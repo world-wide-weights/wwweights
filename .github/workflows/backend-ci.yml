@@ -18,10 +18,9 @@ jobs:
 
      - name: Checkout repository
        uses: actions/checkout@v3
+       with:
+         path: backend
 
-     - name: Goto backend
-       run: 'cd backend'
-     
      - name: node modules
        run: 'npm ci'
     
