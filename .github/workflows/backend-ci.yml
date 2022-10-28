@@ -19,9 +19,6 @@ jobs:
         working-directory: backend
     steps:
 
-     - name: where am i
-       run: 'ls'
-
      - name: node modules
        run: 'npm ci'
     
