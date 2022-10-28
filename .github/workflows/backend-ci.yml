@@ -24,6 +24,9 @@ jobs:
      - name: go to backend
        run: 'cd backend'
 
+     - name: where am i
+       run: 'ls'
+
      - name: node modules
        run: 'npm ci'
     
