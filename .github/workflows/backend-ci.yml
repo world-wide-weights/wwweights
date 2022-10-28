@@ -1,0 +1,33 @@
+name: backend-pipeline
+
+on:
+  push:
+    paths:
+      - 'backend/**'
+      - '.github/workflows/**.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/**.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: backend
+    steps:
+     
+     - name: Checkout repository
+       uses: actions/checkout@v3
+
+     - name: node modules
+       run: 'npm ci --audit=false'
+    
+     - name: end 2 end tests
+       run: npm run test:e2e
+       
+     - name: unit tests
+       run: npm run test
