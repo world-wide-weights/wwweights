@@ -6,15 +6,22 @@ on:
     branches: [main]
   paths:
     - 'backend/**/*'
+    - '.github/workflows/**.yml'
 
+jobs:
   test:
     runs-on: node:18
     steps:
-    
+
+     - name: Checkout repository
+       uses: actions/checkout@v3
+
+     - name: Goto backend
+       run: 'cd backend'
+     
      - name: node modules
        run: 'npm ci'
     
-     # run unit tests    
      - name: end 2 end tests
        run: npm run test:e2e
        
