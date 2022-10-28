@@ -1,0 +1,8 @@
+{
+    "css.validate": true,
+    "css.lint.unknownAtRules": "ignore",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+    }
+}
