@@ -22,9 +22,11 @@ jobs:
      
      - name: Checkout repository
        uses: actions/checkout@v3
+       with:
+         path: backend
 
      - name: node modules
-       run: 'npm ci'
+       run: 'npm ci --audit=false'
     
      - name: end 2 end tests
        run: npm run test:e2e
