@@ -6,6 +6,14 @@
     $ cd more-or-less-frontend
     $ npm install
 
+## Start & watch
+
+    $ npm run dev
+
+## Simple build for production
+
+    $ npm run build
+
 ## Testing with Cypress
 ### Note
 Cypress Components tests currently not supporting Next v13.0.0.
@@ -19,15 +27,6 @@ Be sure that frontend is running or start it.
 ### Run cli
 
     $ npm run test:cli
-
-## Start & watch
-
-    $ npm run dev
-
-## Simple build for production
-
-    $ npm run build
-
 ---
 
 ## Tools
