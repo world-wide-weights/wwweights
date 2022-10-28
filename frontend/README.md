@@ -13,6 +13,7 @@
 ## Simple build for production
 
     $ npm run build
+    $ npm run start # Starts that build
 
 ## Testing with Cypress
 ### Note
