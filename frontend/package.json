@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "npx cypress open",
+    "test:cli": "npx cypress run"
   },
   "dependencies": {
     "next": "13.0.0",
