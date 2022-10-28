@@ -2,8 +2,8 @@
 
 ## Install
 
-    $ git clone git@github.com:mijo-design/more-or-less-frontend.git
-    $ cd more-or-less-frontend
+    $ git clone git@github.com:world-wide-weights/wwweights.git
+    $ cd frontend
     $ npm install
 
 ## Start & watch
