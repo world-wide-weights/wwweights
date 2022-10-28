@@ -22,8 +22,6 @@ jobs:
      
      - name: Checkout repository
        uses: actions/checkout@v3
-       with:
-         path: backend
 
      - name: node modules
        run: 'npm ci --audit=false'
