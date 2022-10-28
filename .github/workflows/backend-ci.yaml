@@ -1,0 +1,22 @@
+name: backend-pipeline
+
+on:
+  push:
+  pull_request:
+    branches: [main]
+  paths:
+    - 'backend/**/*'
+
+  test:
+    runs-on: node:18
+    steps:
+    
+     - name: node modules
+       run: 'npm ci'
+    
+     # run unit tests    
+     - name: end 2 end tests
+       run: npm run test:e2e
+       
+     - name: unit tests
+       run: npm run test
