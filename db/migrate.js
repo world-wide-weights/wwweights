@@ -4,7 +4,7 @@ function getCurrentState(dbConn){
 }
 
 
-function main(args: string[]){
+function main(args){
 	const sourceDB = new 
 	const currentState = null
 	const mode = args[0]
@@ -24,4 +24,4 @@ function main(args: string[]){
 
 // Remove generic arguments
 const args = process.args.splice(2)
-
+main(args)

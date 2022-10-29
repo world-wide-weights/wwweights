@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.0.3",
     "migrations": "^1.3.0",
     "typeorm": "^0.3.10"
   }
