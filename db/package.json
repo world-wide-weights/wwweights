@@ -1,0 +1,15 @@
+{
+  "name": "wwweights-migrations",
+  "version": "1.0.0",
+  "description": "",
+  "main": "migrate.js",
+  "scripts": {
+    "migrate": "node migrate.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "migrations": "^1.3.0",
+    "typeorm": "^0.3.10"
+  }
+}
