@@ -11,11 +11,14 @@ export class Item {
   @Column()
   weight: string; // exact - rannge - ca.
 
-  @Column()
+  @Column('text', { array: true })
   tags: string[];
 
   @Column()
   image: string; // Link to static store or base-64 Encoded
+
+  @Column()
+  user?: string;
 
   @Column({ default: true })
   isActive: boolean;
