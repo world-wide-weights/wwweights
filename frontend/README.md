@@ -40,4 +40,4 @@ Be sure that frontend is running or start it.
 - [yup](https://www.npmjs.com/package/yup) is used to handle form validation.
 
 ### CSS
-- [TailwindCss](https://tailwindcss.com/) is used as Css Utility Framework
+- [TailwindCSS](https://tailwindcss.com/) is used as CSS Utility Framework
