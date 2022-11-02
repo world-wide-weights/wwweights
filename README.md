@@ -1,6 +1,6 @@
 # wwweights
 ## Docker quickstart
-The docker compose stack should allow you to get all get up and running in no time.
+The docker compose stack should allow you to get everything up and running in no time.
 However it is still required to run `npm i` manually for front- and backend.
 1. Install node dependencies
 ```sh
@@ -11,7 +11,7 @@ npm i
 ```
 2. Setup env in project root folder
 ```sh
-cp dev.env .env
+cp sample.env .env
 ```
 3. Start docker compose stack
 ```sh
