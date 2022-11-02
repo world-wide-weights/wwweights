@@ -11,6 +11,8 @@ import { ItemsService } from './items.service';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { plainToInstance } from 'class-transformer';
+import { Item } from './entities/item.entity';
 
 @Controller('items')
 @ApiTags('items')
@@ -19,7 +21,7 @@ export class ItemsController {
 
   @Post()
   create(@Body() createItemDto: CreateItemDto) {
-    return this.itemsService.create(createItemDto);
+    return plainToInstance(Item, this.itemsService.create(createItemDto));
   }
 
   @Get()
