@@ -14,7 +14,12 @@ on:
 jobs:
   single-run:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: frontend
     steps:
+
       - name: Checkout
         uses: actions/checkout@v3
 
