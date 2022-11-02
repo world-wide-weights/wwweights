@@ -18,7 +18,8 @@ cp dev.env .env
 docker compose up -d
 ```
 **Note:** Older version of docker might require a - between docker and compose (`docker-compose`)
-Frontend is now accessible on port [8080](http://localhost:8080)
-Backend is now accessible on port [8081](http://localhost:8081)
-Postgres is now accessible on port 5432. It is highly recommended to use pg admin to access postgres.
+
+Frontend is now accessible on port [8080](http://localhost:8080)    
+Backend is now accessible on port [8081](http://localhost:8081)    
+Postgres is now accessible on port 5432. It is highly recommended to use pg admin to access postgres.    
 
