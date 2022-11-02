@@ -31,5 +31,4 @@ jobs:
         timeout-minutes: 15
         with:
           working-directory: ./frontend
-          build: npm run build
-          start: npm start
+          start: npm start dev
