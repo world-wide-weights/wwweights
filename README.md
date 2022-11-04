@@ -19,7 +19,7 @@ docker compose up -d
 ```
 **Note:** Older version of docker might require a - between docker and compose (`docker-compose`)
 
-Frontend is now accessible on port [8080](http://localhost:8080)    
-Backend is now accessible on port [8081](http://localhost:8081)    
+Frontend is now accessible on port [3000](http://localhost:3000)    
+Backend is now accessible on port [3001](http://localhost:3001)    
 Postgres is now accessible on port 5432. It is highly recommended to use pg admin to access postgres.    
 
