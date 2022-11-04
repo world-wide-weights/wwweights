@@ -20,6 +20,8 @@ services:
       - 3000:3000
     working_dir: /home/node
     command: npm run dev
+    environment:
+      - WATCHPACK_POLLING=true 
   db:
     image: postgres:15
     restart: "always"
