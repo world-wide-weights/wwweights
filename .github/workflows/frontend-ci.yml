@@ -1,0 +1,35 @@
+name: frontend-pipeline
+
+on:
+  push:
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/**.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/**.yml'
+
+jobs:
+  single-run:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: frontend
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: node modules
+        run: 'npm ci --audit:false'
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v4
+        timeout-minutes: 15
+        with:
+          working-directory: ./frontend
+          build: npm run build
+          start: npm start
