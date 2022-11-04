@@ -12,7 +12,12 @@ export type ItemPreviewProps = {
 }
 
 /**
- *  Button component, can also be a link when kind tertiary
+ * Excerpt component for Item
+ * 
+ * Example:
+ * ```tsx
+ * <ItemPreview id="1" name="Smartphone" weight="300 gr" imageUrl="https://via.placeholder.com/96.png" />
+ * ```
  */
 export const ItemPreview: React.FC<ItemPreviewProps> = ({ id, name, weight, imageUrl }) => {
 
