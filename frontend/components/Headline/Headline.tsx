@@ -9,6 +9,9 @@ type HeadlineProps = {
     hasMargin?: boolean
 }
 
+/**
+ * Custom Headline Component, to easy handle headlines with different level and adjustive styles
+ */
 export const Headline: React.FC<HeadlineProps> = ({ level = 1, children, hasMargin = true }) => {
     const CustomTag = `h${level}` as keyof JSX.IntrinsicElements
 
