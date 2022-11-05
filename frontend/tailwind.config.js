@@ -4,6 +4,10 @@ module.exports = {
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}'
   ],
+  safelist: [{
+      pattern: /(bg)-*/,
+    }
+  ],
   theme: {
     extend: {},
   },
