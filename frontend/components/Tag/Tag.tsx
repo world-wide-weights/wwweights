@@ -1,14 +1,13 @@
-
 export enum TagTypesEnum {
-    red = 'red-600',
+    red = 'red-500',
     purple = "indigo-500",
     pink = "pink-500",
-    lightblue = "primary-blue-hover-icon",
-    blue = "primary-blue",
+    cyan = "cyan-500",
+    blue = "blue-500",
     green = "emerald-500",
     yellow = "amber-500",
-    lightgrey = "lightgrey",
-    darkgrey = "darkgrey",
+    lightgrey = "gray-500",
+    darkgrey = "gray-800",
     dark = "gray-900",
 }
 
@@ -28,6 +27,6 @@ type TagProps = {
  */
 export const Tag: React.FC<TagProps> = ({ title, link, type = TagTypesEnum.blue }) => {
     return (
-        <a href="{link}" className="inline-block bg-${type} bg-opacity-20 text-${type} rounded-full px-5 py-1 mr-2 mb-2">{title}</a>
+        <a href="{link}" className="inline-block bg-${type} bg-opacity-20 rounded-full px-5 py-1 mr-2 mb-2">{title}</a>
     )
 }
