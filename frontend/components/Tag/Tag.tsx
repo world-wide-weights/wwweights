@@ -27,6 +27,6 @@ type TagProps = {
  */
 export const Tag: React.FC<TagProps> = ({ title, link, type = TagTypesEnum.blue }) => {
     return (
-        <a href="{link}" className="inline-block bg-${type} bg-opacity-20 rounded-full px-5 py-1 mr-2 mb-2">{title}</a>
+        <a href="{link}" className={`inline-block bg-${type} bg-opacity-20 rounded-full px-5 py-1 mr-2 mb-2`}>{title}</a>
     )
 }
