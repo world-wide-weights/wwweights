@@ -9,35 +9,23 @@ type HeadlineProps = {
     hasMargin?: boolean
 }
 
+/** Defines the classes for each size level */
+const textSizes: { [K in Required<HeadlineProps>["level"]]: string } = {
+    1: "text-3xl md:text-4xl",
+    2: "text-2xl md:text-3xl",
+    3: "text-xl md:text-2xl",
+    4: "text-lg md:text-xl",
+    5: "text-base md:text-lg",
+    6: ""
+}
+
 /**
  * Custom Headline Component, to easy handle headlines with different level and adjustive styles
  */
 export const Headline: React.FC<HeadlineProps> = ({ level = 1, children, hasMargin = true }) => {
     const CustomTag = `h${level}` as keyof JSX.IntrinsicElements
 
-    // Generate text size class depending on level
-    let textSize = ""
-    switch (level) {
-        case 1:
-            textSize = "text-3xl md:text-4xl"
-            break
-        case 2:
-            textSize = "text-2xl md:text-3xl"
-            break
-        case 3:
-            textSize = "text-xl md:text-2xl"
-            break
-        case 4:
-            textSize = "text-lg md:text-xl"
-            break
-        case 5:
-            textSize = "text-base md:text-lg"
-            break
-        case 6:
-            textSize = ""
-    }
-
     return (
-        <CustomTag className={`${textSize} font-semibold ${hasMargin ? "mb-2 md:mb-4" : ""}`}>{children}</CustomTag>
+        <CustomTag className={`${textSizes[level]} font-semibold ${hasMargin ? "mb-2 md:mb-4" : ""}`}>{children}</CustomTag>
     )
 }
