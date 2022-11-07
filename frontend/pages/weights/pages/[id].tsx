@@ -1,17 +1,7 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next"
+import Link from "next/link"
 
-const WeightsList = ({ items }: InferGetStaticPropsType<typeof getStaticProps>) => {
-    return (
-        <div>
-            {items.map((item: any) => <div key={item.id}>
-                <h1>{item.title}</h1>
-            </div>)}
-        </div>
-    )
-}
-
-export default WeightsList
-
+// As long as we do not have a weight. Let's work with Todo
 type Todo = {
     userId: number
     id: number
@@ -19,12 +9,32 @@ type Todo = {
     completed: boolean
 }
 
-export const getStaticProps: GetStaticProps = async (context) => {
-    const response = await fetch(`https://jsonplaceholder.typicode.com/todos?_start=${parseInt(context.params?.id as string ?? 1) * 5}&_limit=5`)
-    const data: Todo[] = await response.json()
+type WeightsListProps = {
+    items: Todo[],
+    currentPage: number
+}
+
+/** Base List for weights */
+export default function WeightsList({ items, currentPage }: InferGetStaticPropsType<typeof getStaticProps>) {
+    return (
+        <div>
+            {items.map((item) => <div key={item.id}>
+                <h1>{item.id}: {item.title} {item.completed ? "✓" : "X"}</h1>
+            </div>)}
+            {currentPage > 1 && <Link href={`/weights/pages/${currentPage - 1}`}>Previous</Link>}
+            <Link href={`/weights/pages/${currentPage + 1}`}>Next</Link>
+        </div>
+    )
+}
+
+export const getStaticProps: GetStaticProps<WeightsListProps> = async (context) => {
+    const currentPage = parseInt(context.params?.id as string ?? "0")
+    const response = await fetch(`https://jsonplaceholder.typicode.com/todos?_start=${currentPage * 5}&_limit=5`)
+    const data = await response.json()
     return {
         props: {
-            items: data
+            items: data,
+            currentPage
         },
         revalidate: 10
     }
@@ -32,15 +42,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
 export const getStaticPaths: GetStaticPaths = () => {
     return {
-        paths: [{
-            params: {
-                id: "1"
-            }
-        }, {
-            params: {
-                id: "2"
-            }
-        }],
+        paths: [],
         fallback: "blocking"
     }
 }
