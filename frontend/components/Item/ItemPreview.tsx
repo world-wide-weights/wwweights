@@ -5,7 +5,7 @@ export type ItemPreviewProps = {
     name: string
     /** Weight */
     weight: string
-    /** Identification to weigth */
+    /** Identification to weight */
     id: string
     /** Image URL */
     imageUrl?: string
