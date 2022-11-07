@@ -6,14 +6,12 @@ export enum TagTypesEnum {
     blue = "blue-500",
     green = "emerald-500",
     yellow = "amber-500",
-    lightgrey = "gray-500",
-    darkgrey = "gray-800",
-    dark = "gray-900",
+    grey = "gray-500",
 }
 
 type TagProps = {
     /** Content of tag */
-    title: String
+    children: React.ReactNode
 
     /** href destination Link */
     link: String
@@ -25,8 +23,8 @@ type TagProps = {
 /**
  * Tag
  */
-export const Tag: React.FC<TagProps> = ({ title, link, type = TagTypesEnum.blue }) => {
+export const Tag: React.FC<TagProps> = ({ children, link, type = TagTypesEnum.blue }) => {
     return (
-        <a href="{link}" className={`inline-block bg-${type} bg-opacity-20 rounded-full px-5 py-1 mr-2 mb-2`}>{title}</a>
+        <a href={`${link}`} className={`inline-block bg-${type} bg-opacity-30 rounded-full px-5 py-1 mr-2 mb-2`}>{children}</a>
     )
 }
