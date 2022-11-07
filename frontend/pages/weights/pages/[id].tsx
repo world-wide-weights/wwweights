@@ -1,4 +1,4 @@
-import { GetStaticPropsContext, InferGetStaticPropsType } from "next"
+import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next"
 
 const WeightsList = ({ items }: InferGetStaticPropsType<typeof getStaticProps>) => {
     return (
@@ -12,17 +12,25 @@ const WeightsList = ({ items }: InferGetStaticPropsType<typeof getStaticProps>) 
 
 export default WeightsList
 
-export const getStaticProps = async (context: GetStaticPropsContext) => {
-    const response = await fetch(`https://jsonplaceholder.typicode.com/photos?_start=${parseInt(context.params?.id as string ?? 1) * 5}&_limit=5`)
-    const data = await response.json()
+type Todo = {
+    userId: number
+    id: number
+    title: string
+    completed: boolean
+}
+
+export const getStaticProps: GetStaticProps = async (context) => {
+    const response = await fetch(`https://jsonplaceholder.typicode.com/todos?_start=${parseInt(context.params?.id as string ?? 1) * 5}&_limit=5`)
+    const data: Todo[] = await response.json()
     return {
         props: {
             items: data
-        }
+        },
+        revalidate: 10
     }
 }
 
-export const getStaticPaths = () => {
+export const getStaticPaths: GetStaticPaths = () => {
     return {
         paths: [{
             params: {
@@ -33,6 +41,6 @@ export const getStaticPaths = () => {
                 id: "2"
             }
         }],
-        fallback: false
+        fallback: "blocking"
     }
 }
