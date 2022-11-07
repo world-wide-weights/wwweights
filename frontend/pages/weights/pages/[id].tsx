@@ -1,4 +1,5 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next"
+import Head from "next/head"
 import Link from "next/link"
 
 // As long as we do not have a weight. Let's work with Todo
@@ -16,14 +17,17 @@ type WeightsListProps = {
 
 /** Base List for weights */
 export default function WeightsList({ items, currentPage }: InferGetStaticPropsType<typeof getStaticProps>) {
-    return (
-        <div>
+    return (<>
+        <Head>
+            <title>Page {currentPage} - Discover weights</title>
+        </Head><div>
             {items.map((item) => <div key={item.id}>
                 <h1>{item.id}: {item.title} {item.completed ? "✓" : "X"}</h1>
             </div>)}
             {currentPage > 1 && <Link href={`/weights/pages/${currentPage - 1}`}>Previous</Link>}
             <Link href={`/weights/pages/${currentPage + 1}`}>Next</Link>
         </div>
+    </>
     )
 }
 

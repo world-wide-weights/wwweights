@@ -1,4 +1,5 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
+import Head from "next/head"
 import Link from "next/link"
 
 // As long as we do not have a weight. Let's work with Todo
@@ -17,7 +18,10 @@ type WeightsListProps = {
 
 /** Base List for weights */
 export default function WeightsList({ items, currentPage, limit }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-    return (
+    return (<>
+        <Head>
+            <title>Page {currentPage} - Discover weights</title>
+        </Head>
         <div>
             {items.map((item) => <div key={item.id}>
                 <h1>{item.id}: {item.title} {item.completed ? "✓" : "X"}</h1>
@@ -25,6 +29,7 @@ export default function WeightsList({ items, currentPage, limit }: InferGetServe
             {currentPage > 0 && <Link href={`/weights?page=${currentPage - 1}&limit=${limit}`}>Previous</Link>}
             <Link href={`/weights?page=${currentPage + 1}&limit=${limit}`}>Next</Link>
         </div>
+    </>
     )
 }
 
