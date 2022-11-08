@@ -20,27 +20,29 @@ type WeightsListProps = {
 
 /** Base List for weights */
 export default function WeightsList({ items, currentPage, limit }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-    return (<div className="container">
+    return (<>
         {/* Meta Tags */}
         <Head>
             <title>Page {currentPage} - Discover weights</title>
         </Head>
 
-        {/* Headline */}
-        <Headline level={3}>All weights</Headline>
+        <div className="container">
+            {/* Headline */}
+            <Headline level={3}>All weights</Headline>
 
-        {/* Weights (todos) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            {items.map((item) => <ItemPreview key={item.id} name={item.title} weight={item.completed ? "✓" : "X"} imageUrl="https://via.placeholder.com/96.png" id={item.id.toString()} />)}
-        </div>
+            {/* Weights (todos) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                {items.map((item) => <ItemPreview key={item.id} name={item.title} weight={item.completed ? "✓" : "X"} imageUrl="https://via.placeholder.com/96.png" id={item.id.toString()} />)}
+            </div>
 
-        {/* Pagination */}
-        <div className="flex justify-center mt-5 md:mt-20">
-            {/* TODO (Zoe-Bot): Change to button when merged */}
-            {currentPage > 0 && <Link className="mr-3" href={`/weights?page=${currentPage - 1}&limit=${limit}`}>Previous</Link>}
-            <Link href={`/weights?page=${currentPage + 1}&limit=${limit}`}>Next</Link>
+            {/* Pagination */}
+            <div className="flex justify-center mt-5 md:mt-20">
+                {/* TODO (Zoe-Bot): Change to button when merged */}
+                {currentPage > 0 && <Link className="mr-3" href={`/weights?page=${currentPage - 1}&limit=${limit}`}>Previous</Link>}
+                <Link href={`/weights?page=${currentPage + 1}&limit=${limit}`}>Next</Link>
+            </div>
         </div>
-    </div>
+    </>
     )
 }
 
