@@ -11,7 +11,7 @@
     "test:cli": "npx cypress run"
   },
   "dependencies": {
-    "@material-symbols/svg-400": "^0.2.15",
+    "material-symbols": "^0.2.15",
     "next": "13.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0"
