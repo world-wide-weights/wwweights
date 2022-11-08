@@ -1,4 +1,4 @@
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { GetStaticPaths, GetStaticProps, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import { Headline } from "../../components/Headline/Headline";
@@ -17,7 +17,7 @@ type WeightsSingleProps = {
 }
 
 /** Single Page of a weight */
-export default function WeightsSingle({ item }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function WeightsSingle({ item }: InferGetServerSidePropsType<typeof getStaticProps>) {
     return <>
         {/* Meta Tags */}
         <Head>
@@ -52,7 +52,7 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
     </>
 }
 
-export const getServerSideProps: GetServerSideProps<WeightsSingleProps> = async (context) => {
+export const getStaticProps: GetStaticProps<WeightsSingleProps> = async (context) => {
     const slug = context.params ? context.params.slug : "1"
     const response = await fetch(`https://jsonplaceholder.typicode.com/todos/${slug}`)
     const data = await response.json()
@@ -60,6 +60,14 @@ export const getServerSideProps: GetServerSideProps<WeightsSingleProps> = async 
     return {
         props: {
             item: data
-        }
+        },
+        revalidate: 10
+    }
+}
+
+export const getStaticPaths: GetStaticPaths = () => {
+    return {
+        paths: [],
+        fallback: "blocking"
     }
 }
