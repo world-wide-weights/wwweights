@@ -9,6 +9,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         <>
             <Navbar />
             <main>{children}</main>
+            {/* TODO (Zoe-Bot): Add footer when merged */}
         </>
     )
 }
