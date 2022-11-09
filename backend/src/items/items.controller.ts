@@ -1,5 +1,4 @@
 import {
-  Body,
   ClassSerializerInterceptor,
   Controller,
   Get,
@@ -9,7 +8,6 @@ import {
 } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateItemDto } from './dto/create-item.dto';
 import { GetItemDto } from './interfaces/get-item-dto';
 import { GetItemQuery } from './queries/impl';
 
@@ -20,7 +18,7 @@ export class ItemsController {
   constructor(private queryBus: QueryBus) {}
 
   @Post()
-  create(@Body() createItemDto: CreateItemDto) {
+  create() {
     return 'This action adds a new item';
   }
 
