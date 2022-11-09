@@ -11,39 +11,31 @@ services:
     command: npm run start:dev
     depends_on:
       - db
-  frontend:
-    image: node:18-alpine3.15
-    restart: "always"
-    volumes:
-      - ./frontend:/home/node
-    ports:
-      - 3000:3000
-    working_dir: /home/node
-    command: npm run dev
-    environment:
-      - WATCHPACK_POLLING=true 
   db:
     image: postgres:15
     restart: "always"
-    volumes: 
+    volumes:
       - postgres-volume:/var/lib/pgsql/data
       - ./db/setup:/docker-entrypoint-initdb.d/
     ports:
       - 5432:5432
+    env_file:
+      - .env
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PW}
       - POSTGRES_DB=${DB_DB}
     healthcheck:
       # TODO: This can be replaced by a more accurate healthcheck based on PID 1 
-      test: ["CMD-SHELL","pg_isready"]
-      interval: 60s
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"
+        ]
+      interval: 5s
       timeout: 5s
       retries: 3
 
 volumes:
   postgres-volume:
-
-
-
-
+    driver: local
