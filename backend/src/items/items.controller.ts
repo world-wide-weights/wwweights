@@ -1,46 +1,36 @@
 import {
+  Body,
+  ClassSerializerInterceptor,
   Controller,
   Get,
-  Post,
-  Body,
-  Patch,
   Param,
-  Delete,
+  Post,
+  UseInterceptors,
 } from '@nestjs/common';
-import { ItemsService } from './items.service';
-import { CreateItemDto } from './dto/create-item.dto';
-import { UpdateItemDto } from './dto/update-item.dto';
+import { QueryBus } from '@nestjs/cqrs';
 import { ApiTags } from '@nestjs/swagger';
-import { plainToInstance } from 'class-transformer';
-import { Item } from './entities/item.entity';
+import { CreateItemDto } from './dto/create-item.dto';
+import { GetItemDto } from './interfaces/get-item-dto';
+import { GetItemQuery } from './queries/impl';
 
 @Controller('items')
 @ApiTags('items')
+@UseInterceptors(ClassSerializerInterceptor)
 export class ItemsController {
-  constructor(private readonly itemsService: ItemsService) {}
+  constructor(private queryBus: QueryBus) {}
 
   @Post()
   create(@Body() createItemDto: CreateItemDto) {
-    return plainToInstance(Item, this.itemsService.create(createItemDto));
+    return 'This action adds a new item';
   }
 
   @Get()
   findAll() {
-    return this.itemsService.findAll();
+    return 'This action returns all items';
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.itemsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateItemDto: UpdateItemDto) {
-    return this.itemsService.update(+id, updateItemDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.itemsService.remove(+id);
+  async getItem(@Param() { id }: GetItemDto) {
+    return this.queryBus.execute(new GetItemQuery(id)); // TODO Check if this i converted to Number with dto
   }
 }
