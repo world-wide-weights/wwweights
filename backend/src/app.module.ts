@@ -4,7 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ItemsModule } from './items/items.module';
-import { Item } from './items/entities/item.entity';
+import { Item } from './items/models/item.model';
 
 @Module({
   imports: [
