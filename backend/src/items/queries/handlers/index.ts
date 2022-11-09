@@ -1,1 +1,2 @@
-export * from './get-item.handler';
+import { GetItemHandler } from './get-item.handler';
+export const ItemHandlers = [GetItemHandler];
