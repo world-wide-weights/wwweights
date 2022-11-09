@@ -31,6 +31,6 @@ export class ItemsController {
 
   @Get(':id')
   async getItem(@Param() { id }: GetItemDto) {
-    return this.queryBus.execute(new GetItemQuery(id)); // TODO Check if this i converted to Number with dto
+    return this.queryBus.execute(new GetItemQuery(id)); // TODO Check if this i converted to Number with dto and Serializer
   }
 }
