@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Item } from './entities/item.entity';
+import { Item } from './models/item.model';
 import { ItemsController } from './items.controller';
-import { ItemsService } from './items.service';
-
+import { ItemHandlers } from './queries/handlers';
+import { CqrsModule } from '@nestjs/cqrs';
 @Module({
-  imports: [TypeOrmModule.forFeature([Item])],
+  imports: [CqrsModule, TypeOrmModule.forFeature([Item])],
   controllers: [ItemsController],
-  providers: [ItemsService],
+  providers: [...ItemHandlers],
 })
 export class ItemsModule {}
