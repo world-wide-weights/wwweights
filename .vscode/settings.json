@@ -1,0 +1,9 @@
+{
+    "css.validate": true,
+    "css.lint.unknownAtRules": "ignore",
+    "editor.formatOnSave": true,
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+    }
+}
