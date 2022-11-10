@@ -3,7 +3,7 @@ import Link from "next/link";
 export type ButtonProps = {
     /** The text inside the Button */
     children: string
-    /** Which type of button we want, tertiary is a link */
+    /** Which type of button we want, tertiary has the style of a link */
     kind?: "primary" | "secondary" | "tertiary"
     /** Button type default is "button" */
     type?: "button" | "reset" | "submit"
@@ -27,6 +27,7 @@ export type ButtonProps = {
 export const Button: React.FC<ButtonProps> = ({ kind = "primary", disabled, icon, loading, className, children, to, onClick, type = "button" }) => {
     disabled = loading ? true : disabled
 
+    // TODO (Zoe-Bot): Maybe this should be improved
     const disabledClassesPrimarySecondary = "text-opacity-75 opacity-80 cursor-default"
     const disabledClassesTertiary = "text-opacity-75 opacity-80 cursor-default"
 
