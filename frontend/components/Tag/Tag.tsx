@@ -3,7 +3,7 @@ type TagProps = {
   children: React.ReactNode;
 
   /** href destination Link */
-  to: String;
+  to: string;
 
   /** Possibility to change color and background of tag */
   color?:
@@ -34,10 +34,10 @@ type TagProps = {
 /**
  * Tag
  */
-export const Tag: React.FC<TagProps> = ({ children, to, color }) => {
+export const Tag: React.FC<TagProps> = ({ children, to, color = "blue" }) => {
   return (
     <a
-      href={`${to}`}
+      href={to}
       className={`inline-block bg-${color}-500 bg-opacity-30 text-${color}-800 rounded-full px-5 py-1 mr-2 mb-2`}
     >
       {children}
