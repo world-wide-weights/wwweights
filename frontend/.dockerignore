@@ -1,4 +1,6 @@
 Dockerfile
+cypress.config.ts
+cypress
 .dockerignore
 node_modules
 npm-debug.log
