@@ -4,7 +4,7 @@
 export const Footer: React.FC = () => {
   return (
     <footer>
-      <div className="py-1 bg-gray-100 text-center">
+      <div className="py-1 bg-gray-100 text-center mt-10">
         <div className="container md:flex justify-between">
 
           <div className="font-semibold text-gray-500 pb-5 pt-5">

@@ -1,3 +1,4 @@
+import { Footer } from "../Footer/Footer"
 import { Navbar } from "../Navbar/Navbar"
 
 type LayoutProps = {
@@ -6,10 +7,12 @@ type LayoutProps = {
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
     return (
-        <>
+        <div className="min-h-screen flex flex-col">
             <Navbar />
             <main>{children}</main>
-            {/* TODO (Zoe-Bot): Add footer when merged */}
-        </>
+            <div className="mt-auto">
+                <Footer />
+            </div>
+        </div>
     )
 }
