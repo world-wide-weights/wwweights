@@ -41,7 +41,7 @@ docker build -t wwweights-frontend .
 Run Docker image 
 
 ```sh
-docker run -p 3000:3000 wwweights-frontend
+docker run -p 3000:3000 --name wwweights-frontend wwweights-frontend
 ```
 
 ## Tools
