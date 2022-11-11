@@ -49,7 +49,7 @@ export default function WeightsList({ items, currentPage, limit }: InferGetServe
 
 export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (context) => {
     const currentPage = parseInt(context.query?.page as string ?? "0")
-    const limit = parseInt(context.query?.limit as string ?? "15")
+    const limit = parseInt(context.query?.limit as string ?? "16")
     const response = await fetch(`https://jsonplaceholder.typicode.com/todos?_start=${currentPage * limit}&_limit=${limit}`)
     const data = await response.json()
     return {
