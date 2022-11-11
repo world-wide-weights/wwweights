@@ -39,8 +39,8 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
                 <div className="flex flex-col self-start col-start-1 col-end-3 md:row-start-2 mt-5 md:mt-0">
                     <p className="mb-3">Quelle: Wikpedia 15.05.2020</p>
                     <ul className="flex md:flex-wrap overflow-y-auto">
-                        <li><div className="absolute bg-gradient-to-r from-white to-transparent w-20 h-8 py-1"></div></li>
-                        <li><div className="absolute bg-gradient-to-r right-0 from-transparent to-white w-20 h-8 py-1"></div></li>
+                        <li><div className="md:hidden absolute bg-gradient-to-r from-white to-transparent w-20 h-8 py-1"></div></li>
+                        <li><div className="md:hidden absolute bg-gradient-to-r right-0 from-transparent to-white w-20 h-8 py-1"></div></li>
                         <li><Tag to="/tags/1">tag testststststststst 1</Tag></li>
                         <li><Tag to="/tags/2">ta sdfjdsfuoisdfu 2</Tag></li>
                         <li><Tag to="/tags/3">tag 3</Tag></li>
