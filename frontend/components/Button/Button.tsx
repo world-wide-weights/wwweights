@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export type ButtonProps = {
-    /** The text inside the Button */
+    /** The content inside the Button */
     children: string
     /** Which type of button we want, tertiary has the style of a link */
     kind?: "primary" | "secondary" | "tertiary"
