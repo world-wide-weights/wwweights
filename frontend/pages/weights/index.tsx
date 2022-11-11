@@ -1,6 +1,6 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Head from "next/head"
-import Link from "next/link"
+import { Button } from "../../components/Button/Button"
 import { Headline } from "../../components/Headline/Headline"
 import { ItemPreview } from "../../components/Item/ItemPreview"
 
@@ -39,9 +39,8 @@ export default function WeightsList({ items, currentPage, limit }: InferGetServe
 
             {/* Pagination */}
             <div className="flex justify-center mt-5 md:mt-10">
-                {/* TODO (Zoe-Bot): Change to button when merged */}
-                {currentPage > 0 && <Link className="mr-3" href={`/weights?page=${currentPage - 1}&limit=${limit}`}>Previous</Link>}
-                <Link href={`/weights?page=${currentPage + 1}&limit=${limit}`}>Next</Link>
+                {currentPage > 0 && <Button to={`/weights?page=${currentPage - 1}&limit=${limit}`} className="mr-5" kind="tertiary">Previous</Button>}
+                <Button to={`/weights?page=${currentPage + 1}&limit=${limit}`} kind="tertiary">Next</Button>
             </div>
         </div>
     </>
