@@ -20,10 +20,12 @@ type WeightsListProps = {
 
 /** Base List for weights */
 export default function WeightsList({ items, currentPage, limit }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+    const siteTitle = `Page ${currentPage} - Discover weights`
+
     return (<>
         {/* Meta Tags */}
         <Head>
-            <title>Page {currentPage} - Discover weights</title>
+            <title>{siteTitle}</title>
         </Head>
 
         <div className="container">
@@ -36,7 +38,7 @@ export default function WeightsList({ items, currentPage, limit }: InferGetServe
             </div>
 
             {/* Pagination */}
-            <div className="flex justify-center mt-5 md:mt-20">
+            <div className="flex justify-center mt-5 md:mt-10">
                 {/* TODO (Zoe-Bot): Change to button when merged */}
                 {currentPage > 0 && <Link className="mr-3" href={`/weights?page=${currentPage - 1}&limit=${limit}`}>Previous</Link>}
                 <Link href={`/weights?page=${currentPage + 1}&limit=${limit}`}>Next</Link>
