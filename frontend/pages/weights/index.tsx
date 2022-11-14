@@ -4,6 +4,9 @@ import { Button } from "../../components/Button/Button"
 import { Headline } from "../../components/Headline/Headline"
 import { ItemPreview } from "../../components/Item/ItemPreview"
 
+const DEFAULT_PAGE_SIZE = 16
+const FIRST_PAGE = 1
+
 // As long as we do not have a weight. Let's work with Todo
 type Todo = {
     userId: number
@@ -22,6 +25,22 @@ type WeightsListProps = {
 export default function WeightsList({ items, currentPage, limit }: InferGetServerSidePropsType<typeof getServerSideProps>) {
     const siteTitle = `Latest ${currentPage > 1 ? `| Page ${currentPage} ` : ``}- World Wide Weights`
 
+    const hasCustomLimit = limit !== DEFAULT_PAGE_SIZE
+
+    // Previous Button
+    const previousButtonQueryString = new URLSearchParams({
+        ...(currentPage > 2 && { page: (currentPage - 1).toString() }), // At page 3 we want to have a page query 
+        ...(hasCustomLimit && { limit: limit.toString() }), // When we have a custom limit of items, we want to provide it
+    }).toString()
+    const previousButtonLink = `/weights${previousButtonQueryString !== "" ? `?${previousButtonQueryString}` : ``}`
+
+    // Next Button
+    const nextButtonQueryString = new URLSearchParams({
+        ...(true && { page: (currentPage + 1).toString() }), // Replace `true` with maxPage logic later
+        ...(hasCustomLimit && { limit: limit.toString() }),
+    }).toString()
+    const nextButtonLink = `/weights${nextButtonQueryString !== "" ? `?${nextButtonQueryString}` : ``}`
+
     return (<>
         {/* Meta Tags */}
         <Head>
@@ -34,13 +53,13 @@ export default function WeightsList({ items, currentPage, limit }: InferGetServe
 
             {/* Weights (todos) */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                {items.map((item) => <ItemPreview key={item.id} name={item.title} weight={item.completed ? "✓" : "X"} imageUrl="https://via.placeholder.com/96.png" id={item.id.toString()} />)}
+                {items.map((item) => <ItemPreview key={item.id} name={`${item.id}: ${item.title}`} weight={item.completed ? "✓" : "X"} imageUrl="https://via.placeholder.com/96.png" id={item.id.toString()} />)}
             </div>
 
             {/* Pagination */}
             <div className="flex justify-center mt-5 md:mt-10">
-                {currentPage > 0 && <Button to={`/weights?page=${currentPage - 1}&limit=${limit}`} className="mr-5" kind="tertiary">Previous</Button>}
-                <Button to={`/weights?page=${currentPage + 1}&limit=${limit}`} kind="tertiary">Next</Button>
+                {currentPage > 1 && <Button to={previousButtonLink} className="mr-5" kind="tertiary">Previous</Button>}
+                <Button to={nextButtonLink} kind="tertiary">Next</Button>
             </div>
         </div>
     </>
@@ -48,9 +67,17 @@ export default function WeightsList({ items, currentPage, limit }: InferGetServe
 }
 
 export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (context) => {
-    const currentPage = parseInt(context.query?.page as string ?? "0")
-    const limit = parseInt(context.query?.limit as string ?? "16")
-    const response = await fetch(`https://jsonplaceholder.typicode.com/todos?_start=${currentPage * limit}&_limit=${limit}`)
+    const currentPage = parseInt(context.query.page as string ?? FIRST_PAGE)
+    const limit = parseInt(context.query.limit as string ?? DEFAULT_PAGE_SIZE)
+
+    // Validate Query
+    if (currentPage < 1 || limit < 1) {
+        return {
+            notFound: true
+        }
+    }
+
+    const response = await fetch(`https://jsonplaceholder.typicode.com/todos?_start=${(currentPage - 1) * limit}&_limit=${limit}`)
     const data = await response.json()
     return {
         props: {
