@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer';
-import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -20,8 +20,20 @@ export class Item {
   @IsString()
   @Expose()
   @Column()
-  weight: string; // exact - range - ca.
+  value: string; // exact - range - ca.
 
+  @IsOptional()
+  @IsBoolean()
+  @Expose()
+  @Column({ default: false })
+  is_ca: boolean;
+
+  @IsString()
+  @Expose()
+  @Column()
+  additional_range_value: string;
+
+  // TODO: Temporary solution, needs to be @ManyToMany
   @IsString({ each: true })
   @Expose()
   @Column('text', { array: true, nullable: true })
@@ -33,18 +45,35 @@ export class Item {
   @Column({ nullable: true })
   image: string; // Link to static store or base-64 Encoded?
 
+  // TODO: Temporary solution
   @IsString()
-  @Column()
+  @Expose()
+  @Column({
+    nullable: true,
+    default: 'no source available',
+  })
+  source: string;
+
+  // TODO: Temporary solution needs to be @ManyToOne
+  @IsString()
   @Expose({ groups: ['admin'] })
+  @Column()
   user: string;
 
+  // TODO: Temporary solution if implemented needs to be @ManyToMany
+  @IsOptional()
+  @IsString()
+  @Expose({ groups: ['admin'] })
+  @Column('text', { array: true, nullable: true })
+  related: string[];
+
+  // TODO: Is this even necessary if we OVERWRITE the whole object on submissions, maybe for suggestions where a user says, no this is a stupid entry pls delete xD
   @IsBoolean()
-  @Expose()
   @Column({ default: true })
   @Expose({ groups: ['admin'] })
   isActive: boolean;
 
-  createSlug() {
+  applySlug() {
     this.slug = this.name.toLowerCase().trim().replace(/ /g, '-');
   }
 
