@@ -71,6 +71,7 @@ export class ItemsController {
   })
   async getItem(@Param() id: GetItemDto) {
     this.logger.log(`Get item with id ${id}`);
-    return this.queryBus.execute(new GetItemQuery(id.id)); // TODO Check if this i converted to Number with dto and Serializer
+    // TODO: Serializer works, but how to add "admin" grp
+    return this.queryBus.execute(new GetItemQuery(id.id));
   }
 }
