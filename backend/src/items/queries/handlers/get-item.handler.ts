@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -12,6 +13,9 @@ export class GetItemHandler implements IQueryHandler<GetItemQuery> {
   ) {}
 
   async execute(query: GetItemQuery) {
-    return this.repository.findOneBy(query);
+    const result = await this.repository.findOneBy(query);
+    if (!result)
+      throw new NotFoundException(`Item with id ${query.id} not found`);
+    return result;
   }
 }
