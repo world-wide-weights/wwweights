@@ -29,7 +29,7 @@ services:
       - postgres-volume:/var/lib/pgsql/data
       - ./db/setup:/docker-entrypoint-initdb.d/
     ports:
-      - 5432:5432
+      - 5433:5432
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PW}
