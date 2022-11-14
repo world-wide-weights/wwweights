@@ -20,7 +20,7 @@ type WeightsListProps = {
 
 /** Base List for weights */
 export default function WeightsList({ items, currentPage, limit }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-    const siteTitle = `Page ${currentPage} - Discover weights`
+    const siteTitle = `Latest ${currentPage > 1 ? `| Page ${currentPage} ` : ``}- World Wide Weights`
 
     return (<>
         {/* Meta Tags */}
