@@ -1,37 +1,60 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
+import { Repository } from 'typeorm';
 import { AppModule } from '../src/app.module';
+import { Item } from '../src/items/models/item.model';
+import { singleItem } from './items/mock';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
   const itemsPath = '/items';
-  beforeEach(async () => {
+  let itemTable: Repository<Item>;
+
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
+    itemTable = await app.get('ItemRepository'); // TODO: Not sure if this is any practice at all , but it works
   });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get(itemsPath)
-      .expect(HttpStatus.OK)
-      .expect({});
+  beforeEach(async () => {
+    await itemTable.clear();
+    await itemTable.insert(singleItem);
   });
 
-  it('/ (CREATE)', () => {
-    return request(app.getHttpServer())
-      .post(itemsPath)
-      .send({
-        name: 'test Name with SpAcEs ',
-        weight: 'ca. 1kg',
-        tags: ['testTag', 'testTag2'],
-        user: 'testUser',
-        isActive: true,
-      })
-      .expect(HttpStatus.CREATED);
+  afterAll(async () => {
+    await Promise.all([app.close()]);
+  });
+
+  describe('Queries /items', () => {
+    it('/ getItems', async () => {
+      const res = await request(app.getHttpServer())
+        .get(itemsPath)
+        .expect(HttpStatus.OK);
+      // Endpoint doesn't full exist yet
+      // expect(res.body.length).toBe(1);
+    });
+
+    it('/:id getItem', async () => {
+      const res = await request(app.getHttpServer())
+        .get(`${itemsPath}/${singleItem.id}`)
+        .expect(HttpStatus.OK);
+      // Endpoint doesn't full exist yet
+      expect(res.body.name).toBe(singleItem.name);
+    });
+  });
+  describe('Commands /items', () => {
+    it('/ createItem', async () => {
+      await itemTable.clear();
+      await request(app.getHttpServer())
+        .post(itemsPath)
+        .send(singleItem)
+        .expect(HttpStatus.CREATED);
+      expect(await itemTable.count()).toEqual(1);
+    });
   });
 });
