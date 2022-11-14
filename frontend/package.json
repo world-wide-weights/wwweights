@@ -11,20 +11,22 @@
     "test:cli": "npx cypress run"
   },
   "dependencies": {
-    "next": "13.0.0",
+    "material-symbols": "^0.2.15",
+    "next": "^13.0.3",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "@types/node": "18.11.7",
-    "@types/react": "18.0.24",
+    "@svgr/webpack": "^6.5.1",
+    "@types/node": "^18.11.9",
+    "@types/react": "^18.0.25",
     "@types/react-dom": "18.0.8",
     "autoprefixer": "^10.4.13",
-    "cypress": "^10.11.0",
-    "eslint": "8.26.0",
-    "eslint-config-next": "13.0.0",
-    "postcss": "^8.4.18",
-    "tailwindcss": "^3.2.1",
+    "cypress": "^11.0.1",
+    "eslint": "^8.27.0",
+    "eslint-config-next": "^13.0.3",
+    "postcss": "^8.4.19",
+    "tailwindcss": "^3.2.3",
     "typescript": "4.8.4"
   }
 }
