@@ -6,6 +6,7 @@ import {
   Logger,
   Param,
   Post,
+  UnprocessableEntityException,
   UseInterceptors,
 } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
@@ -30,7 +31,7 @@ export class ItemsController {
   ) {}
 
   @Post()
-  createItem() {
+  async createItem() {
     // This is currently jsut for testing since it is not part of any issue
     try {
       const newItem = new Item({
@@ -42,9 +43,11 @@ export class ItemsController {
         isActive: true,
       });
       newItem.applySlug();
-      return this.repository.save(newItem);
+      return await this.repository.save(newItem);
     } catch (error) {
-      // TODO: ExceptionsHandler still logs the error even after catching, no need to do error handling?
+      if (error.name === 'QueryFailedError')
+        throw new UnprocessableEntityException('Item already exists');
+      this.logger.error(error);
     }
   }
 
