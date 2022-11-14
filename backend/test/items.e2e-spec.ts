@@ -43,7 +43,6 @@ describe('AppController (e2e)', () => {
       const res = await request(app.getHttpServer())
         .get(`${itemsPath}/${singleItem.id}`)
         .expect(HttpStatus.OK);
-      // Endpoint doesn't full exist yet
       expect(res.body.name).toBe(singleItem.name);
     });
   });
