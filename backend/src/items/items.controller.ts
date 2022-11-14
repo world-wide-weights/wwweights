@@ -30,12 +30,13 @@ export class ItemsController {
     // This is currently jsut for testing since it is not part of any issue
     const newItem = new Item({
       name: 'test Name with SpAcEs ',
-      weight: 'ca. 1kg',
+      value: '1kg',
+      is_ca: true,
       tags: ['testTag', 'testTag2'],
       user: 'testUser',
       isActive: true,
     });
-    newItem.createSlug();
+    newItem.applySlug();
     return this.repository.save(newItem);
   }
 
