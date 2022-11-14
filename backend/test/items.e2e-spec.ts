@@ -18,7 +18,8 @@ describe('AppController (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     await app.init();
-    itemTable = await app.get('ItemRepository'); // TODO: Not sure if this is any practice at all , but it works
+    // TODO: Not sure if this is any practice at all , but it works
+    itemTable = await app.get('ItemRepository');
   });
 
   beforeEach(async () => {
