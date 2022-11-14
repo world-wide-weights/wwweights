@@ -69,9 +69,9 @@ export class ItemsController {
     description: 'No item found',
     type: null,
   })
-  async getItem(@Param() id: GetItemDto) {
+  async getItem(@Param() { id }: GetItemDto) {
     this.logger.log(`Get item with id ${id}`);
     // TODO: Serializer works, but how to add "admin" grp
-    return this.queryBus.execute(new GetItemQuery(id.id));
+    return this.queryBus.execute(new GetItemQuery(id));
   }
 }
