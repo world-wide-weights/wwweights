@@ -10,7 +10,7 @@ export class Item {
   @IsString()
   @IsNotEmpty()
   @Expose()
-  @Column()
+  @Column({ unique: true })
   name: string;
 
   @Expose()
@@ -30,7 +30,7 @@ export class Item {
 
   @IsString()
   @Expose()
-  @Column()
+  @Column({ nullable: true })
   additional_range_value: string;
 
   // TODO: Temporary solution, needs to be @ManyToMany
