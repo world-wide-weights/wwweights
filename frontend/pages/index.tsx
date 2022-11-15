@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { Button } from "../components/Button/Button";
 
 const Home = () => {
   return (
@@ -11,6 +12,7 @@ const Home = () => {
 
       <div className="container">
         <p>Hello World</p>
+        <Button to="/weights" icon="list">Weights List</Button>
       </div>
     </div>
   )
