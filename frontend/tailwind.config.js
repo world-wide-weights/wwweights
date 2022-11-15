@@ -3,10 +3,11 @@ module.exports = {
   content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   safelist: [
     {
-      pattern: /bg-(.*)-500/,
+      pattern: /bg-(.*)-(200|300|500)/,
+      variants: ['hover', 'focus'],
     },
     {
-      pattern: /text-(.*)-800/,
+      pattern: /text-(.*)-(600|800)/,
     },
   ],
   theme: {
@@ -20,7 +21,22 @@ module.exports = {
         '2xl': '12rem',
       },
     },
-    extend: {},
+    extend: {
+      colors: {
+        'blue-500': '#0967D2',
+        'blue-600': '#0552B5',
+        'blue-700': '#03449E',
+        'gray-100': '#F5F7FA',
+        'gray-200': '#E4E7EB',
+        'gray-300': '#CBD2D9',
+        'gray-400': '#9AA581',
+        'gray-500': '#7B8794',
+        'gray-600': '#616E7C',
+        'gray-700': '#3E4C59',
+        'gray-800': '#323F48',
+        'gray-900': '#1F2933',
+      },
+    },
   },
   plugins: [],
 };
