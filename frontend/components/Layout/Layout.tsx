@@ -7,7 +7,7 @@ type LayoutProps = {
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
     return (
-        <div className="min-h-screen flex flex-col">
+        <div className="min-h-screen bg-gray-100 flex flex-col">
             <Navbar />
             <main>{children}</main>
             <div className="mt-auto">

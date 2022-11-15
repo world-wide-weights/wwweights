@@ -14,16 +14,16 @@ const navLinks = [{
 export const Navbar: React.FC = () => {
     const [isNavMobileOpen, setIsNavMobileOpen] = useState<boolean>(false)
 
-    return <div className="mb-5">
+    return <div className="bg-white py-3 mb-5">
         <nav className="container md:flex justify-between">
             <div className="flex items-center justify-between">
-                <Link className="flex items-center py-4" href="/">
+                <Link className="flex items-center" href="/">
                     <Image src={logo} alt="Logo" className="min-w-[25px] w-[25px] mr-2" />
                     <h6 className="font-semibold text-blue-500">World Wide Weights</h6>
                 </Link>
                 <IconButton className="block md:hidden" onClick={() => setIsNavMobileOpen(isNavMobileOpen => !isNavMobileOpen)} icon="menu" />
             </div>
-            <ul className={`${isNavMobileOpen ? "block" : "hidden"} md:flex items-center gap-4 pb-5 md:pb-0 `}>
+            <ul className={`${isNavMobileOpen ? "block" : "hidden"} md:flex items-center gap-4 py-5 md:py-0`}>
                 {navLinks.map(navLink => <li key={navLink.text} className="mb-4 md:mb-0"><Button to={navLink.to} kind="tertiary">{navLink.text}</Button></li>)}
                 {/* TODO (Zoe-Bot): Here is a dropdown in the future */}
                 <li className="hidden md:inline"><IconButton onClick={() => ""} icon="more_horiz" /></li>

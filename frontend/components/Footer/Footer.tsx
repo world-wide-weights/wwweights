@@ -6,7 +6,7 @@ import { Button } from "../Button/Button";
 export const Footer: React.FC = () => {
   return (
     <footer>
-      <div className="bg-gray-100 text-center mt-10 py-5">
+      <div className="bg-white text-center mt-10 py-5">
         <div className="container flex flex-col items-center md:flex-row md:justify-between">
 
           <div className="font-semibold text-gray-500 pb-5 md:pb-0">
