@@ -17,7 +17,7 @@ type TagProps = {
  */
 export const Tag: React.FC<TagProps> = ({ children, to, color = "blue" }) => {
   return (
-    <Link href={to} className={`inline-block bg-${color}-500 bg-opacity-20 text-${color}-800 rounded-full whitespace-nowrap px-5 py-1 mr-2 mb-2`}>
+    <Link href={to} className={`inline-block bg-${color}-500 bg-opacity-20 text-${color}-600 rounded-full whitespace-nowrap px-5 py-1 mr-2 mb-2`}>
       {children}
     </Link>
   )
