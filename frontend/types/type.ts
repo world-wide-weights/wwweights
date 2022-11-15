@@ -1,0 +1,1 @@
+export type Color = "red" | "indigo" | "pink" | "cyan" | "blue" | "emerald" | "amber" | "gray" | "slate" | "zinc" | "neutral" | "stone" | "orange" | "yellow" | "lime" | "green" | "teal" | "sky" | "violet" | "purple" | "fuchsia" | "rose"

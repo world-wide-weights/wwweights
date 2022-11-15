@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Color } from "../../types/type";
 
 type TagProps = {
   /** Content of tag */
@@ -8,28 +9,7 @@ type TagProps = {
   to: string
 
   /** Possibility to change color and background of tag */
-  color?: "red"
-  | "indigo"
-  | "pink"
-  | "cyan"
-  | "blue"
-  | "emerald"
-  | "amber"
-  | "gray"
-  | "slate"
-  | "zinc"
-  | "neutral"
-  | "stone"
-  | "orange"
-  | "yellow"
-  | "lime"
-  | "green"
-  | "teal"
-  | "sky"
-  | "violet"
-  | "purple"
-  | "fuchsia"
-  | "rose"
+  color?: Color
 }
 
 /**
