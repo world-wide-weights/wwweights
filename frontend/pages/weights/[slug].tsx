@@ -27,7 +27,7 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
             <title>{siteTitle}</title>
         </Head>
 
-        <div className="container mt-20">
+        <div className="container mt-10 md:mt-20">
             <div className="grid items-center grid-cols-2">
                 {/* Headline and Weight */}
                 <div className="md:col-start-1 md:col-end-3 pl-5 sm:pl-0 md:pl-0 md:mt-5">
@@ -39,7 +39,6 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
                 <div className="flex flex-col self-start col-start-1 col-end-3 md:row-start-2 mt-5 md:mt-0">
                     <p className="mb-3">Quelle: Wikpedia 15.05.2020</p>
                     <ul className="flex md:flex-wrap overflow-y-auto">
-                        <li><div className="md:hidden absolute bg-gradient-to-r from-white to-transparent w-20 h-8 py-1"></div></li>
                         <li><div className="md:hidden absolute bg-gradient-to-r right-0 from-transparent to-white w-20 h-8 py-1"></div></li>
                         <li><Tag to="/tags/1">tag testststststststst 1</Tag></li>
                         <li><Tag to="/tags/2">ta sdfjdsfuoisdfu 2</Tag></li>
@@ -53,7 +52,7 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
                         <li><Tag to="/tags/3">tagasdasdasd 3</Tag></li>
                         <li><Tag to="/tags/3">tagasdasdasd 3</Tag></li>
                         <li><Tag to="/tags/3">tagasdasdasd 3</Tag></li>
-                        <li><Tag to="/tags/3">tagasdasdasd 3</Tag></li>
+                        <li className="mr-24"><Tag to="/tags/3">tagasdasdasd 3</Tag></li>
                     </ul>
                 </div>
 
