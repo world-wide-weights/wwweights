@@ -58,7 +58,7 @@ export default function WeightsList({ items, currentPage, limit }: InferGetServe
             </div>
 
             {/* Pagination */}
-            <div className="flex justify-center mt-5 md:mt-10">
+            <div className="flex justify-center mt-5 md:mt-8">
                 {currentPage > 1 && <Button to={previousButtonLink} className="mr-5" kind="tertiary">Previous</Button>}
                 <Button to={nextButtonLink} kind="tertiary">Next</Button>
             </div>
