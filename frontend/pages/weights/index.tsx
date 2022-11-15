@@ -4,7 +4,7 @@ import { Button } from "../../components/Button/Button"
 import { Headline } from "../../components/Headline/Headline"
 import { ItemPreview } from "../../components/Item/ItemPreview"
 
-const DEFAULT_PAGE_SIZE = 16
+const DEFAULT_ITEMS_PER_PAGE = 16
 const PAGE_SIZE_MAXIMUM = 100
 const FIRST_PAGE = 1
 
@@ -26,7 +26,7 @@ type WeightsListProps = {
 export default function WeightsList({ items, currentPage, limit }: InferGetServerSidePropsType<typeof getServerSideProps>) {
     const siteTitle = `Latest ${currentPage > 1 ? `| Page ${currentPage} ` : ``}- World Wide Weights`
 
-    const hasCustomLimit = limit !== DEFAULT_PAGE_SIZE
+    const hasCustomLimit = limit !== DEFAULT_ITEMS_PER_PAGE
 
     // Previous Button
     const previousButtonQueryString = new URLSearchParams({
@@ -69,7 +69,7 @@ export default function WeightsList({ items, currentPage, limit }: InferGetServe
 
 export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (context) => {
     const currentPage = parseInt(context.query.page as string ?? FIRST_PAGE)
-    const limit = parseInt(context.query.limit as string ?? DEFAULT_PAGE_SIZE)
+    const limit = parseInt(context.query.limit as string ?? DEFAULT_ITEMS_PER_PAGE)
 
     // Validate Query
     if (currentPage < 1 || limit < 1 || limit > PAGE_SIZE_MAXIMUM) {
