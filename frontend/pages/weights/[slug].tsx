@@ -57,10 +57,10 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
 
                 {/* Source and Tags */}
                 <div className="flex flex-col self-start col-start-1 col-end-3 lg:row-start-2 mt-5 lg:mt-0">
-                    <p className="mb-3">Quelle: Wikpedia 15.05.2020</p>
+                    <a href="https://de.wikipedia.org/wiki/Korrelationskoeffizient" className="mb-3">According to $source a {item.title} weights $130.000 - 150.000 kg.</a>
                     <ul className="flex md:flex-wrap overflow-y-auto">
                         <li><div className="md:hidden absolute bg-gradient-to-r right-0 from-transparent to-white w-20 h-8 py-1"></div></li>
-                        {tags.map((tag, index) => <li className={`${index === tags.length - 1 ? "mr-20" : ""}`}><Tag to={tag.link}>{tag.name}</Tag></li>)}
+                        {tags.map((tag, index) => <li key={tag.name} className={`${index === tags.length - 1 ? "mr-20" : ""}`}><Tag to={tag.link}>{tag.name}</Tag></li>)}
                     </ul>
                 </div>
 
