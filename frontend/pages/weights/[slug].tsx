@@ -17,6 +17,26 @@ type WeightsSingleProps = {
     item: Todo
 }
 
+const tags = [{
+    name: "tag testststststststst 1",
+    link: "/tags/1"
+}, {
+    name: "tag testststststststst 2",
+    link: "/tags/2"
+}, {
+    name: "tag 3",
+    link: "/tags/3"
+}, {
+    name: "tag 4",
+    link: "/tags/4"
+}, {
+    name: "tag testststststststst 5",
+    link: "/tags/5"
+}, {
+    name: "tag testststststststst 6",
+    link: "/tags/6"
+}]
+
 /** Single Page of a weight */
 export default function WeightsSingle({ item }: InferGetServerSidePropsType<typeof getStaticProps>) {
     const siteTitle = `${item.title} Weight | WWWeights`
@@ -40,19 +60,7 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
                     <p className="mb-3">Quelle: Wikpedia 15.05.2020</p>
                     <ul className="flex md:flex-wrap overflow-y-auto">
                         <li><div className="md:hidden absolute bg-gradient-to-r right-0 from-transparent to-white w-20 h-8 py-1"></div></li>
-                        <li><Tag to="/tags/1">tag testststststststst 1</Tag></li>
-                        <li><Tag to="/tags/2">ta sdfjdsfuoisdfu 2</Tag></li>
-                        <li><Tag to="/tags/3">tag 3</Tag></li>
-                        <li><Tag to="/tags/3">tag 3</Tag></li>
-                        <li><Tag to="/tags/3">tag 3</Tag></li>
-                        <li><Tag to="/tags/3">tagasdasdasd 3</Tag></li>
-                        <li><Tag to="/tags/3">tagasdasdasd 3</Tag></li>
-                        <li><Tag to="/tags/3">tagasdasdasd 3</Tag></li>
-                        <li><Tag to="/tags/3">tagasdasdasd 3</Tag></li>
-                        <li><Tag to="/tags/3">tagasdasdasd 3</Tag></li>
-                        <li><Tag to="/tags/3">tagasdasdasd 3</Tag></li>
-                        <li><Tag to="/tags/3">tagasdasdasd 3</Tag></li>
-                        <li className="mr-24"><Tag to="/tags/3">tagasdasdasd 3</Tag></li>
+                        {tags.map((tag, index) => <li className={`${index === tags.length - 1 ? "mr-20" : ""}`}><Tag to={tag.link}>{tag.name}</Tag></li>)}
                     </ul>
                 </div>
 
