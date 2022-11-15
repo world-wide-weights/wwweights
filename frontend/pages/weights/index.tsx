@@ -5,7 +5,7 @@ import { Headline } from "../../components/Headline/Headline"
 import { ItemPreview } from "../../components/Item/ItemPreview"
 
 const DEFAULT_ITEMS_PER_PAGE = 16
-const PAGE_SIZE_MAXIMUM = 100
+const ITEMS_PER_PAGE_MAXIMUM = 100
 const FIRST_PAGE = 1
 
 // As long as we do not have a weight. Let's work with Todo
@@ -72,7 +72,7 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
     const limit = parseInt(context.query.limit as string ?? DEFAULT_ITEMS_PER_PAGE)
 
     // Validate Query
-    if (currentPage < 1 || limit < 1 || limit > PAGE_SIZE_MAXIMUM) {
+    if (currentPage < 1 || limit < 1 || limit > ITEMS_PER_PAGE_MAXIMUM) {
         return {
             notFound: true // Renders 404 page
         }
