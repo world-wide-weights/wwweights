@@ -28,15 +28,15 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
         </Head>
 
         <div className="container mt-10 md:mt-20">
-            <div className="grid items-center grid-cols-2">
+            <div className="grid grid-cols-[120px_1fr] md:grid-cols-[250px_1fr] items-center lg:grid-cols-2">
                 {/* Headline and Weight */}
-                <div className="md:col-start-1 md:col-end-3 pl-5 sm:pl-0 md:pl-0 md:mt-5">
+                <div className="lg:col-start-1 lg:col-end-3 pl-5 lg:pl-0 md:mt-5">
                     <Headline level={3}>{item.title}</Headline>
-                    <h6 className="text-2xl sm:text-3xl lg:text-5xl font-bold md:mb-5">130.000 - 150.000 kg</h6>
+                    <h6 className="text-2xl sm:text-4xl lg:text-5xl font-bold md:mb-5">130.000 - 150.000 kg</h6>
                 </div>
 
                 {/* Source and Tags */}
-                <div className="flex flex-col self-start col-start-1 col-end-3 md:row-start-2 mt-5 md:mt-0">
+                <div className="flex flex-col self-start col-start-1 col-end-3 lg:row-start-2 mt-5 lg:mt-0">
                     <p className="mb-3">Quelle: Wikpedia 15.05.2020</p>
                     <ul className="flex md:flex-wrap overflow-y-auto">
                         <li><div className="md:hidden absolute bg-gradient-to-r right-0 from-transparent to-white w-20 h-8 py-1"></div></li>
@@ -57,8 +57,9 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
                 </div>
 
                 {/* Weights Image */}
-                <div className="row-start-1 md:row-end-3 md:flex md:justify-end">
-                    <Image src="https://picsum.photos/1200" className="rounded-xl" alt={item.title} width={230} height={230} />
+                <div className="row-start-1 lg:row-end-3 lg:flex lg:justify-end">
+                    <Image src="https://picsum.photos/1200" priority className="sm:hidden rounded-xl" alt={item.title} width={120} height={120} />
+                    <Image src="https://picsum.photos/1200" priority className="hidden sm:block rounded-xl" alt={item.title} width={230} height={230} />
                 </div>
             </div>
         </div>
