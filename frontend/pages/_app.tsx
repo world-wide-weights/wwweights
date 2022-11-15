@@ -7,9 +7,7 @@ import '../styles/global.css';
 const App = ({ Component, pageProps }: AppProps) => {
   return <>
     <Head>
-      <style>
-        @import url('https://use.typekit.net/opi3gwx.css');
-      </style>
+      <link rel="stylesheet" href="https://use.typekit.net/opi3gwx.css" />
     </Head>
     <Layout>
       <Component {...pageProps} />
