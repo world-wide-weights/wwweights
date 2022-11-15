@@ -3,7 +3,7 @@ module.exports = {
   content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   safelist: [
     {
-      pattern: /bg-(.*)-(200|300|500)/,
+      pattern: /bg-(.*)-(100|200|500)/,
       variants: ['hover', 'focus'],
     },
     {

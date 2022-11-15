@@ -19,7 +19,7 @@ type IconButtonProps = {
  */
 export const IconButton: React.FunctionComponent<IconButtonProps> = ({ icon, to, onClick, className = "", color = "gray" }) => {
     const innerIcon = <i className={`material-symbols-rounded text-${color}-600`}>{icon}</i>
-    const classes = `cursor-pointer hover:bg-${color}-200 focus:bg-${color}-300 rounded-full w-10 h-10 flex items-center justify-center ${className}`
+    const classes = `cursor-pointer hover:bg-${color}-100 focus:bg-${color}-200 rounded-full w-10 h-10 flex items-center justify-center ${className}`
 
     return <>
         {/* Button as link */}
