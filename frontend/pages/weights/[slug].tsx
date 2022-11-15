@@ -1,7 +1,6 @@
 import { GetStaticPaths, GetStaticProps, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import { Headline } from "../../components/Headline/Headline";
 import { Tag } from "../../components/Tag/Tag";
 
 // TODO (Zoe-Bot): Adjust types when list page merged and when using weights of course xD
@@ -51,7 +50,10 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
             <div className="grid grid-cols-[120px_1fr] md:grid-cols-[250px_1fr] items-center lg:grid-cols-2">
                 {/* Headline and Weight */}
                 <div className="lg:col-start-1 lg:col-end-3 pl-5 lg:pl-0 md:mt-5">
-                    <Headline level={3}>{item.title}</Headline>
+                    <a target="_blank" rel="noopener noreferrer" className="flex items-center text-gray-700 text-lg sm:text-2xl md:mb-2" href={`https://www.google.com/search?q=${item.title}`}>
+                        {item.title}
+                        <i className="material-symbols-rounded ml-2">open_in_new</i>
+                    </a>
                     <h6 className="text-2xl sm:text-4xl lg:text-5xl font-bold md:mb-5">130.000 - 150.000 kg</h6>
                 </div>
 
