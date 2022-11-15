@@ -71,6 +71,13 @@ export const getStaticProps: GetStaticProps<WeightsSingleProps> = async (context
     const response = await fetch(`https://jsonplaceholder.typicode.com/todos/${slug}`)
     const data = await response.json()
 
+    // Validate Query
+    if (!data) {
+        return {
+            notFound: true // Renders 404 page
+        }
+    }
+
     return {
         props: {
             item: data
