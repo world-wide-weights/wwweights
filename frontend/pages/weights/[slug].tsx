@@ -19,7 +19,7 @@ type WeightsSingleProps = {
 
 /** Single Page of a weight */
 export default function WeightsSingle({ item }: InferGetServerSidePropsType<typeof getStaticProps>) {
-    const siteTitle = `How much does ${item.title} weight | WWWeights`
+    const siteTitle = `${item.title} Weight | WWWeights`
 
     return <>
         {/* Meta Tags */}
