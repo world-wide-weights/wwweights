@@ -1,4 +1,4 @@
-import 'material-symbols';
+import 'material-symbols/rounded.css';
 import type { AppProps } from 'next/app';
 import { Layout } from '../components/Layout/Layout';
 import '../styles/global.css';
