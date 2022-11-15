@@ -74,7 +74,7 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
     // Validate Query
     if (currentPage < 1 || limit < 1 || limit > PAGE_SIZE_MAXIMUM) {
         return {
-            notFound: true
+            notFound: true // Renders 404 page
         }
     }
 
