@@ -61,6 +61,7 @@ export class Item {
 
   // TODO: Temporary solution
   @IsString()
+  @IsOptional()
   @Expose()
   @ApiProperty()
   @Column({
@@ -70,6 +71,7 @@ export class Item {
   source: string;
 
   // TODO: Temporary solution needs to be @ManyToOne
+  @IsString()
   @Expose({ groups: ['admin'] })
   @ApiProperty()
   @Column()
