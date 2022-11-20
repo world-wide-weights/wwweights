@@ -6,19 +6,19 @@ export type PaginationProps = {
     totalItems: number
     /** The index of current page. */
     currentPage: number
-    /** The number dictating how many items a page contains. */
-    pageSize: number
     /** Base Path of link where pages are. */
     basePath: string
+    /** The number dictating how many items a page contains. */
+    itemsPerPage?: number
     /** The number dictating how many items a page contains. */
     defaultItemsPerPage?: number
     /** Customize count of siblings shown between the dots */
     siblingCount?: number
 }
 
-export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage, pageSize, basePath, defaultItemsPerPage = 16, siblingCount = 1 }) => {
-    const paginationRange = usePagination({ currentPage, totalItems, siblingCount, pageSize })
-    const hasCustomLimit = pageSize !== defaultItemsPerPage
+export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage, basePath, itemsPerPage = 16, defaultItemsPerPage = 16, siblingCount = 1 }) => {
+    const paginationRange = usePagination({ currentPage, totalItems, siblingCount, itemsPerPage })
+    const hasCustomLimit = itemsPerPage !== defaultItemsPerPage
     const lastPage = paginationRange[paginationRange.length - 1]
 
     // If our pagination array length is less than 2 to we should not render component (because there are not enough items for pagination)
@@ -29,21 +29,21 @@ export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage,
     // Next Button
     const nextButtonQueryString = new URLSearchParams({
         page: (currentPage + 1).toString(), // Replace `true` with maxPage logic later
-        ...(hasCustomLimit && { limit: pageSize.toString() }),
+        ...(hasCustomLimit && { limit: itemsPerPage.toString() }),
     }).toString()
     const nextButtonLink = `${basePath}${nextButtonQueryString !== "" ? `?${nextButtonQueryString}` : ``}`
 
     // Previous Button
     const previousButtonQueryString = new URLSearchParams({
         page: (currentPage - 1).toString(), // At page 3 we want to have a page query 
-        ...(hasCustomLimit && { limit: pageSize.toString() }), // When we have a custom limit of items, we want to provide it
+        ...(hasCustomLimit && { limit: itemsPerPage.toString() }), // When we have a custom limit of items, we want to provide it
     }).toString()
     const previousButtonLink = `${basePath}${previousButtonQueryString !== "" ? `?${previousButtonQueryString}` : ``}`
 
     const pageLink = (pageNumber: number | string) => {
         const pageButtonQueryString = new URLSearchParams({
             page: pageNumber.toString(), // At page 3 we want to have a page query 
-            ...(hasCustomLimit && { limit: pageSize.toString() }), // When we have a custom limit of items, we want to provide it
+            ...(hasCustomLimit && { limit: itemsPerPage.toString() }), // When we have a custom limit of items, we want to provide it
         }).toString()
 
         return `${basePath}${pageButtonQueryString !== "" ? `?${pageButtonQueryString}` : ``}`

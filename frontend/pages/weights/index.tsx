@@ -1,12 +1,12 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Head from "next/head"
-import { Button } from "../../components/Button/Button"
 import { Headline } from "../../components/Headline/Headline"
 import { ItemPreview } from "../../components/Item/ItemPreview"
 import { Pagination } from "../../components/PaginationNav/Pagination"
 
 const DEFAULT_ITEMS_PER_PAGE = 16
 const ITEMS_PER_PAGE_MAXIMUM = 100
+const ITEMS_PER_PAGE = 8
 const FIRST_PAGE = 1
 
 // As long as we do not have a weight. Let's work with Todo
@@ -27,22 +27,6 @@ type WeightsListProps = {
 export default function WeightsList({ items, currentPage, limit }: InferGetServerSidePropsType<typeof getServerSideProps>) {
     const siteTitle = `Latest ${currentPage > 1 ? `| Page ${currentPage} ` : ``}- World Wide Weights`
 
-    const hasCustomLimit = limit !== DEFAULT_ITEMS_PER_PAGE
-
-    // Previous Button
-    const previousButtonQueryString = new URLSearchParams({
-        ...(currentPage > 2 && { page: (currentPage - 1).toString() }), // At page 3 we want to have a page query 
-        ...(hasCustomLimit && { limit: limit.toString() }), // When we have a custom limit of items, we want to provide it
-    }).toString()
-    const previousButtonLink = `/weights${previousButtonQueryString !== "" ? `?${previousButtonQueryString}` : ``}`
-
-    // Next Button
-    const nextButtonQueryString = new URLSearchParams({
-        ...(true && { page: (currentPage + 1).toString() }), // Replace `true` with maxPage logic later
-        ...(hasCustomLimit && { limit: limit.toString() }),
-    }).toString()
-    const nextButtonLink = `/weights${nextButtonQueryString !== "" ? `?${nextButtonQueryString}` : ``}`
-
     return (<>
         {/* Meta Tags */}
         <Head>
@@ -59,12 +43,7 @@ export default function WeightsList({ items, currentPage, limit }: InferGetServe
             </div>
 
             {/* Pagination */}
-            <Pagination totalItems={100} currentPage={currentPage} pageSize={hasCustomLimit ? limit : DEFAULT_ITEMS_PER_PAGE} basePath={"/weights"} />
-
-            <div className="flex justify-center mt-5 md:mt-10">
-                {currentPage > 1 && <Button to={previousButtonLink} className="mr-5" kind="tertiary">Previous</Button>}
-                <Button to={nextButtonLink} kind="tertiary">Next</Button>
-            </div>
+            <Pagination totalItems={100} currentPage={currentPage} itemsPerPage={ITEMS_PER_PAGE} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} basePath={"/weights"} />
         </div>
     </>
     )
