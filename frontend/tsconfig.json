@@ -18,15 +18,16 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+	"types":["cypress","node"]
   },
   "include": [
     "next-env.d.ts",
+	"cypress.d.ts",
     "**/*.ts",
     "**/*.tsx"
   ],
   "exclude": [
-    "node_modules",
-	"**/*.cy.tsx"
+    "node_modules"
   ]
 }
