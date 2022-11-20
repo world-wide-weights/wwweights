@@ -6,7 +6,6 @@ import { Pagination } from "../../components/PaginationNav/Pagination"
 
 const DEFAULT_ITEMS_PER_PAGE = 16
 const ITEMS_PER_PAGE_MAXIMUM = 100
-const ITEMS_PER_PAGE = 8
 const FIRST_PAGE = 1
 
 // As long as we do not have a weight. Let's work with Todo
@@ -38,12 +37,12 @@ export default function WeightsList({ items, currentPage, limit }: InferGetServe
             <Headline level={3}>All weights</Headline>
 
             {/* Weights (todos) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-10">
                 {items.map((item) => <ItemPreview key={item.id} name={`${item.id}: ${item.title}`} weight={item.completed ? "✓" : "X"} imageUrl="https://via.placeholder.com/96.png" id={item.id.toString()} />)}
             </div>
 
             {/* Pagination */}
-            <Pagination totalItems={100} currentPage={currentPage} itemsPerPage={ITEMS_PER_PAGE} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} basePath={"/weights"} />
+            <Pagination totalItems={100} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} basePath={"/weights"} />
         </div>
     </>
     )
