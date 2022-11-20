@@ -2,7 +2,7 @@ import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Head from "next/head"
 import { Headline } from "../../components/Headline/Headline"
 import { ItemPreview } from "../../components/Item/ItemPreview"
-import { Pagination } from "../../components/PaginationNav/Pagination"
+import { Pagination } from "../../components/Pagination/Pagination"
 
 const DEFAULT_ITEMS_PER_PAGE = 16
 const ITEMS_PER_PAGE_MAXIMUM = 100

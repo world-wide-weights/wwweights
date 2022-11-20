@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { PaginationProps } from "../components/PaginationNav/Pagination";
+import { PaginationProps } from "../components/Pagination/Pagination";
 
 // https://www.freecodecamp.org/news/build-a-custom-pagination-component-in-react/
 
