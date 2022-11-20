@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { routes } from "../../pages/routes"
+import { routes } from "../routes"
 
 export type ItemPreviewProps = {
     /** Name of weight */

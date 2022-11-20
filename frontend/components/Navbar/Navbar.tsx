@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { routes } from '../../pages/routes'
 import logo from '../../public/logo.png'
+import { routes } from '../routes'
 
 /** Navbar component, should only be used once at the top */
 export const Navbar: React.FC = () => {
