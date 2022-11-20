@@ -3,6 +3,7 @@ import Head from "next/head"
 import { Button } from "../../components/Button/Button"
 import { Headline } from "../../components/Headline/Headline"
 import { ItemPreview } from "../../components/Item/ItemPreview"
+import { Pagination } from "../../components/PaginationNav/Pagination"
 
 const DEFAULT_ITEMS_PER_PAGE = 16
 const ITEMS_PER_PAGE_MAXIMUM = 100
@@ -58,6 +59,8 @@ export default function WeightsList({ items, currentPage, limit }: InferGetServe
             </div>
 
             {/* Pagination */}
+            <Pagination totalItems={100} currentPage={currentPage} pageSize={hasCustomLimit ? limit : DEFAULT_ITEMS_PER_PAGE} basePath={"/weights"} />
+
             <div className="flex justify-center mt-5 md:mt-10">
                 {currentPage > 1 && <Button to={previousButtonLink} className="mr-5" kind="tertiary">Previous</Button>}
                 <Button to={nextButtonLink} kind="tertiary">Next</Button>
