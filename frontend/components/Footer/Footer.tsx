@@ -1,3 +1,4 @@
+import { routes } from "../../pages/routes";
 import { Button } from "../Button/Button";
 
 /**
@@ -14,8 +15,8 @@ export const Footer: React.FC = () => {
           </div>
 
           <ul className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
-            <li><Button to="#" kind="tertiary">Imprint</Button></li>
-            <li><Button to="#" kind="tertiary">Privacy Policy</Button></li>
+            <li><Button to={routes.legal.imprint} kind="tertiary">Imprint</Button></li>
+            <li><Button to={routes.legal.privacy} kind="tertiary">Privacy Policy</Button></li>
           </ul>
 
         </div>

@@ -1,5 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
+import { routes } from "../../pages/routes"
 
 export type ItemPreviewProps = {
     /** Name of weight */
@@ -22,8 +23,7 @@ export type ItemPreviewProps = {
  */
 export const ItemPreview: React.FC<ItemPreviewProps> = ({ id, name, weight, imageUrl }) => {
 
-    // TODO: Move this to route defintion constant
-    return <Link className="flex items-center" href={`/weights/${id}`}>
+    return <Link className="flex items-center" href={`${routes.weights.single}${id}`}>
         {imageUrl && <Image className="object-cover rounded-xl w-24 h-24 mr-5 bg-white" alt={`Image of ${name}`} src={imageUrl} width={96} height={96} />}
         <div>
             <h5 className="text-gray-900 text-xl font-semibold break-all">{name}</h5>
