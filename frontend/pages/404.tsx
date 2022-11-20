@@ -1,5 +1,8 @@
 import { BaseError } from "../components/Errors/BaseError";
 
+/**
+ * Custom 404 Page, occures when we enter a bad link.
+ */
 export default function Custom404() {
     return <BaseError headline="404 - Seite nicht gefunden" description={<>
         <p>Ursachen dafür können sein:</p>
