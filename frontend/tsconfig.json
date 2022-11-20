@@ -26,7 +26,6 @@
   },
   "include": [
     "next-env.d.ts",
-    "frontend/cypress/support/component.ts",
     "**/*.ts",
     "**/*.tsx"
   ],

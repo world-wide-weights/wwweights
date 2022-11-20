@@ -8,7 +8,7 @@ WORKDIR /app
 
 # Install dependencies based on the preferred package manager
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm ci --audit-false
 
 # Rebuild the source code only when needed
 FROM node:16-alpine AS builder
@@ -20,7 +20,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 
 # Add sharp for optimization 
 # See https://nextjs.org/docs/messages/install-sharp
-RUN npm i sharp --no-save
+RUN npm i sharp -g
 
 RUN npm run build
 
