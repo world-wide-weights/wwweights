@@ -24,7 +24,7 @@ type TagsListProps = {
 
 /** Base List for tags */
 export default function TagsList({ items, currentPage, limit }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-    const siteTitle = `Tags ${currentPage > 1 ? `| Page ${currentPage} ` : ``}- World Wide Weights`
+    const siteTitle = `All Tags ${currentPage > 1 ? `| Page ${currentPage} ` : ``}- World Wide Weights`
 
     const hasCustomLimit = limit !== DEFAULT_ITEMS_PER_PAGE
 
