@@ -55,6 +55,8 @@ export const usePagination = ({ totalItems, pageSize, siblingCount = 1, currentP
             return [firstPageIndex, DOTS, ...middleRange, DOTS, lastPageIndex];
         }
 
+        return []
+
     }, [totalItems, pageSize, siblingCount, currentPage])
 
     return paginationRange

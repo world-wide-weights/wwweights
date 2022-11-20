@@ -19,10 +19,10 @@ export type PaginationProps = {
 export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage, pageSize, basePath, defaultItemsPerPage = 16, siblingCount = 1 }) => {
     const paginationRange = usePagination({ currentPage, totalItems, siblingCount, pageSize })
     const hasCustomLimit = pageSize !== defaultItemsPerPage
-    const lastPage = paginationRange![paginationRange!.length - 1]
+    const lastPage = paginationRange[paginationRange.length - 1]
 
     // If our pagination array length is less than 2 to we should not render component (because there are not enough items for pagination)
-    if (currentPage === 0 || paginationRange!.length < 2) {
+    if (currentPage === 0 || paginationRange.length < 2) {
         return null
     }
 
@@ -55,7 +55,7 @@ export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage,
             <li>
                 <Button to={previousButtonLink} disabled={currentPage === 1} className="mr-5" kind="tertiary">Previous</Button>
             </li>
-            {paginationRange!.map((pageNumber, index) => {
+            {paginationRange.map((pageNumber, index) => {
                 // If the pageItem is a DOT, render the DOTS unicode character
                 if (pageNumber === DOTS) {
                     return <li key={index} className="pagination-item dots">&#8230;</li>;
