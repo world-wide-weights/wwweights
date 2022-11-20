@@ -73,7 +73,7 @@ export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage,
 
             {/*  Right navigation arrow */}
             <li>
-                <Button to={nextButtonLink} disabled={currentPage === lastPage} icon="arrow_forward_ios" className="hidden md:flex ml-5" kind="tertiary">Next</Button>
+                <Button to={nextButtonLink} disabled={currentPage === lastPage} iconEnd="arrow_forward_ios" className="hidden md:flex ml-5" kind="tertiary">Next</Button>
                 <IconButton to={nextButtonLink} className="flex md:hidden" disabled={currentPage === 1} icon="arrow_forward_ios" />
             </li>
         </ul>
