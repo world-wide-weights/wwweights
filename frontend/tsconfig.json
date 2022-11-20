@@ -19,11 +19,14 @@
     "jsx": "preserve",
     "incremental": true,
     "baseUrl": ".",
-	"types":["cypress","node"]
+    "types": [
+      "cypress",
+      "node"
+    ]
   },
   "include": [
     "next-env.d.ts",
-	"cypress.d.ts",
+    "frontend/cypress/support/component.ts",
     "**/*.ts",
     "**/*.tsx"
   ],
