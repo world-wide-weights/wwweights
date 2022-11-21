@@ -15,8 +15,8 @@ export class CreateItemHandler implements ICommandHandler<CreateItemCommand> {
 
   async execute(command: CreateItemCommand) {
     try {
-      // TODO: People use here Event! look into it
-      const result = this.publisher.mergeClassContext(
+      // TODO: Class or Object?
+      const result = this.publisher.mergeObjectContext(
         await this.repository.save(new Item(command.createItemDto)),
       );
       return (
