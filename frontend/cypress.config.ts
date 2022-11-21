@@ -17,7 +17,7 @@ export default defineConfig({
     async setupNodeEvents(on, config) {
       const dev = process.env.NODE_ENV !== 'production'
       const hostname = 'localhost'
-      const port = 3000
+      const port = 3002
       const app = next({ dev, hostname, port })
       const handle = app.getRequestHandler()
 
@@ -26,7 +26,6 @@ export default defineConfig({
           try {
             const parsedUrl = parse(req.url!, true)
             await handle(req, res, parsedUrl)
-
           } catch (err) {
             console.error('Error occurred handling', req.url, err)
             res.statusCode = 500
@@ -37,8 +36,6 @@ export default defineConfig({
         })
       })
 
-      // register handlers for cy.task command
-      // https://on.cypress.io/task
       on('task', {
         clearNock() {
           nock.restore()
@@ -51,7 +48,7 @@ export default defineConfig({
 
           console.log('Nock will: %s %s%s respond with %d %o', method, hostname, path, statusCode, body)
 
-          nock(hostname, { allowUnmocked: true })[method](path).reply(statusCode, body)
+          nock(hostname, { allowUnmocked: true })[method](path).query(true).reply(statusCode, body)
 
           return null
         },
@@ -69,7 +66,7 @@ export default defineConfig({
     },
   },
   env: {
-    BASE_URL: 'http://localhost:3000'
+    BASE_URL: 'http://localhost:3002'
   }
 })
 
