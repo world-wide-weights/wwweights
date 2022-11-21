@@ -1,3 +1,5 @@
+import weights from '../fixtures/weights.json'
+
 // Theoretically a component test but changes url so component tests not working
 describe('Pagination', () => {
     beforeEach(() => {
@@ -5,21 +7,16 @@ describe('Pagination', () => {
         cy.task('nock', {
             hostname: 'https://jsonplaceholder.typicode.com',
             method: 'get',
-            path: '/todos/1',
+            path: `${/.*$/}`,
             statusCode: 200,
-            body: {
-                "userId": 1,
-                "id": 1,
-                "title": "Test",
-                "completed": false
-            },
+            body: weights,
         })
 
-        cy.visit(`${Cypress.env("BASE_URL")}/weights/1`)
+        // cy.visit(`${Cypress.env("BASE_URL")}/weights`)
     })
 
     it('should display', () => {
-
+        cy.visit(`${Cypress.env("BASE_URL")}/weights?page=2`)
     })
 })
 
