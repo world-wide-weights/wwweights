@@ -7,15 +7,14 @@ describe('Pagination', () => {
         cy.task('nock', {
             hostname: 'https://jsonplaceholder.typicode.com',
             method: 'get',
-            path: `${/.*$/}`,
+            path: `/todos`,
             statusCode: 200,
             body: weights,
         })
-
-        // cy.visit(`${Cypress.env("BASE_URL")}/weights`)
     })
 
     it('should display', () => {
+
         cy.visit(`${Cypress.env("BASE_URL")}/weights?page=2`)
     })
 })
