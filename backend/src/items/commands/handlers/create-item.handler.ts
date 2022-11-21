@@ -1,5 +1,5 @@
 import { UnprocessableEntityException } from '@nestjs/common';
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Item } from '../../models/item.model';
@@ -10,12 +10,14 @@ export class CreateItemHandler implements ICommandHandler<CreateItemCommand> {
   constructor(
     @InjectRepository(Item)
     private repository: Repository<Item>,
+    private readonly publisher: EventPublisher,
   ) {}
 
   async execute(command: CreateItemCommand) {
     try {
-      const result = await this.repository.save(
-        new Item(command.createItemDto),
+      // TODO: People use here Event! look into it
+      const result = this.publisher.mergeClassContext(
+        await this.repository.save(new Item(command.createItemDto)),
       );
       return (
         result || new UnprocessableEntityException('Item could not be created')
