@@ -10,6 +10,8 @@ export type ItemPreviewProps = {
     id: string
     /** Image URL */
     imageUrl?: string
+    /** For testing */
+    dataCy?: string
 }
 
 /**
@@ -20,10 +22,10 @@ export type ItemPreviewProps = {
  * <ItemPreview id="1" name="Smartphone" weight="300 gr" imageUrl="https://via.placeholder.com/96.png" />
  * ```
  */
-export const ItemPreview: React.FC<ItemPreviewProps> = ({ id, name, weight, imageUrl }) => {
+export const ItemPreview: React.FC<ItemPreviewProps> = ({ id, name, weight, imageUrl, dataCy }) => {
 
     // TODO: Move this to route defintion constant
-    return <Link className="flex items-center" href={`/weights/${id}`}>
+    return <Link dataCy={dataCy} className="flex items-center" href={`/weights/${id}`}>
         {imageUrl && <Image className="object-cover rounded-xl w-24 h-24 mr-5 bg-white" alt={`Image of ${name}`} src={imageUrl} width={96} height={96} />}
         <div>
             <h5 className="text-gray-900 text-xl font-semibold break-all">{name}</h5>
