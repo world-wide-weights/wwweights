@@ -14,8 +14,8 @@ Cypress.Commands.add('check404', () => {
 })
 
 Cypress.Commands.add('checkCurrentActivePage', (activePageNumber) => {
-    cy.dataCy(`pagination-button-page-${activePageNumber}`).should('have.class', 'bg-blue-500 text-white')
-
+    cy.dataCy(`pagination-button-page-${activePageNumber}`).should('have.class', 'bg-blue-500')
+    cy.dataCy(`pagination-button-page-${activePageNumber}`).should('have.class', 'text-white')
 })
 
 export { }

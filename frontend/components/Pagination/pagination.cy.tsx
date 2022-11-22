@@ -18,11 +18,13 @@ describe('Pagination', () => {
 
             it('should disable prevoius button when on page 1 desktop', () => {
                 cy.dataCy('pagination-button-left-desktop').invoke('attr', 'href').should('eq', '')
-                cy.dataCy('pagination-button-left-desktop').should('have.class', 'text-opacity-75 opacity-80')
+                cy.dataCy('pagination-button-left-desktop').should('have.class', 'text-opacity-75')
+                cy.dataCy('pagination-button-left-desktop').should('have.class', 'opacity-80')
             })
 
             it('should show active state of current page', () => {
-                cy.dataCy("pagination-button-page-1").should('have.class', 'bg-blue-500 text-white')
+                cy.dataCy("pagination-button-page-1").should('have.class', 'bg-blue-500')
+                cy.dataCy("pagination-button-page-1").should('have.class', 'text-white')
             })
 
             it('should show no left dots, but show right dots', () => {
@@ -45,7 +47,8 @@ describe('Pagination', () => {
             cy.mount(<Pagination totalItems={TOTAL_ITEMS} currentPage={10} basePath={'/'} itemsPerPage={ITEMS_PER_PAGE} />)
 
             cy.dataCy('pagination-button-right-desktop').invoke('attr', 'href').should('eq', '')
-            cy.dataCy('pagination-button-right-desktop').should('have.class', 'text-opacity-75 opacity-80')
+            cy.dataCy('pagination-button-right-desktop').should('have.class', 'text-opacity-75')
+            cy.dataCy('pagination-button-right-desktop').should('have.class', 'opacity-80')
         })
 
         it('should show no left dots and show no right dots', () => {
