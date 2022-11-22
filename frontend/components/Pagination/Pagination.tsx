@@ -53,19 +53,19 @@ export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage,
     }
 
     return <>
-        <ul className="flex items-center justify-center">
+        <ul dataCy="pagination" className="flex items-center justify-center">
             {/* Left navigation arrow */}
             <li>
-                <Button to={previousButtonLink} disabled={currentPage === 1} icon="arrow_back_ios" className="hidden md:flex mr-5" kind="tertiary">Previous</Button>
-                <IconButton to={previousButtonLink} className="flex md:hidden" disabled={currentPage === 1} icon="arrow_back_ios" />
+                <Button dataCy="pagination-button-left-desktop" to={previousButtonLink} disabled={currentPage === 1} icon="arrow_back_ios" className="hidden md:flex mr-5" kind="tertiary">Previous</Button>
+                <IconButton dataCy="pagination-button-left-mobile" to={previousButtonLink} className="flex md:hidden" disabled={currentPage === 1} icon="arrow_back_ios" />
             </li>
 
             {paginationRange.map((pageNumber, index) =>
                 // If the pageItem is a DOT, render the DOTS unicode character else render our pages
                 pageNumber === DOTS ?
-                    <li key={index} className="text-gray-500">&#8230;</li> :
+                    <li dataCy="pagination-dots" key={index} className="text-gray-500">&#8230;</li> :
                     <li key={index}>
-                        <Button to={pageLink(pageNumber)} className={pageNumber === currentPage ? "flex justify-center items-center bg-blue-500 text-white hover:text-white focus:text-white rounded-full w-9 h-9" : "px-3 md:px-4"} kind="tertiary">
+                        <Button dataCy={`pagination-button-page-${pageNumber}`} to={pageLink(pageNumber)} className={pageNumber === currentPage ? "flex justify-center items-center bg-blue-500 text-white hover:text-white focus:text-white rounded-full w-9 h-9" : "px-3 md:px-4"} kind="tertiary">
                             {pageNumber.toString()}
                         </Button>
                     </li>
@@ -73,8 +73,8 @@ export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage,
 
             {/*  Right navigation arrow */}
             <li>
-                <Button to={nextButtonLink} disabled={currentPage === lastPage} iconEnd="arrow_forward_ios" className="hidden md:flex ml-5" kind="tertiary">Next</Button>
-                <IconButton to={nextButtonLink} className="flex md:hidden" disabled={currentPage === lastPage} icon="arrow_forward_ios" />
+                <Button dataCy="pagination-button-right-desktop" to={nextButtonLink} disabled={currentPage === lastPage} iconEnd="arrow_forward_ios" className="hidden md:flex ml-5" kind="tertiary">Next</Button>
+                <IconButton dataCy="pagination-button-right-mobile" to={nextButtonLink} className="flex md:hidden" disabled={currentPage === lastPage} icon="arrow_forward_ios" />
             </li>
         </ul>
     </>
