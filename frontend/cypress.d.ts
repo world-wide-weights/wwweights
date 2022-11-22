@@ -7,6 +7,7 @@ declare global {
   namespace Cypress {
     interface Chainable {
       mount: typeof mount;
+      dataCy(dataCy: string, customSelector?: string): Chainable<void>
     }
   }
 }
