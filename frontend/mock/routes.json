@@ -1,0 +1,6 @@
+{
+    "/api/query/v1/items/getList": "/phones",
+    "/api/query/v1/items/getList?page=:page": "/phones?_page=:page",
+    "/api/query/v1/items/getList?page=:page&limit=:limit": "/phones?_page=:page&_limit=:limit",
+    "/api/query/v1/items/getOne?slug=:slug": "/phones/:slug"
+}
