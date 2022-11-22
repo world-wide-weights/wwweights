@@ -1,7 +1,7 @@
 import '../../styles/global.css';
 import { Tag } from './Tag';
 
-describe('Headline', () => {
+describe('Tag', () => {
     it('should display correct color', () => {
         const color = "amber"
 
