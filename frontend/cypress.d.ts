@@ -8,6 +8,9 @@ declare global {
     interface Chainable {
       mount: typeof mount;
       dataCy(dataCy: string, customSelector?: string): Chainable<void>
+      visitLocalPage(path?: string, options?: Partial<Cypress.VisitOptions>): Chainable<void>
+      check404(): Chainable<void>
+      checkCurrentActivePage(activePageNumber: number): Chainable<void>
     }
   }
 }
