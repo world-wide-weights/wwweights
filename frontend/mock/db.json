@@ -1,5 +1,5 @@
 {
-    "phones": [
+    "items": [
         {
             "id": 100,
             "name": "Cassiopeia IT-500 M30CR",
@@ -13999,6 +13999,792 @@
                     "slug": "PDA"
                 }
             ]
+        }
+    ],
+    "tags": [
+        {
+            "name": "Casio",
+            "slug": "Casio"
+        },
+        {
+            "name": "2003 Apr",
+            "slug": "2003-Apr"
+        },
+        {
+            "name": "Windows (mobile-class)",
+            "slug": "Windows-(mobile-class)"
+        },
+        {
+            "name": "PDA",
+            "slug": "PDA"
+        },
+        {
+            "name": "2000 Sep",
+            "slug": "2000-Sep"
+        },
+        {
+            "name": "2001 Jan",
+            "slug": "2001-Jan"
+        },
+        {
+            "name": "2000 Dec",
+            "slug": "2000-Dec"
+        },
+        {
+            "name": "Hewlett-Packard",
+            "slug": "Hewlett-Packard"
+        },
+        {
+            "name": "2004 Jul",
+            "slug": "2004-Jul"
+        },
+        {
+            "name": "Smartphone",
+            "slug": "Smartphone"
+        },
+        {
+            "name": "Toshiba",
+            "slug": "Toshiba"
+        },
+        {
+            "name": "2004 Sep 14",
+            "slug": "2004-Sep-14"
+        },
+        {
+            "name": "Orange",
+            "slug": "Orange"
+        },
+        {
+            "name": "T-Mobile",
+            "slug": "T-Mobile"
+        },
+        {
+            "name": "2004 Sep",
+            "slug": "2004-Sep"
+        },
+        {
+            "name": "O2",
+            "slug": "O2"
+        },
+        {
+            "name": "2004 Nov",
+            "slug": "2004-Nov"
+        },
+        {
+            "name": "2000 Jan",
+            "slug": "2000-Jan"
+        },
+        {
+            "name": "I-Mate",
+            "slug": "I-Mate"
+        },
+        {
+            "name": "2004 Oct",
+            "slug": "2004-Oct"
+        },
+        {
+            "name": "2004 Dec",
+            "slug": "2004-Dec"
+        },
+        {
+            "name": "Qtek",
+            "slug": "Qtek"
+        },
+        {
+            "name": "Siemens",
+            "slug": "Siemens"
+        },
+        {
+            "name": "Audiovox",
+            "slug": "Audiovox"
+        },
+        {
+            "name": "2005 Feb",
+            "slug": "2005-Feb"
+        },
+        {
+            "name": "2002 Apr",
+            "slug": "2002-Apr"
+        },
+        {
+            "name": "2002 May",
+            "slug": "2002-May"
+        },
+        {
+            "name": "2002 Oct",
+            "slug": "2002-Oct"
+        },
+        {
+            "name": "2000 May",
+            "slug": "2000-May"
+        },
+        {
+            "name": "2004 Jul 11",
+            "slug": "2004-Jul-11"
+        },
+        {
+            "name": "Fujitsu-Siemens",
+            "slug": "Fujitsu-Siemens"
+        },
+        {
+            "name": "Dell",
+            "slug": "Dell"
+        },
+        {
+            "name": "2005 Jan",
+            "slug": "2005-Jan"
+        },
+        {
+            "name": "2005 Apr",
+            "slug": "2005-Apr"
+        },
+        {
+            "name": "MiTAC",
+            "slug": "MiTAC"
+        },
+        {
+            "name": "2004 Feb",
+            "slug": "2004-Feb"
+        },
+        {
+            "name": "2003 May",
+            "slug": "2003-May"
+        },
+        {
+            "name": "2000 Oct",
+            "slug": "2000-Oct"
+        },
+        {
+            "name": "Palmtop",
+            "slug": "Palmtop"
+        },
+        {
+            "name": "Olympus",
+            "slug": "Olympus"
+        },
+        {
+            "name": "2005 Mar",
+            "slug": "2005-Mar"
+        },
+        {
+            "name": "2005 Aug",
+            "slug": "2005-Aug"
+        },
+        {
+            "name": "PNA",
+            "slug": "PNA"
+        },
+        {
+            "name": "2005 May",
+            "slug": "2005-May"
+        },
+        {
+            "name": "2005 Oct",
+            "slug": "2005-Oct"
+        },
+        {
+            "name": "Vodafone",
+            "slug": "Vodafone"
+        },
+        {
+            "name": "2006 Apr",
+            "slug": "2006-Apr"
+        },
+        {
+            "name": "1999 Apr",
+            "slug": "1999-Apr"
+        },
+        {
+            "name": "Motorola",
+            "slug": "Motorola"
+        },
+        {
+            "name": "Cancelled",
+            "slug": "Cancelled"
+        },
+        {
+            "name": "2005 Nov",
+            "slug": "2005-Nov"
+        },
+        {
+            "name": "BenQ",
+            "slug": "BenQ"
+        },
+        {
+            "name": "2006 Jan",
+            "slug": "2006-Jan"
+        },
+        {
+            "name": "Acer",
+            "slug": "Acer"
+        },
+        {
+            "name": "2004 May",
+            "slug": "2004-May"
+        },
+        {
+            "name": "1999 Nov",
+            "slug": "1999-Nov"
+        },
+        {
+            "name": "E-TEN",
+            "slug": "E-TEN"
+        },
+        {
+            "name": "2003 Nov",
+            "slug": "2003-Nov"
+        },
+        {
+            "name": "IBM",
+            "slug": "IBM"
+        },
+        {
+            "name": "1999 May",
+            "slug": "1999-May"
+        },
+        {
+            "name": "Subnotebook",
+            "slug": "Subnotebook"
+        },
+        {
+            "name": "2005 Jul",
+            "slug": "2005-Jul"
+        },
+        {
+            "name": "Samsung",
+            "slug": "Samsung"
+        },
+        {
+            "name": "2003 Aug",
+            "slug": "2003-Aug"
+        },
+        {
+            "name": "Ericsson",
+            "slug": "Ericsson"
+        },
+        {
+            "name": "1996 Dec",
+            "slug": "1996-Dec"
+        },
+        {
+            "name": "1997 Jun",
+            "slug": "1997-Jun"
+        },
+        {
+            "name": "1999 Jan",
+            "slug": "1999-Jan"
+        },
+        {
+            "name": "1998 Jun",
+            "slug": "1998-Jun"
+        },
+        {
+            "name": "1997 Sep",
+            "slug": "1997-Sep"
+        },
+        {
+            "name": "2003 Sep",
+            "slug": "2003-Sep"
+        },
+        {
+            "name": "2003 Mar",
+            "slug": "2003-Mar"
+        },
+        {
+            "name": "2003 Jun",
+            "slug": "2003-Jun"
+        },
+        {
+            "name": "2001 Jun",
+            "slug": "2001-Jun"
+        },
+        {
+            "name": "Tablet",
+            "slug": "Tablet"
+        },
+        {
+            "name": "2004 Jun",
+            "slug": "2004-Jun"
+        },
+        {
+            "name": "2004 Aug",
+            "slug": "2004-Aug"
+        },
+        {
+            "name": "2004 Apr",
+            "slug": "2004-Apr"
+        },
+        {
+            "name": "2003 Dec",
+            "slug": "2003-Dec"
+        },
+        {
+            "name": "2004 Jan",
+            "slug": "2004-Jan"
+        },
+        {
+            "name": "Compaq",
+            "slug": "Compaq"
+        },
+        {
+            "name": "2001 Mar",
+            "slug": "2001-Mar"
+        },
+        {
+            "name": "2002 Nov",
+            "slug": "2002-Nov"
+        },
+        {
+            "name": "1997 Feb",
+            "slug": "1997-Feb"
+        },
+        {
+            "name": "1997 May",
+            "slug": "1997-May"
+        },
+        {
+            "name": "2001 Dec",
+            "slug": "2001-Dec"
+        },
+        {
+            "name": "Asus",
+            "slug": "Asus"
+        },
+        {
+            "name": "Sharp",
+            "slug": "Sharp"
+        },
+        {
+            "name": "1999 Mar",
+            "slug": "1999-Mar"
+        },
+        {
+            "name": "2000 Nov",
+            "slug": "2000-Nov"
+        },
+        {
+            "name": "1998 Jul",
+            "slug": "1998-Jul"
+        },
+        {
+            "name": "1998 Nov",
+            "slug": "1998-Nov"
+        },
+        {
+            "name": "1999 Jul",
+            "slug": "1999-Jul"
+        },
+        {
+            "name": "Notebook",
+            "slug": "Notebook"
+        },
+        {
+            "name": "2002 Feb",
+            "slug": "2002-Feb"
+        },
+        {
+            "name": "2000 Jul",
+            "slug": "2000-Jul"
+        },
+        {
+            "name": "2001 Oct",
+            "slug": "2001-Oct"
+        },
+        {
+            "name": "2001 Nov",
+            "slug": "2001-Nov"
+        },
+        {
+            "name": "2002 Mar",
+            "slug": "2002-Mar"
+        },
+        {
+            "name": "2000 Mar",
+            "slug": "2000-Mar"
+        },
+        {
+            "name": "2002 Jan",
+            "slug": "2002-Jan"
+        },
+        {
+            "name": "Yakumo",
+            "slug": "Yakumo"
+        },
+        {
+            "name": "2002 Aug",
+            "slug": "2002-Aug"
+        },
+        {
+            "name": "2003 Jan",
+            "slug": "2003-Jan"
+        },
+        {
+            "name": "2003 Oct",
+            "slug": "2003-Oct"
+        },
+        {
+            "name": "2001 Aug",
+            "slug": "2001-Aug"
+        },
+        {
+            "name": "Vadem",
+            "slug": "Vadem"
+        },
+        {
+            "name": "1999 Dec",
+            "slug": "1999-Dec"
+        },
+        {
+            "name": "1998 Oct",
+            "slug": "1998-Oct"
+        },
+        {
+            "name": "1997 Jan",
+            "slug": "1997-Jan"
+        },
+        {
+            "name": "1998 Jan",
+            "slug": "1998-Jan"
+        },
+        {
+            "name": "1998 Sep",
+            "slug": "1998-Sep"
+        },
+        {
+            "name": "NEC",
+            "slug": "NEC"
+        },
+        {
+            "name": "1997 Jul",
+            "slug": "1997-Jul"
+        },
+        {
+            "name": "1997 Oct",
+            "slug": "1997-Oct"
+        },
+        {
+            "name": "1999 Feb",
+            "slug": "1999-Feb"
+        },
+        {
+            "name": "2001 Feb",
+            "slug": "2001-Feb"
+        },
+        {
+            "name": "2005 Dec",
+            "slug": "2005-Dec"
+        },
+        {
+            "name": "2006 Mar",
+            "slug": "2006-Mar"
+        },
+        {
+            "name": "Symbol",
+            "slug": "Symbol"
+        },
+        {
+            "name": "2002 Dec",
+            "slug": "2002-Dec"
+        },
+        {
+            "name": "ViewSonic",
+            "slug": "ViewSonic"
+        },
+        {
+            "name": "2003 Jul",
+            "slug": "2003-Jul"
+        },
+        {
+            "name": "2004 Mar",
+            "slug": "2004-Mar"
+        },
+        {
+            "name": "Hitachi",
+            "slug": "Hitachi"
+        },
+        {
+            "name": "1998 Apr",
+            "slug": "1998-Apr"
+        },
+        {
+            "name": "1999 Jun",
+            "slug": "1999-Jun"
+        },
+        {
+            "name": "2005 Jun",
+            "slug": "2005-Jun"
+        },
+        {
+            "name": "Everex",
+            "slug": "Everex"
+        },
+        {
+            "name": "Trium",
+            "slug": "Trium"
+        },
+        {
+            "name": "2000 Feb",
+            "slug": "2000-Feb"
+        },
+        {
+            "name": "2002 Sep",
+            "slug": "2002-Sep"
+        },
+        {
+            "name": "Data Evolution",
+            "slug": "Data-Evolution"
+        },
+        {
+            "name": "AnexTEK",
+            "slug": "AnexTEK"
+        },
+        {
+            "name": "Sagem",
+            "slug": "Sagem"
+        },
+        {
+            "name": "2002 Jun",
+            "slug": "2002-Jun"
+        },
+        {
+            "name": "Garmin",
+            "slug": "Garmin"
+        },
+        {
+            "name": "Silicon-i",
+            "slug": "Silicon-i"
+        },
+        {
+            "name": "2007 Sep",
+            "slug": "2007-Sep"
+        },
+        {
+            "name": "2005 Sep",
+            "slug": "2005-Sep"
+        },
+        {
+            "name": "Mio",
+            "slug": "Mio"
+        },
+        {
+            "name": "2006 Feb",
+            "slug": "2006-Feb"
+        },
+        {
+            "name": "Palm",
+            "slug": "Palm"
+        },
+        {
+            "name": "TORQ",
+            "slug": "TORQ"
+        },
+        {
+            "name": "Dopod",
+            "slug": "Dopod"
+        },
+        {
+            "name": "2004 Jan 4",
+            "slug": "2004-Jan-4"
+        },
+        {
+            "name": "2006 May 2",
+            "slug": "2006-May-2"
+        },
+        {
+            "name": "Psion Teklogix",
+            "slug": "Psion-Teklogix"
+        },
+        {
+            "name": "Qool",
+            "slug": "Qool"
+        },
+        {
+            "name": "Yes",
+            "slug": "Yes"
+        },
+        {
+            "name": "LG",
+            "slug": "LG"
+        },
+        {
+            "name": "2006 Jan 24",
+            "slug": "2006-Jan-24"
+        },
+        {
+            "name": "Medion",
+            "slug": "Medion"
+        },
+        {
+            "name": "1997 Dec",
+            "slug": "1997-Dec"
+        },
+        {
+            "name": "1998 Feb",
+            "slug": "1998-Feb"
+        },
+        {
+            "name": "2000 Aug",
+            "slug": "2000-Aug"
+        },
+        {
+            "name": "Cingular",
+            "slug": "Cingular"
+        },
+        {
+            "name": "Dallab",
+            "slug": "Dallab"
+        },
+        {
+            "name": "Gigabyte",
+            "slug": "Gigabyte"
+        },
+        {
+            "name": "2006 Aug",
+            "slug": "2006-Aug"
+        },
+        {
+            "name": "Sprint",
+            "slug": "Sprint"
+        },
+        {
+            "name": "Lenovo",
+            "slug": "Lenovo"
+        },
+        {
+            "name": "Pharos",
+            "slug": "Pharos"
+        },
+        {
+            "name": "CyberBank",
+            "slug": "CyberBank"
+        },
+        {
+            "name": "JVC",
+            "slug": "JVC"
+        },
+        {
+            "name": "2006 Oct",
+            "slug": "2006-Oct"
+        },
+        {
+            "name": "1998 Dec",
+            "slug": "1998-Dec"
+        },
+        {
+            "name": "Hyundai",
+            "slug": "Hyundai"
+        },
+        {
+            "name": "2006 May",
+            "slug": "2006-May"
+        },
+        {
+            "name": "1999 Sep",
+            "slug": "1999-Sep"
+        },
+        {
+            "name": "2006 May 18",
+            "slug": "2006-May-18"
+        },
+        {
+            "name": "2006 Jul 4",
+            "slug": "2006-Jul-4"
+        },
+        {
+            "name": "2006 Mar 2",
+            "slug": "2006-Mar-2"
+        },
+        {
+            "name": "2006 Mar 28",
+            "slug": "2006-Mar-28"
+        },
+        {
+            "name": "Bsquare",
+            "slug": "Bsquare"
+        },
+        {
+            "name": "2006 Jun 27",
+            "slug": "2006-Jun-27"
+        },
+        {
+            "name": "2006 Sep",
+            "slug": "2006-Sep"
+        },
+        {
+            "name": "BenQ-Siemens",
+            "slug": "BenQ-Siemens"
+        },
+        {
+            "name": "2007 Mar 19",
+            "slug": "2007-Mar-19"
+        },
+        {
+            "name": "2006 Aug 14",
+            "slug": "2006-Aug-14"
+        },
+        {
+            "name": "2006 Jul",
+            "slug": "2006-Jul"
+        },
+        {
+            "name": "Axia",
+            "slug": "Axia"
+        },
+        {
+            "name": "2006 Jun",
+            "slug": "2006-Jun"
+        },
+        {
+            "name": "i-teq",
+            "slug": "i-teq"
+        },
+        {
+            "name": "2001 Sep",
+            "slug": "2001-Sep"
+        },
+        {
+            "name": "2006 Jul 12",
+            "slug": "2006-Jul-12"
+        },
+        {
+            "name": "2006 Aug 27",
+            "slug": "2006-Aug-27"
+        },
+        {
+            "name": "2006 May 31",
+            "slug": "2006-May-31"
+        },
+        {
+            "name": "2006 Oct 31",
+            "slug": "2006-Oct-31"
+        },
+        {
+            "name": "2007 Mar",
+            "slug": "2007-Mar"
+        },
+        {
+            "name": "2007 Apr",
+            "slug": "2007-Apr"
+        },
+        {
+            "name": "Coxion",
+            "slug": "Coxion"
+        },
+        {
+            "name": "NTT DoCoMo",
+            "slug": "NTT-DoCoMo"
+        },
+        {
+            "name": "2001 Jul",
+            "slug": "2001-Jul"
+        },
+        {
+            "name": "2000 Jun 6",
+            "slug": "2000-Jun-6"
+        },
+        {
+            "name": "Telekom",
+            "slug": "Telekom"
         }
     ]
 }

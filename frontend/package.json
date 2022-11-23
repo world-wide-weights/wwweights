@@ -10,7 +10,7 @@
     "test": "npx cypress open",
     "test:cli": "npx cypress run",
     "test-components:cli": "npx cypress run --component",
-    "mock-server": "json-server --watch mock/phones.json --port=3004 --routes mock/routes.json --id slug"
+    "mock-server": "json-server --watch mock/db.json --port=3004 --routes mock/routes.json --id slug"
   },
   "dependencies": {
     "json-server": "^0.17.1",
