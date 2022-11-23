@@ -16,8 +16,25 @@ type Todo = {
     completed: boolean
 }
 
+export type Item = {
+    id: number, // TODO: Change
+    name: string
+    slug: string
+    weight: {
+        value: number
+        aditionalValue?: number
+        isCa: false
+    },
+    source?: string
+    image?: string
+    tags: {
+        name: string
+        slug: string
+    }[]
+}
+
 type WeightsListProps = {
-    items: Todo[],
+    items: Item[],
     currentPage: number,
     limit: number
 }
@@ -54,7 +71,7 @@ export default function WeightsList({ items, currentPage, limit }: InferGetServe
 
             {/* Weights (todos) */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                {items.map((item) => <ItemPreview key={item.id} name={`${item.id}: ${item.title}`} weight={item.completed ? "✓" : "X"} imageUrl="https://via.placeholder.com/96.png" id={item.id.toString()} />)}
+                {items.map((item) => <ItemPreview key={item.id} name={item.name} slug={item.slug} weight={`${item.weight.isCa ? "ca." : ""}${item.weight.value}${item.weight.aditionalValue ? `- ${item.weight.aditionalValue}` : ""} g`} imageUrl="https://via.placeholder.com/96.png" />)}
             </div>
 
             {/* Pagination */}
@@ -78,7 +95,7 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
         }
     }
 
-    const response = await fetch(`https://jsonplaceholder.typicode.com/todos?_start=${(currentPage - 1) * limit}&_limit=${limit}`)
+    const response = await fetch(`http://localhost:3004/api/query/v1/items/getList?page=${currentPage}&limit=${limit}`)
     const data = await response.json()
     return {
         props: {
