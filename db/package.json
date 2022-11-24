@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "chalk": "^4.1.2",
     "dotenv": "^16.0.3",
     "pg": "^8.8.0",
     "ts-node": "^10.9.1",
