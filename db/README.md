@@ -1,6 +1,11 @@
 # Migration solution
 
-## Changelog
+## Quickstart 
+
+Set env
+```sh
+cp sample.env .env
+```
 
 Run migration solution using
 ```sh
