@@ -15,8 +15,8 @@ export const Footer: React.FC = () => {
 
           {/* Links */}
           <ul className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
-            <li><Button to="#" kind="tertiary">Imprint</Button></li>
-            <li><Button to="#" kind="tertiary">Privacy Policy</Button></li>
+            <li><Button to="#" kind="tertiary" hasColoredTertiary>Imprint</Button></li>
+            <li><Button to="#" kind="tertiary" hasColoredTertiary>Privacy Policy</Button></li>
           </ul>
         </div>
       </div>
