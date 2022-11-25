@@ -5,6 +5,8 @@ export type ButtonProps = {
     children: string
     /** Which type of button we want, tertiary has the style of a link */
     kind?: "primary" | "secondary" | "tertiary"
+    /** Change tertiary button/link color to be primary color */
+    hasColoredTertiary?: boolean
     /** Button type default is "button" */
     type?: "button" | "reset" | "submit"
     /** Function that happens when you click button */
@@ -24,19 +26,21 @@ export type ButtonProps = {
 /**
  *  Button component (with link and button functionality), can look like a link when kind tertiary
  */
-export const Button: React.FC<ButtonProps> = ({ kind = "primary", disabled, icon, loading, className, children, to, onClick, type = "button" }) => {
+export const Button: React.FC<ButtonProps> = ({ kind = "primary", disabled, icon, loading, className, children, to, onClick, hasColoredTertiary = false, type = "button" }) => {
     // When loading should be disabled
     disabled = loading ? true : disabled
 
+    const tertiaryColor = hasColoredTertiary ? "blue" : "grey"
+
     // Base Classes 
     const buttonBaseClasses = "flex items-center justify-center md:justify-start font-semibold border border-transparent rounded-full py-2 px-8 w-full md:w-max"
-    const linkBaseClasses = "flex items-center text-gray-600 font-semibold"
+    const linkBaseClasses = `flex items-center text-${tertiaryColor}-600`
 
     // Disable state classes
     const disabledClassesPrimarySecondary = "text-opacity-75 opacity-80 cursor-default"
     const disabledPrimary = disabled ? disabledClassesPrimarySecondary : "hover:bg-blue-600 focus:bg-blue-700"
     const disabledSecondary = disabled ? disabledClassesPrimarySecondary : "hover:bg-blue-500 focus:bg-blue-600 hover:text-white focus:text-white"
-    const disabledTertiary = disabled ? disabledClassesPrimarySecondary : "hover:text-gray-800 focus:text-gray-900"
+    const disabledTertiary = disabled ? disabledClassesPrimarySecondary : `hover:text-${tertiaryColor}-700 focus:text-${tertiaryColor}-800`
 
     // Kind classes
     const primaryClasses = `bg-blue-500 text-white ${disabledPrimary}`

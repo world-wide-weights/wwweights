@@ -9,7 +9,8 @@ module.exports = {
       variants: ['hover', 'focus'],
     },
     {
-      pattern: /text-(.*)-(600)/,
+      pattern: /text-(.*)-(600|700|800)/,
+      variants: ['hover', 'focus'],
     },
   ],
   theme: {
@@ -35,18 +36,29 @@ module.exports = {
     },
     extend: {
       colors: {
-        'blue-500': '#0967D2',
-        'blue-600': '#0552B5',
-        'blue-700': '#03449E',
-        'gray-100': '#F5F7FA',
-        'gray-200': '#E4E7EB',
-        'gray-300': '#CBD2D9',
-        'gray-400': '#9AA581',
-        'gray-500': '#7B8794',
-        'gray-600': '#616E7C',
-        'gray-700': '#3E4C59',
-        'gray-800': '#323F48',
-        'gray-900': '#1F2933',
+        blue: {
+          '50': '#98C6FB',
+          '100': '#84BBFA',
+          '200': '#5DA6F8',
+          '300': '#3690F6',
+          '400': '#0F7AF5',
+          '500': '#0967D2',
+          '600': '#0552B5',
+          '700': '#03449E',
+          '800': '#043266',
+          '900': '#021831',
+        },
+        grey: {
+          '100': '#F5F7FA',
+          '200': '#E4E7EB',
+          '300': '#CBD2D9',
+          '400': '#9AA581',
+          '500': '#7B8794',
+          '600': '#616E7C',
+          '700': '#3E4C59',
+          '800': '#323F48',
+          '900': '#1F2933',
+        }
       },
       fontFamily: {
         sans: ['var(--font-montserrat)', ...fontFamily.sans]
