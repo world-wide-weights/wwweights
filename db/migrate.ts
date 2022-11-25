@@ -102,9 +102,20 @@ async function connectToDb(): Promise<DataSource>{
 }
 
 async function main(args: string[]){
+	const mode = args[0]
+	if (mode === 'help'){
+		console.log(chalk.magentaBright('VERY GOOD AND BUHGFREE MIGRATION SOLUTION (v0.1)'))
+		console.log('')
+		console.log(` ${chalk.blue('create')} - Create a new migration. A name must be provided`)
+		console.log(` ${chalk.blue('status')} - Get current migration status of DB`)
+		console.log(` ${chalk.blue('up')}     - Apply all missing migrations`)
+		console.log(` ${chalk.blue('next')}   - Apply next migration`)	
+		console.log(` ${chalk.blue('down')}   - Revert all applied migrations`)
+		console.log(` ${chalk.blue('prev')}   - Revert last migration`)
+		process.exit(0)
+	}
 	const sourceDB = await connectToDb()
 	const currentState = await getCurrentState(sourceDB)
-	const mode = args[0]
 	switch(mode){
 		case 'create':
 			console.log(chalk.blue('Create Migration'))
@@ -139,16 +150,6 @@ async function main(args: string[]){
 			}else{
 				console.log(chalk.blue('Currently at version 0, which means no migrations have been applied/no migration state exists in the db'))
 			}
-			break
-		case 'help':
-			console.log(chalk.magentaBright('VERY GOOD AND BUHGFREE MIGRATION SOLUTION (v0.1)'))
-			console.log('')
-			console.log(` ${chalk.blue('create')} - Create a new migration. A name must be provided`)
-			console.log(` ${chalk.blue('status')} - Get current migration status of DB`)
-			console.log(` ${chalk.blue('up')}     - Apply all missing migrations`)
-			console.log(` ${chalk.blue('next')}   - Apply next migration`)	
-			console.log(` ${chalk.blue('down')}   - Revert all applied migrations`)
-			console.log(` ${chalk.blue('prev')}   - Revert last migration`)
 			break
 		default:
 			console.log(chalk.red('Invalid input')+' use help to see possible arguments')
