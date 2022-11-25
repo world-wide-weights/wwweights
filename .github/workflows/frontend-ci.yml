@@ -104,8 +104,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
-          context: .
-          file: ./frontend/Dockerfile
+          context: ./frontend
           tags: frontend:pipeline_internal
           outputs: type=docker,dest=/tmp/frontend-image.tar
        
