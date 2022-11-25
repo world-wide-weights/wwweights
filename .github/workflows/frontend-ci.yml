@@ -136,7 +136,7 @@ jobs:
         id: extract_branch
   
       - name: tag docker image
-        run: docker tag frontend:pipeline_internal frontend:${{ steps.extract_branch.outputs.branch }}
+        run: docker tag frontend:pipeline_internal ghcr.io/wwweights/frontend:${{ steps.extract_branch.outputs.branch }}
 
       - name: Login to Packages Container registry
         uses: docker/login-action@v1 
@@ -146,4 +146,4 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       
       - name: push
-        run: docker push ghrc.io/wwweights/frontend:${{ steps.extract_branch.outputs.branch }}
+        run: docker push ghcr.io/wwweights/frontend:${{ steps.extract_branch.outputs.branch }}
