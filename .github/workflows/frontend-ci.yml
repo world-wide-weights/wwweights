@@ -129,9 +129,10 @@ jobs:
       
       - name: Load Docker image
         run: docker load --input /tmp/frontend-image.tar
-      
+     
+        # Extract branch name and replace / with _ as slashes are invalid as image tags
       - name: Extract branch name
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/} | tr '/' '_')"
         id: extract_branch
   
       - name: tag docker image
