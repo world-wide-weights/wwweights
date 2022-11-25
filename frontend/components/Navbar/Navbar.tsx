@@ -5,6 +5,7 @@ import logo from '../../public/logo.png'
 import { Button } from '../Button/Button'
 import { IconButton } from '../Button/IconButton'
 
+// TODO: Adjust with routes.ts
 const navLinks = [{
     to: "/weights",
     text: "Discover",
