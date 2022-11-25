@@ -32,7 +32,7 @@ jobs:
           path: ~/.npm
           key: node-modules-${{ hashFiles('package-lock.json') }}
 
-  test:
+  tests:
     runs-on: ubuntu-latest
     needs: setup
     defaults:
@@ -51,8 +51,8 @@ jobs:
          path: ~/.npm
          key: node-modules-${{ hashFiles('package-lock.json') }}
 
-      - name: node modules
-        run: npm ci --audit:false --cache ~/.npm --prefer-offline
+     - name: node modules
+       run: npm ci --audit:false --cache ~/.npm --prefer-offline
 
      - name: end 2 end tests
        run: npm run test:e2e
@@ -62,7 +62,7 @@ jobs:
 
   docker-build:
     runs-on: ubuntu-latest
-    needs: [tests] 
+    needs: tests 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
