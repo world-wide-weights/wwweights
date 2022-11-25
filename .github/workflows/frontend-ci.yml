@@ -151,4 +151,3 @@ jobs:
       
       - name: push
         run: docker push ghrc.io/wwweights/frontend:${{ steps.extract_branch.outputs.branch }}
-{
