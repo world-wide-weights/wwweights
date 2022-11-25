@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "npx cypress open",
-    "test:cli": "npx cypress run"
+    "test:cli": "npx cypress run",
+    "test-components:cli": "npx cypress run --component"
   },
   "dependencies": {
     "@next/font": "^13.0.3",

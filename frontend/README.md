@@ -25,9 +25,13 @@ Be sure that frontend is running or start it.
     $ npm run dev
     $ npm run test
 
-### Run cli
+### Run tests cli
 
     $ npm run test:cli
+
+### Run component tests cli
+
+    $ npm run test-components:cli
 ---
 
 ## Build Docker image
