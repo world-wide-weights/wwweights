@@ -26,41 +26,50 @@ export type ButtonProps = {
 }
 
 /**
- *  Button component, can also be a link when kind tertiary
+ *  Button component (with link and button functionality), can look like a link when kind tertiary
  */
 export const Button: React.FC<ButtonProps> = ({ kind = "primary", disabled, icon, dataCy, iconEnd, loading, className, children, to, onClick, type = "button" }) => {
     disabled = loading ? true : disabled
 
-    // TODO (Zoe-Bot): Maybe this should be improved
+    // Base Classes 
+    const buttonBaseClasses = "flex items-center justify-center md:justify-start font-semibold border border-transparent rounded-full py-2 px-8 w-full md:w-max"
+    const linkBaseClasses = "flex items-center text-gray-600 font-semibold"
+
+    // Disable state classes
     const disabledClassesPrimarySecondary = "text-opacity-75 opacity-80 cursor-default"
-    const disabledClassesTertiary = "text-opacity-75 opacity-80 cursor-default"
+    const disabledPrimary = disabled ? disabledClassesPrimarySecondary : "hover:bg-blue-600 focus:bg-blue-700"
+    const disabledSecondary = disabled ? disabledClassesPrimarySecondary : "hover:bg-blue-500 focus:bg-blue-600 hover:text-white focus:text-white"
+    const disabledTertiary = disabled ? disabledClassesPrimarySecondary : "hover:text-gray-800 focus:text-gray-900"
+
+    // Kind classes
+    const primaryClasses = `bg-blue-500 text-white ${disabledPrimary}`
+    const secondaryClasses = `border border-blue-500 text-blue-500 ${disabledSecondary}`
+
+    const innerContent = <>
+        {icon && (loading ? <i className={`material-symbols-rounded text-xl mr-1 ${loading ? "animate-spin" : ""}`}>sync</i> : <i className="material-symbols-rounded text-xl mr-1">{icon}</i>)}
+        {children}
+        {iconEnd && <span className="material-symbols-rounded text-xl ml-2">{iconEnd}</span>}
+    </>
 
     return (<>
-        {kind === "tertiary" ?
-            to ?
-                <Link dataCy={dataCy} href={disabled ? "" : to} onClick={disabled ? (event) => event.preventDefault() : () => ""} tabIndex={disabled ? -1 : 0} className={`flex items-center text-gray-600 font-semibold w-max ${disabled ? disabledClassesTertiary : "hover:text-gray-800 focus:text-gray-900"} ${className}`}>
-                    {icon && (loading ? <span className={`material-symbols-outlined text-xl mr-1 ${loading ? "animate-spin" : ""}`}>sync</span> : <span className="material-symbols-outlined text-xl mr-1">{icon}</span>)}
-                    {children}
-                    {iconEnd && <span className="material-symbols-outlined text-xl ml-2">{iconEnd}</span>}
-                </Link>
-                :
-                <button dataCy={dataCy} disabled={disabled} onClick={disabled ? () => "" : onClick} type={type} className={`flex items-center text-gray-600 font-semibold ${disabled ? disabledClassesTertiary : "hover:text-gray-800 focus:text-gray-900"} ${className}`}>
-                    {icon && (loading ? <span className={`material-symbols-outlined text-xl mr-1 ${loading ? "animate-spin" : ""}`}>sync</span> : <span className="material-symbols-outlined text-xl mr-1">{icon}</span>)}
-                    {children}
-                    {iconEnd && <span className="material-symbols-outlined text-xl ml-2">{iconEnd}</span>}
-                </button>
-            :
-            to ?
-                <Link dataCy={dataCy} href={disabled ? "" : to} onClick={disabled ? (event) => event.preventDefault() : () => ""} tabIndex={disabled ? -1 : 0} className={`flex items-center justify-center md:justify-start font-semibold border border-transparent rounded-full py-2 px-8 w-full md:w-max ${kind === "primary" ? `bg-blue-500 text-white ${disabled ? disabledClassesPrimarySecondary : "hover:bg-blue-600 focus:bg-blue-700"}` : `border border-blue-500 text-blue-500 ${disabled ? disabledClassesPrimarySecondary : "hover:bg-blue-500 focus:bg-blue-600 hover:text-white focus:text-white"}`} ${className}`}>
-                    {icon && (loading ? <span className={`material-symbols-outlined text-xl mr-1 ${loading ? "animate-spin" : ""}`}>sync</span> : <span className="material-symbols-outlined text-xl mr-1">{icon}</span>)}
-                    {children}
-                    {iconEnd && <span className="material-symbols-outlined text-xl ml-2">{iconEnd}</span>}
-                </Link>
-                :
-                <button dataCy={dataCy} disabled={disabled} onClick={disabled ? () => "" : onClick} type={type} className={`flex items-center justify-center md:justify-start font-semibold border border-transparent rounded-full py-2 px-8 w-full md:w-max ${kind === "primary" ? `bg-blue-500 text-white ${disabled ? disabledClassesPrimarySecondary : "hover:bg-blue-600 focus:bg-blue-700"}` : `border border-blue-500 text-blue-500 ${disabled ? disabledClassesPrimarySecondary : "hover:bg-blue-500 focus:bg-blue-600 hover:text-white focus:text-white"}`} ${className}`}>
-                    {icon && (loading ? <span className={`material-symbols-outlined text-xl mr-1 ${loading ? "animate-spin" : ""}`}>sync</span> : <span className="material-symbols-outlined text-xl mr-1">{icon}</span>)}
-                    {children}
-                    {iconEnd && <span className="material-symbols-outlined text-xl ml-2">{iconEnd}</span>}
-                </button>
-        }</>)
+        {/* Primary or Secondary as link */}
+        {kind !== "tertiary" && to && <Link dataCy={dataCy} href={disabled ? "" : to} onClick={disabled ? (event) => event.preventDefault() : () => ""} tabIndex={disabled ? -1 : 0} className={`${buttonBaseClasses} ${kind === "primary" ? primaryClasses : secondaryClasses} ${className}`}>
+            {innerContent}
+        </Link>}
+
+        {/* Primary or Secondary as button */}
+        {kind !== "tertiary" && !to && <button dataCy={dataCy} disabled={disabled} onClick={disabled ? () => "" : onClick} type={type} className={`${buttonBaseClasses} ${kind === "primary" ? primaryClasses : secondaryClasses} ${className}`}>
+            {innerContent}
+        </button>}
+
+        {/* Tertiary (link style) as link */}
+        {kind === "tertiary" && to && <Link dataCy={dataCy} href={disabled ? "" : to} onClick={disabled ? (event) => event.preventDefault() : () => ""} tabIndex={disabled ? -1 : 0} className={`${linkBaseClasses} w-max ${disabledTertiary} ${className}`}>
+            {innerContent}
+        </Link>}
+
+        {/* Tertiary (link style) as button */}
+        {kind === "tertiary" && !to && <button dataCy={dataCy} disabled={disabled} onClick={disabled ? () => "" : onClick} type={type} className={`${linkBaseClasses} ${disabledTertiary} ${className}`}>
+            {innerContent}
+        </button>}
+    </>)
 }
