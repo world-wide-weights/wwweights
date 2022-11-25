@@ -145,7 +145,7 @@ async function main(args: string[]){
 			break
 		case 'status':
 			if (currentState != 0){
-				const migrationName = findMigrationNameForVersion(currentState)
+				const migrationName = await findMigrationNameForVersion(currentState)
 				console.log(chalk.blue(`Currently at version number ${currentState} which corresponds to migration ${migrationName} `))
 			}else{
 				console.log(chalk.blue('Currently at version 0, which means no migrations have been applied/no migration state exists in the db'))
