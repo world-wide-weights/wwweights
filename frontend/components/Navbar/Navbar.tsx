@@ -6,7 +6,7 @@ import { Button } from '../Button/Button'
 import { IconButton } from '../Button/IconButton'
 
 const navLinks = [{
-    to: "/discover",
+    to: "/weights",
     text: "Discover",
 }]
 
