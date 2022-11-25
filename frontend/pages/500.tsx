@@ -5,6 +5,6 @@ import { BaseError } from "../components/Errors/BaseError";
  */
 export default function Custom500() {
     return <BaseError headline="500 - Error on Server Side" description={<>
-        <p>An error has occurred on our side. First try again. If that doesn't help, contact us here or wait until we fix the problem.</p>
+        <p>An error has occurred on our side. First try again. If that doesn&apos;t help, contact us here or wait until we fix the problem.</p>
     </>} />
 }
