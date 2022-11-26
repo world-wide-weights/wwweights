@@ -14,15 +14,14 @@ export class CreateItemHandler implements ICommandHandler<CreateItemCommand> {
   ) {}
 
   async execute(command: CreateItemCommand) {
+    // No returns, just Exceptions, rest is handled by eventHandler in CQRS
     try {
       // TODO: Class or Object?
-      const result = this.publisher.mergeObjectContext(
-        await this.repository.save(new Item(command.createItemDto)),
-      );
-      return (
-        result || new UnprocessableEntityException('Item could not be created')
-      );
+      const newItem = new Item(command.createItemDto);
+      const createdItem = await this.repository.save(newItem);
+      this.publisher.mergeObjectContext(createdItem);
     } catch (error) {
+      console.log(error);
       throw new UnprocessableEntityException('Item could not be created');
     }
   }

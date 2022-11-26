@@ -1,10 +1,18 @@
+import { AggregateRoot } from '@nestjs/cqrs';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
-import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  IsBoolean,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import slugify from 'slugify';
+import { Column, Entity, PrimaryGeneratedColumn, VersionColumn } from 'typeorm';
 
 @Entity()
-export class Item {
+export class Item extends AggregateRoot {
   @Expose()
   @PrimaryGeneratedColumn()
   id: number;
@@ -19,16 +27,22 @@ export class Item {
   @Expose()
   @ApiProperty()
   @Transform((params) =>
-    params.obj.name.trim().toLowerCase().replace(/\s/g, '-'),
+    slugify(params.obj.name.trim().toLowerCase().replace(/\s/g, '-'), {
+      strict: true,
+      lower: true,
+      trim: true,
+    }),
   )
   @Column({ unique: true })
   slug: string;
 
-  @IsString()
+  // TODO: look if there really is no way to combine IsNumber with scientific notation for TypeOrm Postgres
+  @IsNumber()
   @Expose()
   @ApiProperty()
-  @Column()
-  value: string; // exact - range - ca.
+  @Transform((params) => parseFloat(params.obj.value))
+  @Column('decimal', { precision: 99, scale: 3 })
+  value: number;
 
   @IsOptional()
   @IsBoolean()
@@ -38,6 +52,7 @@ export class Item {
   is_ca: boolean;
 
   @IsString()
+  @IsOptional()
   @Expose()
   @ApiProperty()
   @Column({ nullable: true })
@@ -90,12 +105,17 @@ export class Item {
   @Expose({ groups: ['admin'] })
   isActive: boolean;
 
+  @VersionColumn()
+  @Expose({ groups: ['admin'] })
+  version: number;
+
   // TODO: Delete if not needed
   // applySlug() {
   //   this.slug = this.name.toLowerCase().trim().replace(/ /g, '-');
   // }
 
   constructor(partial: Partial<Item>) {
+    super();
     Object.assign(this, partial);
   }
 }

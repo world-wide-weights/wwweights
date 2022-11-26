@@ -4,6 +4,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Logger,
   Param,
   Post,
@@ -30,7 +32,7 @@ export class ItemsController {
   constructor(
     private commandBus: CommandBus,
     private queryBus: QueryBus,
-    // just here for Testing since no create issue was created
+    // TODO: remove after implementations
     @InjectRepository(Item)
     private repository: Repository<Item>,
   ) {}
@@ -40,11 +42,6 @@ export class ItemsController {
   @ApiOperation({ summary: 'Create an item' })
   async createItem(@Body() createItemDto: CreateItemDto) {
     return this.commandBus.execute(new CreateItemCommand(createItemDto));
-    // } catch (error) {
-    //   if (error.name === 'QueryFailedError')
-    //     throw new UnprocessableEntityException('Item could not be created');
-    //   this.logger.error(error);
-    // }
   }
 
   @Get()
@@ -64,6 +61,7 @@ export class ItemsController {
   }
 
   @Delete()
+  @HttpCode(HttpStatus.NO_CONTENT)
   async deleteAllItems() {
     // TODO: implement
     return await this.repository.delete({});

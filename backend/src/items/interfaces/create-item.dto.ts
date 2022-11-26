@@ -1,4 +1,6 @@
-import { PickType } from '@nestjs/swagger';
+import { ApiProperty, PickType } from '@nestjs/swagger';
+import { IsString } from 'class-validator';
+import { Column } from 'typeorm';
 import { Item } from '../models/item.model';
 
 // Using Pick instead of Partial (makes everything optional)
@@ -10,6 +12,12 @@ export class CreateItemDto extends PickType(Item, [
   'tags',
   'image',
   'source',
-  'user',
-  //'slug', // TODO: Remove this if slug generates without this
-]) {}
+  'slug',
+]) {
+  // Current Behavior: since we want certain user fields only to be seen by group 'admin', the class=transformer would strip the entire thing on server Entry
+  // TODO: This can possibly be relocated into the item.model if nestjs supports: ignoreGroup on plainToClass
+  @IsString()
+  @ApiProperty()
+  @Column()
+  user: string;
+}
