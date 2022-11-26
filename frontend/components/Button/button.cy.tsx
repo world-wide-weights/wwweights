@@ -12,7 +12,7 @@ describe('Button', () => {
     describe('Icon', () => {
       it('should display icon', () => {
         cy.mount(<Button kind="primary" icon="face" onClick={() => ""}>Test</Button>)
-        cy.get('button span').should('be.visible')
+        cy.get('button i').should('be.visible')
       })
     })
 
@@ -28,7 +28,7 @@ describe('Button', () => {
       })
 
       it('should show loading icon when loading', () => {
-        cy.get('button span').should('contain', 'sync')
+        cy.get('button i').should('contain', 'sync')
       })
     })
 
@@ -62,7 +62,7 @@ describe('Button', () => {
     describe('Icon', () => {
       it('should display icon', () => {
         cy.mount(<Button kind="primary" icon="face" to="/">Test</Button>)
-        cy.get('a span').should('be.visible')
+        cy.get('a i').should('be.visible')
       })
     })
 
@@ -78,7 +78,7 @@ describe('Button', () => {
       })
 
       it('should show loading icon when loading', () => {
-        cy.get('a span').should('contain', 'sync')
+        cy.get('a i').should('contain', 'sync')
       })
     })
 
@@ -108,7 +108,7 @@ describe('Button', () => {
     describe('Icon', () => {
       it('should display icon', () => {
         cy.mount(<Button kind="secondary" icon="face" onClick={() => ""}>Test</Button>)
-        cy.get('button span').should('be.visible')
+        cy.get('button i').should('be.visible')
       })
     })
 
@@ -124,7 +124,7 @@ describe('Button', () => {
       })
 
       it('should show loading icon when loading', () => {
-        cy.get('button span').should('contain', 'sync')
+        cy.get('button i').should('contain', 'sync')
       })
     })
 
@@ -154,7 +154,7 @@ describe('Button', () => {
     describe('Icon', () => {
       it('should display icon', () => {
         cy.mount(<Button kind="secondary" icon="face" to="/">Test</Button>)
-        cy.get('a span').should('be.visible')
+        cy.get('a i').should('be.visible')
       })
     })
 
@@ -170,7 +170,7 @@ describe('Button', () => {
       })
 
       it('should show loading icon when loading', () => {
-        cy.get('a span').should('contain', 'sync')
+        cy.get('a i').should('contain', 'sync')
       })
     })
 
@@ -199,7 +199,7 @@ describe('Button', () => {
     describe('Icon', () => {
       it('should display icon', () => {
         cy.mount(<Button kind="tertiary" icon="face" onClick={() => ""}>Test</Button>)
-        cy.get('button span').should('be.visible')
+        cy.get('button i').should('be.visible')
       })
     })
 
@@ -215,7 +215,7 @@ describe('Button', () => {
       })
 
       it('should show loading icon when loading', () => {
-        cy.get('button span').should('contain', 'sync')
+        cy.get('button i').should('contain', 'sync')
       })
     })
 
@@ -244,7 +244,7 @@ describe('Button', () => {
     describe('Icon', () => {
       it('should display icon', () => {
         cy.mount(<Button kind="tertiary" icon="face" to="/">Test</Button>)
-        cy.get('a span').should('be.visible')
+        cy.get('a i').should('be.visible')
       })
     })
 
@@ -260,7 +260,7 @@ describe('Button', () => {
       })
 
       it('should show loading icon when loading', () => {
-        cy.get('a span').should('contain', 'sync')
+        cy.get('a i').should('contain', 'sync')
       })
     })
 
