@@ -1,3 +1,3 @@
 export class GetItemQuery {
-  constructor(public readonly id: number) {}
+  constructor(public readonly slug: string) {}
 }

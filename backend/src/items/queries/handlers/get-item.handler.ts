@@ -16,7 +16,7 @@ export class GetItemHandler implements IQueryHandler<GetItemQuery> {
     // TODO: Does this work instead of query.id? technically it is `{query: {id: 1}}`
     const result = await this.repository.findOneBy(query);
     if (!result)
-      throw new NotFoundException(`Item with id ${query.id} not found`);
+      throw new NotFoundException(`Item with slug ${query.slug} not found`);
 
     // TODO: Can you return new ...Exception... and it throws it later? => return result || new NotFoundException(`Item with id ${query.id} not found`);
     return result;

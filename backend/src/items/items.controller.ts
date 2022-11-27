@@ -46,30 +46,28 @@ export class ItemsController {
 
   @Get()
   async getAllItems() {
-    // TODO: implement
+    // TODO: implement in other issue
     return await this.repository.find();
   }
 
-  @Get(':id')
-  @ApiParam({ name: 'id', type: Number })
+  @Get(':slug')
+  @ApiParam({ name: 'slug', type: String })
   @ApiOperation({ summary: 'Get an item by id' })
-  async getItem(@Param() { id }: GetItemDto) {
-    this.logger.log(`Get item with id ${id}`);
-    // TODO: Serializer works, but how to add "admin" grp
-    // TODO: does this and everywhere else have to be awaited?
-    return this.queryBus.execute(new GetItemQuery(id));
+  async getItem(@Param() { slug }: GetItemDto) {
+    this.logger.log(`Get item with slug ${slug}`);
+    return await this.queryBus.execute(new GetItemQuery(slug));
   }
 
   @Delete()
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteAllItems() {
-    // TODO: implement
+    // TODO: do not implement, we use event sourcing and ddd, so we do not delete
     return await this.repository.delete({});
   }
 
-  @Delete('/:id')
-  async deleteItem(@Param() { id }: GetItemDto) {
-    // TODO: implement
-    return await this.repository.delete(id);
+  @Delete('/:slug')
+  async deleteItem(@Param() { slug }: GetItemDto) {
+    // TODO: do not implement, we use event sourcing and ddd, so we do not delete
+    return await this.repository.delete(slug);
   }
 }

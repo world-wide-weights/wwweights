@@ -4,7 +4,7 @@ import * as request from 'supertest';
 import { Repository } from 'typeorm';
 import { AppModule } from '../src/app.module';
 import { Item } from '../src/items/models/item.model';
-import { singleItem } from './items/mock';
+import { createItem, singleItem } from './items/mock';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -47,14 +47,18 @@ describe('AppController (e2e)', () => {
       expect(res.body.name).toBe(singleItem.name);
     });
   });
+
   describe('Commands /items', () => {
     it('/ createItem', async () => {
       await itemTable.clear();
       await request(app.getHttpServer())
         .post(itemsPath)
-        .send(singleItem)
+        .send(createItem)
         .expect(HttpStatus.CREATED);
       expect(await itemTable.count()).toEqual(1);
+      const item = await itemTable.findOneBy({ name: createItem.name });
+      expect(item.name).toMatchObject(createItem.name);
+      expect(item.slug).toBeDefined();
     });
   });
 });
