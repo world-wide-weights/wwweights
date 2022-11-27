@@ -5,7 +5,7 @@ import chalk from 'chalk'
 
 function createNewMigration( name: string){
 	if (!name){
-		throw new Error(chalk.red('No migration name required. The migration name is mandatory and should be descriptive'))
+		throw new Error(chalk.red('No migration name provided. The migration name is mandatory and should be descriptive'))
 	}
 	const migrationName: string = `${(Date.now() / 1000 | 0).toString()}-${name}` // Bitwise or to floor => unix timestamp for current time 
 	fs.mkdirSync(`migrations/${migrationName}`, {recursive: true}) // Recursive in case migrations folder does not exist yet
