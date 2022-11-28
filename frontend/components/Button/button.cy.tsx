@@ -193,7 +193,7 @@ describe('Button', () => {
   describe('Tertiary button', () => {
     it('should display tertiary button', () => {
       cy.mount(<Button kind="tertiary" onClick={() => ""}>Test</Button>)
-      cy.get('button').should('have.class', 'text-gray-600')
+      cy.get('button').should('have.class', 'text-grey-600')
     })
 
     describe('Icon', () => {
@@ -238,7 +238,7 @@ describe('Button', () => {
   describe('Tertiary link', () => {
     it('should display tertiary link', () => {
       cy.mount(<Button kind="tertiary" to="/">Test</Button>)
-      cy.get('a').should('have.class', 'text-gray-600')
+      cy.get('a').should('have.class', 'text-grey-600')
     })
 
     describe('Icon', () => {
