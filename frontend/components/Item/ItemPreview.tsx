@@ -7,8 +7,8 @@ export type ItemPreviewProps = {
     name: string
     /** Weight */
     weight: string
-    /** Identification to weight */
-    id: string
+    /** Slug of weight */
+    slug: string
     /** Image URL */
     imageUrl?: string
 }
@@ -21,9 +21,9 @@ export type ItemPreviewProps = {
  * <ItemPreview id="1" name="Smartphone" weight="300 gr" imageUrl="https://via.placeholder.com/96.png" />
  * ```
  */
-export const ItemPreview: React.FC<ItemPreviewProps> = ({ id, name, weight, imageUrl }) => {
+export const ItemPreview: React.FC<ItemPreviewProps> = ({ slug, name, weight, imageUrl }) => {
 
-    return <Link className="flex items-center" href={routes.weights.single(id)}>
+    return <Link className="flex items-center" href={routes.weights.single(slug)}>
         {imageUrl && <Image className="object-cover rounded-xl w-24 h-24 mr-5 bg-white" alt={`Image of ${name}`} src={imageUrl} width={96} height={96} />}
         <div>
             <h5 className="text-gray-900 text-xl font-semibold break-all">{name}</h5>
