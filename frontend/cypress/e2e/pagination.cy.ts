@@ -1,8 +1,30 @@
 const currentPage = 2
 const limit = 5
+import weights from "../fixtures/weights/getList.json"
+import weightsListFive from "../fixtures/weights/getListLimitFive.json"
+
+/***
+ * 
+ * WARNING:
+ * This testing strategy is partial not smart. We have to find a better solution.
+ * 
+ * 
+ * 
+ * 
+ */
 
 describe('Pagination /weights', () => {
+
     it('should display pagination', () => {
+        cy.task('clearNock')
+        cy.task('nock', {
+            hostname: 'http://localhost:3004',
+            method: 'get',
+            path: `/api/query/v1/items/getList`,
+            statusCode: 200,
+            body: weights,
+        })
+
         cy.visitLocalPage("/weights")
         cy.dataCy('pagination').should('be.visible')
     })
@@ -60,6 +82,15 @@ describe('Pagination /weights', () => {
         })
 
         it('should show limited count of items when set limit', () => {
+            cy.task('clearNock')
+            cy.task('nock', {
+                hostname: 'http://localhost:3004',
+                method: 'get',
+                path: `/api/query/v1/items/getList`,
+                statusCode: 200,
+                body: weightsListFive,
+            })
+
             cy.dataCy('weights-list-item').should('have.length', limit)
         })
 
