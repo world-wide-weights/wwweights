@@ -6,13 +6,13 @@ type IconButtonProps = {
     icon: string
     /** optional icon color */
     color?: Color
-    /** link to go when you click button */
+    /** Optionally specify an href for your Button to become an `<a>` element */
     to?: string
     /** function that happens when you click button */
     onClick?: (values: any) => void
     /** Optional can add classes to customize margins for example */
     className?: string
-    /** Add disabled state */
+    /** Specify whether the Button should be disabled, or not */
     disabled?: boolean
     /** For testing */
     dataCy?: string
