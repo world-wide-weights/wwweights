@@ -1,8 +1,8 @@
 export const routes = {
     home: "/",
     weights: {
-        list: "/weights",
-        single: "/weights/" // Dynamic Route
+        list: (query: Partial<{ page: number, limit: number }>) => {  /** TODO */ },
+        single: (slug: string) => `/weights/${slug}`
     },
     legal: {
         imprint: "/legal/imprint",
