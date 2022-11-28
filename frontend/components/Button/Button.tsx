@@ -13,10 +13,10 @@ export type ButtonProps = {
     onClick?: (values: any) => void
     /** Link to go when you click button */
     to?: string
-    /** Icon before the text */
+    /** Optional prop to specify icon */
     icon?: string
-    /** Adds icon at the end of the text */
-    iconEnd?: string
+    /** Specify the location of the icon */
+    iconSlot?: "start" | "end"
     /** Can add classes to customize margins for example */
     className?: string
     /** Disabled state when set to true button is disabled */
@@ -30,7 +30,7 @@ export type ButtonProps = {
 /**
  *  Button component (with link and button functionality), can look like a link when kind tertiary
  */
-export const Button: React.FC<ButtonProps> = ({ kind = "primary", disabled, icon, dataCy, iconEnd, loading, className, children, to, onClick, isColored = false, type = "button" }) => {
+export const Button: React.FC<ButtonProps> = ({ kind = "primary", disabled, icon, dataCy, iconSlot = "start", loading, className, children, to, onClick, isColored = false, type = "button" }) => {
     // When loading should be disabled
     disabled = loading ? true : disabled
 
@@ -51,9 +51,9 @@ export const Button: React.FC<ButtonProps> = ({ kind = "primary", disabled, icon
     const secondaryClasses = `border border-blue-500 text-blue-500 ${disabledSecondary}`
 
     const innerContent = <>
-        {icon && (loading ? <i className={`material-symbols-rounded text-xl mr-1 ${loading ? "animate-spin" : ""}`}>sync</i> : <i className="material-symbols-rounded text-xl mr-1">{icon}</i>)}
+        {icon && iconSlot === "start" && (loading ? <i className={`material-symbols-rounded text-xl mr-1 ${loading ? "animate-spin" : ""}`}>sync</i> : <i className="material-symbols-rounded text-xl mr-1">{icon}</i>)}
         {children}
-        {iconEnd && <span className="material-symbols-rounded text-xl ml-2">{iconEnd}</span>}
+        {icon && iconSlot === "end" && <span className="material-symbols-rounded text-xl ml-2">{icon}</span>}
     </>
 
     return (<>
