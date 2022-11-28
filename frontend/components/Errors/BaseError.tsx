@@ -29,8 +29,10 @@ export const BaseError: React.FC<BaseErrorProps> = ({ headline, description, to 
             <div className="md:w-2/3">
                 <Headline>{headline}</Headline>
                 {description}
-                <Button className="mt-5" to={to} icon="arrow_back">{backButtonText}</Button>
-                {ctaContent}
+                <div className="flex items-center mt-5">
+                    <Button to={to} icon="arrow_back">{backButtonText}</Button>
+                    {ctaContent}
+                </div>
             </div>
         </div>
     </>
