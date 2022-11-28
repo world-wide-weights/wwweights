@@ -6,7 +6,7 @@ export type ButtonProps = {
     /** Which type of button we want, tertiary has the style of a link */
     kind?: "primary" | "secondary" | "tertiary"
     /** Change tertiary button/link color to be primary color */
-    hasColoredTertiary?: boolean
+    isColored?: boolean
     /** Button type default is "button" */
     type?: "button" | "reset" | "submit"
     /** Function that happens when you click button */
@@ -26,11 +26,11 @@ export type ButtonProps = {
 /**
  *  Button component (with link and button functionality), can look like a link when kind tertiary
  */
-export const Button: React.FC<ButtonProps> = ({ kind = "primary", disabled, icon, loading, className, children, to, onClick, hasColoredTertiary = false, type = "button" }) => {
+export const Button: React.FC<ButtonProps> = ({ kind = "primary", disabled, icon, loading, className, children, to, onClick, isColored = false, type = "button" }) => {
     // When loading should be disabled
     disabled = loading ? true : disabled
 
-    const tertiaryColor = hasColoredTertiary ? "blue" : "grey"
+    const tertiaryColor = isColored ? "blue" : "grey"
 
     // Base Classes 
     const buttonBaseClasses = "flex items-center justify-center md:justify-start font-semibold border border-transparent rounded-full py-2 px-8 w-full md:w-max"
