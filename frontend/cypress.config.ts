@@ -21,6 +21,7 @@ export default defineConfig({
       const app = next({ dev, hostname, port })
       const handle = app.getRequestHandler()
 
+	  // TODO: Move this to async and await syntax
       app.prepare().then(() => {
         createServer(async (req, res) => {
           try {
