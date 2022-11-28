@@ -5,7 +5,7 @@ export type ButtonProps = {
     children: string
     /** Which type of button we want, tertiary has the style of a link */
     kind?: "primary" | "secondary" | "tertiary"
-    /** Change tertiary button/link color to be primary color */
+    /** Force color */
     isColored?: boolean
     /** Button type default is "button" */
     type?: "button" | "reset" | "submit"
