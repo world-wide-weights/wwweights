@@ -59,9 +59,6 @@ module.exports = {
           '800': '#323F48',
           '900': '#1F2933',
         }
-      },
-      fontFamily: {
-        sans: ['var(--font-montserrat)', ...fontFamily.sans]
       }
     },
   },

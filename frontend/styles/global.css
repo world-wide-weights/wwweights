@@ -2,6 +2,6 @@
 @tailwind utilities;
 @tailwind components;
 
-html {
-    font-size: 15px; 
+body {
+    font-size: 15px;
 }
