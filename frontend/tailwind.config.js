@@ -61,6 +61,9 @@ module.exports = {
         }
       }
     },
+    fontFamily: {
+      sans: ['var(--font-montserrat)', ...fontFamily.sans],
+    }
   },
   plugins: [],
 };
