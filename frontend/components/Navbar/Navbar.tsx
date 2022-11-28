@@ -8,7 +8,7 @@ import { routes } from '../routes'
 
 // TODO: Adjust with routes.ts
 const navLinks = [{
-    to: "/weights",
+    to: routes.weights,
     text: "Discover",
 }]
 
@@ -26,7 +26,7 @@ export const Navbar: React.FC = () => {
                 <IconButton className="block md:hidden" onClick={() => setIsNavMobileOpen(isNavMobileOpen => !isNavMobileOpen)} icon="menu" />
             </div>
             <ul className={`${isNavMobileOpen ? "block" : "hidden"} md:flex items-center gap-4 py-5 md:py-0`}>
-                {navLinks.map(navLink => <li key={navLink.text} className="mb-4 md:mb-0"><Button to={navLink.to} kind="tertiary">{navLink.text}</Button></li>)}
+                {navLinks.map(navLink => <li key={navLink.text} className="mb-4 md:mb-0"><Button to={navLink.to.list} kind="tertiary">{navLink.text}</Button></li>)}
                 {/* TODO (Zoe-Bot): Here is a dropdown in the future */}
                 <li className="hidden md:inline"><IconButton onClick={() => ""} icon="more_horiz" /></li>
                 <li><Button to="/contribute">Contribute</Button></li>
