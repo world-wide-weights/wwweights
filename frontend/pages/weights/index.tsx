@@ -54,11 +54,11 @@ export default function WeightsList({ items, currentPage, limit }: InferGetServe
 
             {/* Weights (todos) */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                {items.map((item) => <ItemPreview key={item.id} name={`${item.id}: ${item.title}`} weight={item.completed ? "✓" : "X"} imageUrl="https://via.placeholder.com/96.png" id={item.id.toString()} />)}
+                {items.map((item) => <ItemPreview key={item.id} name={`${item.id}: ${item.title}`} weight={item.completed ? "✓" : "X"} imageUrl="https://picsum.photos/200" id={item.id.toString()} />)}
             </div>
 
             {/* Pagination */}
-            <div className="flex justify-center mt-5 md:mt-10">
+            <div className="flex justify-center mt-5 md:mt-8">
                 {currentPage > 1 && <Button to={previousButtonLink} className="mr-5" kind="tertiary">Previous</Button>}
                 <Button to={nextButtonLink} kind="tertiary">Next</Button>
             </div>
