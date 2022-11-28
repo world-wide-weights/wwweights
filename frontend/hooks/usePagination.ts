@@ -5,7 +5,9 @@ import { PaginationProps } from "../components/Pagination/Pagination";
 
 export const DOTS = '...'
 
-export const usePagination = ({ totalItems, itemsPerPage, siblingCount = 1, currentPage }: Omit<PaginationProps, "basePath" | "defaultItemsPerPage">) => {
+type UsePaginationProps = Omit<PaginationProps, "basePath" | "defaultItemsPerPage">
+
+export const usePagination = ({ totalItems, itemsPerPage, siblingCount = 1, currentPage }: UsePaginationProps) => {
     const paginationRange = useMemo(() => {
         const totalPageCount = Math.ceil(totalItems / itemsPerPage)
 
