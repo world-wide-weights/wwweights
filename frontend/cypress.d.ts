@@ -1,6 +1,9 @@
 // Code stolen from cypress docs
 // https://docs.cypress.io/api/commands/mount#Creating-a-New-cy-mount-Command
 
+
+// TODO: Move in cypress/
+
 import { mount } from "cypress/react";
 
 declare global {
