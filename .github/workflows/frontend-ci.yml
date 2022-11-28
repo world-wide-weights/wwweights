@@ -34,3 +34,58 @@ jobs:
           build: npm run build
           start: npm start
           config: baseUrl=http://localhost:3002
+          command: npm run test-components:cli
+
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: [component-tests, e2e-tests] 
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: ./frontend
+          tags: frontend:pipeline_internal
+          outputs: type=docker,dest=/tmp/frontend-image.tar
+       
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: frontend-image
+          path: /tmp/frontend-image.tar
+
+  docker-push:
+    runs-on: ubuntu-latest
+    needs: docker-build
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: frontend-image 
+          path: /tmp
+      
+      - name: Load Docker image
+        run: docker load --input /tmp/frontend-image.tar
+     
+        # Extract branch name and replace / with _ as slashes are invalid as image tags
+      - name: Extract branch name
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/} | tr '/' '_')"
+        id: extract_branch
+  
+      - name: tag docker image
+        run: docker tag frontend:pipeline_internal ghcr.io/world-wide-weights/frontend:${{ steps.extract_branch.outputs.branch }}
+
+      - name: Login to Packages Container registry
+        uses: docker/login-action@v1 
+        with:
+          registry: ghcr.io 
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: push
+        run: docker push ghcr.io/world-wide-weights/frontend:${{ steps.extract_branch.outputs.branch }}
