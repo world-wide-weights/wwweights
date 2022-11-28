@@ -12,6 +12,7 @@
     "test-components:cli": "npx cypress run --component"
   },
   "dependencies": {
+    "@next/font": "^13.0.3",
     "material-symbols": "^0.2.15",
     "next": "^13.0.3",
     "react": "18.2.0",
