@@ -10,24 +10,27 @@ type BaseErrorProps = {
     /** Custom url for back button */
     to?: string
     /** Custom text for back button */
-    buttonText?: string
+    backButtonText?: string
+    /** For additional JSX for example try again button */
+    ctaContent?: React.ReactNode
 }
 
 /**
  * Base Error Component, is used as a wrapper for errors like 404, 500,...
  */
-export const BaseError: React.FC<BaseErrorProps> = ({ headline, description, to = "/", buttonText = "Back home" }) => {
+export const BaseError: React.FC<BaseErrorProps> = ({ headline, description, to = "/", backButtonText = "Back home", ctaContent }) => {
     const siteTitle = `${headline} | World Wide Weights`
 
     return <>
         <Head>
             <title>{siteTitle}</title>
         </Head>
-        <div className="container flex items-center min-h-[calc(100vh-76px-104px)]"> { /* 100% page - 76px Navbar - 104px Footer*/}
+        <div className="container flex items-center min-h-[calc(100vh-88.5px-102.5px)]"> { /* 100vh page - 88.5px Navbar - 102.5px Footer*/}
             <div className="md:w-2/3">
                 <Headline>{headline}</Headline>
                 {description}
-                <Button className="mt-5" to={to} icon="arrow_back">{buttonText}</Button>
+                <Button className="mt-5" to={to} icon="arrow_back">{backButtonText}</Button>
+                {ctaContent}
             </div>
         </div>
     </>
