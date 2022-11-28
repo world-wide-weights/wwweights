@@ -34,7 +34,7 @@ export const Button: React.FC<ButtonProps> = ({ kind = "primary", disabled, icon
 
     // Base Classes 
     const buttonBaseClasses = "flex items-center justify-center md:justify-start font-semibold border border-transparent rounded-full py-2 px-8 w-full md:w-max"
-    const linkBaseClasses = `flex items-center text-${tertiaryColor}-600`
+    const linkBaseClasses = `flex items-center font-semibold text-${tertiaryColor}-600`
 
     // Disable state classes
     const disabledClassesPrimarySecondary = "text-opacity-75 opacity-80 cursor-default"
