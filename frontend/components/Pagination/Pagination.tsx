@@ -1,4 +1,5 @@
-import { DOTS, usePagination } from "../../hooks/usePagination"
+import { usePagination } from "../../hooks/usePagination"
+import { DOTS } from "../../services/pagination/pagination"
 import { Button } from "../Button/Button"
 import { IconButton } from "../Button/IconButton"
 
