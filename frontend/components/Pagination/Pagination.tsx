@@ -9,9 +9,9 @@ export type PaginationProps = {
     currentPage: number
     /** Base Path of link where pages are. */
     basePath: string
-    /** The number dictating how many items a page contains. */
+    /** The number of items to be shown per page. */
     itemsPerPage: number
-    /** The number dictating how many items a page contains. */
+    /** The default number of items to be shown per page. */
     defaultItemsPerPage?: number
     /** Customize count of siblings shown between the dots */
     siblingCount?: number
