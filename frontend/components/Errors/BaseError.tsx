@@ -8,7 +8,7 @@ type BaseErrorProps = {
     /** Custom descripton for example can be just a little text for more information or a list with the reasons. */
     children: React.ReactNode
     /** Custom url for back button */
-    to?: string
+    backButtonTo?: string
     /** Custom text for back button */
     backButtonText?: string
     /** For additional JSX for example try again button */
@@ -18,7 +18,7 @@ type BaseErrorProps = {
 /**
  * Base Error Component, is used as a wrapper for errors like 404, 500,...
  */
-export const BaseError: React.FC<BaseErrorProps> = ({ headline, children, to = "/", backButtonText = "Back home", ctaContent }) => {
+export const BaseError: React.FC<BaseErrorProps> = ({ headline, children, backButtonTo = "/", backButtonText = "Back home", ctaContent }) => {
     const siteTitle = `${headline} | World Wide Weights`
 
     return <>
@@ -30,7 +30,7 @@ export const BaseError: React.FC<BaseErrorProps> = ({ headline, children, to = "
                 <Headline>{headline}</Headline>
                 {children}
                 <div className="flex items-center mt-5">
-                    <Button to={to} icon="arrow_back">{backButtonText}</Button>
+                    <Button to={backButtonTo} icon="arrow_back">{backButtonText}</Button>
                     {ctaContent}
                 </div>
             </div>
