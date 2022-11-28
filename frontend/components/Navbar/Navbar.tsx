@@ -1,15 +1,35 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { useState } from 'react'
 import logo from '../../public/logo.png'
+import { Button } from '../Button/Button'
+import { IconButton } from '../Button/IconButton'
+
+// TODO: Adjust with routes.ts
+const navLinks = [{
+    to: "/weights",
+    text: "Discover",
+}]
 
 /** Navbar component, should only be used once at the top */
 export const Navbar: React.FC = () => {
-    return <div className="bg-gray-100 mb-5">
-        <div className="container">
-            <Link className="flex items-center py-4" href="/">
-                <Image src={logo} alt="Logo" className="min-w-[25px] w-[25px] mr-2" />
-                <h6 className="font-semibold">World Wide Weights</h6>
-            </Link>
-        </div>
-    </div>
+    const [isNavMobileOpen, setIsNavMobileOpen] = useState<boolean>(false)
+
+    return <div className="bg-white py-3 mb-5">
+        <nav className="container md:flex justify-between">
+            <div className="flex items-center justify-between">
+                <Link className="flex items-center" href="/">
+                    <Image src={logo} alt="Logo" className="min-w-[25px] w-[25px] mr-2" />
+                    <h6 className="font-semibold text-lg text-blue-500">World Wide Weights</h6>
+                </Link>
+                <IconButton className="block md:hidden" onClick={() => setIsNavMobileOpen(isNavMobileOpen => !isNavMobileOpen)} icon="menu" />
+            </div>
+            <ul className={`${isNavMobileOpen ? "block" : "hidden"} md:flex items-center gap-4 py-5 md:py-0`}>
+                {navLinks.map(navLink => <li key={navLink.text} className="mb-4 md:mb-0"><Button to={navLink.to} kind="tertiary">{navLink.text}</Button></li>)}
+                {/* TODO (Zoe-Bot): Here is a dropdown in the future */}
+                <li className="hidden md:inline"><IconButton onClick={() => ""} icon="more_horiz" /></li>
+                <li><Button to="/contribute">Contribute</Button></li>
+            </ul>
+        </nav>
+    </div >
 }
