@@ -1,4 +1,5 @@
-import 'material-symbols';
+/** Imports all material symbols globally which we use as our icon pack */
+import 'material-symbols/rounded.css';
 import type { AppProps } from 'next/app';
 import { Layout } from '../components/Layout/Layout';
 import '../styles/global.css';
