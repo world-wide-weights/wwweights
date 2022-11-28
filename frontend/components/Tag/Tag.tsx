@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Color } from "../../types/type";
+import { Color } from "../../types/color";
 
 type TagProps = {
   /** Content of tag */
