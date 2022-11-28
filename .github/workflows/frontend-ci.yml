@@ -3,28 +3,55 @@ name: frontend-pipeline
 on:
   push:
     paths:
-      - 'frontend/**'
-      - '.github/workflows/**.yml'
+      - "frontend/**"
+      - ".github/workflows/**.yml"
   pull_request:
     branches: [main]
     paths:
-      - 'frontend/**'
-      - '.github/workflows/**.yml'
+      - "frontend/**"
+      - ".github/workflows/**.yml"
 
 jobs:
-  single-run:
+  setup:
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
         working-directory: frontend
     steps:
-
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: install npm dependencies
+        run: npm ci --no-auit --cache ~/.npm
+
+      - name: Cache
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: node-modules-${{ hashFiles('package-lock.json') }}
+
+  e2e-tests:
+    runs-on: ubuntu-latest
+    needs: setup
+    defaults:
+      run:
+        shell: bash
+        working-directory: frontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Load cache
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: node-modules-${{ hashFiles('package-lock.json') }}
+
       - name: node modules
-        run: 'npm ci --audit:false'
+        run: npm ci --audit:false --cache ~/.npm --prefer-offline
 
       - name: Cypress run
         uses: cypress-io/github-action@v4
@@ -33,7 +60,35 @@ jobs:
           working-directory: ./frontend
           build: npm run build
           start: npm start
-          config: baseUrl=http://localhost:3002
+
+  component-tests:
+    runs-on: ubuntu-latest
+    needs: setup
+    defaults:
+      run:
+        shell: bash
+        working-directory: frontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Load cache
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: node-modules-${{ hashFiles('package-lock.json') }}
+
+      - name: node modules
+        run: npm ci --audit:false --cache ~/.npm --prefer-offline
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v4
+        timeout-minutes: 15
+        with:
+          working-directory: ./frontend
+          build: npm run build
+          start: npm start
           command: npm run test-components:cli
 
   docker-build:
