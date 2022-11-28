@@ -1,3 +1,4 @@
+import Head from "next/head"
 import { Button } from "../Button/Button"
 import { Headline } from "../Headline/Headline"
 
@@ -16,11 +17,18 @@ type BaseErrorProps = {
  * Base Error Component, is used as a wrapper for errors like 404, 500,...
  */
 export const BaseError: React.FC<BaseErrorProps> = ({ headline, description, to = "/", buttonText = "Back home" }) => {
-    return <div className="container flex items-center min-h-[calc(100vh-76px-104px)]"> { /* 100% page - 76px Navbar - 104px Footer*/}
-        <div className="md:w-2/3">
-            <Headline>{headline}</Headline>
-            {description}
-            <Button className="mt-5" to={to} icon="arrow_back">{buttonText}</Button>
+    const siteTitle = `${headline} | World Wide Weights`
+
+    return <>
+        <Head>
+            <title>{siteTitle}</title>
+        </Head>
+        <div className="container flex items-center min-h-[calc(100vh-76px-104px)]"> { /* 100% page - 76px Navbar - 104px Footer*/}
+            <div className="md:w-2/3">
+                <Headline>{headline}</Headline>
+                {description}
+                <Button className="mt-5" to={to} icon="arrow_back">{buttonText}</Button>
+            </div>
         </div>
-    </div>
+    </>
 }
