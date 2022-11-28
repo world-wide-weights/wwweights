@@ -10,7 +10,7 @@ Cypress.Commands.add('visitLocalPage', (path = "", options) => {
 
 Cypress.Commands.add('check404', () => {
     // TODO (Zoe-Bot): Change implementation when 404 page implemented 
-    cy.contains('This page could not be found').should('be.visible')
+    cy.contains('404 - Page not found').should('be.visible')
 })
 
 Cypress.Commands.add('checkCurrentActivePage', (activePageNumber) => {
