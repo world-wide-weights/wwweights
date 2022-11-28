@@ -13,7 +13,7 @@ const Home = () => {
       <div className="container">
         <p>Hello World</p>
         <Button to="/weights" icon="list">Weights List</Button>
-        <Button to="/tags" icon="list">Weights List</Button>
+        <Button to="/tags" icon="bookmark">Tags List</Button>
       </div>
     </div>
   )
