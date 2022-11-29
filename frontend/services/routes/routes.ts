@@ -7,7 +7,17 @@ export const routes = {
     home: "/",
     weights: {
         list: (options?: PaginationType) => {
-            return `/weights`
+            if (!options)
+                return "/weights"
+
+            const hasCustomLimit = options.itemsPerPage !== options.defaultItemsPerPage
+
+            const queryString = new URLSearchParams({
+                ...(options.page && options.page !== 1 && { page: options.page.toString() }),
+                ...(options.itemsPerPage && hasCustomLimit && { limit: options.itemsPerPage.toString() }),
+            }).toString()
+
+            return `/weights${queryString !== "" ? `?${queryString}` : ``}`
         },
         single: (slug: string) => `/weights/${slug}`
     },
