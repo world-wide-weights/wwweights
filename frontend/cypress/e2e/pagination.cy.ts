@@ -14,8 +14,7 @@ import weightsListFive from "../fixtures/weights/getListLimitFive.json"
  */
 
 describe('Pagination /weights', () => {
-
-    it('should display pagination', () => {
+    beforeEach(() => {
         cy.task('clearNock')
         cy.task('nock', {
             hostname: 'http://localhost:3004',
@@ -24,7 +23,9 @@ describe('Pagination /weights', () => {
             statusCode: 200,
             body: weights,
         })
+    })
 
+    it('should display pagination', () => {
         cy.visitLocalPage("/weights")
         cy.dataCy('pagination').should('be.visible')
     })
@@ -78,10 +79,6 @@ describe('Pagination /weights', () => {
 
     describe('Limit', () => {
         beforeEach(() => {
-            cy.visitLocalPage(`/weights?limit=${limit}`)
-        })
-
-        it('should show limited count of items when set limit', () => {
             cy.task('clearNock')
             cy.task('nock', {
                 hostname: 'http://localhost:3004',
@@ -91,6 +88,10 @@ describe('Pagination /weights', () => {
                 body: weightsListFive,
             })
 
+            cy.visitLocalPage(`/weights?limit=${limit}`)
+        })
+
+        it('should show limited count of items when set limit', () => {
             cy.dataCy('weights-list-item').should('have.length', limit)
         })
 

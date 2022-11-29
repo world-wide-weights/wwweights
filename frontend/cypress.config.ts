@@ -49,7 +49,7 @@ export default defineConfig({
 
           console.log('Nock will: %s %s%s respond with %d %o', method, hostname, path, statusCode, body)
 
-          nock(hostname, { allowUnmocked: true })[method](path).query(true).reply(statusCode, body)
+          nock(hostname).persist()[method](path).query(true).reply(statusCode, body)
 
           return null
         },
