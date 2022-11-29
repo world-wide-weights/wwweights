@@ -24,6 +24,7 @@ describe('Button', () => {
       it('should disable button when loading', () => {
         cy.get('button').should('have.class', 'text-opacity-75')
         cy.get('button').should('have.class', 'opacity-80')
+        cy.get('button').should('be.disabled')
         cy.get('button').should('have.attr', 'disabled')
       })
 
@@ -120,6 +121,7 @@ describe('Button', () => {
       it('should disable button when loading', () => {
         cy.get('button').should('have.class', 'text-opacity-75')
         cy.get('button').should('have.class', 'opacity-80')
+        cy.get('button').should('be.disabled')
         cy.get('button').should('have.attr', 'disabled')
       })
 
@@ -211,6 +213,7 @@ describe('Button', () => {
       it('should disable button when loading', () => {
         cy.get('button').should('have.class', 'text-opacity-75')
         cy.get('button').should('have.class', 'opacity-80')
+        cy.get('button').should('be.disabled')
         cy.get('button').should('have.attr', 'disabled')
       })
 
