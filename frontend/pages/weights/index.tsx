@@ -3,7 +3,7 @@ import Head from "next/head"
 import { Button } from "../../components/Button/Button"
 import { Headline } from "../../components/Headline/Headline"
 import { ItemPreview } from "../../components/Item/ItemPreview"
-import { routes } from "../../components/routes"
+import { routes } from "../../services/routes/routes"
 
 const DEFAULT_ITEMS_PER_PAGE = 16
 const ITEMS_PER_PAGE_MAXIMUM = 100

@@ -1,5 +1,5 @@
+import { routes } from "../../services/routes/routes";
 import { Button } from "../Button/Button";
-import { routes } from "../routes";
 
 /**
  * Footer
