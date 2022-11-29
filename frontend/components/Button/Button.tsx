@@ -24,13 +24,13 @@ export type ButtonProps = {
     /** Loading state when set to true button is loading */
     loading?: boolean
     /** For testing */
-    dataCy?: string
+    datacy?: string
 }
 
 /**
  *  Button component (with link and button functionality), can look like a link when kind tertiary
  */
-export const Button: React.FC<ButtonProps> = ({ kind = "primary", disabled, icon, dataCy, iconSlot = "start", loading, className, children, to, onClick, isColored = false, type = "button" }) => {
+export const Button: React.FC<ButtonProps> = ({ kind = "primary", disabled, icon, datacy, iconSlot = "start", loading, className, children, to, onClick, isColored = false, type = "button" }) => {
     // When loading should be disabled
     disabled = loading ? true : disabled
 
@@ -58,22 +58,22 @@ export const Button: React.FC<ButtonProps> = ({ kind = "primary", disabled, icon
 
     return (<>
         {/* Primary or Secondary as link */}
-        {kind !== "tertiary" && to && <Link dataCy={dataCy} href={disabled ? "" : to} onClick={disabled ? (event) => event.preventDefault() : () => ""} tabIndex={disabled ? -1 : 0} className={`${buttonBaseClasses} ${kind === "primary" ? primaryClasses : secondaryClasses} ${className}`}>
+        {kind !== "tertiary" && to && <Link datacy={datacy} href={disabled ? "" : to} onClick={disabled ? (event) => event.preventDefault() : () => ""} tabIndex={disabled ? -1 : 0} className={`${buttonBaseClasses} ${kind === "primary" ? primaryClasses : secondaryClasses} ${className}`}>
             {innerContent}
         </Link>}
 
         {/* Primary or Secondary as button */}
-        {kind !== "tertiary" && !to && <button dataCy={dataCy} disabled={disabled} onClick={disabled ? () => "" : onClick} type={type} className={`${buttonBaseClasses} ${kind === "primary" ? primaryClasses : secondaryClasses} ${className}`}>
+        {kind !== "tertiary" && !to && <button datacy={datacy} disabled={disabled} onClick={disabled ? () => "" : onClick} type={type} className={`${buttonBaseClasses} ${kind === "primary" ? primaryClasses : secondaryClasses} ${className}`}>
             {innerContent}
         </button>}
 
         {/* Tertiary (link style) as link */}
-        {kind === "tertiary" && to && <Link dataCy={dataCy} href={disabled ? "" : to} onClick={disabled ? (event) => event.preventDefault() : () => ""} tabIndex={disabled ? -1 : 0} className={`${linkBaseClasses} w-max ${disabledTertiary} ${className}`}>
+        {kind === "tertiary" && to && <Link datacy={datacy} href={disabled ? "" : to} onClick={disabled ? (event) => event.preventDefault() : () => ""} tabIndex={disabled ? -1 : 0} className={`${linkBaseClasses} w-max ${disabledTertiary} ${className}`}>
             {innerContent}
         </Link>}
 
         {/* Tertiary (link style) as button */}
-        {kind === "tertiary" && !to && <button dataCy={dataCy} disabled={disabled} onClick={disabled ? () => "" : onClick} type={type} className={`${linkBaseClasses} ${disabledTertiary} ${className}`}>
+        {kind === "tertiary" && !to && <button datacy={datacy} disabled={disabled} onClick={disabled ? () => "" : onClick} type={type} className={`${linkBaseClasses} ${disabledTertiary} ${className}`}>
             {innerContent}
         </button>}
     </>)

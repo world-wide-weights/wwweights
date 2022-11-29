@@ -56,7 +56,7 @@ export default function WeightsList({ items, currentPage, limit }: InferGetServe
 
             {/* Weights (todos) */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-10">
-                {items.map((item) => <ItemPreview dataCy="weights-list-item" key={item.id} name={item.name} slug={item.slug} weight={`${item.weight.isCa ? "ca." : ""}${item.weight.value}${item.weight.aditionalValue ? `- ${item.weight.aditionalValue}` : ""} g`} imageUrl="https://picsum.photos/200" />)}
+                {items.map((item) => <ItemPreview datacy="weights-list-item" key={item.id} name={item.name} slug={item.slug} weight={`${item.weight.isCa ? "ca." : ""}${item.weight.value}${item.weight.aditionalValue ? `- ${item.weight.aditionalValue}` : ""} g`} imageUrl="https://picsum.photos/200" />)}
             </div>
 
             {/* Pagination */}
