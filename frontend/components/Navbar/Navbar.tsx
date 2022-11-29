@@ -7,7 +7,7 @@ import { Button } from '../Button/Button'
 import { IconButton } from '../Button/IconButton'
 
 const navLinks = [{
-    to: routes.weights.list,
+    to: routes.weights.list(),
     text: "Discover",
 }]
 

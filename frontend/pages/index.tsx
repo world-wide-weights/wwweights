@@ -13,7 +13,7 @@ const Home = () => {
 
       <div className="container">
         <p>Hello World</p>
-        <Button to={routes.weights.list} icon="list">Weights List</Button>
+        <Button to={routes.weights.list()} icon="list">Weights List</Button>
       </div>
     </div>
   )

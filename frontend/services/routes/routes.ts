@@ -1,7 +1,7 @@
 export const routes = {
     home: "/",
     weights: {
-        list: (query: Partial<{ page: number, limit: number }>) => {  /** TODO */ },
+        list: (query?: Partial<{ page: number, limit: number }>) => `/weights`,
         single: (slug: string) => `/weights/${slug}`
     },
     legal: {
