@@ -22,8 +22,8 @@ type IconButtonProps = {
  * Button only with an icon
  */
 export const IconButton: React.FunctionComponent<IconButtonProps> = ({ icon, to, onClick, datacy, disabled, className = "", color = "gray" }) => {
-    const innerIcon = <i className={`material-symbols-rounded ${disabled ? "text-opacity-50 cursor-default" : ""} text-${color}-600`}>{icon}</i>
-    const classes = `cursor-pointer hover:bg-${color}-100 focus:bg-${color}-200 rounded-full w-10 h-10 flex items-center justify-center ${className}`
+    const innerIcon = <i className={`material-symbols-rounded ${disabled ? "text-opacity-50 " : ""}text-${color}-600`}>{icon}</i>
+    const classes = `text-center ${disabled ? "cursor-default" : `cursor-pointer hover:bg-${color}-200 focus:bg-${color}-300`} rounded-full w-10 h-10 flex items-center justify-center ${className}`
 
     return <>
         {/* Button as link */}

@@ -51,7 +51,7 @@ export const Button: React.FC<ButtonProps> = ({ kind = "primary", disabled, icon
     const secondaryClasses = `border border-blue-500 text-blue-500 ${disabledSecondary}`
 
     const innerContent = <>
-        {icon && iconSlot === "start" && (loading ? <i className={`material-symbols-rounded text-xl mr-1 ${loading ? "animate-spin" : ""}`}>sync</i> : <i className="material-symbols-rounded text-xl mr-1">{icon}</i>)}
+        {icon && iconSlot === "start" && (loading ? <i className={`material-symbols-rounded text-xl mr-2 ${loading ? "animate-spin" : ""}`}>sync</i> : <i className="material-symbols-rounded text-xl mr-1">{icon}</i>)}
         {children}
         {icon && iconSlot === "end" && <span className="material-symbols-rounded text-xl ml-2">{icon}</span>}
     </>

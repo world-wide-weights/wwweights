@@ -31,8 +31,8 @@ export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage,
         <ul datacy="pagination" className="flex items-center justify-center">
             {/* Left navigation arrow */}
             <li>
-                <Button datacy="pagination-button-left-desktop" to={paginationRange.prev ?? " "} disabled={!paginationRange.prev} icon="arrow_back_ios" className="hidden md:flex mr-5" kind="tertiary">Previous</Button>
-                <IconButton datacy="pagination-button-left-mobile" to={paginationRange.prev ?? " "} className="flex md:hidden" disabled={!paginationRange.prev} icon="arrow_back_ios" />
+                <Button datacy="pagination-button-left-desktop" to={paginationRange.prev ?? " "} disabled={!paginationRange.prev} icon="arrow_back_ios_new" className="hidden md:flex mr-5" kind="tertiary">Previous</Button>
+                <IconButton datacy="pagination-button-left-mobile" to={paginationRange.prev ?? " "} className="flex md:hidden" disabled={!paginationRange.prev} icon="arrow_back_ios_new" />
             </li>
 
             {paginationRange.pages.map((page, index) =>
@@ -40,7 +40,7 @@ export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage,
                 page.content === DOTS ?
                     <li datacy="pagination-dots" key={index} className="text-gray-500">&#8230;</li> :
                     <li key={index}>
-                        <Button datacy={`pagination-button-page-${page.content}`} to={page.link} className={page.content === currentPage ? "flex justify-center items-center bg-blue-500 text-white hover:text-white focus:text-white rounded-full w-9 h-9" : "px-3 md:px-4"} kind="tertiary">
+                        <Button datacy={`pagination-button-page-${page.content}`} to={page.link} className={`flex justify-center items-center rounded-full w-9 h-9 ${page.content === currentPage ? "bg-blue-500 text-white hover:text-white focus:text-white" : "hover:bg-gray-200"}`} kind="tertiary">
                             {page.content.toString()}
                         </Button>
                     </li>
