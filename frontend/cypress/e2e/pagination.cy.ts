@@ -67,12 +67,12 @@ describe('Pagination /weights', () => {
         })
 
         it('should show next page when click next button', () => {
-            cy.dataCy('pagination-button-right-desktop').click()
+            cy.dataCy('pagination-button-next').click()
             cy.checkCurrentActivePage(currentPage + 1)
         })
 
         it('should show previous page when click previous button', () => {
-            cy.dataCy('pagination-button-left-desktop').click()
+            cy.dataCy('pagination-button-previous').click()
             cy.checkCurrentActivePage(currentPage - 1)
         })
     })
@@ -96,10 +96,10 @@ describe('Pagination /weights', () => {
         })
 
         it('should have limit set when change page', () => {
-            cy.dataCy('pagination-button-left-desktop').click()
+            cy.dataCy('pagination-button-previous').click()
             cy.dataCy('weights-list-item').should('have.length', limit)
 
-            cy.dataCy('pagination-button-right-desktop').click()
+            cy.dataCy('pagination-button-next').click()
             cy.dataCy('weights-list-item').should('have.length', limit)
         })
     })
