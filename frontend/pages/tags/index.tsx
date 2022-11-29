@@ -4,7 +4,7 @@ import { Button } from "../../components/Button/Button"
 import { Headline } from "../../components/Headline/Headline"
 import { Tag } from "../../components/Tag/Tag"
 
-const DEFAULT_ITEMS_PER_PAGE = 32
+const DEFAULT_ITEMS_PER_PAGE = 64
 const ITEMS_PER_PAGE_MAXIMUM = 100
 const FIRST_PAGE = 1
 
@@ -16,14 +16,19 @@ type Todo = {
     completed: boolean
 }
 
+export type Tag = {
+    name: string
+    slug: string
+}
+
 type TagsListProps = {
-    items: Todo[],
+    tags: Tag[],
     currentPage: number,
     limit: number
 }
 
 /** Base List for tags */
-export default function TagsList({ items, currentPage, limit }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function TagsList({ tags, currentPage, limit }: InferGetServerSidePropsType<typeof getServerSideProps>) {
     const siteTitle = `All Tags ${currentPage > 1 ? `| Page ${currentPage} ` : ``}- World Wide Weights`
 
     const hasCustomLimit = limit !== DEFAULT_ITEMS_PER_PAGE
@@ -54,7 +59,7 @@ export default function TagsList({ items, currentPage, limit }: InferGetServerSi
 
             {/* tags (todos) */}
             <div className="flex flex-wrap">
-                {items.map((item) => <Tag key={item.title} to="#">{item.title}</Tag>)}
+                {tags.map((tag) => <Tag key={tag.name} to="#">{tag.name}</Tag>)}
             </div>
 
             {/* Pagination */}
@@ -78,11 +83,11 @@ export const getServerSideProps: GetServerSideProps<TagsListProps> = async (cont
         }
     }
 
-    const response = await fetch(`https://jsonplaceholder.typicode.com/todos?_start=${(currentPage - 1) * limit}&_limit=${limit}`)
+    const response = await fetch(`http://localhost:3004/api/query/v1/tags/getList?page=${currentPage}&limit=${limit}`)
     const data = await response.json()
     return {
         props: {
-            items: data,
+            tags: data,
             currentPage,
             limit
         }
