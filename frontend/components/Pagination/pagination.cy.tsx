@@ -19,9 +19,9 @@ describe('Pagination', () => {
             })
 
             it('should disable prevoius button when on page 1 desktop', () => {
-                cy.dataCy('pagination-button-left-desktop').invoke('attr', 'href').should('eq', '')
-                cy.dataCy('pagination-button-left-desktop').should('have.class', 'text-opacity-75')
-                cy.dataCy('pagination-button-left-desktop').should('have.class', 'opacity-80')
+                cy.dataCy('pagination-button-previous').invoke('attr', 'href').should('eq', '')
+                cy.dataCy('pagination-button-previous').should('have.class', 'text-opacity-75')
+                cy.dataCy('pagination-button-previous').should('have.class', 'opacity-80')
             })
 
             it('should show active state of current page', () => {
@@ -39,9 +39,42 @@ describe('Pagination', () => {
         it('should disable next button when on last page desktop', () => {
             cy.mount(<Pagination totalItems={TOTAL_ITEMS} currentPage={10} basePath={testRoute} itemsPerPage={ITEMS_PER_PAGE} />)
 
-            cy.dataCy('pagination-button-right-desktop').invoke('attr', 'href').should('eq', '')
-            cy.dataCy('pagination-button-right-desktop').should('have.class', 'text-opacity-75')
-            cy.dataCy('pagination-button-right-desktop').should('have.class', 'opacity-80')
+            cy.dataCy('pagination-button-next').invoke('attr', 'href').should('eq', '')
+            cy.dataCy('pagination-button-next').should('have.class', 'text-opacity-75')
+            cy.dataCy('pagination-button-next').should('have.class', 'opacity-80')
+        })
+    })
+
+    describe('Tablet', () => {
+        beforeEach(() => {
+            // Tablet (bzw. between sm and md in tailwind)
+            cy.viewport(660, 1000)
+        })
+
+        describe('Mount with first page', () => {
+            beforeEach(() => {
+                cy.mount(<Pagination totalItems={TOTAL_ITEMS} currentPage={1} basePath={testRoute} itemsPerPage={ITEMS_PER_PAGE} />)
+            })
+
+            it('should hide text on tablet', () => {
+                cy.dataCy('pagination-button-next').should('not.be.visible')
+                cy.dataCy('pagination-button-previous').should('not.be.visible')
+
+                cy.dataCy('pagination-button-next-tablet').should('be.visible')
+                cy.dataCy('pagination-button-previous-tablet').should('be.visible')
+            })
+
+            it('should disable previous button when on page 1 tablet', () => {
+                cy.dataCy('pagination-button-previous-tablet').invoke('attr', 'href').should('eq', '')
+                cy.dataCy('pagination-button-previous-tablet', ' i').should('have.class', 'text-opacity-50')
+            })
+        })
+
+        it('should disable next button when on last page tablet', () => {
+            cy.mount(<Pagination totalItems={TOTAL_ITEMS} currentPage={10} basePath={testRoute} itemsPerPage={ITEMS_PER_PAGE} />)
+
+            cy.dataCy('pagination-button-next-tablet').invoke('attr', 'href').should('eq', '')
+            cy.dataCy('pagination-button-next-tablet', ' i').should('have.class', 'text-opacity-50')
         })
     })
 
@@ -52,28 +85,24 @@ describe('Pagination', () => {
 
         describe('Mount with first page', () => {
             beforeEach(() => {
-                cy.mount(<Pagination totalItems={TOTAL_ITEMS} currentPage={1} basePath={testRoute} itemsPerPage={ITEMS_PER_PAGE} />)
+                cy.mount(<Pagination totalItems={3} currentPage={1} basePath={testRoute} itemsPerPage={1} />)
             })
 
             it('should hide text on mobile', () => {
-                cy.dataCy('pagination-button-right-desktop').should('not.be.visible')
-                cy.dataCy('pagination-button-left-desktop').should('not.be.visible')
-
-                cy.dataCy('pagination-button-right-mobile').should('be.visible')
-                cy.dataCy('pagination-button-left-mobile').should('be.visible')
+                cy.dataCy('pagination-button-page-1').should('not.be.visible')
+                cy.dataCy('pagination-button-page-2').should('not.be.visible')
+                cy.dataCy('pagination-button-page-3').should('not.be.visible')
             })
 
-            it('should disable prevoius button when on page 1 mobile', () => {
-                cy.dataCy('pagination-button-left-mobile').invoke('attr', 'href').should('eq', '')
-                cy.dataCy('pagination-button-left-mobile', ' i').should('have.class', 'text-opacity-50')
+            it('should not show previous button when on page 1 mobile', () => {
+                cy.dataCy('pagination-button-previous').should('not.be.visible')
             })
         })
 
-        it('should disable next button when on last page mobile', () => {
-            cy.mount(<Pagination totalItems={TOTAL_ITEMS} currentPage={10} basePath={testRoute} itemsPerPage={ITEMS_PER_PAGE} />)
+        it('should not show next button when on page 1 mobile', () => {
+            cy.mount(<Pagination totalItems={3} currentPage={3} basePath={testRoute} itemsPerPage={1} />)
 
-            cy.dataCy('pagination-button-right-mobile').invoke('attr', 'href').should('eq', '')
-            cy.dataCy('pagination-button-right-mobile', ' i').should('have.class', 'text-opacity-50')
+            cy.dataCy('pagination-button-next').should('not.be.visible')
         })
     })
 })
