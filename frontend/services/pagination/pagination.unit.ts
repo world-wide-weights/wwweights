@@ -1,4 +1,4 @@
-import { DOTS, paginationDataService, PaginationDataServiceParams } from "./pagination";
+import { DOTS, getTotalPageCount, paginationDataService, PaginationDataServiceParams, paginationService, PaginationServiceParams } from "./pagination";
 
 describe('Pagination', () => {
 
@@ -91,6 +91,83 @@ describe('Pagination', () => {
             }
 
             expect(paginationDataService(options)).deep.equal([1, 2, 3])
+        })
+    })
+
+    describe('Total Page Count', () => {
+        it('should return 0 when either one or both params are 0', () => {
+            expect(getTotalPageCount(0, 0)).deep.equal(0)
+            expect(getTotalPageCount(0, 1)).deep.equal(0)
+            expect(getTotalPageCount(1, 0)).deep.equal(0)
+        })
+
+        it('should return 0 when either one or both params are negative', () => {
+            expect(getTotalPageCount(-1, -1)).deep.equal(0)
+            expect(getTotalPageCount(1, -1)).deep.equal(0)
+            expect(getTotalPageCount(-1, 1)).deep.equal(0)
+        })
+    })
+
+    describe('Pagination service', () => {
+        it('should return pagination without links', () => {
+            const options: PaginationServiceParams = {
+                totalItems: 100,
+                itemsPerPage: 10,
+                siblingCount: 1,
+                currentPage: 5,
+                defaultItemsPerPage: 10,
+                basePath: () => "/"
+            }
+
+            expect(paginationService(options)).deep.equal({
+                prev: "/",
+                next: "/",
+                pages: [
+                    {
+                        "content": 1,
+                        "link": "/"
+                    },
+                    {
+                        "content": "..."
+                    },
+                    {
+                        "content": 4,
+                        "link": "/"
+                    },
+                    {
+                        "content": 5,
+                        "link": "/"
+                    },
+                    {
+                        "content": 6,
+                        "link": "/"
+                    },
+                    {
+                        "content": "..."
+                    },
+                    {
+                        "content": 10,
+                        "link": "/"
+                    }
+                ]
+            })
+        })
+
+        it('should return empty pages and links null when totalItems is 0', () => {
+            const options: PaginationServiceParams = {
+                totalItems: 0,
+                itemsPerPage: 10,
+                siblingCount: 1,
+                currentPage: 2,
+                defaultItemsPerPage: 10,
+                basePath: () => "/"
+            }
+
+            expect(paginationService(options)).deep.equal({
+                prev: null,
+                next: null,
+                pages: []
+            })
         })
     })
 })
