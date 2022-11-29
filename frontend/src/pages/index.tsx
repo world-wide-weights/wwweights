@@ -1,6 +1,6 @@
 import Head from "next/head";
-import { Button } from "../components/Button/Button";
 import { routes } from "../services/routes/routes";
+import { Button } from "../components/Button/Button";
 
 const Home = () => {
   return (

@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
-import logo from '../../public/logo.png'
+import logo from '../../../public/logo.png'
 import { routes } from '../../services/routes/routes'
 import { Button } from '../Button/Button'
 import { IconButton } from '../Button/IconButton'
