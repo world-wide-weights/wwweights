@@ -39,8 +39,8 @@ export class Item extends AggregateRoot {
   @Expose()
   @ApiProperty()
   @Transform((params) => parseFloat(params.obj.value))
-  @Column('decimal', { precision: 99, scale: 3 })
-  // This is always in grams and scientific notation example: 1.234e+5
+  @Column('decimal', { precision: 128, scale: 3 })
+  // This is always in grams and scientific notation example: 1.234e10
   value: number;
 
   @IsOptional()
@@ -52,8 +52,10 @@ export class Item extends AggregateRoot {
   @IsNumber()
   @IsOptional()
   @Expose()
-  @Transform((params) => parseFloat(params.obj.value))
-  @Column('decimal', { precision: 99, scale: 3, nullable: true })
+  @Transform((params) => {
+    return parseFloat(params.obj.additional_range_value) || null;
+  })
+  @Column('decimal', { precision: 128, scale: 3, nullable: true })
   additional_range_value: number;
 
   // TODO: Temporary solution, needs to be @ManyToMany
