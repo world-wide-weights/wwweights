@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 Cypress.Commands.add('dataCy', (dataCy, customSelector = "") => {
-    cy.get(`[dataCy=${dataCy}]${customSelector}`)
+    cy.get(`[datacy=${dataCy}]${customSelector}`)
 })
 
 Cypress.Commands.add('visitLocalPage', (path = "", options) => {
