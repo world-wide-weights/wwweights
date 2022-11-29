@@ -1,10 +1,7 @@
 import { useMemo } from "react";
-import { PaginationProps } from "../components/Pagination/Pagination";
-import { paginationService } from "../services/pagination/pagination";
+import { paginationService, PaginationServiceType } from "../services/pagination/pagination";
 
-type UsePaginationProps = Omit<PaginationProps, "basePath" | "defaultItemsPerPage">
-
-export const usePagination = (usePaginationProps: UsePaginationProps) => {
+export const usePagination = (usePaginationProps: PaginationServiceType) => {
     const paginationRange = useMemo(() => paginationService(usePaginationProps), [usePaginationProps]) // MC: Is this still working expected?
     return paginationRange
 }

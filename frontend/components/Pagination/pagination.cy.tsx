@@ -1,4 +1,5 @@
 import 'material-symbols';
+import { routes } from '../../services/routes/routes';
 import '../../styles/global.css';
 import { Pagination } from './Pagination';
 
@@ -9,7 +10,7 @@ describe('Pagination', () => {
     describe('Desktop', () => {
         describe('Mount with first page', () => {
             beforeEach(() => {
-                cy.mount(<Pagination totalItems={TOTAL_ITEMS} currentPage={1} basePath={'/'} itemsPerPage={ITEMS_PER_PAGE} />)
+                cy.mount(<Pagination totalItems={TOTAL_ITEMS} currentPage={1} basePath={routes.weights.list} itemsPerPage={ITEMS_PER_PAGE} />)
             })
 
             it('should display component', () => {
@@ -29,13 +30,13 @@ describe('Pagination', () => {
         })
 
         it('should not display component when not enough items', () => {
-            cy.mount(<Pagination totalItems={10} currentPage={1} basePath={'/'} itemsPerPage={10} />)
+            cy.mount(<Pagination totalItems={10} currentPage={1} basePath={routes.weights.list} itemsPerPage={10} />)
 
             cy.dataCy('pagination').should('not.exist')
         })
 
         it('should disable next button when on last page desktop', () => {
-            cy.mount(<Pagination totalItems={TOTAL_ITEMS} currentPage={10} basePath={'/'} itemsPerPage={ITEMS_PER_PAGE} />)
+            cy.mount(<Pagination totalItems={TOTAL_ITEMS} currentPage={10} basePath={routes.weights.list} itemsPerPage={ITEMS_PER_PAGE} />)
 
             cy.dataCy('pagination-button-right-desktop').invoke('attr', 'href').should('eq', '')
             cy.dataCy('pagination-button-right-desktop').should('have.class', 'text-opacity-75')
@@ -50,7 +51,7 @@ describe('Pagination', () => {
 
         describe('Mount with first page', () => {
             beforeEach(() => {
-                cy.mount(<Pagination totalItems={TOTAL_ITEMS} currentPage={1} basePath={'/'} itemsPerPage={ITEMS_PER_PAGE} />)
+                cy.mount(<Pagination totalItems={TOTAL_ITEMS} currentPage={1} basePath={routes.weights.list} itemsPerPage={ITEMS_PER_PAGE} />)
             })
 
             it('should hide text on mobile', () => {
@@ -68,7 +69,7 @@ describe('Pagination', () => {
         })
 
         it('should disable next button when on last page mobile', () => {
-            cy.mount(<Pagination totalItems={TOTAL_ITEMS} currentPage={10} basePath={'/'} itemsPerPage={ITEMS_PER_PAGE} />)
+            cy.mount(<Pagination totalItems={TOTAL_ITEMS} currentPage={10} basePath={routes.weights.list} itemsPerPage={ITEMS_PER_PAGE} />)
 
             cy.dataCy('pagination-button-right-mobile').invoke('attr', 'href').should('eq', '')
             cy.dataCy('pagination-button-right-mobile', ' i').should('have.class', 'text-opacity-50')

@@ -1,20 +1,55 @@
-import { PaginationProps } from "../../components/Pagination/Pagination"
+import { RoutePagination } from "../routes/routes"
 import { range } from "../utils/range"
 
 // https://www.freecodecamp.org/news/build-a-custom-pagination-component-in-react/
 
-type PaginationService = Omit<PaginationProps, "basePath" | "defaultItemsPerPage">
+type PaginationEllipsis = {
+    content: typeof DOTS
+}
+
+type PaginationPage = {
+    content: number,
+    link: string
+}
+
+type PaginationService = {
+    prev: string | null
+    next: string | null
+    pages: (PaginationPage | PaginationEllipsis)[]
+}
 
 export const DOTS = '...'
+export type PaginationServiceType = { totalItems: number, itemsPerPage: number, siblingCount: number, currentPage: number, basePath: RoutePagination, defaultItemsPerPage?: number }
+export const paginationService = ({ totalItems, itemsPerPage, siblingCount, currentPage, basePath, defaultItemsPerPage }: PaginationServiceType): PaginationService => {
+    const totalPageCount = getTotalPageCount(totalItems, itemsPerPage)
 
-export const paginationService = ({ totalItems, itemsPerPage, siblingCount = 1, currentPage }: PaginationService) => {
-    const totalPageCount = Math.ceil(totalItems / itemsPerPage)
+    const paginationData = paginationDataService({ totalPageCount, currentPage, siblingCount })
+
+    const pages = paginationData.map((page): (PaginationPage | PaginationEllipsis) => (page === DOTS ? {
+        content: DOTS
+    } : {
+        content: page,
+        link: basePath({ page, itemsPerPage, defaultItemsPerPage })
+    }))
+
+    const prevPage = currentPage === 1 ? null : basePath({ page: currentPage - 1, itemsPerPage, defaultItemsPerPage })
+    const nextPage = currentPage === totalPageCount ? null : basePath({ page: currentPage + 1, itemsPerPage, defaultItemsPerPage })
+
+    return {
+        prev: prevPage,
+        next: nextPage,
+        pages
+    }
+}
+
+export type PaginationDataServiceType = { totalPageCount: number, siblingCount: number, currentPage: number }
+export const paginationDataService = ({ totalPageCount, siblingCount, currentPage }: PaginationDataServiceType): (number | typeof DOTS)[] => {
 
     // Pages count is determined as siblingCount + firstPage + lastPage + currentPage + 2*DOTS
-    const totalPageNumbers = siblingCount * 2 + 5
+    const maxPaginationItemsLength = siblingCount * 2 + 5
 
     // Case 1: If the number of pages is less than the page numbers we want to show in our paginationComponent, we return the range [1..totalPageCount]
-    if (totalPageNumbers >= totalPageCount) {
+    if (maxPaginationItemsLength >= totalPageCount) {
         return range(1, totalPageCount)
     }
 
@@ -52,3 +87,5 @@ export const paginationService = ({ totalItems, itemsPerPage, siblingCount = 1, 
     return []
 
 }
+
+export const getTotalPageCount = (totalItems: number, itemsPerPage: number) => Math.ceil(totalItems / itemsPerPage)

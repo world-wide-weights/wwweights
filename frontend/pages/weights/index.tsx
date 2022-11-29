@@ -3,6 +3,7 @@ import Head from "next/head"
 import { Headline } from "../../components/Headline/Headline"
 import { ItemPreview } from "../../components/Item/ItemPreview"
 import { Pagination } from "../../components/Pagination/Pagination"
+import { routes } from "../../services/routes/routes"
 
 const DEFAULT_ITEMS_PER_PAGE = 16
 const ITEMS_PER_PAGE_MAXIMUM = 100
@@ -59,7 +60,7 @@ export default function WeightsList({ items, currentPage, limit }: InferGetServe
             </div>
 
             {/* Pagination */}
-            <Pagination totalItems={100} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} basePath={"/weights"} />
+            <Pagination totalItems={100} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} basePath={routes.weights.list} />
         </div>
     </>
     )
