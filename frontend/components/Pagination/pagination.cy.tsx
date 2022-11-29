@@ -26,15 +26,6 @@ describe('Pagination', () => {
                 cy.dataCy("pagination-button-page-1").should('have.class', 'bg-blue-500')
                 cy.dataCy("pagination-button-page-1").should('have.class', 'text-white')
             })
-
-            it('should show no left dots, but show right dots', () => {
-                // No left dots (if there where dots that would not exist)
-                cy.dataCy('pagination-button-page-2').should('be.visible') // This is the place of the left dots
-
-                // Right dots
-                cy.dataCy('pagination-dots').should('be.visible')
-                cy.dataCy('pagination-button-page-6').should('not.exist') // This is the place of right dots
-            })
         })
 
         it('should not display component when not enough items', () => {
@@ -49,31 +40,6 @@ describe('Pagination', () => {
             cy.dataCy('pagination-button-right-desktop').invoke('attr', 'href').should('eq', '')
             cy.dataCy('pagination-button-right-desktop').should('have.class', 'text-opacity-75')
             cy.dataCy('pagination-button-right-desktop').should('have.class', 'opacity-80')
-        })
-
-        it('should show no left dots and show no right dots', () => {
-            cy.mount(<Pagination totalItems={15} currentPage={1} basePath={'/'} itemsPerPage={5} />)
-            cy.dataCy('pagination-dots').should('not.exist')
-        })
-
-        it('should show left dots, but show no right dots', () => {
-            cy.mount(<Pagination totalItems={TOTAL_ITEMS} currentPage={8} basePath={'/'} itemsPerPage={ITEMS_PER_PAGE} />)
-
-            // Left dots
-            cy.dataCy('pagination-dots').should('be.visible')
-            cy.dataCy('pagination-button-page-2').should('not.exist') // This is the place of the left dots
-
-            // No Right dots (if there where dots that would not exist)
-            cy.dataCy('pagination-button-page-6').should('be.visible') // This is the place of right dots
-        })
-
-        it('should show left dots and show right dots', () => {
-            cy.mount(<Pagination totalItems={TOTAL_ITEMS} currentPage={4} basePath={'/'} itemsPerPage={ITEMS_PER_PAGE} />)
-
-            cy.dataCy('pagination-dots').should('be.visible')
-
-            cy.dataCy('pagination-button-page-2').should('not.exist') // This is the place of the left dots
-            cy.dataCy('pagination-button-page-6').should('not.exist') // This is the place of right dots
         })
     })
 

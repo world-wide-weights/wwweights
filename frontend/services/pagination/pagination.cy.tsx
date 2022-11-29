@@ -77,6 +77,28 @@ describe('Pagination', () => {
             })
         })
     })
+
+    it('should show no left dots, but show right dots on page 1 with 10 pages and 1 sibling', () => {
+        const options = {
+            currentPage: 1,
+            totalItems: 100,
+            siblingCount: 1,
+            itemsPerPage: 10
+        }
+
+        expect(paginationService(options)).deep.equal([1, 2, 3, 4, 5, DOTS, 10])
+    })
+
+    it('should show no left dots and show no right dots', () => {
+        const options = {
+            currentPage: 1,
+            totalItems: 15,
+            siblingCount: 1,
+            itemsPerPage: 5
+        }
+
+        expect(paginationService(options)).deep.equal([1, 2, 3])
+    })
 })
 
 export { };
