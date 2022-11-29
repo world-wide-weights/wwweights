@@ -1,8 +1,6 @@
 import { RoutePagination } from "../routes/routes"
 import { range } from "../utils/range"
 
-// https://www.freecodecamp.org/news/build-a-custom-pagination-component-in-react/
-
 type PaginationEllipsis = {
     content: typeof DOTS
 }
