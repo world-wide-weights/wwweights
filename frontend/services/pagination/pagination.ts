@@ -17,8 +17,8 @@ type PaginationService = {
 }
 
 export const DOTS = '...'
-export type PaginationServiceType = { totalItems: number, itemsPerPage: number, siblingCount: number, currentPage: number, basePath: RoutePagination, defaultItemsPerPage?: number }
-export const paginationService = ({ totalItems, itemsPerPage, siblingCount, currentPage, basePath, defaultItemsPerPage }: PaginationServiceType): PaginationService => {
+export type PaginationServiceParams = { totalItems: number, itemsPerPage: number, siblingCount: number, currentPage: number, basePath: RoutePagination, defaultItemsPerPage?: number }
+export const paginationService = ({ totalItems, itemsPerPage, siblingCount, currentPage, basePath, defaultItemsPerPage }: PaginationServiceParams): PaginationService => {
     const totalPageCount = getTotalPageCount(totalItems, itemsPerPage)
 
     const paginationData = paginationDataService({ totalPageCount, currentPage, siblingCount })
@@ -30,18 +30,18 @@ export const paginationService = ({ totalItems, itemsPerPage, siblingCount, curr
         link: basePath({ page, itemsPerPage, defaultItemsPerPage })
     }))
 
-    const prevPage = currentPage === 1 ? null : basePath({ page: currentPage - 1, itemsPerPage, defaultItemsPerPage })
-    const nextPage = currentPage === totalPageCount ? null : basePath({ page: currentPage + 1, itemsPerPage, defaultItemsPerPage })
+    const prev = currentPage === 1 ? null : basePath({ page: currentPage - 1, itemsPerPage, defaultItemsPerPage })
+    const next = currentPage === totalPageCount ? null : basePath({ page: currentPage + 1, itemsPerPage, defaultItemsPerPage })
 
     return {
-        prev: prevPage,
-        next: nextPage,
+        prev,
+        next,
         pages
     }
 }
 
-export type PaginationDataServiceType = { totalPageCount: number, siblingCount: number, currentPage: number }
-export const paginationDataService = ({ totalPageCount, siblingCount, currentPage }: PaginationDataServiceType): (number | typeof DOTS)[] => {
+export type PaginationDataServiceParams = { totalPageCount: number, siblingCount: number, currentPage: number }
+export const paginationDataService = ({ totalPageCount, siblingCount, currentPage }: PaginationDataServiceParams): (number | typeof DOTS)[] => {
 
     // Pages count is determined as siblingCount + firstPage + lastPage + currentPage + 2*DOTS
     const maxPaginationItemsLength = siblingCount * 2 + 5
