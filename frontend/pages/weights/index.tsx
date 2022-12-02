@@ -3,6 +3,7 @@ import Head from "next/head"
 import { Button } from "../../components/Button/Button"
 import { Headline } from "../../components/Headline/Headline"
 import { ItemPreview } from "../../components/Item/ItemPreview"
+import { routes } from "../../services/routes/routes"
 
 const DEFAULT_ITEMS_PER_PAGE = 16
 const ITEMS_PER_PAGE_MAXIMUM = 100
@@ -50,14 +51,14 @@ export default function WeightsList({ items, currentPage, limit }: InferGetServe
         ...(currentPage > 2 && { page: (currentPage - 1).toString() }), // At page 3 we want to have a page query 
         ...(hasCustomLimit && { limit: limit.toString() }), // When we have a custom limit of items, we want to provide it
     }).toString()
-    const previousButtonLink = `/weights${previousButtonQueryString !== "" ? `?${previousButtonQueryString}` : ``}`
+    const previousButtonLink = `${routes.weights.list()}${previousButtonQueryString !== "" ? `?${previousButtonQueryString}` : ``}`
 
     // Next Button
     const nextButtonQueryString = new URLSearchParams({
         ...(true && { page: (currentPage + 1).toString() }), // Replace `true` with maxPage logic later
         ...(hasCustomLimit && { limit: limit.toString() }),
     }).toString()
-    const nextButtonLink = `/weights${nextButtonQueryString !== "" ? `?${nextButtonQueryString}` : ``}`
+    const nextButtonLink = `${routes.weights.list()}${nextButtonQueryString !== "" ? `?${nextButtonQueryString}` : ``}`
 
     return (<>
         {/* Meta Tags */}

@@ -2,12 +2,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 import logo from '../../public/logo.png'
+import { routes } from '../../services/routes/routes'
 import { Button } from '../Button/Button'
 import { IconButton } from '../Button/IconButton'
 
-// TODO: Adjust with routes.ts
 const navLinks = [{
-    to: "/weights",
+    to: routes.weights.list(),
     text: "Discover",
 }]
 
@@ -18,7 +18,7 @@ export const Navbar: React.FC = () => {
     return <div className="bg-white py-3 mb-5">
         <nav className="container md:flex justify-between">
             <div className="flex items-center justify-between">
-                <Link className="flex items-center" href="/">
+                <Link className="flex items-center" href={routes.home}>
                     <Image src={logo} alt="Logo" className="min-w-[25px] w-[25px] mr-2" />
                     <h6 className="font-semibold text-lg text-blue-500">World Wide Weights</h6>
                 </Link>
@@ -31,5 +31,5 @@ export const Navbar: React.FC = () => {
                 <li><Button to="/contribute">Contribute</Button></li>
             </ul>
         </nav>
-    </div >
+    </div>
 }
