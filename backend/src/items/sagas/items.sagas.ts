@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ICommand, ofType, Saga } from '@nestjs/cqrs';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { delay, map } from 'rxjs/operators';
+import { TestItemSagaCommand } from '../commands/impl/test-item-saga.command';
 import { ItemCreatedEvent } from '../events/impl/item-created.event';
-import { ItemTestEvent } from '../events/impl/item-test.event';
 
 @Injectable()
 export class ItemsSagas {
@@ -11,9 +11,9 @@ export class ItemsSagas {
   itemCreated = (events$: Observable<any>): Observable<ICommand> => {
     return events$.pipe(
       ofType(ItemCreatedEvent),
-      //delay(1000), // TODO: This is from an example, maybe we need that later
+      delay(1000), // TODO: This is from an example, maybe we need that later
       map((event) => {
-        return new ItemTestEvent(event.item);
+        return new TestItemSagaCommand(event.item);
       }),
     );
   };

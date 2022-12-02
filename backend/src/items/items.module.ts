@@ -6,9 +6,15 @@ import { EventHandlers } from './events/handler';
 import { ItemsController } from './items.controller';
 import { Item } from './models/item.model';
 import { QueryHandlers } from './queries/handlers';
+import { ItemsSagas } from './sagas/items.sagas';
 @Module({
   imports: [CqrsModule, TypeOrmModule.forFeature([Item])],
   controllers: [ItemsController],
-  providers: [...QueryHandlers, ...CommandHandlers, ...EventHandlers],
+  providers: [
+    ...QueryHandlers,
+    ...CommandHandlers,
+    ...EventHandlers,
+    ItemsSagas,
+  ],
 })
 export class ItemsModule {}
