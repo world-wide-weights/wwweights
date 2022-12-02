@@ -11,7 +11,8 @@ export class ItemsSagas {
   itemCreated = (events$: Observable<any>): Observable<ICommand> => {
     return events$.pipe(
       ofType(ItemCreatedEvent),
-      delay(1000), // TODO: This is from an example, maybe we need that later
+      // TODO: Remove the delay once we have a real saga
+      delay(1000),
       map((event) => {
         return new TestItemSagaCommand(event.item);
       }),

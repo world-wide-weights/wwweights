@@ -13,7 +13,6 @@ export class GetItemHandler implements IQueryHandler<GetItemQuery> {
   ) {}
 
   async execute(query: GetItemQuery) {
-    // TODO: Does this work instead of query.id? technically it is `{query: {id: 1}}`
     const result = await this.repository.findOneBy(query);
     if (!result)
       throw new NotFoundException(`Item with slug ${query.slug} not found`);

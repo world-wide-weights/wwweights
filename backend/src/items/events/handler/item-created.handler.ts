@@ -11,7 +11,6 @@ export class ItemCreatedHandler implements IEventHandler<ItemCreatedEvent> {
     private readonly repository: Repository<Item>,
   ) {}
   async handle(event: ItemCreatedEvent) {
-    // TODO: Here will be the logic to create the item in the read DB (PostGres)
     await this.repository.save(event.item);
     // TODO: Here will be followup logic like publishing with SSE
   }
