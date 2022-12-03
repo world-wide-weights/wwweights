@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { BehaviorSubject } from 'rxjs';
+import { TestItemSagaCommand } from './items/commands/test-item-saga.command';
 import { ItemCreatedEvent } from './items/events/item-created.event';
 
 @Injectable()
@@ -12,7 +13,10 @@ export class EventStore {
     event: any;
   }>(null);
 
-  private readonly eventMap = new Map([['ItemCreatedEvent', ItemCreatedEvent]]);
+  private readonly eventMap = new Map([
+    ['ItemCreatedEvent', ItemCreatedEvent],
+    ['TestItemSagaCommand', TestItemSagaCommand],
+  ]);
 
   constructor() {
     this.eventsStream.subscribe((entry) => {
@@ -31,7 +35,6 @@ export class EventStore {
 
   public addEvent(type: string, event: any) {
     const eventEntry = { id: this.latestId++, type, event };
-    this.eventsStream.next(eventEntry);
     this.logger.log(
       `Added #${eventEntry.id} ${eventEntry.type}: ${JSON.stringify(
         eventEntry.event,
@@ -39,6 +42,7 @@ export class EventStore {
         2,
       )}`,
     );
+    this.eventsStream.next(eventEntry);
     return eventEntry.id;
   }
 }
