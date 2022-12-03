@@ -3,7 +3,6 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Delete,
-  Get,
   HttpCode,
   HttpStatus,
   Logger,
@@ -12,26 +11,24 @@ import {
   SerializeOptions,
   UseInterceptors,
 } from '@nestjs/common';
-import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { CommandBus } from '@nestjs/cqrs';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateItemCommand } from './commands/create-item.command';
 import { CreateItemDto } from './interfaces/create-item.dto';
 import { GetItemDto } from './interfaces/get-item-dto';
 import { Item } from './models/item.model';
-import { GetItemQuery } from './queries/get-item.query';
 
-@Controller('items')
-@ApiTags('items')
+@Controller('commands/items')
+@ApiTags('items-commands')
 @UseInterceptors(ClassSerializerInterceptor)
 @SerializeOptions({ strategy: 'excludeAll' })
-export class ItemsController {
-  private readonly logger = new Logger(ItemsController.name);
+export class ItemsCommandsController {
+  private readonly logger = new Logger(ItemsCommandsController.name);
 
   constructor(
     private commandBus: CommandBus,
-    private queryBus: QueryBus,
     // TODO: remove after implementations
     @InjectRepository(Item)
     private repository: Repository<Item>,
@@ -43,20 +40,6 @@ export class ItemsController {
   @HttpCode(HttpStatus.OK)
   async createItem(@Body() createItemDto: CreateItemDto) {
     this.commandBus.execute(new CreateItemCommand(createItemDto));
-  }
-
-  @Get()
-  async getAllItems() {
-    // TODO: implement in other issue
-    return await this.repository.find();
-  }
-
-  @Get(':slug')
-  @ApiParam({ name: 'slug', type: String })
-  @ApiOperation({ summary: 'Get an item by id' })
-  async getItem(@Param() { slug }: GetItemDto) {
-    this.logger.log(`Get item with slug ${slug}`);
-    return await this.queryBus.execute(new GetItemQuery(slug));
   }
 
   @Delete()

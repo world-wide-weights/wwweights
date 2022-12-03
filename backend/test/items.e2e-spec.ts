@@ -35,10 +35,12 @@ describe('AppController (e2e)', () => {
 
   //--------------------- Queries(GET) ---------------------
 
-  describe('Queries /items', () => {
+  describe('Queries /queries/items', () => {
+    const queriesPath = '/queries/items/';
+
     it('/ => getItems', async () => {
       const res = await request(app.getHttpServer())
-        .get(itemsPath)
+        .get(queriesPath)
         .expect(HttpStatus.OK);
       expect(res.body.length).toEqual(1);
       expect(res.body[0]).toEqual(singleItem);
@@ -46,19 +48,20 @@ describe('AppController (e2e)', () => {
 
     it('/:slug => getItem', async () => {
       const res = await request(app.getHttpServer())
-        .get(`${itemsPath}${singleItem.slug}`)
+        .get(`${queriesPath}${singleItem.slug}`)
         .expect(HttpStatus.OK);
       expect(res.body.name).toBe(singleItem.name);
     });
   });
 
   //-------------------- Commands(POST) --------------------
+  describe('Commands /commands/items', () => {
+    const commandsPath = '/commands/items/';
 
-  describe('Commands /items', () => {
     it('/ => createItem', async () => {
       await itemTable.clear();
       const res = await request(app.getHttpServer())
-        .post(itemsPath)
+        .post(commandsPath)
         .send(createItem)
         .expect(HttpStatus.OK);
 

@@ -6,7 +6,7 @@ import { TestItemSagaCommand } from '../commands/test-item-saga.command';
 import { ItemCreatedEvent } from '../events/item-created.event';
 
 @Injectable()
-export class ItemsSagas {
+export class ItemsTestSaga {
   @Saga()
   itemCreated = (events$: Observable<any>): Observable<ICommand> => {
     return events$.pipe(
