@@ -16,11 +16,11 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateItemCommand } from './commands/impl/create-item.command';
+import { CreateItemCommand } from './commands/create-item.command';
 import { CreateItemDto } from './interfaces/create-item.dto';
 import { GetItemDto } from './interfaces/get-item-dto';
 import { Item } from './models/item.model';
-import { GetItemQuery } from './queries/impl';
+import { GetItemQuery } from './queries/get-item.query';
 
 @Controller('items')
 @ApiTags('items')
@@ -40,8 +40,9 @@ export class ItemsController {
   @Post()
   @ApiBody({ type: CreateItemDto })
   @ApiOperation({ summary: 'Create an item' })
+  @HttpCode(HttpStatus.OK)
   async createItem(@Body() createItemDto: CreateItemDto) {
-    return this.commandBus.execute(new CreateItemCommand(createItemDto));
+    this.commandBus.execute(new CreateItemCommand(createItemDto));
   }
 
   @Get()
