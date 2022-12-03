@@ -60,9 +60,10 @@ describe('AppController (e2e)', () => {
       const res = await request(app.getHttpServer())
         .post(itemsPath)
         .send(createItem)
-        .expect(HttpStatus.CREATED);
+        .expect(HttpStatus.OK);
 
       expect(res.body).toStrictEqual({}); // Because we don't return in CQRS
+      // TODO: how to test if request takes long
       expect(await itemTable.count()).toEqual(1);
       const item = await itemTable.findOneBy({ name: createItem.name });
 
