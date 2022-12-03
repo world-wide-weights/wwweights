@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ICommand, ofType, Saga } from '@nestjs/cqrs';
 import { Observable } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
-import { TestItemSagaCommand } from '../commands/impl/test-item-saga.command';
-import { ItemCreatedEvent } from '../events/impl/item-created.event';
+import { TestItemSagaCommand } from '../commands/test-item-saga.command';
+import { ItemCreatedEvent } from '../events/item-created.event';
 
 @Injectable()
 export class ItemsSagas {

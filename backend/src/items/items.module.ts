@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CommandHandlers } from './commands/handlers';
-import { EventHandlers } from './events/handler';
+import { CommandHandlers } from './commands';
+import { EventHandlers } from './events';
 import { ItemsController } from './items.controller';
 import { Item } from './models/item.model';
-import { QueryHandlers } from './queries/handlers';
+import { QueryHandlers } from './queries';
 import { ItemsSagas } from './sagas/items.sagas';
 @Module({
   imports: [CqrsModule, TypeOrmModule.forFeature([Item])],
