@@ -6,7 +6,7 @@ describe('Button', () => {
   describe('Primary Button', () => {
     it('should display primary button', () => {
       cy.mount(<Button kind="primary" onClick={() => ""}>Test</Button>)
-      cy.get('button').should('have.class', 'bg-blue-500')
+      cy.get('button').should('have.class', 'bgx-blue-500')
     })
 
     describe('Icon', () => {
