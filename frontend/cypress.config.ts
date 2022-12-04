@@ -22,7 +22,7 @@ export default defineConfig({
       const handle = app.getRequestHandler()
 
       // TODO: Move this to async and await syntax
-      app.prepare().then(() => {
+      await app.prepare().then(() => {
         createServer(async (req, res) => {
           try {
             const parsedUrl = parse(req.url!, true)
