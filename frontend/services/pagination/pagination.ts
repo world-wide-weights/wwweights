@@ -1,8 +1,12 @@
 import { RoutePagination } from "../routes/routes"
 import { range } from "../utils/range"
 
+export const Ellipsis = '...'
+
+export type PaginationBaseOptions = Partial<{ page: number, itemsPerPage: number, defaultItemsPerPage: number }>
+
 type PaginationEllipsis = {
-    content: typeof DOTS
+    content: typeof Ellipsis
 }
 
 type PaginationPage = {
@@ -10,23 +14,27 @@ type PaginationPage = {
     link: string
 }
 
-export type PaginationBaseOptions = Partial<{ page: number, itemsPerPage: number, defaultItemsPerPage: number }>
-
 type PaginationService = {
     prev: string | null
     next: string | null
     pages: (PaginationPage | PaginationEllipsis)[]
 }
 
-export const DOTS = '...'
-export type PaginationServiceParams = { totalItems: number, itemsPerPage: number, siblingCount: number, currentPage: number, baseRoute: RoutePagination, defaultItemsPerPage: number }
+export type PaginationServiceParams = {
+    totalItems: number,
+    itemsPerPage: number,
+    siblingCount: number,
+    currentPage: number,
+    baseRoute: RoutePagination,
+    defaultItemsPerPage: number
+}
 export const paginationService = ({ totalItems, itemsPerPage, siblingCount, currentPage, baseRoute, defaultItemsPerPage }: PaginationServiceParams): PaginationService => {
     const totalPageCount = getTotalPageCount(totalItems, itemsPerPage)
 
     const paginationData = paginationDataService({ totalPageCount, currentPage, siblingCount })
 
-    const pages = paginationData.map((page): (PaginationPage | PaginationEllipsis) => (page === DOTS ? {
-        content: DOTS
+    const pages = paginationData.map((page): (PaginationPage | PaginationEllipsis) => (page === Ellipsis ? {
+        content: Ellipsis
     } : {
         content: page,
         link: baseRoute({ page, itemsPerPage, defaultItemsPerPage })
@@ -42,10 +50,14 @@ export const paginationService = ({ totalItems, itemsPerPage, siblingCount, curr
     }
 }
 
-export type PaginationDataServiceParams = { totalPageCount: number, siblingCount: number, currentPage: number }
-export const paginationDataService = ({ totalPageCount, siblingCount, currentPage }: PaginationDataServiceParams): (number | typeof DOTS)[] => {
+export type PaginationDataServiceParams = {
+    totalPageCount: number,
+    siblingCount: number,
+    currentPage: number
+}
+export const paginationDataService = ({ totalPageCount, siblingCount, currentPage }: PaginationDataServiceParams): (number | typeof Ellipsis)[] => {
 
-    // Pages count is determined as siblingCount + firstPage + lastPage + currentPage + 2*DOTS
+    // Pages count is determined as siblingCount + firstPage + lastPage + currentPage + 2*Ellipsis
     const maxPaginationItemsLength = siblingCount * 2 + 5
 
     // Case 1: If the number of pages is less than the page numbers we want to show in our paginationComponent, we return the range [1..totalPageCount]
@@ -68,27 +80,26 @@ export const paginationDataService = ({ totalPageCount, siblingCount, currentPag
     if (!shouldShowLeftDots && shouldShowRightDots) {
         const leftItemCount = 3 + 2 * siblingCount
         const leftRange = range(1, leftItemCount)
-        return [...leftRange, DOTS, totalPageCount]
+        return [...leftRange, Ellipsis, totalPageCount]
     }
 
     // Case 3: No right dots to show, but left dots to be shown
     if (shouldShowLeftDots && !shouldShowRightDots) {
         const rightItemCount = 3 + 2 * siblingCount
         const rightRange = range(totalPageCount - rightItemCount + 1, totalPageCount)
-        return [firstPageIndex, DOTS, ...rightRange]
+        return [firstPageIndex, Ellipsis, ...rightRange]
     }
 
     // Case 4: Both left and right dots to be shown
     if (shouldShowLeftDots && shouldShowRightDots) {
         const middleRange = range(leftSiblingIndex, rightSiblingIndex)
-        return [firstPageIndex, DOTS, ...middleRange, DOTS, lastPageIndex]
+        return [firstPageIndex, Ellipsis, ...middleRange, Ellipsis, lastPageIndex]
     }
 
     return []
-
 }
 
-export const getTotalPageCount = (totalItems: number, itemsPerPage: number) => {
+export const getTotalPageCount = (totalItems: number, itemsPerPage: number): number => {
     if (itemsPerPage <= 0 || totalItems <= 0)
         return 0
 

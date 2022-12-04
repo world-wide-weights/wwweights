@@ -1,4 +1,4 @@
-import { DOTS, getTotalPageCount, paginationDataService, PaginationDataServiceParams, paginationService, PaginationServiceParams } from "./pagination";
+import { Ellipsis, getTotalPageCount, paginationDataService, PaginationDataServiceParams, paginationService, PaginationServiceParams } from "./pagination";
 
 describe('Pagination', () => {
 
@@ -15,7 +15,7 @@ describe('Pagination', () => {
                     }
 
                     expect(paginationDataService(options)).deep.equal([1, 2, 3, 4, 5, 6, 7])
-                    expect(paginationDataService(options)).not.deep.equal([1, DOTS, 3, 4, 5, 6, 7])
+                    expect(paginationDataService(options)).not.deep.equal([1, Ellipsis, 3, 4, 5, 6, 7])
                 })
 
                 it("should not display left dots on page 4 with 10 pages", () => {
@@ -25,7 +25,7 @@ describe('Pagination', () => {
                         siblingCount
                     }
 
-                    expect(paginationDataService(options)).deep.equal([1, 2, 3, 4, 5, DOTS, 10])
+                    expect(paginationDataService(options)).deep.equal([1, 2, 3, 4, 5, Ellipsis, 10])
                 })
 
                 it("should not display right dots page 7 with 10 pages", () => {
@@ -35,7 +35,7 @@ describe('Pagination', () => {
                         siblingCount
                     }
 
-                    expect(paginationDataService(options)).deep.equal([1, DOTS, 6, 7, 8, 9, 10])
+                    expect(paginationDataService(options)).deep.equal([1, Ellipsis, 6, 7, 8, 9, 10])
                 })
 
                 it("should display right & left dots page 6 with 10 pages", () => {
@@ -45,7 +45,7 @@ describe('Pagination', () => {
                         siblingCount
                     }
 
-                    expect(paginationDataService(options)).deep.equal([1, DOTS, 5, 6, 7, DOTS, 10])
+                    expect(paginationDataService(options)).deep.equal([1, Ellipsis, 5, 6, 7, Ellipsis, 10])
                 })
             })
 
@@ -58,7 +58,7 @@ describe('Pagination', () => {
                         siblingCount
                     }
 
-                    expect(paginationDataService(options)).deep.equal([1, 2, 3, 4, 5, 6, 7, DOTS, 10])
+                    expect(paginationDataService(options)).deep.equal([1, 2, 3, 4, 5, 6, 7, Ellipsis, 10])
                 })
 
                 it("should display lefts dots on page 6 with 10 pages and 2 siblings", () => {
@@ -68,7 +68,7 @@ describe('Pagination', () => {
                         siblingCount
                     }
 
-                    expect(paginationDataService(options)).deep.equal([1, DOTS, 4, 5, 6, 7, 8, 9, 10])
+                    expect(paginationDataService(options)).deep.equal([1, Ellipsis, 4, 5, 6, 7, 8, 9, 10])
                 })
             })
         })
@@ -80,7 +80,7 @@ describe('Pagination', () => {
                 siblingCount: 1
             }
 
-            expect(paginationDataService(options)).deep.equal([1, 2, 3, 4, 5, DOTS, 10])
+            expect(paginationDataService(options)).deep.equal([1, 2, 3, 4, 5, Ellipsis, 10])
         })
 
         it('should only show numbers when items are less than max pagination item length', () => {

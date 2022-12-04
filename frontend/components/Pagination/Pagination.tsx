@@ -1,5 +1,5 @@
 import { usePagination } from "../../hooks/usePagination"
-import { DOTS } from "../../services/pagination/pagination"
+import { Ellipsis } from "../../services/pagination/pagination"
 import { RoutePagination } from "../../services/routes/routes"
 import { Button } from "../Button/Button"
 import { IconButton } from "../Button/IconButton"
@@ -36,8 +36,8 @@ export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage,
             </li>
 
             {paginationService.pages.map((page, index) =>
-                // If the pageItem is a DOT, render the DOTS unicode character else render our pages
-                page.content === DOTS ?
+                // If the pageItem is a Ellipsis, render the Ellipsis else render page
+                page.content === Ellipsis ?
                     <li datacy="pagination-dots" key={index} className="hidden sm:list-item text-gray-500">&#8230;</li> :
                     <li className="hidden sm:list-item" key={index}>
                         <Button datacy={`pagination-button-page-${page.content}`} to={page.link} className={`flex justify-center items-center rounded-full w-9 h-9 ${page.content === currentPage ? "bg-blue-500 text-white hover:text-white focus:text-white" : "hover:bg-gray-200"}`} kind="tertiary">
