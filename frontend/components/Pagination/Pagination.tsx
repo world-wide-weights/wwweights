@@ -15,15 +15,15 @@ export type PaginationProps = {
     itemsPerPage: number
     /** The default number of items to be shown per page. */
     defaultItemsPerPage?: number
-    /** Customize count of siblings shown between the dots */
+    /** Customize count of siblings shown between the dots. Examples: `1 => 1 .. (4) 5 (6) ... 15` `2 => 1 .. (4) (5) 6 (7) (8) ... 15` */
     siblingCount?: number
 }
 
 export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage, baseRoute, itemsPerPage, defaultItemsPerPage = 16, siblingCount = 1 }) => {
-    const paginationRange = usePagination({ currentPage, totalItems, siblingCount, itemsPerPage, baseRoute, defaultItemsPerPage })
+    const paginationService = usePagination({ currentPage, totalItems, siblingCount, itemsPerPage, baseRoute, defaultItemsPerPage })
 
     // If our pagination array length is less than 2 to we should not render component (because there are not enough items for pagination)
-    if (currentPage === 0 || paginationRange.pages.length < 2) {
+    if (currentPage === 0 || paginationService.pages.length < 2) {
         return null
     }
 
@@ -31,11 +31,11 @@ export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage,
         <ul datacy="pagination" className="flex items-center justify-center">
             {/* Left navigation arrow */}
             <li>
-                <Button datacy="pagination-button-previous" to={paginationRange.prev ?? " "} disabled={!paginationRange.prev} icon="arrow_back_ios_new" className={`${!paginationRange.prev ? "hidden" : "flex"} sm:hidden md:flex mr-5`} kind="tertiary">Previous</Button>
-                <IconButton datacy="pagination-button-previous-tablet" to={paginationRange.prev ?? " "} className="hidden sm:flex md:hidden" disabled={!paginationRange.prev} icon="arrow_back_ios_new" />
+                <Button datacy="pagination-button-previous" to={paginationService.prev ?? " "} disabled={!paginationService.prev} icon="arrow_back_ios_new" className={`${!paginationService.prev ? "hidden" : "flex"} sm:hidden md:flex mr-5`} kind="tertiary">Previous</Button>
+                <IconButton datacy="pagination-button-previous-tablet" to={paginationService.prev ?? " "} className="hidden sm:flex md:hidden" disabled={!paginationService.prev} icon="arrow_back_ios_new" />
             </li>
 
-            {paginationRange.pages.map((page, index) =>
+            {paginationService.pages.map((page, index) =>
                 // If the pageItem is a DOT, render the DOTS unicode character else render our pages
                 page.content === DOTS ?
                     <li datacy="pagination-dots" key={index} className="hidden sm:list-item text-gray-500">&#8230;</li> :
@@ -48,8 +48,8 @@ export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage,
 
             {/*  Right navigation arrow */}
             <li>
-                <Button datacy="pagination-button-next" to={paginationRange.next ?? " "} disabled={!paginationRange.next} icon="arrow_forward_ios" iconSlot="end" className={`${!paginationRange.next ? "hidden" : "flex"} sm:hidden md:flex ml-5`} kind="tertiary">Next</Button>
-                <IconButton datacy="pagination-button-next-tablet" to={paginationRange.next ?? " "} className="hidden sm:flex md:hidden" disabled={!paginationRange.next} icon="arrow_forward_ios" />
+                <Button datacy="pagination-button-next" to={paginationService.next ?? " "} disabled={!paginationService.next} icon="arrow_forward_ios" iconSlot="end" className={`${!paginationService.next ? "hidden" : "flex"} sm:hidden md:flex ml-5`} kind="tertiary">Next</Button>
+                <IconButton datacy="pagination-button-next-tablet" to={paginationService.next ?? " "} className="hidden sm:flex md:hidden" disabled={!paginationService.next} icon="arrow_forward_ios" />
             </li>
         </ul>
     </>
