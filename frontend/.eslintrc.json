@@ -1,5 +1,9 @@
 {
   "extends": [
     "next"
-  ]
+  ],
+  "rules": {
+    "@typescript-eslint/semi": "off",
+    "semi": "off"
+  }
 }
