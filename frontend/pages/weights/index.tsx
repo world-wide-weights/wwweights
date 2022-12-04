@@ -1,8 +1,8 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Head from "next/head"
-import { Button } from "../../components/Button/Button"
 import { Headline } from "../../components/Headline/Headline"
 import { ItemPreview } from "../../components/Item/ItemPreview"
+import { Pagination } from "../../components/Pagination/Pagination"
 import { routes } from "../../services/routes/routes"
 
 const DEFAULT_ITEMS_PER_PAGE = 16
@@ -44,22 +44,6 @@ type WeightsListProps = {
 export default function WeightsList({ items, currentPage, limit }: InferGetServerSidePropsType<typeof getServerSideProps>) {
     const siteTitle = `Latest ${currentPage > 1 ? `| Page ${currentPage} ` : ``}- World Wide Weights`
 
-    const hasCustomLimit = limit !== DEFAULT_ITEMS_PER_PAGE
-
-    // Previous Button
-    const previousButtonQueryString = new URLSearchParams({
-        ...(currentPage > 2 && { page: (currentPage - 1).toString() }), // At page 3 we want to have a page query 
-        ...(hasCustomLimit && { limit: limit.toString() }), // When we have a custom limit of items, we want to provide it
-    }).toString()
-    const previousButtonLink = `${routes.weights.list()}${previousButtonQueryString !== "" ? `?${previousButtonQueryString}` : ``}`
-
-    // Next Button
-    const nextButtonQueryString = new URLSearchParams({
-        ...(true && { page: (currentPage + 1).toString() }), // Replace `true` with maxPage logic later
-        ...(hasCustomLimit && { limit: limit.toString() }),
-    }).toString()
-    const nextButtonLink = `${routes.weights.list()}${nextButtonQueryString !== "" ? `?${nextButtonQueryString}` : ``}`
-
     return (<>
         {/* Meta Tags */}
         <Head>
@@ -71,17 +55,13 @@ export default function WeightsList({ items, currentPage, limit }: InferGetServe
             <Headline level={3}>All weights</Headline>
 
             {/* Weights (todos) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                {items.map((item) => <ItemPreview key={item.id} name={item.name} slug={item.slug} weight={`${item.weight.isCa ? "ca." : ""}${item.weight.value}${item.weight.aditionalValue ? `- ${item.weight.aditionalValue}` : ""} g`} imageUrl="https://picsum.photos/200" />)}
-            </div >
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-10">
+                {items.map((item) => <ItemPreview datacy="weights-list-item" key={item.id} name={item.name} slug={item.slug} weight={`${item.weight.isCa ? "ca." : ""}${item.weight.value}${item.weight.aditionalValue ? `- ${item.weight.aditionalValue}` : ""} g`} imageUrl="https://picsum.photos/200" />)}
+            </div>
 
             {/* Pagination */}
-            < div className="flex justify-center mt-5 md:mt-8" >
-                {currentPage > 1 && <Button to={previousButtonLink} className="mr-5" kind="tertiary">Previous</Button>
-                }
-                <Button to={nextButtonLink} kind="tertiary">Next</Button>
-            </div >
-        </div >
+            <Pagination totalItems={100} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} baseRoute={routes.weights.list} />
+        </div>
     </>
     )
 }

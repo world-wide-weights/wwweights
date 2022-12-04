@@ -58,8 +58,6 @@ jobs:
         timeout-minutes: 15
         with:
           working-directory: ./frontend
-          build: npm run build
-          start: npm start
 
   component-tests:
     runs-on: ubuntu-latest
