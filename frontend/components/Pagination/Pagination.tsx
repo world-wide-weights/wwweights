@@ -10,7 +10,7 @@ export type PaginationProps = {
     /** The index of current page. */
     currentPage: number
     /** Base Path of link where pages are. */
-    basePath: RoutePagination
+    baseRoute: RoutePagination
     /** The number of items to be shown per page. */
     itemsPerPage: number
     /** The default number of items to be shown per page. */
@@ -19,8 +19,8 @@ export type PaginationProps = {
     siblingCount?: number
 }
 
-export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage, basePath, itemsPerPage, defaultItemsPerPage = 16, siblingCount = 1 }) => {
-    const paginationRange = usePagination({ currentPage, totalItems, siblingCount, itemsPerPage, basePath, defaultItemsPerPage })
+export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage, baseRoute, itemsPerPage, defaultItemsPerPage = 16, siblingCount = 1 }) => {
+    const paginationRange = usePagination({ currentPage, totalItems, siblingCount, itemsPerPage, baseRoute, defaultItemsPerPage })
 
     // If our pagination array length is less than 2 to we should not render component (because there are not enough items for pagination)
     if (currentPage === 0 || paginationRange.pages.length < 2) {

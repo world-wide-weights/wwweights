@@ -17,8 +17,8 @@ type PaginationService = {
 }
 
 export const DOTS = '...'
-export type PaginationServiceParams = { totalItems: number, itemsPerPage: number, siblingCount: number, currentPage: number, basePath: RoutePagination, defaultItemsPerPage: number }
-export const paginationService = ({ totalItems, itemsPerPage, siblingCount, currentPage, basePath, defaultItemsPerPage }: PaginationServiceParams): PaginationService => {
+export type PaginationServiceParams = { totalItems: number, itemsPerPage: number, siblingCount: number, currentPage: number, baseRoute: RoutePagination, defaultItemsPerPage: number }
+export const paginationService = ({ totalItems, itemsPerPage, siblingCount, currentPage, baseRoute, defaultItemsPerPage }: PaginationServiceParams): PaginationService => {
     const totalPageCount = getTotalPageCount(totalItems, itemsPerPage)
 
     const paginationData = paginationDataService({ totalPageCount, currentPage, siblingCount })
@@ -27,11 +27,11 @@ export const paginationService = ({ totalItems, itemsPerPage, siblingCount, curr
         content: DOTS
     } : {
         content: page,
-        link: basePath({ page, itemsPerPage, defaultItemsPerPage })
+        link: baseRoute({ page, itemsPerPage, defaultItemsPerPage })
     }))
 
-    const prev = (currentPage === 1 || totalPageCount === 0) ? null : basePath({ page: currentPage - 1, itemsPerPage, defaultItemsPerPage })
-    const next = (currentPage === totalPageCount || totalPageCount === 0) ? null : basePath({ page: currentPage + 1, itemsPerPage, defaultItemsPerPage })
+    const prev = (currentPage === 1 || totalPageCount === 0) ? null : baseRoute({ page: currentPage - 1, itemsPerPage, defaultItemsPerPage })
+    const next = (currentPage === totalPageCount || totalPageCount === 0) ? null : baseRoute({ page: currentPage + 1, itemsPerPage, defaultItemsPerPage })
 
     return {
         prev,

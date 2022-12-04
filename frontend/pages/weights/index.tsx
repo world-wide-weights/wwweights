@@ -60,7 +60,7 @@ export default function WeightsList({ items, currentPage, limit }: InferGetServe
             </div>
 
             {/* Pagination */}
-            <Pagination totalItems={100} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} basePath={routes.weights.list} />
+            <Pagination totalItems={100} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} baseRoute={routes.weights.list} />
         </div>
     </>
     )

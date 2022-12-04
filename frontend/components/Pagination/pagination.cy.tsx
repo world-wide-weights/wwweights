@@ -11,7 +11,7 @@ describe('Pagination', () => {
     describe('Desktop', () => {
         describe('Mount with first page', () => {
             beforeEach(() => {
-                cy.mount(<Pagination totalItems={TOTAL_ITEMS} currentPage={1} basePath={testRoute} itemsPerPage={ITEMS_PER_PAGE} />)
+                cy.mount(<Pagination totalItems={TOTAL_ITEMS} currentPage={1} baseRoute={testRoute} itemsPerPage={ITEMS_PER_PAGE} />)
             })
 
             it('should display component', () => {
@@ -31,13 +31,13 @@ describe('Pagination', () => {
         })
 
         it('should not display component when not enough items', () => {
-            cy.mount(<Pagination totalItems={10} currentPage={1} basePath={testRoute} itemsPerPage={10} />)
+            cy.mount(<Pagination totalItems={10} currentPage={1} baseRoute={testRoute} itemsPerPage={10} />)
 
             cy.dataCy('pagination').should('not.exist')
         })
 
         it('should disable next button when on last page desktop', () => {
-            cy.mount(<Pagination totalItems={TOTAL_ITEMS} currentPage={10} basePath={testRoute} itemsPerPage={ITEMS_PER_PAGE} />)
+            cy.mount(<Pagination totalItems={TOTAL_ITEMS} currentPage={10} baseRoute={testRoute} itemsPerPage={ITEMS_PER_PAGE} />)
 
             cy.dataCy('pagination-button-next').invoke('attr', 'href').should('eq', '')
             cy.dataCy('pagination-button-next').should('have.class', 'text-opacity-75')
@@ -53,7 +53,7 @@ describe('Pagination', () => {
 
         describe('Mount with first page', () => {
             beforeEach(() => {
-                cy.mount(<Pagination totalItems={TOTAL_ITEMS} currentPage={1} basePath={testRoute} itemsPerPage={ITEMS_PER_PAGE} />)
+                cy.mount(<Pagination totalItems={TOTAL_ITEMS} currentPage={1} baseRoute={testRoute} itemsPerPage={ITEMS_PER_PAGE} />)
             })
 
             it('should hide text on tablet', () => {
@@ -71,7 +71,7 @@ describe('Pagination', () => {
         })
 
         it('should disable next button when on last page tablet', () => {
-            cy.mount(<Pagination totalItems={TOTAL_ITEMS} currentPage={10} basePath={testRoute} itemsPerPage={ITEMS_PER_PAGE} />)
+            cy.mount(<Pagination totalItems={TOTAL_ITEMS} currentPage={10} baseRoute={testRoute} itemsPerPage={ITEMS_PER_PAGE} />)
 
             cy.dataCy('pagination-button-next-tablet').invoke('attr', 'href').should('eq', '')
             cy.dataCy('pagination-button-next-tablet', ' i').should('have.class', 'text-opacity-50')
@@ -85,7 +85,7 @@ describe('Pagination', () => {
 
         describe('Mount with first page', () => {
             beforeEach(() => {
-                cy.mount(<Pagination totalItems={3} currentPage={1} basePath={testRoute} itemsPerPage={1} />)
+                cy.mount(<Pagination totalItems={3} currentPage={1} baseRoute={testRoute} itemsPerPage={1} />)
             })
 
             it('should hide text on mobile', () => {
@@ -100,7 +100,7 @@ describe('Pagination', () => {
         })
 
         it('should not show next button when on page 1 mobile', () => {
-            cy.mount(<Pagination totalItems={3} currentPage={3} basePath={testRoute} itemsPerPage={1} />)
+            cy.mount(<Pagination totalItems={3} currentPage={3} baseRoute={testRoute} itemsPerPage={1} />)
 
             cy.dataCy('pagination-button-next').should('not.be.visible')
         })

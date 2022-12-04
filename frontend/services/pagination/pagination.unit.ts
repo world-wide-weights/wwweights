@@ -116,7 +116,7 @@ describe('Pagination', () => {
                 siblingCount: 1,
                 currentPage: 5,
                 defaultItemsPerPage: 10,
-                basePath: () => "/"
+                baseRoute: () => "/"
             }
 
             expect(paginationService(options)).deep.equal({
@@ -160,7 +160,7 @@ describe('Pagination', () => {
                 siblingCount: 1,
                 currentPage: 2,
                 defaultItemsPerPage: 10,
-                basePath: () => "/"
+                baseRoute: () => "/"
             }
 
             expect(paginationService(options)).deep.equal({
