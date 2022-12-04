@@ -1,12 +1,14 @@
+import { PaginationBaseOptions } from "../pagination/pagination"
 
 /**
+ * Define Routes for frontend
  * Not optional params / queries via function paramters: e.g.: post(slug: string) => `/posts/${slug}`
  * Optional params / queries via options object: e.g.: post(options?: Partial<PostOptions>) => ...
  */
 export const routes = {
     home: "/",
     weights: {
-        list: (options?: PaginationType) => {
+        list: (options?: PaginationBaseOptions) => {
             if (!options)
                 return "/weights"
 
@@ -25,7 +27,8 @@ export const routes = {
         imprint: "/legal/imprint",
         privacy: "/legal/privacy-policy"
     }
-}
+} as const
 
-export type PaginationType = Partial<{ page: number, itemsPerPage: number, defaultItemsPerPage: number }>
-export type RoutePagination = (query?: PaginationType) => string
+// Define types here 
+// TODO: Improve type connection between defintion here and up routes
+export type RoutePagination = (options?: PaginationBaseOptions) => string

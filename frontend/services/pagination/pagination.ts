@@ -10,6 +10,8 @@ type PaginationPage = {
     link: string
 }
 
+export type PaginationBaseOptions = Partial<{ page: number, itemsPerPage: number, defaultItemsPerPage: number }>
+
 type PaginationService = {
     prev: string | null
     next: string | null
