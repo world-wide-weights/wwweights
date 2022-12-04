@@ -1,17 +1,8 @@
+import weights from "../../fixtures/weights/getList.json"
+import weightsListFive from "../../fixtures/weights/getListLimitFive.json"
+
 const currentPage = 2
 const limit = 5
-import weights from "../fixtures/weights/getList.json"
-import weightsListFive from "../fixtures/weights/getListLimitFive.json"
-
-/***
- * 
- * WARNING:
- * This testing strategy is partial not smart. We have to find a better solution.
- * 
- * 
- * 
- * 
- */
 
 describe('Pagination /weights', () => {
     beforeEach(() => {
