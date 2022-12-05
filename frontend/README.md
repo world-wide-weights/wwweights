@@ -25,10 +25,28 @@ Be sure that frontend is running or start it.
     $ npm run dev
     $ npm run test
 
-### Run cli
+### Run tests cli
 
     $ npm run test:cli
+
+### Run component tests cli
+
+    $ npm run test-components:cli
 ---
+
+## Build Docker image
+
+Build Docker image from Dockerfile 
+
+```sh
+docker build -t wwweights-frontend .
+```
+
+Run Docker image 
+
+```sh
+docker run -p 3000:3000 --name wwweights-frontend wwweights-frontend
+```
 
 ## Tools
 

@@ -10,7 +10,7 @@ type HeadlineProps = {
 }
 
 /** Defines the classes for each size level */
-const textSizes: { [K in Required<HeadlineProps>["level"]]: string } = {
+export const textSizes: { [K in Required<HeadlineProps>["level"]]: string } = {
     1: "text-3xl md:text-4xl",
     2: "text-2xl md:text-3xl",
     3: "text-xl md:text-2xl",

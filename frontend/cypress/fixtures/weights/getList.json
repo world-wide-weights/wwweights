@@ -1,0 +1,450 @@
+[
+    {
+        "id": 100,
+        "name": "Cassiopeia IT-500 M30CR",
+        "slug": "cassiopeia-it-500-m30cr",
+        "weight": {
+            "value": "290",
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Casio",
+                "slug": "casio"
+            },
+            {
+                "name": "2003 Apr",
+                "slug": "2003-apr"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": 101,
+        "name": "Cassiopeia IT-500 M30CB",
+        "slug": "cassiopeia-it-500-m30cb",
+        "weight": {
+            "value": "260",
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Casio",
+                "slug": "casio"
+            },
+            {
+                "name": "2003 Apr",
+                "slug": "2003-apr"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": 102,
+        "name": "Cassiopeia EM-500",
+        "slug": "cassiopeia-em-500",
+        "weight": {
+            "value": "218",
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Casio",
+                "slug": "casio"
+            },
+            {
+                "name": "2000 Sep",
+                "slug": "2000-sep"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": 103,
+        "name": "Cassiopeia EG-800",
+        "slug": "cassiopeia-eg-800",
+        "weight": {
+            "value": "295",
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Casio",
+                "slug": "casio"
+            },
+            {
+                "name": "2001 Jan",
+                "slug": "2001-jan"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": 104,
+        "name": "Cassiopeia IT-700M30E",
+        "slug": "cassiopeia-it-700m30e",
+        "weight": {
+            "value": "340",
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Casio",
+                "slug": "casio"
+            },
+            {
+                "name": "2000 Dec",
+                "slug": "2000-dec"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": 105,
+        "name": "iPAQ H6340 / H6345",
+        "slug": "ipaq-h6340-h6345",
+        "weight": {
+            "value": "190",
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Hewlett-Packard",
+                "slug": "hewlett-packard"
+            },
+            {
+                "name": "2004 Jul",
+                "slug": "2004-jul"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": 106,
+        "name": "e830",
+        "slug": "e830",
+        "weight": {
+            "value": "198",
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Toshiba",
+                "slug": "toshiba"
+            },
+            {
+                "name": "2004 Sep 14",
+                "slug": "2004-sep-14"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": 107,
+        "name": "SPV E100",
+        "slug": "spv-e100",
+        "weight": {
+            "value": "127",
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Orange",
+                "slug": "orange"
+            },
+            {
+                "name": "2003 Apr",
+                "slug": "2003-apr"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": 108,
+        "name": "MDA III",
+        "slug": "mda-iii",
+        "weight": {
+            "value": "212",
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "T-Mobile",
+                "slug": "t-mobile"
+            },
+            {
+                "name": "2004 Sep",
+                "slug": "2004-sep"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": 109,
+        "name": "XDA IIs / XDA III",
+        "slug": "xda-iis-xda-iii",
+        "weight": {
+            "value": "212",
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "O2",
+                "slug": "o2"
+            },
+            {
+                "name": "2004 Nov",
+                "slug": "2004-nov"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "name": "Cassiopeia E-105",
+        "slug": "cassiopeia-e-105",
+        "weight": {
+            "value": "255",
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Casio",
+                "slug": "casio"
+            },
+            {
+                "name": "2000 Jan",
+                "slug": "2000-jan"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": 110,
+        "name": "PDA2k",
+        "slug": "pda2k",
+        "weight": {
+            "value": "212",
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "I-Mate",
+                "slug": "i-mate"
+            },
+            {
+                "name": "2004 Oct",
+                "slug": "2004-oct"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": 111,
+        "name": "SPV M2000",
+        "slug": "spv-m2000",
+        "weight": {
+            "value": "212",
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Orange",
+                "slug": "orange"
+            },
+            {
+                "name": "2004 Dec",
+                "slug": "2004-dec"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": 112,
+        "name": 9090,
+        "slug": "9090",
+        "weight": {
+            "value": "212",
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Qtek",
+                "slug": "qtek"
+            },
+            {
+                "name": "2004 Sep",
+                "slug": "2004-sep"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": 113,
+        "name": "SX66",
+        "slug": "sx66",
+        "weight": {
+            "value": "208",
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Siemens",
+                "slug": "siemens"
+            },
+            {
+                "name": "2004 Dec",
+                "slug": "2004-dec"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": 114,
+        "name": "PPC-6601",
+        "slug": "ppc-6601",
+        "weight": {
+            "value": "208",
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Audiovox",
+                "slug": "audiovox"
+            },
+            {
+                "name": "2004 Nov",
+                "slug": "2004-nov"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    }
+]
