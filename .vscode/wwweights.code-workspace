@@ -1,33 +1,38 @@
 {
-    "folders": [
-      {
-        "name": "root",
-        "path": "../"
-      },
-      {
-        "name": "backend",
-        "path": "../backend"
-      },
-      {
-        "name": "frontend",
-        "path": "../frontend"
-      },
-    ],
-    "settings": {
-      "editor.formatOnPaste": true,
-      "editor.formatOnSave": true,
-      "eslint.format.enable": true,
-      "eslint.alwaysShowStatus": true
+  "folders": [
+    {
+      "name": "root",
+      "path": "../"
     },
-    "files.exclude": {
-      "node_modules/": true,
-      "packages/": true
+    {
+      "name": "backend",
+      "path": "../backend"
     },
-    "extensions": {
-      "recommendations": [
+    {
+      "name": "frontend",
+      "path": "../frontend"
+    }
+  ],
+  "settings": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true,
+      "source.fixAll.eslint": true
+    },
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "eslint.format.enable": true,
+    "eslint.alwaysShowStatus": true
+  },
+  "files.exclude": {
+    "node_modules/": true,
+    "packages/": true
+  },
+  "extensions": {
+    "recommendations": [
       "dbaeumer.vscode-eslint",
       "esbenp.prettier-vscode",
       "GitHub.vscode-pull-request-github",
-      "aaron-bond.better-comments"]
-    }
+      "aaron-bond.better-comments"
+    ]
   }
+}
