@@ -51,7 +51,7 @@ export default function TagsList({ tags, currentPage, limit }: InferGetServerSid
 
             {/* tags */}
             <div className="flex flex-wrap">
-                {tags.map((tag) => <Tag key={tag.name} to="#">{tag.name}</Tag>)}
+                {tags.map((tag) => <Tag key={tag.name} to={tag.slug}>{tag.name}</Tag>)}
             </div>
 
             {/* Pagination */}
