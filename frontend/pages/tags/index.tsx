@@ -1,8 +1,9 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Head from "next/head"
-import { Button } from "../../components/Button/Button"
 import { Headline } from "../../components/Headline/Headline"
+import { Pagination } from "../../components/Pagination/Pagination"
 import { Tag } from "../../components/Tag/Tag"
+import { routes } from "../../services/routes/routes"
 
 const DEFAULT_ITEMS_PER_PAGE = 64
 const ITEMS_PER_PAGE_MAXIMUM = 100
@@ -22,23 +23,7 @@ type TagsListProps = {
 /** Base List for tags */
 export default function TagsList({ tags, currentPage, limit }: InferGetServerSidePropsType<typeof getServerSideProps>) {
     const siteTitle = `All Tags ${currentPage > 1 ? `| Page ${currentPage} ` : ``}- World Wide Weights`
-
-    const hasCustomLimit = limit !== DEFAULT_ITEMS_PER_PAGE
-
-    // Previous Button
-    const previousButtonQueryString = new URLSearchParams({
-        ...(currentPage > 2 && { page: (currentPage - 1).toString() }), // At page 3 we want to have a page query 
-        ...(hasCustomLimit && { limit: limit.toString() }), // When we have a custom limit of items, we want to provide it
-    }).toString()
-    const previousButtonLink = `/tags${previousButtonQueryString !== "" ? `?${previousButtonQueryString}` : ``}`
-
-    // Next Button
-    const nextButtonQueryString = new URLSearchParams({
-        ...(true && { page: (currentPage + 1).toString() }), // Replace `true` with maxPage logic later
-        ...(hasCustomLimit && { limit: limit.toString() }),
-    }).toString()
-    const nextButtonLink = `/tags${nextButtonQueryString !== "" ? `?${nextButtonQueryString}` : ``}`
-
+   
     return (<>
         {/* Meta Tags */}
         <Head>
@@ -55,7 +40,7 @@ export default function TagsList({ tags, currentPage, limit }: InferGetServerSid
             </div>
 
             {/* Pagination */}
-            
+            <Pagination totalItems={100} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} baseRoute={routes.tags.list} />
         </div>
     </>
     )
