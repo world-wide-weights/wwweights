@@ -8,14 +8,6 @@ const DEFAULT_ITEMS_PER_PAGE = 64
 const ITEMS_PER_PAGE_MAXIMUM = 100
 const FIRST_PAGE = 1
 
-// Also in this case, todo names instead of tags
-type Todo = {
-    userId: number
-    id: number
-    title: string
-    completed: boolean
-}
-
 export type Tag = {
     name: string
     slug: string
@@ -57,16 +49,13 @@ export default function TagsList({ tags, currentPage, limit }: InferGetServerSid
             {/* Headline */}
             <Headline level={3}>All tags</Headline>
 
-            {/* tags (todos) */}
+            {/* tags */}
             <div className="flex flex-wrap">
                 {tags.map((tag) => <Tag key={tag.name} to="#">{tag.name}</Tag>)}
             </div>
 
             {/* Pagination */}
-            <div className="flex justify-center mt-5 md:mt-10">
-                {currentPage > 1 && <Button to={previousButtonLink} className="mr-5" kind="tertiary">Previous</Button>}
-                <Button to={nextButtonLink} kind="tertiary">Next</Button>
-            </div>
+            
         </div>
     </>
     )
