@@ -35,8 +35,8 @@ export default function TagsList({ tags, currentPage, limit }: InferGetServerSid
             <Headline level={3}>All tags</Headline>
 
             {/* tags */}
-            <div className="flex flex-wrap">
-                {tags.map((tag) => <Tag key={tag.name} to={tag.slug}>{tag.name}</Tag>)}
+            <div className="flex flex-wrap pb-3">
+                {tags.map((tag) => <Tag key={tag.name} to={routes.tags.single(tag.slug)}>{tag.name}</Tag>)}
             </div>
 
             {/* Pagination */}
