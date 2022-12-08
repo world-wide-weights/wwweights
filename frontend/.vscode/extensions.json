@@ -1,5 +1,5 @@
 {
     "recommendations": [
-       // Fill in any extensions
+        "bradlc.vscode-tailwindcss"
     ]
 }

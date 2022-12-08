@@ -1,8 +1,4 @@
 {
     "css.validate": true,
     "css.lint.unknownAtRules": "ignore",
-    "typescript.preferences.importModuleSpecifier": "relative",
-    "editor.codeActionsOnSave": {
-        "source.organizeImports": true
-    }
 }

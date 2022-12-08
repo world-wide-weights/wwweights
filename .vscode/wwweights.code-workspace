@@ -11,6 +11,10 @@
     {
       "name": "frontend",
       "path": "../frontend"
+    },
+    {
+      "name": "db",
+      "path": "../db"
     }
   ],
   "settings": {
@@ -21,18 +25,22 @@
     "editor.formatOnPaste": true,
     "editor.formatOnSave": true,
     "eslint.format.enable": true,
-    "eslint.alwaysShowStatus": true
-  },
-  "files.exclude": {
-    "node_modules/": true,
-    "packages/": true
+    "eslint.alwaysShowStatus": true,
+    "files.exclude": {
+      // Dont show subfolder workspaces in root
+      "frontend": true,
+      "backend": true,
+      "db": true
+    },
+    "typescript.preferences.importModuleSpecifier": "relative",
   },
   "extensions": {
     "recommendations": [
       "dbaeumer.vscode-eslint",
       "esbenp.prettier-vscode",
       "GitHub.vscode-pull-request-github",
-      "aaron-bond.better-comments"
+      "aaron-bond.better-comments",
+      "mikestead.dotenv"
     ]
   }
 }
