@@ -58,10 +58,9 @@ jobs:
         timeout-minutes: 15
         with:
           working-directory: ./frontend
-          build: npm run build
-          start: npm start
+          
       - uses: actions/upload-artifact@v3
-        if: failure()
+        if: always()
         with:
           name: e2e-test-reports
           path: |
@@ -101,7 +100,7 @@ jobs:
           command: npm run test-components:cli
           
       - uses: actions/upload-artifact@v3
-        if: failure()
+        if: always()
         with:
           name: component-test-reports
           path: |
