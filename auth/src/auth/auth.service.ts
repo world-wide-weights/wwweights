@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import {JwtService} from '@nestjs/jwt';
-import {UserEntity} from 'src/shared/entities/users.entity';
-import {UserService} from 'src/shared/services/user.service';
+import {UserEntity} from '../shared/entities/users.entity';
+import {UserService} from '../shared/services/user.service';
 import {LoginDTO} from './dtos/login.dto';
 import {SignUpDTO} from './dtos/signup.dto';
 

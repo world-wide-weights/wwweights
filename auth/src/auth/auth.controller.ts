@@ -1,6 +1,6 @@
 import { Controller,Body, Post, UseInterceptors, ClassSerializerInterceptor, SerializeOptions } from '@nestjs/common';
 import {plainToInstance} from 'class-transformer';
-import {UserEntity} from 'src/shared/entities/users.entity';
+import {UserEntity} from '../shared/entities/users.entity';
 import {AuthService} from './auth.service';
 import {LoginDTO} from './dtos/login.dto';
 import {SignUpDTO} from './dtos/signup.dto';
