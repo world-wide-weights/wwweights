@@ -14,7 +14,7 @@ export class AuthController {
 	
 	@Post('signup')
 	async signup(@Body() signUpData: SignUpDTO){
-		return plainToInstance(await this.authService.signup(signUpData), UserEntity)
+		return plainToInstance(UserEntity,await this.authService.signup(signUpData))
 	}
 
 	@Post('login')
