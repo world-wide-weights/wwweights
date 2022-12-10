@@ -89,23 +89,6 @@ export class Item extends AggregateRoot {
   @Column()
   user: string;
 
-  // TODO: Temporary solution if implemented needs to be @ManyToMany
-  // @IsOptional()
-  // @IsString()
-  // @Expose({ groups: ['admin'] })
-  // @ApiProperty()
-  // @Column('text', { array: true, nullable: true })
-  // related: string[];
-
-  // TODO: Is this even necessary if we OVERWRITE the whole object on submissions, maybe for suggestions where a user says, no this is a stupid entry pls delete xD
-  // @Column({ default: true })
-  // @Expose({ groups: ['admin'] })
-  // isActive: boolean;
-
-  // @VersionColumn()
-  // @Expose({ groups: ['admin'] })
-  // version: number;
-
   constructor(partial: Partial<Item>) {
     super();
     Object.assign(this, partial);
