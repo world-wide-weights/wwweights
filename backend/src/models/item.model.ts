@@ -3,9 +3,25 @@ import { Expose, Transform } from 'class-transformer';
 import slugify from 'slugify';
 import { Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
 
+export class Weight {
+  @Expose()
+  @Column()
+  // This is always in grams and scientific notation example: 1.234e10
+  value: string;
+
+  @Expose()
+  @Column()
+  isCa: boolean;
+
+  @Expose()
+  @Column({ nullable: true })
+  additional_range_value: string;
+}
+
 @Entity()
 export class Item extends AggregateRoot {
   @ObjectIdColumn()
+  @Expose({ name: 'id' })
   _id: ObjectID;
 
   @Expose()
@@ -24,30 +40,17 @@ export class Item extends AggregateRoot {
   slug: string;
 
   @Expose()
-  @Transform((params) => parseFloat(params.obj.value))
-  @Column('decimal', { precision: 128, scale: 3 })
-  // This is always in grams and scientific notation example: 1.234e10
-  value: number;
-
-  @Expose()
-  @Column({ default: false })
-  isCa: boolean;
-
-  @Expose()
-  @Transform((params) => {
-    return parseFloat(params.obj.additional_range_value) || null;
-  })
-  @Column('decimal', { precision: 128, scale: 3, nullable: true })
-  additional_range_value: number;
+  @Column(() => Weight)
+  weight: Weight;
 
   // TODO: Temporary solution, needs to be @ManyToMany
   @Expose()
-  @Column('text', { array: true, nullable: true })
+  @Column('text', { array: true })
   //@ManyToMany(() => Tag, (tag) => tag.items) No Tags yet
   tags: string[];
 
   @Expose()
-  @Column({ nullable: true })
+  @Column()
   image: string; // Link to static store or base-64 Encoded?
 
   // TODO: Temporary solution

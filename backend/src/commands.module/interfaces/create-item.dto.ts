@@ -1,11 +1,29 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
+  IsArray,
   IsBoolean,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
   IsString,
+  ValidateNested,
 } from 'class-validator';
+
+export class Weight {
+  @IsString()
+  @ApiProperty()
+  value: string;
+
+  @IsBoolean()
+  @IsOptional()
+  @ApiPropertyOptional()
+  isCa = false;
+
+  @IsString()
+  @IsOptional()
+  @ApiPropertyOptional()
+  additional_range_value: string;
+}
 
 export class CreateItemDto {
   // TODO: Slug here or on event write
@@ -14,26 +32,13 @@ export class CreateItemDto {
   @ApiProperty()
   name: string;
 
-  @IsNumber()
+  @ValidateNested()
   @ApiProperty()
-  // @Transform((params) => parseFloat(params.obj.value))
-  // This is always in grams and scientific notation example: 1.234e10
-  value: number;
-
-  @IsOptional()
-  @IsBoolean()
-  @ApiPropertyOptional()
-  isCa: boolean;
-
-  @IsNumber()
-  @IsOptional()
-  @ApiPropertyOptional()
-  // @Transform((params) => {
-  //   return parseFloat(params.obj.additional_range_value) || null;
-  // })
-  additional_range_value: number;
+  @Type(() => Weight)
+  weight: Weight;
 
   @IsString({ each: true })
+  @IsArray()
   @IsOptional()
   @ApiPropertyOptional()
   tags: string[];

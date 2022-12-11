@@ -16,18 +16,17 @@ export class CreateItemHandler implements ICommandHandler<CreateItemCommand> {
   // No returns, just Exceptions, rest is handled by eventHandler in CQRS
   async execute(command: CreateItemCommand) {
     try {
-      // PlainToInstance isntead of new Item() to trigger the slug generation
-      // TODO: Here we should request information from the EventStore to see if the slug and item can be created
+      // Check for normal issues
+      this.logger.warn('dto: ', command.createItemDto);
       const newItem = plainToInstance(Item, command.createItemDto);
+      this.logger.warn('newItem', newItem);
       const eventItem = this.publisher.mergeObjectContext(newItem);
+
+      // TODO: Aggregate State from Eventstore to check for duplicates and stuff
 
       const eventId = this.eventStore.addEvent('ItemCreatedEvent', eventItem);
       this.logger.log(`EventId created: ${eventId}`);
-      // const eventFromStore = this.eventStore.getEvent(eventId);
-      // eventItem.apply(new ItemCreatedEvent(eventFromStore));
-      // eventItem.commit();
     } catch (error) {
-      // TODO: Do we handle this also by sending a "createItemFailed" event?
       this.logger.error(error);
       throw new UnprocessableEntityException('Item could not be created');
     }
