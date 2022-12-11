@@ -3,12 +3,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { Repository } from 'typeorm';
 import { AppModule } from '../src/app.module';
-import { Item } from '../src/items/models/item.model';
+import { Item } from '../src/CommandModule/models/item.model';
 import { createItem, singleItem } from './items/mock';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
-  const itemsPath = '/items/';
   let itemTable: Repository<Item>;
 
   beforeAll(async () => {
@@ -43,7 +42,10 @@ describe('AppController (e2e)', () => {
         .get(queriesPath)
         .expect(HttpStatus.OK);
       expect(res.body.length).toEqual(1);
-      expect(res.body[0]).toEqual(singleItem);
+      // const { _id, ...item } = res.body[0];
+      // const { _id, ...compareItem } = singleItem;
+      console.log(singleItem);
+      expect(res.body[0]).toStrictEqual(singleItem);
     });
 
     it('/:slug => getItem', async () => {

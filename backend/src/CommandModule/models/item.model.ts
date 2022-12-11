@@ -9,18 +9,18 @@ import {
   IsString,
 } from 'class-validator';
 import slugify from 'slugify';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, ObjectID, ObjectIdColumn } from 'typeorm';
 
 @Entity()
 export class Item extends AggregateRoot {
-  @Expose()
-  @PrimaryGeneratedColumn()
-  id: number;
+  @ObjectIdColumn()
+  _id: ObjectID;
 
   @IsString()
   @IsNotEmpty()
   @Expose()
   @ApiProperty()
+  @Index({ unique: true })
   @Column({ unique: true })
   name: string;
 
@@ -32,6 +32,7 @@ export class Item extends AggregateRoot {
       trim: true,
     });
   })
+  @Index({ unique: true })
   @Column({ unique: true })
   slug: string;
 

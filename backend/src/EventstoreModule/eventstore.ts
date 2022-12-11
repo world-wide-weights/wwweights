@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { BehaviorSubject } from 'rxjs';
-import { TestItemSagaCommand } from './items/commands/test-item-saga.command';
-import { ItemCreatedEvent } from './items/events/item-created.event';
+import { TestItemSagaCommand } from '../CommandModule/commands/test-item-saga.command';
+import { ItemCreatedEvent } from '../CommandModule/events/item-created.event';
 
 @Injectable()
 export class EventStore {

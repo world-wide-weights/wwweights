@@ -1,6 +1,6 @@
 import { Logger, UnprocessableEntityException } from '@nestjs/common';
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
-import { EventStore } from '../../eventstore';
+import { EventStore } from '../../EventstoreModule/eventstore';
 import { TestItemSagaCommand } from './test-item-saga.command';
 
 @CommandHandler(TestItemSagaCommand)

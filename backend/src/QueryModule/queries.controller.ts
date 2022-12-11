@@ -11,8 +11,8 @@ import { QueryBus } from '@nestjs/cqrs';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { GetItemDto } from './interfaces/get-item-dto';
-import { Item } from './models/item.model';
+import { GetItemDto } from '../CommandModule/interfaces/get-item-dto';
+import { Item } from '../CommandModule/models/item.model';
 import { GetItemQuery } from './queries/get-item.query';
 
 @Controller('queries/items')

@@ -3,9 +3,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ItemsCommandsModule } from './items/items.commands.module';
-import { ItemsQueriesModule } from './items/items.queries.module';
-import { Item } from './items/models/item.model';
+import { ItemsCommandsModule } from './CommandModule/items.commands.module';
+import { Item } from './CommandModule/models/item.model';
+import { ItemsQueriesModule } from './QueryModule/queries.module';
 
 @Module({
   imports: [
@@ -16,14 +16,17 @@ import { Item } from './items/models/item.model';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
+        type: 'mongodb',
         host: configService.get('DB_HOST'),
         port: configService.get('DB_PORT'),
-        username: configService.get('DB_USER'),
-        password: configService.get('DB_PW'),
-        database: configService.get('DB_DB'),
-        entities: [Item],
+        database: configService.get('DB_NAME'),
+        // username: configService.get('DB_USERNAME'),
+        // password: configService.get('DB_PASSWORD'),
         synchronize: true,
+        useNewUrlParser: true,
+        autoLoadEntities: true,
+        useUnifiedTopology: true,
+        entities: [Item],
       }),
       inject: [ConfigService],
     }),

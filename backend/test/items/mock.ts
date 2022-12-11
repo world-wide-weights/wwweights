@@ -1,8 +1,7 @@
-import { CreateItemDto } from '../../src/items/interfaces/create-item.dto';
-import { Item } from '../../src/items/models/item.model';
+import { CreateItemDto } from '../../src/CommandModule/interfaces/create-item.dto';
+import { Item } from '../../src/CommandModule/models/item.model';
 
 export const singleItem: Partial<Item> = {
-  id: 1,
   name: 'test Name with SpAcEs ',
   slug: 'test-name-with-spaces',
   value: 1123675e30,
