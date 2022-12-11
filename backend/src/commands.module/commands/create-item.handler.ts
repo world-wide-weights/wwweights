@@ -1,8 +1,8 @@
 import { Logger, UnprocessableEntityException } from '@nestjs/common';
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { plainToInstance } from 'class-transformer';
-import { EventStore } from '../../EventstoreModule/eventstore';
-import { Item } from '../models/item.model';
+import { EventStore } from '../../eventstore/eventstore';
+import { Item } from '../../models/item.model';
 import { CreateItemCommand } from './create-item.command';
 
 @CommandHandler(CreateItemCommand)

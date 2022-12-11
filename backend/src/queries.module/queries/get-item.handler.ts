@@ -2,7 +2,7 @@ import { Logger, NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Item } from '../../CommandModule/models/item.model';
+import { Item } from '../../models/item.model';
 import { GetItemQuery } from './get-item.query';
 
 @QueryHandler(GetItemQuery)

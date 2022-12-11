@@ -2,9 +2,10 @@ import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { Repository } from 'typeorm';
-import { AppModule } from '../src/app.module';
-import { Item } from '../src/CommandModule/models/item.model';
-import { createItem, singleItem } from './items/mock';
+import { ItemsCommandsModule } from '../src/commands.module/commands.module';
+import { Item } from '../src/models/item.model';
+import { rootMongoTestModule } from './helpers/MongoMemoryHelpers';
+import { createItem, singleItem } from './mocks/items';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -12,7 +13,7 @@ describe('AppController (e2e)', () => {
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [rootMongoTestModule(), ItemsCommandsModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
@@ -32,31 +33,6 @@ describe('AppController (e2e)', () => {
     await Promise.all([app.close()]);
   });
 
-  //--------------------- Queries(GET) ---------------------
-
-  describe('Queries /queries/items', () => {
-    const queriesPath = '/queries/items/';
-
-    it('/ => getItems', async () => {
-      const res = await request(app.getHttpServer())
-        .get(queriesPath)
-        .expect(HttpStatus.OK);
-      expect(res.body.length).toEqual(1);
-      // const { _id, ...item } = res.body[0];
-      // const { _id, ...compareItem } = singleItem;
-      console.log(singleItem);
-      expect(res.body[0]).toStrictEqual(singleItem);
-    });
-
-    it('/:slug => getItem', async () => {
-      const res = await request(app.getHttpServer())
-        .get(`${queriesPath}${singleItem.slug}`)
-        .expect(HttpStatus.OK);
-      expect(res.body.name).toBe(singleItem.name);
-    });
-  });
-
-  //-------------------- Commands(POST) --------------------
   describe('Commands /commands/items', () => {
     const commandsPath = '/commands/items/';
 

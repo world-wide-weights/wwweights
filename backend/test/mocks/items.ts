@@ -1,5 +1,5 @@
-import { CreateItemDto } from '../../src/CommandModule/interfaces/create-item.dto';
-import { Item } from '../../src/CommandModule/models/item.model';
+import { CreateItemDto } from '../../src/commands.module/interfaces/create-item.dto';
+import { Item } from '../../src/models/item.model';
 
 export const singleItem: Partial<Item> = {
   name: 'test Name with SpAcEs ',

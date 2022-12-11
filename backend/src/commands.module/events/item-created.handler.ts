@@ -2,7 +2,7 @@ import { Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Item } from '../models/item.model';
+import { Item } from '../../models/item.model';
 import { ItemCreatedEvent } from './item-created.event';
 
 @EventsHandler(ItemCreatedEvent)

@@ -3,9 +3,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ItemsCommandsModule } from './CommandModule/items.commands.module';
-import { Item } from './CommandModule/models/item.model';
-import { ItemsQueriesModule } from './QueryModule/queries.module';
+import { ItemsCommandsModule } from './commands.module/commands.module';
+import { Item } from './models/item.model';
+import { ItemsQueriesModule } from './queries.module/queries.module';
 
 @Module({
   imports: [
@@ -20,6 +20,7 @@ import { ItemsQueriesModule } from './QueryModule/queries.module';
         host: configService.get('DB_HOST'),
         port: configService.get('DB_PORT'),
         database: configService.get('DB_NAME'),
+        // TODO: implement this
         // username: configService.get('DB_USERNAME'),
         // password: configService.get('DB_PASSWORD'),
         synchronize: true,

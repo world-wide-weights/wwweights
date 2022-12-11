@@ -15,13 +15,13 @@ import { CommandBus } from '@nestjs/cqrs';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Item } from '../models/item.model';
 import { CreateItemCommand } from './commands/create-item.command';
 import { CreateItemDto } from './interfaces/create-item.dto';
 import { GetItemDto } from './interfaces/get-item-dto';
-import { Item } from './models/item.model';
 
-@Controller('commands/items')
-@ApiTags('items-commands')
+@Controller('commands')
+@ApiTags('commands')
 @UseInterceptors(ClassSerializerInterceptor)
 @SerializeOptions({ strategy: 'excludeAll' })
 export class ItemsCommandsController {
@@ -34,7 +34,7 @@ export class ItemsCommandsController {
     private repository: Repository<Item>,
   ) {}
 
-  @Post()
+  @Post('create-item')
   @ApiBody({ type: CreateItemDto })
   @ApiOperation({ summary: 'Create an item' })
   @HttpCode(HttpStatus.OK)

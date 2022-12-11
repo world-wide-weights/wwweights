@@ -11,12 +11,12 @@ import { QueryBus } from '@nestjs/cqrs';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { GetItemDto } from '../CommandModule/interfaces/get-item-dto';
-import { Item } from '../CommandModule/models/item.model';
+import { GetItemDto } from '../commands.module/interfaces/get-item-dto';
+import { Item } from '../models/item.model';
 import { GetItemQuery } from './queries/get-item.query';
 
-@Controller('queries/items')
-@ApiTags('items-queries')
+@Controller('queries')
+@ApiTags('queries')
 @UseInterceptors(ClassSerializerInterceptor)
 @SerializeOptions({ strategy: 'excludeAll' })
 export class ItemsQueriesController {
