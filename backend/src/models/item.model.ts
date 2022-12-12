@@ -7,15 +7,15 @@ export class Weight {
   @Expose()
   @Column()
   // This is always in grams and scientific notation example: 1.234e10
-  value: string;
+  value: number;
 
   @Expose()
   @Column()
-  isCa: boolean;
+  isCa? = false;
 
   @Expose()
   @Column({ nullable: true })
-  additional_range_value: string;
+  aditionalValue?: number;
 }
 
 @Entity()
@@ -47,19 +47,16 @@ export class Item extends AggregateRoot {
   @Expose()
   @Column('text', { array: true })
   //@ManyToMany(() => Tag, (tag) => tag.items) No Tags yet
-  tags: string[];
+  tags?: string[];
 
   @Expose()
   @Column()
-  image: string; // Link to static store or base-64 Encoded?
+  image?: string; // Link to static store or base-64 Encoded?
 
   // TODO: Temporary solution
   @Expose()
-  @Column({
-    nullable: true,
-    default: 'no source available',
-  })
-  source: string;
+  @Column()
+  source?: string;
 
   // TODO: Temporary solution needs to be @ManyToOne
   @Expose()

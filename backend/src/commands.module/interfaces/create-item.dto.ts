@@ -4,25 +4,26 @@ import {
   IsArray,
   IsBoolean,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   ValidateNested,
 } from 'class-validator';
 
 export class Weight {
-  @IsString()
-  @ApiProperty()
-  value: string;
+  @IsNumber()
+  @ApiProperty({ default: '1.234e100' })
+  value: number;
 
   @IsBoolean()
   @IsOptional()
-  @ApiPropertyOptional()
-  isCa = false;
+  @ApiPropertyOptional({ default: false })
+  isCa?: boolean;
 
-  @IsString()
+  @IsNumber()
   @IsOptional()
   @ApiPropertyOptional()
-  additional_range_value: string;
+  aditionalValue?: number;
 }
 
 export class CreateItemDto {
@@ -41,17 +42,17 @@ export class CreateItemDto {
   @IsArray()
   @IsOptional()
   @ApiPropertyOptional()
-  tags: string[];
+  tags?: string[];
 
   @IsString()
   @IsOptional()
   @ApiPropertyOptional()
-  image: string;
+  image?: string;
 
   @IsString()
   @IsOptional()
   @ApiPropertyOptional()
-  source: string;
+  source?: string;
 
   @IsString()
   @ApiProperty()

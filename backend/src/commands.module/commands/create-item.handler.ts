@@ -22,7 +22,7 @@ export class CreateItemHandler implements ICommandHandler<CreateItemCommand> {
       this.logger.warn('newItem', newItem);
       const eventItem = this.publisher.mergeObjectContext(newItem);
 
-      // TODO: Aggregate State from Eventstore to check for duplicates and stuff
+      // TODO: Aggregate State from Eventstore or Tries to check for duplicates and stuff
 
       const eventId = this.eventStore.addEvent('ItemCreatedEvent', eventItem);
       this.logger.log(`EventId created: ${eventId}`);

@@ -4,9 +4,7 @@ import { Item } from '../../src/models/item.model';
 export const singleItem: Partial<Item> = {
   name: 'test Name with SpAcEs ',
   slug: 'test-name-with-spaces',
-  value: 1123675e30,
-  isCa: true,
-  additional_range_value: null,
+  weight: { value: 1123675e30 },
   tags: ['testTag', 'testTag2'],
   image: null,
   source: 'no source available',
@@ -15,6 +13,6 @@ export const singleItem: Partial<Item> = {
 
 export const createItem: Partial<CreateItemDto> = {
   name: 'test Name with SpAcEs ',
-  value: 1123675e30,
+  weight: { value: 1123675e30 },
   user: 'testUser',
 };
