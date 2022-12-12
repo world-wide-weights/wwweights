@@ -4,6 +4,7 @@ import {
   MethodNotAllowedException,
   NotFoundException,
 } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { MailService } from '../mail/mail.service';
 import { ERROR_MESSAGES } from '../shared/enums/errors.enum';
 import { STATUS } from '../shared/enums/status.enum';
@@ -30,7 +31,7 @@ export class AccountService {
     this.mailService.sendMail(user.email, 'mail-verify', {}, 'Verify Mail');
   }
 
-  async resetPassword(email: string) {
+  async initiateResetPasswordFlow(email: string) {
     const user = await this.userService.findOneByEmail(email);
     if (!user) {
       // Just return to not indicate whether or not user with that email exists
@@ -42,5 +43,10 @@ export class AccountService {
       {},
       'Reset Password',
     );
+  }
+
+  async updatePassword(userId: number, newPassword: string) {
+    const hash = await bcrypt.hash(newPassword, 10);
+    await this.userService.updatePassword(userId, hash);
   }
 }
