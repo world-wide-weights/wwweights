@@ -23,6 +23,7 @@ export class AccountController {
   @Post('reset-password')
   //@UseGuards(PasswordResetJWTGuard)
   updatePassword(@Body() updatePasswordBody: UpdatePasswordDTO) {
-    this.accountService.updatePassword(id, updatePasswordBody.password);
+    // TODO add id from JWT
+    this.accountService.updatePassword(1, updatePasswordBody.password);
   }
 }
