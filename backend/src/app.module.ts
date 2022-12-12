@@ -21,8 +21,8 @@ import { ItemsQueriesModule } from './queries.module/queries.module';
         port: configService.get('DB_PORT'),
         database: configService.get('DB_NAME'),
         // TODO: implement this
-        // username: configService.get('DB_USERNAME'),
-        // password: configService.get('DB_PASSWORD'),
+        // username: configService.get('DB_USER'),
+        // password: configService.get('DB_PW'),
         synchronize: true,
         useNewUrlParser: true,
         autoLoadEntities: true,
