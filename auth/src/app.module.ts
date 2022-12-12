@@ -6,6 +6,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 import { AuthModule } from './auth/auth.module';
 import {UserEntity} from './shared/entities/users.entity';
 import { SharedModule } from './shared/shared.module';
+import { AccountModule } from './account/account.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -25,7 +27,9 @@ import { SharedModule } from './shared/shared.module';
 	inject: [ConfigService]
   }),
   AuthModule,
-  SharedModule
+  SharedModule,
+  AccountModule,
+  MailModule
   ],
   controllers: [AppController],
   providers: [AppService],
