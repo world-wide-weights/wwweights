@@ -1,0 +1,10 @@
+@host=http://localhost:3000
+
+POST {{host}}/signup
+Content-Type: application/json
+
+{
+    "username": "test",
+    "email": "test@test.de",
+    "password": "alsoSomethingWithtest"
+}

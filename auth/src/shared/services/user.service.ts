@@ -19,7 +19,7 @@ export class UserService {
   }
 
   async findOneById(id) {
-    return await this.userEntity.findOneById(id);
+    return await this.userEntity.findOneBy(id);
   }
 
   async setLoginTimestamp(id: number) {

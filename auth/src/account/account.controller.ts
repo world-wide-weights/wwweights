@@ -1,4 +1,6 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { ResetJWTGuard } from '../shared/guards/mail-jwt.guard';
+import { RequestWithId } from '../shared/interfaces/request-with-id.interface';
 import { JwtGuard } from '../shared/guards/jwt.guard';
 import { RequestWithUser } from '../shared/interfaces/request-with-user.dto';
 import { AccountService } from './account.service';
@@ -21,9 +23,14 @@ export class AccountController {
   }
 
   @Post('reset-password')
-  //@UseGuards(PasswordResetJWTGuard)
-  updatePassword(@Body() updatePasswordBody: UpdatePasswordDTO) {
-    // TODO add id from JWT
-    this.accountService.updatePassword(1, updatePasswordBody.password);
+  @UseGuards(ResetJWTGuard)
+  updatePassword(
+    @Body() updatePasswordBody: UpdatePasswordDTO,
+    @Req() requestWithId: RequestWithId,
+  ) {
+    this.accountService.updatePassword(
+      requestWithId.id,
+      updatePasswordBody.password,
+    );
   }
 }

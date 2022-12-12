@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { JWTPayload } from '../dtos/jwt-payload.dto';
+import { ResetJWTPayload } from '../dtos/reset-jwt-payload.dto';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class ResetJwtStrategy extends PassportStrategy(Strategy, 'reset-jwt') {
   constructor(private readonly configService: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -13,7 +13,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: JWTPayload) {
-    return payload;
+  async validate(payload: ResetJWTPayload) {
+    return payload.id;
   }
 }

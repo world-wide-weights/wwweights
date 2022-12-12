@@ -11,6 +11,7 @@ import { STATUS } from '../shared/enums/status.enum';
 import { UserService } from '../shared/services/user.service';
 import { LoginDTO } from './dtos/login.dto';
 import { SignUpDTO } from './dtos/signup.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -20,8 +21,11 @@ export class AuthService {
   ) {}
 
   async signup(body: SignUpDTO) {
-    const newUser = this.userService.insertNew(body);
+    // hash password
+    const hash = await bcrypt.hash(body.password, 10);
+    const newUser = this.userService.insertNew({ ...body, password: hash });
     if (!newUser) {
+      // All conflict related exceptions are thrown within the userService
       throw new InternalServerErrorException();
     }
     return newUser;
@@ -33,7 +37,7 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    // This is not awaited, as it is not necessary for the user
+    // This is not awaited, as it is not necessary for the response
     this.userService.setLoginTimestamp(user.pkUserId);
     return this.generateJWTToken(user);
   }
