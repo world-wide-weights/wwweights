@@ -3,11 +3,11 @@ import Link from "next/link"
 import { routes } from "../../services/routes/routes"
 
 export type ItemPreviewProps = {
-    /** Name of weight */
+    /** Name of item */
     name: string
     /** Weight */
     weight: string
-    /** Slug of weight */
+    /** Slug of item */
     slug: string
     /** Image URL */
     imageUrl?: string
