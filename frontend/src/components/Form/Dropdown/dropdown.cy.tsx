@@ -115,7 +115,7 @@ describe('Dropdown', () => {
     })
 
     it('should have icon chevron-down when dropdown is closed', () => {
-        cy.get(`[data-cy="${data.name}-dropdown-button"] span`).should('have.class', 'rotate-0')
+        cy.get(`[data-cy="${data.name}-dropdown-button"] i`).should('have.class', 'rotate-0')
     })
 
     it('should have icon rotate-180 when dropdown is open', () => {
@@ -123,6 +123,6 @@ describe('Dropdown', () => {
         cy.get(`[data-cy="${data.name}-dropdown-button"]`).click()
         cy.get(`[data-cy="${data.name}-dropdown-menu"]`).should('be.visible')
 
-        cy.get(`[data-cy="${data.name}-dropdown-button"] span`).should('have.class', '-rotate-180')
+        cy.get(`[data-cy="${data.name}-dropdown-button"] i`).should('have.class', '-rotate-180')
     })
 })
