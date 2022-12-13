@@ -2,7 +2,7 @@ type IconProps = {
     /** The icon to show */
     children: string
     /** Fill icons */
-    isFilled: boolean
+    isFilled?: boolean
     /** Custom classes */
     className?: string
 }
