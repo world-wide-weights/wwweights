@@ -2,7 +2,10 @@ const { fontFamily } = require('tailwindcss/defaultTheme')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
+  content: [
+    "src/pages/**/*.{ts,tsx}",
+    "src/components/**/*.{ts,tsx}"
+  ],
   safelist: [
     {
       pattern: /bg-(.*)-(100|200|500)/,

@@ -9,14 +9,6 @@ const DEFAULT_ITEMS_PER_PAGE = 16
 const ITEMS_PER_PAGE_MAXIMUM = 100
 const FIRST_PAGE = 1
 
-// As long as we do not have a weight. Let's work with Todo
-type Todo = {
-    userId: number
-    id: number
-    title: string
-    completed: boolean
-}
-
 export type Item = {
     id: number, // TODO: Change
     name: string
