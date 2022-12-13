@@ -4,15 +4,6 @@ import Image from "next/image";
 import { Item } from ".";
 import { Tag } from "../../components/Tag/Tag";
 
-// TODO (Zoe-Bot): Adjust types when list page merged and when using weights of course xD
-type Todo = {
-    userId: number
-    id: number
-    title: string
-    completed: boolean
-}
-
-// TODO (Zoe-Bot): Adjust types when list page merged
 type WeightsSingleProps = {
     item: Item
 }
@@ -50,7 +41,7 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
                 {/* Weights Image */}
                 < div className="row-start-1 lg:row-end-3 lg:flex lg:justify-end" >
                     {/* No better way yet: https://github.com/vercel/next.js/discussions/21379 Let's take a look at this when we got problems with it */}
-                    < Image src="https://picsum.photos/1200" priority className="sm:hidden rounded-xl" alt={item.name} width={120} height={120} />
+                    <Image src="https://picsum.photos/1200" priority className="sm:hidden rounded-xl" alt={item.name} width={120} height={120} />
                     <Image src="https://picsum.photos/1200" priority className="hidden sm:block rounded-xl" alt={item.name} width={230} height={230} />
                 </div >
             </div >
