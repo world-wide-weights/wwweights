@@ -42,7 +42,7 @@ export default function WeightsList({ items, currentPage, limit }: InferGetServe
             <title>{siteTitle}</title>
         </Head>
 
-        <div className="container">
+        <div className="container mt-5">
             {/* Headline */}
             <Headline level={3}>All weights</Headline>
 
