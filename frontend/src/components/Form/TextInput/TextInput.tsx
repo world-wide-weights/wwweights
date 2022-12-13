@@ -25,7 +25,7 @@ export const TextInput: React.FC<TextInputProps> = ({ name, labelText, labelRequ
             <Field type={type} name={name}>{(props: FieldProps<any>) => (
                 <>
                     <div className="relative flex flex-col justify-center my-1">
-                        {icon && <span className={`absolute material-symbols-rounded right-4 ${props.meta.error && props.meta.touched ? "text-red-500" : "text-gray-500"} `}>{icon}</span>}
+                        {icon && <i className={`absolute material-symbols-rounded right-4 ${props.meta.error && props.meta.touched ? "text-red-500" : "text-gray-500"} `}>{icon}</i>}
                         <input datacy={`textinput-${name}-input`} {...restProps} {...props.field} className={`rounded-full pl-4 py-2 ${icon ? "pr-12" : ""} ${props.meta.error && props.meta.touched ? 'bg-red-500 bg-opacity-10 border-2 border-red-500 focus:outline-none focus:border-red-500 focus:ring-red-500' : 'border-2 border-gray-100 bg-gray-100'}`} />
                     </div>
                     {!(props.meta.error && props.meta.touched) && <p className="text-gray-600 mx-4">{helperText}</p>}

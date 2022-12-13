@@ -69,7 +69,7 @@ describe('Text Input', () => {
         cy.mount(<Wrapper>
             <TextInput name={data.name} placeholder={data.placeholder} labelText={data.labelText} icon="face" />
         </Wrapper>)
-        cy.get('span.material-symbols-rounded').should('be.visible')
+        cy.get('i.material-symbols-rounded').should('be.visible')
     })
 
     describe('Error', () => {

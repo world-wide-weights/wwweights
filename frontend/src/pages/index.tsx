@@ -11,7 +11,7 @@ const Home = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <div className="container bg-white">
+      <div className="container">
         <p>Hello World</p>
         <Button to={routes.weights.list()} icon="list">Weights List</Button>
       </div>
