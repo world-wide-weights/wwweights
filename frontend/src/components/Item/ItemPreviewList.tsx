@@ -20,7 +20,7 @@ export type ItemPreviewProps = {
  * 
  * Example:
  * ```tsx
- * <ItemPreview id="1" name="Smartphone" weight="300 gr" imageUrl="https://via.placeholder.com/96.png" />
+ * <ItemPreviewBox id="1" name="Smartphone" weight="300 gr" imageUrl="https://via.placeholder.com/96.png" />
  * ```
  */
 export const ItemPreview: React.FC<ItemPreviewProps> = ({ slug, datacy, name, weight, imageUrl }) => {
