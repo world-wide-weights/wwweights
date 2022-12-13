@@ -37,7 +37,7 @@ export const routes = {
 
             return `/tags${queryString !== "" ? `?${queryString}` : ``}`
         },
-        single: (slug: string) => `/search={slug}`
+        single: (slug: string) => `/weights?search=${slug}`
     },
     legal: {
         imprint: "/legal/imprint",
