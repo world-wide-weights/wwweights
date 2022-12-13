@@ -13,8 +13,8 @@ const Home = () => {
 
       <div className="container">
         <p>Hello World</p>
-        <Button to={routes.weights.list()} icon="list">Weights List</Button>
-        <Button to="/tags" icon="bookmark">Tags List</Button>
+        <Button className="mt-2" to={routes.weights.list()} icon="list">Weights List</Button>
+        <Button className="mt-2" to={routes.tags.list()} icon="bookmark">Tags List</Button>
       </div>
     </div>
   )
