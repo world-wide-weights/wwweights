@@ -12,7 +12,7 @@ describe('AuthController (e2e)', () => {
   beforeEach(async () => {
     const dataSource = await setupDataSource();
     const configModuleMock = ConfigModule.forRoot({
-      envFilePath: './testing.env',
+      envFilePath: './test/testing.env',
     });
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
