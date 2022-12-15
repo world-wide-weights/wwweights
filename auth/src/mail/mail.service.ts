@@ -57,7 +57,7 @@ export class MailService {
     subject: string,
   ): Promise<void> {
     const mailTemplate = await readFile(
-      __dirname + '/templates/' + template + 'template.ejs',
+      __dirname + '/templates/' + template + '.template.ejs',
       'utf-8',
     );
     const mailContent = render(mailTemplate, mailData as any);

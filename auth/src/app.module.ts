@@ -4,10 +4,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import { UserEntity } from './shared/entities/users.entity';
+import { UserEntity } from './db/entities/users.entity';
 import { SharedModule } from './shared/shared.module';
 import { AccountModule } from './account/account.module';
 import { MailModule } from './mail/mail.module';
+import { DbModule } from './db/db.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { MailModule } from './mail/mail.module';
     SharedModule,
     AccountModule,
     MailModule,
+    DbModule,
   ],
   controllers: [AppController],
   providers: [AppService],

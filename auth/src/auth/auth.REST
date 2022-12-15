@@ -1,4 +1,4 @@
-@host=http://localhost:3000
+@host=http://localhost:3005/auth
 
 POST {{host}}/signup
 Content-Type: application/json
@@ -7,4 +7,14 @@ Content-Type: application/json
     "username": "test",
     "email": "test@test.de",
     "password": "alsoSomethingWithtest"
+}
+
+###
+
+POST {{host}}/login
+Content-Type: application/json
+
+{
+  "email": "test@test.de",
+  "password": "alsoSomethingWithtest" 
 }

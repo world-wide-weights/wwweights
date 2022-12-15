@@ -4,17 +4,23 @@ import {
   MethodNotAllowedException,
   NotFoundException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { UserEntity } from '../db/entities/users.entity';
+import { MailVerifyJWTDTO } from '../shared/dtos/mail-jwt-payload.dto';
+import { UserService } from '../db/db.service';
 import { MailService } from '../mail/mail.service';
 import { ERROR_MESSAGES } from '../shared/enums/errors.enum';
 import { STATUS } from '../shared/enums/status.enum';
-import { UserService } from '../shared/services/user.service';
 
 @Injectable()
 export class AccountService {
   constructor(
     private readonly mailService: MailService,
     private readonly userService: UserService,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   async resendVerifyEmail(email: string) {
@@ -28,7 +34,28 @@ export class AccountService {
     if (user.status === STATUS.VERIFIED) {
       throw new ConflictException(ERROR_MESSAGES.USER_ALREADY_VERIFIED);
     }
-    this.mailService.sendMail(user.email, 'mail-verify', {}, 'Verify Mail');
+    await this.sendVerifyMail(user);
+  }
+
+  async sendVerifyMail(user: UserEntity) {
+    const verifyToken = this.jwtService.sign(
+      { id: user.pkUserId } as MailVerifyJWTDTO,
+      {
+        secret: this.configService.get<string>('JWT_MAIL_VERIFY_SECRET'),
+        algorithm: 'HS256',
+      },
+    );
+    this.mailService.sendMail(
+      user.email,
+      'mail-verify',
+      {
+        name: user.username,
+        verifyLink: `${this.configService.get<string>(
+          'SERVICE_ADDRESS',
+        )}/account/verify-email/?code=${verifyToken}`,
+      },
+      'Verify Mail',
+    );
   }
 
   async initiateResetPasswordFlow(email: string) {
@@ -48,5 +75,9 @@ export class AccountService {
   async updatePassword(userId: number, newPassword: string) {
     const hash = await bcrypt.hash(newPassword, 10);
     await this.userService.updatePassword(userId, hash);
+  }
+
+  async verifyEmail(tokenPayload: MailVerifyJWTDTO) {
+    this.userService.changeUserStatus(tokenPayload.id, STATUS.VERIFIED);
   }
 }

@@ -7,10 +7,11 @@ import {
   SerializeOptions,
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
-import { UserEntity } from '../shared/entities/users.entity';
+import { UserEntity } from '../db/entities/users.entity';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dtos/login.dto';
 import { SignUpDTO } from './dtos/signup.dto';
+import { TokenResponse } from './responses/token.response';
 
 @Controller('auth')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -27,7 +28,10 @@ export class AuthController {
   }
 
   @Post('login')
-  login(loginData: LoginDTO) {
-    return this.authService.login(loginData);
+  async login(@Body() loginData: LoginDTO) {
+    return plainToInstance(
+      TokenResponse,
+      await this.authService.login(loginData),
+    );
   }
 }

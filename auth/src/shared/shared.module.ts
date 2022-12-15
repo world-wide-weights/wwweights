@@ -1,25 +1,23 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from './entities/users.entity';
-import { UserService } from './services/user.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserEntity]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'),
+        privateKey: configService.get<string>('JWT_PRIVATE_KEY'),
+        algorithm: 'RS256',
         signOptions: {
-          expiresIn: configService.get<string>('JWT_EXPIRE_TIME'),
+          expiresIn: configService.get<number>('JWT_EXPIRE_TIME'),
+          algorithm: 'RS256',
         },
       }),
     }),
   ],
-  providers: [UserService],
-  exports: [UserService, JwtModule],
+  providers: [],
+  exports: [JwtModule],
 })
 export class SharedModule {}

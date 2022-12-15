@@ -1,5 +1,6 @@
 import { newDb } from 'pg-mem';
 import { DataSource } from 'typeorm';
+import { UserEntity } from '../../src/db/entities/users.entity';
 
 export const setupDataSource = async () => {
   const db = newDb({
@@ -21,6 +22,8 @@ export const setupDataSource = async () => {
 
   const ds: DataSource = await db.adapters.createTypeormDataSource({
     type: 'postgres',
+    entities: [UserEntity],
+    migrationsRun: false,
   });
   await ds.initialize();
   await ds.synchronize();

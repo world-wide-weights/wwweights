@@ -2,18 +2,21 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { ResetJWTPayload } from '../dtos/reset-jwt-payload.dto';
+import { MailVerifyJWTDTO } from '../dtos/mail-jwt-payload.dto';
 
 @Injectable()
-export class ResetJwtStrategy extends PassportStrategy(Strategy, 'reset-jwt') {
+export class MailVerifyJwtStrategy extends PassportStrategy(
+  Strategy,
+  'mail-verify-jwt',
+) {
   constructor(private readonly configService: ConfigService) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: configService.get<string>('JWT_SECRET'),
+      jwtFromRequest: ExtractJwt.fromUrlQueryParameter('code'),
+      secretOrKey: configService.get<string>('JWT_MAIL_VERIFY_SECRET'),
     });
   }
 
-  async validate(payload: ResetJWTPayload) {
-    return payload.id;
+  async validate(payload: MailVerifyJWTDTO) {
+    return payload;
   }
 }

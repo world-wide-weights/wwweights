@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { STATUS } from '../shared/enums/status.enum';
 import { Repository } from 'typeorm';
-import { UserEntity } from '../entities/users.entity';
+import { UserEntity } from './entities/users.entity';
 
 @Injectable()
 export class UserService {
@@ -23,10 +24,13 @@ export class UserService {
   }
 
   async setLoginTimestamp(id: number) {
-    // TODO: maybe add new way to fetch time other than OS time
-
+    const dbTime = (
+      await this.userEntity.query('SELECT NOW()::timestamptz')
+    )[0];
     // Use postgres function to get the current timestamp. This allows for consistent time measurements even with multiple auth services running
-    await this.userEntity.update(id, { lastLogin: 'NOW()::timestamptz' });
+    await this.userEntity.update(id, {
+      lastLogin: dbTime.now,
+    });
   }
 
   async insertNew(userData: Partial<UserEntity>): Promise<UserEntity> {
@@ -41,5 +45,9 @@ export class UserService {
   }
   async updatePassword(id: number, hash: string) {
     await this.userEntity.update(id, { password: hash });
+  }
+
+  async changeUserStatus(id: number, status: STATUS): Promise<void> {
+    await this.userEntity.update(id, { status: status });
   }
 }
