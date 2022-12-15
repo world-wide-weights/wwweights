@@ -1,16 +1,22 @@
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { MongoMemoryServer } from 'mongodb-memory-server';
+import { Item } from '../../src/models/item.model';
 
 let mongod: MongoMemoryServer;
 
-export const rootMongoTestModule = (options: TypeOrmModuleOptions = {}) =>
+export const rootMongoTestModule = () =>
   TypeOrmModule.forRootAsync({
     useFactory: async () => {
       mongod = await MongoMemoryServer.create();
       const mongoUri = await mongod.getUri();
       return {
-        url: mongoUri,
-        ...options,
+        type: 'mongodb',
+        uri: mongoUri,
+        synchronize: true,
+        useNewUrlParser: true,
+        autoLoadEntities: true,
+        useUnifiedTopology: true,
+        entities: [Item],
       };
     },
   });

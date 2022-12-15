@@ -2,10 +2,13 @@ import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { Repository } from 'typeorm';
-import { ItemsCommandsModule } from '../src/commands.module/commands.module';
 import { Item } from '../src/models/item.model';
-import { rootMongoTestModule } from './helpers/MongoMemoryHelpers';
-import { createItem, singleItem } from './mocks/items';
+import { ItemsQueriesModule } from '../src/queries.module/queries.module';
+import {
+  closeInMongodConnection,
+  rootMongoTestModule,
+} from './helpers/MongoMemoryHelpers';
+import { singleItem } from './mocks/items';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -13,13 +16,12 @@ describe('AppController (e2e)', () => {
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [rootMongoTestModule(), ItemsCommandsModule],
+      imports: [rootMongoTestModule(), ItemsQueriesModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
     await app.init();
-    // TODO: Not sure if this is any practice at all , but it works
     itemTable = await app.get('ItemRepository');
   });
 
@@ -30,27 +32,25 @@ describe('AppController (e2e)', () => {
 
   afterAll(async () => {
     await itemTable.clear();
+    await closeInMongodConnection();
     await Promise.all([app.close()]);
   });
 
-  describe('Commands /commands/items', () => {
-    const commandsPath = '/commands/items/';
+  describe('Queries /queries/', () => {
+    const queriesPath = '/queries/';
 
-    it('/ => createItem', async () => {
-      await itemTable.clear();
+    it('/ => getAllItems', async () => {
       const res = await request(app.getHttpServer())
-        .post(commandsPath)
-        .send(createItem)
+        .get(queriesPath + 'get-all-items')
         .expect(HttpStatus.OK);
+      expect(res.body.length).toEqual(1);
+    });
 
-      expect(res.body).toStrictEqual({}); // Because we don't return in CQRS
-      // TODO: how to test if request takes long
-      expect(await itemTable.count()).toEqual(1);
-      const item = await itemTable.findOneBy({ name: createItem.name });
-
-      expect(item.name).toEqual(createItem.name);
-      expect(item.slug).toBeDefined();
-      expect(item.slug.length).not.toEqual('');
+    it('/:slug => getOneItem', async () => {
+      const res = await request(app.getHttpServer())
+        .get(queriesPath + 'get-one-item/' + singleItem.slug)
+        .expect(HttpStatus.OK);
+      expect(res.body.name).toBe(singleItem.name);
     });
   });
 });

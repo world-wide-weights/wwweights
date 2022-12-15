@@ -29,15 +29,15 @@ export class ItemsQueriesController {
     private repository: Repository<Item>,
   ) {}
 
-  @Get()
+  @Get('get-all-items')
   async getAllItems() {
     // TODO: implement in other issue
     return await this.repository.find();
   }
 
-  @Get(':slug')
+  @Get('get-one-item/:slug')
   @ApiParam({ name: 'slug', type: String })
-  @ApiOperation({ summary: 'Get an item by id' })
+  @ApiOperation({ summary: 'Get an item by slug' })
   async getItem(@Param() { slug }: GetItemDto) {
     this.logger.log(`Get item with slug ${slug}`);
     return await this.queryBus.execute(new GetItemQuery(slug));

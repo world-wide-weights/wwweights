@@ -17,7 +17,7 @@ export class ItemCreatedHandler implements IEventHandler<ItemCreatedEvent> {
       await this.repository.save(event.item);
       // TODO: Here will be followup logic like publishing with SSE
     } catch (error) {
-      // TODO: Do we handle Errors here, coz we send nothing to a user back!?
+      // TODO: Do we handle Errors here, coz we send nothing to a user back!? SOLUTION: NEW SAGA
       this.logger.error(error);
       //throw new UnprocessableEntityException('Item could not be created');
     }

@@ -42,14 +42,14 @@ export class ItemsCommandsController {
     this.commandBus.execute(new CreateItemCommand(createItemDto));
   }
 
-  @Delete()
+  @Delete('delete-all-items')
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteAllItems() {
     // TODO: do not implement, we use event sourcing and ddd, so we do not delete
     return await this.repository.delete({});
   }
 
-  @Delete('/:slug')
+  @Delete('delete-one-item/:slug')
   async deleteItem(@Param() { slug }: GetItemDto) {
     // TODO: do not implement, we use event sourcing and ddd, so we do not delete
     return await this.repository.delete(slug);
