@@ -5,6 +5,8 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   SerializeOptions,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { UserEntity } from '../db/entities/users.entity';
@@ -28,6 +30,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @HttpCode(HttpStatus.OK)
   async login(@Body() loginData: LoginDTO) {
     return plainToInstance(
       TokenResponse,

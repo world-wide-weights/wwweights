@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { STATUS } from '../shared/enums/status.enum';
-import { Repository } from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
 import { UserEntity } from './entities/users.entity';
 
 @Injectable()
@@ -24,9 +24,7 @@ export class UserService {
   }
 
   async setLoginTimestamp(id: number) {
-    const dbTime = (
-      await this.userEntity.query('SELECT NOW()::timestamptz')
-    )[0];
+    const dbTime = await this.getCurrentDbTime();
     // Use postgres function to get the current timestamp. This allows for consistent time measurements even with multiple auth services running
     await this.userEntity.update(id, {
       lastLogin: dbTime.now,
@@ -39,7 +37,22 @@ export class UserService {
       await this.userEntity.save(user);
       return user;
     } catch (e) {
-      // TODO: Add catch for conflicts
+      console.log(Object.keys(e));
+      console.log(Object.values(e));
+      if (e instanceof QueryFailedError) {
+        if ((e as any).code === '23505') {
+          const conflicts = [];
+          if ((e as any).constraint === 'username_unique') {
+            conflicts.push('Username already in use');
+          }
+          if ((e as any).constraint === 'email_unique') {
+            conflicts.push('Email already in use');
+          }
+          throw new ConflictException(
+            conflicts.join(',') || 'Unknown conflict',
+          );
+        }
+      }
       throw e;
     }
   }
@@ -49,5 +62,9 @@ export class UserService {
 
   async changeUserStatus(id: number, status: STATUS): Promise<void> {
     await this.userEntity.update(id, { status: status });
+  }
+
+   async getCurrentDbTime(): Promise<{ now: string }> {
+    return (await this.userEntity.query('SELECT NOW()::timestamptz'))[0];
   }
 }
