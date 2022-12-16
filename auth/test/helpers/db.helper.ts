@@ -17,7 +17,7 @@ export async function createUser(
     role: ROLES.USER,
   };
   Object.assign(user, valueOverride);
-  user.password = await bcrypt.hash(user.password, 10)
+  user.password = await bcrypt.hash(user.password, 10);
   return (await dataSource.getRepository(UserEntity).insert(user))
     .generatedMaps;
 }

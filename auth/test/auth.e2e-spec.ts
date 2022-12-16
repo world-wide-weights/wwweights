@@ -8,6 +8,8 @@ import { DataSource } from 'typeorm';
 import { AppModule } from '../src/app.module';
 import { createUser } from './helpers/db.helper';
 import { setupDataSource } from './helpers/typeOrmSetup';
+import { UserEntity } from 'src/db/entities/users.entity';
+import { comparePassword } from './helpers/general.helper';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
@@ -46,12 +48,29 @@ describe('AuthController (e2e)', () => {
   });
 
   describe('/auth/signup (POST)', () => {
-    it('Should accept valid DTO (GET)', () => {
+    it('Should accept valid DTO ', () => {
       // ACT & ASSERT
       return request(app.getHttpServer())
         .post('/auth/signup')
         .send(SAMPLE_USER)
         .expect(201);
+    });
+
+    it('Should write to DB ', async () => {
+      // ACT
+      const res = request(app.getHttpServer())
+        .post('/auth/signup')
+        .send(SAMPLE_USER);
+
+      // ASSERT
+      const user = await dataSource
+        .getRepository(UserEntity)
+        .findOneBy({ email: SAMPLE_USER.email });
+      expect(user.email).toEqual(SAMPLE_USER.email);
+      expect(user.username).toEqual(SAMPLE_USER.username);
+      expect(comparePassword(SAMPLE_USER.password, user.password)).toEqual(
+        true,
+      );
     });
 
     it('Should fail for incomplete payload', async () => {
