@@ -7,12 +7,17 @@ import {
   SerializeOptions,
   HttpCode,
   HttpStatus,
+  Get,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
+import { RequestWithRefreshPayload } from 'src/shared/interfaces/request-with-refresh-payload.interface';
 import { UserEntity } from '../db/entities/users.entity';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dtos/login.dto';
 import { SignUpDTO } from './dtos/signup.dto';
+import { RefreshTokenGuard } from './guards/refresh-token.guard';
 import { TokenResponse } from './responses/token.response';
 
 @Controller('auth')
@@ -36,5 +41,19 @@ export class AuthController {
       TokenResponse,
       await this.authService.login(loginData),
     );
+  }
+
+  @Post('/refresh')
+  @UseGuards(RefreshTokenGuard)
+  async getAuthViaRefreshToken(@Req() tokenData: RequestWithRefreshPayload) {
+    return plainToInstance(
+      TokenResponse,
+      await this.authService.getAuthPayload(tokenData.user),
+    );
+  }
+
+  @Get('.well-known/jwks.json')
+  getJWKSInfo() {
+    return {};
   }
 }

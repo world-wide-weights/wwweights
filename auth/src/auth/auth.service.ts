@@ -13,6 +13,8 @@ import { SignUpDTO } from './dtos/signup.dto';
 import * as bcrypt from 'bcrypt';
 import { UserService } from '../db/db.service';
 import { AccountService } from '../account/account.service';
+import { runInThisContext } from 'vm';
+import { RefreshJWTPayload } from 'src/shared/dtos/refresh-jwt-payload.dto';
 
 @Injectable()
 export class AuthService {
@@ -44,20 +46,31 @@ export class AuthService {
     }
 
     // This is not awaited, as it is not necessary for the response
-    this.userService.setLoginTimestamp(user.pkUserId);
-    return await this.generateJWTToken(user);
+    return await this.getAuthPayload(user);
   }
 
-  async generateJWTToken(user: UserEntity) {
-    const token: string = await this.jwtService.sign({
+  async getAuthPayload(user: UserEntity) {
+    this.userService.setLoginTimestamp(user.pkUserId);
+    return {
+      access_token: await this.generateJWTToken(user),
+      refresh_token: await this.generateRefreshToken(user),
+    };
+  }
+
+  private async generateRefreshToken(user: UserEntity) {
+    return await this.jwtService.sign({
+      id: user.pkUserId,
+      email: user.email,
+    } as RefreshJWTPayload);
+  }
+
+  private async generateJWTToken(user: UserEntity) {
+    return await this.jwtService.sign({
       username: user.username,
       id: user.pkUserId,
       email: user.email,
       status: user.status as STATUS,
       role: user.role as ROLES,
     } as JWTPayload);
-    return {
-      access_token: token,
-    };
   }
 }

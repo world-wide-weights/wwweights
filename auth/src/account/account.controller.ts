@@ -5,8 +5,8 @@ import { RequestWithUser } from '../shared/interfaces/request-with-user.dto';
 import { AccountService } from './account.service';
 import { ResetPasswordDTO } from './dtos/password-reset.dto';
 import { UpdatePasswordDTO } from './dtos/update-password.dto';
-import { ResetJWTGuard } from '../shared/guards/reset-jwt.guard';
-import { MailVerifyJWTDTO } from '../shared/dtos/mail-jwt-payload.dto';
+import { ResetJWTGuard } from './guards/reset-jwt.guard';
+import { MailVerifyJWTDTO } from './dtos/mail-jwt-payload.dto';
 
 @Controller('account')
 export class AccountController {

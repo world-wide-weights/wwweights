@@ -8,7 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UserEntity } from '../db/entities/users.entity';
-import { MailVerifyJWTDTO } from '../shared/dtos/mail-jwt-payload.dto';
+import { MailVerifyJWTDTO } from './dtos/mail-jwt-payload.dto';
 import { UserService } from '../db/db.service';
 import { MailService } from '../mail/mail.service';
 import { ERROR_MESSAGES } from '../shared/enums/errors.enum';

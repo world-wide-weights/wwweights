@@ -37,20 +37,15 @@ export class UserService {
       await this.userEntity.save(user);
       return user;
     } catch (e) {
-      console.log(Object.keys(e));
-      console.log(Object.values(e));
       if (e instanceof QueryFailedError) {
         if ((e as any).code === '23505') {
-          const conflicts = [];
           if ((e as any).constraint === 'username_unique') {
-            conflicts.push('Username already in use');
+            throw new ConflictException('Username already in use');
           }
           if ((e as any).constraint === 'email_unique') {
-            conflicts.push('Email already in use');
+            throw new ConflictException('Email already in use');
           }
-          throw new ConflictException(
-            conflicts.join(',') || 'Unknown conflict',
-          );
+          throw new ConflictException('Unknown conflict');
         }
       }
       throw e;
@@ -64,7 +59,7 @@ export class UserService {
     await this.userEntity.update(id, { status: status });
   }
 
-   async getCurrentDbTime(): Promise<{ now: string }> {
+  async getCurrentDbTime(): Promise<{ now: string }> {
     return (await this.userEntity.query('SELECT NOW()::timestamptz'))[0];
   }
 }

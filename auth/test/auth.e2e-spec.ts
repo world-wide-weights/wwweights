@@ -154,11 +154,16 @@ describe('AuthController (e2e)', () => {
         email: SAMPLE_USER.email,
       });
       // ASSERT
-      const isTokenValid = jwtService.verify(res.body.access_token, {
+      const tokePayload = jwtService.verify(res.body.access_token, {
         publicKey: configService.get<string>('JWT_PUBLIC_KEY'),
         algorithms: ['RS256'],
       });
-      expect(res.body.access_token);
+      expect(tokePayload).toEqual(
+        expect.objectContaining({
+          email: SAMPLE_USER.email,
+          username: SAMPLE_USER.username,
+        }),
+      );
     });
   });
 });
