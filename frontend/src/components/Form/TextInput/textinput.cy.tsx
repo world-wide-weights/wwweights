@@ -18,26 +18,24 @@ const schema = yup.object().shape({
 
 const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return <Formik initialValues={initialValues} onSubmit={submitForm} validationSchema={schema} >
-        {(formik) => (
-            <Form>
-                <div className="w-80">
-                    {children}
-                </div>
-            </Form>
-        )}
+        <Form>
+            <div className="w-80">
+                {children}
+            </div>
+        </Form>
     </Formik>
 }
 
-describe('Text Input', () => {
-    const data = {
-        name: "title",
-        placeholder: "Hello...",
-        labelText: "Titel",
-        helperText: "The title is shown at the top of the page.",
-        type: "email"
-    }
+const data = {
+    name: "title",
+    placeholder: "Hello...",
+    labelText: "Titel",
+    helperText: "The title is shown at the top of the page.",
+    type: "email"
+}
 
-    describe('Props', () => {
+describe('Text Input', () => {
+    describe('Basic Props', () => {
         beforeEach(() => {
             cy.mount(<Wrapper>
                 <TextInput name={data.name} placeholder={data.placeholder} labelText={data.labelText} helperText={data.helperText} />
@@ -65,11 +63,41 @@ describe('Text Input', () => {
         cy.get('label').should('contain', '*')
     })
 
-    it('should have icon at the end when set icon', () => {
-        cy.mount(<Wrapper>
-            <TextInput name={data.name} placeholder={data.placeholder} labelText={data.labelText} icon="face" />
-        </Wrapper>)
-        cy.get('i.material-symbols-rounded').should('be.visible')
+    describe('Icon Prop', () => {
+        it('should have icon at the end when set icon', () => {
+            cy.mount(<Wrapper>
+                <TextInput name={data.name} placeholder={data.placeholder} labelText={data.labelText} icon="face" />
+            </Wrapper>)
+            cy.get('i.material-symbols-rounded').should('be.visible')
+        })
+
+        describe('Iconbutton', () => {
+            beforeEach(() => {
+                cy.mount(<Wrapper>
+                    <TextInput name={data.name} iconOnClick={() => console.log("Onclick")} iconButtonIsSubmit icon="search" />
+                </Wrapper>)
+            })
+
+            it('should have icon button when iconOnClick is set', () => {
+                cy.dataCy('textinput-title-inputwrapper', ' button i').should('be.visible')
+            })
+
+            it('should have button type submit when iconButtonIsSubmit is set', () => {
+                cy.dataCy('textinput-title-inputwrapper', ' button').invoke('attr', 'type').should('contain', 'submit')
+            })
+        })
+
+        describe('Iconlink', () => {
+            beforeEach(() => {
+                cy.mount(<Wrapper>
+                    <TextInput name={data.name} iconLink="/link" icon="search" />
+                </Wrapper>)
+            })
+
+            it('should have icon link when iconLink is set', () => {
+                cy.dataCy('textinput-title-inputwrapper', ' a i').should('be.visible')
+            })
+        })
     })
 
     describe('Error', () => {
