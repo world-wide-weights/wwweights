@@ -39,13 +39,6 @@ describe('AppController (e2e)', () => {
   describe('Queries /queries/', () => {
     const queriesPath = '/queries/';
 
-    it('/ => getAllItems', async () => {
-      const res = await request(app.getHttpServer())
-        .get(queriesPath + 'get-all-items')
-        .expect(HttpStatus.OK);
-      expect(res.body.length).toEqual(1);
-    });
-
     it('/:slug => getOneItem', async () => {
       const res = await request(app.getHttpServer())
         .get(queriesPath + 'get-one-item/' + singleItem.slug)
