@@ -14,6 +14,7 @@ import * as bcrypt from 'bcrypt';
 import { UserService } from '../db/db.service';
 import { AccountService } from '../account/account.service';
 import { RefreshJWTPayload } from 'src/shared/dtos/refresh-jwt-payload.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -21,6 +22,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly accountService: AccountService,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   async signup(body: SignUpDTO): Promise<UserEntity> {
@@ -47,7 +49,6 @@ export class AuthService {
     ) {
       throw new UnauthorizedException();
     }
-
     // This is not awaited, as it is not necessary for the response
     return await this.getAuthPayload(user);
   }
@@ -61,10 +62,13 @@ export class AuthService {
   }
 
   private async generateRefreshToken(user: UserEntity) {
-    return await this.jwtService.sign({
-      id: user.pkUserId,
-      email: user.email,
-    } as RefreshJWTPayload);
+    return await this.jwtService.sign(
+      {
+        id: user.pkUserId,
+        email: user.email,
+      } as RefreshJWTPayload,
+      { expiresIn: this.configService.get('JWT_REFRESH_EXPIRE_TIME') },
+    );
   }
 
   private async generateJWTToken(user: UserEntity) {

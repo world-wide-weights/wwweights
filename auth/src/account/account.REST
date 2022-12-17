@@ -1,0 +1,31 @@
+@host=http://localhost:3005/account
+@jwt=
+@resetJWT=
+@mailJWT=
+
+
+###
+GET {{host}}/resend-verification-mail
+Authorization: Bearer {{jwt}}
+
+###
+POST {{host}}/send-password-reset-mail
+Content-Type: application/json
+
+{
+    "email": "test@test.test"
+}
+
+###
+POST {{host}}/reset-password
+Content-Type: application/json
+Authorization: Bearer {{resetJWT}}
+
+{
+    "password": "newPassword"
+}
+
+###
+GET {{host}}/verify-email
+Authorization: Bearer {{mailJWT}}
+

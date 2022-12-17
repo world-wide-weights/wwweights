@@ -7,6 +7,7 @@ import { ResetPasswordDTO } from './dtos/password-reset.dto';
 import { UpdatePasswordDTO } from './dtos/update-password.dto';
 import { ResetJWTGuard } from './guards/reset-jwt.guard';
 import { MailVerifyJWTDTO } from './dtos/mail-jwt-payload.dto';
+import { MailVerifyJWTGuard } from './guards/mail-verify-jwt.guard';
 
 @Controller('account')
 export class AccountController {
@@ -36,7 +37,7 @@ export class AccountController {
   }
 
   @Get('verify-email')
-  @UseGuards()
+  @UseGuards(MailVerifyJWTGuard)
   verifyMail(@Req() tokenPayload: MailVerifyJWTDTO) {
     this.accountService.verifyEmail(tokenPayload);
   }
