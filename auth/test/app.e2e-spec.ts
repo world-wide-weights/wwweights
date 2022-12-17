@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common';
+import { HttpStatus, INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { DataSource } from 'typeorm';
@@ -21,10 +21,14 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
+    afterEach(async () => {
+    await app.close()
+  })
+
   it('/health (GET)', () => {
     return request(app.getHttpServer())
       .get('/health')
-      .expect(200)
+      .expect(HttpStatus.OK)
       .expect('We good');
   });
 });

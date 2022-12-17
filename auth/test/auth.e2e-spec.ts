@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from '../src/db/db.service';
@@ -17,7 +17,7 @@ import { setupDataSource } from './helpers/typeOrmSetup';
 import { comparePassword } from './helpers/general.helper';
 import { RefreshJWTPayload } from '../src/auth/dtos/refresh-jwt-payload.dto';
 import { STATUS } from '../src/shared/enums/status.enum';
-import configuration from './__mocks__/configuration';
+import { SAMPLE_USER } from './helpers/sample-data.helper';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
@@ -25,12 +25,7 @@ describe('AuthController (e2e)', () => {
   let jwtService: JwtService;
   let configService: ConfigService;
   let userService: UserService;
-  const SAMPLE_USER = {
-    username: 'R2D2',
-    password: 'StarWarsIsAVeryNiceMovie',
-    email: 'r2d2@jedi.temple',
-  };
-
+ 
   beforeEach(async () => {
     dataSource = await setupDataSource();
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -57,13 +52,17 @@ describe('AuthController (e2e)', () => {
         }));
   });
 
+    afterEach(async () => {
+    await app.close()
+  })
+
   describe('/auth/signup (POST)', () => {
     it('Should accept valid DTO ', () => {
       // ACT & ASSERT
       return request(app.getHttpServer())
         .post('/auth/signup')
         .send(SAMPLE_USER)
-        .expect(201);
+        .expect(HttpStatus.CREATED);
     });
 
     it('Should write to DB ', async () => {
@@ -149,7 +148,7 @@ describe('AuthController (e2e)', () => {
           password: 'StarWarsIsAVeryNiceMovie',
           email: 'r2d2@jedi.temple',
         })
-        .expect(401);
+        .expect(HttpStatus.UNAUTHORIZED);
     });
 
     it('Should return token for correct data ', async () => {
