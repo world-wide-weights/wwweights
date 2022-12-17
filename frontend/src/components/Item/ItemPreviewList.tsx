@@ -1,12 +1,14 @@
 import Image from "next/image"
 import Link from "next/link"
+import { Weight } from "../../pages/weights"
 import { routes } from "../../services/routes/routes"
+import { ProgressBar } from "../ProgressBar/ProgressBar"
 
 export type ItemPreviewProps = {
     /** Name of item */
     name: string
     /** Weight */
-    weight: string
+    weight: Weight
     /** Slug of item */
     slug: string
     /** Image URL */
@@ -24,6 +26,8 @@ export type ItemPreviewProps = {
  * ```
  */
 export const ItemPreviewList: React.FC<ItemPreviewProps> = ({ slug, name, weight, imageUrl }) => {
+    const weightString = `${weight.isCa ? "ca." : ""}${weight.value}${weight.aditionalValue ? `- ${weight.aditionalValue}` : ""} g`
+
     return <li className="bg-white rounded-lg py-2 mb-2">
         <Link className="flex flex-col md:flex-row md:items-center md:h-12 mx-4 md:mx-8" href={routes.weights.single(slug)}>
             <div className="flex justify-between items-center h-12 md:w-1/4">
@@ -33,13 +37,10 @@ export const ItemPreviewList: React.FC<ItemPreviewProps> = ({ slug, name, weight
                 </div>
             </div>
             <div className="flex items-center md:w-3/4">
-                <h5 className="text-gray-800 md:text-lg text-right font-semibold w-1/3 sm:w-1/4 lg:w-1/6 mr-4" title={`${name} has a weight of ${weight}`}>{weight}</h5>
+                <h5 className="text-gray-800 md:text-lg text-right font-semibold w-1/3 sm:w-1/4 lg:w-1/6 mr-4" title={`${name} has a weight of ${weightString}`}>{weightString}</h5>
                 <div className="w-2/3 sm:w-3/4 lg:w-5/6">
-                    <div className="relative bg-gray-200 rounded-lg h-2 w-[100%]">
-                        <div className="absolute bg-blue-500 rounded-lg h-2 w-[50%]">
-
-                        </div>
-                    </div>
+                    {/* TODO (Zoe-Bot): Add correct percentage and find a solution for span Issue #107 */}
+                    <ProgressBar progress={62} />
                 </div>
             </div>
         </Link>
