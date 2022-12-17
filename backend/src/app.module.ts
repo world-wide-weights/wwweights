@@ -13,19 +13,25 @@ import { ItemsQueriesModule } from './queries.module/queries.module';
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'mongodb',
-        host: configService.get('DB_HOST'),
-        port: configService.get('DB_PORT'),
-        database: configService.get('DB_NAME'),
-        // TODO: implement this
-        // username: configService.get('DB_USER'),
-        // password: configService.get('DB_PW'),
-        synchronize: true,
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        entities: [Item],
-      }),
+      useFactory: (configService: ConfigService) => {
+        return {
+          type: 'mongodb',
+          authSource: 'admin',
+          host: configService.get('DB_HOST'),
+          port: +configService.get('DB_PORT'),
+          database: configService.get('DB_NAME'),
+          username: configService.get('DB_USER'),
+          password: configService.get('DB_PW'),
+          // TODO: Remove this option in production:
+          // Only enable this option if your application is in development,
+          // otherwise use TypeORM migrations to sync entity schemas:
+          // https://typeorm.io/#/migrations
+          synchronize: true,
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+          entities: [Item],
+        };
+      },
       inject: [ConfigService],
     }),
     ItemsCommandsModule,
