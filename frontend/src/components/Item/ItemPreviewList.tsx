@@ -1,7 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
 import { routes } from "../../services/routes/routes"
-import { Button } from "../Button/Button"
 
 export type ItemPreviewProps = {
     /** Name of item */
@@ -10,8 +9,6 @@ export type ItemPreviewProps = {
     weight: string
     /** Slug of item */
     slug: string
-    /** Tags of item  */
-    tags: string[]
     /** Image URL */
     imageUrl?: string
     /** For testing */
@@ -23,21 +20,28 @@ export type ItemPreviewProps = {
  * 
  * Example:
  * ```tsx
- * <ItemPreviewList name="Smartphone" slug="smartphone" weight="300 g" tags={["tag1", "tag2", "tag3"]} imageUrl="https://via.placeholder.com/96.png" />
+ * <ItemPreviewList name="Smartphone" slug="smartphone" weight="300 g" imageUrl="https://via.placeholder.com/96.png" />
  * ```
  */
-export const ItemPreviewList: React.FC<ItemPreviewProps> = ({ slug, name, tags, weight, imageUrl }) => {
-    return <li>
-        <Link className="flex items-center h-12" href={routes.weights.single(slug)}>
-            <div className="min-w-min">
-                {imageUrl && <Image className="object-cover rounded-lg w-12 h-12 mr-8 lg:mr-12 bg-white" alt={`Image of ${name}`} src={imageUrl} width={96} height={96} />}
+export const ItemPreviewList: React.FC<ItemPreviewProps> = ({ slug, name, weight, imageUrl }) => {
+    return <li className="bg-white rounded-lg py-2 mb-2">
+        <Link className="flex flex-col md:flex-row md:items-center md:h-12 mx-4 md:mx-8" href={routes.weights.single(slug)}>
+            <div className="flex justify-between items-center h-12 md:w-1/4">
+                <h5 className="text-gray-600 truncate pr-3">{name}</h5>
+                <div className="min-w-[48px] w-[48px]">
+                    {imageUrl && <Image className="object-cover rounded-lg w-12 h-12 md:mr-5" alt={`Image of ${name}`} src={imageUrl} width={96} height={96} />}
+                </div>
             </div>
-            <div className="lg:flex w-8/12 md:w-5/12 lg:w-10/12">
-                <h5 className="text-gray-600 truncate md:mr-4 w-9/12 md:w-7/12">{name}</h5>
-                <h5 className="text-gray-800 text-lg font-semibold md:w-4/12" title={`${name} has a weight of ${weight}`}>{weight}</h5>
+            <div className="flex items-center md:w-3/4">
+                <h5 className="text-gray-800 md:text-lg text-right font-semibold w-1/3 sm:w-1/4 lg:w-1/6 mr-4" title={`${name} has a weight of ${weight}`}>{weight}</h5>
+                <div className="w-2/3 sm:w-3/4 lg:w-5/6">
+                    <div className="relative bg-gray-200 rounded-lg h-2 w-[100%]">
+                        <div className="absolute bg-blue-500 rounded-lg h-2 w-[50%]">
+
+                        </div>
+                    </div>
+                </div>
             </div>
-            <span className="text-gray-600 hidden md:block w-5/12">{tags.slice(0, 5).map((tag, index) => index !== tags.length - 1 ? `${tag}, ` : `${tag}`)}</span>
-            <Button className="hidden sm:flex w-4/12 md:w-3/12" icon="arrow_forward" isColored kind="tertiary">Show details</Button>
         </Link>
     </li>
 }
