@@ -14,38 +14,36 @@ const submitForm = (values: typeof initialValues) => {
 
 const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return <Formik initialValues={initialValues} onSubmit={submitForm}>
-        {(formik) => (
-            <Form>
-                <div className="w-80">
-                    {children}
-                </div>
-            </Form>
-        )}
+        <Form>
+            <div className="w-80">
+                {children}
+            </div>
+        </Form>
     </Formik>
 }
 
-describe('Dropdown', () => {
-    const data = {
-        name: "filter",
-        placeholder: "Choose a filter...",
-        options: [
-            {
-                id: 1,
-                label: "Relevance"
-            },
-            {
-                id: 2,
-                label: "Das ist ein sehr langer Text für ein Dropdown item",
-                icon: "face"
-            },
-            {
-                id: 3,
-                label: "Lightest",
-                icon: "face"
-            }
-        ]
-    }
+const data = {
+    name: "filter",
+    placeholder: "Choose a filter...",
+    options: [
+        {
+            id: 1,
+            label: "Relevance"
+        },
+        {
+            id: 2,
+            label: "Das ist ein sehr langer Text für ein Dropdown item",
+            icon: "face"
+        },
+        {
+            id: 3,
+            label: "Lightest",
+            icon: "face"
+        }
+    ]
+}
 
+describe('Dropdown', () => {
     beforeEach(() => {
         cy.mount(<Wrapper>
             <Dropdown name={data.name} options={data.options} placeholder={data.placeholder} />
