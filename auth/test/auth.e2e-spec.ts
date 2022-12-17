@@ -33,18 +33,11 @@ describe('AuthController (e2e)', () => {
 
   beforeEach(async () => {
     dataSource = await setupDataSource();
-    const configModuleMock = ConfigModule.forRoot({
-      isGlobal: true,
-      load: [configuration],
-      ignoreEnvFile: true
-    });
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
       .overrideProvider(DataSource)
       .useValue(dataSource)
-      .overrideProvider(ConfigModule)
-      .useValue(configModuleMock)
       .compile();
 
     app = await moduleFixture.createNestApplication();

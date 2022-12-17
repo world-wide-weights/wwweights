@@ -53,7 +53,9 @@ jobs:
 
      - name: node modules
        run: npm ci --audit:false --cache ~/.npm --prefer-offline
-
+     
+     - name: .env
+       run: cp sample.env .env
      - name: end 2 end tests
        run: npm run test:e2e
        
