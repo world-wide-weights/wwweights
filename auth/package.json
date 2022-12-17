@@ -57,6 +57,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.2.5",
+    "nodemailer-mock": "^1.5.12",
     "pg-mem": "^2.6.4",
     "prettier": "^2.3.2",
     "source-map-support": "^0.5.20",

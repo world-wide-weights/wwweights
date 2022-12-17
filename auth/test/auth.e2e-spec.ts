@@ -14,10 +14,10 @@ import {
   updateByAttribute,
 } from './helpers/db.helper';
 import { setupDataSource } from './helpers/typeOrmSetup';
-import { UserEntity } from '../src/db/entities/users.entity';
 import { comparePassword } from './helpers/general.helper';
 import { RefreshJWTPayload } from '../src/shared/dtos/refresh-jwt-payload.dto';
 import { STATUS } from '../src/shared/enums/status.enum';
+import configuration from './__mocks__/configuration';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
@@ -34,7 +34,8 @@ describe('AuthController (e2e)', () => {
   beforeEach(async () => {
     dataSource = await setupDataSource();
     const configModuleMock = ConfigModule.forRoot({
-      envFilePath: './test/testing.env',
+      isGlobal: true,
+      load: [configuration]
     });
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
