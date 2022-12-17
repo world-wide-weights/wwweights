@@ -44,6 +44,7 @@ export class AuthController {
   }
 
   @Post('/refresh')
+  @HttpCode(HttpStatus.OK)
   @UseGuards(RefreshTokenGuard)
   async getAuthViaRefreshToken(@Req() tokenData: RequestWithRefreshPayload) {
     return plainToInstance(

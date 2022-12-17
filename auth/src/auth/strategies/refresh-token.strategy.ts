@@ -2,12 +2,15 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { UserService } from 'src/db/db.service';
-import { RefreshJWTPayload } from 'src/shared/dtos/refresh-jwt-payload.dto';
-import { STATUS } from 'src/shared/enums/status.enum';
+import { UserService } from '../../db/db.service';
+import { RefreshJWTPayload } from '../../shared/dtos/refresh-jwt-payload.dto';
+import { STATUS } from '../../shared/enums/status.enum';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, 'refresh-jwt') {
+export class RefreshTokenStrategy extends PassportStrategy(
+  Strategy,
+  'refresh-jwt',
+) {
   constructor(
     private readonly configService: ConfigService,
     private readonly userService: UserService,

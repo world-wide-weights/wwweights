@@ -13,7 +13,6 @@ import { SignUpDTO } from './dtos/signup.dto';
 import * as bcrypt from 'bcrypt';
 import { UserService } from '../db/db.service';
 import { AccountService } from '../account/account.service';
-import { runInThisContext } from 'vm';
 import { RefreshJWTPayload } from 'src/shared/dtos/refresh-jwt-payload.dto';
 
 @Injectable()
@@ -41,7 +40,11 @@ export class AuthService {
 
   async login(body: LoginDTO) {
     const user = await this.userService.findOneByEmail(body.email);
-    if (!user || !(await bcrypt.compare(body.password, user.password))) {
+    if (
+      !user ||
+      user.status === STATUS.BANNED ||
+      !(await bcrypt.compare(body.password, user.password))
+    ) {
       throw new UnauthorizedException();
     }
 
