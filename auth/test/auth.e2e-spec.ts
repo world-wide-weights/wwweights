@@ -35,7 +35,8 @@ describe('AuthController (e2e)', () => {
     dataSource = await setupDataSource();
     const configModuleMock = ConfigModule.forRoot({
       isGlobal: true,
-      load: [configuration]
+      load: [configuration],
+      ignoreEnvFile: true
     });
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
