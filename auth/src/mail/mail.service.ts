@@ -1,15 +1,8 @@
-import {
-  Injectable,
-  Logger,
-  ServiceUnavailableException,
-} from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { intervalBackoff, retryBackoff } from 'backoff-rxjs';
 import { render } from 'ejs';
 import { readFile as _readFile } from 'fs';
 import * as nodemailer from 'nodemailer';
-import { bindCallback, from, fromEvent, Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
 import { promisify } from 'util';
 
 const readFile = promisify(_readFile);
