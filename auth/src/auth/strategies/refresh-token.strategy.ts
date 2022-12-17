@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UserService } from '../../db/db.service';
-import { RefreshJWTPayload } from '../../shared/dtos/refresh-jwt-payload.dto';
+import { RefreshJWTPayload } from '../dtos/refresh-jwt-payload.dto';
 import { STATUS } from '../../shared/enums/status.enum';
 
 @Injectable()

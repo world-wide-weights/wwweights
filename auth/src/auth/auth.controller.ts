@@ -12,12 +12,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
-import { RequestWithRefreshPayload } from 'src/shared/interfaces/request-with-refresh-payload.interface';
 import { UserEntity } from '../db/entities/users.entity';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dtos/login.dto';
 import { SignUpDTO } from './dtos/signup.dto';
 import { RefreshTokenGuard } from './guards/refresh-token.guard';
+import { RequestWithRefreshPayload } from './interfaces/request-with-refresh-payload.interface';
 import { TokenResponse } from './responses/token.response';
 
 @Controller('auth')

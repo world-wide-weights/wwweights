@@ -1,10 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { retryBackoff } from 'backoff-rxjs';
+import { intervalBackoff, retryBackoff } from 'backoff-rxjs';
 import { render } from 'ejs';
 import { readFile as _readFile } from 'fs';
 import * as nodemailer from 'nodemailer';
-import { of } from 'rxjs';
+import { bindCallback, from, fromEvent, Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { promisify } from 'util';
 
@@ -15,6 +19,7 @@ export class MailService {
   mailTransport: nodemailer.Transporter<any>;
   maxRetries: number;
   errorDelay: number;
+  private logger = new Logger(MailService.name);
 
   constructor(private readonly configService: ConfigService) {
     this.mailTransport = nodemailer.createTransport({
@@ -29,25 +34,32 @@ export class MailService {
     });
   }
 
-  private passToMailServerWithBackoff(recipient, subject, message) {
-    of('Send Mail').pipe(
-      switchMap(() =>
-        this.mailTransport.sendMail({
+  private async passToMailserver(
+    recipient: string,
+    subject: string,
+    message: string,
+  ): Promise<void> {
+    // Sleep helper func
+    const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
+    let attempts = 0;
+    while (attempts < this.configService.get<number>('MAIL_MAX_RETRIES')) {
+      try {
+        await this.mailTransport.sendMail({
           to: recipient,
           from: process.env.MAIL_ADRESS,
           subject: subject,
           html: message,
-        }),
-      ),
-      retryBackoff({
-        initialInterval: this.configService.get<number>('MAIL_ERROR_DELAY_MS'),
-        maxRetries: this.configService.get<number>('MAIL_MAX_RETRIES'),
-        backoffDelay(iteration, initialInterval) {
-          // Not exponential in this case
-          return iteration * initialInterval;
-        },
-      }),
-    );
+        });
+      } catch (e) {
+        attempts++;
+        await delay(this.errorDelay);
+        continue;
+      }
+      return;
+    }
+    // getting here means sending the mail is not possible
+    this.logger.error('Sending mail not possible at this time');
   }
 
   async sendMail<T>(
@@ -61,6 +73,6 @@ export class MailService {
       'utf-8',
     );
     const mailContent = render(mailTemplate, mailData as any);
-    await this.passToMailServerWithBackoff(recipient, subject, mailContent);
+    await this.passToMailserver(recipient, subject, mailContent);
   }
 }

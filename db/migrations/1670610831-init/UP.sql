@@ -5,8 +5,8 @@ CREATE TABLE users(
 	username VARCHAR(24) NOT NULL,
 	email VARCHAR(128) NOT NULL,
 	password TEXT,
-	status VARCHAR(16) NOT NULL DEFAULT 'user',
-	role VARCHAR(16) NOT NULL DEFAULT 'unverified',
+	status VARCHAR(16) NOT NULL DEFAULT 'unverified',
+	role VARCHAR(16) NOT NULL DEFAULT 'user',
 	last_login TIMESTAMPTZ
 );
 

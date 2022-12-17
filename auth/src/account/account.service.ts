@@ -43,6 +43,7 @@ export class AccountService {
       {
         secret: this.configService.get<string>('JWT_MAIL_VERIFY_SECRET'),
         algorithm: 'HS256',
+        expiresIn: this.configService.get<string>('JWT_MAIL_EXPIRE_TIME')
       },
     );
     this.mailService.sendMail(
@@ -78,6 +79,6 @@ export class AccountService {
   }
 
   async verifyEmail(tokenPayload: MailVerifyJWTDTO) {
-    this.userService.changeUserStatus(tokenPayload.id, STATUS.VERIFIED);
+    await this.userService.changeUserStatus(tokenPayload.id, STATUS.VERIFIED);
   }
 }

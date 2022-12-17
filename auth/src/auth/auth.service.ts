@@ -13,8 +13,8 @@ import { SignUpDTO } from './dtos/signup.dto';
 import * as bcrypt from 'bcrypt';
 import { UserService } from '../db/db.service';
 import { AccountService } from '../account/account.service';
-import { RefreshJWTPayload } from 'src/shared/dtos/refresh-jwt-payload.dto';
 import { ConfigService } from '@nestjs/config';
+import { RefreshJWTPayload } from './dtos/refresh-jwt-payload.dto';
 
 @Injectable()
 export class AuthService {

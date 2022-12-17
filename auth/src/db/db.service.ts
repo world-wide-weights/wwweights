@@ -52,7 +52,7 @@ export class UserService {
     }
   }
   async updatePassword(id: number, hash: string) {
-    await this.userEntity.update(id, { password: hash });
+    await this.userEntity.update({ pkUserId: id }, { password: hash });
   }
 
   async changeUserStatus(id: number, status: STATUS): Promise<void> {

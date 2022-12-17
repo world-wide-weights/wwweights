@@ -15,7 +15,7 @@ import {
 } from './helpers/db.helper';
 import { setupDataSource } from './helpers/typeOrmSetup';
 import { comparePassword } from './helpers/general.helper';
-import { RefreshJWTPayload } from '../src/shared/dtos/refresh-jwt-payload.dto';
+import { RefreshJWTPayload } from '../src/auth/dtos/refresh-jwt-payload.dto';
 import { STATUS } from '../src/shared/enums/status.enum';
 import configuration from './__mocks__/configuration';
 

@@ -5,7 +5,7 @@ Content-Type: application/json
 
 {
     "username": "test",
-    "email": "test@test.de",
+    "email": "seamus.hoeger37@ethereal.email",
     "password": "alsoSomethingWithtest"
 }
 
@@ -15,7 +15,7 @@ POST {{host}}/login
 Content-Type: application/json
 
 {
-  "email": "test@test.de",
+  "email": "seamus.hoeger37@ethereal.email",
   "password": "alsoSomethingWithtest" 
 }
 

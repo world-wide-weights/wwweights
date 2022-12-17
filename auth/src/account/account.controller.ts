@@ -1,13 +1,13 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
-import { RequestWithId } from '../shared/interfaces/request-with-id.interface';
 import { JwtGuard } from '../shared/guards/jwt.guard';
 import { RequestWithUser } from '../shared/interfaces/request-with-user.dto';
 import { AccountService } from './account.service';
 import { ResetPasswordDTO } from './dtos/password-reset.dto';
 import { UpdatePasswordDTO } from './dtos/update-password.dto';
 import { ResetJWTGuard } from './guards/reset-jwt.guard';
-import { MailVerifyJWTDTO } from './dtos/mail-jwt-payload.dto';
 import { MailVerifyJWTGuard } from './guards/mail-verify-jwt.guard';
+import { RequestWithMailJwtPayload } from './interfaces/request-mail-verify-jwt-payload.interface';
+import { RequestWithResetJWTPayload } from './interfaces/request-with-reset-jwt-payload.interface';
 
 @Controller('account')
 export class AccountController {
@@ -15,8 +15,8 @@ export class AccountController {
 
   @Get('resend-verification-email')
   @UseGuards(JwtGuard)
-  resendAccountVerifyEmail(@Req() requestWithUser: RequestWithUser) {
-    this.accountService.resendVerifyEmail(requestWithUser.user.email);
+  async resendAccountVerifyEmail(@Req() requestWithUser: RequestWithUser) {
+    await this.accountService.resendVerifyEmail(requestWithUser.user.email);
   }
 
   @Post('send-reset-password-mail')
@@ -28,17 +28,17 @@ export class AccountController {
   @UseGuards(ResetJWTGuard)
   updatePassword(
     @Body() updatePasswordBody: UpdatePasswordDTO,
-    @Req() requestWithId: RequestWithId,
+    @Req() requestWithId: RequestWithResetJWTPayload,
   ) {
     this.accountService.updatePassword(
-      requestWithId.id,
+      requestWithId.user.id,
       updatePasswordBody.password,
     );
   }
 
   @Get('verify-email')
   @UseGuards(MailVerifyJWTGuard)
-  verifyMail(@Req() tokenPayload: MailVerifyJWTDTO) {
-    this.accountService.verifyEmail(tokenPayload);
+  verifyMail(@Req() tokenPayload: RequestWithMailJwtPayload) {
+    this.accountService.verifyEmail(tokenPayload.user);
   }
 }
