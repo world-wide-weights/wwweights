@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ItemsCommandsModule } from './commands.module/commands.module';
 import { Item } from './models/item.model';
 import { ItemsQueriesModule } from './queries.module/queries.module';
@@ -25,7 +23,6 @@ import { ItemsQueriesModule } from './queries.module/queries.module';
         // password: configService.get('DB_PW'),
         synchronize: true,
         useNewUrlParser: true,
-        autoLoadEntities: true,
         useUnifiedTopology: true,
         entities: [Item],
       }),
@@ -34,7 +31,5 @@ import { ItemsQueriesModule } from './queries.module/queries.module';
     ItemsCommandsModule,
     ItemsQueriesModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

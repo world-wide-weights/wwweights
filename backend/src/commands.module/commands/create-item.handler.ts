@@ -13,13 +13,13 @@ export class CreateItemHandler implements ICommandHandler<CreateItemCommand> {
     private readonly eventStore: EventStore,
   ) {}
 
-  // No returns, just Exceptions, rest is handled by eventHandler in CQRS
+  // No returns, just Exceptions in CQRS
   async execute(command: CreateItemCommand) {
     try {
       // Check for normal issues
-      this.logger.warn('dto: ', command.createItemDto);
+      this.logger.debug('dto: ', command.createItemDto);
       const newItem = plainToInstance(Item, command.createItemDto);
-      this.logger.warn('newItem', newItem);
+      this.logger.debug('newItem', newItem);
       const eventItem = this.publisher.mergeObjectContext(newItem);
 
       // TODO: Aggregate State from Eventstore or Tries to check for duplicates and stuff
