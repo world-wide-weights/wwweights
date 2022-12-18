@@ -4,10 +4,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { EventStore } from '../eventstore/eventstore';
 import { Item } from '../models/item.model';
 import { QueryHandlers } from './queries';
-import { ItemsQueriesController } from './queries.controller';
+import { QueriesController } from './queries.controller';
 @Module({
   imports: [CqrsModule, TypeOrmModule.forFeature([Item])],
-  controllers: [ItemsQueriesController],
+  controllers: [QueriesController],
   providers: [...QueryHandlers, EventStore],
 })
-export class ItemsQueriesModule {}
+export class QueriesModule {}

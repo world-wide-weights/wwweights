@@ -16,8 +16,8 @@ import { GetItemQuery } from './queries/get-item.query';
 @ApiTags('queries')
 @UseInterceptors(ClassSerializerInterceptor)
 @SerializeOptions({ strategy: 'excludeAll' })
-export class ItemsQueriesController {
-  private readonly logger = new Logger(ItemsQueriesController.name);
+export class QueriesController {
+  private readonly logger = new Logger(QueriesController.name);
 
   constructor(private queryBus: QueryBus) {}
 

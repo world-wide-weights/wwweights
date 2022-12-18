@@ -1,7 +1,7 @@
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
-import { ItemsCommandsModule } from '../src/commands.module/commands.module';
+import { CommandsModule } from '../src/commands.module/commands.module';
 import {
   closeInMongodConnection,
   rootMongoTestModule,
@@ -15,7 +15,7 @@ describe('AppController (e2e)', () => {
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [rootMongoTestModule(), ItemsCommandsModule],
+      imports: [rootMongoTestModule(), CommandsModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();

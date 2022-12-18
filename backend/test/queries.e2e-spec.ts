@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { Repository } from 'typeorm';
 import { Item } from '../src/models/item.model';
-import { ItemsQueriesModule } from '../src/queries.module/queries.module';
+import { QueriesModule } from '../src/queries.module/queries.module';
 import {
   closeInMongodConnection,
   rootMongoTestModule,
@@ -13,10 +13,11 @@ import { singleItem } from './mocks/items';
 describe('AppController (e2e)', () => {
   let app: INestApplication;
   let itemTable: Repository<Item>;
+  jest.setTimeout(30000);
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [rootMongoTestModule(), ItemsQueriesModule],
+      imports: [rootMongoTestModule(), QueriesModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();

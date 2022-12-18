@@ -14,7 +14,6 @@ export const rootMongoTestModule = () =>
         uri: mongoUri,
         synchronize: true,
         useNewUrlParser: true,
-        autoLoadEntities: true,
         useUnifiedTopology: true,
         entities: [Item],
       };

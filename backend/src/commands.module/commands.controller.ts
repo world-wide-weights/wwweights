@@ -18,8 +18,8 @@ import { CreateItemDto } from './interfaces/create-item.dto';
 @ApiTags('commands')
 @UseInterceptors(ClassSerializerInterceptor)
 @SerializeOptions({ strategy: 'excludeAll' })
-export class ItemsCommandsController {
-  private readonly logger = new Logger(ItemsCommandsController.name);
+export class CommandsController {
+  private readonly logger = new Logger(CommandsController.name);
 
   constructor(private commandBus: CommandBus) {}
 
