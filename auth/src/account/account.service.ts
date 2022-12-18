@@ -13,6 +13,7 @@ import { UserService } from '../db/db.service';
 import { MailService } from '../mail/mail.service';
 import { ERROR_MESSAGES } from '../shared/enums/errors.enum';
 import { STATUS } from '../shared/enums/status.enum';
+import { VerifyEmailData } from '../mail/interfaces/email-verify-mail.interface';
 
 @Injectable()
 export class AccountService {
@@ -43,10 +44,10 @@ export class AccountService {
       {
         secret: this.configService.get<string>('JWT_MAIL_VERIFY_SECRET'),
         algorithm: 'HS256',
-        expiresIn: this.configService.get<string>('JWT_MAIL_EXPIRE_TIME')
+        expiresIn: this.configService.get<string>('JWT_MAIL_EXPIRE_TIME'),
       },
     );
-    this.mailService.sendMail(
+    this.mailService.sendMail<VerifyEmailData>(
       user.email,
       'mail-verify',
       {
