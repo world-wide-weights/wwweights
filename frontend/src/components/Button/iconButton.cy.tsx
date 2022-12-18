@@ -16,13 +16,14 @@ describe('IconButton', () => {
 
     describe('Button as link', () => {
       it('should display component', () => {
-        cy.mount(<IconButton icon='menu' to=''/>)
-        cy.get('button')
+        cy.mount(<IconButton icon='menu' to='/weights'/>)
+        cy.get("a").should("be.visible")
       })
       it('should display icon', () => {
-        cy.mount(<IconButton icon='menu' to=''/>)
-        cy.get('button i').should('be.visible')
+        cy.mount(<IconButton icon='menu' to='/weights'/>)
+        cy.get('a i').should('be.visible')
       })
+    
     })
 
 })
