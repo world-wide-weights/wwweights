@@ -4,7 +4,9 @@
 First:
 ```sh
 npm i 
+cp sample.env .env
 ```
+
 Run for dev:
 ```sh
 npm run start:dev

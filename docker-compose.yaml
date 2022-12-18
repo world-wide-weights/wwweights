@@ -10,7 +10,7 @@ services:
     working_dir: /home/node
     command: npm run start:dev
     depends_on:
-      - mongodb_container
+      - mongodb
   frontend:
     image: node:18-alpine3.15
     restart: "always"
@@ -22,12 +22,12 @@ services:
     command: npm run dev
     environment:
       - WATCHPACK_POLLING=true
-  mongodb_container:
+  mongodb:
     image: mongo:latest
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
-      MONGO_INITDB_ROOT_PASSWORD: ${DB_PW}
-      MONGO_INITDB_DATABASE: ${DB_NAME}
+      MONGO_INITDB_ROOT_USERNAME: ${DB_MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_MONGO_PW}
+      MONGO_INITDB_DATABASE: ${DB_MONGO_NAME}
     ports:
       - 27018:27017
     healthcheck:
@@ -37,7 +37,7 @@ services:
       retries: 3
     restart: unless-stopped
     volumes:
-      - mongodb_data_container:/data/db
+      - mongodb_data_container:/data/mongodb
 
 volumes:
   mongodb_data_container:

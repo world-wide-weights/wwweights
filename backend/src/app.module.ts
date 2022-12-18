@@ -8,7 +8,7 @@ import { QueriesModule } from './queries.module/queries.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '../.env',
+      envFilePath: '.env',
       isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
@@ -22,11 +22,10 @@ import { QueriesModule } from './queries.module/queries.module';
           username: configService.get('DB_MONGO_USER'),
           password: configService.get('DB_MONGO_PW'),
           database: configService.get('DB_MONGO_NAME'),
-          // TODO: Remove this option in production:
           // Only enable this option if your application is in development,
           // otherwise use TypeORM migrations to sync entity schemas:
           // https://typeorm.io/#/migrations
-          synchronize: true,
+          synchronize: configService.get<string>('NODE_ENV') !== 'production',
           useNewUrlParser: true,
           useUnifiedTopology: true,
           entities: [Item],
