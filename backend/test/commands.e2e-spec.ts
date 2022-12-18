@@ -1,10 +1,13 @@
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import * as request from 'supertest';
+import { DataSource } from 'typeorm';
 import { CommandsModule } from '../src/commands.module/commands.module';
+import { Item } from '../src/models/item.model';
 import {
-  closeInMongodConnection,
-  rootMongoTestModule,
+  initializeMockDataSource,
+  teardownMockDataSource,
 } from './helpers/MongoMemoryHelpers';
 import { timeout } from './helpers/timeout';
 import { createItem, singleItem } from './mocks/items';
@@ -12,16 +15,21 @@ import { createItem, singleItem } from './mocks/items';
 describe('AppController (e2e)', () => {
   let app: INestApplication;
   let itemRepository: any;
+  let dataSource: DataSource;
 
   beforeAll(async () => {
+    const dataSource = await initializeMockDataSource();
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [rootMongoTestModule(), CommandsModule],
-    }).compile();
+      imports: [TypeOrmModule.forRoot({}), CommandsModule],
+    })
+      .overrideProvider(DataSource)
+      .useValue(dataSource)
+      .compile();
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
     await app.init();
-    itemRepository = await app.get('ItemRepository');
+    itemRepository = await dataSource.getMongoRepository(Item);
   });
 
   beforeEach(async () => {
@@ -31,8 +39,8 @@ describe('AppController (e2e)', () => {
 
   afterAll(async () => {
     await itemRepository.clear();
-    await closeInMongodConnection();
-    await Promise.all([app.close()]);
+    await teardownMockDataSource();
+    await app.close();
   });
 
   describe('Commands /commands/', () => {
