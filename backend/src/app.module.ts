@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ItemsCommandsModule } from './commands.module/commands.module';
+import { CommandsModule } from './commands.module/commands.module';
 import { Item } from './models/item.model';
-import { ItemsQueriesModule } from './queries.module/queries.module';
+import { QueriesModule } from './queries.module/queries.module';
 
 @Module({
   imports: [
@@ -34,8 +34,8 @@ import { ItemsQueriesModule } from './queries.module/queries.module';
       },
       inject: [ConfigService],
     }),
-    ItemsCommandsModule,
-    ItemsQueriesModule,
+    CommandsModule,
+    QueriesModule,
   ],
 })
 export class AppModule {}
