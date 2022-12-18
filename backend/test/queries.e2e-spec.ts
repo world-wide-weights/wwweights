@@ -1,39 +1,44 @@
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import * as request from 'supertest';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Item } from '../src/models/item.model';
 import { ItemsQueriesModule } from '../src/queries.module/queries.module';
 import {
-  closeInMongodConnection,
-  rootMongoTestModule,
+  initializeMockDataSource,
+  teardownMockDataSource,
 } from './helpers/MongoMemoryHelpers';
 import { singleItem } from './mocks/items';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
-  let itemTable: Repository<Item>;
+  let itemRepository: Repository<Item>;
 
   beforeAll(async () => {
+    const dataSource = await initializeMockDataSource();
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [rootMongoTestModule(), ItemsQueriesModule],
-    }).compile();
+      imports: [TypeOrmModule.forRoot(), ItemsQueriesModule],
+    })
+      .overrideProvider(DataSource)
+      .useValue(dataSource)
+      .compile();
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
     await app.init();
-    itemTable = await app.get('ItemRepository');
+    itemRepository = dataSource.getMongoRepository(Item);
   });
 
   beforeEach(async () => {
-    await itemTable.clear();
-    await itemTable.insert(singleItem);
+    await itemRepository.clear();
+    await itemRepository.insert(singleItem);
   });
 
   afterAll(async () => {
-    await itemTable.clear();
-    await closeInMongodConnection();
-    await Promise.all([app.close()]);
+    await itemRepository.clear();
+    await teardownMockDataSource();
+    await app.close();
   });
 
   describe('Queries /queries/', () => {
