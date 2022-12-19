@@ -25,6 +25,7 @@ const Home = () => {
       <div className="container bg-white">
         <p>Hello World</p>
         <Button to={routes.weights.list()} icon="list">Weights List</Button>
+        <Button className="mt-2" to={routes.tags.list()} icon="bookmark">Tags List</Button>
         <Formik initialValues={initialValues} onSubmit={submitForm}>
           <Form>
             <div className="w-80">
