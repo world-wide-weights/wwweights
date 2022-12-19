@@ -15,6 +15,7 @@ const Home = () => {
       <div className="container">
         <p>Hello World</p>
         <Button to={routes.weights.list()} icon="list">Weights List</Button>
+        <Button className="mt-2" to={routes.tags.list()} icon="bookmark">Tags List</Button>
 
         <div className="grid md:grid-cols-3 gap-3">
           <Stats icon="weight" value="200 g" />
