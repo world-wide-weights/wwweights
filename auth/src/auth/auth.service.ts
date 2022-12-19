@@ -12,7 +12,6 @@ import { LoginDTO } from './dtos/login.dto';
 import { SignUpDTO } from './dtos/signup.dto';
 import * as bcrypt from 'bcrypt';
 import { UserService } from '../db/db.service';
-import { AccountService } from '../account/account.service';
 import { ConfigService } from '@nestjs/config';
 import { RefreshJWTPayload } from './dtos/refresh-jwt-payload.dto';
 
@@ -20,7 +19,6 @@ import { RefreshJWTPayload } from './dtos/refresh-jwt-payload.dto';
 export class AuthService {
   constructor(
     private readonly userService: UserService,
-    private readonly accountService: AccountService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
   ) {}
@@ -36,7 +34,8 @@ export class AuthService {
       // All conflict related exceptions are thrown within the userService
       throw new InternalServerErrorException();
     }
-    this.accountService.sendVerifyMail(newUser);
+    // Coming soon in future PR
+    // this.accountService.sendVerifyMail(newUser);
     return newUser;
   }
 
