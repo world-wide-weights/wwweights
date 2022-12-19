@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Weight } from "../../pages/weights"
 import { routes } from "../../services/routes/routes"
+import { generateWeightString } from "../../services/utils/weight"
 
 export type ItemPreviewProps = {
     /** Name of item */
@@ -25,7 +26,7 @@ export type ItemPreviewProps = {
  * ```
  */
 export const ItemPreviewBox: React.FC<ItemPreviewProps> = ({ slug, datacy, name, weight, imageUrl }) => {
-    const weightString = `${weight.isCa ? "ca." : ""}${weight.value}${weight.aditionalValue ? `- ${weight.aditionalValue}` : ""} g`
+    const weightString = generateWeightString(weight)
 
     return <Link datacy={datacy} className="flex items-center" href={routes.weights.single(slug)}>
         {imageUrl && <Image className="object-cover rounded-xl w-24 h-24 mr-5 bg-white" alt={`Image of ${name}`} src={imageUrl} width={96} height={96} />}

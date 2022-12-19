@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Weight } from "../../pages/weights"
 import { routes } from "../../services/routes/routes"
+import { generateWeightString } from "../../services/utils/weight"
 import { ProgressBar } from "../ProgressBar/ProgressBar"
 
 export type ItemPreviewProps = {
@@ -26,7 +27,7 @@ export type ItemPreviewProps = {
  * ```
  */
 export const ItemPreviewList: React.FC<ItemPreviewProps> = ({ slug, name, weight, imageUrl }) => {
-    const weightString = `${weight.isCa ? "ca." : ""}${weight.value}${weight.aditionalValue ? `- ${weight.aditionalValue}` : ""} g`
+    const weightString = generateWeightString(weight)
 
     return <li className="bg-white rounded-lg py-2 mb-2">
         <Link className="flex flex-col md:flex-row md:items-center md:h-12 mx-4 md:mx-8" href={routes.weights.single(slug)}>

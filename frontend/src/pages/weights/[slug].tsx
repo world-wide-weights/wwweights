@@ -3,6 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { Item } from ".";
 import { Tag } from "../../components/Tag/Tag";
+import { generateWeightString } from "../../services/utils/weight";
 
 type WeightsSingleProps = {
     item: Item
@@ -11,6 +12,7 @@ type WeightsSingleProps = {
 /** Single Page of a weight */
 export default function WeightsSingle({ item }: InferGetServerSidePropsType<typeof getStaticProps>) {
     const siteTitle = `${item.name} Weight | WWWeights`
+    const weightString = generateWeightString(item.weight)
 
     return <>
         {/* Meta Tags */}
@@ -26,12 +28,12 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
                         {item.name}
                         <i className="material-symbols-rounded ml-2">open_in_new</i>
                     </a></h1>
-                    <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold md:mb-5">{`${item.weight.isCa ? "ca." : ""}${item.weight.value}${item.weight.aditionalValue ? `- ${item.weight.aditionalValue}` : ""} g`}</h2>
+                    <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold md:mb-5">{weightString}</h2>
                 </div>
 
                 {/* Source and Tags */}
                 <div className="flex flex-col self-start col-start-1 col-end-3 lg:row-start-2 mt-5 lg:mt-0">
-                    <a target="_blank" rel="noopener noreferrer" href={item.source} className="text-gray-600 hover:text-gray-700 mb-3 md:mb-5">According to &quot;{item.source}&quot; a &quot;{item.name}&quot; weights {`${item.weight.isCa ? "ca." : ""}${item.weight.value}${item.weight.aditionalValue ? `- ${item.weight.aditionalValue}` : ""} g`}.</a>
+                    <a target="_blank" rel="noopener noreferrer" href={item.source} className="text-gray-600 hover:text-gray-700 mb-3 md:mb-5">According to &quot;{item.source}&quot; a &quot;{item.name}&quot; weights {weightString}.</a>
                     <ul className="flex md:flex-wrap overflow-y-auto">
                         <li><div className="md:hidden absolute bg-gradient-to-r right-0 from-transparent to-white w-20 h-8 py-1"></div></li>
                         {item.tags.map((tag, index) => <li key={tag.name} className={`${index === item.tags.length - 1 ? "mr-20" : ""}`}><Tag to={tag.slug}>{tag.name}</Tag></li>)}
