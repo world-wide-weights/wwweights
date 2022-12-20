@@ -1,6 +1,6 @@
 import Head from "next/head";
-import { Button } from "../components/Button/Button";
 import { routes } from "../services/routes/routes";
+import { Button } from "../components/Button/Button";
 
 const Home = () => {
   return (
@@ -13,7 +13,8 @@ const Home = () => {
 
       <div className="container">
         <p>Hello World</p>
-        <Button to={routes.weights.list()} icon="list">Weights List</Button>
+        <Button className="mt-2" to={routes.weights.list()} icon="list">Weights List</Button>
+        <Button className="mt-2" to={routes.tags.list()} icon="bookmark">Tags List</Button>
       </div>
     </div>
   )
