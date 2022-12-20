@@ -1,5 +1,6 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Head from "next/head"
+import { SearchHeader } from "../../components/Header/SearchHeader"
 import { Headline } from "../../components/Headline/Headline"
 import { ItemPreview } from "../../components/Item/ItemPreview"
 import { Pagination } from "../../components/Pagination/Pagination"
@@ -10,7 +11,7 @@ const ITEMS_PER_PAGE_MAXIMUM = 100
 const FIRST_PAGE = 1
 
 export type Item = {
-    id: number, // TODO: Change
+    id: number, // TODO: Change to string
     name: string
     slug: string
     weight: {
@@ -27,13 +28,14 @@ export type Item = {
 }
 
 type WeightsListProps = {
-    items: Item[],
-    currentPage: number,
+    items: Item[]
+    currentPage: number
     limit: number
+    search: string
 }
 
 /** Base List for weights */
-export default function WeightsList({ items, currentPage, limit }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function WeightsList({ items, currentPage, limit, search }: InferGetServerSidePropsType<typeof getServerSideProps>) {
     const siteTitle = `Latest ${currentPage > 1 ? `| Page ${currentPage} ` : ``}- World Wide Weights`
 
     return (<>
@@ -41,6 +43,8 @@ export default function WeightsList({ items, currentPage, limit }: InferGetServe
         <Head>
             <title>{siteTitle}</title>
         </Head>
+
+        <SearchHeader search={search} />
 
         <div className="container mt-5">
             {/* Headline */}
@@ -61,6 +65,7 @@ export default function WeightsList({ items, currentPage, limit }: InferGetServe
 export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (context) => {
     const currentPage = parseInt(context.query.page as string ?? FIRST_PAGE)
     const limit = parseInt(context.query.limit as string ?? DEFAULT_ITEMS_PER_PAGE)
+    const search = context.query.search as string ?? ""
 
     // Validate Query
     if (currentPage < 1 || limit < 1 || limit > ITEMS_PER_PAGE_MAXIMUM) {
@@ -69,13 +74,14 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
         }
     }
 
-    const response = await fetch(`http://localhost:3004/api/query/v1/items/getList?page=${currentPage}&limit=${limit}`)
+    const response = await fetch(`http://localhost:3004/api/query/v1/items/getList?page=${currentPage}&limit=${limit}&search=${search}`)
     const data = await response.json()
     return {
         props: {
             items: data,
             currentPage,
-            limit
+            limit,
+            search
         }
     }
 }

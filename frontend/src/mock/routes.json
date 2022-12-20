@@ -1,13 +1,13 @@
 {
     "/api/query/v1/items/getList": "/items",
+    "/api/query/v1/items/getList?page=:page&limit=:limit&search=:query": "/items?_page=:page&_limit=:limit&q=:query",
     "/api/query/v1/items/getList?page=:page&limit=:limit": "/items?_page=:page&_limit=:limit",
-    "/api/query/v1/items/getList?limit=:limit&page=:page": "/items?_limit=:limit&_page=:page",
     "/api/query/v1/items/getList?page=:page": "/items?_page=:page",
     "/api/query/v1/items/getList?limit=:limit": "/items?_limit=:limit",
+    "/api/query/v1/items/getList?search=:query": "/items?q=:query",
     "/api/query/v1/items/getOne?slug=:slug": "/items/:slug",
     "/api/query/v1/tags/getList": "/tags",
     "/api/query/v1/tags/getList?page=:page&limit=:limit": "/tags?_page=:page&_limit=:limit",
     "/api/query/v1/tags/getList?limit=:limit&page=:page": "/tags?_limit=:limit&_page=:page",
-    "/api/query/v1/tags/getList?page=:page": "/tags?_page=:page",
-    "/api/query/v1/tags/getOne?slug=:slug": "/tags/:slug"
+    "/api/query/v1/tags/getList?page=:page": "/tags?_page=:page"
 }

@@ -8,7 +8,7 @@ import { PaginationBaseOptions } from "../pagination/pagination"
 export const routes = {
     home: "/",
     weights: {
-        list: (options?: PaginationBaseOptions) => {
+        list: (options?: PaginationBaseOptions & { search?: string }) => {
             if (!options)
                 return "/weights"
 
@@ -17,6 +17,7 @@ export const routes = {
             const queryString = new URLSearchParams({
                 ...(options.page && options.page !== 1 && { page: options.page.toString() }),
                 ...(options.itemsPerPage && hasCustomLimit && { limit: options.itemsPerPage.toString() }),
+                ...(options.search && { search: options.search })
             }).toString()
 
             return `/weights${queryString !== "" ? `?${queryString}` : ``}`
