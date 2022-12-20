@@ -10,7 +10,7 @@ services:
     working_dir: /home/node
     command: npm run start:dev
     depends_on:
-      - db
+      - mongodb
   frontend:
     image: node:18-alpine3.15
     restart: "always"
@@ -21,29 +21,23 @@ services:
     working_dir: /home/node
     command: npm run dev
     environment:
-      - WATCHPACK_POLLING=true 
-  db:
-    image: postgres:15
-    restart: "always"
-    volumes: 
-      - postgres-volume:/var/lib/pgsql/data
-      - ./db/setup:/docker-entrypoint-initdb.d/
-    ports:
-      - 5432:5432
+      - WATCHPACK_POLLING=true
+  mongodb:
+    image: mongo:latest
     environment:
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PW}
-      - POSTGRES_DB=${DB_DB}
+      MONGO_INITDB_ROOT_USERNAME: ${DB_MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_MONGO_PW}
+      MONGO_INITDB_DATABASE: ${DB_MONGO_NAME}
+    ports:
+      - 27018:27017
     healthcheck:
-      # TODO: This can be replaced by a more accurate healthcheck based on PID 1 
-      test: ["CMD-SHELL","pg_isready"]
-      interval: 60s
-      timeout: 5s
+      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/test --quiet
+      interval: 30s
+      timeout: 10s
       retries: 3
+    restart: unless-stopped
+    volumes:
+      - mongodb_data_container:/data/mongodb
 
 volumes:
-  postgres-volume:
-
-
-
-
+  mongodb_data_container:
