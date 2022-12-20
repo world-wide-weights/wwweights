@@ -23,6 +23,22 @@ export const routes = {
         },
         single: (slug: string) => `/weights/${slug}`
     },
+    tags: {
+        list: (options?: PaginationBaseOptions) => {
+            if (!options)
+                return "/tags"
+
+            const hasCustomLimit = options.itemsPerPage !== options.defaultItemsPerPage
+
+            const queryString = new URLSearchParams({
+                ...(options.page && options.page !== 1 && { page: options.page.toString() }),
+                ...(options.itemsPerPage && hasCustomLimit && { limit: options.itemsPerPage.toString() }),
+            }).toString()
+
+            return `/tags${queryString !== "" ? `?${queryString}` : ``}`
+        },
+        single: (slug: string) => `/weights?search=${slug}`
+    },
     legal: {
         imprint: "/legal/imprint",
         privacy: "/legal/privacy-policy"

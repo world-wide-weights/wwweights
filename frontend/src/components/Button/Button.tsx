@@ -34,7 +34,7 @@ export const Button: React.FC<ButtonProps> = ({ kind = "primary", disabled, icon
     // When loading should be disabled
     disabled = loading ? true : disabled
 
-    const tertiaryColor = isColored ? "blue" : "grey"
+    const tertiaryColor = isColored ? "blue" : "gray"
 
     // Base Classes 
     const buttonBaseClasses = "flex items-center justify-center md:justify-start font-semibold border border-transparent rounded-full py-2 px-8 w-full md:w-max"
@@ -53,7 +53,7 @@ export const Button: React.FC<ButtonProps> = ({ kind = "primary", disabled, icon
     const innerContent = <>
         {icon && iconSlot === "start" && (loading ? <i className={`material-symbols-rounded text-xl mr-2 ${loading ? "animate-spin" : ""}`}>sync</i> : <i className="material-symbols-rounded text-xl mr-1">{icon}</i>)}
         {children}
-        {icon && iconSlot === "end" && <span className="material-symbols-rounded text-xl ml-2">{icon}</span>}
+        {icon && iconSlot === "end" && <i className="material-symbols-rounded text-xl ml-2">{icon}</i>}
     </>
 
     return (<>

@@ -1,6 +1,5 @@
 import Head from "next/head";
 import { Button } from "../components/Button/Button";
-import { DiscoverHeader } from "../components/Header/DiscoverHeader";
 import { routes } from "../services/routes/routes";
 
 const Home = () => {
@@ -12,11 +11,10 @@ const Home = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <DiscoverHeader />
-
-      <div className="container mt-5">
+      <div className="container">
         <p>Hello World</p>
         <Button to={routes.weights.list()} icon="list">Weights List</Button>
+        <Button className="mt-2" to={routes.tags.list()} icon="bookmark">Tags List</Button>
       </div>
     </div>
   )
