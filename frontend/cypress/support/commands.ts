@@ -19,10 +19,10 @@ Cypress.Commands.add('checkCurrentActivePage', (activePageNumber) => {
     cy.dataCy(`pagination-button-page-${activePageNumber}`).should('have.class', 'text-white')
 })
 
-Cypress.Commands.add('getRelatedTags', () => {
+Cypress.Commands.add('mockGetRelatedTags', () => {
     cy.intercept('GET', `${apiBaseUrl}/api/query/v1/tags/related`, {
         fixture: 'tags/related.json'
-    }).as('getRelatedTags')
+    }).as('mockGetRelatedTags')
 })
 
 export { }

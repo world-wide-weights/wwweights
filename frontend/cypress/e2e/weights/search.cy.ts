@@ -26,10 +26,10 @@ describe('Search /weights', () => {
                 body: statistics,
             })
 
-            cy.getRelatedTags()
+            cy.mockGetRelatedTags()
 
             cy.visitLocalPage("/weights")
-            cy.wait('@getRelatedTags')
+            cy.wait('@mockGetRelatedTags')
         })
 
         it('should search items when click search items', () => {
@@ -46,7 +46,7 @@ describe('Search /weights', () => {
 
         it('should search items when query in url', () => {
             cy.visitLocalPage(`/weights?query=${items[0].tags[0].slug}`)
-            cy.wait('@getRelatedTags')
+            cy.wait('@mockGetRelatedTags')
 
             cy.dataCy('search').should('have.value', items[0].tags[0].slug)
         })
@@ -73,10 +73,10 @@ describe('Search /weights', () => {
                 body: statistics,
             })
 
-            cy.getRelatedTags()
+            cy.mockGetRelatedTags()
 
             cy.visitLocalPage("/weights")
-            cy.wait('@getRelatedTags')
+            cy.wait('@mockGetRelatedTags')
         })
 
         describe('Displayed tags', () => {
