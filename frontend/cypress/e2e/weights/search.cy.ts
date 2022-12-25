@@ -29,7 +29,7 @@ describe('Search /weights', () => {
         })
 
         it('should search items when hit enter', () => {
-            cy.dataCy('search').type(items[0].tags[0].slug).type('{enter}')
+            cy.dataCy('search').type(`${items[0].tags[0].slug}{enter}`)
             cy.url().should('include', items[0].tags[0].slug)
         })
 
