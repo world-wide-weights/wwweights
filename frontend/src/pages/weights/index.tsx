@@ -4,6 +4,7 @@ import { SearchHeader } from "../../components/Header/SearchHeader"
 import { Headline } from "../../components/Headline/Headline"
 import { ItemPreviewBox } from "../../components/Item/ItemPreviewBox"
 import { Pagination } from "../../components/Pagination/Pagination"
+import { StatsCard } from "../../components/Statistics/StatsCard"
 import { routes } from "../../services/routes/routes"
 
 const DEFAULT_ITEMS_PER_PAGE = 16
@@ -53,14 +54,25 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
             {/* Headline */}
             <Headline level={3}>All weights</Headline>
 
-            {/* Weights (todos) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-10">
-                {items.map((item) => <ItemPreviewBox datacy="weights-list-item" key={item.id} name={item.name} slug={item.slug} weight={item.weight} imageUrl="https://picsum.photos/200" />)}
-            </div>
+            <div className="flex">
+                <div className="w-3/4 mr-10">
 
-            {/* Pagination */}
-            <Pagination totalItems={totalItems} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} query={query} baseRoute={routes.weights.list} />
+                    {/* Weights */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-5 mb-10">
+                        {items.map((item) => <ItemPreviewBox datacy="weights-list-item" key={item.id} name={item.name} slug={item.slug} weight={item.weight} imageUrl="https://picsum.photos/200" />)}
+                    </div>
+
+                    {/* Pagination */}
+                    <Pagination totalItems={totalItems} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} query={query} baseRoute={routes.weights.list} />
+                </div>
+                <div className="flex flex-col gap-4 w-1/4">
+                    <StatsCard icon="weight" value="230g" descriptionTop="Apple iPhone 11" descriptionBottom="Heaviest" />
+                    <StatsCard icon="weight" value="230g" descriptionTop="Apple iPhone 11" descriptionBottom="Heaviest" />
+                    <StatsCard icon="weight" value="~200 g" descriptionBottom="Average" />
+                </div>
+            </div>
         </div>
+
     </>
     )
 }
