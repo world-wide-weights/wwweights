@@ -3,6 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { Item } from ".";
 import { Chip } from "../../components/Chip/Chip";
+import { SearchHeader } from "../../components/Header/SearchHeader";
 import { Icon } from "../../components/Icon/Icon";
 import { generateWeightString } from "../../services/utils/weight";
 
@@ -20,6 +21,9 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
         <Head>
             <title>{siteTitle}</title>
         </Head>
+
+        {/* Search with related tags */}
+        <SearchHeader />
 
         <div className="container mt-10 md:mt-20">
             <div className="grid grid-cols-[120px_1fr] md:grid-cols-[250px_1fr] items-center lg:grid-cols-2">
