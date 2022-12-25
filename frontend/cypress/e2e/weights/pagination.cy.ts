@@ -2,7 +2,7 @@ import items from "../../fixtures/items/list.json"
 
 const currentPage = 2
 const limit = 5
-const apiBaseUrl = Cypress.env("API_BASE_URL")
+const apiBaseUrl = "http://localhost:3004"
 
 describe('Pagination /weights', () => {
     describe("Base tests", () => {
