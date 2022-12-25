@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { Color } from "../../types/color"
+import { Icon } from "../Icon/Icon"
 
 type IconButtonProps = {
     /** icon of the icon button */
@@ -22,7 +23,7 @@ type IconButtonProps = {
  * Button only with an icon
  */
 export const IconButton: React.FunctionComponent<IconButtonProps> = ({ icon, to, onClick, datacy, disabled, className = "", color = "gray" }) => {
-    const innerIcon = <i className={`material-symbols-rounded ${disabled ? "text-opacity-50 " : ""}text-${color}-600`}>{icon}</i>
+    const innerIcon = <Icon className={`${disabled ? "text-opacity-50 " : ""}text-${color}-600`}>{icon}</Icon>
     const classes = `text-center ${disabled ? "cursor-default" : `cursor-pointer hover:bg-${color}-200 focus:bg-${color}-300`} rounded-full w-10 h-10 flex items-center justify-center ${className}`
 
     return <>
