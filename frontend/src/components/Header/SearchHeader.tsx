@@ -8,13 +8,13 @@ import { Search } from "../Form/Search/Search";
 
 type SearchHeaderProps = {
     /** Search query. */
-    query: string
+    query?: string
 }
 
 /**
  * Header with search and search suggestions
  */
-export const SearchHeader: React.FC<SearchHeaderProps> = ({ query }) => {
+export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "" }) => {
     const router = useRouter()
 
     // Local States
@@ -87,15 +87,16 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query }) => {
                                 </div>
                             </div>
                             {/* TODO(Zoe-bot): Loading Component and scrollable tags */}
-                            {isLoadingRelatedTags ? <p>Loading...</p> : <div className="whitespace-nowrap overflow-x-scroll md:whitespace-normal md:overflow-hidden">
+                            {/* TODO(Zoe-bot): Only develop Remove query !== "" condition when normal backend api is set */}
+                            {query !== "" && (isLoadingRelatedTags ? <p>Loading...</p> : <div className="whitespace-nowrap overflow-x-scroll md:whitespace-normal md:overflow-hidden">
                                 {/* Only show tags not current searched (should not be the value in query field) */}
                                 {relatedTags.map(relatedTag => relatedTag.name !== query && <Chip key={relatedTag.slug} to={routes.weights.list({ query: relatedTag.slug })}>{relatedTag.name}</Chip>)}
-                            </div>}
+                            </div>)}
                             <AutoUpdateQueryField />
                         </Form>
                     )}
                 </Formik>
             </div>
         </div>
-    </header>
+    </header >
 }
