@@ -1,13 +1,13 @@
 /// <reference types="cypress" />
 
-const apiBaseUrl = Cypress.env("API_URL")
+const apiBaseUrl = Cypress.env("API_BASE_URL")
 
 Cypress.Commands.add('dataCy', (dataCy, customSelector = "") => {
     cy.get(`[datacy=${dataCy}]${customSelector}`)
 })
 
 Cypress.Commands.add('visitLocalPage', (path = "", options) => {
-    cy.visit(`${Cypress.env("BASE_URL")}${path}`, options)
+    cy.visit(`${Cypress.env("CLIENT_BASE_URL")}${path}`, options)
 })
 
 Cypress.Commands.add('check404', () => {

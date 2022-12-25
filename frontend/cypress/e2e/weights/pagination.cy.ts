@@ -3,7 +3,7 @@ import itemsListFive from "../../fixtures/items/listLimitFive.json"
 
 const currentPage = 2
 const limit = 5
-const apiBaseUrl = Cypress.env("API_URL")
+const apiBaseUrl = Cypress.env("API_BASE_URL")
 
 describe('Pagination /weights', () => {
     describe("Base tests", () => {
