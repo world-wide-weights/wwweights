@@ -1,5 +1,5 @@
 import items from "../../fixtures/items/list.json"
-import relatedtags from "../../fixtures/tags/related.json"
+import relatedTags from "../../fixtures/tags/related.json"
 
 describe('Search /weights', () => {
     describe('Search', () => {
@@ -53,7 +53,7 @@ describe('Search /weights', () => {
                 // Click first tag
                 cy.dataCy('search-header-tag-wrapper', ' a').first().click()
 
-                cy.dataCy('search').should('have.value', relatedtags[0].name)
+                cy.dataCy('search').should('have.value', relatedTags[0].name)
             })
 
             it('should not display tag in list when search for tag', () => {
