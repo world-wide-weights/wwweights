@@ -2,8 +2,8 @@ import { GetStaticPaths, GetStaticProps, InferGetServerSidePropsType } from "nex
 import Head from "next/head";
 import Image from "next/image";
 import { Item } from ".";
+import { Chip } from "../../components/Chip/Chip";
 import { Icon } from "../../components/Icon/Icon";
-import { Tag } from "../../components/Tag/Tag";
 import { generateWeightString } from "../../services/utils/weight";
 
 type WeightsSingleProps = {
@@ -37,7 +37,7 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
                     <a target="_blank" rel="noopener noreferrer" href={item.source} className="text-gray-600 hover:text-gray-700 mb-3 md:mb-5">According to &quot;{item.source}&quot; a &quot;{item.name}&quot; weights {weightString}.</a>
                     <ul className="flex md:flex-wrap overflow-y-auto">
                         <li><div className="md:hidden absolute bg-gradient-to-r right-0 from-transparent to-white w-20 h-8 py-1"></div></li>
-                        {item.tags.map((tag, index) => <li key={tag.name} className={`${index === item.tags.length - 1 ? "mr-20" : ""}`}><Tag to={tag.slug}>{tag.name}</Tag></li>)}
+                        {item.tags.map((tag, index) => <li key={tag.name} className={`${index === item.tags.length - 1 ? "mr-20" : ""}`}><Chip to={tag.slug}>{tag.name}</Chip></li>)}
                     </ul>
                 </div >
 

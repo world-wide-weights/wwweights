@@ -1,11 +1,11 @@
 import '../../styles/global.css';
-import { Tag } from './Tag';
+import { Chip } from './Chip';
 
-describe('Tag', () => {
+describe('Chip', () => {
     it('should display correct color', () => {
         const color = "amber"
 
-        cy.mount(<Tag to="/" color={"amber"}>Test</Tag>)
+        cy.mount(<Chip to="/" color={"amber"}>Test</Chip>)
 
         cy.get('a').should('have.class', `bg-${color}-500`)
         cy.get('a').should('have.class', `text-${color}-600`)

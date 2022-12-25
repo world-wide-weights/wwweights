@@ -1,8 +1,8 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Head from "next/head"
+import { Chip } from "../../components/Chip/Chip"
 import { Headline } from "../../components/Headline/Headline"
 import { Pagination } from "../../components/Pagination/Pagination"
-import { Tag } from "../../components/Tag/Tag"
 import { routes } from "../../services/routes/routes"
 
 const DEFAULT_ITEMS_PER_PAGE = 64
@@ -37,7 +37,7 @@ export default function TagsList({ tags, currentPage, totalItems, limit }: Infer
 
             {/* tags */}
             <div className="flex flex-wrap pb-3">
-                {tags.map((tag) => <Tag key={tag.name} to={routes.tags.single(tag.slug)}>{tag.name}</Tag>)}
+                {tags.map((tag) => <Chip key={tag.name} to={routes.tags.single(tag.slug)}>{tag.name}</Chip>)}
             </div>
 
             {/* Pagination */}
