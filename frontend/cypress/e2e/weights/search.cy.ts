@@ -1,5 +1,4 @@
 import items from "../../fixtures/items/list.json"
-import statistics from "../../fixtures/items/statistics.json"
 import relatedtags from "../../fixtures/tags/related.json"
 
 const apiBaseUrl = Cypress.env("API_BASE_URL")
@@ -7,26 +6,7 @@ const apiBaseUrl = Cypress.env("API_BASE_URL")
 describe('Search /weights', () => {
     describe('Search', () => {
         beforeEach(() => {
-            cy.task('clearNock')
-            cy.task('activateNock')
-
-            cy.task('nock', {
-                hostname: apiBaseUrl,
-                method: 'get',
-                path: `/api/query/v1/items/list`,
-                statusCode: 200,
-                body: items,
-            })
-
-            cy.task('nock', {
-                hostname: apiBaseUrl,
-                method: 'get',
-                path: `/api/query/v1/items/statistics`,
-                statusCode: 200,
-                body: statistics,
-            })
-
-            cy.mockGetRelatedTags()
+            cy.mockWeightsPage()
 
             cy.visitLocalPage("/weights")
             cy.wait('@mockGetRelatedTags')
@@ -54,26 +34,7 @@ describe('Search /weights', () => {
 
     describe('Related Tags', () => {
         beforeEach(() => {
-            cy.task('clearNock')
-            cy.task('activateNock')
-
-            cy.task('nock', {
-                hostname: apiBaseUrl,
-                method: 'get',
-                path: `/api/query/v1/items/list`,
-                statusCode: 200,
-                body: items,
-            })
-
-            cy.task('nock', {
-                hostname: apiBaseUrl,
-                method: 'get',
-                path: `/api/query/v1/items/statistics`,
-                statusCode: 200,
-                body: statistics,
-            })
-
-            cy.mockGetRelatedTags()
+            cy.mockWeightsPage()
 
             cy.visitLocalPage("/weights")
             cy.wait('@mockGetRelatedTags')

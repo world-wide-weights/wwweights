@@ -1,5 +1,8 @@
 /// <reference types="cypress" />
 
+import items from "../fixtures/items/list.json"
+import statistics from "../fixtures/items/statistics.json"
+
 const apiBaseUrl = Cypress.env("API_BASE_URL")
 
 Cypress.Commands.add('dataCy', (dataCy, customSelector = "") => {
@@ -23,6 +26,28 @@ Cypress.Commands.add('mockGetRelatedTags', () => {
     cy.intercept('GET', `${apiBaseUrl}/api/query/v1/tags/related`, {
         fixture: 'tags/related.json'
     }).as('mockGetRelatedTags')
+})
+
+Cypress.Commands.add('mockWeightsPage', () => {
+    cy.task('clearNock')
+    cy.task('activateNock')
+    cy.task('nock', {
+        hostname: apiBaseUrl,
+        method: 'get',
+        path: `/api/query/v1/items/list`,
+        statusCode: 200,
+        body: items,
+    })
+
+    cy.task('nock', {
+        hostname: apiBaseUrl,
+        method: 'get',
+        path: `/api/query/v1/items/statistics`,
+        statusCode: 200,
+        body: statistics,
+    })
+
+    cy.mockGetRelatedTags()
 })
 
 export { }
