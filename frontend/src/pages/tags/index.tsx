@@ -15,15 +15,16 @@ export type Tag = {
 }
 
 type TagsListProps = {
-    tags: Tag[],
-    currentPage: number,
+    tags: Tag[]
+    currentPage: number
+    totalItems: number
     limit: number
 }
 
 /** Base List for tags */
-export default function TagsList({ tags, currentPage, limit }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function TagsList({ tags, currentPage, totalItems, limit }: InferGetServerSidePropsType<typeof getServerSideProps>) {
     const siteTitle = `All Tags ${currentPage > 1 ? `| Page ${currentPage} ` : ``}- World Wide Weights`
-   
+
     return (<>
         {/* Meta Tags */}
         <Head>
@@ -40,7 +41,7 @@ export default function TagsList({ tags, currentPage, limit }: InferGetServerSid
             </div>
 
             {/* Pagination */}
-            <Pagination totalItems={100} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} baseRoute={routes.tags.list} />
+            <Pagination totalItems={totalItems} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} baseRoute={routes.tags.list} query="" />
         </div>
     </>
     )
@@ -59,10 +60,13 @@ export const getServerSideProps: GetServerSideProps<TagsListProps> = async (cont
 
     const response = await fetch(`http://localhost:3004/api/query/v1/tags/getList?page=${currentPage}&limit=${limit}`)
     const data = await response.json()
+    const totalItems = parseInt(response.headers.get("x-total-count") ?? "100")
+
     return {
         props: {
             tags: data,
             currentPage,
+            totalItems,
             limit
         }
     }
