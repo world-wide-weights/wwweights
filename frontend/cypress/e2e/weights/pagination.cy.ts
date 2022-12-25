@@ -3,18 +3,21 @@ import itemsListFive from "../../fixtures/items/listLimitFive.json"
 
 const currentPage = 2
 const limit = 5
+const apiBaseUrl = Cypress.env("API_URL")
 
 describe('Pagination /weights', () => {
     describe("Base tests", () => {
         beforeEach(() => {
             cy.task('clearNock')
             cy.task('nock', {
-                hostname: 'http://localhost:3004',
+                hostname: apiBaseUrl,
                 method: 'get',
                 path: `/api/query/v1/items/list`,
                 statusCode: 200,
                 body: items,
             })
+
+            cy.getRelatedTags()
         })
 
         it('should display pagination', () => {
@@ -74,12 +77,14 @@ describe('Pagination /weights', () => {
         beforeEach(() => {
             cy.task('clearNock')
             cy.task('nock', {
-                hostname: 'http://localhost:3004',
+                hostname: apiBaseUrl,
                 method: 'get',
                 path: `/api/query/v1/items/list`,
                 statusCode: 200,
                 body: itemsListFive,
             })
+
+            cy.getRelatedTags()
 
             cy.visitLocalPage(`/weights?limit=${limit}`)
         })
