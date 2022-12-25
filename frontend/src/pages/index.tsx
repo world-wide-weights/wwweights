@@ -11,10 +11,10 @@ const Home = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <div className="container bg-white">
-        <p>Hello World</p>
-        <Button to={routes.weights.list()} icon="list">Weights List</Button>
-        <Button className="mt-2" to={routes.tags.list()} icon="bookmark">Tags List</Button>
+      <div className="container">
+        <p className="mb-2">Hello World</p>
+        <Button className="mb-2" to={routes.weights.list()} icon="list">Weights List</Button>
+        <Button to={routes.tags.list()} icon="bookmark">Tags List</Button>
       </div>
     </div>
   )
