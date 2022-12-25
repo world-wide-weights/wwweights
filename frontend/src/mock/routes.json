@@ -9,5 +9,6 @@
     "/api/query/v1/tags/list": "/tags",
     "/api/query/v1/tags/list?page=:page&limit=:limit": "/tags?_page=:page&_limit=:limit",
     "/api/query/v1/tags/list?limit=:limit&page=:page": "/tags?_limit=:limit&_page=:page",
-    "/api/query/v1/tags/list?page=:page": "/tags?_page=:page"
+    "/api/query/v1/tags/list?page=:page": "/tags?_page=:page",
+    "/api/query/v1/tags/related": "/related_tags"
 }
