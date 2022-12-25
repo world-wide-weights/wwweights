@@ -21,19 +21,23 @@ describe('Pagination /weights', () => {
 
         it('should display pagination', () => {
             cy.visitLocalPage("/weights")
+            cy.wait('@getRelatedTags')
             cy.dataCy('pagination').should('be.visible')
         })
 
         it('should show page 1 when query is page=1 or nothing', () => {
             cy.visitLocalPage("/weights")
+            cy.wait('@getRelatedTags')
             cy.checkCurrentActivePage(1)
 
             cy.visitLocalPage("/weights?page=1")
+            cy.wait('@getRelatedTags')
             cy.checkCurrentActivePage(1)
         })
 
         it('should show page 2 when query is page=2', () => {
             cy.visitLocalPage("/weights?page=2")
+            cy.wait('@getRelatedTags')
             cy.checkCurrentActivePage(2)
         })
 
@@ -58,6 +62,7 @@ describe('Pagination /weights', () => {
         describe('Buttons', () => {
             beforeEach(() => {
                 cy.visitLocalPage(`/weights?page=${currentPage}`)
+                cy.wait('@getRelatedTags')
             })
 
             it('should show next page when click next button', () => {
@@ -86,6 +91,7 @@ describe('Pagination /weights', () => {
             cy.getRelatedTags()
 
             cy.visitLocalPage(`/weights?limit=${limit}`)
+            cy.wait('@getRelatedTags')
         })
 
         it('should show limited count of items when set limit', () => {
