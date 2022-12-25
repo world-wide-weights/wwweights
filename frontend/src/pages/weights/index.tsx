@@ -1,7 +1,7 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Head from "next/head"
 import { Headline } from "../../components/Headline/Headline"
-import { ItemPreview } from "../../components/Item/ItemPreview"
+import { ItemPreviewBox } from "../../components/Item/ItemPreviewBox"
 import { Pagination } from "../../components/Pagination/Pagination"
 import { routes } from "../../services/routes/routes"
 
@@ -13,17 +13,18 @@ export type Item = {
     id: number, // TODO: Change
     name: string
     slug: string
-    weight: {
-        value: number
-        aditionalValue?: number
-        isCa: false
-    },
+    weight: Weight,
     source?: string
     image?: string
     tags: {
         name: string
         slug: string
     }[]
+}
+export type Weight = {
+    value: number
+    aditionalValue?: number
+    isCa: boolean
 }
 
 type WeightsListProps = {
@@ -48,7 +49,7 @@ export default function WeightsList({ items, currentPage, limit }: InferGetServe
 
             {/* Weights (todos) */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-10">
-                {items.map((item) => <ItemPreview datacy="weights-list-item" key={item.id} name={item.name} slug={item.slug} weight={`${item.weight.isCa ? "ca." : ""}${item.weight.value}${item.weight.aditionalValue ? `- ${item.weight.aditionalValue}` : ""} g`} imageUrl="https://picsum.photos/200" />)}
+                {items.map((item) => <ItemPreviewBox datacy="weights-list-item" key={item.id} name={item.name} slug={item.slug} weight={item.weight} imageUrl="https://picsum.photos/200" />)}
             </div>
 
             {/* Pagination */}

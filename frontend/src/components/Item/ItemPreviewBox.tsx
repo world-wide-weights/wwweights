@@ -1,13 +1,15 @@
 import Image from "next/image"
 import Link from "next/link"
+import { Weight } from "../../pages/weights"
 import { routes } from "../../services/routes/routes"
+import { generateWeightString } from "../../services/utils/weight"
 
 export type ItemPreviewProps = {
-    /** Name of weight */
+    /** Name of item */
     name: string
     /** Weight */
-    weight: string
-    /** Slug of weight */
+    weight: Weight
+    /** Slug of item */
     slug: string
     /** Image URL */
     imageUrl?: string
@@ -20,15 +22,17 @@ export type ItemPreviewProps = {
  * 
  * Example:
  * ```tsx
- * <ItemPreview id="1" name="Smartphone" weight="300 gr" imageUrl="https://via.placeholder.com/96.png" />
+ * <ItemPreviewBox id="1" name="Smartphone" weight="300 gr" imageUrl="https://via.placeholder.com/96.png" />
  * ```
  */
-export const ItemPreview: React.FC<ItemPreviewProps> = ({ slug, datacy, name, weight, imageUrl }) => {
+export const ItemPreviewBox: React.FC<ItemPreviewProps> = ({ slug, datacy, name, weight, imageUrl }) => {
+    const weightString = generateWeightString(weight)
+
     return <Link datacy={datacy} className="flex items-center" href={routes.weights.single(slug)}>
         {imageUrl && <Image className="object-cover rounded-xl w-24 h-24 mr-5 bg-white" alt={`Image of ${name}`} src={imageUrl} width={96} height={96} />}
         <div>
             <h5 className="text-gray-900 text-xl font-semibold break-all">{name}</h5>
-            <p title={`${name} has a weight of ${weight}`}>{weight}</p>
+            <p title={`${name} has a weight of ${weightString}`}>{weightString}</p>
         </div>
     </Link>
 }
