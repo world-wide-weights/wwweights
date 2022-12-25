@@ -2,6 +2,7 @@ import { GetStaticPaths, GetStaticProps, InferGetServerSidePropsType } from "nex
 import Head from "next/head";
 import Image from "next/image";
 import { Item } from ".";
+import { Icon } from "../../components/Icon/Icon";
 import { Tag } from "../../components/Tag/Tag";
 import { generateWeightString } from "../../services/utils/weight";
 
@@ -26,7 +27,7 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
                 <div className="lg:col-start-1 lg:col-end-3 pl-5 lg:pl-0 md:mt-5">
                     <h1><a target="_blank" rel="noopener noreferrer" className="flex items-center text-gray-700 text-lg sm:text-2xl md:mb-2" href={`https://www.google.com/search?q=${item.name}`}>
                         {item.name}
-                        <i className="material-symbols-rounded ml-2">open_in_new</i>
+                        <Icon className="ml-2">open_in_new</Icon>
                     </a></h1>
                     <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold md:mb-5">{weightString}</h2>
                 </div>
