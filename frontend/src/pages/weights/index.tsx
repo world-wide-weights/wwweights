@@ -62,18 +62,19 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
             {/* Headline */}
             <Headline level={3}>All weights</Headline>
 
-            <div className="flex">
-                <div className="w-3/4 mr-10">
-
+            <div className="md:flex">
+                <div className="md:w-1/2 lg:w-2/3 2xl:w-3/4 mr-10 mb-10 md:mb-0">
                     {/* Weights */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-5 mb-10">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-5 mb-10">
                         {items.map((item) => <ItemPreviewBox datacy="weights-list-item" key={item.id} name={item.name} slug={item.slug} weight={item.weight} imageUrl="https://picsum.photos/200" />)}
                     </div>
 
                     {/* Pagination */}
                     <Pagination totalItems={totalItems} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} query={query} baseRoute={routes.weights.list} />
                 </div>
-                <div className="flex flex-col gap-4 w-1/4">
+                <Headline level={3} className="md:hidden">Statistics</Headline>
+                <div className="flex flex-col gap-4 md:w-1/2 lg:w-1/3 2xl:w-1/4">
+                    {/* Headline */}
                     <StatsCard icon="weight" value={generateWeightString(statistics.heaviest.weight)} descriptionTop={statistics.heaviest.name} descriptionBottom="Heaviest" />
                     <StatsCard icon="eco" value={generateWeightString(statistics.lightest.weight)} descriptionTop={statistics.lightest.name} descriptionBottom="Lightest" />
                     <StatsCard icon="scale" value={`~${statistics.averageWeight} g`} descriptionBottom="Average" />
