@@ -88,7 +88,7 @@ describe('Pagination /weights', () => {
             cy.visitLocalPage(`/weights?limit=${limit}`)
         })
 
-        it.only('should show limited count of items when set limit', () => {
+        it('should show limited count of items when set limit', () => {
             cy.dataCy('weights-list-item').should('have.length', limit)
         })
 
