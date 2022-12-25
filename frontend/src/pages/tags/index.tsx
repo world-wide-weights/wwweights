@@ -58,7 +58,7 @@ export const getServerSideProps: GetServerSideProps<TagsListProps> = async (cont
         }
     }
 
-    const response = await fetch(`http://localhost:3004/api/query/v1/tags/getList?page=${currentPage}&limit=${limit}`)
+    const response = await fetch(`http://localhost:3004/api/query/v1/tags/list?page=${currentPage}&limit=${limit}`)
     const data = await response.json()
     const totalItems = parseInt(response.headers.get("x-total-count") ?? "100")
 

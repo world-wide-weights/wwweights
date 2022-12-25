@@ -1,5 +1,5 @@
-import weights from "../../fixtures/weights/getList.json"
-import weightsListFive from "../../fixtures/weights/getListLimitFive.json"
+import items from "../../fixtures/items/list.json"
+import itemsListFive from "../../fixtures/items/listLimitFive.json"
 
 const currentPage = 2
 const limit = 5
@@ -11,9 +11,9 @@ describe('Pagination /weights', () => {
             cy.task('nock', {
                 hostname: 'http://localhost:3004',
                 method: 'get',
-                path: `/api/query/v1/items/getList`,
+                path: `/api/query/v1/items/list`,
                 statusCode: 200,
-                body: weights,
+                body: items,
             })
         })
 
@@ -76,9 +76,9 @@ describe('Pagination /weights', () => {
             cy.task('nock', {
                 hostname: 'http://localhost:3004',
                 method: 'get',
-                path: `/api/query/v1/items/getList`,
+                path: `/api/query/v1/items/list`,
                 statusCode: 200,
-                body: weightsListFive,
+                body: itemsListFive,
             })
 
             cy.visitLocalPage(`/weights?limit=${limit}`)

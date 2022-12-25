@@ -76,7 +76,7 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
         }
     }
 
-    const response = await fetch(`http://localhost:3004/api/query/v1/items/getList?page=${currentPage}&limit=${limit}&query=${query}`)
+    const response = await fetch(`http://localhost:3004/api/query/v1/items/list?page=${currentPage}&limit=${limit}&query=${query}`)
     const data = await response.json()
     const totalItems = parseInt(response.headers.get("x-total-count") ?? "100") // TODO: For tests its 100 in future (when our api is used) this information will come from body and this will be removed anyway 
 
