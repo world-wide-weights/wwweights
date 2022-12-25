@@ -1,8 +1,6 @@
 import items from "../../fixtures/items/list.json"
 import relatedtags from "../../fixtures/tags/related.json"
 
-const apiBaseUrl = Cypress.env("API_BASE_URL")
-
 describe('Search /weights', () => {
     describe('Search', () => {
         beforeEach(() => {

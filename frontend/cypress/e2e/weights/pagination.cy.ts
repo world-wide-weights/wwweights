@@ -69,7 +69,7 @@ describe('Pagination /weights', () => {
 
     describe('Limit', () => {
         beforeEach(() => {
-            cy.mockWeightsPage()
+            cy.mockWeightsPage(5)
 
             cy.visitLocalPage(`/weights?limit=${limit}`)
             cy.wait('@mockGetRelatedTags')

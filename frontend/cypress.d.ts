@@ -40,8 +40,9 @@ declare global {
        * - mock get items 
        * - mock related tags 
        * - mock item statistics
+       * @param itemCount count of items getting back with body
        */
-      mockWeightsPage(): Chainable<void>
+      mockWeightsPage(itemCount?: number): Chainable<void>
     }
   }
 }

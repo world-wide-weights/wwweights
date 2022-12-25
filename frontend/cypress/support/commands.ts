@@ -28,7 +28,9 @@ Cypress.Commands.add('mockGetRelatedTags', () => {
     }).as('mockGetRelatedTags')
 })
 
-Cypress.Commands.add('mockWeightsPage', () => {
+Cypress.Commands.add('mockWeightsPage', (itemCount?: number) => {
+    const body = itemCount ? items.slice(0, itemCount) : items
+
     cy.task('clearNock')
     cy.task('activateNock')
     cy.task('nock', {
@@ -36,7 +38,7 @@ Cypress.Commands.add('mockWeightsPage', () => {
         method: 'get',
         path: `/api/query/v1/items/list`,
         statusCode: 200,
-        body: items,
+        body
     })
 
     cy.task('nock', {
