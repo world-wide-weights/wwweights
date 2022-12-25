@@ -17,7 +17,7 @@ type ChipProps = {
  */
 export const Chip: React.FC<ChipProps> = ({ children, to, onClick, color = "blue" }) => {
   if (onClick && to)
-    return <p>Use "onClick" prop or "to" prop not both!</p>
+    return <p>Use &quot;onClick&quot; prop or &quot;to&quot; prop not both!</p>
 
   return <>
     {onClick && <button type="button" onClick={onClick} className={`inline-block bg-${color}-500 bg-opacity-20 text-${color}-600 rounded-full whitespace-nowrap px-5 py-1 mr-2 mb-2`}>

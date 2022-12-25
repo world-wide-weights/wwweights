@@ -51,7 +51,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query }) => {
 
             // Set query field to tagname when defined otherwise set to current query in url
             setFieldValue("query", queryField)
-        }, [query])
+        }, [setFieldValue])
         return null
     }
 
