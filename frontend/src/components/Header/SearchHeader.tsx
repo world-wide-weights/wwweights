@@ -1,4 +1,4 @@
-import { Form, Formik } from "formik";
+import { Form, Formik, useFormikContext } from "formik";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Tag } from "../../pages/tags";
@@ -16,6 +16,8 @@ type SearchHeaderProps = {
  */
 export const SearchHeader: React.FC<SearchHeaderProps> = ({ query }) => {
     const router = useRouter()
+
+    // Local States
     const [relatedTags, setRelatedTags] = useState<Tag[]>([])
     const [isLoadingRelatedTags, setIsLoadingRelatedTags] = useState(false)
 
@@ -24,11 +26,38 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query }) => {
         query: ""
     }
 
-    // Formik On Submit Button
+    /**
+     * Formik function calls when form is submitted.
+     * Will redirect to items list with the given query 
+     * @param formValues 
+     */
     const submitForm = (formValues: typeof initialQueryValues) => {
         router.push(routes.weights.list({ query: formValues.query }))
     }
 
+    /**
+     * Always update field according to url 
+     * so its working correct when going back with back keys or click on tag
+     * needs to be called inside formik for formikcontext working
+     */
+    const AutoUpdateQueryField = (): null => {
+        const { setFieldValue } = useFormikContext()
+        useEffect(() => {
+            const tag = relatedTags.find(relatedTag => relatedTag.slug === query)
+            let queryField = query
+
+            if (tag)
+                queryField = tag.name
+
+            // Set query field to tagname when defined otherwise set to current query in url
+            setFieldValue("query", queryField)
+        }, [query])
+        return null
+    }
+
+    /**
+     * Fetch related tags
+     */
     useEffect(() => {
         setIsLoadingRelatedTags(true)
         const fetchRelatedTags = async () => {
@@ -44,16 +73,21 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query }) => {
             <div className="md:flex md:flex-col md:items-center">
                 <h1 className="font-semibold text-xl text-center md:text-3xl mb-2">Wie viel wiegt?</h1>
                 <Formik initialValues={initialQueryValues} onSubmit={submitForm}>
-                    <Form>
-                        <div className="md:flex md:justify-center">
-                            <div className="md:w-96">
-                                <Search />
+                    {({ values }) => (
+                        <Form>
+                            <div className="md:flex md:justify-center">
+                                <div className="md:w-96">
+                                    <Search />
+                                </div>
                             </div>
-                        </div>
-                        <div className="whitespace-nowrap overflow-x-scroll md:whitespace-normal md:overflow-hidden">
-                            {relatedTags.map(relatedTag => <Chip key={relatedTag.slug} to={routes.weights.list({ query: relatedTag.slug })}>{relatedTag.name}</Chip>)}
-                        </div>
-                    </Form>
+                            {/* TODO(Zoe-bot): Loading Component */}
+                            {isLoadingRelatedTags ? <p>Loading...</p> : <div className="whitespace-nowrap overflow-x-scroll md:whitespace-normal md:overflow-hidden">
+                                {/* Only show tags not current searched (should not be the value in query field) */}
+                                {relatedTags.map(relatedTag => relatedTag.name !== query && <Chip key={relatedTag.slug} to={routes.weights.list({ query: relatedTag.slug })}>{relatedTag.name}</Chip>)}
+                            </div>}
+                            <AutoUpdateQueryField />
+                        </Form>
+                    )}
                 </Formik>
             </div>
         </div>
