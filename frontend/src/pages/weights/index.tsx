@@ -6,6 +6,7 @@ import { ItemPreviewBox } from "../../components/Item/ItemPreviewBox"
 import { Pagination } from "../../components/Pagination/Pagination"
 import { StatsCard } from "../../components/Statistics/StatsCard"
 import { routes } from "../../services/routes/routes"
+import { generateWeightString } from "../../services/utils/weight"
 
 const DEFAULT_ITEMS_PER_PAGE = 16
 const ITEMS_PER_PAGE_MAXIMUM = 100
@@ -29,16 +30,23 @@ export type Weight = {
     isCa: boolean
 }
 
+type Statistics = {
+    heaviest: Item
+    lightest: Item
+    averageWeight: number // in gram
+}
+
 type WeightsListProps = {
     items: Item[]
     currentPage: number
     totalItems: number
     limit: number
     query: string
+    statistics: Statistics
 }
 
 /** Base List for weights */
-export default function WeightsList({ items, currentPage, totalItems, limit, query }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function WeightsList({ items, currentPage, totalItems, limit, query, statistics }: InferGetServerSidePropsType<typeof getServerSideProps>) {
     const siteTitle = `Latest ${currentPage > 1 ? `| Page ${currentPage} ` : ``}- World Wide Weights`
 
     return (<>
@@ -66,9 +74,9 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                     <Pagination totalItems={totalItems} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} query={query} baseRoute={routes.weights.list} />
                 </div>
                 <div className="flex flex-col gap-4 w-1/4">
-                    <StatsCard icon="weight" value="230g" descriptionTop="Apple iPhone 11" descriptionBottom="Heaviest" />
-                    <StatsCard icon="weight" value="230g" descriptionTop="Apple iPhone 11" descriptionBottom="Heaviest" />
-                    <StatsCard icon="weight" value="~200 g" descriptionBottom="Average" />
+                    <StatsCard icon="weight" value={generateWeightString(statistics.heaviest.weight)} descriptionTop={statistics.heaviest.name} descriptionBottom="Heaviest" />
+                    <StatsCard icon="eco" value={generateWeightString(statistics.lightest.weight)} descriptionTop={statistics.lightest.name} descriptionBottom="Lightest" />
+                    <StatsCard icon="scale" value={`~${statistics.averageWeight} g`} descriptionBottom="Average" />
                 </div>
             </div>
         </div>
@@ -89,17 +97,25 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
         }
     }
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/items/list?page=${currentPage}&limit=${limit}&query=${query}`)
-    const data = await response.json()
-    const totalItems = parseInt(response.headers.get("x-total-count") ?? "100") // Faalback For tests its 100 in future (when our api is used) this information will come from body and this will be removed anyway 
+    const [itemsResponse, statisticResponse] = await Promise.all([
+        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/items/list?page=${currentPage}&limit=${limit}&query=${query}`),
+        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/items/statistics`),
+    ])
+    const [items, statistics] = await Promise.all([
+        itemsResponse.json(),
+        statisticResponse.json()
+    ])
+
+    const totalItems = parseInt(itemsResponse.headers.get("x-total-count") ?? "100") // Faalback For tests its 100 in future (when our api is used) this information will come from body and this will be removed anyway 
 
     return {
         props: {
-            items: data,
+            items,
             currentPage,
             limit,
             totalItems,
-            query
+            query,
+            statistics
         }
     }
 }
