@@ -1,6 +1,7 @@
 import { Field, FieldProps } from "formik";
 import Link from "next/link";
 import { FormError } from "../../Errors/FormError";
+import { Icon } from "../../Icon/Icon";
 import { Label } from "../Label";
 
 type TextInputProps = {
@@ -32,9 +33,9 @@ export const TextInput: React.FC<TextInputProps> = ({ name, labelText, labelRequ
             <Field type={type} name={name}>{(props: FieldProps<any>) => (
                 <>
                     <div datacy={`textinput-${name}-inputwrapper`} className="relative flex flex-col justify-center my-1">
-                        {icon && !iconLink && !iconOnClick && <i className={`absolute material-symbols-rounded right-4 ${props.meta.error && props.meta.touched ? "text-red-500" : "text-gray-500"} `}>{icon}</i>}
-                        {icon && iconLink && !iconOnClick && <Link href={iconLink}><i className={`absolute material-symbols-rounded right-0 px-4 py-2 ${props.meta.error && props.meta.touched ? "text-red-500" : "text-gray-500"}`}>{icon}</i></Link>}
-                        {icon && iconOnClick && !iconLink && <button type={iconButtonIsSubmit ? "submit" : "button"} onClick={iconOnClick}><i className={`absolute material-symbols-rounded right-0 px-4 py-2 ${props.meta.error && props.meta.touched ? "text-red-500" : "text-gray-500"}`}>{icon}</i></button>}
+                        {icon && !iconLink && !iconOnClick && <Icon className={`absolute right-4 ${props.meta.error && props.meta.touched ? "text-red-500" : "text-gray-500"} `}>{icon}</Icon>}
+                        {icon && iconLink && !iconOnClick && <Link href={iconLink}><Icon className={`absolute right-0 px-4 py-2 ${props.meta.error && props.meta.touched ? "text-red-500" : "text-gray-500"}`}>{icon}</Icon></Link>}
+                        {icon && iconOnClick && !iconLink && <button type={iconButtonIsSubmit ? "submit" : "button"} onClick={iconOnClick}><Icon className={`absolute right-0 px-4 py-2 ${props.meta.error && props.meta.touched ? "text-red-500" : "text-gray-500"}`}>{icon}</Icon></button>}
                         <input datacy={`textinput-${name}-input`} {...restProps} {...props.field} className={`rounded-full pl-4 py-2 ${icon ? "pr-12" : ""} ${props.meta.error && props.meta.touched ? 'bg-red-500 bg-opacity-10 border-2 border-red-500 focus:outline-none focus:border-red-500 focus:ring-red-500' : 'border-2 border-gray-100 bg-gray-100'}`} />
                     </div>
                     {!(props.meta.error && props.meta.touched) && <p className="text-gray-600 mx-4">{helperText}</p>}

@@ -1,4 +1,5 @@
 import { ErrorMessage } from "formik"
+import { Icon } from "../Icon/Icon"
 
 export type FormErrorProps = {
     /** unique name of formik field */
@@ -14,7 +15,7 @@ export const FormError: React.FunctionComponent<FormErrorProps> = (props) => {
     return (
         <ErrorMessage name={props.field} >
             {errorMessage => <div data-cy={props.dataCy} className="flex items-center text-red-500">
-                <i className="material-symbols-rounded mr-2">error</i>
+                <Icon className="mr-2">error</Icon>
                 <span className="font-semibold text-sm">{errorMessage}</span>
             </div>}
         </ErrorMessage>
