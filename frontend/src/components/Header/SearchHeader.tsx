@@ -79,22 +79,20 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "" }) => {
             <div className="md:flex md:flex-col md:items-center">
                 <h1 className="font-semibold text-xl text-center md:text-3xl mb-2">Wie viel wiegt?</h1>
                 <Formik initialValues={initialQueryValues} onSubmit={submitForm}>
-                    {({ values }) => (
-                        <Form>
-                            <div className="md:flex md:justify-center">
-                                <div className="md:w-96">
-                                    <Search />
-                                </div>
+                    <Form>
+                        <div className="md:flex md:justify-center">
+                            <div className="md:w-96">
+                                <Search />
                             </div>
-                            {/* TODO(Zoe-bot): Loading Component and scrollable tags */}
-                            {/* TODO(Zoe-bot): Only develop Remove query !== "" condition when normal backend api is set */}
-                            {query !== "" && (isLoadingRelatedTags ? <p>Loading...</p> : <div datacy="search-header-tag-wrapper" className="whitespace-nowrap overflow-x-scroll md:whitespace-normal md:overflow-hidden">
-                                {/* Only show tags not current searched (should not be the value in query field) */}
-                                {relatedTags.map(relatedTag => relatedTag.name !== values.query && <Chip key={relatedTag.slug} to={routes.weights.list({ query: relatedTag.slug })}>{relatedTag.name}</Chip>)}
-                            </div>)}
-                            <AutoUpdateQueryField />
-                        </Form>
-                    )}
+                        </div>
+                        {/* TODO(Zoe-bot): Loading Component and scrollable tags */}
+                        {/* TODO(Zoe-bot): Only develop Remove query !== "" condition when normal backend api is set */}
+                        {query !== "" && (isLoadingRelatedTags ? <p>Loading...</p> : <div datacy="search-header-tag-wrapper" className="whitespace-nowrap overflow-x-scroll md:whitespace-normal md:overflow-hidden">
+                            {/* Only show tags not current searched (should not be the value in query field) */}
+                            {relatedTags.map(relatedTag => relatedTag.slug !== query && <Chip key={relatedTag.slug} to={routes.weights.list({ query: relatedTag.slug })}>{relatedTag.name}</Chip>)}
+                        </div>)}
+                        <AutoUpdateQueryField />
+                    </Form>
                 </Formik>
             </div>
         </div>
