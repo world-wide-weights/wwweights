@@ -11,11 +11,13 @@ const navLinks = [{
     text: "Discover",
 }]
 
-/** Navbar component, should only be used once at the top */
+/** 
+ * Navbar component, should only be used once at the top 
+ */
 export const Navbar: React.FC = () => {
     const [isNavMobileOpen, setIsNavMobileOpen] = useState<boolean>(false)
 
-    return <div className="bg-white py-3 mb-5">
+    return <div className="bg-white py-3">
         <nav className="container md:flex justify-between">
             <div className="flex items-center justify-between">
                 <Link className="flex items-center" href={routes.home}>

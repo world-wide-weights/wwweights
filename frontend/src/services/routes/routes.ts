@@ -8,7 +8,7 @@ import { PaginationBaseOptions } from "../pagination/pagination"
 export const routes = {
     home: "/",
     weights: {
-        list: (options?: PaginationBaseOptions) => {
+        list: (options?: PaginationBaseOptions & { query?: string }) => {
             if (!options)
                 return "/weights"
 
@@ -17,6 +17,7 @@ export const routes = {
             const queryString = new URLSearchParams({
                 ...(options.page && options.page !== 1 && { page: options.page.toString() }),
                 ...(options.itemsPerPage && hasCustomLimit && { limit: options.itemsPerPage.toString() }),
+                ...(options.query && { query: options.query })
             }).toString()
 
             return `/weights${queryString !== "" ? `?${queryString}` : ``}`
@@ -37,7 +38,7 @@ export const routes = {
 
             return `/tags${queryString !== "" ? `?${queryString}` : ``}`
         },
-        single: (slug: string) => `/weights?search=${slug}`
+        single: (slug: string) => `/weights?query=${slug}`
     },
     legal: {
         imprint: "/legal/imprint",
@@ -47,4 +48,4 @@ export const routes = {
 
 // Define types here 
 // TODO: Improve type connection between defintion here and up routes
-export type RoutePagination = (options?: PaginationBaseOptions) => string
+export type RoutePagination = (options?: PaginationBaseOptions & { query?: string }) => string

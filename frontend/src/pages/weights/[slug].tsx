@@ -2,8 +2,9 @@ import { GetStaticPaths, GetStaticProps, InferGetServerSidePropsType } from "nex
 import Head from "next/head";
 import Image from "next/image";
 import { Item } from ".";
+import { Chip } from "../../components/Chip/Chip";
+import { SearchHeader } from "../../components/Header/SearchHeader";
 import { Icon } from "../../components/Icon/Icon";
-import { Tag } from "../../components/Tag/Tag";
 import { generateWeightString } from "../../services/utils/weight";
 
 type WeightsSingleProps = {
@@ -21,6 +22,9 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
             <title>{siteTitle}</title>
         </Head>
 
+        {/* Search with related tags */}
+        <SearchHeader />
+
         <div className="container mt-10 md:mt-20">
             <div className="grid grid-cols-[120px_1fr] md:grid-cols-[250px_1fr] items-center lg:grid-cols-2">
                 {/* Headline and Weight */}
@@ -37,24 +41,24 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
                     <a target="_blank" rel="noopener noreferrer" href={item.source} className="text-gray-600 hover:text-gray-700 mb-3 md:mb-5">According to &quot;{item.source}&quot; a &quot;{item.name}&quot; weights {weightString}.</a>
                     <ul className="flex md:flex-wrap overflow-y-auto">
                         <li><div className="md:hidden absolute bg-gradient-to-r right-0 from-transparent to-white w-20 h-8 py-1"></div></li>
-                        {item.tags.map((tag, index) => <li key={tag.name} className={`${index === item.tags.length - 1 ? "mr-20" : ""}`}><Tag to={tag.slug}>{tag.name}</Tag></li>)}
+                        {item.tags.map((tag, index) => <li key={tag.name} className={`${index === item.tags.length - 1 ? "mr-20" : ""}`}><Chip to={tag.slug}>{tag.name}</Chip></li>)}
                     </ul>
-                </div >
+                </div>
 
                 {/* Weights Image */}
-                < div className="row-start-1 lg:row-end-3 lg:flex lg:justify-end" >
+                <div className="row-start-1 lg:row-end-3 lg:flex lg:justify-end">
                     {/* No better way yet: https://github.com/vercel/next.js/discussions/21379 Let's take a look at this when we got problems with it */}
                     <Image src="https://picsum.photos/1200" priority className="sm:hidden rounded-xl" alt={item.name} width={120} height={120} />
                     <Image src="https://picsum.photos/1200" priority className="hidden sm:block rounded-xl" alt={item.name} width={230} height={230} />
-                </div >
-            </div >
-        </div >
+                </div>
+            </div>
+        </div>
     </>
 }
 
 export const getStaticProps: GetStaticProps<WeightsSingleProps> = async (context) => {
     const slug = context.params ? context.params.slug : "1"
-    const response = await fetch(`http://localhost:3004/api/query/v1/items/getOne?slug=${slug}`)
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/items/list?slug=${slug}`)
     const data = await response.json()
 
     // Validate Query

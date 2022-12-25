@@ -2,6 +2,7 @@ import { Footer } from "../Footer/Footer"
 import { Navbar } from "../Navbar/Navbar"
 
 type LayoutProps = {
+    /** The main content. */
     children: React.ReactNode
 }
 

@@ -68,7 +68,8 @@ export default defineConfig({
     specPattern: '**/*.{cy,unit}.{js,jsx,ts,tsx}'
   },
   env: {
-    BASE_URL: 'http://localhost:3002'
+    CLIENT_BASE_URL: 'http://localhost:3002',
+    API_BASE_URL: 'http://localhost:3004'
   }
 })
 

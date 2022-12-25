@@ -12,7 +12,6 @@ const Home = () => {
       </Head>
 
       <div className="container">
-        <p className="mb-2">Hello World</p>
         <Button className="mb-2" to={routes.weights.list()} icon="list">Weights List</Button>
         <Button to={routes.tags.list()} icon="bookmark">Tags List</Button>
       </div>
