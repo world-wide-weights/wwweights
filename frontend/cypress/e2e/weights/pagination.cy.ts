@@ -1,5 +1,4 @@
 import items from "../../fixtures/items/list.json"
-import itemsListFive from "../../fixtures/items/listLimitFive.json"
 
 const currentPage = 2
 const limit = 5
@@ -81,7 +80,7 @@ describe('Pagination /weights', () => {
                 method: 'get',
                 path: `/api/query/v1/items/list`,
                 statusCode: 200,
-                body: itemsListFive,
+                body: items.slice(0, limit),
             })
 
             cy.getRelatedTags()
@@ -89,7 +88,7 @@ describe('Pagination /weights', () => {
             cy.visitLocalPage(`/weights?limit=${limit}`)
         })
 
-        it('should show limited count of items when set limit', () => {
+        it.only('should show limited count of items when set limit', () => {
             cy.dataCy('weights-list-item').should('have.length', limit)
         })
 
