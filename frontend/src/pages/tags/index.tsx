@@ -41,7 +41,7 @@ export default function TagsList({ tags, currentPage, totalItems, limit }: Infer
             </div>
 
             {/* Pagination */}
-            <Pagination totalItems={totalItems} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} baseRoute={routes.tags.list} query="" />
+            <Pagination totalItems={totalItems} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} baseRoute={routes.tags.list} />
         </div>
     </>
     )
