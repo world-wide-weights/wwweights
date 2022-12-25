@@ -18,7 +18,7 @@ type TextInputProps = {
     iconLink?: string
     /** Onclick when click on icon */
     iconOnClick?: (event: any) => void
-    /** Onclick when click on icon */
+    /** Set to true when the icon button should have type submit. */
     iconButtonIsSubmit?: boolean
 } & React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
 
