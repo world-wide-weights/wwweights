@@ -59,13 +59,19 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query }) => {
      * Fetch related tags
      */
     useEffect(() => {
-        setIsLoadingRelatedTags(true)
         const fetchRelatedTags = async () => {
-            const response = await fetch(`http://localhost:3004/api/query/v1/tags/related`)
-            const data = await response.json()
-            setRelatedTags(data)
+            setIsLoadingRelatedTags(true)
+
+            try {
+                const response = await fetch(`http://localhost:3004/api/query/v1/tags/related`)
+                const data = await response.json()
+                setRelatedTags(data)
+                setIsLoadingRelatedTags(false)
+            } catch (error) {
+                console.error(error)
+            }
         }
-        fetchRelatedTags().then(() => setIsLoadingRelatedTags(false))
+        fetchRelatedTags()
     }, [])
 
     return <header className="bg-white pt-2 md:pt-5 pb-3 md:pb-10">

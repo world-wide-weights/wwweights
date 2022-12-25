@@ -46,7 +46,6 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
             <title>{siteTitle}</title>
         </Head>
 
-        {console.log(query)}
         <SearchHeader query={query} />
 
         <div className="container mt-5">
