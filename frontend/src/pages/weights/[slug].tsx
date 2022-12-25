@@ -39,16 +39,16 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
                         <li><div className="md:hidden absolute bg-gradient-to-r right-0 from-transparent to-white w-20 h-8 py-1"></div></li>
                         {item.tags.map((tag, index) => <li key={tag.name} className={`${index === item.tags.length - 1 ? "mr-20" : ""}`}><Chip to={tag.slug}>{tag.name}</Chip></li>)}
                     </ul>
-                </div >
+                </div>
 
                 {/* Weights Image */}
-                < div className="row-start-1 lg:row-end-3 lg:flex lg:justify-end" >
+                <div className="row-start-1 lg:row-end-3 lg:flex lg:justify-end" >
                     {/* No better way yet: https://github.com/vercel/next.js/discussions/21379 Let's take a look at this when we got problems with it */}
                     <Image src="https://picsum.photos/1200" priority className="sm:hidden rounded-xl" alt={item.name} width={120} height={120} />
                     <Image src="https://picsum.photos/1200" priority className="hidden sm:block rounded-xl" alt={item.name} width={230} height={230} />
-                </div >
-            </div >
-        </div >
+                </div>
+            </div>
+        </div>
     </>
 }
 
