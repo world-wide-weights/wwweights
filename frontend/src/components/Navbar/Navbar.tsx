@@ -11,7 +11,9 @@ const navLinks = [{
     text: "Discover",
 }]
 
-/** Navbar component, should only be used once at the top */
+/** 
+ * Navbar component, should only be used once at the top 
+ */
 export const Navbar: React.FC = () => {
     const [isNavMobileOpen, setIsNavMobileOpen] = useState<boolean>(false)
 

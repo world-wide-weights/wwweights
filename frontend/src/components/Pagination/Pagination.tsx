@@ -21,6 +21,9 @@ export type PaginationProps = {
     query: string
 }
 
+/**
+ * Pagination component contains the complete logic for paginate correct
+ */
 export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage, baseRoute, query, itemsPerPage, defaultItemsPerPage = 16, siblingCount = 1 }) => {
     const paginationService = usePagination({ currentPage, totalItems, siblingCount, itemsPerPage, baseRoute, defaultItemsPerPage, query })
 

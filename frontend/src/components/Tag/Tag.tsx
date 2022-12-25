@@ -4,16 +4,14 @@ import { Color } from "../../types/color";
 type TagProps = {
   /** Content of tag */
   children: React.ReactNode
-
   /** href destination Link */
   to: string
-
   /** Possibility to change color and background of tag */
   color?: Color
 }
 
 /**
- * Tag
+ * Chip which can be just display a tag or be a link
  */
 export const Tag: React.FC<TagProps> = ({ children, to, color = "blue" }) => {
   return (
