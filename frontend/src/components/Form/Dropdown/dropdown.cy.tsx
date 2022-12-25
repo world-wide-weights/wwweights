@@ -27,16 +27,16 @@ const data = {
     placeholder: "Choose a filter...",
     options: [
         {
-            id: 1,
+            value: 1,
             label: "Relevance"
         },
         {
-            id: 2,
+            value: 2,
             label: "Das ist ein sehr langer Text für ein Dropdown item",
             icon: "face"
         },
         {
-            id: 3,
+            value: 3,
             label: "Lightest",
             icon: "face"
         }
@@ -59,7 +59,7 @@ describe('Dropdown', () => {
         cy.get(`[data-cy="${data.name}-dropdown-button"]`).click()
 
         data.options.forEach((option) => {
-            cy.get(`[data-cy="${data.name}-dropdown-option-${option.id}"]`).should('contain', option.label)
+            cy.get(`[data-cy="${data.name}-dropdown-option-${option.value}"]`).should('contain', option.label)
         })
     })
 
@@ -96,7 +96,7 @@ describe('Dropdown', () => {
         cy.get(`[data-cy="${data.name}-dropdown-menu"]`).should('be.visible')
 
         // select first item
-        cy.get(`[data-cy="${data.name}-dropdown-option-${data.options[0].id}"]`).click()
+        cy.get(`[data-cy="${data.name}-dropdown-option-${data.options[0].value}"]`).click()
 
         cy.get(`[data-cy="${data.name}-dropdown-button"]`).should('contain', data.options[0].label)
     })
@@ -107,7 +107,7 @@ describe('Dropdown', () => {
         cy.get(`[data-cy="${data.name}-dropdown-menu"]`).should('be.visible')
 
         // select first item
-        cy.get(`[data-cy="${data.name}-dropdown-option-${data.options[0].id}"]`).click()
+        cy.get(`[data-cy="${data.name}-dropdown-option-${data.options[0].value}"]`).click()
 
         cy.get(`[data-cy="${data.name}-dropdown-menu"]`).should('not.exist')
     })
