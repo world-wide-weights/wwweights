@@ -28,7 +28,7 @@ module.exports = {
       },
     },
     fontSize: {
-      sm: '0.7rem',
+      sm: '0.8rem',
       base: '0.9rem',
       lg: '1.0rem',
       xl: '1.2rem',
@@ -51,7 +51,7 @@ module.exports = {
           '800': '#043266',
           '900': '#021831',
         },
-        grey: {
+        gray: {
           '100': '#F5F7FA',
           '200': '#E4E7EB',
           '300': '#CBD2D9',

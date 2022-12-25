@@ -1,6 +1,5 @@
 import Head from "next/head";
 import { Button } from "../components/Button/Button";
-import { ItemPreviewList } from "../components/Item/ItemPreviewList";
 import { routes } from "../services/routes/routes";
 
 const Home = () => {
@@ -13,16 +12,9 @@ const Home = () => {
       </Head>
 
       <div className="container">
-        <p>Hello World</p>
-        <Button className="mt-2" to={routes.weights.list()} icon="list">Weights List</Button>
-        <Button className="mt-2" to={routes.tags.list()} icon="bookmark">Tags List</Button>
-
-        <ul>
-          <ItemPreviewList name="Smartphone Tessdjfdskfjskjdfk" slug="smartphone" weight={{ value: 200, isCa: false }} imageUrl="https://via.placeholder.com/96.png" />
-          <ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 200, aditionalValue: 300, isCa: false }} imageUrl="https://via.placeholder.com/96.png" />
-          <ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 200, isCa: false }} />
-          <ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 200, isCa: false }} imageUrl="https://via.placeholder.com/96.png" />
-        </ul>
+        <p className="mb-2">Hello World</p>
+        <Button className="mb-2" to={routes.weights.list()} icon="list">Weights List</Button>
+        <Button to={routes.tags.list()} icon="bookmark">Tags List</Button>
       </div>
     </div>
   )

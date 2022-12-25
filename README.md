@@ -21,5 +21,5 @@ docker compose up -d
 
 Frontend is now accessible on port [3000](http://localhost:3000)    
 Backend is now accessible on port [3001](http://localhost:3001)    
-Postgres is now accessible on port 5432. It is highly recommended to use pg admin to access postgres.    
+Postgres is now accessible on port 5433. It is highly recommended to use pg admin to access postgres.    
 
