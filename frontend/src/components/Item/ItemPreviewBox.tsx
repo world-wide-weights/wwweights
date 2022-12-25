@@ -29,7 +29,7 @@ export const ItemPreviewBox: React.FC<ItemPreviewProps> = ({ slug, datacy, name,
     const weightString = generateWeightString(weight)
 
     return <Link datacy={datacy} className="flex items-center" href={routes.weights.single(slug)}>
-        {imageUrl && <Image className="object-cover rounded-xl w-24 h-24 mr-5 bg-white" alt={`Image of ${name}`} src={imageUrl} width={96} height={96} />}
+        {imageUrl && <Image priority className="object-cover rounded-xl w-24 h-24 mr-5 bg-white" alt={`Image of ${name}`} src={imageUrl} width={96} height={96} />}
         <div>
             <h5 className="text-gray-900 text-xl font-semibold break-all">{name}</h5>
             <p title={`${name} has a weight of ${weightString}`}>{weightString}</p>
