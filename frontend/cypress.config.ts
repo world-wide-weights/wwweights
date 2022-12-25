@@ -44,8 +44,12 @@ export default defineConfig({
 
           return null
         },
-        async nock({ hostname, method, path, statusCode, body }: NockType) {
+        activateNock() {
           nock.activate()
+
+          return null
+        },
+        async nock({ hostname, method, path, statusCode, body }: NockType) {
 
           console.log(`Backend Mock: ${method.toUpperCase()} ${hostname}${path} respond with`, statusCode, `${JSON.stringify(body).substring(0, 50)}...`)
 

@@ -1,4 +1,5 @@
 import items from "../../fixtures/items/list.json"
+import statistics from "../../fixtures/items/statistics.json"
 
 const currentPage = 2
 const limit = 5
@@ -8,12 +9,21 @@ describe('Pagination /weights', () => {
     describe("Base tests", () => {
         beforeEach(() => {
             cy.task('clearNock')
+            cy.task('activateNock')
             cy.task('nock', {
                 hostname: apiBaseUrl,
                 method: 'get',
                 path: `/api/query/v1/items/list`,
                 statusCode: 200,
                 body: items,
+            })
+
+            cy.task('nock', {
+                hostname: apiBaseUrl,
+                method: 'get',
+                path: `/api/query/v1/items/statistics`,
+                statusCode: 200,
+                body: statistics,
             })
 
             cy.getRelatedTags()
@@ -80,12 +90,22 @@ describe('Pagination /weights', () => {
     describe('Limit', () => {
         beforeEach(() => {
             cy.task('clearNock')
+            cy.task('activateNock')
+
             cy.task('nock', {
                 hostname: apiBaseUrl,
                 method: 'get',
                 path: `/api/query/v1/items/list`,
                 statusCode: 200,
                 body: items.slice(0, limit),
+            })
+
+            cy.task('nock', {
+                hostname: apiBaseUrl,
+                method: 'get',
+                path: `/api/query/v1/items/statistics`,
+                statusCode: 200,
+                body: statistics,
             })
 
             cy.getRelatedTags()
