@@ -72,12 +72,12 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                     {/* Pagination */}
                     <Pagination totalItems={totalItems} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} query={query} baseRoute={routes.weights.list} />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col md:w-1/2 lg:w-1/3 2xl:w-1/4">
                     {/* Headline Statistics */}
                     <Headline level={3} className="md:hidden">Statistics</Headline>
 
                     {/* Statistics */}
-                    <div className="gap-4 md:w-1/2 lg:w-1/3 2xl:w-1/4">
+                    <div className="gap-4">
                         <StatsCard icon="weight" value={generateWeightString(statistics.heaviest.weight)} descriptionTop={statistics.heaviest.name} descriptionBottom="Heaviest" />
                         <StatsCard icon="eco" value={generateWeightString(statistics.lightest.weight)} descriptionTop={statistics.lightest.name} descriptionBottom="Lightest" />
                         <StatsCard icon="scale" value={`~${statistics.averageWeight} g`} descriptionBottom="Average" />
