@@ -86,7 +86,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query }) => {
                                     <Search />
                                 </div>
                             </div>
-                            {/* TODO(Zoe-bot): Loading Component */}
+                            {/* TODO(Zoe-bot): Loading Component and scrollable tags */}
                             {isLoadingRelatedTags ? <p>Loading...</p> : <div className="whitespace-nowrap overflow-x-scroll md:whitespace-normal md:overflow-hidden">
                                 {/* Only show tags not current searched (should not be the value in query field) */}
                                 {relatedTags.map(relatedTag => relatedTag.name !== query && <Chip key={relatedTag.slug} to={routes.weights.list({ query: relatedTag.slug })}>{relatedTag.name}</Chip>)}
