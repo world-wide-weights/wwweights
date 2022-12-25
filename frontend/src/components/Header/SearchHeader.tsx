@@ -88,9 +88,9 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "" }) => {
                             </div>
                             {/* TODO(Zoe-bot): Loading Component and scrollable tags */}
                             {/* TODO(Zoe-bot): Only develop Remove query !== "" condition when normal backend api is set */}
-                            {query !== "" && (isLoadingRelatedTags ? <p>Loading...</p> : <div className="whitespace-nowrap overflow-x-scroll md:whitespace-normal md:overflow-hidden">
+                            {query !== "" && (isLoadingRelatedTags ? <p>Loading...</p> : <div datacy="search-header-tag-wrapper" className="whitespace-nowrap overflow-x-scroll md:whitespace-normal md:overflow-hidden">
                                 {/* Only show tags not current searched (should not be the value in query field) */}
-                                {relatedTags.map(relatedTag => relatedTag.name !== query && <Chip key={relatedTag.slug} to={routes.weights.list({ query: relatedTag.slug })}>{relatedTag.name}</Chip>)}
+                                {relatedTags.map(relatedTag => relatedTag.name !== values.query && <Chip key={relatedTag.slug} to={routes.weights.list({ query: relatedTag.slug })}>{relatedTag.name}</Chip>)}
                             </div>)}
                             <AutoUpdateQueryField />
                         </Form>
