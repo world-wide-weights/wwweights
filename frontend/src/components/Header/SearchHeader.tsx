@@ -63,7 +63,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query }) => {
             setIsLoadingRelatedTags(true)
 
             try {
-                const response = await fetch(`http://localhost:3004/api/query/v1/tags/related`)
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/tags/related`)
                 const data = await response.json()
                 setRelatedTags(data)
                 setIsLoadingRelatedTags(false)
