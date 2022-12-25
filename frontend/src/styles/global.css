@@ -2,6 +2,14 @@
 @tailwind utilities;
 @tailwind components;
 
+:root {
+    --primary-color: #0967D2;
+}
+
+:focus-visible {
+    outline: var(--primary-color) auto 2px;
+}
+
 body {
     font-size: 15px;
 }
