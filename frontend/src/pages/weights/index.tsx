@@ -2,6 +2,7 @@ import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Head from "next/head"
 import { SearchHeader } from "../../components/Header/SearchHeader"
 import { Headline } from "../../components/Headline/Headline"
+import { Icon } from "../../components/Icon/Icon"
 import { ItemPreviewBox } from "../../components/Item/ItemPreviewBox"
 import { Pagination } from "../../components/Pagination/Pagination"
 import { StatsCard } from "../../components/Statistics/StatsCard"
@@ -63,7 +64,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
             <Headline level={3}>All weights</Headline>
 
             <div className="md:flex">
-                <div className="md:w-1/2 lg:w-2/3 2xl:w-3/4 mr-10 mb-10 md:mb-0">
+                <div className="md:w-1/2 lg:w-2/3 2xl:w-[70%] mr-10 mb-10 md:mb-0">
                     {/* Weights */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-5 mb-10">
                         {items.map((item) => <ItemPreviewBox datacy="weights-list-item" key={item.id} name={item.name} slug={item.slug} weight={item.weight} imageUrl="https://picsum.photos/200" />)}
@@ -72,15 +73,21 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                     {/* Pagination */}
                     <Pagination totalItems={totalItems} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} query={query} baseRoute={routes.weights.list} />
                 </div>
-                <div className="flex flex-col md:w-1/2 lg:w-1/3 2xl:w-1/4">
+                <div className="flex md:w-1/2 lg:w-1/3 2xl:w-[30%]">
                     {/* Headline Statistics */}
                     <Headline level={3} className="md:hidden">Statistics</Headline>
 
                     {/* Statistics */}
-                    <div className="gap-4">
-                        <StatsCard icon="weight" value={generateWeightString(statistics.heaviest.weight)} descriptionTop={statistics.heaviest.name} descriptionBottom="Heaviest" />
-                        <StatsCard icon="eco" value={generateWeightString(statistics.lightest.weight)} descriptionTop={statistics.lightest.name} descriptionBottom="Lightest" />
-                        <StatsCard icon="scale" value={`~${statistics.averageWeight} g`} descriptionBottom="Average" />
+                    <div className="flex h-min">
+                        <button className="bg-white rounded-lg px-1 mr-2">
+                            <Icon>chevron_left</Icon>
+                        </button>
+
+                        <div className="grid gap-4">
+                            <StatsCard icon="weight" value={generateWeightString(statistics.heaviest.weight)} descriptionTop={statistics.heaviest.name} descriptionBottom="Heaviest" />
+                            <StatsCard icon="eco" value={generateWeightString(statistics.lightest.weight)} descriptionTop={statistics.lightest.name} descriptionBottom="Lightest" />
+                            <StatsCard icon="scale" value={`~${statistics.averageWeight} g`} descriptionBottom="Average" />
+                        </div>
                     </div>
                 </div>
             </div>
