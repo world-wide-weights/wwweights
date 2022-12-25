@@ -54,7 +54,7 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
 
 export const getStaticProps: GetStaticProps<WeightsSingleProps> = async (context) => {
     const slug = context.params ? context.params.slug : "1"
-    const response = await fetch(`http://localhost:3004/api/query/v1/items/getOne?slug=${slug}`)
+    const response = await fetch(`http://localhost:3004/api/query/v1/items/list?slug=${slug}`)
     const data = await response.json()
 
     // Validate Query
