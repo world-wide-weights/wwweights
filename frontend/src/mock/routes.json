@@ -1,6 +1,6 @@
 {
     "/api/query/v1/items/getList": "/items",
-    "/api/query/v1/items/getList?page=:page&limit=:limit&search=:query": "/items?_page=:page&_limit=:limit&q=:query",
+    "/api/query/v1/items/getList?page=:page&limit=:limit&query=:query": "/items?_page=:page&_limit=:limit&q=:query",
     "/api/query/v1/items/getList?page=:page&limit=:limit": "/items?_page=:page&_limit=:limit",
     "/api/query/v1/items/getList?page=:page": "/items?_page=:page",
     "/api/query/v1/items/getList?limit=:limit": "/items?_limit=:limit",

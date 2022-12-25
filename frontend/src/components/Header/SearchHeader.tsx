@@ -4,28 +4,32 @@ import { routes } from "../../services/routes/routes";
 import { Search } from "../Form/Search/Search";
 
 type SearchHeaderProps = {
-    search: string
+    /** Search query. */
+    query: string
 }
 
-export const SearchHeader: React.FC<SearchHeaderProps> = ({ search }) => {
+/**
+ * Header with search and search suggestions
+ */
+export const SearchHeader: React.FC<SearchHeaderProps> = ({ query }) => {
     const router = useRouter()
 
-    const initialValues = {
-        search: search
+    // Formik Initial Values
+    const initialQueryValues = {
+        query: query
     }
 
-    const submitForm = (values: typeof initialValues) => {
-        router.push(routes.weights.list(values))
+    // Formik On Submit Button
+    const submitForm = (formValues: typeof initialQueryValues) => {
+        router.push(routes.weights.list({ query: formValues.query }))
     }
 
-    return <header className="bg-white pt-5 pb-10">
+    return <header className="bg-white pt-2 md:pt-5 pb-3 md:pb-10">
         <div className="container flex flex-col items-center">
-            <h1 className="font-semibold text-3xl mb-2">Wie viel wiegt?</h1>
-            <Formik initialValues={initialValues} onSubmit={submitForm}>
-                <Form>
-                    <div className="md:w-96">
-                        <Search />
-                    </div>
+            <h1 className="font-semibold text-xl md:text-3xl mb-2">Wie viel wiegt?</h1>
+            <Formik initialValues={initialQueryValues} onSubmit={submitForm}>
+                <Form className="w-full md:w-96">
+                    <Search />
                 </Form>
             </Formik>
         </div>

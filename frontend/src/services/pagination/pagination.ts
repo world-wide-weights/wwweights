@@ -1,5 +1,5 @@
-import { range } from "../utils/range"
 import { RoutePagination } from "../routes/routes"
+import { range } from "../utils/range"
 
 export const Ellipsis = '...'
 
@@ -27,8 +27,9 @@ export type PaginationServiceParams = {
     currentPage: number,
     baseRoute: RoutePagination,
     defaultItemsPerPage: number
+    query: string
 }
-export const paginationService = ({ totalItems, itemsPerPage, siblingCount, currentPage, baseRoute, defaultItemsPerPage }: PaginationServiceParams): PaginationService => {
+export const paginationService = ({ totalItems, itemsPerPage, siblingCount, currentPage, baseRoute, defaultItemsPerPage, query }: PaginationServiceParams): PaginationService => {
     const totalPageCount = getTotalPageCount(totalItems, itemsPerPage)
 
     const paginationData = paginationDataService({ totalPageCount, currentPage, siblingCount })
@@ -37,11 +38,11 @@ export const paginationService = ({ totalItems, itemsPerPage, siblingCount, curr
         content: Ellipsis
     } : {
         content: page,
-        link: baseRoute({ page, itemsPerPage, defaultItemsPerPage })
+        link: baseRoute({ page, itemsPerPage, defaultItemsPerPage, query })
     }))
 
-    const prev = (currentPage === 1 || totalPageCount === 0) ? null : baseRoute({ page: currentPage - 1, itemsPerPage, defaultItemsPerPage })
-    const next = (currentPage === totalPageCount || totalPageCount === 0) ? null : baseRoute({ page: currentPage + 1, itemsPerPage, defaultItemsPerPage })
+    const prev = (currentPage === 1 || totalPageCount === 0) ? null : baseRoute({ page: currentPage - 1, itemsPerPage, defaultItemsPerPage, query })
+    const next = (currentPage === totalPageCount || totalPageCount === 0) ? null : baseRoute({ page: currentPage + 1, itemsPerPage, defaultItemsPerPage, query })
 
     return {
         prev,

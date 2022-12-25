@@ -30,12 +30,13 @@ export type Item = {
 type WeightsListProps = {
     items: Item[]
     currentPage: number
+    totalItems: number
     limit: number
-    search: string
+    query: string
 }
 
 /** Base List for weights */
-export default function WeightsList({ items, currentPage, limit, search }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function WeightsList({ items, currentPage, totalItems, limit, query }: InferGetServerSidePropsType<typeof getServerSideProps>) {
     const siteTitle = `Latest ${currentPage > 1 ? `| Page ${currentPage} ` : ``}- World Wide Weights`
 
     return (<>
@@ -44,7 +45,7 @@ export default function WeightsList({ items, currentPage, limit, search }: Infer
             <title>{siteTitle}</title>
         </Head>
 
-        <SearchHeader search={search} />
+        <SearchHeader query={query} />
 
         <div className="container mt-5">
             {/* Headline */}
@@ -56,7 +57,7 @@ export default function WeightsList({ items, currentPage, limit, search }: Infer
             </div>
 
             {/* Pagination */}
-            <Pagination totalItems={100} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} baseRoute={routes.weights.list} />
+            <Pagination totalItems={totalItems} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} query={query} baseRoute={routes.weights.list} />
         </div>
     </>
     )
@@ -65,7 +66,7 @@ export default function WeightsList({ items, currentPage, limit, search }: Infer
 export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (context) => {
     const currentPage = parseInt(context.query.page as string ?? FIRST_PAGE)
     const limit = parseInt(context.query.limit as string ?? DEFAULT_ITEMS_PER_PAGE)
-    const search = context.query.search as string ?? ""
+    const query = context.query.query as string ?? ""
 
     // Validate Query
     if (currentPage < 1 || limit < 1 || limit > ITEMS_PER_PAGE_MAXIMUM) {
@@ -74,14 +75,17 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
         }
     }
 
-    const response = await fetch(`http://localhost:3004/api/query/v1/items/getList?page=${currentPage}&limit=${limit}&search=${search}`)
+    const response = await fetch(`http://localhost:3004/api/query/v1/items/getList?page=${currentPage}&limit=${limit}&query=${query}`)
     const data = await response.json()
+    const totalItems = parseInt(response.headers.get("x-total-count") ?? "0")
+
     return {
         props: {
             items: data,
             currentPage,
             limit,
-            search
+            totalItems,
+            query
         }
     }
 }

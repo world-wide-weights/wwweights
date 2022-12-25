@@ -17,10 +17,12 @@ export type PaginationProps = {
     defaultItemsPerPage?: number
     /** Customize count of siblings shown between the dots. Examples: `1 => 1 .. (4) 5 (6) ... 15` `2 => 1 .. (4) (5) 6 (7) (8) ... 15` */
     siblingCount?: number
+    /** Search query. */
+    query: string
 }
 
-export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage, baseRoute, itemsPerPage, defaultItemsPerPage = 16, siblingCount = 1 }) => {
-    const paginationService = usePagination({ currentPage, totalItems, siblingCount, itemsPerPage, baseRoute, defaultItemsPerPage })
+export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage, baseRoute, query, itemsPerPage, defaultItemsPerPage = 16, siblingCount = 1 }) => {
+    const paginationService = usePagination({ currentPage, totalItems, siblingCount, itemsPerPage, baseRoute, defaultItemsPerPage, query })
 
     // If our pagination array length is less than 2 to we should not render component (because there are not enough items for pagination)
     if (currentPage === 0 || paginationService.pages.length < 2) {
