@@ -28,10 +28,9 @@ describe('Search /weights', () => {
             cy.url().should('include', items[0].tags[0].slug)
         })
 
-        it('should search items when hit enter', () => {
-            cy.dataCy('search').type(items[0].tags[0].slug, {
-                delay: 100
-            }).type('{enter}')
+        it.only('should search items when hit enter', () => {
+            cy.dataCy('search').type(items[0].tags[0].slug).blur()
+            cy.dataCy('search').type('{enter}')
             cy.url().should('include', items[0].tags[0].slug)
         })
 
