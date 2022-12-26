@@ -1,11 +1,13 @@
-// See https://github.com/typicode/json-server#module
+// See https://github.com/typicode/json-server#module 
 const jsonServer = require('json-server')
 const server = jsonServer.create()
 const router = jsonServer.router('db.json')
+router.db._.id = 'slug'
 const middlewares = jsonServer.defaults()
 
 server.use(middlewares)
-// Add this before server.use(router)
+
+// Add this before server.use(router) 
 server.use(jsonServer.rewriter({
     "/api/query/v1/items/list": "/items",
     "/api/query/v1/items/list?page=:page&limit=:limit&query=:query": "/items?_page=:page&_limit=:limit&q=:query",
@@ -20,6 +22,7 @@ server.use(jsonServer.rewriter({
     "/api/query/v1/tags/list?page=:page": "/tags?_page=:page",
     "/api/query/v1/tags/related": "/related_tags"
 }))
+
 server.use(router)
 server.listen(3004, () => {
     console.log('JSON Server is running')
