@@ -38,7 +38,7 @@ export const ItemPreviewList: React.FC<ItemPreviewProps> = ({ slug, name, weight
                 </div>
             </div>
             <div className="flex items-center md:w-3/4">
-                <h5 className="text-gray-800 md:text-lg text-right font-semibold w-1/3 sm:w-1/4 lg:w-1/6 mr-4" title={`${name} has a weight of ${weightString}`}>{weightString}</h5>
+                <h5 className="text-gray-800 md:text-lg text-right font-medium w-1/3 sm:w-1/4 lg:w-1/6 mr-4" title={`${name} has a weight of ${weightString}`}>{weightString}</h5>
                 <div className="w-2/3 sm:w-3/4 lg:w-5/6">
                     {/* TODO (Zoe-Bot): Add correct percentage and find a solution for span Issue #107 */}
                     <ProgressBar progress={62} />

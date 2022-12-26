@@ -11,5 +11,5 @@
 }
 
 body {
-    font-size: 15px;
+    @apply tracking-wide	
 }

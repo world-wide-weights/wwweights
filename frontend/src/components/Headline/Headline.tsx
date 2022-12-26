@@ -28,6 +28,6 @@ export const Headline: React.FC<HeadlineProps> = ({ level = 1, children, hasMarg
     const CustomTag = `h${level}` as keyof JSX.IntrinsicElements
 
     return (
-        <CustomTag className={`${textSizes[level]} font-semibold ${hasMargin ? "mb-2 md:mb-4" : ""} ${className}`}>{children}</CustomTag>
+        <CustomTag className={`${textSizes[level]} font-bold ${hasMargin ? "mb-2 md:mb-4" : ""} ${className}`}>{children}</CustomTag>
     )
 }

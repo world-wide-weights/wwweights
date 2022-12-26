@@ -22,7 +22,7 @@ export const Navbar: React.FC = () => {
             <div className="flex items-center justify-between">
                 <Link className="flex items-center" href={routes.home}>
                     <Image src={logo} alt="Logo" className="min-w-[25px] w-[25px] mr-2" />
-                    <h6 className="font-semibold text-lg text-blue-500">World Wide Weights</h6>
+                    <h6 className="font-medium text-lg text-blue-500">World Wide Weights</h6>
                 </Link>
                 <IconButton className="block md:hidden" onClick={() => setIsNavMobileOpen(isNavMobileOpen => !isNavMobileOpen)} icon="menu" />
             </div>

@@ -27,16 +27,6 @@ module.exports = {
         '2xl': '12rem',
       },
     },
-    fontSize: {
-      sm: '0.8rem',
-      base: '0.9rem',
-      lg: '1.0rem',
-      xl: '1.2rem',
-      "2xl": '1.463rem',
-      "3xl": '1.853rem',
-      "4xl": '2.341rem',
-      "5xl": '2.952rem',
-    },
     extend: {
       colors: {
         blue: {
@@ -65,7 +55,7 @@ module.exports = {
       }
     },
     fontFamily: {
-      sans: ['var(--font-montserrat)', ...fontFamily.sans],
+      sans: [...fontFamily.sans],
     }
   },
   plugins: [],
