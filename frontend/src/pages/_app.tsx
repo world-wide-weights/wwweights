@@ -24,10 +24,11 @@ const metropolis = localFont({
       style: 'normal',
     },
   ],
+  variable: "--font-metropolis"
 })
 
 const App = ({ Component, pageProps }: AppProps) => {
-  return <main className={`${metropolis.className} font-sans`}>
+  return <main className={`${metropolis.variable} font-sans`}>
     <Layout>
       <Component {...pageProps} />
     </Layout>

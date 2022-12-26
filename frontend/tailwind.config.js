@@ -55,7 +55,7 @@ module.exports = {
       }
     },
     fontFamily: {
-      sans: [...fontFamily.sans],
+      sans: ['var(--font-metropolis)', ...fontFamily.sans],
     }
   },
   plugins: [],
