@@ -29,7 +29,7 @@ Cypress.Commands.add('mockGetRelatedTags', () => {
 })
 
 Cypress.Commands.add('mockWeightsPage', (itemCount?: number) => {
-    const body = itemCount ? items.slice(0, itemCount) : items
+    const body = itemCount || itemCount === 0 ? items.slice(0, itemCount) : items
 
     cy.task('clearNock')
     cy.task('activateNock')
