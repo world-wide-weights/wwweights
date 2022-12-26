@@ -25,7 +25,7 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
         {/* Search with related tags */}
         <SearchHeader />
 
-        <div className="container mt-10 md:mt-20">
+        <main className="container mt-10 md:mt-20">
             <div className="grid grid-cols-[120px_1fr] md:grid-cols-[250px_1fr] items-center lg:grid-cols-2">
                 {/* Headline and Weight */}
                 <div className="lg:col-start-1 lg:col-end-3 pl-5 lg:pl-0 md:mt-5">
@@ -52,7 +52,7 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
                     <Image src="https://picsum.photos/1200" priority className="hidden sm:block rounded-xl" alt={item.name} width={230} height={230} />
                 </div>
             </div>
-        </div>
+        </main>
     </>
 }
 

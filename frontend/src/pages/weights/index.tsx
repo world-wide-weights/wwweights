@@ -47,10 +47,14 @@ type WeightsListProps = {
     statistics: Statistics
 }
 
-/** Base List for weights */
+/** 
+ * Discover Page, list all items, search results and single tags
+ */
 export default function WeightsList({ items, currentPage, totalItems, limit, query, statistics }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+    // Site Title
     const siteTitle = `Latest ${currentPage > 1 ? `| Page ${currentPage} ` : ``}- World Wide Weights`
 
+    // Local state
     const [statisticsExpanded, setStatisticsExpanded] = useState<boolean>(false)
 
     return (<>
@@ -62,7 +66,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
         {/* Search with related tags */}
         <SearchHeader query={query} />
 
-        <div className="container mt-5">
+        <main className="container mt-5">
             {/* Headline Weight */}
             {!statisticsExpanded && <Headline level={3}>All weights</Headline>}
 
@@ -97,8 +101,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                     </div>
                 </div>
             </div>
-        </div>
-
+        </main>
     </>
     )
 }
