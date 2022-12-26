@@ -31,7 +31,7 @@ export default function TagsList({ tags, currentPage, totalItems, limit }: Infer
             <title>{siteTitle}</title>
         </Head>
 
-        <div className="container mt-5">
+        <main className="container mt-5">
             {/* Headline */}
             <Headline level={3}>All tags</Headline>
 
@@ -42,7 +42,7 @@ export default function TagsList({ tags, currentPage, totalItems, limit }: Infer
 
             {/* Pagination */}
             <Pagination totalItems={totalItems} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} baseRoute={routes.tags.list} />
-        </div>
+        </main>
     </>
     )
 }
