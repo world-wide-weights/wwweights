@@ -33,7 +33,16 @@ declare global {
       /**
        * Interceptor for related tag request.
        */
-      getRelatedTags(): Chainable<void>
+      mockGetRelatedTags(): Chainable<void>
+      /**
+       * Mocks all requests server side and client side
+       * - clear and activate nock
+       * - mock get items 
+       * - mock related tags 
+       * - mock item statistics
+       * @param itemCount count of items getting back with body
+       */
+      mockWeightsPage(itemCount?: number): Chainable<void>
     }
   }
 }

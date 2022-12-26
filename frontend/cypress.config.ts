@@ -21,7 +21,7 @@ export default defineConfig({
       const app = next({ dev, hostname, port })
       const handle = app.getRequestHandler()
 
-      // TODO: Move this to async and await syntax
+      // TODO (Zoe-Bot): Move this to async and await syntax
       await app.prepare().then(() => {
         createServer(async (req, res) => {
           try {
@@ -38,15 +38,32 @@ export default defineConfig({
       })
 
       on('task', {
+        /**
+         * Clears HTTP interceptor and the interceptor list.
+         * Goes into unmocked state.
+         */
         clearNock() {
           nock.restore()
           nock.cleanAll()
 
+          // Need to return null or a value in task otherwise it will fail test: https://docs.cypress.io/api/commands/task#Usage
           return null
         },
-        async nock({ hostname, method, path, statusCode, body }: NockType) {
-          nock.activate()
+        /**
+         * When we call clearNock we need to activate the http interceptor.
+         */
+        activateNock() {
+          // After nock restore (in clearNock()) is called we need to activate nock again because it removes http interceptor: https://github.com/nock/nock#restoring
+          if (!nock.isActive())
+            nock.activate()
 
+          return null
+        },
+        /**
+         * Mocks server side requests
+         * @param object with mock meta information and body
+         */
+        async nock({ hostname, method, path, statusCode, body }: NockType) {
           console.log(`Backend Mock: ${method.toUpperCase()} ${hostname}${path} respond with`, statusCode, `${JSON.stringify(body).substring(0, 50)}...`)
 
           nock(hostname).persist()[method](path).query(true).reply(statusCode, body)

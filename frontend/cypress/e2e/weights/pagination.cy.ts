@@ -1,43 +1,31 @@
-import items from "../../fixtures/items/list.json"
-
 const currentPage = 2
 const limit = 5
-const apiBaseUrl = Cypress.env("API_BASE_URL")
 
 describe('Pagination /weights', () => {
     describe("Base tests", () => {
         beforeEach(() => {
-            cy.task('clearNock')
-            cy.task('nock', {
-                hostname: apiBaseUrl,
-                method: 'get',
-                path: `/api/query/v1/items/list`,
-                statusCode: 200,
-                body: items,
-            })
-
-            cy.getRelatedTags()
+            cy.mockWeightsPage()
         })
 
         it('should display pagination', () => {
             cy.visitLocalPage("/weights")
-            cy.wait('@getRelatedTags')
+            cy.wait('@mockGetRelatedTags')
             cy.dataCy('pagination').should('be.visible')
         })
 
         it('should show page 1 when query is page=1 or nothing', () => {
             cy.visitLocalPage("/weights")
-            cy.wait('@getRelatedTags')
+            cy.wait('@mockGetRelatedTags')
             cy.checkCurrentActivePage(1)
 
             cy.visitLocalPage("/weights?page=1")
-            cy.wait('@getRelatedTags')
+            cy.wait('@mockGetRelatedTags')
             cy.checkCurrentActivePage(1)
         })
 
         it('should show page 2 when query is page=2', () => {
             cy.visitLocalPage("/weights?page=2")
-            cy.wait('@getRelatedTags')
+            cy.wait('@mockGetRelatedTags')
             cy.checkCurrentActivePage(2)
         })
 
@@ -62,7 +50,7 @@ describe('Pagination /weights', () => {
         describe('Buttons', () => {
             beforeEach(() => {
                 cy.visitLocalPage(`/weights?page=${currentPage}`)
-                cy.wait('@getRelatedTags')
+                cy.wait('@mockGetRelatedTags')
             })
 
             it('should show next page when click next button', () => {
@@ -79,19 +67,10 @@ describe('Pagination /weights', () => {
 
     describe('Limit', () => {
         beforeEach(() => {
-            cy.task('clearNock')
-            cy.task('nock', {
-                hostname: apiBaseUrl,
-                method: 'get',
-                path: `/api/query/v1/items/list`,
-                statusCode: 200,
-                body: items.slice(0, limit),
-            })
-
-            cy.getRelatedTags()
+            cy.mockWeightsPage(5)
 
             cy.visitLocalPage(`/weights?limit=${limit}`)
-            cy.wait('@getRelatedTags')
+            cy.wait('@mockGetRelatedTags')
         })
 
         it('should show limited count of items when set limit', () => {

@@ -1,26 +1,16 @@
 import items from "../../fixtures/items/list.json"
-import relatedtags from "../../fixtures/tags/related.json"
-
-const apiBaseUrl = Cypress.env("API_BASE_URL")
+import relatedTags from "../../fixtures/tags/related.json"
 
 describe('Search /weights', () => {
     describe('Search', () => {
         beforeEach(() => {
-            cy.task('clearNock')
-            cy.task('nock', {
-                hostname: apiBaseUrl,
-                method: 'get',
-                path: `/api/query/v1/items/list`,
-                statusCode: 200,
-                body: items,
-            })
-
-            cy.getRelatedTags()
+            cy.mockWeightsPage()
 
             cy.visitLocalPage("/weights")
-            cy.wait('@getRelatedTags')
+            cy.wait('@mockGetRelatedTags')
         })
 
+        // This test seems to be flaky: https://github.com/cypress-io/cypress/issues/3817
         // it('should search items when click search items', () => {
         //     cy.dataCy('search').type(items[0].tags[0].slug)
         //     cy.dataCy('text-input-submit-icon-query').click()
@@ -28,6 +18,7 @@ describe('Search /weights', () => {
         //     cy.url().should('include', items[0].tags[0].slug)
         // })
 
+        // This test seems to be flaky: https://github.com/cypress-io/cypress/issues/3817
         // it('should search items when hit enter', () => {
         //     cy.dataCy('search').type(`${items[0].tags[0].slug}{enter}`)
         //     cy.url().should('include', items[0].tags[0].slug)
@@ -35,7 +26,7 @@ describe('Search /weights', () => {
 
         it('should search items when query in url', () => {
             cy.visitLocalPage(`/weights?query=${items[0].tags[0].slug}`)
-            cy.wait('@getRelatedTags')
+            cy.wait('@mockGetRelatedTags')
 
             cy.dataCy('search').should('have.value', items[0].tags[0].slug)
         })
@@ -43,19 +34,10 @@ describe('Search /weights', () => {
 
     describe('Related Tags', () => {
         beforeEach(() => {
-            cy.task('clearNock')
-            cy.task('nock', {
-                hostname: apiBaseUrl,
-                method: 'get',
-                path: `/api/query/v1/items/list`,
-                statusCode: 200,
-                body: items,
-            })
-
-            cy.getRelatedTags()
+            cy.mockWeightsPage()
 
             cy.visitLocalPage("/weights")
-            cy.wait('@getRelatedTags')
+            cy.wait('@mockGetRelatedTags')
         })
 
         describe('Displayed tags', () => {
@@ -73,7 +55,7 @@ describe('Search /weights', () => {
                 // Click first tag
                 cy.dataCy('search-header-tag-wrapper', ' a').first().click()
 
-                cy.dataCy('search').should('have.value', relatedtags[0].name)
+                cy.dataCy('search').should('have.value', relatedTags[0].name)
             })
 
             it('should not display tag in list when search for tag', () => {

@@ -1,0 +1,59 @@
+{
+    "heaviest": {
+        "id": 100,
+        "name": "Cassiopeia IT-500 M30CR",
+        "slug": "cassiopeia-it-500-m30cr",
+        "weight": {
+            "value": "290",
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Casio",
+                "slug": "casio"
+            },
+            {
+                "name": "2003 Apr",
+                "slug": "2003-apr"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    "lightest": {
+        "id": 105,
+        "name": "iPAQ H6340 / H6345",
+        "slug": "ipaq-h6340-h6345",
+        "weight": {
+            "value": "190",
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Hewlett-Packard",
+                "slug": "hewlett-packard"
+            },
+            {
+                "name": "2004 Jul",
+                "slug": "2004-jul"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    "averageWeight": 200
+}
