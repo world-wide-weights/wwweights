@@ -136,10 +136,13 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
         }
     }
 
+    // Fetch items and statistics
     const [itemsResponse, statisticResponse] = await Promise.all([
         fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/items/list?page=${currentPage}&limit=${limit}&query=${query}`),
         fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/items/statistics`),
     ])
+
+    // Read jsons from items and statistics
     const [items, statistics] = await Promise.all([
         itemsResponse.json(),
         statisticResponse.json()

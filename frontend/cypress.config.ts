@@ -46,6 +46,7 @@ export default defineConfig({
           nock.restore()
           nock.cleanAll()
 
+          // Need to return null or a value in task otherwise it will fail test: https://docs.cypress.io/api/commands/task#Usage
           return null
         },
         /**
@@ -56,7 +57,6 @@ export default defineConfig({
           if (!nock.isActive())
             nock.activate()
 
-          // Need to return null or a value otherwise it will fail test: https://docs.cypress.io/api/commands/task#Usage
           return null
         },
         /**
