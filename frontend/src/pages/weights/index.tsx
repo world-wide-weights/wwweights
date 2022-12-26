@@ -2,6 +2,7 @@ import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Head from "next/head"
 import { useState } from "react"
 import { Button } from "../../components/Button/Button"
+import { SearchEmptyState } from "../../components/EmptyState/SearchEmptyState"
 import { SearchHeader } from "../../components/Header/SearchHeader"
 import { Headline } from "../../components/Headline/Headline"
 import { Icon } from "../../components/Icon/Icon"
@@ -58,7 +59,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
     // Local state
     const [statisticsExpanded, setStatisticsExpanded] = useState<boolean>(false)
 
-    return (<>
+    return <>
         {/* Meta Tags */}
         <Head>
             <title>{siteTitle}</title>
@@ -69,59 +70,62 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
 
         {/* Content */}
         <main className="container mt-5">
+            {items.length === 0 ?
+                // Empty State
+                <SearchEmptyState query={query} />
+                : <>
+                    {/* Not Expanded Headline bar */}
+                    {!statisticsExpanded && <div className="flex items-center justify-between">
+                        {/* Headline Weight  */}
+                        <Headline level={3}>All weights</Headline>
 
-            {/* Not Expanded Headline bar */}
-            {!statisticsExpanded && <div className="flex items-center justify-between">
-                {/* Headline Weight  */}
-                <Headline level={3}>All weights</Headline>
+                        {/* Show more Statistics Button */}
+                        <Button onClick={() => setStatisticsExpanded(true)} className="hidden md:flex" kind="tertiary">Show more</Button>
+                    </div>}
 
-                {/* Show more Statistics Button */}
-                <Button onClick={() => setStatisticsExpanded(true)} className="hidden md:flex" kind="tertiary">Show more</Button>
-            </div>}
+                    <div className={`md:flex ${statisticsExpanded ? "md:flex-col-reverse" : ""}`}>
 
-            <div className={`md:flex ${statisticsExpanded ? "md:flex-col-reverse" : ""}`}>
+                        {/* Weights List */}
+                        <div className={`${statisticsExpanded ? "" : "md:w-1/2 lg:w-2/3 2xl:w-[70%] mr-10"} mb-10 md:mb-0`}>
+                            {/* Headline Weight Expanded */}
+                            {statisticsExpanded && <Headline level={3}>All weights</Headline>}
 
-                {/* Weights List */}
-                <div className={`${statisticsExpanded ? "" : "md:w-1/2 lg:w-2/3 2xl:w-[70%] mr-10"} mb-10 md:mb-0`}>
-                    {/* Headline Weight Expanded */}
-                    {statisticsExpanded && <Headline level={3}>All weights</Headline>}
+                            {/* Weights */}
+                            <div className={`grid ${statisticsExpanded ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" : "grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3"} gap-5 mb-10`}>
+                                {items.map((item) => <ItemPreviewBox datacy="weights-list-item" key={item.id} name={item.name} slug={item.slug} weight={item.weight} imageUrl="https://picsum.photos/200" />)}
+                            </div>
 
-                    {/* Weights */}
-                    <div className={`grid ${statisticsExpanded ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" : "grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3"} gap-5 mb-10`}>
-                        {items.map((item) => <ItemPreviewBox datacy="weights-list-item" key={item.id} name={item.name} slug={item.slug} weight={item.weight} imageUrl="https://picsum.photos/200" />)}
-                    </div>
+                            {/* Pagination */}
+                            <Pagination totalItems={totalItems} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} query={query} baseRoute={routes.weights.list} />
+                        </div>
 
-                    {/* Pagination */}
-                    <Pagination totalItems={totalItems} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} query={query} baseRoute={routes.weights.list} />
-                </div>
+                        {/* Statistics */}
+                        <div className={`${statisticsExpanded ? "md:flex-col" : "md:items-start md:w-1/2 lg:w-1/3 2xl:w-[30%]"} md:flex`}>
+                            <div className="flex justify-between">
+                                {/* Headline Statistics */}
+                                <Headline level={3} className={`${statisticsExpanded ? "" : "md:hidden"} `}>Statistics</Headline>
 
-                {/* Statistics */}
-                <div className={`${statisticsExpanded ? "md:flex-col" : "md:items-start md:w-1/2 lg:w-1/3 2xl:w-[30%]"} md:flex`}>
-                    <div className="flex justify-between">
-                        {/* Headline Statistics */}
-                        <Headline level={3} className={`${statisticsExpanded ? "" : "md:hidden"} `}>Statistics</Headline>
+                                {/* Show less Statistics Button */}
+                                {statisticsExpanded && <Button onClick={() => setStatisticsExpanded(false)} className="hidden md:flex" kind="tertiary">Show less</Button>}
+                            </div>
 
-                        {/* Show less Statistics Button */}
-                        {statisticsExpanded && <Button onClick={() => setStatisticsExpanded(false)} className="hidden md:flex" kind="tertiary">Show less</Button>}
-                    </div>
+                            {/* Statistics */}
+                            <div className="flex mb-5 md:mb-10">
+                                <button onClick={() => setStatisticsExpanded(!statisticsExpanded)} className="hidden md:block bg-white self-stretch rounded-lg px-1 mr-2">
+                                    <Icon>chevron_left</Icon>
+                                </button>
 
-                    {/* Statistics */}
-                    <div className="flex mb-5 md:mb-10">
-                        <button onClick={() => setStatisticsExpanded(!statisticsExpanded)} className="hidden md:block bg-white self-stretch rounded-lg px-1 mr-2">
-                            <Icon>chevron_left</Icon>
-                        </button>
-
-                        <div className={`${statisticsExpanded ? "flex flex-col md:flex-row" : "grid"} flex-grow md:flex-auto gap-4`}>
-                            <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="weight" value={generateWeightString(statistics.heaviest.weight)} descriptionTop={statistics.heaviest.name} descriptionBottom="Heaviest" />
-                            <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="eco" value={generateWeightString(statistics.lightest.weight)} descriptionTop={statistics.lightest.name} descriptionBottom="Lightest" />
-                            <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="scale" value={`~${statistics.averageWeight} g`} descriptionBottom="Average" />
+                                <div className={`${statisticsExpanded ? "flex flex-col md:flex-row" : "grid"} flex-grow md:flex-auto gap-4`}>
+                                    <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="weight" value={generateWeightString(statistics.heaviest.weight)} descriptionTop={statistics.heaviest.name} descriptionBottom="Heaviest" />
+                                    <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="eco" value={generateWeightString(statistics.lightest.weight)} descriptionTop={statistics.lightest.name} descriptionBottom="Lightest" />
+                                    <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="scale" value={`~${statistics.averageWeight} g`} descriptionBottom="Average" />
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </>}
         </main>
     </>
-    )
 }
 
 export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (context) => {
