@@ -2,7 +2,7 @@ import { Form, Formik, useFormikContext } from "formik";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Tag } from "../../pages/tags";
-import { routes } from "../../services/routes/routes";
+import { routes, SortType } from "../../services/routes/routes";
 import { Chip } from "../Chip/Chip";
 import { Search } from "../Form/Search/Search";
 import { Headline } from "../Headline/Headline";
@@ -10,12 +10,14 @@ import { Headline } from "../Headline/Headline";
 type SearchHeaderProps = {
     /** Search query. */
     query?: string
+    /** Sort type of items. */
+    sort?: SortType
 }
 
 /**
  * Header with search and search suggestions
  */
-export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "" }) => {
+export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "asc" }) => {
     const router = useRouter()
 
     // Local States
@@ -33,7 +35,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "" }) => {
      * @param formValues 
      */
     const submitForm = (formValues: typeof initialQueryValues) => {
-        router.push(routes.weights.list({ query: formValues.query }))
+        router.push(routes.weights.list({ sort, query: formValues.query }))
     }
 
     /**
@@ -90,7 +92,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "" }) => {
                         {/* TODO(Zoe-bot): Only develop Remove query !== "" condition when normal backend api is set */}
                         {query !== "" && (isLoadingRelatedTags ? <p>Loading...</p> : <div datacy="search-header-tag-wrapper" className="whitespace-nowrap overflow-x-scroll md:whitespace-normal md:overflow-hidden">
                             {/* Only show tags not current searched (should not be the value in query field) */}
-                            {relatedTags.map(relatedTag => relatedTag.slug !== query && <Chip key={relatedTag.slug} to={routes.weights.list({ query: relatedTag.slug })}>{relatedTag.name}</Chip>)}
+                            {relatedTags.map(relatedTag => relatedTag.slug !== query && <Chip key={relatedTag.slug} to={routes.weights.list({ sort, query: relatedTag.slug })}>{relatedTag.name}</Chip>)}
                         </div>)}
                         <AutoUpdateQueryField />
                     </Form>

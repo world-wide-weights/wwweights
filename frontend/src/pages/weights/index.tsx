@@ -1,7 +1,8 @@
-import { Form, Formik } from "formik"
+import { Formik, useFormikContext } from "formik"
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Head from "next/head"
-import { useState } from "react"
+import { useRouter } from "next/router"
+import { useEffect, useState } from "react"
 import { Button } from "../../components/Button/Button"
 import { SearchEmptyState } from "../../components/EmptyState/SearchEmptyState"
 import { Dropdown } from "../../components/Form/Dropdown/Dropdown"
@@ -52,36 +53,67 @@ type WeightsListProps = {
     statistics: Statistics
 }
 
+const sortDropdownOptions = [
+    {
+        value: "asc",
+        label: "Heaviest",
+        icon: "face"
+    }, {
+        value: "desc",
+        label: "Lightest",
+        icon: "face"
+    },
+]
+
 /** 
  * Discover Page, list all items, search results and single tags
  */
 export default function WeightsList({ items, currentPage, totalItems, limit, query, sort, statistics }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-    // Site Title
+    const router = useRouter()
+
+    // Strings
     const siteTitle = `Latest ${currentPage > 1 ? `| Page ${currentPage} ` : ``}- World Wide Weights`
     const headlineItems = query === "" ? "All items" : query
 
     // Local state
     const [statisticsExpanded, setStatisticsExpanded] = useState<boolean>(false)
 
-    const initialValues = {
-        sort: "asc"
+    // Formik initial state
+    const initialSortValues: { sort: SortType } = {
+        sort
     }
 
-    const submitForm = (values: typeof initialValues) => {
-        routes.weights.list()
+    /**
+     * Formik function calls when form is submitted.
+     * Will redirect to items list with the given sort type
+     * @param formValues 
+     */
+    const submitForm = (formValues: typeof initialSortValues) => {
+        router.push(routes.weights.list({ query, sort: formValues.sort }))
     }
 
-    const sortDropdownOptions = [
-        {
-            value: "asc",
-            label: "Heaviest",
-            icon: "face"
-        }, {
-            value: "desc",
-            label: "Lightest",
-            icon: "face"
-        },
-    ]
+    /**
+     * Submit form when dropdown value change
+     * needs to be called inside formik for formikcontext working
+     */
+    const SortDropdownChangeListener = () => {
+        const { submitForm, values } = useFormikContext<{ sort: SortType }>()
+        const [lastValues, setLastValues] = useState(values)
+
+        useEffect(() => {
+            // Update values last state when change
+            if (lastValues !== values) {
+                setLastValues(values)
+            }
+
+            // When state updated and not initialvalue submit form
+            if (lastValues !== values && values !== initialSortValues) {
+                submitForm()
+            }
+        }, [values, submitForm])
+
+        return null
+    }
 
     return <>
         {/* Meta Tags */}
@@ -90,7 +122,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
         </Head>
 
         {/* Search with related tags */}
-        <SearchHeader query={query} />
+        <SearchHeader query={query} sort={sort} />
 
         {/* Content */}
         <main className="container mt-5">
@@ -120,10 +152,12 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                                 <p>{totalItems}</p>
                             </div>}
 
-                            <Formik initialValues={initialValues} onSubmit={submitForm}>
-                                <Form>
+                            <Formik initialValues={initialSortValues} onSubmit={submitForm}>
+                                <>
+                                    {/* TODO (Zoe-Bot): Fix bug when change dropdown and go back with arrows update dropdown */}
                                     <Dropdown name="sort" options={sortDropdownOptions} />
-                                </Form>
+                                    <SortDropdownChangeListener />
+                                </>
                             </Formik>
 
                             {/* Weights */}
