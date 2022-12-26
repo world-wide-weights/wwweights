@@ -54,6 +54,7 @@ type WeightsListProps = {
 export default function WeightsList({ items, currentPage, totalItems, limit, query, statistics }: InferGetServerSidePropsType<typeof getServerSideProps>) {
     // Site Title
     const siteTitle = `Latest ${currentPage > 1 ? `| Page ${currentPage} ` : ``}- World Wide Weights`
+    const headlineItems = query === "" ? "All items" : query
 
     // Local state
     const [statisticsExpanded, setStatisticsExpanded] = useState<boolean>(false)
@@ -72,8 +73,11 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
 
             {/* Not Expanded Headline bar */}
             {!statisticsExpanded && <div className="flex items-center justify-between">
-                {/* Headline Weight  */}
-                <Headline level={3}>All weights</Headline>
+                <div className="flex items-end mb-2 md:mb-4">
+                    {/* Headline Weight  */}
+                    <Headline level={3} hasMargin={false} className="mr-4">{headlineItems}</Headline>
+                    <p>{totalItems}</p>
+                </div>
 
                 {/* Show more Statistics Button */}
                 <Button onClick={() => setStatisticsExpanded(true)} className="hidden md:flex" kind="tertiary">Show more</Button>
@@ -84,7 +88,10 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                 {/* Weights List */}
                 <div className={`${statisticsExpanded ? "" : "md:w-1/2 lg:w-2/3 2xl:w-[70%] mr-10"} mb-10 md:mb-0`}>
                     {/* Headline Weight Expanded */}
-                    {statisticsExpanded && <Headline level={3}>All weights</Headline>}
+                    {statisticsExpanded && <div className="flex items-end mb-2 md:mb-4">
+                        <Headline level={3} hasMargin={false} className="mr-4">{headlineItems}</Headline>
+                        <p>{totalItems}</p>
+                    </div>}
 
                     {/* Weights */}
                     <div className={`grid ${statisticsExpanded ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" : "grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3"} gap-5 mb-10`}>
