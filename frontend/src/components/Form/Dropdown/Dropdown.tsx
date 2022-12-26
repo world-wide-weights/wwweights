@@ -6,7 +6,7 @@ type DropdownProps = {
     /** Gives the dropdown a unique name */
     name: string
     /** Text that informs the user what to expect in the list of dropdown options. */
-    placeholder: string
+    placeholder?: string
     /** A list of options to choose from. */
     options: ComponentOptions[]
 }

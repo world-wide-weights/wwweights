@@ -1,14 +1,16 @@
+import { Form, Formik } from "formik"
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Head from "next/head"
 import { useState } from "react"
 import { Button } from "../../components/Button/Button"
+import { Dropdown } from "../../components/Form/Dropdown/Dropdown"
 import { SearchHeader } from "../../components/Header/SearchHeader"
 import { Headline } from "../../components/Headline/Headline"
 import { Icon } from "../../components/Icon/Icon"
 import { ItemPreviewBox } from "../../components/Item/ItemPreviewBox"
 import { Pagination } from "../../components/Pagination/Pagination"
 import { StatsCard } from "../../components/Statistics/StatsCard"
-import { routes } from "../../services/routes/routes"
+import { routes, SortType } from "../../services/routes/routes"
 import { generateWeightString } from "../../services/utils/weight"
 
 const DEFAULT_ITEMS_PER_PAGE = 16
@@ -45,19 +47,40 @@ type WeightsListProps = {
     totalItems: number
     limit: number
     query: string
+    sort: SortType
     statistics: Statistics
 }
 
 /** 
  * Discover Page, list all items, search results and single tags
  */
-export default function WeightsList({ items, currentPage, totalItems, limit, query, statistics }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function WeightsList({ items, currentPage, totalItems, limit, query, sort, statistics }: InferGetServerSidePropsType<typeof getServerSideProps>) {
     // Site Title
     const siteTitle = `Latest ${currentPage > 1 ? `| Page ${currentPage} ` : ``}- World Wide Weights`
     const headlineItems = query === "" ? "All items" : query
 
     // Local state
     const [statisticsExpanded, setStatisticsExpanded] = useState<boolean>(false)
+
+    const initialValues = {
+        sort: "asc"
+    }
+
+    const submitForm = (values: typeof initialValues) => {
+        routes.weights.list()
+    }
+
+    const sortDropdownOptions = [
+        {
+            value: "asc",
+            label: "Heaviest",
+            icon: "face"
+        }, {
+            value: "desc",
+            label: "Lightest",
+            icon: "face"
+        },
+    ]
 
     return (<>
         {/* Meta Tags */}
@@ -93,13 +116,19 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                         <p>{totalItems}</p>
                     </div>}
 
+                    <Formik initialValues={initialValues} onSubmit={submitForm}>
+                        <Form>
+                            <Dropdown name="sort" options={sortDropdownOptions} />
+                        </Form>
+                    </Formik>
+
                     {/* Weights */}
                     <div className={`grid ${statisticsExpanded ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" : "grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3"} gap-5 mb-10`}>
                         {items.map((item) => <ItemPreviewBox datacy="weights-list-item" key={item.id} name={item.name} slug={item.slug} weight={item.weight} imageUrl="https://picsum.photos/200" />)}
                     </div>
 
                     {/* Pagination */}
-                    <Pagination totalItems={totalItems} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} query={query} baseRoute={routes.weights.list} />
+                    <Pagination totalItems={totalItems} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} query={query} sort={sort} baseRoute={routes.weights.list} />
                 </div>
 
                 {/* Statistics */}
@@ -135,6 +164,7 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
     const currentPage = parseInt(context.query.page as string ?? FIRST_PAGE)
     const limit = parseInt(context.query.limit as string ?? DEFAULT_ITEMS_PER_PAGE)
     const query = context.query.query as string ?? ""
+    const sort = context.query.sort as SortType ?? "asc"
 
     // Validate Query
     if (currentPage < 1 || limit < 1 || limit > ITEMS_PER_PAGE_MAXIMUM) {
@@ -145,7 +175,8 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
 
     // Fetch items and statistics
     const [itemsResponse, statisticResponse] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/items/list?page=${currentPage}&limit=${limit}&query=${query}`),
+        // TODO (Zoe-Bot): Update api endpoint when correct api is used (sort)
+        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/items/list?page=${currentPage}&limit=${limit}&sort=weight.value&order=${sort}&query=${query}`),
         fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/items/statistics`),
     ])
 
@@ -164,6 +195,7 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
             limit,
             totalItems,
             query,
+            sort,
             statistics
         }
     }
