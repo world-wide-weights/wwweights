@@ -21,17 +21,17 @@ describe('Search /weights', () => {
             cy.wait('@getRelatedTags')
         })
 
-        it('should search items when click search items', () => {
-            cy.dataCy('search').type(items[0].tags[0].slug)
-            cy.dataCy('text-input-submit-icon-query').click()
+        // it('should search items when click search items', () => {
+        //     cy.dataCy('search').type(items[0].tags[0].slug)
+        //     cy.dataCy('text-input-submit-icon-query').click()
 
-            cy.url().should('include', items[0].tags[0].slug)
-        })
+        //     cy.url().should('include', items[0].tags[0].slug)
+        // })
 
-        it('should search items when hit enter', () => {
-            cy.dataCy('search').type(`${items[0].tags[0].slug}{enter}`)
-            cy.url().should('include', items[0].tags[0].slug)
-        })
+        // it('should search items when hit enter', () => {
+        //     cy.dataCy('search').type(`${items[0].tags[0].slug}{enter}`)
+        //     cy.url().should('include', items[0].tags[0].slug)
+        // })
 
         it('should search items when query in url', () => {
             cy.visitLocalPage(`/weights?query=${items[0].tags[0].slug}`)
