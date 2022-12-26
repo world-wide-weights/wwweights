@@ -54,4 +54,4 @@ export const routes = {
 export type RoutePagination = (options?: PaginationBaseOptions & { query?: string, sort?: SortType }) => string
 
 // TODO (Zoe-Bot): Move to sort component when exist
-export type SortType = "asc" | "desc"
+export type SortType = "asc" | "desc" | ""
