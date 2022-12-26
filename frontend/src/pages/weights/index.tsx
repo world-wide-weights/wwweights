@@ -86,7 +86,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
             <div className={`md:flex ${statisticsExpanded ? "md:flex-col-reverse" : ""}`}>
 
                 {/* Weights List */}
-                <div className={`${statisticsExpanded ? "" : "md:w-1/2 lg:w-2/3 2xl:w-[70%] mr-10"} mb-10 md:mb-0`}>
+                <div className={`${statisticsExpanded ? "" : "md:w-1/2 lg:w-2/3 2xl:w-[70%] md:mr-10"} mb-10 md:mb-0`}>
                     {/* Headline Weight Expanded */}
                     {statisticsExpanded && <div className="flex items-end mb-2 md:mb-4">
                         <Headline level={3} hasMargin={false} className="mr-4">{headlineItems}</Headline>
@@ -118,7 +118,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                             <Icon>chevron_left</Icon>
                         </button>
 
-                        <div className={`${statisticsExpanded ? "flex flex-col md:flex-row" : "grid"} flex-grow md:flex-auto gap-4`}>
+                        <div className={`${statisticsExpanded ? "flex flex-col md:flex-row" : "grid"} flex-grow md:flex-auto gap-2 md:gap-4`}>
                             <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="weight" value={generateWeightString(statistics.heaviest.weight)} descriptionTop={statistics.heaviest.name} descriptionBottom="Heaviest" />
                             <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="eco" value={generateWeightString(statistics.lightest.weight)} descriptionTop={statistics.lightest.name} descriptionBottom="Lightest" />
                             <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="scale" value={`~${statistics.averageWeight} g`} descriptionBottom="Average" />
