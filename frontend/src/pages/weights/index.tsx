@@ -1,6 +1,7 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Head from "next/head"
 import { useState } from "react"
+import { Button } from "../../components/Button/Button"
 import { SearchHeader } from "../../components/Header/SearchHeader"
 import { Headline } from "../../components/Headline/Headline"
 import { Icon } from "../../components/Icon/Icon"
@@ -66,13 +67,23 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
         {/* Search with related tags */}
         <SearchHeader query={query} />
 
+        {/* Content */}
         <main className="container mt-5">
-            {/* Headline Weight */}
-            {!statisticsExpanded && <Headline level={3}>All weights</Headline>}
+
+            {/* Not Expanded Headline bar */}
+            {!statisticsExpanded && <div className="flex items-center justify-between">
+                {/* Headline Weight  */}
+                <Headline level={3}>All weights</Headline>
+
+                {/* Show more Statistics Button */}
+                <Button onClick={() => setStatisticsExpanded(true)} className="hidden md:flex" kind="tertiary">Show more</Button>
+            </div>}
 
             <div className={`md:flex ${statisticsExpanded ? "md:flex-col-reverse" : ""}`}>
+
+                {/* Weights List */}
                 <div className={`${statisticsExpanded ? "" : "md:w-1/2 lg:w-2/3 2xl:w-[70%] mr-10"} mb-10 md:mb-0`}>
-                    {/* Headline Weight */}
+                    {/* Headline Weight Expanded */}
                     {statisticsExpanded && <Headline level={3}>All weights</Headline>}
 
                     {/* Weights */}
@@ -83,9 +94,16 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                     {/* Pagination */}
                     <Pagination totalItems={totalItems} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} query={query} baseRoute={routes.weights.list} />
                 </div>
+
+                {/* Statistics */}
                 <div className={`${statisticsExpanded ? "md:flex-col" : "md:items-start md:w-1/2 lg:w-1/3 2xl:w-[30%]"} md:flex`}>
-                    {/* Headline Statistics */}
-                    <Headline level={3} className={`${statisticsExpanded ? "" : "md:hidden"} `}>Statistics</Headline>
+                    <div className="flex justify-between">
+                        {/* Headline Statistics */}
+                        <Headline level={3} className={`${statisticsExpanded ? "" : "md:hidden"} `}>Statistics</Headline>
+
+                        {/* Show less Statistics Button */}
+                        {statisticsExpanded && <Button onClick={() => setStatisticsExpanded(false)} className="hidden md:flex" kind="tertiary">Show less</Button>}
+                    </div>
 
                     {/* Statistics */}
                     <div className="flex mb-5 md:mb-10">
