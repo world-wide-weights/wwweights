@@ -11,7 +11,7 @@ describe('Search /weights', () => {
         })
 
         it('should search items when click search items', () => {
-            cy.dataCy('search').click()
+            cy.wait(500)
             cy.dataCy('search').type(items[0].tags[0].slug)
             cy.dataCy('text-input-submit-icon-query').click()
 
@@ -19,7 +19,7 @@ describe('Search /weights', () => {
         })
 
         it('should search items when hit enter', () => {
-            cy.dataCy('search').click()
+            cy.dataCy('search').clear()
             cy.dataCy('search').type(`${items[0].tags[0].slug}{enter}`)
             cy.url().should('include', items[0].tags[0].slug)
         })
