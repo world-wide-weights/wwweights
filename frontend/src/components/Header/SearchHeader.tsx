@@ -5,6 +5,7 @@ import { Tag } from "../../pages/tags";
 import { routes } from "../../services/routes/routes";
 import { Chip } from "../Chip/Chip";
 import { Search } from "../Form/Search/Search";
+import { Headline } from "../Headline/Headline";
 
 type SearchHeaderProps = {
     /** Search query. */
@@ -77,7 +78,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "" }) => {
     return <header className="bg-white pt-2 md:pt-5 pb-3 md:pb-10">
         <div className="container">
             <div className="md:flex md:flex-col md:items-center">
-                <h1 className="font-semibold text-xl text-center md:text-3xl mb-2">Wie viel wiegt?</h1>
+                <Headline level={2} className="text-center">Wie viel wiegt?</Headline>
                 <Formik initialValues={initialQueryValues} onSubmit={submitForm}>
                     <Form>
                         <div className="md:flex md:justify-center">
