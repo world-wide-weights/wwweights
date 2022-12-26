@@ -6,8 +6,6 @@ const middlewares = jsonServer.defaults()
 
 server.use(middlewares)
 
-console.log(router)
-
 // Add this before server.use(router) 
 server.use(jsonServer.rewriter({
     "/api/query/v1/items/list": "/items",
@@ -27,4 +25,7 @@ server.use(jsonServer.rewriter({
 server.use(router)
 server.listen(3004, () => {
     console.log('JSON Server is running')
-}) // Export the Server API module.exports = server
+})
+
+// Export the Server API 
+module.exports = server
