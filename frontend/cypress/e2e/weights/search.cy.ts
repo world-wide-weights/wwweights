@@ -10,6 +10,7 @@ describe('Search /weights', () => {
             cy.wait('@mockGetRelatedTags')
         })
 
+        // This test seems to be flaky: https://github.com/cypress-io/cypress/issues/3817
         it('should search items when click search items', () => {
             cy.dataCy('search').clear()
             cy.dataCy('search').type(items[0].tags[0].slug)
@@ -18,6 +19,7 @@ describe('Search /weights', () => {
             cy.url().should('include', items[0].tags[0].slug)
         })
 
+        // This test seems to be flaky: https://github.com/cypress-io/cypress/issues/3817
         it('should search items when hit enter', () => {
             cy.dataCy('search').clear()
             cy.dataCy('search').type(`${items[0].tags[0].slug}{enter}`)
