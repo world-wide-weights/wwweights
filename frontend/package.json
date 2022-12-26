@@ -11,8 +11,7 @@
     "test": "npx cypress open",
     "test:cli": "npx cypress run",
     "test-components:cli": "npx cypress run --component",
-    "mock-server": "json-server --watch ./src/mock/db.json --port=3004 --routes ./src/mock/routes.json --id slug",
-    "mock-server-deploy": "node src/mock/server.js"
+    "mock-server": "json-server --watch ./src/mock/db.json --port=3004 --routes ./src/mock/routes.json --id slug"
   },
   "dependencies": {
     "@next/font": "^13.0.3",
