@@ -44,31 +44,33 @@ export const Sort: React.FC<SortProps> = ({ sort, query }) => {
     }
 
     /**
-     * Submit form when dropdown value change
-     * needs to be called inside formik for formikcontext working
+     * Submit form when dropdown value change and keep field value updated correct when change link.
+     * Needs to be called inside formik for formikcontext working.
      */
     const SortDropdownChangeListener = () => {
-        const { submitForm, values } = useFormikContext<{ sort: SortType }>()
+        const { submitForm, values, setFieldValue } = useFormikContext<{ sort: SortType }>()
         const [lastValues, setLastValues] = useState(values)
 
+        /** Submit form when value change */
         useEffect(() => {
-            // Update values last state when change
+            // Update values last state when change and submit form
             if (lastValues !== values) {
                 setLastValues(values)
-            }
-
-            // When state updated and not initialvalue submit form
-            if (lastValues !== values && values !== initialSortValues) {
                 submitForm()
             }
         }, [values, submitForm])
+
+        /** Keep form value up to date */
+        useEffect(() => {
+            if (sort !== values.sort)
+                setFieldValue("sort", sort)
+        }, [sort])
 
         return null
     }
 
     return <Formik initialValues={initialSortValues} onSubmit={submitForm}>
         <>
-            {/* TODO (Zoe-Bot): Fix bug when change dropdown and go back with arrows update dropdown */}
             <Dropdown name="sort" options={sortDropdownOptions} />
             <SortDropdownChangeListener />
         </>
