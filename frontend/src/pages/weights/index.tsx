@@ -1,16 +1,14 @@
-import { Formik, useFormikContext } from "formik"
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Head from "next/head"
-import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Button } from "../../components/Button/Button"
 import { SearchEmptyState } from "../../components/EmptyState/SearchEmptyState"
-import { Dropdown } from "../../components/Form/Dropdown/Dropdown"
 import { SearchHeader } from "../../components/Header/SearchHeader"
 import { Headline } from "../../components/Headline/Headline"
 import { Icon } from "../../components/Icon/Icon"
 import { ItemPreviewBox } from "../../components/Item/ItemPreviewBox"
 import { Pagination } from "../../components/Pagination/Pagination"
+import { Sort } from "../../components/Sort/Sort"
 import { StatsCard } from "../../components/Statistics/StatsCard"
 import { routes, SortType } from "../../services/routes/routes"
 import { generateWeightString } from "../../services/utils/weight"
@@ -53,24 +51,10 @@ type WeightsListProps = {
     statistics: Statistics
 }
 
-const sortDropdownOptions = [
-    {
-        value: "asc",
-        label: "Heaviest",
-        icon: "face"
-    }, {
-        value: "desc",
-        label: "Lightest",
-        icon: "face"
-    },
-]
-
 /** 
  * Discover Page, list all items, search results and single tags
  */
 export default function WeightsList({ items, currentPage, totalItems, limit, query, sort, statistics }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-    const router = useRouter()
-
     // Strings
     const siteTitle = `Latest ${currentPage > 1 ? `| Page ${currentPage} ` : ``}- World Wide Weights`
     const headlineItems = query === "" ? "All items" : query
@@ -78,49 +62,13 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
     // Local state
     const [statisticsExpanded, setStatisticsExpanded] = useState<boolean>(false)
 
-    // Formik initial state
-    const initialSortValues: { sort: SortType } = {
-        sort
-    }
-
-    /**
-     * Formik function calls when form is submitted.
-     * Will redirect to items list with the given sort type
-     * @param formValues 
-     */
-    const submitForm = (formValues: typeof initialSortValues) => {
-        router.push(routes.weights.list({ query, sort: formValues.sort }))
-    }
-
-    /**
-     * Submit form when dropdown value change
-     * needs to be called inside formik for formikcontext working
-     */
-    const SortDropdownChangeListener = () => {
-        const { submitForm, values } = useFormikContext<{ sort: SortType }>()
-        const [lastValues, setLastValues] = useState(values)
-
-        useEffect(() => {
-            // Update values last state when change
-            if (lastValues !== values) {
-                setLastValues(values)
-            }
-
-            // When state updated and not initialvalue submit form
-            if (lastValues !== values && values !== initialSortValues) {
-                submitForm()
-            }
-        }, [values, submitForm])
-
-        return null
-    }
-
     return <>
         {/* Meta Tags */}
         <Head>
             <title>{siteTitle}</title>
         </Head>
 
+        {/* TODO (Zoe-Bot): Find a better solution instead of give sort and query */}
         {/* Search with related tags */}
         <SearchHeader query={query} sort={sort} />
 
@@ -152,13 +100,8 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                                 <p>{totalItems}</p>
                             </div>}
 
-                            <Formik initialValues={initialSortValues} onSubmit={submitForm}>
-                                <>
-                                    {/* TODO (Zoe-Bot): Fix bug when change dropdown and go back with arrows update dropdown */}
-                                    <Dropdown name="sort" options={sortDropdownOptions} />
-                                    <SortDropdownChangeListener />
-                                </>
-                            </Formik>
+                            {/* Sort Dropdown */}
+                            <Sort sort={sort} query={query} />
 
                             {/* Weights */}
                             <div className={`grid ${statisticsExpanded ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" : "grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3"} gap-5 mb-10`}>

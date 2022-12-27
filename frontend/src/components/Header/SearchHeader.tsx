@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { Tag } from "../../pages/tags";
 import { routes, SortType } from "../../services/routes/routes";
 import { Chip } from "../Chip/Chip";
-import { Search } from "../Form/Search/Search";
 import { Headline } from "../Headline/Headline";
+import { Search } from "../Search/Search";
 
 type SearchHeaderProps = {
     /** Search query. */
