@@ -51,76 +51,71 @@ describe('Dropdown', () => {
     })
 
     it('should initial set placeholder', () => {
-        cy.get(`[data-cy="${data.name}-dropdown-button"] span`).should('contain', data.placeholder)
+        cy.dataCy(`${data.name}-dropdown-button`, " span").should('contain', data.placeholder)
     })
 
     it('should set options in dropdown', () => {
         // open dropdown
-        cy.get(`[data-cy="${data.name}-dropdown-button"]`).click()
+        cy.dataCy(`${data.name}-dropdown-button`).click()
 
         data.options.forEach((option) => {
-            cy.get(`[data-cy="${data.name}-dropdown-option-${option.value}"]`).should('contain', option.label)
+            cy.dataCy(`${data.name}-dropdown-option-${option.value}`).should('contain', option.label)
         })
     })
 
     it('should open dropdown when click it', () => {
         // open dropdown
-        cy.get(`[data-cy="${data.name}-dropdown-button"]`).click()
+        cy.dataCy(`${data.name}-dropdown-button`).click()
 
-        cy.get(`[data-cy="${data.name}-dropdown-menu"]`).should('be.visible')
+        cy.dataCy(`${data.name}-dropdown-menu`).should('be.visible')
     })
 
     it('should close dropdown when click it after its open', () => {
         // open dropdown
-        cy.get(`[data-cy="${data.name}-dropdown-button"]`).click({ force: true })
-        cy.get(`[data-cy="${data.name}-dropdown-menu"]`).should('be.visible')
+        cy.dataCy(`${data.name}-dropdown-button`).click({ force: true })
 
         // close dropdown
-        cy.get(`[data-cy="${data.name}-dropdown-button"]`).click({ force: true })
-        cy.get(`[data-cy="${data.name}-dropdown-menu"]`).should('not.exist')
+        cy.dataCy(`${data.name}-dropdown-button`).click({ force: true })
+        cy.dataCy(`${data.name}-dropdown-menu`).should('not.exist')
     })
 
     it('should close dropdown when click outside dropdown', () => {
         // open dropdown
-        cy.get(`[data-cy="${data.name}-dropdown-button"]`).click()
-        cy.get(`[data-cy="${data.name}-dropdown-menu"]`).should('be.visible')
+        cy.dataCy(`${data.name}-dropdown-button`).click()
 
         // close dropdown
         cy.get('body').click()
-        cy.get(`[data-cy="${data.name}-dropdown-menu"]`).should('not.exist')
+        cy.dataCy(`${data.name}-dropdown-menu`).should('not.exist')
     })
 
     it('should set correct item when click on it', () => {
         // open dropdown
-        cy.get(`[data-cy="${data.name}-dropdown-button"]`).click()
-        cy.get(`[data-cy="${data.name}-dropdown-menu"]`).should('be.visible')
+        cy.dataCy(`${data.name}-dropdown-button`).click()
 
         // select first item
-        cy.get(`[data-cy="${data.name}-dropdown-option-${data.options[0].value}"]`).click()
+        cy.dataCy(`${data.name}-dropdown-option-${data.options[0].value}`).click()
 
-        cy.get(`[data-cy="${data.name}-dropdown-button"]`).should('contain', data.options[0].label)
+        cy.dataCy(`${data.name}-dropdown-button`).should('contain', data.options[0].label)
     })
 
     it('should close dropdown after select element', () => {
         // open dropdown
-        cy.get(`[data-cy="${data.name}-dropdown-button"]`).click()
-        cy.get(`[data-cy="${data.name}-dropdown-menu"]`).should('be.visible')
+        cy.dataCy(`${data.name}-dropdown-button`).click()
 
         // select first item
-        cy.get(`[data-cy="${data.name}-dropdown-option-${data.options[0].value}"]`).click()
+        cy.dataCy(`${data.name}-dropdown-option-${data.options[0].value}`).click()
 
-        cy.get(`[data-cy="${data.name}-dropdown-menu"]`).should('not.exist')
+        cy.dataCy(`${data.name}-dropdown-menu`).should('not.exist')
     })
 
     it('should have icon chevron-down when dropdown is closed', () => {
-        cy.get(`[data-cy="${data.name}-dropdown-button"] i`).should('have.class', 'rotate-0')
+        cy.dataCy(`${data.name}-dropdown-button`, ' i').should('have.class', 'rotate-0')
     })
 
     it('should have icon rotate-180 when dropdown is open', () => {
         // open dropdown
-        cy.get(`[data-cy="${data.name}-dropdown-button"]`).click()
-        cy.get(`[data-cy="${data.name}-dropdown-menu"]`).should('be.visible')
+        cy.dataCy(`${data.name}-dropdown-button`).click()
 
-        cy.get(`[data-cy="${data.name}-dropdown-button"] i`).should('have.class', '-rotate-180')
+        cy.dataCy(`${data.name}-dropdown-button`, ' i').should('have.class', '-rotate-180')
     })
 })
