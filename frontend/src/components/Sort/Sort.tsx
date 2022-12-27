@@ -15,11 +15,11 @@ const sortDropdownOptions = [
     {
         value: "asc",
         label: "Heaviest",
-        icon: "face"
+        icon: "weight"
     }, {
         value: "desc",
         label: "Lightest",
-        icon: "face"
+        icon: "eco"
     },
 ]
 
