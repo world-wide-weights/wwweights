@@ -78,30 +78,20 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                 // Empty State
                 <SearchEmptyState query={query} />
                 : <>
-                    {/* Not Expanded Headline bar */}
-                    {!statisticsExpanded && <div className="flex items-center justify-between">
-                        <div className="flex items-end mb-2 md:mb-4">
-                            {/* Headline Weight  */}
-                            <Headline level={3} hasMargin={false} className="mr-4">{headlineItems}</Headline>
-                            <p>{totalItems}</p>
-                        </div>
-
-                        {/* Show more Statistics Button */}
-                        <Button onClick={() => setStatisticsExpanded(true)} className="hidden md:flex" kind="tertiary">Show more</Button>
-                    </div>}
-
                     <div className={`md:flex ${statisticsExpanded ? "md:flex-col-reverse" : ""}`}>
-
-                        {/* Weights List */}
+                        {/*** Weights List ***/}
                         <div className={`${statisticsExpanded ? "" : "md:w-1/2 lg:w-2/3 2xl:w-[70%] md:mr-10"} mb-10 md:mb-0`}>
-                            {/* Headline Weight Expanded */}
-                            {statisticsExpanded && <div className="flex items-end mb-2 md:mb-4">
-                                <Headline level={3} hasMargin={false} className="mr-4">{headlineItems}</Headline>
-                                <p>{totalItems}</p>
-                            </div>}
+                            {/* Header Weights List */}
+                            <div className="lg:flex justify-between items-center mb-2 md:mb-4">
+                                <div className="flex items-end mb-2 lg:mb-0">
+                                    {/* Headline */}
+                                    <Headline level={3} hasMargin={false} className="mr-4">{headlineItems}</Headline>
+                                    <p>{totalItems}</p>
+                                </div>
 
-                            {/* Sort Dropdown */}
-                            <Sort sort={sort} query={query} />
+                                {/* Sort Dropdown */}
+                                <Sort sort={sort} query={query} />
+                            </div>
 
                             {/* Weights */}
                             <div className={`grid ${statisticsExpanded ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" : "grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3"} gap-5 mb-10`}>
@@ -112,26 +102,29 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                             <Pagination totalItems={totalItems} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} query={query} sort={sort} baseRoute={routes.weights.list} />
                         </div>
 
-                        {/* Statistics */}
-                        <div className={`${statisticsExpanded ? "md:flex-col" : "md:items-start md:w-1/2 lg:w-1/3 2xl:w-[30%]"} md:flex`}>
-                            <div className="flex justify-between">
-                                {/* Headline Statistics */}
-                                <Headline level={3} className={`${statisticsExpanded ? "" : "md:hidden"} `}>Statistics</Headline>
+                        {/*** Statistics ***/}
+                        <div className={`${statisticsExpanded ? "" : "md:items-start md:w-1/2 lg:w-1/3 2xl:w-[30%]"}`}>
+                            {/* Header Statistics */}
+                            <div className={`flex ${statisticsExpanded ? "justify-between" : "md:items-end md:justify-end md:h-[82px] lg:h-[46px]"} mb-2 md:mb-4`}>
+                                {/* Headline */}
+                                <Headline level={3} hasMargin={false} className={`${statisticsExpanded ? "" : "md:hidden"} `}>Statistics</Headline>
 
-                                {/* Show less Statistics Button */}
-                                {statisticsExpanded && <Button onClick={() => setStatisticsExpanded(false)} className="hidden md:flex" kind="tertiary">Show less</Button>}
+                                {/* Show Statistics Button */}
+                                <Button onClick={() => setStatisticsExpanded(!statisticsExpanded)} className="hidden md:flex" kind="tertiary">{statisticsExpanded ? "Show less" : "Show more"}</Button>
                             </div>
 
-                            {/* Statistics */}
-                            <div className="flex mb-5 md:mb-10">
-                                <button onClick={() => setStatisticsExpanded(!statisticsExpanded)} className="hidden md:block bg-white self-stretch rounded-lg px-1 mr-2">
-                                    <Icon>chevron_left</Icon>
-                                </button>
+                            {/* Statistics Content */}
+                            <div className={`${statisticsExpanded ? "md:flex-col" : "md:items-start"} md:flex`}>
+                                <div className="flex mb-5 md:mb-10">
+                                    <button onClick={() => setStatisticsExpanded(!statisticsExpanded)} className="hidden md:block bg-white self-stretch rounded-lg px-1 mr-2">
+                                        <Icon>chevron_left</Icon>
+                                    </button>
 
-                                <div className={`${statisticsExpanded ? "flex flex-col md:flex-row" : "grid"} flex-grow md:flex-auto gap-2 md:gap-4`}>
-                                    <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="weight" value={generateWeightString(statistics.heaviest.weight)} descriptionTop={statistics.heaviest.name} descriptionBottom="Heaviest" />
-                                    <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="eco" value={generateWeightString(statistics.lightest.weight)} descriptionTop={statistics.lightest.name} descriptionBottom="Lightest" />
-                                    <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="scale" value={`~${statistics.averageWeight} g`} descriptionBottom="Average" />
+                                    <div className={`${statisticsExpanded ? "flex flex-col md:flex-row" : "grid"} flex-grow md:flex-auto gap-2 md:gap-4`}>
+                                        <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="weight" value={generateWeightString(statistics.heaviest.weight)} descriptionTop={statistics.heaviest.name} descriptionBottom="Heaviest" />
+                                        <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="eco" value={generateWeightString(statistics.lightest.weight)} descriptionTop={statistics.lightest.name} descriptionBottom="Lightest" />
+                                        <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="scale" value={`~${statistics.averageWeight} g`} descriptionBottom="Average" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
