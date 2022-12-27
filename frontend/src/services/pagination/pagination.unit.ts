@@ -117,6 +117,7 @@ describe('Pagination', () => {
                 currentPage: 5,
                 defaultItemsPerPage: 10,
                 query: "",
+                sort: "asc",
                 baseRoute: () => "/"
             }
 
@@ -162,6 +163,7 @@ describe('Pagination', () => {
                 currentPage: 2,
                 defaultItemsPerPage: 10,
                 query: "",
+                sort: "asc",
                 baseRoute: () => "/"
             }
 
