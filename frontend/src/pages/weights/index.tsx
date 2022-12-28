@@ -1,6 +1,6 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Head from "next/head"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { Button } from "../../components/Button/Button"
 import { IconButton } from "../../components/Button/IconButton"
 import { SearchEmptyState } from "../../components/EmptyState/SearchEmptyState"
@@ -12,6 +12,7 @@ import { ItemPreviewList } from "../../components/Item/ItemPreviewList"
 import { Pagination } from "../../components/Pagination/Pagination"
 import { Sort } from "../../components/Sort/Sort"
 import { StatsCard } from "../../components/Statistics/StatsCard"
+import { useLocalStorage } from "../../hooks/useLocalStorage"
 import { routes, SortType } from "../../services/routes/routes"
 import { generateWeightString } from "../../services/utils/weight"
 
@@ -53,6 +54,11 @@ type WeightsListProps = {
     statistics: Statistics
 }
 
+type ViewType = "grid" | "list"
+
+const KEY_VIEW_TYPE = "discover_view_type"
+
+
 /** 
  * Discover Page, list all items, search results and single tags
  */
@@ -61,9 +67,12 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
     const siteTitle = `Latest ${currentPage > 1 ? `| Page ${currentPage} ` : ``}- World Wide Weights`
     const headlineItems = query === "" ? "All items" : query
 
+    // Refs
+    const initialRender = useRef<boolean>(true)
+
     // Local state
     const [statisticsExpanded, setStatisticsExpanded] = useState<boolean>(false)
-    const [viewType, setViewType] = useState<"grid" | "list">("list")
+    const [viewType, loadingViewType, setViewType] = useLocalStorage(KEY_VIEW_TYPE, "grid", initialRender)
 
     return <>
         {/* Meta Tags */}
@@ -101,15 +110,18 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                                 </div>
                             </div>
 
-                            {/* Weights Box View */}
-                            {viewType === "grid" && <div className={`grid ${statisticsExpanded ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" : "grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3"} gap-5 mb-10`}>
-                                {items.map((item) => <ItemPreviewGrid datacy="weights-list-item" key={item.id} name={item.name} slug={item.slug} weight={item.weight} imageUrl="https://picsum.photos/200" />)}
-                            </div>}
+                            {/* TODO (Zoe-Bot): Add loading state component */}
+                            {loadingViewType ? <p>Loading...</p> : <>
+                                {/* Weights Box View */}
+                                {viewType === "grid" && <div className={`grid ${statisticsExpanded ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" : "grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3"} gap-5 mb-10`}>
+                                    {items.map((item) => <ItemPreviewGrid datacy="weights-list-item" key={item.id} name={item.name} slug={item.slug} weight={item.weight} imageUrl="https://picsum.photos/200" />)}
+                                </div>}
 
-                            {/* Weights List View */}
-                            {viewType === "list" && <ul className={`grid gap-2 mb-10`}>
-                                {items.map((item) => <ItemPreviewList datacy="weights-list-item" key={item.id} name={item.name} slug={item.slug} weight={item.weight} imageUrl="https://picsum.photos/200" />)}
-                            </ul>}
+                                {/* Weights List View */}
+                                {viewType === "list" && <ul className={`grid gap-2 mb-10`}>
+                                    {items.map((item) => <ItemPreviewList datacy="weights-list-item" key={item.id} name={item.name} slug={item.slug} weight={item.weight} imageUrl="https://picsum.photos/200" />)}
+                                </ul>}
+                            </>}
 
                             {/* Pagination */}
                             <Pagination totalItems={totalItems} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} query={query} sort={sort} baseRoute={routes.weights.list} />
