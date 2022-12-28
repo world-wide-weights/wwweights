@@ -102,8 +102,8 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                                 </div>
 
                                 <div className="flex items-center mb-2 lg:mb-0">
-                                    <IconButton icon="grid_view" onClick={() => setViewType("grid")} className="mr-2" />
-                                    <IconButton icon="list" onClick={() => setViewType("list")} className="mr-4" />
+                                    <IconButton icon="grid_view" color={viewType === "grid" ? "blue" : "gray"} active={viewType === "grid"} onClick={() => setViewType("grid")} className="mr-2" />
+                                    <IconButton icon="list" color={viewType === "list" ? "blue" : "gray"} active={viewType === "list"} onClick={() => setViewType("list")} className="mr-4" />
 
                                     {/* Sort Dropdown */}
                                     <Sort sort={sort} query={query} />
