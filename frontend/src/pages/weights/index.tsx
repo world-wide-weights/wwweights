@@ -19,6 +19,7 @@ import { generateWeightString } from "../../services/utils/weight"
 const DEFAULT_ITEMS_PER_PAGE = 16
 const ITEMS_PER_PAGE_MAXIMUM = 100
 const FIRST_PAGE = 1
+const KEY_VIEW_TYPE = "discover_view_type"
 
 export type Item = {
     id: number, // TODO: Change to string
@@ -54,11 +55,6 @@ type WeightsListProps = {
     statistics: Statistics
 }
 
-type ViewType = "grid" | "list"
-
-const KEY_VIEW_TYPE = "discover_view_type"
-
-
 /** 
  * Discover Page, list all items, search results and single tags
  */
@@ -90,7 +86,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                 // Empty State
                 <SearchEmptyState query={query} />
                 : <>
-                    <div className={`lg:flex ${statisticsExpanded ? "md:flex-col-reverse" : ""}`}>
+                    <div className={`lg:flex ${statisticsExpanded ? "lg:flex-col-reverse" : ""}`}>
                         {/*** Weights List ***/}
                         <div className={`${statisticsExpanded ? "" : "lg:w-2/3 2xl:w-[70%] lg:mr-10"} mb-10 lg:mb-0`}>
                             {/* Header Weights List */}
