@@ -26,11 +26,11 @@ export type ItemPreviewProps = {
  * <ItemPreviewList name="Smartphone" slug="smartphone" weight="300 g" imageUrl="https://via.placeholder.com/96.png" />
  * ```
  */
-export const ItemPreviewList: React.FC<ItemPreviewProps> = ({ slug, name, weight, imageUrl }) => {
+export const ItemPreviewList: React.FC<ItemPreviewProps> = ({ slug, name, weight, imageUrl, datacy }) => {
     const weightString = generateWeightString(weight)
 
     return <li className="bg-white rounded-lg py-2 mb-2">
-        <Link className="flex flex-col md:flex-row md:items-center md:h-12 mx-4 md:mx-8" href={routes.weights.single(slug)}>
+        <Link datacy={datacy} className="flex flex-col md:flex-row md:items-center md:h-12 mx-4 md:mx-8" href={routes.weights.single(slug)}>
             <div className="flex justify-between items-center h-12 md:w-1/4">
                 <h5 className="text-gray-600 truncate pr-3">{name}</h5>
                 <div className="min-w-[48px] w-[48px]">
