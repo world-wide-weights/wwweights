@@ -17,7 +17,7 @@ describe('Local Storage Custom Hook', () => {
 
     const ExampleSetValue: React.FC = () => {
         const initialRender = useRef<boolean>(true)
-        const [value, loadingValue, setValue] = useLocalStorage<"example1" | "example2">(EXAMPLE_KEY, INITIAL_VALUE, initialRender)
+        const [value, setValue] = useLocalStorage<"example1" | "example2">(EXAMPLE_KEY, INITIAL_VALUE, initialRender)
 
         return <>
             <p>{value}</p>

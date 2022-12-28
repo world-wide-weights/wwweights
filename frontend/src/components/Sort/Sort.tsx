@@ -60,13 +60,13 @@ export const Sort: React.FC<SortProps> = ({ sort, query }) => {
                 setLastValues(values)
                 submitForm()
             }
-        }, [values, submitForm])
+        }, [values, lastValues, submitForm])
 
         /** Keep form value up to date */
         useEffect(() => {
             if (sort !== values.sort)
                 setFieldValue("sort", sort)
-        }, [sort])
+        }, [setFieldValue, values])
 
         return null
     }
