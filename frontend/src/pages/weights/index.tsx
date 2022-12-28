@@ -99,8 +99,8 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
 
                                 {/* Sort */}
                                 <div className="flex items-center mb-2 lg:mb-0">
-                                    <IconButton icon="grid_view" color={viewType === "grid" ? "blue" : "gray"} active={viewType === "grid"} onClick={() => setViewType("grid")} className="mr-2" />
-                                    <IconButton icon="list" color={viewType === "list" ? "blue" : "gray"} active={viewType === "list"} onClick={() => setViewType("list")} className="mr-4" />
+                                    <IconButton datacy="discover-grid-view-button" icon="grid_view" color={viewType === "grid" ? "blue" : "gray"} active={viewType === "grid"} onClick={() => setViewType("grid")} className="mr-2" />
+                                    <IconButton datacy="discover-grid-list-button" icon="list" color={viewType === "list" ? "blue" : "gray"} active={viewType === "list"} onClick={() => setViewType("list")} className="mr-4" />
 
                                     {/* Sort Dropdown */}
                                     <div className="flex-grow">
@@ -113,7 +113,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                             {loadingViewType ? <p>Loading...</p> : <>
                                 {/* Weights Box View */}
                                 {viewType === "grid" && <div className={`grid ${statisticsExpanded ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" : "grid-cols-1 md:grid-cols-2 2xl:grid-cols-3"} gap-5 mb-10`}>
-                                    {items.map((item) => <ItemPreviewGrid datacy="weights-list-item" key={item.id} name={item.name} slug={item.slug} weight={item.weight} imageUrl="https://picsum.photos/200" />)}
+                                    {items.map((item) => <ItemPreviewGrid datacy="weights-grid-item" key={item.id} name={item.name} slug={item.slug} weight={item.weight} imageUrl="https://picsum.photos/200" />)}
                                 </div>}
 
                                 {/* Weights List View */}
