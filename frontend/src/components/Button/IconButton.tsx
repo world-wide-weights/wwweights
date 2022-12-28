@@ -15,6 +15,8 @@ type IconButtonProps = {
     className?: string
     /** Specify whether the Button should be disabled, or not */
     disabled?: boolean
+    /** Remove hover and focus effects when active is true. */
+    active?: boolean
     /** For testing */
     datacy?: string
 }
@@ -22,18 +24,18 @@ type IconButtonProps = {
 /**
  * Button only with an icon
  */
-export const IconButton: React.FunctionComponent<IconButtonProps> = ({ icon, to, onClick, datacy, disabled, className = "", color = "gray" }) => {
+export const IconButton: React.FunctionComponent<IconButtonProps> = ({ icon, to, onClick, datacy, disabled = false, active = false, className = "", color = "gray" }) => {
     const innerIcon = <Icon className={`${disabled ? "text-opacity-50 " : ""}text-${color}-600`}>{icon}</Icon>
-    const classes = `text-center ${disabled ? "cursor-default" : `cursor-pointer hover:bg-${color}-200 focus:bg-${color}-300`} rounded-full w-10 h-10 flex items-center justify-center ${className}`
+    const classes = `text-center ${disabled || active ? "cursor-default" : `cursor-pointer hover:bg-${color}-200 focus:bg-${color}-300`} rounded-full w-10 h-10 flex items-center justify-center ${className}`
 
     return <>
         {/* Button as link */}
-        {to && <Link datacy={datacy} href={disabled ? "" : to} onClick={disabled ? (event) => event.preventDefault() : () => ""} className={classes}>
+        {to && <Link datacy={datacy} href={disabled ? "" : to} onClick={disabled || active ? (event) => event.preventDefault() : () => ""} className={classes}>
             {innerIcon}
         </Link>}
 
         {/* Button with onclick */}
-        {!to && <button datacy={datacy} type="button" onClick={onClick} disabled={disabled} className={classes}>
+        {!to && <button datacy={datacy} type="button" onClick={onClick} disabled={disabled || active} className={classes}>
             {innerIcon}
         </button>}
     </>
