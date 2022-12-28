@@ -90,30 +90,33 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                 // Empty State
                 <SearchEmptyState query={query} />
                 : <>
-                    <div className={`md:flex ${statisticsExpanded ? "md:flex-col-reverse" : ""}`}>
+                    <div className={`lg:flex ${statisticsExpanded ? "md:flex-col-reverse" : ""}`}>
                         {/*** Weights List ***/}
-                        <div className={`${statisticsExpanded ? "" : "md:w-1/2 lg:w-2/3 2xl:w-[70%] md:mr-10"} mb-10 md:mb-0`}>
+                        <div className={`${statisticsExpanded ? "" : "lg:w-2/3 2xl:w-[70%] lg:mr-10"} mb-10 lg:mb-0`}>
                             {/* Header Weights List */}
-                            <div className="lg:flex justify-between items-center mb-2 md:mb-4">
+                            <div className="md:flex justify-between items-center mb-2 lg:mb-4">
                                 <div className="flex items-end mb-2 lg:mb-0">
                                     {/* Headline */}
                                     <Headline level={3} hasMargin={false} className="mr-4">{headlineItems}</Headline>
                                     <p>{totalItems}</p>
                                 </div>
 
+                                {/* Sort */}
                                 <div className="flex items-center mb-2 lg:mb-0">
                                     <IconButton icon="grid_view" color={viewType === "grid" ? "blue" : "gray"} active={viewType === "grid"} onClick={() => setViewType("grid")} className="mr-2" />
                                     <IconButton icon="list" color={viewType === "list" ? "blue" : "gray"} active={viewType === "list"} onClick={() => setViewType("list")} className="mr-4" />
 
                                     {/* Sort Dropdown */}
-                                    <Sort sort={sort} query={query} />
+                                    <div className="flex-grow">
+                                        <Sort sort={sort} query={query} />
+                                    </div>
                                 </div>
                             </div>
 
                             {/* TODO (Zoe-Bot): Add loading state component */}
                             {loadingViewType ? <p>Loading...</p> : <>
                                 {/* Weights Box View */}
-                                {viewType === "grid" && <div className={`grid ${statisticsExpanded ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" : "grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3"} gap-5 mb-10`}>
+                                {viewType === "grid" && <div className={`grid ${statisticsExpanded ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" : "grid-cols-1 md:grid-cols-2 2xl:grid-cols-3"} gap-5 mb-10`}>
                                     {items.map((item) => <ItemPreviewGrid datacy="weights-list-item" key={item.id} name={item.name} slug={item.slug} weight={item.weight} imageUrl="https://picsum.photos/200" />)}
                                 </div>}
 
@@ -128,24 +131,24 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                         </div>
 
                         {/*** Statistics ***/}
-                        <div className={`${statisticsExpanded ? "" : "md:items-start md:w-1/2 lg:w-1/3 2xl:w-[30%]"}`}>
+                        <div className={`${statisticsExpanded ? "" : "lg:items-start lg:w-1/2 xl:w-1/3 2xl:w-[30%]"}`}>
                             {/* Header Statistics */}
-                            <div className={`flex ${statisticsExpanded ? "justify-between" : "md:items-end md:justify-end md:h-[82px] lg:h-[46px]"} mb-2 md:mb-4`}>
+                            <div className={`flex ${statisticsExpanded ? "justify-between" : "lg:items-end lg:justify-end lg:h-[46px]"} mb-2 lg:mb-4`}>
                                 {/* Headline */}
-                                <Headline level={3} hasMargin={false} className={`${statisticsExpanded ? "" : "md:hidden"} `}>Statistics</Headline>
+                                <Headline level={3} hasMargin={false} className={`${statisticsExpanded ? "" : "lg:hidden"} `}>Statistics</Headline>
 
                                 {/* Show Statistics Button */}
-                                <Button onClick={() => setStatisticsExpanded(!statisticsExpanded)} className="hidden md:flex" kind="tertiary">{statisticsExpanded ? "Show less" : "Show more"}</Button>
+                                <Button onClick={() => setStatisticsExpanded(!statisticsExpanded)} className="hidden lg:flex" kind="tertiary">{statisticsExpanded ? "Show less" : "Show more"}</Button>
                             </div>
 
                             {/* Statistics Content */}
-                            <div className={`${statisticsExpanded ? "md:flex-col" : "md:items-start"} md:flex`}>
-                                <div className="flex mb-5 md:mb-10">
-                                    <button onClick={() => setStatisticsExpanded(!statisticsExpanded)} className="hidden md:block bg-white self-stretch rounded-lg px-1 mr-2">
+                            <div className={`${statisticsExpanded ? "lg:flex-col" : "lg:items-start"} lg:flex`}>
+                                <div className="flex mb-5 lg:mb-10">
+                                    <button onClick={() => setStatisticsExpanded(!statisticsExpanded)} className="hidden lg:block bg-white self-stretch rounded-lg px-1 mr-2">
                                         <Icon>chevron_left</Icon>
                                     </button>
 
-                                    <div className={`${statisticsExpanded ? "flex flex-col md:flex-row" : "grid"} flex-grow md:flex-auto gap-2 md:gap-4`}>
+                                    <div className={`${statisticsExpanded ? "flex flex-col lg:flex-row" : "grid"} flex-grow md:flex-auto gap-2 lg:gap-4`}>
                                         <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="weight" value={generateWeightString(statistics.heaviest.weight)} descriptionTop={statistics.heaviest.name} descriptionBottom="Heaviest" />
                                         <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="eco" value={generateWeightString(statistics.lightest.weight)} descriptionTop={statistics.lightest.name} descriptionBottom="Lightest" />
                                         <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="scale" value={`~${statistics.averageWeight} g`} descriptionBottom="Average" />

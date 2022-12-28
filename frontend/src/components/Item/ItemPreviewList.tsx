@@ -30,15 +30,15 @@ export const ItemPreviewList: React.FC<ItemPreviewProps> = ({ slug, name, weight
     const weightString = generateWeightString(weight)
 
     return <li className="bg-white rounded-lg py-2 mb-2">
-        <Link datacy={datacy} className="flex flex-col md:flex-row md:items-center md:h-12 mx-4 md:mx-8" href={routes.weights.single(slug)}>
-            <div className="flex justify-between items-center h-12 md:w-1/4">
-                <h5 className="text-gray-600 truncate pr-3">{name}</h5>
+        <Link datacy={datacy} className="flex flex-col md:flex-row md:items-center md:h-12 mx-2 md:mx-4" href={routes.weights.single(slug)}>
+            <div className="flex justify-between items-center h-12 md:w-1/3">
+                <h5 className="text-gray-600 font-medium truncate pr-3">{name}</h5>
                 <div className="min-w-[48px] w-[48px]">
                     {imageUrl && <Image className="object-cover rounded-lg w-12 h-12 md:mr-5" alt={`Image of ${name}`} src={imageUrl} width={96} height={96} />}
                 </div>
             </div>
-            <div className="flex items-center md:w-3/4">
-                <h5 className="text-gray-800 md:text-lg text-right font-medium w-1/3 sm:w-1/4 lg:w-1/6 mr-4" title={`${name} has a weight of ${weightString}`}>{weightString}</h5>
+            <div className="flex items-center md:w-2/3">
+                <h5 className="text-gray-800 md:text-lg text-right font-bold w-1/3 sm:w-1/4 lg:w-1/6 mr-4" title={`${name} has a weight of ${weightString}`}>{weightString}</h5>
                 <div className="w-2/3 sm:w-3/4 lg:w-5/6">
                     {/* TODO (Zoe-Bot): Add correct percentage and find a solution for span Issue #107 */}
                     <ProgressBar progress={62} />
