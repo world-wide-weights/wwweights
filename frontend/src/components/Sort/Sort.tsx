@@ -66,7 +66,7 @@ export const Sort: React.FC<SortProps> = ({ sort, query }) => {
         useEffect(() => {
             if (sort !== values.sort)
                 setFieldValue("sort", sort)
-        }, [setFieldValue, values])
+        }, [setFieldValue]) // eslint-disable-line react-hooks/exhaustive-deps
 
         return null
     }
