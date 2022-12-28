@@ -2,11 +2,13 @@ import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Head from "next/head"
 import { useState } from "react"
 import { Button } from "../../components/Button/Button"
+import { IconButton } from "../../components/Button/IconButton"
 import { SearchEmptyState } from "../../components/EmptyState/SearchEmptyState"
 import { SearchHeader } from "../../components/Header/SearchHeader"
 import { Headline } from "../../components/Headline/Headline"
 import { Icon } from "../../components/Icon/Icon"
-import { ItemPreviewBox } from "../../components/Item/ItemPreviewBox"
+import { ItemPreviewGrid } from "../../components/Item/ItemPreviewGrid"
+import { ItemPreviewList } from "../../components/Item/ItemPreviewList"
 import { Pagination } from "../../components/Pagination/Pagination"
 import { Sort } from "../../components/Sort/Sort"
 import { StatsCard } from "../../components/Statistics/StatsCard"
@@ -61,6 +63,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
 
     // Local state
     const [statisticsExpanded, setStatisticsExpanded] = useState<boolean>(false)
+    const [viewType, setViewType] = useState<"grid" | "list">("list")
 
     return <>
         {/* Meta Tags */}
@@ -89,14 +92,24 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                                     <p>{totalItems}</p>
                                 </div>
 
-                                {/* Sort Dropdown */}
-                                <Sort sort={sort} query={query} />
+                                <div className="flex items-center mb-2 lg:mb-0">
+                                    <IconButton icon="grid_view" onClick={() => setViewType("grid")} className="mr-2" />
+                                    <IconButton icon="list" onClick={() => setViewType("list")} className="mr-4" />
+
+                                    {/* Sort Dropdown */}
+                                    <Sort sort={sort} query={query} />
+                                </div>
                             </div>
 
-                            {/* Weights */}
-                            <div className={`grid ${statisticsExpanded ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" : "grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3"} gap-5 mb-10`}>
-                                {items.map((item) => <ItemPreviewBox datacy="weights-list-item" key={item.id} name={item.name} slug={item.slug} weight={item.weight} imageUrl="https://picsum.photos/200" />)}
-                            </div>
+                            {/* Weights Box View */}
+                            {viewType === "grid" && <div className={`grid ${statisticsExpanded ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" : "grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3"} gap-5 mb-10`}>
+                                {items.map((item) => <ItemPreviewGrid datacy="weights-list-item" key={item.id} name={item.name} slug={item.slug} weight={item.weight} imageUrl="https://picsum.photos/200" />)}
+                            </div>}
+
+                            {/* Weights List View */}
+                            {viewType === "list" && <ul className={`grid gap-2 mb-10`}>
+                                {items.map((item) => <ItemPreviewList datacy="weights-list-item" key={item.id} name={item.name} slug={item.slug} weight={item.weight} imageUrl="https://picsum.photos/200" />)}
+                            </ul>}
 
                             {/* Pagination */}
                             <Pagination totalItems={totalItems} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} query={query} sort={sort} baseRoute={routes.weights.list} />

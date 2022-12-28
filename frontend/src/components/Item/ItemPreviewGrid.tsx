@@ -1,31 +1,18 @@
 import Image from "next/image"
 import Link from "next/link"
-import { Weight } from "../../pages/weights"
 import { routes } from "../../services/routes/routes"
 import { generateWeightString } from "../../services/utils/weight"
-
-export type ItemPreviewProps = {
-    /** Name of item */
-    name: string
-    /** Weight */
-    weight: Weight
-    /** Slug of item */
-    slug: string
-    /** Image URL */
-    imageUrl?: string
-    /** For testing */
-    datacy?: string
-}
+import { ItemPreviewProps } from "./ItemPreviewList"
 
 /**
  * Excerpt component for Item
- * 
+ * s
  * Example:
  * ```tsx
- * <ItemPreviewBox id="1" name="Smartphone" weight="300 gr" imageUrl="https://via.placeholder.com/96.png" />
+ * <ItemPreviewGrid id="1" name="Smartphone" weight="300 gr" imageUrl="https://via.placeholder.com/96.png" />
  * ```
  */
-export const ItemPreviewBox: React.FC<ItemPreviewProps> = ({ slug, datacy, name, weight, imageUrl }) => {
+export const ItemPreviewGrid: React.FC<ItemPreviewProps> = ({ slug, datacy, name, weight, imageUrl }) => {
     const weightString = generateWeightString(weight)
 
     return <Link datacy={datacy} className="flex items-center justify-between rounded-lg bg-white pl-5 pr-2 md:pr-3 py-2 md:py-3" href={routes.weights.single(slug)}>
