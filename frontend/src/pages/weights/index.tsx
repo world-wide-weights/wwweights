@@ -173,7 +173,7 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
     // Fetch items and statistics
     const [itemsResponse, statisticResponse] = await Promise.all([
         // TODO (Zoe-Bot): Update api endpoint when correct api is used (sort)
-        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/items/list?page=${currentPage}&limit=${limit}&query=${query}&sort=weight.value&order=${sort}`),
+        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/items/list?page=${currentPage}&limit=${limit}&sort=weight.value&order=${sort}${query !== "" ? `&query=${query}` : ""}`),
         fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/items/statistics`),
     ])
 
