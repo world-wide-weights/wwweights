@@ -7,8 +7,9 @@ import { Dispatch, MutableRefObject, SetStateAction, useEffect, useState } from 
  * @param initialRenderRef ref from component with inital value true (need to check when we are on first render to set intial value correct).
  * @returns [ value: the state we sync, loading: loading state from the synced value, setValue: update the state ]
  */
-export const useLocalStorage = <T>(key: string, initialValue: T, initialRenderRef: MutableRefObject<boolean>): readonly [T, Dispatch<SetStateAction<T>>] => {
+export const useLocalStorage = <T>(key: string, initialValue: T, initialRenderRef: MutableRefObject<boolean>): readonly [T, Dispatch<SetStateAction<T>>, boolean] => {
     const [value, setValue] = useState<T>(initialValue)
+    const [loading, setLoading] = useState<boolean>(true)
 
     /**
      * Sets the inital state from localstorage or set initialValue when not set jet.
@@ -28,6 +29,7 @@ export const useLocalStorage = <T>(key: string, initialValue: T, initialRenderRe
          */
         if (initialRenderRef.current) {
             initialRenderRef.current = false
+            setLoading(false)
             return
         }
 
@@ -35,5 +37,5 @@ export const useLocalStorage = <T>(key: string, initialValue: T, initialRenderRe
         localStorage.setItem(key, value as string)
     }, [initialRenderRef, key, value])
 
-    return [value, setValue] as const
+    return [value, setValue, loading] as const
 }
