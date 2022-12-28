@@ -177,8 +177,6 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
         fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/items/statistics`),
     ])
 
-    console.log(itemsResponse)
-
     // Read jsons from items and statistics
     const [items, statistics] = await Promise.all([
         itemsResponse.json(),
