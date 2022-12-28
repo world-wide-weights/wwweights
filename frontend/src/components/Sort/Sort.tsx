@@ -1,7 +1,7 @@
 import { Formik, useFormikContext } from "formik"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-import { routes, SortType } from "../../services/routes/routes"
+import { routes } from "../../services/routes/routes"
 import { Dropdown } from "../Form/Dropdown/Dropdown"
 
 type SortProps = {
@@ -10,6 +10,8 @@ type SortProps = {
     /** Search query. */
     query: string
 }
+
+export type SortType = "asc" | "desc" | ""
 
 const sortDropdownOptions = [
     {

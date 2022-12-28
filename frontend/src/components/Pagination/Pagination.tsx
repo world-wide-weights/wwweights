@@ -1,8 +1,9 @@
 import { usePagination } from "../../hooks/usePagination"
 import { Ellipsis } from "../../services/pagination/pagination"
-import { RoutePagination, SortType } from "../../services/routes/routes"
+import { RoutePagination } from "../../services/routes/routes"
 import { Button } from "../Button/Button"
 import { IconButton } from "../Button/IconButton"
+import { SortType } from "../Sort/Sort"
 
 export type PaginationProps = {
     /** The total number of items. */

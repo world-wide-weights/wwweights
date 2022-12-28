@@ -10,10 +10,10 @@ import { Icon } from "../../components/Icon/Icon"
 import { ItemPreviewGrid } from "../../components/Item/ItemPreviewGrid"
 import { ItemPreviewList } from "../../components/Item/ItemPreviewList"
 import { Pagination } from "../../components/Pagination/Pagination"
-import { Sort } from "../../components/Sort/Sort"
+import { Sort, SortType } from "../../components/Sort/Sort"
 import { StatsCard } from "../../components/Statistics/StatsCard"
 import { useLocalStorage } from "../../hooks/useLocalStorage"
-import { routes, SortType } from "../../services/routes/routes"
+import { routes } from "../../services/routes/routes"
 import { generateWeightString } from "../../services/utils/weight"
 
 const DEFAULT_ITEMS_PER_PAGE = 16

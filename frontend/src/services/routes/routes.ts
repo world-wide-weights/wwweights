@@ -1,3 +1,4 @@
+import { SortType } from "../../components/Sort/Sort"
 import { PaginationBaseOptions } from "../pagination/pagination"
 
 /**
@@ -53,5 +54,3 @@ export const routes = {
 // TODO (Zoe-Bot): Change sort types when correct api implemented
 export type RoutePagination = (options?: PaginationBaseOptions & { query?: string, sort?: SortType }) => string
 
-// TODO (Zoe-Bot): Move to sort component when exist
-export type SortType = "asc" | "desc" | ""
