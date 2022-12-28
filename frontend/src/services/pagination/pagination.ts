@@ -1,4 +1,5 @@
-import { RoutePagination, SortType } from "../routes/routes"
+import { SortType } from "src/components/Sort/Sort"
+import { RoutePagination } from "../routes/routes"
 import { range } from "../utils/range"
 
 export const Ellipsis = '...'
