@@ -15,11 +15,11 @@ export type SortType = "asc" | "desc" | ""
 
 const sortDropdownOptions = [
     {
-        value: "asc",
+        value: "desc",
         label: "Heaviest",
         icon: "weight"
     }, {
-        value: "desc",
+        value: "asc",
         label: "Lightest",
         icon: "eco"
     },
