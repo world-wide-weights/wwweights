@@ -40,7 +40,6 @@ export const routes = {
 
             return `/tags${queryString !== "" ? `?${queryString}` : ``}`
         },
-        // TODO (Zoe-Bot): Move to weights
         single: (slug: string) => `/weights?query=${slug}`
     },
     legal: {
