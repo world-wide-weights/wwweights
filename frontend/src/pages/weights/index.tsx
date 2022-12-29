@@ -22,7 +22,7 @@ const FIRST_PAGE = 1
 const KEY_VIEW_TYPE = "discover_view_type"
 
 export type Item = {
-    id: number, // TODO: Change to string
+    id: string,
     name: string
     slug: string
     weight: Weight,

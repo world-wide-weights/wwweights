@@ -1,6 +1,6 @@
 {
     "heaviest": {
-        "id": 230,
+        "id": "230",
         "name": "Clio C-1000",
         "slug": "clio-c-1000",
         "weight": {
@@ -28,7 +28,7 @@
         ]
     },
     "lightest": {
-        "id": 105,
+        "id": "105",
         "name": "iPAQ H6340 / H6345",
         "slug": "ipaq-h6340-h6345",
         "weight": {
