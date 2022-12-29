@@ -146,7 +146,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                                     <div className={`${statisticsExpanded ? "flex flex-col lg:flex-row" : "grid"} flex-grow md:flex-auto gap-2 lg:gap-4`}>
                                         <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="weight" value={generateWeightString(statistics.heaviest.weight)} descriptionTop={statistics.heaviest.name} descriptionBottom="Heaviest" />
                                         <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="eco" value={generateWeightString(statistics.lightest.weight)} descriptionTop={statistics.lightest.name} descriptionBottom="Lightest" />
-                                        <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="scale" value={`~${statistics.averageWeight} g`} descriptionBottom="Average" />
+                                        <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="scale" value={`${statistics.averageWeight} g`} descriptionBottom="Average" />
                                     </div>
                                 </div>
                             </div>
