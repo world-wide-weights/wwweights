@@ -2,7 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Weight } from "../../pages/weights"
 import { routes } from "../../services/routes/routes"
-import { generateWeightString } from "../../services/utils/weight"
+import { generateWeightProgressBarPercentage, generateWeightString } from "../../services/utils/weight"
 import { ProgressBar } from "../ProgressBar/ProgressBar"
 
 export type ItemPreviewProps = {
@@ -10,8 +10,6 @@ export type ItemPreviewProps = {
     name: string
     /** Weight. */
     weight: Weight
-    /** Heaviest Weight from statistics. */
-    heaviestWeight?: Weight
     /** Slug of item. */
     slug: string
     /** Image URL. */
@@ -28,7 +26,7 @@ export type ItemPreviewProps = {
  * <ItemPreviewList name="Smartphone" slug="smartphone" weight={ value: 100, isCa: false } heaviestWeight={ value: 100, isCa: false } imageUrl="https://via.placeholder.com/96.png" />
  * ```
  */
-export const ItemPreviewList: React.FC<ItemPreviewProps> = ({ slug, name, weight, heaviestWeight, imageUrl, datacy }) => {
+export const ItemPreviewList: React.FC<ItemPreviewProps & { heaviestWeight: Weight }> = ({ slug, name, weight, heaviestWeight, imageUrl, datacy }) => {
     const weightString = generateWeightString(weight)
 
     return <li className="bg-white rounded-lg py-2 mb-2">
@@ -43,7 +41,7 @@ export const ItemPreviewList: React.FC<ItemPreviewProps> = ({ slug, name, weight
                 <h5 className="text-gray-800 md:text-lg text-right font-bold w-1/3 sm:w-1/4 lg:w-1/6 mr-4" title={`${name} has a weight of ${weightString}`}>{weightString}</h5>
                 <div className="w-2/3 sm:w-3/4 lg:w-5/6">
                     {/* TODO (Zoe-Bot): Add correct percentage and find a solution for span Issue #107 */}
-                    <ProgressBar progress={62} />
+                    <ProgressBar progress={generateWeightProgressBarPercentage(weight, heaviestWeight).percentage} />
                 </div>
             </div>
         </Link>
