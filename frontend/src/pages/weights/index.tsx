@@ -35,7 +35,7 @@ export type Item = {
 }
 export type Weight = {
     value: number
-    aditionalValue?: number
+    additionalValue?: number
     isCa: boolean
 }
 
@@ -117,7 +117,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
 
                                 {/* Weights List View */}
                                 {viewType === "list" && <ul className={`grid gap-2 mb-10`}>
-                                    {items.map((item) => <ItemPreviewList datacy="weights-list-item" key={item.id} name={item.name} slug={item.slug} weight={item.weight} imageUrl="https://picsum.photos/200" />)}
+                                    {items.map((item) => <ItemPreviewList datacy="weights-list-item" key={item.id} name={item.name} slug={item.slug} weight={item.weight} heaviestWeight={statistics.heaviest.weight} imageUrl="https://picsum.photos/200" />)}
                                 </ul>}
                             </>}
 

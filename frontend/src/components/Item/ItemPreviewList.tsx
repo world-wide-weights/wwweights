@@ -6,15 +6,17 @@ import { generateWeightString } from "../../services/utils/weight"
 import { ProgressBar } from "../ProgressBar/ProgressBar"
 
 export type ItemPreviewProps = {
-    /** Name of item */
+    /** Name of item. */
     name: string
-    /** Weight */
+    /** Weight. */
     weight: Weight
-    /** Slug of item */
+    /** Heaviest Weight from statistics. */
+    heaviestWeight?: Weight
+    /** Slug of item. */
     slug: string
-    /** Image URL */
+    /** Image URL. */
     imageUrl?: string
-    /** For testing */
+    /** For testing. */
     datacy?: string
 }
 
@@ -23,10 +25,10 @@ export type ItemPreviewProps = {
  * 
  * Example:
  * ```tsx
- * <ItemPreviewList name="Smartphone" slug="smartphone" weight="300 g" imageUrl="https://via.placeholder.com/96.png" />
+ * <ItemPreviewList name="Smartphone" slug="smartphone" weight={ value: 100, isCa: false } heaviestWeight={ value: 100, isCa: false } imageUrl="https://via.placeholder.com/96.png" />
  * ```
  */
-export const ItemPreviewList: React.FC<ItemPreviewProps> = ({ slug, name, weight, imageUrl, datacy }) => {
+export const ItemPreviewList: React.FC<ItemPreviewProps> = ({ slug, name, weight, heaviestWeight, imageUrl, datacy }) => {
     const weightString = generateWeightString(weight)
 
     return <li className="bg-white rounded-lg py-2 mb-2">
