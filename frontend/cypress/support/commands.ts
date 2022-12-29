@@ -36,7 +36,7 @@ Cypress.Commands.add('mockWeightsPage', (itemCount?: number) => {
     cy.task('nock', {
         hostname: apiBaseUrl,
         method: 'get',
-        path: `/api/query/v1/items/list`,
+        path: `/items`, // TODO (Zoe-Bot): Update url when correct api is used
         statusCode: 200,
         body
     })
