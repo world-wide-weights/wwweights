@@ -1,29 +1,29 @@
 {
     "heaviest": {
-        "id": 100,
-        "name": "Cassiopeia IT-500 M30CR",
-        "slug": "cassiopeia-it-500-m30cr",
+        "id": 230,
+        "name": "Clio C-1000",
+        "slug": "clio-c-1000",
         "weight": {
-            "value": "290",
+            "value": 1451,
             "isCa": false
         },
         "source": "https://phonedb.net/",
         "tags": [
             {
-                "name": "Casio",
-                "slug": "casio"
+                "name": "Vadem",
+                "slug": "vadem"
             },
             {
-                "name": "2003 Apr",
-                "slug": "2003-apr"
+                "name": "1998 Nov",
+                "slug": "1998-nov"
             },
             {
                 "name": "Windows (mobile-class)",
                 "slug": "windows-(mobile-class)"
             },
             {
-                "name": "PDA",
-                "slug": "pda"
+                "name": "Notebook",
+                "slug": "notebook"
             }
         ]
     },
