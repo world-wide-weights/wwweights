@@ -28,6 +28,7 @@ export type ItemPreviewProps = {
  */
 export const ItemPreviewList: React.FC<ItemPreviewProps & { heaviestWeight: Weight }> = ({ slug, name, weight, heaviestWeight, imageUrl, datacy }) => {
     const weightString = generateWeightString(weight)
+    const percentageProgressbar = generateWeightProgressBarPercentage(weight, heaviestWeight)
 
     return <li className="bg-white rounded-lg py-2 mb-2">
         <Link datacy={datacy} className="flex flex-col md:flex-row md:items-center md:h-12 mx-2 md:mx-4" href={routes.weights.single(slug)}>
@@ -41,7 +42,7 @@ export const ItemPreviewList: React.FC<ItemPreviewProps & { heaviestWeight: Weig
                 <h5 className="text-gray-800 text-right font-bold w-1/3 sm:w-1/4 lg:w-1/3 mr-4" title={`${name} has a weight of ${weightString}`}>{weightString}</h5>
                 <div className="w-2/3 sm:w-3/4 lg:w-2/3">
                     {/* TODO (Zoe-Bot): Add correct percentage and find a solution for span Issue #107 */}
-                    <ProgressBar progress={generateWeightProgressBarPercentage(weight, heaviestWeight).percentage} />
+                    <ProgressBar progress={percentageProgressbar.percentage} isCa={weight.isCa} progressAdditional={percentageProgressbar.percentageAdditional} />
                 </div>
             </div>
         </Link>
