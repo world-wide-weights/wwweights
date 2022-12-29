@@ -18,8 +18,8 @@ export const ItemPreviewGrid: React.FC<ItemPreviewProps> = ({ slug, datacy, name
     return <Link datacy={datacy} className="flex items-center justify-between rounded-lg bg-white pl-5 pr-2 md:pr-3 py-2 md:py-3" href={routes.weights.single(slug)}>
         <div className="pr-3">
             <div>
-                <h5 className="text-gray-600 font-medium break-all">{name}</h5>
-                <h5 className="font-bold text-lg" title={`${name} has a weight of ${weightString}`}>{weightString}</h5>
+                <h5 className="text-gray-600 text-sm font-medium break-all">{name}</h5>
+                <h5 className="font-bold" title={`${name} has a weight of ${weightString}`}>{weightString}</h5>
             </div>
         </div>
         {imageUrl && <Image priority className="object-cover rounded-lg w-20 bg-white" alt={`Image of ${name}`} src={imageUrl} width={96} height={96} />}
