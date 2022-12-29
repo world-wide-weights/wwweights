@@ -14,12 +14,12 @@ export type ProgressBarProps = {
 export const ProgressBar: React.FC<ProgressBarProps> = ({ progress, progressAdditional = false, isCa = false }) => {
     return <div className="relative bg-gray-200 rounded-lg h-2 w-[100%]">
         {/* Additional Progress */}
-        <div style={{
+        {progressAdditional && <div datacy="progressbar-additional-progress" style={{
             width: progressAdditional > 100 ? "100%" : `${progressAdditional}%` // Use style instead of tailwind arbitary values because otherwise need to create safelist for 100 classes
-        }} className={`absolute bg-blue-100 rounded-lg h-2`} />
+        }} className={`absolute bg-blue-100 rounded-lg h-2`} />}
 
         {/* Progress */}
-        <div style={{
+        <div datacy="progressbar-progress" style={{
             width: progress > 100 ? "100%" : `${progress}%` // Use style instead of tailwind arbitary values because otherwise need to create safelist for 100 classes
         }} className={`absolute ${isCa ? "bg-gradient-to-r from-blue-600 to-blue-400" : "bg-blue-600"} rounded-lg h-2`} />
     </div>
