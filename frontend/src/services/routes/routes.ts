@@ -1,3 +1,4 @@
+import { SortType } from "../../components/Sort/Sort"
 import { PaginationBaseOptions } from "../pagination/pagination"
 
 /**
@@ -8,7 +9,7 @@ import { PaginationBaseOptions } from "../pagination/pagination"
 export const routes = {
     home: "/",
     weights: {
-        list: (options?: PaginationBaseOptions & { query?: string }) => {
+        list: (options?: PaginationBaseOptions & { query?: string, sort?: SortType }) => {
             if (!options)
                 return "/weights"
 
@@ -17,7 +18,8 @@ export const routes = {
             const queryString = new URLSearchParams({
                 ...(options.page && options.page !== 1 && { page: options.page.toString() }),
                 ...(options.itemsPerPage && hasCustomLimit && { limit: options.itemsPerPage.toString() }),
-                ...(options.query && { query: options.query })
+                ...(options.query && { query: options.query }),
+                ...(options.sort && { sort: options.sort })
             }).toString()
 
             return `/weights${queryString !== "" ? `?${queryString}` : ``}`
@@ -48,4 +50,6 @@ export const routes = {
 
 // Define types here 
 // TODO: Improve type connection between defintion here and up routes
-export type RoutePagination = (options?: PaginationBaseOptions & { query?: string }) => string
+// TODO (Zoe-Bot): Change sort types when correct api implemented
+export type RoutePagination = (options?: PaginationBaseOptions & { query?: string, sort?: SortType }) => string
+

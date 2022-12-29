@@ -27,16 +27,6 @@ module.exports = {
         '2xl': '12rem',
       },
     },
-    fontSize: {
-      sm: '0.8rem',
-      base: '0.9rem',
-      lg: '1.0rem',
-      xl: '1.2rem',
-      "2xl": '1.463rem',
-      "3xl": '1.853rem',
-      "4xl": '2.341rem',
-      "5xl": '2.952rem',
-    },
     extend: {
       colors: {
         blue: {
@@ -53,7 +43,7 @@ module.exports = {
         },
         gray: {
           '100': '#F5F7FA',
-          '200': '#E4E7EB',
+          '200': '#DDE5EF',
           '300': '#CBD2D9',
           '400': '#9AA581',
           '500': '#7B8794',
@@ -65,7 +55,7 @@ module.exports = {
       }
     },
     fontFamily: {
-      sans: ['var(--font-montserrat)', ...fontFamily.sans],
+      sans: ['var(--font-metropolis)', ...fontFamily.sans],
     }
   },
   plugins: [],
