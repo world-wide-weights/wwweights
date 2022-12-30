@@ -1,4 +1,5 @@
 import { Form, Formik } from "formik";
+import { useState } from "react";
 import { Button } from "../../components/Button/Button";
 import { TextInput } from "../../components/Form/TextInput/TextInput";
 import { AccountLayout } from "../../components/Layout/AccountLayout";
@@ -9,6 +10,7 @@ import { NextPageWithLayout } from "../_app";
  * Login page is a guest route.
  */
 const Login: NextPageWithLayout = () => {
+    const [isPasswordEyeOpen, setIsPasswordEyeOpen] = useState<boolean>(true)
 
     // Formik Login Form inital values
     const initialFormValues = {
@@ -29,7 +31,7 @@ const Login: NextPageWithLayout = () => {
         <Formik initialValues={initialFormValues} onSubmit={onFormSubmit}>
             <Form className="mb-5 lg:mb-10">
                 <TextInput name="email" labelText="E-Mail" placeholder="E-Mail" />
-                <TextInput name="password" labelText="Password" placeholder="Password" />
+                <TextInput type={isPasswordEyeOpen ? "text" : "password"} name="password" labelText="Password" placeholder="Password" icon={isPasswordEyeOpen ? "visibility" : "visibility_off"} iconOnClick={() => setIsPasswordEyeOpen(!isPasswordEyeOpen)} />
                 <Button kind="tertiary" className="mb-5">Forgot Password?</Button>
 
                 <Button to={routes.home} type="submit" className="w-full">Login</Button>
@@ -45,7 +47,7 @@ const Login: NextPageWithLayout = () => {
 }
 
 Login.getLayout = (page: React.ReactElement) => {
-    return <AccountLayout page={page} siteTitle="Login" headline="Welcome back" description="Sign in to your account below." />
+    return <AccountLayout page={page} siteTitle="Login" headline="Welcome back" description="Sign in to your account below." descriptionImage="Login to share your stuff" />
 }
 
 export default Login

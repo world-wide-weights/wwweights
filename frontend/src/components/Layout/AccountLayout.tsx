@@ -14,13 +14,15 @@ type AccountLayoutProps = {
     headline: string
     /** Short description shown below headline. */
     description: string
+    /** Short description in image below headline. */
+    descriptionImage: string
 }
 
 /**
  * Layout Wrapper for Register and Login Pages (Account).
  * Adds image right, centers the content horizontal, adds header information and add footer at bottom of the page.
  */
-export const AccountLayout: React.FC<AccountLayoutProps> = ({ page, headline, description, siteTitle }) => {
+export const AccountLayout: React.FC<AccountLayoutProps> = ({ page, headline, description, descriptionImage, siteTitle }) => {
     return <>
         <Head>
             <title>WWWeights | {siteTitle}</title>
@@ -55,7 +57,7 @@ export const AccountLayout: React.FC<AccountLayoutProps> = ({ page, headline, de
             <div className={`hidden lg:flex items-center justify-center bg-background-half-page bg-no-repeat bg-cover bg-center w-1/2`}>
                 <div className="text-white font-bold w-1/2">
                     <h5 className="text-5xl leading-snug mb-5"><span className="text-blue-300">Weight</span> something and wanna share with people?</h5>
-                    <h6 className="text-2xl">Login to share your stuff</h6>
+                    <h6 className="text-2xl">{descriptionImage}</h6>
                 </div>
             </div>
         </div>
