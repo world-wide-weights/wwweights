@@ -46,7 +46,7 @@ const Login: NextPageWithLayout = () => {
                         </Formik>
 
                         <div className="flex">
-                            <p className="mr-2">Don't have an account?</p>
+                            <p className="mr-2">Don&apos;t have an account?</p>
                             <Button kind="tertiary" isColored>Register</Button>
                         </div>
                     </div>
