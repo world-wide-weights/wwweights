@@ -9,6 +9,9 @@ import { IconButton } from '../Button/IconButton'
 const navLinks = [{
     to: routes.weights.list(),
     text: "Discover",
+}, {
+    to: routes.account.login,
+    text: "Login",
 }]
 
 /** 
@@ -30,7 +33,8 @@ export const Navbar: React.FC = () => {
                 {navLinks.map(navLink => <li key={navLink.text} className="mb-4 md:mb-0"><Button to={navLink.to} kind="tertiary">{navLink.text}</Button></li>)}
                 {/* TODO (Zoe-Bot): Here is a dropdown in the future */}
                 <li className="hidden md:inline"><IconButton onClick={() => ""} icon="more_horiz" /></li>
-                <li><Button to="/contribute">Contribute</Button></li>
+                {/* TODO (Zoe-Bot): Add correct link when contribute exist */}
+                <li><Button to={routes.account.login}>Contribute</Button></li>
             </ul>
         </nav>
     </div>

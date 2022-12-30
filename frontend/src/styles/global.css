@@ -10,6 +10,18 @@
     outline: var(--primary-color) auto 2px;
 }
 
+::selection {
+    /* WebKit/Blink Browsers */
+    background: var(--primary-color);
+    color: white;
+}
+
+::-moz-selection {
+    /* Gecko Browsers */
+    background: var(--primary-color);
+    color: white;
+}
+
 body {
     @apply tracking-wide	
 }

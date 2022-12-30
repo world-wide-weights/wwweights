@@ -45,18 +45,20 @@ module.exports = {
           '100': '#F5F7FA',
           '200': '#DDE5EF',
           '300': '#CBD2D9',
-          '400': '#9AA581',
+          '400': '#b5bec7',
           '500': '#7B8794',
           '600': '#616E7C',
           '700': '#3E4C59',
           '800': '#323F48',
           '900': '#1F2933',
         }
+      }, backgroundImage: {
+        'background-half-page': `url('../../public/background_half_page.svg')`,
       }
     },
     fontFamily: {
       sans: ['var(--font-metropolis)', ...fontFamily.sans],
-    }
+    },
   },
   plugins: [],
 };

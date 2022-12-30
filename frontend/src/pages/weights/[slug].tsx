@@ -16,6 +16,7 @@ type WeightsSingleProps = {
 export default function WeightsSingle({ item }: InferGetServerSidePropsType<typeof getStaticProps>) {
     const siteTitle = `${item.name} Weight | WWWeights`
     const weightString = generateWeightString(item.weight)
+    const sourceName = item.source ? new URL(item.source).hostname.replace('www.', '') : null
 
     return <>
         {/* Meta Tags */}
@@ -39,7 +40,7 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
 
                 {/* Source and Tags */}
                 <div className="flex flex-col self-start col-start-1 col-end-3 lg:row-start-2 mt-5 lg:mt-0">
-                    <a target="_blank" rel="noopener noreferrer" href={item.source} className="text-gray-600 hover:text-gray-700 mb-3 md:mb-5">According to &quot;{item.source}&quot; a &quot;{item.name}&quot; weights {weightString}.</a>
+                    {item.source && <a target="_blank" rel="noopener noreferrer" href={item.source} className="text-gray-600 hover:text-gray-700 mb-3 md:mb-5">According to {sourceName} a {item.name} weights {weightString}.</a>}
                     <ul className="flex md:flex-wrap overflow-y-auto">
                         <li><div className="md:hidden absolute bg-gradient-to-r right-0 from-transparent to-gray-100 w-20 h-8 py-1"></div></li>
                         {item.tags.map((tag, index) => <li key={tag.name} className={`${index === item.tags.length - 1 ? "mr-20" : ""}`}><Chip to={routes.tags.single(tag.slug)}>{tag.name}</Chip></li>)}
