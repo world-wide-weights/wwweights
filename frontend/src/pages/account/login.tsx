@@ -24,7 +24,7 @@ const Login: NextPageWithLayout = () => {
         password: ""
     }
 
-    // Formik Validation
+    // Formik Form Validation
     const validationSchema: yup.SchemaOf<LoginDto> = yup.object().shape({
         email: yup.string().required("E-Mail is required."),
         password: yup.string().required("Password is required.")
@@ -34,7 +34,7 @@ const Login: NextPageWithLayout = () => {
      * Handle submit login form
      * @param values from form
      */
-    const onFormSubmit = (values: typeof initialFormValues) => {
+    const onFormSubmit = (values: LoginDto) => {
         console.log(values)
     }
 
