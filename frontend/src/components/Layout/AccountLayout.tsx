@@ -23,7 +23,7 @@ type AccountLayoutProps = {
  * Adds image right, centers the content horizontal, adds header information and add footer at bottom of the page.
  */
 export const AccountLayout: React.FC<AccountLayoutProps> = ({ page, headline, description, descriptionImage, siteTitle }) => {
-    const siteTitleString = `WWWeights | {siteTitle}`
+    const siteTitleString = `WWWeights | ${siteTitle}`
 
     return <>
         <Head>
