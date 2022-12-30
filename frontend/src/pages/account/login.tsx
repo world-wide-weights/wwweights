@@ -30,13 +30,13 @@ const Login: NextPageWithLayout = () => {
 
             <main className="lg:flex lg:h-screen">
                 <div className="flex flex-col justify-center lg:w-1/2">
-                    <div className="container">
-                        <Image src={logo} alt="Logo" className="min-w-[40px] w-[40px] mb-16" />
+                    <div className="container mt-5 lg:mt-0">
+                        <Image src={logo} alt="Logo" className="min-w-[40px] w-[40px] mb-12 lg:mb-16" />
                         <Headline>Welcome back</Headline>
-                        <p className="mb-5">Sign in to your account below.</p>
+                        <p className="mb-4 lg:mb-5">Sign in to your account below.</p>
 
                         <Formik initialValues={initialFormValues} onSubmit={onFormSubmit}>
-                            <Form className="mb-10">
+                            <Form className="mb-5 lg:mb-10">
                                 <TextInput name="email" labelText="E-Mail" placeholder="E-Mail" />
                                 <TextInput name="password" labelText="Password" placeholder="Password" />
                                 <Button kind="tertiary" className="mb-5">Forgot Pasword?</Button>
