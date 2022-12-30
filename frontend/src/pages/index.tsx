@@ -1,8 +1,9 @@
+import { NextPage } from "next";
 import Head from "next/head";
 import { Button } from "../components/Button/Button";
 import { routes } from "../services/routes/routes";
 
-const Home = () => {
+const Home: NextPage = () => {
   return (
     <div>
       <Head>
