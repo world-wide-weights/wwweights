@@ -10,7 +10,7 @@ import { NextPageWithLayout } from "../_app";
  * Login page is a guest route.
  */
 const Login: NextPageWithLayout = () => {
-    const [isPasswordEyeOpen, setIsPasswordEyeOpen] = useState<boolean>(true)
+    const [isPasswordEyeOpen, setIsPasswordEyeOpen] = useState<boolean>(false)
 
     // Formik Login Form inital values
     const initialFormValues = {
@@ -34,7 +34,7 @@ const Login: NextPageWithLayout = () => {
                 <TextInput type={isPasswordEyeOpen ? "text" : "password"} name="password" labelText="Password" placeholder="Password" icon={isPasswordEyeOpen ? "visibility" : "visibility_off"} iconOnClick={() => setIsPasswordEyeOpen(!isPasswordEyeOpen)} />
                 <Button kind="tertiary" className="mb-5">Forgot Password?</Button>
 
-                <Button to={routes.home} type="submit" className="w-full">Login</Button>
+                <Button to={routes.home} type="submit">Login</Button>
             </Form>
         </Formik>
 
