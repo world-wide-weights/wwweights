@@ -12,17 +12,17 @@ import '../styles/global.css';
 const metropolis = localFont({
   src: [
     {
-      path: '../font/metropolis/Metropolis-Regular.woff2',
+      path: '../assets/font/metropolis/Metropolis-Regular.woff2',
       weight: '400',
       style: 'normal',
     },
     {
-      path: '../font/metropolis/Metropolis-Medium.woff2',
+      path: '../assets/font/metropolis/Metropolis-Medium.woff2',
       weight: '500',
       style: 'normal',
     },
     {
-      path: '../font/metropolis/Metropolis-Bold.woff2',
+      path: '../assets/font/metropolis/Metropolis-Bold.woff2',
       weight: '700',
       style: 'normal',
     },
