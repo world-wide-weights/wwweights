@@ -24,23 +24,21 @@ const Login: NextPageWithLayout = () => {
     }
 
     return <>
-        <div>
-            {/* Login Form */}
-            <Formik initialValues={initialFormValues} onSubmit={onFormSubmit}>
-                <Form className="mb-5 lg:mb-10">
-                    <TextInput name="email" labelText="E-Mail" placeholder="E-Mail" />
-                    <TextInput name="password" labelText="Password" placeholder="Password" />
-                    <Button kind="tertiary" className="mb-5">Forgot Pasword?</Button>
+        {/* Login Form */}
+        <Formik initialValues={initialFormValues} onSubmit={onFormSubmit}>
+            <Form className="mb-5 lg:mb-10">
+                <TextInput name="email" labelText="E-Mail" placeholder="E-Mail" />
+                <TextInput name="password" labelText="Password" placeholder="Password" />
+                <Button kind="tertiary" className="mb-5">Forgot Pasword?</Button>
 
-                    <Button type="submit" className="w-full">Login</Button>
-                </Form>
-            </Formik>
+                <Button type="submit" className="w-full">Login</Button>
+            </Form>
+        </Formik>
 
-            {/* Register Text */}
-            <div className="flex">
-                <p className="mr-2">Don&apos;t have an account?</p>
-                <Button kind="tertiary" isColored>Register</Button>
-            </div>
+        {/* Register Text */}
+        <div className="flex">
+            <p className="mr-2">Don&apos;t have an account?</p>
+            <Button kind="tertiary" isColored>Register</Button>
         </div>
     </>
 }
