@@ -42,6 +42,10 @@ export const routes = {
         },
         single: (slug: string) => `/weights?query=${slug}`
     },
+    account: {
+        login: "/account/login",
+        register: "/account/register"
+    },
     legal: {
         terms: "/legal/terms-of-service",
         privacy: "/legal/privacy-policy"
