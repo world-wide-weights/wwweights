@@ -1,41 +1,55 @@
 import { Form, Formik } from "formik";
 import { useState } from "react";
+import * as yup from 'yup';
 import { Button } from "../../components/Button/Button";
 import { TextInput } from "../../components/Form/TextInput/TextInput";
 import { AccountLayout } from "../../components/Layout/AccountLayout";
 import { routes } from "../../services/routes/routes";
 import { NextPageWithLayout } from "../_app";
 
+export type LoginDto = {
+    email: string
+    password: string
+}
+
 /**
  * Login page is a guest route.
  */
 const Login: NextPageWithLayout = () => {
-    const [isPasswordEyeOpen, setIsPasswordEyeOpen] = useState<boolean>(true)
+    const [isPasswordEyeOpen, setIsPasswordEyeOpen] = useState<boolean>(false)
 
-    // Formik Login Form inital values
-    const initialFormValues = {
+    // Formik Form Initial Values
+    const initialFormValues: LoginDto = {
         email: "",
         password: ""
     }
 
+    // Formik Form Validation
+    const validationSchema: yup.SchemaOf<LoginDto> = yup.object().shape({
+        email: yup.string().required("E-Mail is required."),
+        password: yup.string().required("Password is required.")
+    })
+
     /**
-     * Handle submit login form
-     * @param values from form
+     * Handle submit login form.
+     * @param values input from form
      */
-    const onFormSubmit = (values: typeof initialFormValues) => {
+    const onFormSubmit = (values: LoginDto) => {
         console.log(values)
     }
 
     return <>
         {/* Login Form */}
-        <Formik initialValues={initialFormValues} onSubmit={onFormSubmit}>
-            <Form className="mb-5 lg:mb-10">
-                <TextInput name="email" labelText="E-Mail" placeholder="E-Mail" />
-                <TextInput type={isPasswordEyeOpen ? "text" : "password"} name="password" labelText="Password" placeholder="Password" icon={isPasswordEyeOpen ? "visibility" : "visibility_off"} iconOnClick={() => setIsPasswordEyeOpen(!isPasswordEyeOpen)} />
-                <Button kind="tertiary" className="mb-5">Forgot Password?</Button>
+        <Formik initialValues={initialFormValues} validationSchema={validationSchema} onSubmit={onFormSubmit}>
+            {({ dirty, isValid }) => (
+                <Form className="mb-5 lg:mb-10">
+                    <TextInput name="email" labelText="E-Mail" placeholder="E-Mail" />
+                    <TextInput type={isPasswordEyeOpen ? "text" : "password"} name="password" labelText="Password" placeholder="Password" icon={isPasswordEyeOpen ? "visibility" : "visibility_off"} iconOnClick={() => setIsPasswordEyeOpen(!isPasswordEyeOpen)} />
+                    <Button kind="tertiary" className="mb-5">Forgot Password?</Button>
 
-                <Button to={routes.home} type="submit" className="w-full">Login</Button>
-            </Form>
+                    <Button to={routes.home} disabled={!(dirty && isValid)} type="submit">Login</Button>
+                </Form>
+            )}
         </Formik>
 
         {/* Register Text */}
@@ -46,8 +60,9 @@ const Login: NextPageWithLayout = () => {
     </>
 }
 
+// Sets custom account layout
 Login.getLayout = (page: React.ReactElement) => {
-    return <AccountLayout page={page} siteTitle="Login" headline="Welcome back" description="Sign in to your account below." descriptionImage="Login to share your stuff" />
+    return <AccountLayout page={page} siteTitle="Login" headline="Welcome back" description="Sign in to your account below." descriptionImage="Login to share your stuff." />
 }
 
 export default Login
