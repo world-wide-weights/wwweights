@@ -18,7 +18,7 @@ export type LoginDto = {
 const Login: NextPageWithLayout = () => {
     const [isPasswordEyeOpen, setIsPasswordEyeOpen] = useState<boolean>(false)
 
-    // Formik Login Form inital values
+    // Formik Form Initial Values
     const initialFormValues: LoginDto = {
         email: "",
         password: ""
@@ -31,8 +31,8 @@ const Login: NextPageWithLayout = () => {
     })
 
     /**
-     * Handle submit login form
-     * @param values from form
+     * Handle submit login form.
+     * @param values input from form
      */
     const onFormSubmit = (values: LoginDto) => {
         console.log(values)
@@ -60,8 +60,9 @@ const Login: NextPageWithLayout = () => {
     </>
 }
 
+// Sets custom account layout
 Login.getLayout = (page: React.ReactElement) => {
-    return <AccountLayout page={page} siteTitle="Login" headline="Welcome back" description="Sign in to your account below." descriptionImage="Login to share your stuff" />
+    return <AccountLayout page={page} siteTitle="Login" headline="Welcome back" description="Sign in to your account below." descriptionImage="Login to share your stuff." />
 }
 
 export default Login
