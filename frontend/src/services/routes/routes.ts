@@ -43,7 +43,7 @@ export const routes = {
         single: (slug: string) => `/weights?query=${slug}`
     },
     legal: {
-        imprint: "/legal/imprint",
+        terms: "/legal/terms-of-service",
         privacy: "/legal/privacy-policy"
     }
 } as const
