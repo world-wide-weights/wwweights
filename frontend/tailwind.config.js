@@ -52,14 +52,13 @@ module.exports = {
           '800': '#323F48',
           '900': '#1F2933',
         }
+      }, backgroundImage: {
+        'background-half-page': `url('../../public/background_half_page.svg')`,
       }
     },
     fontFamily: {
       sans: ['var(--font-metropolis)', ...fontFamily.sans],
     },
-    backgroundImage: {
-      'background-half-page': `url('../../public/background_half_page.svg')`,
-    }
   },
   plugins: [],
 };
