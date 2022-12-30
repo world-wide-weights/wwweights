@@ -41,8 +41,8 @@ describe('AppController (e2e)', () => {
     await app.close();
   });
 
-  describe('Queries /queries/', () => {
-    const queriesPath = '/queries/';
+  describe('Queries /query/v1', () => {
+    const queriesPath = '/query/v1';
 
     it('/:slug => getOneItem', async () => {
       const res = await request(app.getHttpServer())

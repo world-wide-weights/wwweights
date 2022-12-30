@@ -3,17 +3,17 @@ import {
   Controller,
   Get,
   Logger,
-  Param,
+  Query,
   SerializeOptions,
   UseInterceptors,
 } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { GetItemDto } from '../commands.module/interfaces/get-item-dto';
+import { QueryItemListDto } from './interfaces/query-item-list.dto';
 import { GetItemQuery } from './queries/get-item.query';
 
-@Controller('queries')
-@ApiTags('queries')
+@Controller('query/v1')
+@ApiTags('query/v1')
 @UseInterceptors(ClassSerializerInterceptor)
 @SerializeOptions({ strategy: 'excludeAll' })
 export class QueriesController {
@@ -21,10 +21,10 @@ export class QueriesController {
 
   constructor(private queryBus: QueryBus) {}
 
-  @Get('get-one-item/:slug')
+  @Get('list')
   @ApiParam({ name: 'slug', type: String })
   @ApiOperation({ summary: 'Get an item by slug' })
-  async getItem(@Param() { slug }: GetItemDto) {
+  async getItem(@Query() { slug }: QueryItemListDto) {
     this.logger.log(`Get item with slug ${slug}`);
     return await this.queryBus.execute(new GetItemQuery(slug));
   }

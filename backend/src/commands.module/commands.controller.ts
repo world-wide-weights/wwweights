@@ -14,8 +14,8 @@ import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateItemCommand } from './commands/create-item.command';
 import { CreateItemDto } from './interfaces/create-item.dto';
 
-@Controller('commands')
-@ApiTags('commands')
+@Controller('command/v1')
+@ApiTags('command/v1')
 @UseInterceptors(ClassSerializerInterceptor)
 @SerializeOptions({ strategy: 'excludeAll' })
 export class CommandsController {

@@ -43,8 +43,8 @@ describe('AppController (e2e)', () => {
     await app.close();
   });
 
-  describe('Commands /commands/', () => {
-    const commandsPath = '/commands/';
+  describe('Commands /command/v1', () => {
+    const commandsPath = '/command/v1';
 
     it('/ => createItem', async () => {
       await itemRepository.clear();
