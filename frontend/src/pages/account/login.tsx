@@ -30,7 +30,7 @@ const Login: NextPageWithLayout = () => {
             <Form className="mb-5 lg:mb-10">
                 <TextInput name="email" labelText="E-Mail" placeholder="E-Mail" />
                 <TextInput name="password" labelText="Password" placeholder="Password" />
-                <Button kind="tertiary" className="mb-5">Forgot Pasword?</Button>
+                <Button kind="tertiary" className="mb-5">Forgot Password?</Button>
 
                 <Button to={routes.home} type="submit" className="w-full">Login</Button>
             </Form>
