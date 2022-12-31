@@ -26,6 +26,7 @@ export const authOptions: NextAuthOptions = {
                 },
             },
             authorize: async (credentials, req) => {
+                // TODO (Zoe-Bot): Maybe add csrf token?
                 const payload: LoginDto = {
                     email: credentials!.email,
                     password: credentials!.password,

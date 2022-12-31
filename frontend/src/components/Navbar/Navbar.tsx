@@ -1,3 +1,4 @@
+import { signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
@@ -6,19 +7,25 @@ import { routes } from '../../services/routes/routes'
 import { Button } from '../Button/Button'
 import { IconButton } from '../Button/IconButton'
 
-const navLinks = [{
-    to: routes.weights.list(),
-    text: "Discover",
-}, {
-    to: routes.account.login,
-    text: "Login",
-}]
-
 /** 
  * Navbar component, should only be used once at the top 
  */
 export const Navbar: React.FC = () => {
+    const { data: session } = useSession()
     const [isNavMobileOpen, setIsNavMobileOpen] = useState<boolean>(false)
+
+    const navLinks = [{
+        to: routes.weights.list(),
+        text: "Discover",
+    }, {
+        viewCondition: !session,
+        to: routes.account.login,
+        text: "Login",
+    }, {
+        viewCondition: session,
+        onClick: () => signOut(),
+        text: "Logout"
+    }]
 
     return <div className="bg-white py-3">
         <nav className="container md:flex justify-between">
@@ -30,7 +37,7 @@ export const Navbar: React.FC = () => {
                 <IconButton className="block md:hidden" onClick={() => setIsNavMobileOpen(isNavMobileOpen => !isNavMobileOpen)} icon="menu" />
             </div>
             <ul className={`${isNavMobileOpen ? "block" : "hidden"} md:flex items-center gap-4 py-5 md:py-0`}>
-                {navLinks.map(navLink => <li key={navLink.text} className="mb-4 md:mb-0"><Button to={navLink.to} kind="tertiary">{navLink.text}</Button></li>)}
+                {navLinks.map(navLink => navLink.viewCondition && <li key={navLink.text} className="mb-4 md:mb-0"><Button {...navLink} kind="tertiary">{navLink.text}</Button></li>)}
                 {/* TODO (Zoe-Bot): Here is a dropdown in the future */}
                 <li className="hidden md:inline"><IconButton onClick={() => ""} icon="more_horiz" /></li>
                 {/* TODO (Zoe-Bot): Add correct link when contribute exist */}
