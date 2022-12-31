@@ -41,15 +41,13 @@ export const authOptions: NextAuthOptions = {
                 });
 
                 const user = await response.json();
-                if (!response.ok) {
-                    throw new Error(user)
-                }
+
                 // If no error and we have user data, return it
                 if (response.ok && user) {
                     return user
                 }
 
-                // Return null if user data could not be retrieved
+                // Some error occured
                 return null
             },
         }),

@@ -1,5 +1,5 @@
 import { Form, Formik } from "formik";
-import { signIn } from "next-auth/react";
+import { signIn, SignInResponse } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useMemo, useState } from "react";
 import * as yup from 'yup';
@@ -19,10 +19,11 @@ export type LoginDto = {
  */
 const Login: NextPageCustomProps = () => {
     const router = useRouter()
+    // Redirect to page where you clicked login
     const callbackUrl = useMemo(() => typeof router.query.callbackUrl == "string" ? router.query.callbackUrl : router.query.callbackUrl?.[0] ?? null, [router])
 
     const [isPasswordEyeOpen, setIsPasswordEyeOpen] = useState<boolean>(false)
-    const [error, setError] = useState(false)
+    const [error, setError] = useState("")
 
     // Formik Form Initial Values
     const initialFormValues: LoginDto = {
@@ -43,15 +44,15 @@ const Login: NextPageCustomProps = () => {
     const onFormSubmit = async (values: LoginDto) => {
         try {
             const response = await signIn('credentials', {
+                redirect: false,
                 email: values.email,
                 password: values.password,
-                callbackUrl: `${window.location.origin}`,
-            })
+            }) as SignInResponse
 
-            if (!response) {
-                router.push(callbackUrl ?? "/");
-            } else if (response) {
-                setError(error)
+            if (response.ok) {
+                router.push(callbackUrl ?? routes.home)
+            } else if (response.error) {
+                setError(response.error)
             }
         } catch (e) {
             console.error(e)
@@ -71,6 +72,9 @@ const Login: NextPageCustomProps = () => {
                 </Form>
             )}
         </Formik>
+
+        {/* TODO (Zoe-Bot): Add correct error handling */}
+        {error && <p className="py-2">Error: {error}</p>}
 
         {/* Register Text */}
         <div className="flex">
