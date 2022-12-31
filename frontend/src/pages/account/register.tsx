@@ -4,7 +4,7 @@ import { Button } from "../../components/Button/Button";
 import { TextInput } from "../../components/Form/TextInput/TextInput";
 import { AccountLayout } from "../../components/Layout/AccountLayout";
 import { routes } from "../../services/routes/routes";
-import { NextPageWithLayout } from "../_app";
+import { NextPageCustomProps } from "../_app";
 
 type RegisterDto = {
     email: string
@@ -15,7 +15,7 @@ type RegisterDto = {
 /**
  * Register page is a guest route.
  */
-const Register: NextPageWithLayout = () => {
+const Register: NextPageCustomProps = () => {
 
     // Formik Form Initial Values
     const initialFormValues: RegisterDto = {

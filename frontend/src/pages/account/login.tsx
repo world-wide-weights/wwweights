@@ -1,13 +1,13 @@
 import { Form, Formik } from "formik";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import * as yup from 'yup';
 import { Button } from "../../components/Button/Button";
 import { TextInput } from "../../components/Form/TextInput/TextInput";
 import { AccountLayout } from "../../components/Layout/AccountLayout";
 import { routes } from "../../services/routes/routes";
-import { NextPageWithLayout } from "../_app";
+import { NextPageCustomProps } from "../_app";
 
 export type LoginDto = {
     email: string
@@ -17,9 +17,12 @@ export type LoginDto = {
 /**
  * Login page is a guest route.
  */
-const Login: NextPageWithLayout = () => {
+const Login: NextPageCustomProps = () => {
     const router = useRouter()
+    const callbackUrl = useMemo(() => typeof router.query.callbackUrl == "string" ? router.query.callbackUrl : router.query.callbackUrl?.[0] ?? null, [router])
+
     const [isPasswordEyeOpen, setIsPasswordEyeOpen] = useState<boolean>(false)
+    const [error, setError] = useState(false)
 
     // Formik Form Initial Values
     const initialFormValues: LoginDto = {
@@ -38,11 +41,21 @@ const Login: NextPageWithLayout = () => {
      * @param values input from form
      */
     const onFormSubmit = async (values: LoginDto) => {
-        const res = await signIn('credentials', {
-            email: values.email,
-            password: values.password,
-            callbackUrl: `${window.location.origin}`,
-        })
+        try {
+            const response = await signIn('credentials', {
+                email: values.email,
+                password: values.password,
+                callbackUrl: `${window.location.origin}`,
+            })
+
+            if (!response) {
+                router.push(callbackUrl ?? "/");
+            } else if (response) {
+                setError(error)
+            }
+        } catch (e) {
+            console.error(e)
+        }
     }
 
     return <>
