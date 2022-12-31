@@ -7,6 +7,7 @@ import type { Session } from "next-auth";
 import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
 import React from 'react';
+import { Auth } from '../components/Auth/Auth';
 import { Layout } from '../components/Layout/Layout';
 import '../styles/global.css';
 
@@ -33,20 +34,25 @@ const metropolis = localFont({
   variable: "--font-metropolis"
 })
 
-// Use this as type when have a page with custom layout
-export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+/**
+ * When using this page type have the option to add custom props.
+ * Page.getLayout --> Adds custom layout for this page.
+ * Page.auth = true --> This page need authentication.
+ */
+export type NextPageCustomProps<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: React.ReactElement) => React.ReactNode
+  auth?: boolean
 }
 
-type AppPropsWithLayout = AppProps<{ session: Session }> & {
-  Component: NextPageWithLayout
+type AppPropsCustom = AppProps<{ session: Session }> & {
+  Component: NextPageCustomProps
 }
 
 /**
  * Starting point of the app. 
  * Wrapps all pages.
  */
-const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLayout) => {
+const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsCustom) => {
   // When getLayout function is defined use custom layout
   const getLayout = Component.getLayout ?? ((page: React.ReactElement) => {
     return <Layout>
@@ -57,7 +63,12 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
   return <>
     <SessionProvider session={session}>
       <div className={`${metropolis.variable} font-sans`}>
-        {getLayout(<Component {...pageProps} />)}
+        {getLayout(Component.auth ?
+          <Auth>
+            <Component {...pageProps} />
+          </Auth> :
+          <Component {...pageProps} />
+        )}
       </div>
     </SessionProvider>
   </>
