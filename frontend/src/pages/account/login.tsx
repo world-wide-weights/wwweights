@@ -1,4 +1,6 @@
 import { Form, Formik } from "formik";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import * as yup from 'yup';
 import { Button } from "../../components/Button/Button";
@@ -16,6 +18,7 @@ export type LoginDto = {
  * Login page is a guest route.
  */
 const Login: NextPageWithLayout = () => {
+    const router = useRouter()
     const [isPasswordEyeOpen, setIsPasswordEyeOpen] = useState<boolean>(false)
 
     // Formik Form Initial Values
@@ -34,8 +37,12 @@ const Login: NextPageWithLayout = () => {
      * Handle submit login form.
      * @param values input from form
      */
-    const onFormSubmit = (values: LoginDto) => {
-        console.log(values)
+    const onFormSubmit = async (values: LoginDto) => {
+        const res = await signIn('credentials', {
+            email: values.email,
+            password: values.password,
+            callbackUrl: `${window.location.origin}`,
+        })
     }
 
     return <>
@@ -47,7 +54,7 @@ const Login: NextPageWithLayout = () => {
                     <TextInput type={isPasswordEyeOpen ? "text" : "password"} name="password" labelText="Password" placeholder="Password" icon={isPasswordEyeOpen ? "visibility" : "visibility_off"} iconOnClick={() => setIsPasswordEyeOpen(!isPasswordEyeOpen)} />
                     <Button kind="tertiary" className="mb-5">Forgot Password?</Button>
 
-                    <Button to={routes.home} disabled={!(dirty && isValid)} type="submit">Login</Button>
+                    <Button disabled={!(dirty && isValid)} type="submit">Login</Button>
                 </Form>
             )}
         </Formik>

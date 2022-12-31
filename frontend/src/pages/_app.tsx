@@ -3,10 +3,13 @@ import localFont from '@next/font/local';
 /** Imports all material symbols globally which we use as our icon pack */
 import 'material-symbols/rounded.css';
 import { NextPage } from 'next';
+import type { Session } from "next-auth";
+import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
 import React from 'react';
 import { Layout } from '../components/Layout/Layout';
 import '../styles/global.css';
+
 
 // Font
 const metropolis = localFont({
@@ -35,7 +38,7 @@ export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: React.ReactElement) => React.ReactNode
 }
 
-type AppPropsWithLayout = AppProps & {
+type AppPropsWithLayout = AppProps<{ session: Session }> & {
   Component: NextPageWithLayout
 }
 
@@ -43,7 +46,7 @@ type AppPropsWithLayout = AppProps & {
  * Starting point of the app. 
  * Wrapps all pages.
  */
-const App = ({ Component, pageProps }: AppPropsWithLayout) => {
+const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLayout) => {
   // When getLayout function is defined use custom layout
   const getLayout = Component.getLayout ?? ((page: React.ReactElement) => {
     return <Layout>
@@ -51,9 +54,13 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
     </Layout>
   })
 
-  return <div className={`${metropolis.variable} font-sans`}>
-    {getLayout(<Component {...pageProps} />)}
-  </div>
+  return <>
+    <SessionProvider session={session}>
+      <div className={`${metropolis.variable} font-sans`}>
+        {getLayout(<Component {...pageProps} />)}
+      </div>
+    </SessionProvider>
+  </>
 }
 
 export default App

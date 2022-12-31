@@ -1,9 +1,14 @@
 import { NextPage } from "next";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { Button } from "../components/Button/Button";
 import { routes } from "../services/routes/routes";
 
 const Home: NextPage = () => {
+  const { data: session } = useSession()
+
+  console.log("session", session)
+
   return (
     <div>
       <Head>
