@@ -3,6 +3,7 @@ Content-Type: application/json
 
 {
   "email": "test@gmail.com",
+  "username": "test",
   "password": "1234"
 }
 
@@ -13,6 +14,7 @@ Content-Type: application/json
 
 {
   "email": "test2@gmail.com",
+  "username": "test",
   "password": "123456"
 }
 
@@ -23,6 +25,7 @@ Content-Type: application/json
 
 {
   "email": "test@gmail.com",
+  "username": "test",
   "password": "1234"
 }
 
