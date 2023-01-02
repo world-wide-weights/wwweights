@@ -21,7 +21,7 @@ export const Navbar: React.FC = () => {
         text: "Discover",
     }, {
         viewCondition: !session,
-        to: routes.account.register + "?callbackUrl=" + new URL(process.env.NEXT_PUBLIC_CLIENT_BASE_URL + router.pathname),
+        to: routes.account.register,
         text: "Register",
     }, {
         viewCondition: !session,
