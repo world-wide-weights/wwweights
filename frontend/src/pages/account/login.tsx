@@ -22,6 +22,7 @@ const Login: NextPageCustomProps = () => {
     // Redirect to page where you clicked login
     const callbackUrl = useMemo(() => typeof router.query.callbackUrl == "string" ? router.query.callbackUrl : router.query.callbackUrl?.[0] ?? null, [router])
 
+    // Local State
     const [isPasswordEyeOpen, setIsPasswordEyeOpen] = useState<boolean>(false)
     const [error, setError] = useState("")
 
@@ -43,19 +44,21 @@ const Login: NextPageCustomProps = () => {
      */
     const onFormSubmit = async (values: LoginDto) => {
         try {
+            // Sign in with next auth
             const response = await signIn('credentials', {
                 redirect: false,
                 email: values.email,
                 password: values.password,
             }) as SignInResponse
 
+            // When everything was ok go to url we was before login or home
             if (response.ok) {
                 router.push(callbackUrl ?? routes.home)
             } else if (response.error) {
                 setError(response.error)
             }
-        } catch (e) {
-            console.error(e)
+        } catch (error) {
+            console.error(error)
         }
     }
 
