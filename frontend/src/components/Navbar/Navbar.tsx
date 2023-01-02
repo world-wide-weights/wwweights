@@ -1,6 +1,7 @@
-import { signOut, useSession } from 'next-auth/react'
+import { signIn, signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useState } from 'react'
 import logo from '../../../public/logo.png'
 import { routes } from '../../services/routes/routes'
@@ -13,13 +14,18 @@ import { IconButton } from '../Button/IconButton'
 export const Navbar: React.FC = () => {
     const { data: session } = useSession()
     const [isNavMobileOpen, setIsNavMobileOpen] = useState<boolean>(false)
+    const router = useRouter()
 
     const navLinks = [{
         to: routes.weights.list(),
         text: "Discover",
     }, {
         viewCondition: !session,
-        to: routes.account.login,
+        to: routes.account.register + "?callbackUrl=" + new URL(process.env.NEXT_PUBLIC_CLIENT_BASE_URL + router.pathname),
+        text: "Register",
+    }, {
+        viewCondition: !session,
+        onClick: () => signIn(),
         text: "Login",
     }, {
         viewCondition: session,
