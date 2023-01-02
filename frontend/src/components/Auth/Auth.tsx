@@ -36,7 +36,7 @@ export const Auth: React.FC<AuthProps> = ({ children, routeType }) => {
         if (isUser && routeType === "guest" && !isRouterChanging) {
             router.push(routes.home)
         }
-    }, [isUser, status, routeType, routes])
+    }, [isUser, status, routeType, router, isRouterChanging])
 
     // Render page when user or route type guest
     if (isUser || routeType === "guest")
