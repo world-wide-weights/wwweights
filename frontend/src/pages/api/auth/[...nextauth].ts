@@ -25,11 +25,11 @@ export const authOptions: NextAuthOptions = {
                     type: 'password'
                 },
             },
-            authorize: async (credentials, req) => {
+            authorize: async (credentials) => {
                 // TODO (Zoe-Bot): Maybe add csrf token?
                 const payload: LoginDto = {
                     email: credentials!.email,
-                    password: credentials!.password,
+                    password: credentials!.password
                 }
 
                 const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/login`, {
@@ -52,22 +52,23 @@ export const authOptions: NextAuthOptions = {
             },
         }),
     ],
+    secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
         jwt: async ({ token, user }: { token: JWT, user?: User }) => {
             if (user) {
-                return {
-                    ...token,
-                    accessToken: user.accessToken,
-                    user
-                }
+                // Add accessToken and user information to the token
+                token.accessToken = user.accessToken
+                token.user = user
             }
 
+            // This will be forwarded to the session callback
             return token
         },
         session: async ({ session, token }: { session: Session, token: JWT }) => {
             session.accessToken = token.accessToken
             session.user = token.user.user
 
+            // Send properties to the client
             return session
         },
     },
