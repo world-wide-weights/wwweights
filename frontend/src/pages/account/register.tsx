@@ -113,5 +113,10 @@ Register.getLayout = (page: React.ReactElement) => {
     return <AccountLayout page={page} siteTitle="Register" headline="Create your account" description="Start for free." descriptionImage="Register to share your stuff." />
 }
 
+// Sets guest route (user need to be logged out)
+Register.auth = {
+    routeType: "guest"
+}
+
 export default Register
 

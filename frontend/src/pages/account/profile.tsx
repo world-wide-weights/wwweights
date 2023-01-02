@@ -7,6 +7,8 @@ const Profile: NextPageCustomProps = () => {
     </div>
 }
 
-Profile.auth = true
+Profile.auth = {
+    routeType: "protected"
+}
 
 export default Profile

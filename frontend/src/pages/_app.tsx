@@ -37,11 +37,16 @@ const metropolis = localFont({
 /**
  * When using this page type have the option to add custom props.
  * Page.getLayout --> Adds custom layout for this page.
- * Page.auth = true --> This page need authentication.
+ * Page.auth = {
+ *    routeType: protected --> To see this page you need to be logged in
+ *    routeType: guest --> To see this page you need to be a guest (not logged in)
+ * } 
  */
 export type NextPageCustomProps<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: React.ReactElement) => React.ReactNode
-  auth?: boolean
+  auth?: {
+    routeType: "protected" | "guest"
+  }
 }
 
 type AppPropsCustom = AppProps<{ session: Session }> & {
@@ -64,7 +69,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsCustom
     <SessionProvider session={session}>
       <div className={`${metropolis.variable} font-sans`}>
         {getLayout(Component.auth ?
-          <Auth>
+          <Auth routeType={Component.auth.routeType}>
             <Component {...pageProps} />
           </Auth> :
           <Component {...pageProps} />

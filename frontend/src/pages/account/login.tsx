@@ -92,5 +92,10 @@ Login.getLayout = (page: React.ReactElement) => {
     return <AccountLayout page={page} siteTitle="Login" headline="Welcome back" description="Sign in to your account below." descriptionImage="Login to share your stuff." />
 }
 
+// Sets guest route (user need to be logged out)
+Login.auth = {
+    routeType: "guest"
+}
+
 export default Login
 
