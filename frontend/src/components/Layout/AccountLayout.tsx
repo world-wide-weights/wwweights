@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link';
 import logo from '../../../public/logo.png';
 import { routes } from "../../services/routes/routes";
 import { Button } from "../Button/Button";
@@ -40,7 +41,9 @@ export const AccountLayout: React.FC<AccountLayoutProps> = ({ page, headline, de
                 <main className="container row-start-2 mt-10 lg:mt-0">
 
                     {/* Header */}
-                    <Image src={logo} alt="Logo" className="min-w-[40px] w-[40px] mb-12 lg:mb-14" />
+                    <Link href={routes.home}>
+                        <Image src={logo} alt="Logo" className="min-w-[40px] w-[40px] mb-12 lg:mb-14" />
+                    </Link>
                     <Headline>{headline}</Headline>
                     <p className="mb-4 lg:mb-5">{description}</p>
                     {page}
