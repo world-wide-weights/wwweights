@@ -8,7 +8,7 @@ import { StatsCard } from "../../components/Statistics/StatsCard";
 import { routes } from "../../services/routes/routes";
 
 const Profile: NextPage = () => {
-    // TODO: Add user to page title 
+    // TODO (Zoe-Bot): Add user to page title 
     const siteTitle = `Profile - World Wide Weights`
 
     return <>
@@ -28,6 +28,7 @@ const Profile: NextPage = () => {
                         <p>Member since 19.12.2022</p>
                     </div>
                     <div className="flex flex-col gap-3 flex-grow">
+                        {/* TODO (Zoe-Bot): Implement correct stats */}
                         <StatsCard icon="visibility" value="300" descriptionTop="Contribution" />
                         <StatsCard icon="visibility" value="300.000.000" descriptionTop="Views" />
                         <StatsCard icon="visibility" value="200" descriptionTop="Feedback" />
@@ -35,6 +36,7 @@ const Profile: NextPage = () => {
                 </div>
                 <div className="lg:w-3/4">
                     <Headline level={4}>Contributions</Headline>
+                    {/* TODO (Zoe-Bot): Implement correct contributions */}
                     <ul className="mb-5">
                         <ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} heaviestWeight={{ value: 200, isCa: false }} imageUrl="https://via.placeholder.com/96.png" />
                         <ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} heaviestWeight={{ value: 100, isCa: false }} imageUrl="https://via.placeholder.com/96.png" />
@@ -42,6 +44,7 @@ const Profile: NextPage = () => {
                         <ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} heaviestWeight={{ value: 100, isCa: false }} imageUrl="https://via.placeholder.com/96.png" />
                     </ul>
 
+                    {/* TODO: Implement correct pagination */}
                     <Pagination totalItems={10} currentPage={1} baseRoute={routes.account.profile} itemsPerPage={5} />
                 </div>
             </div>
