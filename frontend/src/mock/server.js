@@ -12,10 +12,7 @@ router.db._.id = 'slug'
 
 server.use(middlewares)
 
-server.use(jsonServer.rewriter({
-    users: 600,
-    ...routes
-}))
+server.use(jsonServer.rewriter(routes))
 server.use(auth)
 server.use(router)
 server.listen(3004, () => {
