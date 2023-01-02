@@ -16,7 +16,7 @@ describe('Login', () => {
             cy.mockSession()
 
             // Login
-            cy.get('button').contains('Login').click()
+            cy.dataCy('login-button').click()
             cy.wait('@mockCredentials')
 
             // Check for redirect

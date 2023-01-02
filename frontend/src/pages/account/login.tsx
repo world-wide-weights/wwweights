@@ -71,7 +71,7 @@ const Login: NextPageCustomProps = () => {
                     <TextInput type={isPasswordEyeOpen ? "text" : "password"} name="password" labelText="Password" placeholder="Password" icon={isPasswordEyeOpen ? "visibility" : "visibility_off"} iconOnClick={() => setIsPasswordEyeOpen(!isPasswordEyeOpen)} />
                     <Button kind="tertiary" className="mb-5">Forgot Password?</Button>
 
-                    <Button disabled={!(dirty && isValid)} type="submit">Login</Button>
+                    <Button datacy="login-button" disabled={!(dirty && isValid)} type="submit">Login</Button>
                 </Form>
             )}
         </Formik>

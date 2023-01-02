@@ -92,7 +92,7 @@ const Register: NextPageCustomProps = () => {
                     <TextInput name="username" labelText="Username" placeholder="Username" />
                     <TextInput name="password" labelText="Password" placeholder="Password" />
 
-                    <Button type="submit" disabled={!(dirty && isValid)} className="md:mt-8">Register</Button>
+                    <Button datacy="register-button" type="submit" disabled={!(dirty && isValid)} className="md:mt-8">Register</Button>
                 </Form>
             )}
         </Formik>
@@ -100,7 +100,7 @@ const Register: NextPageCustomProps = () => {
         {/* TODO (Zoe-Bot): Add correct error handling */}
         {error && <p className="py-2">Error: {error}</p>}
 
-        {/* Register Text */}
+        {/* Login Text */}
         <div className="flex">
             <p className="mr-2">Already have an account?</p>
             <Button to={routes.account.login} kind="tertiary" isColored>Login</Button>
