@@ -12,7 +12,7 @@ router.db._.id = 'slug'
 
 server.use(middlewares)
 
-server.use(jsonServer.rewriter(routes))
+server.use(auth.rewriter(routes))
 server.use(auth)
 server.use(router)
 server.listen(3004, () => {
