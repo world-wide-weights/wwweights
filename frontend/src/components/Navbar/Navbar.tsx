@@ -21,12 +21,12 @@ export const Navbar: React.FC = () => {
         text: "Discover",
     }, {
         viewCondition: !session,
-        to: routes.account.register + "?callbackUrl=" + new URL(process.env.NEXT_PUBLIC_CLIENT_BASE_URL + router.pathname),
-        text: "Register",
-    }, {
-        viewCondition: !session,
         onClick: () => signIn(),
         text: "Login",
+    }, {
+        viewCondition: !session,
+        to: routes.account.register + "?callbackUrl=" + new URL(process.env.NEXT_PUBLIC_CLIENT_BASE_URL + router.pathname),
+        text: "Register",
     }, {
         viewCondition: session,
         onClick: () => signOut(),
