@@ -23,7 +23,7 @@ export type ItemPreviewProps = {
  * 
  * Example:
  * ```tsx
- * <ItemPreviewList name="Smartphone" slug="smartphone" weight={ value: 100, isCa: false } heaviestWeight={ value: 100, isCa: false } imageUrl="https://via.placeholder.com/96.png" />
+ * <ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} heaviestWeight={{ value: 100, isCa: false }} imageUrl="https://via.placeholder.com/96.png" />
  * ```
  */
 export const ItemPreviewList: React.FC<ItemPreviewProps & { heaviestWeight: Weight }> = ({ slug, name, weight, heaviestWeight, imageUrl, datacy }) => {
