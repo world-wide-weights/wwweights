@@ -1,6 +1,7 @@
 import { signIn, useSession } from "next-auth/react"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
+import { useIsRouterChanging } from "../../hooks/useIsRouterChanging"
 import { routes } from "../../services/routes/routes"
 
 type AuthProps = {
@@ -17,6 +18,8 @@ type AuthProps = {
  */
 export const Auth: React.FC<AuthProps> = ({ children, routeType }) => {
     const { data: session, status } = useSession()
+    const isRouterChanging = useIsRouterChanging()
+
     const router = useRouter()
     const isUser = !!session?.user
 
@@ -25,13 +28,15 @@ export const Auth: React.FC<AuthProps> = ({ children, routeType }) => {
             return
 
         // When no user redirect to login
-        if (!isUser && routeType === "protected")
+        if (!isUser && routeType === "protected" && !isRouterChanging) {
             signIn()
+        }
 
         // When user and route type guest redirect to home
-        if (isUser && routeType === "guest")
+        if (isUser && routeType === "guest" && !isRouterChanging) {
             router.push(routes.home)
-    }, [isUser, status])
+        }
+    }, [isUser, status, routeType, routes])
 
     // Render page when user or route type guest
     if (isUser || routeType === "guest")
