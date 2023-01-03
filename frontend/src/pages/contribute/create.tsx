@@ -10,27 +10,23 @@ import { NextPageCustomProps } from "../_app";
 
 type CreateItemDto = {
     name: string
-    weight: string
-    weightType: "exact" | "range" | "ca."
+    weight: number | string
     unit: string // TODO (Zoe-Bot): define units
-    additional?: string
+    additional?: number | string
     isCa: boolean
     source?: string
     image?: string
     tags: Tag[]
 }
 
-const weightTypeDropdownOptions = [
+const weightIsCaOptions = [
     {
-        value: "exact",
-        label: "Exact Weight",
+        value: true,
+        label: "ca.",
     }, {
-        value: "range",
-        label: "Weight Range",
-    }, {
-        value: "ca.",
-        label: "Approximate Weight",
-    },
+        value: false,
+        label: "-",
+    }
 ]
 
 const unitTypeDropdownOptions = [
@@ -50,13 +46,13 @@ const unitTypeDropdownOptions = [
  * Create new items on this page.
  */
 const Create: NextPageCustomProps = () => {
+
     // Formik Form Initial Values
     const initialFormValues: CreateItemDto = {
         name: "",
         weight: "",
-        weightType: "exact",
         unit: "g",
-        additional: "string",
+        additional: "",
         isCa: false,
         source: "",
         image: "",
@@ -84,23 +80,29 @@ const Create: NextPageCustomProps = () => {
             <Formik initialValues={initialFormValues} onSubmit={onFormSubmit}>
                 <Form>
                     <div className="bg-white rounded-lg py-6 px-5 mb-4">
-                        <div className="lg:w-2/3 xl:w-1/2">
+                        <div className="lg:w-3/4 2xl:w-1/2">
                             <Headline level={3} hasMargin={false}>General Information</Headline>
                             <p className="mb-4">Give us some general info about the item so. These ones are needed for contribution. If this is approved by us it will be listed public.</p>
 
                             <TextInput name="name" labelText="Name" labelRequired placeholder="apple" />
 
-                            <div className="md:flex justify-between gap-3 items-end">
-                                <div className="md:w-1/3 lg:w-1/4">
-                                    <TextInput name="weight" labelText="Weight" labelRequired placeholder="150" />
+                            <div className="md:flex items-end justify-between gap-3">
+                                <div className="md:w-1/5">
+                                    <Dropdown name="isCa" labelText="Weight" labelRequired options={weightIsCaOptions} hasMargin light />
                                 </div>
-                                <div className="md:w-1/3 lg:w-2/4">
-                                    <Dropdown name="weightType" options={weightTypeDropdownOptions} hasMargin light />
+                                <div className="md:w-1/4 lg:w-1/4">
+                                    <TextInput type="number" min={0} name="weight" placeholder="150" />
                                 </div>
-                                <div className="md:w-1/3 lg:w-1/4">
+                                <div className="flex justify-center md:items-center md:h-[72px]"><span>-</span></div>
+                                <div className="md:w-1/4 lg:w-1/4">
+                                    <TextInput type="number" min={0} name="additional" placeholder="300" />
+                                </div>
+                                <div className="md:w-1/4 lg:w-1/4">
                                     <Dropdown name="unit" options={unitTypeDropdownOptions} hasMargin light />
                                 </div>
                             </div>
+                            <p className="text-gray-600 text-sm">Leave additional weight empty when it is an exact value.</p>
+
                         </div>
                     </div>
                     <div className="bg-white rounded-lg py-6 px-5 mb-4">

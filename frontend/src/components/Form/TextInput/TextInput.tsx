@@ -28,7 +28,7 @@ type TextInputProps = {
  */
 export const TextInput: React.FC<TextInputProps> = ({ name, labelText, labelRequired = false, helperText, type, icon, iconLink, iconOnClick, iconButtonIsSubmit, ...restProps }) => {
     return (
-        <div className="mb-4">
+        <div className="mb-2 md:mb-4">
             {labelText && <Label name={name} labelText={labelText} labelRequired={labelRequired} />}
             <Field type={type} name={name}>{(props: FieldProps<any>) => (
                 <>
