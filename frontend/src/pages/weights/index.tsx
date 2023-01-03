@@ -15,6 +15,7 @@ import { StatsCard } from "../../components/Statistics/StatsCard"
 import { useLocalStorage } from "../../hooks/useLocalStorage"
 import { routes } from "../../services/routes/routes"
 import { generateWeightString } from "../../services/utils/weight"
+import { Tag } from "../tags"
 
 const DEFAULT_ITEMS_PER_PAGE = 16
 const ITEMS_PER_PAGE_MAXIMUM = 100
@@ -28,10 +29,7 @@ export type Item = {
     weight: Weight,
     source?: string
     image?: string
-    tags: {
-        name: string
-        slug: string
-    }[]
+    tags: Tag[]
 }
 export type Weight = {
     value: number
