@@ -20,6 +20,10 @@ export const Navbar: React.FC = () => {
         to: routes.weights.list(),
         text: "Discover",
     }, {
+        viewCondition: session,
+        to: routes.account.profile(),
+        text: "My Profile",
+    }, {
         viewCondition: !session,
         onClick: () => signIn(),
         text: "Login",

@@ -10,7 +10,6 @@ const Profile: NextPageCustomProps = () => {
     const { data: session } = useSession()
     const siteTitle = `Profile ${session?.user.username} - World Wide Weights`
 
-
     return <>
         {/* Meta Tags */}
         <Head>
