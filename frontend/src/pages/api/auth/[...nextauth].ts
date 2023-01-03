@@ -32,15 +32,16 @@ export const authOptions: NextAuthOptions = {
                     password: credentials!.password
                 }
 
+                // Login to our api
                 const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/login`, {
                     method: 'POST',
                     body: JSON.stringify(payload),
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                });
+                })
 
-                const user = await response.json();
+                const user = await response.json()
 
                 // If no error and we have user data, return it
                 if (response.ok && user) {
@@ -65,6 +66,7 @@ export const authOptions: NextAuthOptions = {
             return token
         },
         session: async ({ session, token }: { session: Session, token: JWT }) => {
+            // Add accessToken and user to session
             session.accessToken = token.accessToken
             session.user = token.user.user
 
