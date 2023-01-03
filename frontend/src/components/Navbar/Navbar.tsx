@@ -20,6 +20,10 @@ export const Navbar: React.FC = () => {
         to: routes.weights.list(),
         text: "Discover",
     }, {
+        viewCondition: session,
+        to: routes.account.profile(),
+        text: "My Profile",
+    }, {
         viewCondition: !session,
         onClick: () => signIn(),
         text: "Login",
@@ -43,10 +47,11 @@ export const Navbar: React.FC = () => {
                 <IconButton className="block md:hidden" onClick={() => setIsNavMobileOpen(isNavMobileOpen => !isNavMobileOpen)} icon="menu" />
             </div>
             <ul className={`${isNavMobileOpen ? "block" : "hidden"} md:flex items-center gap-4 py-5 md:py-0`}>
+                {/* TODO (Zoe-Bot): Find better solution if active state is onclick */}
                 {/* When viewCondition is set then show based on it, when not then just show */}
-                {navLinks.map(navLink => (navLink.viewCondition === undefined ? true : navLink.viewCondition) && <li key={navLink.text} className="mb-4 md:mb-0"><Button {...navLink} kind="tertiary">{navLink.text}</Button></li>)}
+                {navLinks.map(navLink => (navLink.viewCondition === undefined ? true : navLink.viewCondition) && <li key={navLink.text} className="mb-4 md:mb-0"><Button {...navLink} isColored={navLink.to === router.pathname} kind="tertiary">{navLink.text}</Button></li>)}
                 {/* TODO (Zoe-Bot): Here is a dropdown in the future */}
-                <li className="hidden md:inline"><IconButton onClick={() => ""} icon="more_horiz" /></li>
+                {/* <li className="hidden md:inline"><IconButton onClick={() => ""} icon="more_horiz" /></li> */}
                 {/* TODO (Zoe-Bot): Add correct link when contribute exist */}
                 <li><Button to={routes.account.login}>Contribute</Button></li>
             </ul>

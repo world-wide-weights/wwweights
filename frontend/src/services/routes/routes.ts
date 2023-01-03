@@ -44,7 +44,8 @@ export const routes = {
     },
     account: {
         login: "/account/login",
-        register: "/account/register"
+        register: "/account/register",
+        profile: () => "/account/profile"
     },
     legal: {
         terms: "/legal/terms-of-service",

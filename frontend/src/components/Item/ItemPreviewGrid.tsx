@@ -9,7 +9,7 @@ import { ItemPreviewProps } from "./ItemPreviewList"
  * s
  * Example:
  * ```tsx
- * <ItemPreviewGrid id="1" name="Smartphone" weight={ value: 100, isCa: false } imageUrl="https://via.placeholder.com/96.png" />
+ * <ItemPreviewGrid id="1" name="Smartphone" weight={{ value: 100, isCa: false }} imageUrl="https://via.placeholder.com/96.png" />
  * ```
  */
 export const ItemPreviewGrid: React.FC<ItemPreviewProps> = ({ slug, datacy, name, weight, imageUrl }) => {
