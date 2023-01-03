@@ -50,7 +50,7 @@ export const Navbar: React.FC = () => {
                 {/* When viewCondition is set then show based on it, when not then just show */}
                 {navLinks.map(navLink => (navLink.viewCondition === undefined ? true : navLink.viewCondition) && <li key={navLink.text} className="mb-4 md:mb-0"><Button {...navLink} kind="tertiary">{navLink.text}</Button></li>)}
                 {/* TODO (Zoe-Bot): Here is a dropdown in the future */}
-                <li className="hidden md:inline"><IconButton onClick={() => ""} icon="more_horiz" /></li>
+                {/* <li className="hidden md:inline"><IconButton onClick={() => ""} icon="more_horiz" /></li> */}
                 {/* TODO (Zoe-Bot): Add correct link when contribute exist */}
                 <li><Button to={routes.account.login}>Contribute</Button></li>
             </ul>
