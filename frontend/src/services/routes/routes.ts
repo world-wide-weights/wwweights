@@ -47,6 +47,9 @@ export const routes = {
         register: "/account/register",
         profile: () => "/account/profile"
     },
+    contribute: {
+        create: "/contribute/create"
+    },
     legal: {
         terms: "/legal/terms-of-service",
         privacy: "/legal/privacy-policy"

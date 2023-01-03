@@ -11,6 +11,8 @@ type DropdownProps = {
     options: ComponentOptions[]
     /** Set to true when dropdown needs to fit to other inputs (have lighter color) */
     light?: boolean
+    /** Add margin to dropdown like other inputs */
+    hasMargin?: boolean
 }
 
 export type ComponentOptions = {
@@ -25,15 +27,15 @@ export type ComponentOptions = {
 /**
  * Dropdown, can only be used with Formik
  */
-export const Dropdown: React.FC<DropdownProps> = ({ name, placeholder, light = false, options }) => {
+export const Dropdown: React.FC<DropdownProps> = ({ name, placeholder, light = false, hasMargin = false, options }) => {
     const [isOpen, setIsOpen] = useState(false)
 
     return <Field name={name}>{(props: FieldProps<any>) => (
-        <div className="relative mb-1">
+        <div className={`relative ${hasMargin ? "mb-4" : ""}`}>
             {/* When dropdown open click outside close it */}
             {isOpen && <div className="fixed cursor-pointer inset-0 h-full w-full z-10" aria-hidden="true" onClick={() => setIsOpen(false)}></div>}
 
-            <button datacy={`${name}-dropdown-button`} className={`relative flex items-center justify-between rounded-lg mr-5 sm:mb-0 py-2 px-5 w-full border ${light ? "bg-gray-100 border-gray-100" : "bg-gray-200 border-gray-200"} ${!props.field.value ? "text-gray-500" : "text-gray-800"}`} type="button" onClick={() => setIsOpen(!isOpen)}>
+            <button datacy={`${name}-dropdown-button`} className={`relative flex items-center justify-between rounded-lg mr-5 sm:mb-0 py-[9px] px-5 w-full border ${light ? "bg-gray-100 border-gray-100" : "bg-gray-200 border-gray-200"} ${!props.field.value ? "text-gray-500" : "text-gray-800"}`} type="button" onClick={() => setIsOpen(!isOpen)}>
                 {props.field.value !== "" ? <span className="truncate">{options.find(option => option.value === props.field.value)?.label}</span> : <span>{placeholder}</span>}
                 <Icon className={`transform-gpu transition-transform duration-200 ease-linear ml-6 ${isOpen ? "-rotate-180" : "rotate-0"}`}>expand_more</Icon>
             </button>
