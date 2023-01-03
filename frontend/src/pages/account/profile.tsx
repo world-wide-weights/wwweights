@@ -53,6 +53,7 @@ const Profile: NextPageCustomProps = () => {
     </>
 }
 
+// Sets route need to be logged in
 Profile.auth = {
     routeType: "protected"
 }
