@@ -11,7 +11,6 @@ import { Auth } from '../components/Auth/Auth';
 import { Layout } from '../components/Layout/Layout';
 import '../styles/global.css';
 
-
 // Font
 const metropolis = localFont({
   src: [
@@ -59,21 +58,23 @@ type AppPropsCustom = AppProps<{ session: Session }> & {
  */
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsCustom) => {
   // When getLayout function is defined use custom layout
-  const getLayout = Component.getLayout ?? ((page: React.ReactElement) => {
+  const setLayout = Component.getLayout ?? ((page: React.ReactElement) => {
     return <Layout>
       {page}
     </Layout>
   })
 
+  // When auth is defined wrap auth around page
+  const auth = Component.auth ?
+    <Auth routeType={Component.auth.routeType}>
+      <Component {...pageProps} />
+    </Auth> :
+    <Component {...pageProps} />
+
   return <>
     <SessionProvider session={session}>
       <div className={`${metropolis.variable} font-sans`}>
-        {getLayout(Component.auth ?
-          <Auth routeType={Component.auth.routeType}>
-            <Component {...pageProps} />
-          </Auth> :
-          <Component {...pageProps} />
-        )}
+        {setLayout(auth)}
       </div>
     </SessionProvider>
   </>
