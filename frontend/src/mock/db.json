@@ -15153,5 +15153,19 @@
             ]
         },
         "averageWeight": 200
-    }
+    },
+    "users": [
+        {
+            "email": "test@gmail.com",
+            "password": "$2a$10$1e4rgxLs0251S/IuWfjdC.w2IbPtaf2qsEKck8FE0qZYQSjLBhlua",
+            "username": "test",
+            "slug": 1
+        },
+        {
+            "email": "test2@gmail.com",
+            "password": "$2a$10$4q3VEQSPR/na4smjWUVdTu2RNlzj8TkO.4xg4S7NLnNkGPzscpOa.",
+            "username": "test",
+            "slug": 2
+        }
+    ]
 }

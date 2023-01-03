@@ -2,8 +2,9 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { Button } from "../components/Button/Button";
 import { routes } from "../services/routes/routes";
+import { NextPageCustomProps } from "./_app";
 
-const Home: NextPage = () => {
+const Home: NextPageCustomProps = () => {
   return (
     <div>
       <Head>

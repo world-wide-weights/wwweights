@@ -1,0 +1,37 @@
+const apiBaseUrl = Cypress.env("API_BASE_URL")
+
+describe('Register', () => {
+    beforeEach(() => {
+        cy.visitLocalPage('/account/register')
+    })
+
+    describe('Register Flow - Email and Password', () => {
+        it('should register successfull, login user and redirect page', () => {
+            // Type credentials
+            cy.dataCy('textinput-email-input').type('hello@gmail.com')
+            cy.dataCy('textinput-username-input').type('Hello')
+            cy.dataCy('textinput-password-input').type('12345678')
+
+            // Mock register
+            cy.intercept('POST', `${apiBaseUrl}/register`, {
+                fixture: 'authentication/register.json'
+            }).as('mockRegister')
+
+            // Mock login and session
+            cy.mockCredentials()
+            cy.mockSession()
+
+            // Register button
+            cy.dataCy('register-button').click()
+
+            cy.wait('@mockRegister')
+            cy.wait('@mockCredentials')
+
+            // Check redirect
+            cy.url().should('include', '/')
+        })
+    })
+})
+
+export { }
+

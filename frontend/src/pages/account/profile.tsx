@@ -1,4 +1,3 @@
-import { NextPage } from "next";
 import Head from "next/head";
 import Image from 'next/image';
 import { Headline } from "../../components/Headline/Headline";
@@ -6,8 +5,9 @@ import { ItemPreviewList } from "../../components/Item/ItemPreviewList";
 import { Pagination } from "../../components/Pagination/Pagination";
 import { StatsCard } from "../../components/Statistics/StatsCard";
 import { routes } from "../../services/routes/routes";
+import { NextPageCustomProps } from "../_app";
 
-const Profile: NextPage = () => {
+const Profile: NextPageCustomProps = () => {
     // TODO (Zoe-Bot): Add user to page title 
     const siteTitle = `Profile - World Wide Weights`
 
@@ -50,6 +50,10 @@ const Profile: NextPage = () => {
             </div>
         </main>
     </>
+}
+
+Profile.auth = {
+    routeType: "protected"
 }
 
 export default Profile
