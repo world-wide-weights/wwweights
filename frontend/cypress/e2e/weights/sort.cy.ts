@@ -29,7 +29,7 @@ describe('Sort /weights', () => {
     it('should keep sort in url when search for something', () => {
         // Search something
         cy.dataCy('search').type(items[0].tags[0].slug)
-        cy.dataCy('text-input-submit-icon-query').click()
+        cy.dataCy('text-input-icon-query').click()
 
         cy.url().should('include', `sort=${SORT_TYPE}`)
     })

@@ -13,7 +13,7 @@ describe('Search /weights', () => {
         // This test seems to be flaky: https://github.com/cypress-io/cypress/issues/3817
         // it('should search items when click search items', () => {
         //     cy.dataCy('search').type(items[0].tags[0].slug)
-        //     cy.dataCy('text-input-submit-icon-query').click()
+        //     cy.dataCy('text-input-icon-query').click()
 
         //     cy.url().should('include', items[0].tags[0].slug)
         // })
@@ -44,7 +44,7 @@ describe('Search /weights', () => {
             beforeEach(() => {
                 // Search item
                 cy.dataCy('search').type(items[0].tags[0].slug)
-                cy.dataCy('text-input-submit-icon-query').click()
+                cy.dataCy('text-input-icon-query').click()
             })
 
             it('should display tags when search', () => {

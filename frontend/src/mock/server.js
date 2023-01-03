@@ -2,16 +2,18 @@
 const jsonServer = require('json-server')
 const server = jsonServer.create()
 const router = jsonServer.router('db.json')
-router.db._.id = 'slug'
+const auth = require('json-server-auth')
 const middlewares = jsonServer.defaults()
 
 const routes = require('./routes.json')
 
+server.db = router.db
+router.db._.id = 'slug'
+
 server.use(middlewares)
 
-// Add this before server.use(router) 
-server.use(jsonServer.rewriter(routes))
-
+server.use(auth.rewriter(routes))
+server.use(auth)
 server.use(router)
 server.listen(3004, () => {
     console.log('JSON Server is running')
