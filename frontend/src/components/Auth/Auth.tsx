@@ -27,12 +27,12 @@ export const Auth: React.FC<AuthProps> = ({ children, routeType }) => {
         if (status === "loading")
             return
 
-        // When no user redirect to login
+        // When no user redirect to login, isRouterChanging prevents push new route when router already pushing
         if (!isUser && routeType === "protected" && !isRouterChanging) {
             signIn()
         }
 
-        // When user and route type guest redirect to home
+        // When user and route type guest redirect to home, isRouterChanging prevents push new route when router already pushing
         if (isUser && routeType === "guest" && !isRouterChanging) {
             router.push(routes.home)
         }
