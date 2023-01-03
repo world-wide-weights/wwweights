@@ -81,7 +81,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "
     return <header className="bg-white pt-2 md:pt-5 pb-3 md:pb-10">
         <div className="container">
             <div className="md:flex md:flex-col md:items-center">
-                <Headline level={2} className="text-center">Wie viel wiegt?</Headline>
+                <Headline level={2} size="text-2xl md:text-3xl" className="text-center">Wie viel wiegt?</Headline>
                 <Formik initialValues={initialQueryValues} onSubmit={submitForm}>
                     <Form>
                         <div className="md:flex md:justify-center">

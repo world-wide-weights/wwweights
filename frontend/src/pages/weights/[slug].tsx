@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Item } from ".";
 import { Chip } from "../../components/Chip/Chip";
 import { SearchHeader } from "../../components/Header/SearchHeader";
+import { Headline } from "../../components/Headline/Headline";
 import { Icon } from "../../components/Icon/Icon";
 import { routes } from "../../services/routes/routes";
 import { generateWeightString } from "../../services/utils/weight";
@@ -31,11 +32,11 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
             <div className="grid grid-cols-[120px_1fr] md:grid-cols-[250px_1fr] items-center lg:grid-cols-2">
                 {/* Headline and Weight */}
                 <div className="lg:col-start-1 lg:col-end-3 pl-5 lg:pl-0 md:mt-5">
-                    <h1><a target="_blank" rel="noopener noreferrer" className="flex items-center text-gray-700 text-lg sm:text-2xl md:mb-2" href={`https://www.google.com/search?q=${item.name}`}>
+                    <a target="_blank" rel="noopener noreferrer" className="flex items-center text-gray-700 text-lg sm:text-2xl md:mb-2" href={`https://www.google.com/search?q=${item.name}`}>
                         {item.name}
                         <Icon className="ml-2">open_in_new</Icon>
-                    </a></h1>
-                    <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold md:mb-5">{weightString}</h2>
+                    </a>
+                    <Headline size="text-2xl sm:text-4xl lg:text-5xl">{weightString}</Headline>
                 </div>
 
                 {/* Source and Tags */}
