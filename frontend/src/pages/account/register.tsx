@@ -69,12 +69,12 @@ const Register: NextPageCustomProps = () => {
             const response = await signIn("credentials", {
                 password,
                 email,
-                redirect: false,
+                redirect: false
             }) as SignInResponse
 
             // When everything was ok in next auth sign in go to url we was before register or home
             if (response.ok) {
-                router.push(callbackUrl ?? "/");
+                router.push(callbackUrl ?? routes.home)
             } else if (response.error) {
                 setError(response.error)
             }
