@@ -1,5 +1,6 @@
 import { Form, Formik } from "formik";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { Button } from "../../components/Button/Button";
 import { IconButton } from "../../components/Button/IconButton";
@@ -7,6 +8,7 @@ import { Dropdown } from "../../components/Form/Dropdown/Dropdown";
 import { TextInput } from "../../components/Form/TextInput/TextInput";
 import { Headline } from "../../components/Headline/Headline";
 import { routes } from "../../services/routes/routes";
+import { getWeightInG } from "../../services/utils/unit";
 import { Weight } from "../weights";
 import { NextPageCustomProps } from "../_app";
 
@@ -23,6 +25,7 @@ type CreateItemForm = {
 
 type CreateItemDto = {
     name: string
+    slug: string // TODO (Zoe-Bot): remove with correct api
     weight: Weight
     source?: string
     image?: string
@@ -56,7 +59,10 @@ const unitTypeDropdownOptions = [
  * Create new items on this page.
  */
 const Create: NextPageCustomProps = () => {
+    // Local state
     const [isOpenDetails, setIsOpenDetails] = useState<boolean>(false)
+
+    const router = useRouter()
 
     // Formik Form Initial Values
     const initialFormValues: CreateItemForm = {
@@ -75,7 +81,41 @@ const Create: NextPageCustomProps = () => {
      * @param values input from form
      */
     const onFormSubmit = async ({ name, weight, unit, additionalValue, isCa, source, image, tags }: CreateItemForm) => {
-        console.log(name)
+        // Prepare weight in g
+        const weightNumber = parseInt(weight as string)
+        const valueInG = getWeightInG(weightNumber, unit)
+
+        // Prepare additionalValue in g
+        if (additionalValue !== "") {
+            const additionalValueNumber = parseInt(additionalValue as string)
+            additionalValue = getWeightInG(additionalValueNumber, unit)
+        }
+
+        // Prepare item data
+        const item: CreateItemDto = {
+            name,
+            ...(source ? { source } : {}), // Only add source when defined
+            ...(image ? { image } : {}), // Only add image when defined
+            slug: name, // TODO (Zoe-Bot): remove with correct api
+            weight: {
+                value: valueInG,
+                isCa,
+                ...(additionalValue ? { additionalValue } : {}) // Only add additionalValue when defined
+            },
+            tags: tags ? tags.split(', ') : []
+        }
+
+        // Create item with api
+        fetch('http://localhost:3004/items', {
+            method: 'POST',
+            body: JSON.stringify(item),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+
+        // Redirect to discover
+        router.push(routes.weights.list())
     }
 
     return <>
