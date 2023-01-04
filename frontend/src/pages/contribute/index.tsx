@@ -1,11 +1,17 @@
+import { useSession } from "next-auth/react";
 import Head from "next/head";
+import Image from 'next/image';
+import { Button } from "../../components/Button/Button";
+import { LinkWithIconColored } from "../../components/Button/LinkWithIconColored";
 import { Headline } from "../../components/Headline/Headline";
+import { routes } from "../../services/routes/routes";
 import { NextPageCustomProps } from "../_app";
 
 /**
  * Login page is a guest route.
  */
 const Contribute: NextPageCustomProps = () => {
+    const { data: session } = useSession()
 
     return <>
         {/* Meta Tags */}
@@ -15,16 +21,36 @@ const Contribute: NextPageCustomProps = () => {
             <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         </Head>
 
-        <main className="container">
+        <main className="container mt-5">
             <Headline>Contribute</Headline>
+
+            {/*** Header ***/}
+            <div className="bg-white rounded-lg px-8 2xl:px-14 py-4 lg:py-8 mb-4">
+                <div className="flex flex-col md:flex-row items-center">
+                    <Image priority src="https://picsum.photos/120" alt="profile picture" width={120} height={120} className="rounded-full mb-2 md:mb-0" />
+                    <div className="text-center md:text-left ml-6 mr-4 2xl:mr-20 mb-4 md:mb-0">
+                        <Headline level={3} hasMargin={false}>{session?.user.username}</Headline>
+                        <Button to={routes.account.profile()} kind="tertiary">View Profile</Button>
+                    </div>
+
+                    <div className="grid grid-cols-2 xl:grid-cols-4 gap-8 xl:gap-0 justify-between w-full">
+                        <LinkWithIconColored text="Add new Item" icon="add" to={routes.contribute.create} />
+                        <LinkWithIconColored text="Suggest changes" icon="edit" to={routes.weights.list()} />
+                        {/* TODO (Zoe-Bot): Correct link when exist. */}
+                        <LinkWithIconColored text="Give Feedback" icon="comment" to={routes.home} />
+                        {/* TODO (Zoe-Bot): Correct link when exist. */}
+                        <LinkWithIconColored text="Add photos" icon="image" to={routes.home} />
+                    </div>
+                </div>
+            </div>
         </main>
     </>
 }
 
 // Sets guest route (user need to be logged out)
-Contribute.auth = {
-    routeType: "protected"
-}
+// Contribute.auth = {
+//     routeType: "protected"
+// }
 
 export default Contribute
 
