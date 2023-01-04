@@ -195,7 +195,7 @@ const Create: NextPageCustomProps = () => {
                                 {/* Source */}
                                 <TextInput name="tags" labelText="Tags" helperText="Tags seperated with commas." placeholder="animal, mammal,..." />
 
-                                {/* TODO (Zoe-bot): Add tags design */}
+                                {/* TODO (Zoe-bot): Add image upload */}
                                 {/* Image */}
                                 <TextInput name="image" labelText="Image Url" placeholder="https://picsum.photos/120" />
                             </div>}
