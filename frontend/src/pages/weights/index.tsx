@@ -74,6 +74,8 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
         {/* Meta Tags */}
         <Head>
             <title>{siteTitle}</title>
+            <meta charSet="utf-8" />
+            <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         </Head>
 
         {/* TODO (Zoe-Bot): Find a better solution instead of give sort and query */}
