@@ -1,3 +1,4 @@
+import { routes } from "../../../src/services/routes/routes"
 import items from "../../fixtures/items/list.json"
 
 // TODO (Zoe-Bot): Update when correct api implemented  
@@ -7,7 +8,7 @@ describe('Sort /weights', () => {
     beforeEach(() => {
         cy.mockWeightsPage()
 
-        cy.visitLocalPage("/weights")
+        cy.visitLocalPage(routes.weights.list())
         cy.wait('@mockGetRelatedTags')
 
         // open dropdown

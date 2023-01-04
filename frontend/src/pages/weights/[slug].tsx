@@ -67,7 +67,7 @@ export const getStaticProps: GetStaticProps<WeightsSingleProps> = async (context
     const data = await response.json()
 
     // Validate Query
-    if (!data.id) {
+    if (!data.slug) {
         return {
             notFound: true // Renders 404 page
         }
