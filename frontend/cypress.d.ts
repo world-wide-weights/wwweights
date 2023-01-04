@@ -52,6 +52,10 @@ declare global {
        * Can't mock login direct because of next auth.
        */
       mockCredentials(): Chainable<void>
+      /**
+       * Mock create item request.
+       */
+      mockCreateItem(): Chainable<void>
     }
   }
 }

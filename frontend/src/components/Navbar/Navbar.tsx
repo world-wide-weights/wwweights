@@ -53,7 +53,7 @@ export const Navbar: React.FC = () => {
                 {/* TODO (Zoe-Bot): Here is a dropdown in the future */}
                 {/* <li className="hidden md:inline"><IconButton onClick={() => ""} icon="more_horiz" /></li> */}
                 {/* TODO (Zoe-Bot): Add correct link when contribute exist */}
-                <li><Button to={routes.account.login}>Contribute</Button></li>
+                <li><Button to={routes.contribute.create}>Contribute</Button></li>
             </ul>
         </nav>
     </div>

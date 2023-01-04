@@ -1,3 +1,4 @@
+import { routes } from "../../../src/services/routes/routes"
 import items from "../../fixtures/items/list.json"
 import relatedTags from "../../fixtures/tags/related.json"
 
@@ -6,7 +7,7 @@ describe('Search /weights', () => {
         beforeEach(() => {
             cy.mockWeightsPage()
 
-            cy.visitLocalPage("/weights")
+            cy.visitLocalPage(routes.weights.list())
             cy.wait('@mockGetRelatedTags')
         })
 
@@ -25,7 +26,7 @@ describe('Search /weights', () => {
         // })
 
         it('should search items when query in url', () => {
-            cy.visitLocalPage(`/weights?query=${items[0].tags[0].slug}`)
+            cy.visitLocalPage(routes.weights.list({ query: items[0].tags[0].slug }))
             cy.wait('@mockGetRelatedTags')
 
             cy.dataCy('search').should('have.value', items[0].tags[0].slug)
@@ -36,7 +37,7 @@ describe('Search /weights', () => {
         beforeEach(() => {
             cy.mockWeightsPage()
 
-            cy.visitLocalPage("/weights")
+            cy.visitLocalPage(routes.weights.list())
             cy.wait('@mockGetRelatedTags')
         })
 

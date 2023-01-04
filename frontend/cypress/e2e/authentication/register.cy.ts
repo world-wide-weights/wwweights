@@ -1,8 +1,10 @@
+import { routes } from "../../../src/services/routes/routes"
+
 const apiBaseUrl = Cypress.env("API_BASE_URL")
 
 describe('Register', () => {
     beforeEach(() => {
-        cy.visitLocalPage('/account/register')
+        cy.visitLocalPage(routes.account.register)
     })
 
     describe('Register Flow - Email and Password', () => {
@@ -28,7 +30,7 @@ describe('Register', () => {
             cy.wait('@mockCredentials')
 
             // Check redirect
-            cy.url().should('include', '/')
+            cy.url().should('include', routes.home)
         })
     })
 })

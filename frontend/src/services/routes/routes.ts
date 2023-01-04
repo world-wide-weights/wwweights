@@ -16,7 +16,7 @@ export const routes = {
             const hasCustomLimit = options.itemsPerPage !== options.defaultItemsPerPage
 
             const queryString = new URLSearchParams({
-                ...(options.page && options.page !== 1 && { page: options.page.toString() }),
+                ...(options.page && options.page > 1 && { page: options.page.toString() }),
                 ...(options.itemsPerPage && hasCustomLimit && { limit: options.itemsPerPage.toString() }),
                 ...(options.query && { query: options.query }),
                 ...(options.sort && { sort: options.sort })
@@ -46,6 +46,9 @@ export const routes = {
         login: "/account/login",
         register: "/account/register",
         profile: () => "/account/profile"
+    },
+    contribute: {
+        create: "/contribute/create"
     },
     legal: {
         terms: "/legal/terms-of-service",

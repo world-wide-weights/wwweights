@@ -15,6 +15,7 @@ import { StatsCard } from "../../components/Statistics/StatsCard"
 import { useLocalStorage } from "../../hooks/useLocalStorage"
 import { routes } from "../../services/routes/routes"
 import { generateWeightString } from "../../services/utils/weight"
+import { Tag } from "../tags"
 
 const DEFAULT_ITEMS_PER_PAGE = 16
 const ITEMS_PER_PAGE_MAXIMUM = 100
@@ -28,10 +29,7 @@ export type Item = {
     weight: Weight,
     source?: string
     image?: string
-    tags: {
-        name: string
-        slug: string
-    }[]
+    tags: Tag[]
 }
 export type Weight = {
     value: number
@@ -112,12 +110,12 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                             {loading ? <p>Loading...</p> : <>
                                 {/* Weights Box View */}
                                 {viewType === "grid" && <div className={`grid ${statisticsExpanded ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" : "grid-cols-1 md:grid-cols-2 2xl:grid-cols-3"} gap-5 mb-5 md:mb-8`}>
-                                    {items.map((item) => <ItemPreviewGrid datacy="weights-grid-item" key={item.id} name={item.name} slug={item.slug} weight={item.weight} imageUrl="https://picsum.photos/200" />)}
+                                    {items.map((item) => <ItemPreviewGrid datacy="weights-grid-item" key={item.slug} name={item.name} slug={item.slug} weight={item.weight} imageUrl="https://picsum.photos/200" />)}
                                 </div>}
 
                                 {/* Weights List View */}
                                 {viewType === "list" && <ul className={`grid gap-2 mb-5 md:mb-8`}>
-                                    {items.map((item) => <ItemPreviewList datacy="weights-list-item" key={item.id} name={item.name} slug={item.slug} weight={item.weight} heaviestWeight={statistics.heaviest.weight} imageUrl="https://picsum.photos/200" />)}
+                                    {items.map((item) => <ItemPreviewList datacy="weights-list-item" key={item.slug} name={item.name} slug={item.slug} weight={item.weight} heaviestWeight={statistics.heaviest.weight} imageUrl="https://picsum.photos/200" />)}
                                 </ul>}
                             </>}
 
