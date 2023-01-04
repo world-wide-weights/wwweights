@@ -21,7 +21,7 @@ type TextInputProps = {
     iconOnClick?: (event: any) => void
     /** Set to true when the icon button should have type submit. */
     iconButtonIsSubmit?: boolean
-    /** No display form validation error. */
+    /** When true don't display form validation error. */
     noError?: boolean
 } & React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
 

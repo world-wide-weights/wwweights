@@ -1,3 +1,4 @@
+// TODO (Zoe-bot): Adjust this to work with more units.
 /**
  * Calculate the value for a weight in gram.
  * @param value the value we want to have in gram.
