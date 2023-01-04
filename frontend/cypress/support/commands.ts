@@ -65,5 +65,11 @@ Cypress.Commands.add('mockCredentials', () => {
     }).as('mockCredentials')
 })
 
+Cypress.Commands.add('mockCreateItem', () => {
+    cy.intercept('POST', `${apiBaseUrl}/items`, {
+        url: `${clientBaseUrl}/account/login`
+    }).as('mockCreateItem')
+})
+
 export { }
 

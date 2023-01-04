@@ -179,7 +179,7 @@ const Create: NextPageCustomProps = () => {
                         {/*** Details ***/}
                         <div className="bg-white rounded-lg p-6 mb-4">
                             {/* Details Header */}
-                            <div onClick={() => setIsOpenDetails(!isOpenDetails)} className="flex items-center justify-between cursor-pointer">
+                            <div onClick={() => setIsOpenDetails(!isOpenDetails)} datacy="create-open-details-button" className="flex items-center justify-between cursor-pointer">
                                 <div className="text-left">
                                     <Headline level={3} hasMargin={false}>Add more details</Headline>
                                     <p>Add Image, tags and a source to help verify this item.</p>
@@ -210,7 +210,7 @@ const Create: NextPageCustomProps = () => {
                             </div>
                             <div className="md:flex gap-3 items-center">
                                 <Button to={routes.weights.list()} isColored kind="secondary" className="mb-2 md:mb-0">Cancel</Button>
-                                <Button disabled={!(dirty && isValid)} type="submit" isColored>Create</Button>
+                                <Button datacy="create-submit-button" disabled={!(dirty && isValid)} type="submit" isColored>Create</Button>
                             </div>
                         </div>
                     </Form>
