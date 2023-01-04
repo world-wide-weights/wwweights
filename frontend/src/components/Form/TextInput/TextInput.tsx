@@ -21,12 +21,14 @@ type TextInputProps = {
     iconOnClick?: (event: any) => void
     /** Set to true when the icon button should have type submit. */
     iconButtonIsSubmit?: boolean
+    /** No display form validation error. */
+    noError?: boolean
 } & React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
 
 /** 
  * Text Input, can only be used with Formik
  */
-export const TextInput: React.FC<TextInputProps> = ({ name, labelText, labelRequired = false, helperText, type, icon, iconLink, iconOnClick, iconButtonIsSubmit, ...restProps }) => {
+export const TextInput: React.FC<TextInputProps> = ({ name, labelText, labelRequired = false, helperText, type, icon, iconLink, noError = false, iconOnClick, iconButtonIsSubmit, ...restProps }) => {
     return (
         <div className="mb-2 md:mb-4">
             {labelText && <Label name={name} labelText={labelText} labelRequired={labelRequired} />}
@@ -41,7 +43,7 @@ export const TextInput: React.FC<TextInputProps> = ({ name, labelText, labelRequ
                     {!(props.meta.error && props.meta.touched) && <p className="text-gray-600 text-sm mt-2">{helperText}</p>}
                 </>
             )}</Field>
-            <FormError field={name} />
+            {!noError && <FormError field={name} />}
         </div>
     )
 }
