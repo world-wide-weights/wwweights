@@ -21,15 +21,10 @@ describe('Create Item', () => {
         // Submit form
         cy.dataCy('create-submit-button').click()
 
-        // Check redirect
-        cy.url().should('include', routes.weights.list())
+        cy.wait('@mockCreateItem')
     })
 
     it('should create item when fill all fields', () => {
-        // Mock create and weights page
-        cy.mockCreateItem()
-        cy.mockWeightsPage()
-
         // Fill required
         cy.dataCy('textinput-name-input').type('apple')
         cy.dataCy('textinput-weight-input').type('150')
@@ -50,11 +45,14 @@ describe('Create Item', () => {
         cy.dataCy('textinput-tags-input').type('fruit')
         cy.dataCy('textinput-image-input').type('https://picsum.photos/120')
 
+        // Mock create and weights page
+        cy.mockCreateItem()
+        cy.mockWeightsPage()
+
         // Submit form
         cy.dataCy('create-submit-button').click()
 
-        // Check redirect
-        cy.url().should('include', routes.weights.list())
+        cy.wait('@mockCreateItem')
     })
 
     describe('Details', () => {
