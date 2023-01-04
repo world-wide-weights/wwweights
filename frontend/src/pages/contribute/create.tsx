@@ -184,7 +184,7 @@ const Create: NextPageCustomProps = () => {
                                     <Headline level={3} hasMargin={false}>Add more details</Headline>
                                     <p>Add Image, tags and a source to help verify this item.</p>
                                 </div>
-                                <IconButton icon="expand_more" iconClassName="text-5xl" className={`transform-gpu transition-transform duration-200 ease-linear w-12 h-12 ${isOpenDetails ? "-rotate-180" : "rotate-0"}`} />
+                                <IconButton icon="expand_more" iconClassName="text-3xl md:text-5xl" className={`transform-gpu transition-transform duration-200 ease-linear min-w-[40px] md:w-12 h-10 md:h-12 ml-3 ${isOpenDetails ? "-rotate-180" : "rotate-0"}`} />
                             </div>
 
                             {isOpenDetails && <div className="mt-4">
