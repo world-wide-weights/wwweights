@@ -52,7 +52,7 @@ export const Dropdown: React.FC<DropdownProps> = ({ name, placeholder, labelText
             {/* Options */}
             {isOpen && <div datacy={`${name}-dropdown-menu`} className="absolute bg-white rounded-lg shadow-[-10px_10px_10px_rgba(203,210,217,0.10),10px_10px_10px_rgba(203,210,217,0.10)] z-10 w-full py-2" tabIndex={-1}>
                 {options.map(option => (
-                    <button key={option.value + ""} datacy={`${name}-dropdown-option-${option.value}`} onClick={() => {
+                    <button type="button" key={option.value + ""} datacy={`${name}-dropdown-option-${option.value}`} onClick={() => {
                         props.form.setFieldValue(props.field.name, option.value)
                         setIsOpen(false)
                     }} className={`flex items-center hover:text-blue-500 w-full px-5 py-2 ${props.field.value === option.value ? `text-blue-500` : "text-gray-700"}`}>
