@@ -48,6 +48,7 @@ export const routes = {
         profile: () => "/account/profile"
     },
     contribute: {
+        index: "/contribute",
         create: "/contribute/create"
     },
     legal: {

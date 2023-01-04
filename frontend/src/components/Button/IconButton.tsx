@@ -26,7 +26,7 @@ type IconButtonProps = {
 /**
  * Button only with an icon
  */
-export const IconButton: React.FunctionComponent<IconButtonProps> = ({ icon, to, onClick, datacy, iconClassName = "", disabled = false, active = false, className = "", color = "gray" }) => {
+export const IconButton: React.FC<IconButtonProps> = ({ icon, to, onClick, datacy, iconClassName = "", disabled = false, active = false, className = "", color = "gray" }) => {
     const innerIcon = <Icon className={`${disabled ? "text-opacity-50 " : ""}text-${color}-600 ${iconClassName}`}>{icon}</Icon>
     const classes = `text-center ${disabled || active ? "cursor-default" : `cursor-pointer hover:bg-${color}-200 focus:bg-${color}-300`} rounded-full w-10 h-10 flex items-center justify-center ${className}`
 
