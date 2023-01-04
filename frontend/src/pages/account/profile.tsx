@@ -45,7 +45,7 @@ const Profile: NextPageCustomProps = () => {
                         <ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 300, isCa: false }} heaviestWeight={{ value: 300, isCa: false }} imageUrl="https://via.placeholder.com/96.png" />
                     </ul>
 
-                    {/* TODO: Implement correct pagination */}
+                    {/* TODO (Zoe-Bot): Implement correct pagination */}
                     {/* <Pagination totalItems={10} currentPage={1} baseRoute={routes.account.profile} itemsPerPage={5} /> */}
                 </div>
             </div>
