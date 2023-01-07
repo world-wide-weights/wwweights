@@ -1,4 +1,4 @@
-import { Expose } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
 @Index('email_unique', ['email'], { unique: true })
@@ -18,6 +18,7 @@ export class UserEntity {
   @Column('character varying', { name: 'email', unique: true, length: 128 })
   email: string;
 
+  @Exclude()
   @Column('text', { name: 'password', nullable: true })
   password: string | null;
 
@@ -37,6 +38,7 @@ export class UserEntity {
   })
   role: string;
 
+  @Exclude()
   @Column('timestamp with time zone', { name: 'last_login', nullable: true })
   lastLogin: Date | null;
 }

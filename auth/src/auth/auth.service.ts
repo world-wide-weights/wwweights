@@ -14,6 +14,7 @@ import * as bcrypt from 'bcrypt';
 import { UserService } from '../db/db.service';
 import { ConfigService } from '@nestjs/config';
 import { RefreshJWTPayload } from './dtos/refresh-jwt-payload.dto';
+import { TokenResponse } from './responses/token.response';
 
 @Injectable()
 export class AuthService {
@@ -39,7 +40,7 @@ export class AuthService {
     return newUser;
   }
 
-  async login(body: LoginDTO) {
+  async login(body: LoginDTO): Promise<TokenResponse> {
     const user = await this.userService.findOneByEmail(body.email);
     if (
       !user ||
@@ -48,11 +49,11 @@ export class AuthService {
     ) {
       throw new UnauthorizedException();
     }
-    // This is not awaited, as it is not necessary for the response
     return await this.getAuthPayload(user);
   }
 
-  async getAuthPayload(user: UserEntity) {
+  async getAuthPayload(user: UserEntity): Promise<TokenResponse> {
+    // This is not awaited, as it is not necessary for the response
     this.userService.setLoginTimestamp(user.pkUserId);
     return {
       access_token: await this.generateJWTToken(user),
@@ -60,7 +61,7 @@ export class AuthService {
     };
   }
 
-  private async generateRefreshToken(user: UserEntity) {
+  private async generateRefreshToken(user: UserEntity): Promise<string> {
     return await this.jwtService.sign(
       {
         id: user.pkUserId,
@@ -70,7 +71,7 @@ export class AuthService {
     );
   }
 
-  private async generateJWTToken(user: UserEntity) {
+  private async generateJWTToken(user: UserEntity): Promise<string> {
     return await this.jwtService.sign({
       username: user.username,
       id: user.pkUserId,

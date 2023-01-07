@@ -27,28 +27,23 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('signup')
-  async signup(@Body() signUpData: SignUpDTO) {
-    return plainToInstance(
-      UserEntity,
-      await this.authService.signup(signUpData),
-    );
+  async signup(@Body() signUpData: SignUpDTO): Promise<UserEntity> {
+    return await this.authService.signup(signUpData);
   }
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  async login(@Body() loginData: LoginDTO) {
-    return plainToInstance(
-      TokenResponse,
-      await this.authService.login(loginData),
-    );
+  async login(@Body() loginData: LoginDTO): Promise<TokenResponse> {
+    return new TokenResponse(await this.authService.login(loginData));
   }
 
   @Post('/refresh')
   @HttpCode(HttpStatus.OK)
   @UseGuards(RefreshTokenGuard)
-  async getAuthViaRefreshToken(@Req() tokenData: RequestWithRefreshPayload) {
-    return plainToInstance(
-      TokenResponse,
+  async getAuthViaRefreshToken(
+    @Req() tokenData: RequestWithRefreshPayload,
+  ): Promise<TokenResponse> {
+    return new TokenResponse(
       await this.authService.getAuthPayload(tokenData.user),
     );
   }

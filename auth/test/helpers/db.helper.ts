@@ -18,7 +18,7 @@ export async function createUser(
   };
   Object.assign(user, valueOverride);
   user.password = await bcrypt.hash(user.password, 10);
-  return (await dataSource.getRepository(UserEntity).insert(user))
+  return (await getRepository<UserEntity>(dataSource, UserEntity).insert(user))
     .generatedMaps[0] as UserEntity;
 }
 
@@ -26,9 +26,9 @@ export async function deleteByAttribute(
   dataSource: DataSource,
   identifier: Partial<UserEntity>,
 ) {
-  return await (
-    dataSource.getRepository(UserEntity) as Repository<UserEntity>
-  ).delete(identifier);
+  return await getRepository<UserEntity>(dataSource, UserEntity).delete(
+    identifier,
+  );
 }
 
 export async function updateByAttribute(
@@ -36,15 +36,20 @@ export async function updateByAttribute(
   identifier: Partial<UserEntity>,
   updateValue: Partial<UserEntity>,
 ) {
-  return await (
-    dataSource.getRepository(UserEntity) as Repository<UserEntity>
-  ).update(identifier, updateValue);
+  return await getRepository<UserEntity>(dataSource, UserEntity).update(
+    identifier,
+    updateValue,
+  );
 }
 export async function getUserByAttribute(
   dataSource: DataSource,
   identifier: Partial<UserEntity>,
 ) {
-  return await dataSource
-    .getRepository<UserEntity>(UserEntity)
-    .findOneBy(identifier);
+  return await getRepository<UserEntity>(dataSource, UserEntity).findOneBy(
+    identifier,
+  );
+}
+
+function getRepository<T>(dataSource, entity): Repository<T> {
+  return dataSource.getRepository(entity) as Repository<T>;
 }

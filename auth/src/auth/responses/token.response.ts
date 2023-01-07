@@ -5,4 +5,8 @@ export class TokenResponse {
   access_token: string;
   @Expose()
   refresh_token: string;
+
+  constructor(data: Partial<TokenResponse>) {
+    Object.assign(this, data);
+  }
 }
