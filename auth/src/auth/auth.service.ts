@@ -75,13 +75,16 @@ export class AuthService {
   }
 
   private async generateJWTToken(user: UserEntity): Promise<string> {
-    return await this.jwtService.sign({
-      username: user.username,
-      id: user.pkUserId,
-      email: user.email,
-      status: user.status as STATUS,
-      role: user.role as ROLES,
-    } as JWTPayload);
+    return this.jwtService.sign(
+      {
+        username: user.username,
+        id: user.pkUserId,
+        email: user.email,
+        status: user.status as STATUS,
+        role: user.role as ROLES,
+      } as JWTPayload,
+      { keyid: this.configService.get<string>('JWT_AUTH_KID') },
+    );
   }
 
   /**
