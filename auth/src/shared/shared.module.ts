@@ -16,6 +16,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
         signOptions: {
           expiresIn: configService.get<number>('JWT_EXPIRE_TIME'),
           algorithm: 'RS256',
+          keyid: configService.get<string>('JWT_AUTH_KID'),
         },
       }),
     }),

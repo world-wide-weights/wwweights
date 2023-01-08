@@ -16,6 +16,9 @@ import { ConfigService } from '@nestjs/config';
 import { RefreshJWTPayload } from './dtos/refresh-jwt-payload.dto';
 import { TokenResponse } from './responses/token.response';
 
+import { createPublicKey } from 'crypto';
+import { RsaJWK, RsaJWKBase } from './responses/jwks.response';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -79,5 +82,20 @@ export class AuthService {
       status: user.status as STATUS,
       role: user.role as ROLES,
     } as JWTPayload);
+  }
+
+  /**
+   * @description Generate JWK for base auth JWTs
+   */
+  getJWKSPayload(): RsaJWK {
+    const authBaseJWK = createPublicKey(
+      this.configService.get<string>('JWT_PUBLIC_KEY') as string,
+    ).export({ format: 'jwk' }) as RsaJWKBase;
+    return {
+      ...authBaseJWK,
+      alg: 'RS256',
+      use: 'sig',
+      kid: this.configService.get<string>('JWT_AUTH_KID'),
+    };
   }
 }
