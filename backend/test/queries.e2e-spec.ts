@@ -17,6 +17,14 @@ describe('AppController (e2e)', () => {
 
   beforeAll(async () => {
     const dataSource = await initializeMockDataSource();
+    dataSource.manager.getMongoRepository(Item).createCollectionIndexes([
+      {
+        key: { name: 'text' },
+        name: 'text',
+        unique: true,
+        weights: { name: 1 },
+      },
+    ]);
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [TypeOrmModule.forRoot(), QueriesModule],
     })

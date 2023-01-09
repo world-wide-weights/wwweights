@@ -1,8 +1,8 @@
 import { Logger, UnprocessableEntityException } from '@nestjs/common';
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
-import { plainToInstance } from 'class-transformer';
 import { EventStore } from '../../eventstore/eventstore';
 import { Item } from '../../models/item.model';
+import { getSlug } from '../../shared/get-slug';
 import { CreateItemCommand } from './create-item.command';
 
 @CommandHandler(CreateItemCommand)
@@ -16,10 +16,10 @@ export class CreateItemHandler implements ICommandHandler<CreateItemCommand> {
   // No returns, just Exceptions in CQRS
   async execute(command: CreateItemCommand) {
     try {
-      // Check for normal issues
-      this.logger.debug('dto: ', command.createItemDto);
-      const newItem = plainToInstance(Item, command.createItemDto);
-      this.logger.debug('newItem', newItem);
+      const newItem = new Item({
+        ...command.createItemDto,
+        slug: getSlug(command.createItemDto.name),
+      });
       const eventItem = this.publisher.mergeObjectContext(newItem);
 
       // TODO: Aggregate State from Eventstore or Tries to check for duplicates and stuff

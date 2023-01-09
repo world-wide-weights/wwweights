@@ -1,8 +1,7 @@
+import { TypegooseModule } from '@m8a/nestjs-typegoose';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { CommandsModule } from './commands.module/commands.module';
-import { Item } from './models/item.model';
 import { QueriesModule } from './queries.module/queries.module';
 
 @Module({
@@ -11,24 +10,18 @@ import { QueriesModule } from './queries.module/queries.module';
       envFilePath: '.env',
       isGlobal: true,
     }),
-    TypeOrmModule.forRootAsync({
+    TypegooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
         return {
-          type: 'mongodb',
           authSource: 'admin',
-          host: configService.get('DB_MONGO_HOST'),
-          port: +configService.get('DB_MONGO_PORT'),
-          username: configService.get('DB_MONGO_USER'),
-          password: configService.get('DB_MONGO_PW'),
-          database: configService.get('DB_MONGO_NAME'),
-          // Only enable this option if your application is in development,
-          // otherwise use TypeORM migrations to sync entity schemas:
-          // https://typeorm.io/#/migrations
-          synchronize: configService.get<string>('NODE_ENV') !== 'production',
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
-          entities: [Item],
+          uri: `mongodb://${configService.get(
+            'DB_MONGO_USER',
+          )}:${configService.get('DB_MONGO_PW')}@${configService.get(
+            'DB_MONGO_HOST',
+          )}:${configService.get('DB_MONGO_PORT')}/${configService.get(
+            'DB_MONGO_NAME',
+          )}`,
         };
       },
       inject: [ConfigService],

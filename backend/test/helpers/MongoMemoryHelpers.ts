@@ -1,9 +1,7 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { DataSource } from 'typeorm';
 import { Item } from '../../src/models/item.model';
 
 let mongod: MongoMemoryServer;
-let dataSource: DataSource;
 
 export async function initializeMockDataSource() {
   mongod = await MongoMemoryServer.create({});

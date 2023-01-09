@@ -1,7 +1,7 @@
+import { InjectModel } from '@m8a/nestjs-typegoose';
 import { Logger } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ReturnModelType } from '@typegoose/typegoose';
 import { Item } from '../../models/item.model';
 import { GetItemListQuery } from './get-item-list.query';
 
@@ -10,16 +10,26 @@ export class GetItemListHandler implements IQueryHandler<GetItemListQuery> {
   private readonly logger = new Logger(GetItemListHandler.name);
 
   constructor(
-    @InjectRepository(Item)
-    private repository: Repository<Item>,
+    @InjectModel(Item)
+    private readonly itemModel: ReturnModelType<typeof Item>,
   ) {}
 
   async execute({ dto }: GetItemListQuery) {
-    const result = await this.repository.find({
-      skip: dto.page * dto.limit,
-      take: dto.limit,
-      order: dto.sort === 'relevance' ? undefined : { [dto.sort]: 'ASC' },
-    });
+    const result = await this.itemModel
+      // .aggregate([
+      //   { $match: { $text: { $search: 'string' } } },
+      //   { $sort: { score: { $meta: 'textScore' } } },
+      // ]);
+      .find(
+        { $text: { $search: 'string' } },
+        { score: { $meta: 'textScore' } },
+        { $sort: { ['boosted']: 'DESC', ['score']: { $meta: 'textScore' } } },
+      )
+      .limit(10)
+      .populate({ path: 'weight' })
+      .exec();
+
+    this.logger.debug('result: ', JSON.stringify(result, null, 2));
     return result;
   }
 }

@@ -12,8 +12,6 @@ async function bootstrap() {
     .setTitle('World Wide Weights Api')
     .setDescription('The wwweights Api overview')
     .setVersion('0.1')
-    .addTag('queries')
-    .addTag('commands')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, document);

@@ -5,17 +5,21 @@ export class QueryItemListDto {
   @IsNumber()
   @IsOptional()
   @Min(1)
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ type: Number })
   page = 1;
 
-  @IsString()
+  @IsNumber()
   @IsOptional()
-  @ApiPropertyOptional()
+  @Min(1)
+  @ApiPropertyOptional({ minimum: 1, default: 16, type: Number })
   limit = 16;
 
   @IsString()
   @IsOptional()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    enum: ['relevance', 'lightest', 'heaviest', 'newest', 'oldest'],
+    default: 'relevance',
+  })
   sort = 'relevance'; // lightest | heaviest | newest | oldest | relevance // Not an ENUM because ENUMS are inperformant and can lead to spaghetti code
 
   @IsString()

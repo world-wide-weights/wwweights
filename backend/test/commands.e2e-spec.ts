@@ -1,8 +1,7 @@
+import { TypegooseModule } from '@m8a/nestjs-typegoose';
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import * as request from 'supertest';
-import { DataSource } from 'typeorm';
 import { CommandsModule } from '../src/commands.module/commands.module';
 import { Item } from '../src/models/item.model';
 import {
@@ -15,12 +14,19 @@ import { createItem, singleItem } from './mocks/items';
 describe('AppController (e2e)', () => {
   let app: INestApplication;
   let itemRepository: any;
-  let dataSource: DataSource;
 
   beforeAll(async () => {
     const dataSource = await initializeMockDataSource();
+    dataSource.manager.getMongoRepository(Item).createCollectionIndexes([
+      {
+        key: { name: 'text' },
+        name: 'text',
+        unique: true,
+        weights: { name: 1 },
+      },
+    ]);
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [TypeOrmModule.forRoot({}), CommandsModule],
+      imports: [TypegooseModule.forRoot(''), CommandsModule],
     })
       .overrideProvider(DataSource)
       .useValue(dataSource)
