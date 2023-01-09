@@ -1,0 +1,14 @@
+@host=http://localhost:3000/commands/
+
+###
+POST {{host}}create-item
+content-Type: application/json
+
+{
+  "name": "test",
+  "weight": {
+    "value": 3.14
+  }, 
+  "user": "user",
+  "slug": "info"
+}

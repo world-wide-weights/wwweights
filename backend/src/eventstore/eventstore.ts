@@ -1,7 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Consumer, Kafka, Producer } from 'kafkajs';
-import { BehaviorSubject } from 'rxjs';
-import { ItemCreatedEvent } from '../commands.module/events/item-created.event';
+import {
+  EventStoreDBClient,
+  FORWARDS,
+  jsonEvent,
+  START,
+  streamNameFilter,
+} from '@eventstore/db-client';
+import { EventBus } from '@nestjs/cqrs';
+import { ItemCreatedEvent } from 'src/commands.module/events/item-created.event';
+import { extractTypeFromStreamId, generateStreamId } from './helpers/eventstore.helpers';
 
 export const logStringify = (obj: any) => {
   return JSON.stringify(obj, null, 2);
@@ -9,46 +16,67 @@ export const logStringify = (obj: any) => {
 @Injectable()
 export class EventStore {
   private readonly logger = new Logger(EventStore.name);
-  private latestId = 0;
-  private eventsStream = new BehaviorSubject<{
-    id: number;
-    type: string;
-    event: any;
-  }>(null);
-
+  private client: EventStoreDBClient;
   private readonly eventMap = new Map([['ItemCreatedEvent', ItemCreatedEvent]]);
-
-  private kafkaConnection: Kafka;
-
-  private kafkaProducer: Producer;
-  private kafkaConsumer: Consumer;
-
-  constructor() {
-    this.kafkaConnection = new Kafka({
-      clientId: 'wwweights-backend',
-      brokers: ['localhost:3007'],
-    });
-    this.kafkaConsumer = this.kafkaConnection.consumer({ groupId: 'backend' });
-    this.kafkaProducer = this.kafkaConnection.producer();
-    this.kafkaProducer.connect();
-
-    this.kafkaConsumer.subscribe({ topics: ['*'] });
-    this.kafkaConsumer.run({
-      eachMessage: async (payload) => console.log(payload),
-    });
+  constructor(private readonly eventBus: EventBus) {
+    console.log('Constructor');
+    this.client = EventStoreDBClient.connectionString(
+      'esdb://localhost:3011?tls=false',
+    );
+    this.init();
   }
 
-  public addEvent(type: string, event: any) {
-    this.kafkaProducer.send({
-      topic: type,
-      messages: [
-        {
-          key: 'event',
-          value: event,
-        },
-      ],
+  private async init() {
+    this.logger.verbose('Connection to EventstoreDB successfull');
+    const subscription = this.client.subscribeToAll({
+      filter: streamNameFilter({
+        prefixes: Array.from(this.eventMap.keys()).map((e) => `${e}-`),
+      }),
     });
-    this.logger.log('Added event');
+    console.log(Array.from(this.eventMap.keys()).map((e) => `${e}-`));
+    for await (const resolvedEvent of subscription) {
+      console.log(
+        `Received event ${resolvedEvent.event?.revision}@${resolvedEvent.event?.streamId}`,
+      );
+
+      await this.publishEventToBus(
+        extractTypeFromStreamId(resolvedEvent.event.streamId),
+        resolvedEvent.event.data,
+      );
+    }
+    this.logger.verbose(
+      'Initialized Stream listener for content streams of eventstore',
+    );
   }
 
+  public async addEvent(type: string, identifier: string, event: any) {
+    const parsedEvent = jsonEvent({
+      type: 'grpc-client',
+      data: event,
+    });
+    await this.client.appendToStream(generateStreamId(type, identifier), [
+      parsedEvent,
+    ]);
+  }
+
+  private publishEventToBus(type: string, event: any) {
+    if (!event) return;
+    if (!this.eventMap.get(type)) {
+      this.logger.warn('Invalid type for event');
+      return;
+    }
+    this.eventBus.publish(new (this.eventMap.get(type))(event));
+  }
+
+  async doesStreamExist(streamId: string) {
+    const res = this.client.readStream(streamId, { maxCount: 1 });
+    console.log('events', res.eventNames());
+    // Every stream has one event on first read => prefinish
+    if (res.eventNames().length > 1) {
+      console.log('returning true')
+      return true;
+    }
+    console.log("returning false")
+    return false;
+  }
 }

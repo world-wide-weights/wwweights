@@ -38,41 +38,24 @@ services:
     restart: unless-stopped
     volumes:
       - mongodb_data_container:/data/mongodb
-  zookeeper:
-    image: 'bitnami/zookeeper:latest'
-    restart: 'always'
-    environment:
-      ZOOKEEPER_CLIENT_PORT: ${ZOOKEEPER_CLIENT_PORT:-2181} 
-      ZOOKEEPER_TICK_TIME: ${ZOOKEEPER_TICK_TIME:-2000} 
-      ALLOW_ANONYMOUS_LOGIN: yes 
-    ports:
-      - 3006:${ZOOKEEPER_CLIENT_PORT:-2181}
-  kafka:
-    image: bitnami/kafka:3.3.1  
+  eventstore:
+    image: eventstore/eventstore:20.6.1-buster-slim
     restart: "always"
-    depends_on: 
-      - zookeeper
-    links:
-      - zookeeper 
-    volumes:
-      - kafka_data_container:/data/kafka
     ports:
-      - 3007:29092
+      - 3010:1113
+      - 3011:2113
+    volumes:
+      - eventstore_data_container:/var/lib/eventstore
     environment:
-      KAFKA_BROKER_ID: 1 #Hardcoded as this should not change in local setup
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:${ZOOKEEPER_CLIENT_PORT:-2181}
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      ALLOW_PLAINTEXT_LISTENER: yes
-      KAFKA_LOG_RETENTION_HOURS: -1
-      KAFKA_LOG_RETENTION_BYTES: -1
-
-
-
-
+      - EVENTSTORE_CLUSTER_SIZE=1
+      - EVENTSTORE_RUN_PROJECTIONS=All
+      - EVENTSTORE_START_STANDARD_PROJECTIONS=true
+      - EVENTSTORE_EXT_TCP_PORT=1113
+      - EVENTSTORE_HTTP_PORT=2113
+      - EVENTSTORE_INSECURE=true
+      - EVENTSTORE_ENABLE_EXTERNAL_TCP=true
+      - EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=true
 
 volumes:
   mongodb_data_container:
-  kafka_data_container:
+  eventstore_data_container:

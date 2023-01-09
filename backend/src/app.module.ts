@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CommandsModule } from './commands.module/commands.module';
+import { EventStoreModule } from './eventstore/eventstore.module';
 import { Item } from './models/item.model';
 import { QueriesModule } from './queries.module/queries.module';
 
@@ -33,6 +34,7 @@ import { QueriesModule } from './queries.module/queries.module';
       },
       inject: [ConfigService],
     }),
+    EventStoreModule,
     CommandsModule,
     QueriesModule,
   ],
