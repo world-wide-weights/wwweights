@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { plainToInstance } from 'class-transformer';
+import { ALLOWED_EVENT_ENTITIES } from 'src/eventstore/enums/allowedEntities.enum';
 import { generateStreamId } from 'src/eventstore/helpers/eventstore.helpers';
 import { EventStore } from '../../eventstore/eventstore';
 import { Item } from '../../models/item.model';
@@ -28,18 +29,8 @@ export class CreateItemHandler implements ICommandHandler<CreateItemCommand> {
       this.logger.debug('newItem', newItem);
       const eventItem = this.publisher.mergeObjectContext(newItem);
 
-      if (
-        await this.eventStore.doesStreamExist(
-          generateStreamId('ItemCreatedEvent', eventItem.slug),
-        )
-      ) {
-        throw new ConflictException('Does already exist');
-      }
-
-      console.log(generateStreamId('ItemCreatedEvent', eventItem.slug))
-
-
       const eventId = this.eventStore.addEvent(
+        ALLOWED_EVENT_ENTITIES.ITEM,
         'ItemCreatedEvent',
         eventItem.slug,
         eventItem,
