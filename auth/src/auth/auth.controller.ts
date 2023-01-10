@@ -11,13 +11,13 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { plainToInstance } from 'class-transformer';
 import { UserEntity } from '../db/entities/users.entity';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dtos/login.dto';
 import { SignUpDTO } from './dtos/signup.dto';
 import { RefreshTokenGuard } from './guards/refresh-token.guard';
 import { RequestWithRefreshPayload } from './interfaces/request-with-refresh-payload.interface';
+import { JWKSResponse } from './responses/jwks.response';
 import { TokenResponse } from './responses/token.response';
 
 @Controller('auth')
@@ -50,6 +50,6 @@ export class AuthController {
 
   @Get('.well-known/jwks.json')
   getJWKSInfo() {
-    return {};
+    return new JWKSResponse({ keys: [this.authService.getJWKSPayload()] });
   }
 }

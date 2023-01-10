@@ -38,6 +38,25 @@ services:
     restart: unless-stopped
     volumes:
       - mongodb_data_container:/data/mongodb
+  postgres:
+    image: postgres:15
+    restart: "always"
+    volumes: 
+      - postgres-volume:/var/lib/pgsql/data
+      - ./db/setup:/docker-entrypoint-initdb.d/
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=${DB_PG_USER}
+      - POSTGRES_PASSWORD=${DB_PG_PW}
+      - POSTGRES_DB=${DB_PG_DB}
+    healthcheck:
+      # TODO: This can be replaced by a more accurate healthcheck based on PID 1 
+      test: ["CMD-SHELL","pg_isready"]
+      interval: 60s
+      timeout: 5s
+      retries: 3
 
 volumes:
   mongodb_data_container:
+  postgres-volume:

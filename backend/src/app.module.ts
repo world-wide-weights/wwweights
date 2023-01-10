@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CommandsModule } from './commands.module/commands.module';
 import { Item } from './models/item.model';
 import { QueriesModule } from './queries.module/queries.module';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { QueriesModule } from './queries.module/queries.module';
     }),
     CommandsModule,
     QueriesModule,
+    SharedModule,
   ],
 })
 export class AppModule {}
