@@ -3,6 +3,7 @@ import { Logger } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { Item } from '../../models/item.model';
+import { getSort } from '../../shared/get-sort';
 import { GetItemListQuery } from './get-item-list.query';
 
 @QueryHandler(GetItemListQuery)
@@ -15,18 +16,16 @@ export class GetItemListHandler implements IQueryHandler<GetItemListQuery> {
   ) {}
 
   async execute({ dto }: GetItemListQuery) {
+    const sort = getSort(dto.sort);
+
     const result = await this.itemModel
-      // .aggregate([
-      //   { $match: { $text: { $search: 'string' } } },
-      //   { $sort: { score: { $meta: 'textScore' } } },
-      // ]);
       .find(
-        { $text: { $search: 'string' } },
+        { $text: { $search: dto.query || '' } },
         { score: { $meta: 'textScore' } },
-        { $sort: { ['boosted']: 'DESC', ['score']: { $meta: 'textScore' } } },
+        { $sort: sort },
       )
-      .limit(10)
-      .populate({ path: 'weight' })
+      .skip((dto.page - 1) * dto.limit)
+      .limit(dto.limit)
       .exec();
 
     this.logger.debug('result: ', JSON.stringify(result, null, 2));
