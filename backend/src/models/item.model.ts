@@ -19,7 +19,6 @@ export class Weight {
 }
 
 @index({ name: 'text', tags: 'text' }, { weights: { name: 10, tags: 5 } })
-@Expose()
 export class Item extends AggregateRoot {
   @Expose({ name: 'id' })
   // Have to do this optionally since it would throw an error on plainToInstance because _id doesn't exist in the DTOs and we only need it on instanceToPlain

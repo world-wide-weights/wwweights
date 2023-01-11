@@ -18,6 +18,7 @@ export class GetItemListHandler implements IQueryHandler<GetItemListQuery> {
   async execute({ dto }: GetItemListQuery) {
     const sort = getSort(dto.sort);
 
+    // TODO: Query through itemsByTags if tags are listed
     const result = await this.itemModel
       .find(
         { $text: { $search: dto.query || '' } },
