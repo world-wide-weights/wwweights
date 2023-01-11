@@ -5,7 +5,7 @@ import { Item } from './item.model';
 export class Suggestion {
   @Expose()
   @prop({ required: true })
-  author: string;
+  user: string;
 
   // TODO: Add relevant Account data
 

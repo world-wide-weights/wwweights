@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { BehaviorSubject } from 'rxjs';
-import { ItemCreatedEvent } from '../commands.module/events/item-created.event';
 
 export const logStringify = (obj: any) => {
   return JSON.stringify(obj, null, 2);
@@ -15,7 +14,9 @@ export class EventStore {
     event: any;
   }>(null);
 
-  private readonly eventMap = new Map([['ItemCreatedEvent', ItemCreatedEvent]]);
+  private readonly eventMap = new Map([
+    ['ItemInsertedEvent', ItemInsertedEvent],
+  ]);
 
   constructor() {
     this.eventsStream.subscribe((entry) => {

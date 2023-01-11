@@ -1,4 +1,4 @@
-import { CreateItemDto } from '../../src/commands.module/interfaces/create-item.dto';
+import { InsertItemDto } from '../../src/commands.module/interfaces/insert-item.dto';
 import { Item } from '../../src/models/item.model';
 
 export const singleItem: Partial<Item> = {
@@ -11,7 +11,7 @@ export const singleItem: Partial<Item> = {
   user: 'testUser',
 };
 
-export const createItem: Partial<CreateItemDto> = {
+export const insertItem: Partial<InsertItemDto> = {
   name: 'test Name with SpAcEs ',
   weight: { value: 1123675e30 },
   user: 'testUser',

@@ -1,8 +1,9 @@
 import { InjectModel } from '@m8a/nestjs-typegoose';
-import { Logger } from '@nestjs/common';
+import { Logger, UnprocessableEntityException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { Item } from '../../models/item.model';
+import { getFilter } from '../../shared/get-filter';
 import { getSort } from '../../shared/get-sort';
 import { GetItemListQuery } from './get-item-list.query';
 
@@ -16,15 +17,15 @@ export class GetItemListHandler implements IQueryHandler<GetItemListQuery> {
   ) {}
 
   async execute({ dto }: GetItemListQuery) {
-    const sort = getSort(dto.sort);
+    if (!dto.query && !dto.tags && !dto.slug)
+      throw new UnprocessableEntityException('No search without restrictions');
+
+    const sort = getSort(dto.sort, !!dto.query);
+    const filter = getFilter(dto.query, dto.tags, dto.slug);
 
     // TODO: Query through itemsByTags if tags are listed
     const result = await this.itemModel
-      .find(
-        { $text: { $search: dto.query || '' } },
-        { score: { $meta: 'textScore' } },
-        { $sort: sort },
-      )
+      .find(filter, { score: { $meta: 'textScore' } }, { $sort: sort })
       .skip((dto.page - 1) * dto.limit)
       .limit(dto.limit)
       .exec();
