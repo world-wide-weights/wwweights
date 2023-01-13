@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EventStoreModule } from 'src/eventstore/eventstore.module';
-import { EventStore } from '../eventstore/eventstore';
 import { Item } from '../models/item.model';
 import { CommandHandlers } from './commands';
 import { CommandsController } from './commands.controller';

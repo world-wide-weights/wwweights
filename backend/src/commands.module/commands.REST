@@ -5,7 +5,7 @@ POST {{host}}create-item
 content-Type: application/json
 
 {
-  "name": "askdbasbd",
+  "name": "test",
   "weight": {
     "value": 3.14
   }, 

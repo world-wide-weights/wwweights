@@ -7,7 +7,6 @@ import {
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { plainToInstance } from 'class-transformer';
 import { ALLOWED_EVENT_ENTITIES } from 'src/eventstore/enums/allowedEntities.enum';
-import { generateStreamId } from 'src/eventstore/helpers/eventstore.helpers';
 import { EventStore } from '../../eventstore/eventstore';
 import { Item } from '../../models/item.model';
 import { CreateItemCommand } from './create-item.command';
@@ -29,12 +28,16 @@ export class CreateItemHandler implements ICommandHandler<CreateItemCommand> {
       this.logger.debug('newItem', newItem);
       const eventItem = this.publisher.mergeObjectContext(newItem);
 
-      if (await this.eventStore.doesStreamExist(`item-${eventItem.slug}`)) {
+      if (
+        await this.eventStore.doesStreamExist(
+          `${ALLOWED_EVENT_ENTITIES.ITEM}-${eventItem.slug}`,
+        )
+      ) {
         throw new ConflictException('Slug already taken');
       }
 
       await this.eventStore.addEvent(
-        `item-${eventItem.slug}`,
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${eventItem.slug}`,
         'ItemCreatedEvent',
         eventItem,
       );
