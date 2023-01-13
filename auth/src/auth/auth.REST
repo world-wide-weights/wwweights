@@ -1,5 +1,5 @@
 @host=http://localhost:3005/auth
-@resetToken=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJzZWFtdXMuaG9lZ2VyMzdAZXRoZXJlYWwuZW1haWwiLCJpYXQiOjE2NzMwOTUyOTksImV4cCI6MTY3MzEzMTI5OX0.TBvoa2jqYbDNMQySA4AmUBZ0Wg6xo-cNfNN0Z8s0B0NF3OFcglVGdNECkqY4_I5SVXoeL_FqlzyBKe8qiyUiH4rScgNiE42AsMN8k0i1SR7kbxm3b6idqGeR6F4PHTrLHgQzx_eK-TQ1OMmHcaN8gkFOHTbO9Hn-TFlrDADv8nI
+@resetToken=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImF1dGgtYmFzZS1rZXkifQ.eyJpZCI6MSwiZW1haWwiOiJzZWFtdXMuaG9lZ2VyMzdAZXRoZXJlYWwuZW1haWwiLCJpYXQiOjE2NzMxOTY4MDQsImV4cCI6MTY3MzIzMjgwNH0.NwWkVOeUTV9k72hHF_qQ_1WtGfG9lz0-vZ1gXdfty2PKxyH6dkSx7lt9yX30LtMzQkMktrWUuqMBUDgrixmiH8XMIOPXeJkgpW_S8XqD5_yn_KMKgEjXKUxmfW_r6GcP9-3m3sERzKtqiiJ4T5AXnsoO_GAhwTg9dSsUHpZYK-0
 POST {{host}}/signup
 Content-Type: application/json
 
@@ -22,3 +22,6 @@ Content-Type: application/json
 ###
 POST {{host}}/refresh
 Authorization: Bearer {{resetToken}} 
+
+### 
+GET {{host}}/.well-known/jwks.json
