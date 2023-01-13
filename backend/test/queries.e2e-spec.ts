@@ -1,6 +1,8 @@
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { EventStore } from '../src/eventstore/eventstore';
 import * as request from 'supertest';
 import { DataSource, Repository } from 'typeorm';
 import { Item } from '../src/models/item.model';
@@ -9,19 +11,26 @@ import {
   initializeMockDataSource,
   teardownMockDataSource,
 } from './helpers/MongoMemoryHelpers';
+import { MockEventStore } from './mocks/eventstore';
 import { singleItem } from './mocks/items';
 
-describe('AppController (e2e)', () => {
+describe('QueryController (e2e)', () => {
   let app: INestApplication;
   let itemRepository: Repository<Item>;
 
   beforeAll(async () => {
     const dataSource = await initializeMockDataSource();
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [TypeOrmModule.forRoot(), QueriesModule],
+      imports: [
+        ConfigModule.forRoot({ isGlobal: true }),
+        TypeOrmModule.forRoot(),
+        QueriesModule,
+      ],
     })
       .overrideProvider(DataSource)
       .useValue(dataSource)
+      .overrideProvider(EventStore)
+      .useClass(MockEventStore)
       .compile();
 
     app = moduleFixture.createNestApplication();

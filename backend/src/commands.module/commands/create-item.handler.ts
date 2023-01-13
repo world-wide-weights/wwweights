@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { plainToInstance } from 'class-transformer';
-import { ALLOWED_EVENT_ENTITIES } from 'src/eventstore/enums/allowedEntities.enum';
+import { ALLOWED_EVENT_ENTITIES } from '../../eventstore/enums/allowedEntities.enum';
 import { EventStore } from '../../eventstore/eventstore';
 import { Item } from '../../models/item.model';
 import { CreateItemCommand } from './create-item.command';

@@ -9,11 +9,12 @@ import {
   END,
   EventStoreDBClient,
   jsonEvent,
+  StreamingRead,
   streamNameFilter,
   StreamNotFoundError,
 } from '@eventstore/db-client';
 import { EventBus } from '@nestjs/cqrs';
-import { ItemCreatedEvent } from 'src/commands.module/events/item-created.event';
+import { ItemCreatedEvent } from '../commands.module/events/item-created.event';
 import { ALLOWED_EVENT_ENTITIES } from './enums/allowedEntities.enum';
 import { ConfigService } from '@nestjs/config';
 
@@ -50,15 +51,16 @@ export class EventStore {
     this.logger.debug('Starting subscription to Eventstore');
     let lastEvent: AllStreamResolvedEvent;
     // Get last event from all streams
-    const lastEventStream = this.client.readAll({
-      direction: BACKWARDS,
-      fromPosition: END,
-    });
+    const lastEventStream: StreamingRead<AllStreamResolvedEvent> =
+      this.client.readAll({
+        direction: BACKWARDS,
+        fromPosition: END,
+      });
 
     for await (const resolvedEvent of lastEventStream) {
       // Check if stream of event is one of the content relevant streams
       if (
-        resolvedEvent.event.streamId.match(
+        resolvedEvent?.event?.streamId?.match(
           `(${Object.values(ALLOWED_EVENT_ENTITIES)
             .map((e) => `${e}-`)
             .join('|')}).*`,
@@ -100,8 +102,8 @@ export class EventStore {
       }
 
       this.publishEventToBus(
-        (resolvedEvent.event.data as any).eventType,
-        (resolvedEvent.event.data as any).value,
+        (resolvedEvent?.event?.data as any)?.eventType,
+        (resolvedEvent?.event?.data as any)?.value,
       );
     }
     this.logger.verbose(
