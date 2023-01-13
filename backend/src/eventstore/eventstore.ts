@@ -17,9 +17,9 @@ import { ItemCreatedEvent } from 'src/commands.module/events/item-created.event'
 import { ALLOWED_EVENT_ENTITIES } from './enums/allowedEntities.enum';
 import { ConfigService } from '@nestjs/config';
 
-export const logStringify = (obj: any) => {
-  return JSON.stringify(obj, null, 2);
-};
+/**
+ * @description Wrapper for eventstoreDb. Used for save interaction with eventstore
+ */
 @Injectable()
 export class EventStore {
   private readonly logger = new Logger(EventStore.name);
