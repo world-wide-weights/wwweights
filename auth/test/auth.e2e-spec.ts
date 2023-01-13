@@ -18,6 +18,9 @@ import { comparePassword } from './helpers/general.helper';
 import { RefreshJWTPayload } from '../src/auth/dtos/refresh-jwt-payload.dto';
 import { STATUS } from '../src/shared/enums/status.enum';
 import { SAMPLE_USER } from './helpers/sample-data.helper';
+import { RsaJWK } from '../src/auth/responses/jwks.response';
+import { JWTPayload } from '../src/shared/dtos/jwt-payload.dto';
+import * as jwkToPem from 'jwk-to-pem';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
@@ -293,6 +296,58 @@ describe('AuthController (e2e)', () => {
           .set('Authorization', `Bearer ${token}a`);
         // ASSERT
         expect(res.statusCode).toEqual(HttpStatus.UNAUTHORIZED);
+      });
+    });
+  });
+
+  describe('/auth/.well-known/jwks.json (GET)', function () {
+    describe('Positive Tests', () => {
+      it('Should contain a key entry for the base auth jwt', async () => {
+        // ACT
+        const res = await request(app.getHttpServer()).get(
+          '/auth/.well-known/jwks.json',
+        );
+        // ASSERT
+        expect(res.statusCode).toEqual(HttpStatus.OK);
+        expect(res.body).toHaveProperty('keys');
+        const expectedItem = res.body.keys.find(
+          (e) => e.kid === configService.get<string>('JWT_AUTH_KID'),
+        );
+        expect(expectedItem).toBeDefined();
+      });
+
+      it('Should return the complete key', async () => {
+        // ACT
+        const res = await request(app.getHttpServer()).get(
+          '/auth/.well-known/jwks.json',
+        );
+        // ASSERT
+        expect(res.statusCode).toEqual(HttpStatus.OK);
+        const expectedItem = res.body.keys.find(
+          (e) => e.kid === configService.get<string>('JWT_AUTH_KID'),
+        );
+        expect(expectedItem).toMatchObject(new RsaJWK(expectedItem));
+      });
+
+      it('Should return key that verifies JWTs encrypted with the private key', async () => {
+        // ARRANGE
+        const user = await createUser(dataSource, SAMPLE_USER);
+        const jwtToken = jwtService.sign({
+          id: user.pkUserId,
+          email: user.email,
+        } as JWTPayload);
+        // ACT
+        const res = await request(app.getHttpServer()).get(
+          '/auth/.well-known/jwks.json',
+        );
+        // ASSERT
+        expect(res.statusCode).toEqual(HttpStatus.OK);
+        const expectedItem = res.body.keys.find(
+          (e) => e.kid === configService.get<string>('JWT_AUTH_KID'),
+        );
+        const publickey = jwkToPem(expectedItem, {private: false}) 
+        const tokenPayload = jwtService.verify(jwtToken, {publicKey: publickey , algorithms: ['RS256']});
+        expect(tokenPayload).toBeDefined()
       });
     });
   });
