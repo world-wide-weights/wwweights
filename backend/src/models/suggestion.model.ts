@@ -15,5 +15,5 @@ export class Suggestion {
 
   @Expose()
   @prop({ required: true })
-  newItem: Item;
+  updatedItem: Item;
 }
