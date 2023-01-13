@@ -1,6 +1,12 @@
-import { Injectable, Logger } from '@nestjs/common';
 import {
+  Injectable,
+  Logger,
+  ServiceUnavailableException,
+} from '@nestjs/common';
+import {
+  AllStreamResolvedEvent,
   BACKWARDS,
+  END,
   EventStoreDBClient,
   jsonEvent,
   streamNameFilter,
@@ -8,11 +14,8 @@ import {
 } from '@eventstore/db-client';
 import { EventBus } from '@nestjs/cqrs';
 import { ItemCreatedEvent } from 'src/commands.module/events/item-created.event';
-import {
-  extractTypeFromStreamId,
-  generateStreamId,
-} from './helpers/eventstore.helpers';
 import { ALLOWED_EVENT_ENTITIES } from './enums/allowedEntities.enum';
+import { ConfigService } from '@nestjs/config';
 
 export const logStringify = (obj: any) => {
   return JSON.stringify(obj, null, 2);
@@ -22,17 +25,57 @@ export class EventStore {
   private readonly logger = new Logger(EventStore.name);
   private client: EventStoreDBClient;
   private readonly eventMap = new Map([['ItemCreatedEvent', ItemCreatedEvent]]);
+  isReady = false;
 
-  constructor(private readonly eventBus: EventBus) {
-    console.log('Constructor');
+  constructor(
+    private readonly eventBus: EventBus,
+    private readonly configService: ConfigService,
+  ) {
     this.client = EventStoreDBClient.connectionString(
-      'esdb://localhost:3011?tls=false',
+      `esdb://${configService.get<string>(
+        'DB_EVENTSTORE_USERNAME',
+      )}:${configService.get<string>(
+        'DB_EVENTSTORE_PW',
+      )}@${configService.get<string>(
+        'DB_EVENTSTORE_HOST',
+      )}?tls=${configService.get<string>('DB_EVENTSTORE_USE_TLS')}`,
     );
     this.init();
   }
 
+  /**
+   * @description Handle past events and the respective rebuild, initialize event subscription
+   */
   private async init() {
-    this.logger.verbose('Connection to EventstoreDB successfull');
+    this.logger.debug('Starting subscription to Eventstore');
+    let lastEvent: AllStreamResolvedEvent;
+    // Get last event from all streams
+    const lastEventStream = this.client.readAll({
+      direction: BACKWARDS,
+      fromPosition: END,
+    });
+
+    for await (const resolvedEvent of lastEventStream) {
+      // Check if stream of event is one of the content relevant streams
+      if (
+        resolvedEvent.event.streamId.match(
+          `(${Object.values(ALLOWED_EVENT_ENTITIES)
+            .map((e) => `${e}-`)
+            .join('|')}).*`,
+        ) &&
+        !lastEvent
+      ) {
+        lastEvent = resolvedEvent;
+        // Event found, there is no need for this anymore
+        await lastEventStream.cancel();
+      }
+    }
+    // Skip protective rebuild period of no events are in eventstore
+    if (!lastEvent) {
+      this.logger.verbose('Eventstore Replay skipped as it was empty');
+      this.isReady = true;
+    }
+
     const subscription = this.client.subscribeToAll({
       filter: streamNameFilter({
         // Build valid stream names by eventmap
@@ -40,9 +83,21 @@ export class EventStore {
       }),
     });
     for await (const resolvedEvent of subscription) {
-      console.log(
+      this.logger.debug(
         `Received event over eventstore stream ${resolvedEvent.event?.revision}@${resolvedEvent.event?.streamId}`,
       );
+
+      // If fetched event is the last event in store at startup time => rebuild is done
+      if (
+        !this.isReady &&
+        resolvedEvent.event.id === lastEvent.event.id &&
+        resolvedEvent.event.streamId === lastEvent.event.streamId
+      ) {
+        this.isReady = true;
+        this.logger.verbose(
+          'Finished Eventstore replay. Now ready to accept events',
+        );
+      }
 
       this.publishEventToBus(
         (resolvedEvent.event.data as any).eventType,
@@ -54,19 +109,21 @@ export class EventStore {
     );
   }
 
-  public async addEvent(
-    entityType: string,
-    eventType: any,
-    identifier: string,
-    event: any,
-  ) {
+  /**
+   * @description Add event to stream
+   */
+  public async addEvent(streamId, eventType: any, event: any) {
+    // If replay is not ready, don´t accept events to avoid inconsistent data
+    if (!this.isReady) {
+      throw new ServiceUnavailableException(
+        'Backend is not ready yet. Retry later',
+      );
+    }
     const parsedEvent = jsonEvent({
       type: 'grpc-client',
       data: { value: event, eventType: eventType },
     });
-    await this.client.appendToStream(generateStreamId(entityType, identifier), [
-      parsedEvent,
-    ]);
+    await this.client.appendToStream(streamId, [parsedEvent]);
   }
 
   /**
@@ -91,7 +148,7 @@ export class EventStore {
       maxCount: 1,
     });
     try {
-      for await (const event of result) {
+      for await (const _ of result) {
         return true;
       }
     } catch (e) {

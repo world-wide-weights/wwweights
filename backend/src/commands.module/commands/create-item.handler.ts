@@ -29,13 +29,16 @@ export class CreateItemHandler implements ICommandHandler<CreateItemCommand> {
       this.logger.debug('newItem', newItem);
       const eventItem = this.publisher.mergeObjectContext(newItem);
 
-      const eventId = this.eventStore.addEvent(
-        ALLOWED_EVENT_ENTITIES.ITEM,
+      if (await this.eventStore.doesStreamExist(`item-${eventItem.slug}`)) {
+        throw new ConflictException('Slug already taken');
+      }
+
+      await this.eventStore.addEvent(
+        `item-${eventItem.slug}`,
         'ItemCreatedEvent',
-        eventItem.slug,
         eventItem,
       );
-      this.logger.log(`EventId created: ${eventId}`);
+      this.logger.log(`Event created on stream: item-${eventItem.slug}`);
     } catch (error) {
       // If thrown error is already a valid HttpException => Throw that one instead
       if (error instanceof HttpException) {
