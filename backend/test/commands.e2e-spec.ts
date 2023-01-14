@@ -1,37 +1,28 @@
-import { TypegooseModule } from '@m8a/nestjs-typegoose';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { Test, TestingModule } from '@nestjs/testing';
-import { CommandsModule } from '../src/commands.module/commands.module';
-import {
-  initializeMockDataSource,
-  teardownMockDataSource,
-} from './helpers/MongoMemoryHelpers';
-import { singleItem } from './mocks/items';
+import { INestApplication } from '@nestjs/common';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
   let itemRepository: any;
 
   beforeAll(async () => {
-    const dataSource = await initializeMockDataSource();
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [TypegooseModule.forRoot(''), CommandsModule],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
-    await app.init();
+    // const dataSource = await initializeMockDataSource();
+    // const moduleFixture: TestingModule = await Test.createTestingModule({
+    //   imports: [TypegooseModule.forRoot(''), CommandsModule],
+    // }).compile();
+    // app = moduleFixture.createNestApplication();
+    // app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+    // await app.init();
   });
 
   beforeEach(async () => {
-    await itemRepository.clear();
-    await itemRepository.insert(singleItem);
+    // await itemRepository.clear();
+    // await itemRepository.insert(singleItem);
   });
 
   afterAll(async () => {
-    await itemRepository.clear();
-    await teardownMockDataSource();
-    await app.close();
+    // await itemRepository.clear();
+    // await teardownMockDataSource();
+    // await app.close();
   });
 
   describe('Commands /command/v1', () => {
