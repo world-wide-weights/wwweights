@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { BehaviorSubject } from 'rxjs';
+import { ItemInsertedEvent } from '../commands.module/events/item-inserted.event';
 
 export const logStringify = (obj: any) => {
   return JSON.stringify(obj, null, 2);
