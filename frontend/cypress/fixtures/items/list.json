@@ -1,11 +1,12 @@
 [
     {
-        "id": 100,
+        "id": "100",
         "name": "Cassiopeia IT-500 M30CR",
         "slug": "cassiopeia-it-500-m30cr",
         "weight": {
-            "value": "290",
-            "isCa": false
+            "value": 290,
+            "additionalValue": 330,
+            "isCa": true
         },
         "source": "https://phonedb.net/",
         "tags": [
@@ -28,12 +29,12 @@
         ]
     },
     {
-        "id": 101,
+        "id": "101",
         "name": "Cassiopeia IT-500 M30CB",
         "slug": "cassiopeia-it-500-m30cb",
         "weight": {
-            "value": "260",
-            "isCa": false
+            "value": 260,
+            "isCa": true
         },
         "source": "https://phonedb.net/",
         "tags": [
@@ -56,12 +57,12 @@
         ]
     },
     {
-        "id": 102,
+        "id": "102",
         "name": "Cassiopeia EM-500",
         "slug": "cassiopeia-em-500",
         "weight": {
-            "value": "218",
-            "isCa": false
+            "value": 218,
+            "isCa": true
         },
         "source": "https://phonedb.net/",
         "tags": [
@@ -84,11 +85,11 @@
         ]
     },
     {
-        "id": 103,
+        "id": "103",
         "name": "Cassiopeia EG-800",
         "slug": "cassiopeia-eg-800",
         "weight": {
-            "value": "295",
+            "value": 295,
             "isCa": false
         },
         "source": "https://phonedb.net/",
@@ -112,11 +113,11 @@
         ]
     },
     {
-        "id": 104,
+        "id": "104",
         "name": "Cassiopeia IT-700M30E",
         "slug": "cassiopeia-it-700m30e",
         "weight": {
-            "value": "340",
+            "value": 340,
             "isCa": false
         },
         "source": "https://phonedb.net/",
@@ -140,12 +141,12 @@
         ]
     },
     {
-        "id": 105,
+        "id": "105",
         "name": "iPAQ H6340 / H6345",
         "slug": "ipaq-h6340-h6345",
         "weight": {
-            "value": "190",
-            "isCa": false
+            "value": 190,
+            "isCa": true
         },
         "source": "https://phonedb.net/",
         "tags": [
@@ -168,11 +169,12 @@
         ]
     },
     {
-        "id": 106,
+        "id": "106",
         "name": "e830",
         "slug": "e830",
         "weight": {
-            "value": "198",
+            "value": 198,
+            "additionalValue": 235,
             "isCa": false
         },
         "source": "https://phonedb.net/",
@@ -196,12 +198,13 @@
         ]
     },
     {
-        "id": 107,
+        "id": "107",
         "name": "SPV E100",
         "slug": "spv-e100",
         "weight": {
-            "value": "127",
-            "isCa": false
+            "value": 127,
+            "additionalValue": 198,
+            "isCa": true
         },
         "source": "https://phonedb.net/",
         "tags": [
@@ -224,12 +227,13 @@
         ]
     },
     {
-        "id": 108,
+        "id": "108",
         "name": "MDA III",
         "slug": "mda-iii",
         "weight": {
-            "value": "212",
-            "isCa": false
+            "value": 212,
+            "additionalValue": 225,
+            "isCa": true
         },
         "source": "https://phonedb.net/",
         "tags": [
@@ -252,11 +256,11 @@
         ]
     },
     {
-        "id": 109,
+        "id": "109",
         "name": "XDA IIs / XDA III",
         "slug": "xda-iis-xda-iii",
         "weight": {
-            "value": "212",
+            "value": 212,
             "isCa": false
         },
         "source": "https://phonedb.net/",
@@ -280,11 +284,11 @@
         ]
     },
     {
-        "id": 10,
+        "id": "10",
         "name": "Cassiopeia E-105",
         "slug": "cassiopeia-e-105",
         "weight": {
-            "value": "255",
+            "value": 255,
             "isCa": false
         },
         "source": "https://phonedb.net/",
@@ -308,12 +312,13 @@
         ]
     },
     {
-        "id": 110,
+        "id": "110",
         "name": "PDA2k",
         "slug": "pda2k",
         "weight": {
-            "value": "212",
-            "isCa": false
+            "value": 212,
+            "additionalValue": 295,
+            "isCa": true
         },
         "source": "https://phonedb.net/",
         "tags": [
@@ -336,11 +341,11 @@
         ]
     },
     {
-        "id": 111,
+        "id": "111",
         "name": "SPV M2000",
         "slug": "spv-m2000",
         "weight": {
-            "value": "212",
+            "value": 212,
             "isCa": false
         },
         "source": "https://phonedb.net/",
@@ -364,12 +369,12 @@
         ]
     },
     {
-        "id": 112,
+        "id": "112",
         "name": 9090,
         "slug": "9090",
         "weight": {
-            "value": "212",
-            "isCa": false
+            "value": 212,
+            "isCa": true
         },
         "source": "https://phonedb.net/",
         "tags": [
@@ -392,12 +397,12 @@
         ]
     },
     {
-        "id": 113,
+        "id": "113",
         "name": "SX66",
         "slug": "sx66",
         "weight": {
-            "value": "208",
-            "isCa": false
+            "value": 208,
+            "isCa": true
         },
         "source": "https://phonedb.net/",
         "tags": [
@@ -420,11 +425,11 @@
         ]
     },
     {
-        "id": 114,
+        "id": "114",
         "name": "PPC-6601",
         "slug": "ppc-6601",
         "weight": {
-            "value": "208",
+            "value": 208,
             "isCa": false
         },
         "source": "https://phonedb.net/",
@@ -436,6 +441,2145 @@
             {
                 "name": "2004 Nov",
                 "slug": "2004-nov"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "115",
+        "name": "XDA IIi",
+        "slug": "xda-iii",
+        "weight": {
+            "value": 190,
+            "additionalValue": 257,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "O2",
+                "slug": "o2"
+            },
+            {
+                "name": "2005 Feb",
+                "slug": "2005-feb"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "116",
+        "name": "MDA",
+        "slug": "mda",
+        "weight": {
+            "value": 201,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "T-Mobile",
+                "slug": "t-mobile"
+            },
+            {
+                "name": "2002 Apr",
+                "slug": "2002-apr"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "117",
+        "name": "XDA",
+        "slug": "xda",
+        "weight": {
+            "value": 201,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "O2",
+                "slug": "o2"
+            },
+            {
+                "name": "2002 Apr",
+                "slug": "2002-apr"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "118",
+        "name": "1010 / 1020",
+        "slug": "1010-1020",
+        "weight": {
+            "value": 201,
+            "additionalValue": 225,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Qtek",
+                "slug": "qtek"
+            },
+            {
+                "name": "2002 May",
+                "slug": "2002-may"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "119",
+        "name": "SX56",
+        "slug": "sx56",
+        "weight": {
+            "value": 201,
+            "additionalValue": 211,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Siemens",
+                "slug": "siemens"
+            },
+            {
+                "name": "2002 Oct",
+                "slug": "2002-oct"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "11",
+        "name": "Cassiopeia E-115",
+        "slug": "cassiopeia-e-115",
+        "weight": {
+            "value": 255,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Casio",
+                "slug": "casio"
+            },
+            {
+                "name": "2000 May",
+                "slug": "2000-may"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": "120",
+        "name": "iPAQ rz1710 / rz1715",
+        "slug": "ipaq-rz1710-rz1715",
+        "weight": {
+            "value": 120,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Hewlett-Packard",
+                "slug": "hewlett-packard"
+            },
+            {
+                "name": "2004 Jul",
+                "slug": "2004-jul"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": "121",
+        "name": "iPAQ rz1717",
+        "slug": "ipaq-rz1717",
+        "weight": {
+            "value": 120,
+            "additionalValue": 175,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Hewlett-Packard",
+                "slug": "hewlett-packard"
+            },
+            {
+                "name": "2004 Jul",
+                "slug": "2004-jul"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": "122",
+        "name": "iPAQ rx3115",
+        "slug": "ipaq-rx3115",
+        "weight": {
+            "value": 147,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Hewlett-Packard",
+                "slug": "hewlett-packard"
+            },
+            {
+                "name": "2004 Jul",
+                "slug": "2004-jul"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": "123",
+        "name": "iPAQ rx3415",
+        "slug": "ipaq-rx3415",
+        "weight": {
+            "value": 147,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Hewlett-Packard",
+                "slug": "hewlett-packard"
+            },
+            {
+                "name": "2004 Jul",
+                "slug": "2004-jul"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": "124",
+        "name": "iPAQ rx3417",
+        "slug": "ipaq-rx3417",
+        "weight": {
+            "value": 147,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Hewlett-Packard",
+                "slug": "hewlett-packard"
+            },
+            {
+                "name": "2004 Jul",
+                "slug": "2004-jul"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": "125",
+        "name": "iPAQ rx3715",
+        "slug": "ipaq-rx3715",
+        "weight": {
+            "value": 158,
+            "additionalValue": 250,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Hewlett-Packard",
+                "slug": "hewlett-packard"
+            },
+            {
+                "name": "2004 Jul",
+                "slug": "2004-jul"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": "126",
+        "name": "iPAQ hx4700 / hx4705",
+        "slug": "ipaq-hx4700-hx4705",
+        "weight": {
+            "value": 186,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Hewlett-Packard",
+                "slug": "hewlett-packard"
+            },
+            {
+                "name": "2004 Jul 11",
+                "slug": "2004-jul-11"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": "127",
+        "name": "Pocket LOOX 720",
+        "slug": "pocket-loox-720",
+        "weight": {
+            "value": 175,
+            "additionalValue": 207,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Fujitsu-Siemens",
+                "slug": "fujitsu-siemens"
+            },
+            {
+                "name": "2004 Sep",
+                "slug": "2004-sep"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": "128",
+        "name": "Pocket LOOX 718",
+        "slug": "pocket-loox-718",
+        "weight": {
+            "value": 170,
+            "additionalValue": 250,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Fujitsu-Siemens",
+                "slug": "fujitsu-siemens"
+            },
+            {
+                "name": "2004 Nov",
+                "slug": "2004-nov"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": "129",
+        "name": "Pocket LOOX 710",
+        "slug": "pocket-loox-710",
+        "weight": {
+            "value": 175,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Fujitsu-Siemens",
+                "slug": "fujitsu-siemens"
+            },
+            {
+                "name": "2004 Sep",
+                "slug": "2004-sep"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": "12",
+        "name": "Cassiopeia E-125",
+        "slug": "cassiopeia-e-125",
+        "weight": {
+            "value": 250,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Casio",
+                "slug": "casio"
+            },
+            {
+                "name": "2000 May",
+                "slug": "2000-may"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": "130",
+        "name": "Axim X50 Basic",
+        "slug": "axim-x50-basic",
+        "weight": {
+            "value": 167,
+            "additionalValue": 227,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Dell",
+                "slug": "dell"
+            },
+            {
+                "name": "2004 Oct",
+                "slug": "2004-oct"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": "131",
+        "name": "Axim X50 Advanced",
+        "slug": "axim-x50-advanced",
+        "weight": {
+            "value": 167,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Dell",
+                "slug": "dell"
+            },
+            {
+                "name": "2004 Oct",
+                "slug": "2004-oct"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": "132",
+        "name": "Axim X50v",
+        "slug": "axim-x50v",
+        "weight": {
+            "value": 167,
+            "additionalValue": 234,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Dell",
+                "slug": "dell"
+            },
+            {
+                "name": "2004 Oct",
+                "slug": "2004-oct"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": "133",
+        "name": "MDA Compact",
+        "slug": "mda-compact",
+        "weight": {
+            "value": 155,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "T-Mobile",
+                "slug": "t-mobile"
+            },
+            {
+                "name": "2005 Jan",
+                "slug": "2005-jan"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "134",
+        "name": "XDA II mini",
+        "slug": "xda-ii-mini",
+        "weight": {
+            "value": 155,
+            "additionalValue": 161,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "O2",
+                "slug": "o2"
+            },
+            {
+                "name": "2005 Jan",
+                "slug": "2005-jan"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "135",
+        "name": "JAM",
+        "slug": "jam",
+        "weight": {
+            "value": 155,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "I-Mate",
+                "slug": "i-mate"
+            },
+            {
+                "name": "2004 Dec",
+                "slug": "2004-dec"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "136",
+        "name": "S100",
+        "slug": "s100",
+        "weight": {
+            "value": 155,
+            "additionalValue": 175,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Qtek",
+                "slug": "qtek"
+            },
+            {
+                "name": "2005 Apr",
+                "slug": "2005-apr"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "137",
+        "name": "Mio 8390 Digi-Walker",
+        "slug": "mio-8390-digi-walker",
+        "weight": {
+            "value": 125,
+            "additionalValue": 161,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "MiTAC",
+                "slug": "mitac"
+            },
+            {
+                "name": "2004 Feb",
+                "slug": "2004-feb"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "138",
+        "name": "Mio 8380 Digi-Walker",
+        "slug": "mio-8380-digi-walker",
+        "weight": {
+            "value": 143,
+            "additionalValue": 231,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "MiTAC",
+                "slug": "mitac"
+            },
+            {
+                "name": "2003 May",
+                "slug": "2003-may"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "139",
+        "name": "Mio 8870 Digi-Walker",
+        "slug": "mio-8870-digi-walker",
+        "weight": {
+            "value": 120,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "MiTAC",
+                "slug": "mitac"
+            },
+            {
+                "name": "2004 Dec",
+                "slug": "2004-dec"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "13",
+        "name": "Jornada 710",
+        "slug": "jornada-710",
+        "weight": {
+            "value": 510,
+            "additionalValue": 549,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Hewlett-Packard",
+                "slug": "hewlett-packard"
+            },
+            {
+                "name": "2000 Oct",
+                "slug": "2000-oct"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Palmtop",
+                "slug": "palmtop"
+            }
+        ]
+    },
+    {
+        "id": "140",
+        "name": "R1000 TDA",
+        "slug": "r1000-tda",
+        "weight": {
+            "value": 180,
+            "additionalValue": 270,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Olympus",
+                "slug": "olympus"
+            },
+            {
+                "name": "2005 Mar",
+                "slug": "2005-mar"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": "141",
+        "name": "iPAQ hw6515",
+        "slug": "ipaq-hw6515",
+        "weight": {
+            "value": 165,
+            "additionalValue": 175,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Hewlett-Packard",
+                "slug": "hewlett-packard"
+            },
+            {
+                "name": "2005 Aug",
+                "slug": "2005-aug"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "142",
+        "name": "iPAQ hx2110 / hx2115",
+        "slug": "ipaq-hx2110-hx2115",
+        "weight": {
+            "value": 164,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Hewlett-Packard",
+                "slug": "hewlett-packard"
+            },
+            {
+                "name": "2005 Jan",
+                "slug": "2005-jan"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": "143",
+        "name": "iPAQ hx2410 / hx2415",
+        "slug": "ipaq-hx2410-hx2415",
+        "weight": {
+            "value": 164,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Hewlett-Packard",
+                "slug": "hewlett-packard"
+            },
+            {
+                "name": "2005 Jan",
+                "slug": "2005-jan"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": "144",
+        "name": "iPAQ hx2750 / hx2755",
+        "slug": "ipaq-hx2750-hx2755",
+        "weight": {
+            "value": 164,
+            "additionalValue": 213,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Hewlett-Packard",
+                "slug": "hewlett-packard"
+            },
+            {
+                "name": "2005 Jan",
+                "slug": "2005-jan"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": "145",
+        "name": "Mio 268 Digi-Walker",
+        "slug": "mio-268-digi-walker",
+        "weight": {
+            "value": 232,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "MiTAC",
+                "slug": "mitac"
+            },
+            {
+                "name": "2005 Jan",
+                "slug": "2005-jan"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PNA",
+                "slug": "pna"
+            }
+        ]
+    },
+    {
+        "id": "146",
+        "name": "Mio 269 Digi-Walker",
+        "slug": "mio-269-digi-walker",
+        "weight": {
+            "value": 238,
+            "additionalValue": 289,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "MiTAC",
+                "slug": "mitac"
+            },
+            {
+                "name": "2005 Jan",
+                "slug": "2005-jan"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PNA",
+                "slug": "pna"
+            }
+        ]
+    },
+    {
+        "id": "147",
+        "name": "PDA2 Pocket PC",
+        "slug": "pda2-pocket-pc",
+        "weight": {
+            "value": 190,
+            "additionalValue": 272,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "I-Mate",
+                "slug": "i-mate"
+            },
+            {
+                "name": "2005 May",
+                "slug": "2005-may"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "148",
+        "name": "MDA Pro",
+        "slug": "mda-pro",
+        "weight": {
+            "value": 285,
+            "additionalValue": 333,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "T-Mobile",
+                "slug": "t-mobile"
+            },
+            {
+                "name": "2005 Oct",
+                "slug": "2005-oct"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "149",
+        "name": "VPA IV / v1640",
+        "slug": "vpa-iv-v1640",
+        "weight": {
+            "value": 285,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Vodafone",
+                "slug": "vodafone"
+            },
+            {
+                "name": "2006 Apr",
+                "slug": "2006-apr"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "14",
+        "name": "Jornada 680",
+        "slug": "jornada-680",
+        "weight": {
+            "value": 510,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Hewlett-Packard",
+                "slug": "hewlett-packard"
+            },
+            {
+                "name": "1999 Apr",
+                "slug": "1999-apr"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Palmtop",
+                "slug": "palmtop"
+            }
+        ]
+    },
+    {
+        "id": "150",
+        "name": "VPA Compact",
+        "slug": "vpa-compact",
+        "weight": {
+            "value": 155,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Vodafone",
+                "slug": "vodafone"
+            },
+            {
+                "name": "2005 May",
+                "slug": "2005-may"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "151",
+        "name": "iPAQ hw6915 Mobile Messenger / hw6925 / hw6945 / hw6965 / HSTNH-H06C-WL",
+        "slug": "ipaq-hw6915-mobile-messenger-hw6925-hw6945-hw6965-hstnh-h06c-wl",
+        "weight": {
+            "value": 179,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Hewlett-Packard",
+                "slug": "hewlett-packard"
+            },
+            {
+                "name": "2006 Apr",
+                "slug": "2006-apr"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "152",
+        "name": "MPx",
+        "slug": "mpx",
+        "weight": {
+            "value": 174,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Motorola",
+                "slug": "motorola"
+            },
+            {
+                "name": "Cancelled",
+                "slug": "cancelled"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "153",
+        "name": "SDA",
+        "slug": "sda",
+        "weight": {
+            "value": 102,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "T-Mobile",
+                "slug": "t-mobile"
+            },
+            {
+                "name": "2004 Dec",
+                "slug": "2004-dec"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "154",
+        "name": "SDA Music",
+        "slug": "sda-music",
+        "weight": {
+            "value": 106,
+            "additionalValue": 146,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "T-Mobile",
+                "slug": "t-mobile"
+            },
+            {
+                "name": "2004 Dec",
+                "slug": "2004-dec"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "155",
+        "name": "SDA II Music",
+        "slug": "sda-ii-music",
+        "weight": {
+            "value": 107,
+            "additionalValue": 171,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "T-Mobile",
+                "slug": "t-mobile"
+            },
+            {
+                "name": "2005 Nov",
+                "slug": "2005-nov"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "156",
+        "name": "SDA II",
+        "slug": "sda-ii",
+        "weight": {
+            "value": 107,
+            "additionalValue": 195,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "T-Mobile",
+                "slug": "t-mobile"
+            },
+            {
+                "name": "Cancelled",
+                "slug": "cancelled"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "157",
+        "name": "P50",
+        "slug": "p50",
+        "weight": {
+            "value": 179,
+            "additionalValue": 228,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "BenQ",
+                "slug": "benq"
+            },
+            {
+                "name": "2006 Jan",
+                "slug": "2006-jan"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "158",
+        "name": "n30",
+        "slug": "n30",
+        "weight": {
+            "value": 130,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Acer",
+                "slug": "acer"
+            },
+            {
+                "name": "2004 May",
+                "slug": "2004-may"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": "159",
+        "name": "n35",
+        "slug": "n35",
+        "weight": {
+            "value": 165,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Acer",
+                "slug": "acer"
+            },
+            {
+                "name": "2004 Dec",
+                "slug": "2004-dec"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": "15",
+        "name": "Jornada 690",
+        "slug": "jornada-690",
+        "weight": {
+            "value": 510,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Hewlett-Packard",
+                "slug": "hewlett-packard"
+            },
+            {
+                "name": "1999 Nov",
+                "slug": "1999-nov"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Palmtop",
+                "slug": "palmtop"
+            }
+        ]
+    },
+    {
+        "id": "160",
+        "name": "n50",
+        "slug": "n50",
+        "weight": {
+            "value": 150,
+            "additionalValue": 211,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Acer",
+                "slug": "acer"
+            },
+            {
+                "name": "2004 Dec",
+                "slug": "2004-dec"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": "161",
+        "name": "InfoTouch M500",
+        "slug": "infotouch-m500",
+        "weight": {
+            "value": 170,
+            "additionalValue": 186,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "E-TEN",
+                "slug": "e-ten"
+            },
+            {
+                "name": "2005 Jan",
+                "slug": "2005-jan"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "162",
+        "name": "n10",
+        "slug": "n10",
+        "weight": {
+            "value": 165,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Acer",
+                "slug": "acer"
+            },
+            {
+                "name": "2003 Nov",
+                "slug": "2003-nov"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "PDA",
+                "slug": "pda"
+            }
+        ]
+    },
+    {
+        "id": "163",
+        "name": "WorkPad z50",
+        "slug": "workpad-z50",
+        "weight": {
+            "value": 1206,
+            "additionalValue": 1255,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "IBM",
+                "slug": "ibm"
+            },
+            {
+                "name": "1999 May",
+                "slug": "1999-may"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Subnotebook",
+                "slug": "subnotebook"
+            }
+        ]
+    },
+    {
+        "id": "164",
+        "name": "2020i",
+        "slug": "2020i",
+        "weight": {
+            "value": 190,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Qtek",
+                "slug": "qtek"
+            },
+            {
+                "name": "2005 May",
+                "slug": "2005-may"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "165",
+        "name": "SPV M2500",
+        "slug": "spv-m2500",
+        "weight": {
+            "value": 190,
+            "additionalValue": 256,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Orange",
+                "slug": "orange"
+            },
+            {
+                "name": "2005 Jul",
+                "slug": "2005-jul"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "166",
+        "name": "SCH-M400",
+        "slug": "sch-m400",
+        "weight": {
+            "value": 207,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Samsung",
+                "slug": "samsung"
+            },
+            {
+                "name": "2003 Aug",
+                "slug": "2003-aug"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "167",
+        "name": "MC12",
+        "slug": "mc12",
+        "weight": {
+            "value": 442,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Ericsson",
+                "slug": "ericsson"
+            },
+            {
+                "name": "1996 Dec",
+                "slug": "1996-dec"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Palmtop",
+                "slug": "palmtop"
+            }
+        ]
+    },
+    {
+        "id": "168",
+        "name": "Palmtop 320LX",
+        "slug": "palmtop-320lx",
+        "weight": {
+            "value": 442,
+            "additionalValue": 455,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Hewlett-Packard",
+                "slug": "hewlett-packard"
+            },
+            {
+                "name": "1996 Dec",
+                "slug": "1996-dec"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Palmtop",
+                "slug": "palmtop"
+            }
+        ]
+    },
+    {
+        "id": "169",
+        "name": "Palmtop 360LX",
+        "slug": "palmtop-360lx",
+        "weight": {
+            "value": 457,
+            "additionalValue": 486,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Hewlett-Packard",
+                "slug": "hewlett-packard"
+            },
+            {
+                "name": "1997 Jun",
+                "slug": "1997-jun"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Palmtop",
+                "slug": "palmtop"
+            }
+        ]
+    },
+    {
+        "id": "16",
+        "name": "Jornada 820",
+        "slug": "jornada-820",
+        "weight": {
+            "value": 1115,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Hewlett-Packard",
+                "slug": "hewlett-packard"
+            },
+            {
+                "name": "1999 Jan",
+                "slug": "1999-jan"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Subnotebook",
+                "slug": "subnotebook"
+            }
+        ]
+    },
+    {
+        "id": "170",
+        "name": "Palmtop 340LX",
+        "slug": "palmtop-340lx",
+        "weight": {
+            "value": 452,
+            "additionalValue": 461,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Hewlett-Packard",
+                "slug": "hewlett-packard"
+            },
+            {
+                "name": "1997 Jun",
+                "slug": "1997-jun"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Palmtop",
+                "slug": "palmtop"
+            }
+        ]
+    },
+    {
+        "id": "171",
+        "name": "MC16",
+        "slug": "mc16",
+        "weight": {
+            "value": 457,
+            "additionalValue": 524,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Ericsson",
+                "slug": "ericsson"
+            },
+            {
+                "name": "1998 Jun",
+                "slug": "1998-jun"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Palmtop",
+                "slug": "palmtop"
+            }
+        ]
+    },
+    {
+        "id": "172",
+        "name": "Palmtop 300LX",
+        "slug": "palmtop-300lx",
+        "weight": {
+            "value": 430,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Hewlett-Packard",
+                "slug": "hewlett-packard"
+            },
+            {
+                "name": "1996 Dec",
+                "slug": "1996-dec"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Palmtop",
+                "slug": "palmtop"
+            }
+        ]
+    },
+    {
+        "id": "173",
+        "name": "Palmtop 620LX",
+        "slug": "palmtop-620lx",
+        "weight": {
+            "value": 586,
+            "additionalValue": 608,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Hewlett-Packard",
+                "slug": "hewlett-packard"
+            },
+            {
+                "name": "1997 Sep",
+                "slug": "1997-sep"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Palmtop",
+                "slug": "palmtop"
+            }
+        ]
+    },
+    {
+        "id": "174",
+        "name": "Palmtop 660LX",
+        "slug": "palmtop-660lx",
+        "weight": {
+            "value": 586,
+            "additionalValue": 650,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Hewlett-Packard",
+                "slug": "hewlett-packard"
+            },
+            {
+                "name": "1997 Sep",
+                "slug": "1997-sep"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Palmtop",
+                "slug": "palmtop"
+            }
+        ]
+    },
+    {
+        "id": "175",
+        "name": "InfoTouch P300",
+        "slug": "infotouch-p300",
+        "weight": {
+            "value": 165,
+            "additionalValue": 260,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "E-TEN",
+                "slug": "e-ten"
+            },
+            {
+                "name": "2003 Sep",
+                "slug": "2003-sep"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "176",
+        "name": "InfoTouch P300B",
+        "slug": "infotouch-p300b",
+        "weight": {
+            "value": 165,
+            "additionalValue": 253,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "E-TEN",
+                "slug": "e-ten"
+            },
+            {
+                "name": "2004 May",
+                "slug": "2004-may"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "177",
+        "name": "InfoTouch P700",
+        "slug": "infotouch-p700",
+        "weight": {
+            "value": 200,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "E-TEN",
+                "slug": "e-ten"
+            },
+            {
+                "name": "2004 Feb",
+                "slug": "2004-feb"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "178",
+        "name": "InfoTouch P600",
+        "slug": "infotouch-p600",
+        "weight": {
+            "value": 210,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "E-TEN",
+                "slug": "e-ten"
+            },
+            {
+                "name": "2003 Mar",
+                "slug": "2003-mar"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "179",
+        "name": "InfoTouch P603",
+        "slug": "infotouch-p603",
+        "weight": {
+            "value": 210,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "E-TEN",
+                "slug": "e-ten"
+            },
+            {
+                "name": "2003 Jun",
+                "slug": "2003-jun"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "17",
+        "name": "Gigaset CL4 SIMpad",
+        "slug": "gigaset-cl4-simpad",
+        "weight": {
+            "value": 950,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Siemens",
+                "slug": "siemens"
+            },
+            {
+                "name": "2001 Jun",
+                "slug": "2001-jun"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Tablet",
+                "slug": "tablet"
+            }
+        ]
+    },
+    {
+        "id": "180",
+        "name": "InfoTouch P610",
+        "slug": "infotouch-p610",
+        "weight": {
+            "value": 210,
+            "additionalValue": 268,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "E-TEN",
+                "slug": "e-ten"
+            },
+            {
+                "name": "2003 Nov",
+                "slug": "2003-nov"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "181",
+        "name": "MPx200",
+        "slug": "mpx200",
+        "weight": {
+            "value": 118,
+            "additionalValue": 136,
+            "isCa": true
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Motorola",
+                "slug": "motorola"
+            },
+            {
+                "name": "2003 Nov",
+                "slug": "2003-nov"
+            },
+            {
+                "name": "Windows (mobile-class)",
+                "slug": "windows-(mobile-class)"
+            },
+            {
+                "name": "Smartphone",
+                "slug": "smartphone"
+            }
+        ]
+    },
+    {
+        "id": "182",
+        "name": "MPx220",
+        "slug": "mpx220",
+        "weight": {
+            "value": 114,
+            "additionalValue": 163,
+            "isCa": false
+        },
+        "source": "https://phonedb.net/",
+        "tags": [
+            {
+                "name": "Motorola",
+                "slug": "motorola"
+            },
+            {
+                "name": "2004 Dec",
+                "slug": "2004-dec"
             },
             {
                 "name": "Windows (mobile-class)",

@@ -3,6 +3,7 @@ import { Ellipsis } from "../../services/pagination/pagination"
 import { RoutePagination } from "../../services/routes/routes"
 import { Button } from "../Button/Button"
 import { IconButton } from "../Button/IconButton"
+import { SortType } from "../Sort/Sort"
 
 export type PaginationProps = {
     /** The total number of items. */
@@ -17,15 +18,17 @@ export type PaginationProps = {
     defaultItemsPerPage?: number
     /** Customize count of siblings shown between the dots. Examples: `1 => 1 .. (4) 5 (6) ... 15` `2 => 1 .. (4) (5) 6 (7) (8) ... 15` */
     siblingCount?: number
-    /** Search query. */
+    /** Search query for baseurl. */
     query?: string
+    /** Sort type for baseurl. */
+    sort?: SortType
 }
 
 /**
  * Pagination component contains the complete logic for paginate correct
  */
-export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage, baseRoute, itemsPerPage, query = "", defaultItemsPerPage = 16, siblingCount = 1 }) => {
-    const paginationService = usePagination({ currentPage, totalItems, siblingCount, itemsPerPage, baseRoute, defaultItemsPerPage, query })
+export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage, baseRoute, itemsPerPage, query = "", sort = "", defaultItemsPerPage = 16, siblingCount = 1 }) => {
+    const paginationService = usePagination({ currentPage, totalItems, siblingCount, itemsPerPage, baseRoute, defaultItemsPerPage, query, sort })
 
     // If our pagination array length is less than 2 to we should not render component (because there are not enough items for pagination)
     if (currentPage === 0 || paginationService.pages.length < 2) {

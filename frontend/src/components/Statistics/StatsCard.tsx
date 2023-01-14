@@ -22,8 +22,8 @@ export const StatsCard: React.FC<StatsProps> = ({ icon, descriptionTop, value, d
             <Icon className="text-blue-700 text-3xl" isFilled>{icon}</Icon>
         </div>
         <div>
-            {descriptionTop && <span className="font-semibold text-gray-600">{descriptionTop}</span>}
-            <h5 className="font-bold text-2xl leading-6">{value}</h5>
+            {descriptionTop && <span className="font-medium text-gray-600">{descriptionTop}</span>}
+            <h5 className="font-bold text-xl leading-6">{value}</h5>
             {descriptionBottom && <p className="text-gray-700">{descriptionBottom}</p>}
         </div>
     </div >

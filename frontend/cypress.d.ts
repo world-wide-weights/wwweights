@@ -43,6 +43,19 @@ declare global {
        * @param itemCount count of items getting back with body
        */
       mockWeightsPage(itemCount?: number): Chainable<void>
+      /**
+       * Mocks user session
+       */
+      mockSession(): Chainable<void>
+      /**
+       * Mock login.
+       * Can't mock login direct because of next auth.
+       */
+      mockCredentials(): Chainable<void>
+      /**
+       * Mock create item request.
+       */
+      mockCreateItem(): Chainable<void>
     }
   }
 }

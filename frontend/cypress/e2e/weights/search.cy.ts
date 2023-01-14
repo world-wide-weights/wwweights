@@ -1,3 +1,4 @@
+import { routes } from "../../../src/services/routes/routes"
 import items from "../../fixtures/items/list.json"
 import relatedTags from "../../fixtures/tags/related.json"
 
@@ -6,14 +7,14 @@ describe('Search /weights', () => {
         beforeEach(() => {
             cy.mockWeightsPage()
 
-            cy.visitLocalPage("/weights")
+            cy.visitLocalPage(routes.weights.list())
             cy.wait('@mockGetRelatedTags')
         })
 
         // This test seems to be flaky: https://github.com/cypress-io/cypress/issues/3817
         // it('should search items when click search items', () => {
         //     cy.dataCy('search').type(items[0].tags[0].slug)
-        //     cy.dataCy('text-input-submit-icon-query').click()
+        //     cy.dataCy('text-input-icon-query').click()
 
         //     cy.url().should('include', items[0].tags[0].slug)
         // })
@@ -25,7 +26,7 @@ describe('Search /weights', () => {
         // })
 
         it('should search items when query in url', () => {
-            cy.visitLocalPage(`/weights?query=${items[0].tags[0].slug}`)
+            cy.visitLocalPage(routes.weights.list({ query: items[0].tags[0].slug }))
             cy.wait('@mockGetRelatedTags')
 
             cy.dataCy('search').should('have.value', items[0].tags[0].slug)
@@ -36,7 +37,7 @@ describe('Search /weights', () => {
         beforeEach(() => {
             cy.mockWeightsPage()
 
-            cy.visitLocalPage("/weights")
+            cy.visitLocalPage(routes.weights.list())
             cy.wait('@mockGetRelatedTags')
         })
 
@@ -44,7 +45,7 @@ describe('Search /weights', () => {
             beforeEach(() => {
                 // Search item
                 cy.dataCy('search').type(items[0].tags[0].slug)
-                cy.dataCy('text-input-submit-icon-query').click()
+                cy.dataCy('text-input-icon-query').click()
             })
 
             it('should display tags when search', () => {

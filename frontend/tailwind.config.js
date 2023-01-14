@@ -27,21 +27,11 @@ module.exports = {
         '2xl': '12rem',
       },
     },
-    fontSize: {
-      sm: '0.8rem',
-      base: '0.9rem',
-      lg: '1.0rem',
-      xl: '1.2rem',
-      "2xl": '1.463rem',
-      "3xl": '1.853rem',
-      "4xl": '2.341rem',
-      "5xl": '2.952rem',
-    },
     extend: {
       colors: {
         blue: {
-          '50': '#98C6FB',
-          '100': '#84BBFA',
+          '50': '#e6effa',
+          '100': '#cae8fc',
           '200': '#BAE3FF',
           '300': '#3690F6',
           '400': '#0F7AF5',
@@ -53,20 +43,22 @@ module.exports = {
         },
         gray: {
           '100': '#F5F7FA',
-          '200': '#E4E7EB',
+          '200': '#DDE5EF',
           '300': '#CBD2D9',
-          '400': '#9AA581',
+          '400': '#b5bec7',
           '500': '#7B8794',
           '600': '#616E7C',
           '700': '#3E4C59',
           '800': '#323F48',
           '900': '#1F2933',
         }
+      }, backgroundImage: {
+        'background-half-page': `url('../../public/background_half_page.svg')`,
       }
     },
     fontFamily: {
-      sans: ['var(--font-montserrat)', ...fontFamily.sans],
-    }
+      sans: ['var(--font-metropolis)', ...fontFamily.sans],
+    },
   },
   plugins: [],
 };

@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CommandsModule } from './commands.module/commands.module';
 import { QueriesModule } from './queries.module/queries.module';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { QueriesModule } from './queries.module/queries.module';
     }),
     CommandsModule,
     QueriesModule,
+    SharedModule,
   ],
 })
 export class AppModule {}

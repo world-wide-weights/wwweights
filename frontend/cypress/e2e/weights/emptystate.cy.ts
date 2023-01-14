@@ -1,10 +1,12 @@
+import { routes } from "../../../src/services/routes/routes"
+
 const SEARCH_QUERY = "apple"
 
 describe('Empty State /weights', () => {
     beforeEach(() => {
         cy.mockWeightsPage(0)
 
-        cy.visitLocalPage(`/weights?query=${SEARCH_QUERY}`)
+        cy.visitLocalPage(routes.weights.list({ query: SEARCH_QUERY }))
         cy.wait('@mockGetRelatedTags')
     })
 

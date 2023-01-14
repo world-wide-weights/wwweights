@@ -4,6 +4,7 @@ import items from "../fixtures/items/list.json"
 import statistics from "../fixtures/items/statistics.json"
 
 const apiBaseUrl = Cypress.env("API_BASE_URL")
+const clientBaseUrl = Cypress.env("CLIENT_BASE_URL")
 
 Cypress.Commands.add('dataCy', (dataCy, customSelector = "") => {
     cy.get(`[datacy=${dataCy}]${customSelector}`)
@@ -36,7 +37,7 @@ Cypress.Commands.add('mockWeightsPage', (itemCount?: number) => {
     cy.task('nock', {
         hostname: apiBaseUrl,
         method: 'get',
-        path: `/api/query/v1/items/list`,
+        path: `/items`, // TODO (Zoe-Bot): Update url when correct api is used
         statusCode: 200,
         body
     })
@@ -50,6 +51,24 @@ Cypress.Commands.add('mockWeightsPage', (itemCount?: number) => {
     })
 
     cy.mockGetRelatedTags()
+})
+
+Cypress.Commands.add('mockSession', () => {
+    cy.intercept('GET', `${clientBaseUrl}/api/auth/session`, {
+        fixture: "/authentication/session.json"
+    }).as('mockSession')
+})
+
+Cypress.Commands.add('mockCredentials', () => {
+    cy.intercept('POST', `${clientBaseUrl}/api/auth/callback/credentials?`, {
+        url: `${clientBaseUrl}/account/login`
+    }).as('mockCredentials')
+})
+
+Cypress.Commands.add('mockCreateItem', () => {
+    cy.intercept('POST', `${apiBaseUrl}/items`, {
+        url: `${clientBaseUrl}/account/login`
+    }).as('mockCreateItem')
 })
 
 export { }

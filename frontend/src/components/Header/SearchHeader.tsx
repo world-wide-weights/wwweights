@@ -4,17 +4,21 @@ import { useEffect, useState } from "react";
 import { Tag } from "../../pages/tags";
 import { routes } from "../../services/routes/routes";
 import { Chip } from "../Chip/Chip";
-import { Search } from "../Form/Search/Search";
+import { Headline } from "../Headline/Headline";
+import { Search } from "../Search/Search";
+import { SortType } from "../Sort/Sort";
 
 type SearchHeaderProps = {
     /** Search query. */
     query?: string
+    /** Sort type of items. */
+    sort?: SortType
 }
 
 /**
  * Header with search and search suggestions
  */
-export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "" }) => {
+export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "asc" }) => {
     const router = useRouter()
 
     // Local States
@@ -32,7 +36,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "" }) => {
      * @param formValues 
      */
     const submitForm = (formValues: typeof initialQueryValues) => {
-        router.push(routes.weights.list({ query: formValues.query }))
+        router.push(routes.weights.list({ sort, query: formValues.query }))
     }
 
     /**
@@ -77,7 +81,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "" }) => {
     return <header className="bg-white pt-2 md:pt-5 pb-3 md:pb-10">
         <div className="container">
             <div className="md:flex md:flex-col md:items-center">
-                <h1 className="font-semibold text-xl text-center md:text-3xl mb-2">Wie viel wiegt?</h1>
+                <Headline level={2} size="text-2xl md:text-3xl" className="text-center">Wie viel wiegt?</Headline>
                 <Formik initialValues={initialQueryValues} onSubmit={submitForm}>
                     <Form>
                         <div className="md:flex md:justify-center">
@@ -85,11 +89,11 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "" }) => {
                                 <Search />
                             </div>
                         </div>
-                        {/* TODO(Zoe-bot): Loading Component and scrollable tags */}
-                        {/* TODO(Zoe-bot): Only develop Remove query !== "" condition when normal backend api is set */}
+                        {/* TODO (Zoe-bot): Loading Component and scrollable tags */}
+                        {/* TODO (Zoe-bot): Only develop Remove query !== "" condition when normal backend api is set */}
                         {query !== "" && (isLoadingRelatedTags ? <p>Loading...</p> : <div datacy="search-header-tag-wrapper" className="whitespace-nowrap overflow-x-scroll md:whitespace-normal md:overflow-hidden">
                             {/* Only show tags not current searched (should not be the value in query field) */}
-                            {relatedTags.map(relatedTag => relatedTag.slug !== query && <Chip key={relatedTag.slug} to={routes.weights.list({ query: relatedTag.slug })}>{relatedTag.name}</Chip>)}
+                            {relatedTags.map(relatedTag => relatedTag.slug !== query && <Chip key={relatedTag.slug} to={routes.weights.list({ sort, query: relatedTag.slug })}>{relatedTag.name}</Chip>)}
                         </div>)}
                         <AutoUpdateQueryField />
                     </Form>
