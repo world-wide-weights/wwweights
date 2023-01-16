@@ -1,66 +1,57 @@
 import { AggregateRoot } from '@nestjs/cqrs';
+import { index, prop } from '@typegoose/typegoose';
 import { Expose, Transform } from 'class-transformer';
-import slugify from 'slugify';
-import { Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
+import { ObjectId } from 'mongoose';
 
 export class Weight {
   @Expose()
-  @Column()
+  @prop({ required: true })
   // This is always in grams and scientific notation example: 1.234e10
   value: number;
 
   @Expose()
-  @Column()
+  @prop()
   isCa? = false;
 
   @Expose()
-  @Column({ nullable: true })
+  @prop()
   aditionalValue?: number;
 }
 
-@Entity()
+@index({ name: 'text', tags: 'text' }, { weights: { name: 10, tags: 5 } })
 export class Item extends AggregateRoot {
-  @ObjectIdColumn()
   @Expose({ name: 'id' })
-  _id: ObjectID;
+  // Have to do this optionally since it would throw an error on plainToInstance because _id doesn't exist in the DTOs and we only need it on instanceToPlain
+  @Transform((params) => params.obj._id?.toString())
+  _id?: ObjectId;
 
   @Expose()
-  @Column({ unique: true })
+  @prop({ required: true, unique: true })
   name: string;
 
   @Expose()
-  @Transform((params) => {
-    return slugify(params.obj.name, {
-      strict: true,
-      lower: true,
-      trim: true,
-    });
-  })
-  @Column({ unique: true })
+  @prop({ required: true, unique: true })
   slug: string;
 
   @Expose()
-  @Column(() => Weight)
+  @prop({ type: () => Weight, _id: false })
   weight: Weight;
 
-  // TODO: Temporary solution, needs to be @ManyToMany
   @Expose()
-  @Column('text', { array: true })
+  @prop({ array: true, type: () => [String] })
   //@ManyToMany(() => Tag, (tag) => tag.items) No Tags yet
   tags?: string[];
 
   @Expose()
-  @Column()
+  @prop()
   image?: string; // Link to static store or base-64 Encoded?
 
-  // TODO: Temporary solution
   @Expose()
-  @Column()
+  @prop()
   source?: string;
 
-  // TODO: Temporary solution needs to be @ManyToOne
   @Expose()
-  @Column()
+  @prop()
   user: string;
 
   constructor(partial: Partial<Item>) {
