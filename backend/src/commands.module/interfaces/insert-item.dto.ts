@@ -10,7 +10,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-export class Weight {
+class Weight {
   @IsNumber()
   @ApiProperty({ default: '1.234e100' })
   value: number;
@@ -26,6 +26,23 @@ export class Weight {
   aditionalValue?: number;
 }
 
+export class InsertItemTag {
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty()
+  name: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiPropertyOptional()
+  slug?: string;
+
+  @IsNumber()
+  @IsOptional()
+  @ApiPropertyOptional()
+  count?: number;
+}
+
 export class InsertItemDto {
   // TODO: Slug here or on event write
   @IsString()
@@ -38,11 +55,12 @@ export class InsertItemDto {
   @Type(() => Weight)
   weight: Weight;
 
-  @IsString({ each: true })
   @IsArray()
   @IsOptional()
   @ApiPropertyOptional()
-  tags?: string[];
+  @ValidateNested({ each: true })
+  @Type(() => InsertItemTag)
+  tags?: InsertItemTag[];
 
   @IsString()
   @IsOptional()

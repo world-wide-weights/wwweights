@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { BehaviorSubject } from 'rxjs';
 import { ItemInsertedEvent } from '../commands.module/events/item-inserted.event';
+import { TagIncrementedEvent } from '../commands.module/events/tag-incremented.event';
 
 export const logStringify = (obj: any) => {
   return JSON.stringify(obj, null, 2);
@@ -17,6 +18,7 @@ export class EventStore {
 
   private readonly eventMap = new Map([
     ['ItemInsertedEvent', ItemInsertedEvent],
+    ['TagIncrementedEvent', TagIncrementedEvent],
   ]);
 
   constructor() {
@@ -38,6 +40,7 @@ export class EventStore {
       )}`,
     );
     this.eventsStream.next(eventEntry);
-    return eventEntry.id;
+    this.logger.log(`EventId created: ${eventEntry.id}`);
+    return;
   }
 }

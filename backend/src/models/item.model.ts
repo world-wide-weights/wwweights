@@ -1,9 +1,8 @@
 import { AggregateRoot } from '@nestjs/cqrs';
 import { index, prop } from '@typegoose/typegoose';
-import { Expose, Transform } from 'class-transformer';
-import { ObjectId } from 'mongoose';
+import { Expose } from 'class-transformer';
 
-export class Weight {
+class Weight {
   @Expose()
   @prop({ required: true })
   // This is always in grams and scientific notation example: 1.234e10
@@ -18,13 +17,26 @@ export class Weight {
   aditionalValue?: number;
 }
 
-@index({ name: 'text', tags: 'text' }, { weights: { name: 10, tags: 5 } })
-export class Item extends AggregateRoot {
-  @Expose({ name: 'id' })
-  // Have to do this optionally since it would throw an error on plainToInstance because _id doesn't exist in the DTOs and we only need it on instanceToPlain
-  @Transform((params) => params.obj._id?.toString())
-  _id?: ObjectId;
+// To simplify here is Tag again but without the Aggregate since the Tag in Items does not have to look the same as the Tag alone
+class Tag {
+  @Expose()
+  @prop({ required: true })
+  name: string;
 
+  @Expose()
+  @prop()
+  slug?: string;
+
+  @Expose()
+  @prop()
+  count?: number;
+}
+
+@index(
+  { name: 'text', 'tags.name': 'text' },
+  { weights: { name: 10, tags: 5 } },
+)
+export class Item extends AggregateRoot {
   @Expose()
   @prop({ required: true, unique: true })
   name: string;
@@ -38,9 +50,8 @@ export class Item extends AggregateRoot {
   weight: Weight;
 
   @Expose()
-  @prop({ array: true, type: () => [String] })
-  //@ManyToMany(() => Tag, (tag) => tag.items) No Tags yet
-  tags?: string[];
+  @prop({ array: true, type: () => [Tag] })
+  tags?: Tag[];
 
   @Expose()
   @prop()

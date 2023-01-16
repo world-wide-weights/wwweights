@@ -1,3 +1,3 @@
 import { ItemInsertedHandler } from './item-inserted.handler';
-
-export const EventHandlers = [ItemInsertedHandler];
+import { TagIncrementedHandler } from './tag-incremented.handler';
+export const EventHandlers = [ItemInsertedHandler, TagIncrementedHandler];

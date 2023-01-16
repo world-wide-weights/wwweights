@@ -1,8 +1,15 @@
 import { Logger, UnprocessableEntityException } from '@nestjs/common';
-import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
+import {
+  CommandBus,
+  CommandHandler,
+  EventPublisher,
+  ICommandHandler,
+} from '@nestjs/cqrs';
 import { EventStore } from '../../eventstore/eventstore';
 import { Item } from '../../models/item.model';
 import { getSlug } from '../../shared/get-slug';
+import { ItemInsertedEvent } from '../events/item-inserted.event';
+import { IncrementTagCommand } from './increment-tag.command';
 import { InsertItemCommand } from './insert-item.command';
 
 @CommandHandler(InsertItemCommand)
@@ -11,21 +18,32 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
   constructor(
     private readonly publisher: EventPublisher,
     private readonly eventStore: EventStore,
+    private commandBus: CommandBus,
   ) {}
 
   // No returns, just Exceptions in CQRS
-  async execute(command: InsertItemCommand) {
+  async execute({ insertItemDto }: InsertItemCommand) {
     try {
+      // Create the slugs for the Tags if missing
+      const tagsWithSlug = insertItemDto.tags.map((tag) => ({
+        ...tag,
+        slug: tag.slug || getSlug(tag.name),
+      }));
+
       const newItem = new Item({
-        ...command.insertItemDto,
-        slug: getSlug(command.insertItemDto.name),
+        ...insertItemDto,
+        slug: getSlug(insertItemDto.name),
+        tags: tagsWithSlug,
       });
+
+      // TODO: Check if Item can be created
+
+      for (const tag of tagsWithSlug) {
+        this.commandBus.execute(new IncrementTagCommand(tag));
+      }
+
       const eventItem = this.publisher.mergeObjectContext(newItem);
-
-      // TODO: Aggregate State from Eventstore or Tries to check for duplicates and stuff
-
-      const eventId = this.eventStore.addEvent('ItemInsertedEvent', eventItem);
-      this.logger.log(`EventId created: ${eventId}`);
+      this.eventStore.addEvent(ItemInsertedEvent.name, eventItem);
     } catch (error) {
       this.logger.error(error);
       throw new UnprocessableEntityException('Item could not be inserted');
