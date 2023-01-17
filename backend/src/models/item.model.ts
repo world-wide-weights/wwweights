@@ -34,11 +34,11 @@ class Tag {
 
 @index(
   { name: 'text', 'tags.name': 'text' },
-  { weights: { name: 10, tags: 5 } },
+  { weights: { name: 10, tags: 5 }, name: 'ItemTextIndex' },
 )
 export class Item extends AggregateRoot {
   @Expose()
-  @prop({ required: true, unique: true })
+  @prop({ required: true })
   name: string;
 
   @Expose()
@@ -50,7 +50,7 @@ export class Item extends AggregateRoot {
   weight: Weight;
 
   @Expose()
-  @prop({ array: true, type: () => [Tag] })
+  @prop({ array: true, type: () => [Tag], _id: false })
   tags?: Tag[];
 
   @Expose()

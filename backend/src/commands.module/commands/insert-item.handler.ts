@@ -11,6 +11,7 @@ import { getSlug } from '../../shared/get-slug';
 import { ItemInsertedEvent } from '../events/item-inserted.event';
 import { IncrementTagCommand } from './increment-tag.command';
 import { InsertItemCommand } from './insert-item.command';
+import { InsertTagCommand } from './insert-tag.command';
 
 @CommandHandler(InsertItemCommand)
 export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
@@ -25,25 +26,36 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
   async execute({ insertItemDto }: InsertItemCommand) {
     try {
       // Create the slugs for the Tags if missing
-      const tagsWithSlug = insertItemDto.tags.map((tag) => ({
-        ...tag,
-        slug: tag.slug || getSlug(tag.name),
-      }));
+
+      const existingTags = insertItemDto.tags.filter((tag) => tag.slug);
+      const newTags = insertItemDto.tags
+        .filter((tag) => !tag.slug)
+        .map((tag) => ({
+          name: tag.name,
+          slug: getSlug(tag.name),
+          count: 1,
+        }));
+
+      this.logger.debug('existingTags: ', existingTags);
+      this.logger.debug('newTags: ', newTags);
 
       const newItem = new Item({
         ...insertItemDto,
         slug: getSlug(insertItemDto.name),
-        tags: tagsWithSlug,
+        tags: [...existingTags, ...newTags],
       });
 
-      // TODO: Check if Item can be created
-
-      for (const tag of tagsWithSlug) {
-        this.commandBus.execute(new IncrementTagCommand(tag));
-      }
-
+      // TODO: Check if Item can be inserted with EventstoreDB Streams?
       const eventItem = this.publisher.mergeObjectContext(newItem);
       this.eventStore.addEvent(ItemInsertedEvent.name, eventItem);
+
+      // TODO: Do the following 2 loops as a SAGA instead
+      for (const tag of existingTags) {
+        this.commandBus.execute(new IncrementTagCommand(tag.slug));
+      }
+      for (const tag of newTags) {
+        this.commandBus.execute(new InsertTagCommand(tag));
+      }
     } catch (error) {
       this.logger.error(error);
       throw new UnprocessableEntityException('Item could not be inserted');

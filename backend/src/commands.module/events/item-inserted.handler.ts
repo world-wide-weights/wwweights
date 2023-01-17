@@ -12,12 +12,12 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
     @InjectModel(Item)
     private readonly itemModel: ReturnModelType<typeof Item>,
   ) {}
-  async handle(event: ItemInsertedEvent) {
+  async handle({ item }: ItemInsertedEvent) {
     try {
-      const insertedItem = new this.itemModel(event.item);
-      this.logger.debug(JSON.stringify(insertedItem, null, 2));
+      const insertedItem = new this.itemModel(item);
       await insertedItem.save();
 
+      this.logger.log(`Item inserted:  ${insertedItem.slug}`);
       // TODO: Also save alterations itemsByTag
     } catch (error) {
       // TODO: Do we handle Errors here, coz we send nothing to a user back!? SOLUTION: NEW SAGA

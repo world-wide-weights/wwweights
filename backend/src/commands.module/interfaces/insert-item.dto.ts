@@ -57,7 +57,7 @@ export class InsertItemDto {
 
   @IsArray()
   @IsOptional()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ type: [InsertItemTag] })
   @ValidateNested({ each: true })
   @Type(() => InsertItemTag)
   tags?: InsertItemTag[];

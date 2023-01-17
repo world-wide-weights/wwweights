@@ -1,3 +1,3 @@
-export class IncrementTagCommand {
+export class DecrementTagCommand {
   constructor(public readonly slug: string) {}
 }
