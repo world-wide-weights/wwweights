@@ -11,11 +11,11 @@ import {
 } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CreateItemCommand } from './commands/create-item.command';
-import { CreateItemDto } from './interfaces/create-item.dto';
+import { InsertItemCommand } from './commands/insert-item.command';
+import { InsertItemDto } from './interfaces/insert-item.dto';
 
-@Controller('commands')
-@ApiTags('commands')
+@Controller('command/v1')
+@ApiTags('command/v1')
 @UseInterceptors(ClassSerializerInterceptor)
 @SerializeOptions({ strategy: 'excludeAll' })
 export class CommandsController {
@@ -23,11 +23,11 @@ export class CommandsController {
 
   constructor(private commandBus: CommandBus) {}
 
-  @Post('create-item')
-  @ApiBody({ type: CreateItemDto })
-  @ApiOperation({ summary: 'Create an item' })
+  @Post('items/insert')
+  @ApiBody({ type: InsertItemDto })
+  @ApiOperation({ summary: 'Insert an item' })
   @HttpCode(HttpStatus.OK)
-  async createItem(@Body() createItemDto: CreateItemDto) {
-    this.commandBus.execute(new CreateItemCommand(createItemDto));
+  async insertItem(@Body() insertItemDto: InsertItemDto) {
+    this.commandBus.execute(new InsertItemCommand(insertItemDto));
   }
 }

@@ -3,17 +3,18 @@ import {
   Controller,
   Get,
   Logger,
-  Param,
+  Query,
   SerializeOptions,
   UseInterceptors,
 } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
-import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { GetItemDto } from '../commands.module/interfaces/get-item-dto';
-import { GetItemQuery } from './queries/get-item.query';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Item } from '../models/item.model';
+import { QueryItemListDto } from './interfaces/query-item-list.dto';
+import { GetItemListQuery } from './queries/get-item-list.query';
 
-@Controller('queries')
-@ApiTags('queries')
+@Controller('query/v1')
+@ApiTags('query/v1')
 @UseInterceptors(ClassSerializerInterceptor)
 @SerializeOptions({ strategy: 'excludeAll' })
 export class QueriesController {
@@ -21,11 +22,44 @@ export class QueriesController {
 
   constructor(private queryBus: QueryBus) {}
 
-  @Get('get-one-item/:slug')
-  @ApiParam({ name: 'slug', type: String })
-  @ApiOperation({ summary: 'Get an item by slug' })
-  async getItem(@Param() { slug }: GetItemDto) {
-    this.logger.log(`Get item with slug ${slug}`);
-    return await this.queryBus.execute(new GetItemQuery(slug));
+  @Get('items/list')
+  @ApiOperation({ summary: 'Get a list of items' })
+  async getItemList(@Query() dto: QueryItemListDto) {
+    this.logger.log(`Get item list`);
+    return (await this.queryBus.execute(new GetItemListQuery(dto))).map(
+      (item) => new Item(item),
+    );
   }
+
+  // @Get('items/related')
+  // @ApiQuery({ name: 'dto', required: false, type: QueryItemRelatedDto })
+  // @ApiOperation({ summary: 'Get an item by slug' })
+  // async getItem(@Query() dto: QueryItemRelatedDto) {
+  //   this.logger.log(`Get item list`);
+  //   return await this.queryBus.execute(new GetItemRelatedQuery(dto));
+  // }
+
+  // @Get('items/statistics')
+  // @ApiQuery({ name: 'dto', required: false, type: QueryItemStatisticsDto })
+  // @ApiOperation({ summary: 'Get an item by slug' })
+  // async getItemStatistics(@Query() dto: QueryItemStatisticsDto) {
+  //   this.logger.log(`Get item list`);
+  //   return await this.queryBus.execute(new GetItemStatisticsQuery(dto));
+  // }
+
+  // @Get('tags/list')
+  // @ApiQuery({ name: 'dto', required: false, type: QueryTagListDto })
+  // @ApiOperation({ summary: 'Get an item by slug' })
+  // async getTagsList(@Query() dto: QueryItemListDto) {
+  //   this.logger.log(`Get item list`);
+  //   return await this.queryBus.execute(new GetTagsListQuery(dto));
+  // }
+
+  // @Get('tags/related')
+  // @ApiQuery({ name: 'dto', required: false, type: QueryTagRelatedDto })
+  // @ApiOperation({ summary: 'Get an item by slug' })
+  // async getTagsRelated(@Query() dto: QueryItemListDto) {
+  //   this.logger.log(`Get item list`);
+  //   return await this.queryBus.execute(new GetTagsRelatedQuery(dto));
+  // }
 }

@@ -1,5 +1,5 @@
 import { Item } from '../../models/item.model';
 
-export class ItemCreatedEvent {
+export class ItemInsertedEvent {
   constructor(public readonly item: Item) {}
 }
