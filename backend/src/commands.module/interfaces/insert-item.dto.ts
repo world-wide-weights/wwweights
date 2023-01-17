@@ -26,7 +26,7 @@ export class Weight {
   aditionalValue?: number;
 }
 
-export class CreateItemDto {
+export class InsertItemDto {
   // TODO: Slug here or on event write
   @IsString()
   @IsNotEmpty()

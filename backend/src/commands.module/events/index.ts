@@ -1,3 +1,3 @@
-import { ItemCreatedHandler } from './item-created.handler';
+import { ItemInsertedHandler } from './item-inserted.handler';
 
-export const EventHandlers = [ItemCreatedHandler];
+export const EventHandlers = [ItemInsertedHandler];
