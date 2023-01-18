@@ -1,9 +1,4 @@
 import {
-  Injectable,
-  Logger,
-  ServiceUnavailableException,
-} from '@nestjs/common';
-import {
   AllStreamResolvedEvent,
   BACKWARDS,
   END,
@@ -13,10 +8,15 @@ import {
   streamNameFilter,
   StreamNotFoundError,
 } from '@eventstore/db-client';
+import {
+  Injectable,
+  Logger,
+  ServiceUnavailableException,
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { EventBus } from '@nestjs/cqrs';
 import { ItemCreatedEvent } from '../commands.module/events/item-created.event';
 import { ALLOWED_EVENT_ENTITIES } from './enums/allowedEntities.enum';
-import { ConfigService } from '@nestjs/config';
 
 /**
  * @description Wrapper for eventstoreDb. Used for save interaction with eventstore
