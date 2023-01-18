@@ -59,6 +59,12 @@ jobs:
        
      - name: unit tests
        run: npm run test
+       
+     - name: codecov upload
+       uses: codecov/codecov-action@v3
+       with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        flags: backend
 
   docker-build:
     runs-on: ubuntu-latest
