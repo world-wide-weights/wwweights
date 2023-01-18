@@ -3,11 +3,10 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { EventStore } from '../../eventstore/eventstore';
 import { TagDecrementedEvent } from '../events/tag-decremented.event';
 import { DecrementTagCommand } from './decrement-tag.command';
-import { IncrementTagCommand } from './increment-tag.command';
 
 @CommandHandler(DecrementTagCommand)
 export class DecrementTagHandler
-  implements ICommandHandler<IncrementTagCommand>
+  implements ICommandHandler<DecrementTagCommand>
 {
   private readonly logger = new Logger(DecrementTagHandler.name);
   constructor(private readonly eventStore: EventStore) {}

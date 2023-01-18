@@ -20,7 +20,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       this.logger.log(`Item inserted:  ${insertedItem.slug}`);
       // TODO: Also save alterations itemsByTag
     } catch (error) {
-      // TODO: Do we handle Errors here, coz we send nothing to a user back!? SOLUTION: NEW SAGA
+      // TODO: Do we handle Errors here, coz we send nothing to a user back!? SOLUTION: NEW SAGA or just log
       this.logger.error(error);
       //throw new UnprocessableEntityException('Item could not be inserted');
     }

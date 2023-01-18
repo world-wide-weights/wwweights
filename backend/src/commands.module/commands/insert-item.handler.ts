@@ -7,6 +7,7 @@ import {
 } from '@nestjs/cqrs';
 import { EventStore } from '../../eventstore/eventstore';
 import { Item } from '../../models/item.model';
+import { Tag } from '../../models/tag.model';
 import { getSlug } from '../../shared/get-slug';
 import { ItemInsertedEvent } from '../events/item-inserted.event';
 import { IncrementTagCommand } from './increment-tag.command';
@@ -25,8 +26,7 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
   // No returns, just Exceptions in CQRS
   async execute({ insertItemDto }: InsertItemCommand) {
     try {
-      // Create the slugs for the Tags if missing
-
+      // TODO: Check these via EventstoreDB
       const existingTags = insertItemDto.tags.filter((tag) => tag.slug);
       const newTags = insertItemDto.tags
         .filter((tag) => !tag.slug)
@@ -35,9 +35,6 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
           slug: getSlug(tag.name),
           count: 1,
         }));
-
-      this.logger.debug('existingTags: ', existingTags);
-      this.logger.debug('newTags: ', newTags);
 
       const newItem = new Item({
         ...insertItemDto,
@@ -49,12 +46,11 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
       const eventItem = this.publisher.mergeObjectContext(newItem);
       this.eventStore.addEvent(ItemInsertedEvent.name, eventItem);
 
-      // TODO: Do the following 2 loops as a SAGA instead
       for (const tag of existingTags) {
-        this.commandBus.execute(new IncrementTagCommand(tag.slug));
+        this.commandBus.execute(new IncrementTagCommand(new Tag(tag), newItem));
       }
       for (const tag of newTags) {
-        this.commandBus.execute(new InsertTagCommand(tag));
+        this.commandBus.execute(new InsertTagCommand(new Tag(tag), newItem));
       }
     } catch (error) {
       this.logger.error(error);

@@ -17,20 +17,28 @@ export class GetItemListHandler implements IQueryHandler<GetItemListQuery> {
   ) {}
 
   async execute({ dto }: GetItemListQuery) {
-    if (!dto.query && !dto.tags && !dto.slug)
-      throw new UnprocessableEntityException('No search without restrictions');
+    try {
+      if (!dto.query && !dto.tags && !dto.slug)
+        throw new UnprocessableEntityException(
+          'No search without restrictions',
+        );
 
-    const sort = getSort(dto.sort, !!dto.query);
-    const filter = getFilter(dto.query, dto.tags, dto.slug);
+      const sort = getSort(dto.sort, !!dto.query);
+      const filter = getFilter(dto.query, dto.tags, dto.slug);
 
-    // TODO: Query through itemsByTags if tags are listed
-    const result = await this.itemModel
-      .find(filter, { score: { $meta: 'textScore' } }, { $sort: sort })
-      .skip((dto.page - 1) * dto.limit)
-      .limit(dto.limit)
-      .exec();
+      // TODO: Query through itemsByTags if tags are listed
+      const result = await this.itemModel
+        .find(filter, { score: { $meta: 'textScore' } }, { $sort: sort })
+        .skip((dto.page - 1) * dto.limit)
+        .limit(dto.limit)
+        .exec();
 
-    this.logger.debug('result: ', JSON.stringify(result, null, 2));
-    return result;
+      this.logger.log(`Items found:  ${result.length}`);
+
+      return result;
+    } catch (error) {
+      this.logger.error(error);
+      throw new UnprocessableEntityException('Item could not be inserted');
+    }
   }
 }

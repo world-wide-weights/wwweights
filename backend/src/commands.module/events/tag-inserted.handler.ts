@@ -15,7 +15,6 @@ export class TagInsertedHandler implements IEventHandler<TagInsertedEvent> {
   async handle({ tag }: TagInsertedEvent) {
     try {
       const insertedTag = new this.tagModel(tag);
-      this.logger.debug(`Inserting Tag: ${insertedTag}`);
       await insertedTag.save();
 
       this.logger.log(`Item inserted:  ${insertedTag.slug}`);
