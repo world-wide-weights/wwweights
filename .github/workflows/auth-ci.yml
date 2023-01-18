@@ -65,7 +65,7 @@ jobs:
        with:
          token: ${{ secrets.CODECOV_TOKEN }}
          files: .coverage/coverage-final.json
-         flag: auth-backend
+         flags: auth-backend
 
   docker-build:
     runs-on: ubuntu-latest
