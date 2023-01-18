@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { Color } from "../../types/color"
+import { Icon } from "../Icon/Icon"
 
 type IconButtonProps = {
     /** icon of the icon button */
@@ -12,8 +13,12 @@ type IconButtonProps = {
     onClick?: (values: any) => void
     /** Optional can add classes to customize margins for example */
     className?: string
+    /** Optional can add classes to icon to adjust size for example. */
+    iconClassName?: string
     /** Specify whether the Button should be disabled, or not */
     disabled?: boolean
+    /** Remove hover and focus effects when active is true. */
+    active?: boolean
     /** For testing */
     datacy?: string
 }
@@ -21,18 +26,18 @@ type IconButtonProps = {
 /**
  * Button only with an icon
  */
-export const IconButton: React.FunctionComponent<IconButtonProps> = ({ icon, to, onClick, datacy, disabled, className = "", color = "gray" }) => {
-    const innerIcon = <i className={`material-symbols-rounded ${disabled ? "text-opacity-50 " : ""}text-${color}-600`}>{icon}</i>
-    const classes = `text-center ${disabled ? "cursor-default" : `cursor-pointer hover:bg-${color}-200 focus:bg-${color}-300`} rounded-full w-10 h-10 flex items-center justify-center ${className}`
+export const IconButton: React.FunctionComponent<IconButtonProps> = ({ icon, to, onClick, datacy, iconClassName = "", disabled = false, active = false, className = "", color = "gray" }) => {
+    const innerIcon = <Icon className={`${disabled ? "text-opacity-50 " : ""}text-${color}-600 ${iconClassName}`}>{icon}</Icon>
+    const classes = `text-center ${disabled || active ? "cursor-default" : `cursor-pointer hover:bg-${color}-200 focus:bg-${color}-300`} rounded-full w-10 h-10 flex items-center justify-center ${className}`
 
     return <>
         {/* Button as link */}
-        {to && <Link datacy={datacy} href={disabled ? "" : to} onClick={disabled ? (event) => event.preventDefault() : () => ""} className={classes}>
+        {to && <Link datacy={datacy} href={disabled ? "" : to} onClick={disabled || active ? (event) => event.preventDefault() : () => ""} className={classes}>
             {innerIcon}
         </Link>}
 
         {/* Button with onclick */}
-        {!to && <button datacy={datacy} type="button" onClick={onClick} disabled={disabled} className={classes}>
+        {!to && <button datacy={datacy} type="button" onClick={onClick} disabled={disabled || active} className={classes}>
             {innerIcon}
         </button>}
     </>

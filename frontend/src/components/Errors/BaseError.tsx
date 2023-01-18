@@ -25,7 +25,7 @@ export const BaseError: React.FC<BaseErrorProps> = ({ headline, children, backBu
         <Head>
             <title>{siteTitle}</title>
         </Head>
-        <div className="container flex items-center min-h-[calc(100vh-88.5px-102.5px)]"> { /* 100vh page - 88.5px Navbar - 102.5px Footer*/}
+        <main className="container flex items-center min-h-[calc(100vh-88.5px-102.5px)]"> { /* 100vh page - 88.5px Navbar - 102.5px Footer*/}
             <div className="md:w-2/3">
                 <Headline>{headline}</Headline>
                 {children}
@@ -34,6 +34,6 @@ export const BaseError: React.FC<BaseErrorProps> = ({ headline, children, backBu
                     {ctaContent}
                 </div>
             </div>
-        </div>
+        </main>
     </>
 }
