@@ -26,6 +26,19 @@ export const options = {
         borderRadius: 100,
       },
     },
+    scales: {
+      y: {
+        grid: {
+          display: false
+        },
+        ticks: {
+          // Include a dollar sign in the ticks
+          callback: function(value, index, ticks) {
+              return '$' + value;
+          }
+        }
+      }
+    },
     responsive: true,
     plugins: {
       legend: {
@@ -40,7 +53,7 @@ export const data = {
     labels,
     datasets: [
       {
-        label: 'Dataset 1',
+        barThickness: 10,
         data: [202, 194, 188, 174, 165],
         backgroundColor: ['#0967D2','#47A3F3','#FFABCA','#C5BAFC','#4F3DA8']
       }
@@ -51,7 +64,7 @@ export const data = {
 export const CompareWeightGraph: React.FC = () => {
   return (
     <div className="flex bg-white rounded-xl p-5">
-        <Bar options={options} data={data} />
+        <Bar  options={options} data={data} />
     </div>
   );
 };
