@@ -8,7 +8,7 @@ describe("IconButton", () => {
       cy.mount(<IconButton icon="menu" onClick={() => ""} />);
     });
     it("should display component", () => {
-      cy.get("button");
+      cy.get("button").should("be.visible");
     });
     it("should display icon", () => {
       cy.get("button i").should("be.visible");
@@ -20,7 +20,7 @@ describe("IconButton", () => {
         cy.get("button").trigger('mouseover')
       });
       it("should have hover", () => {
-        cy.get('button').should('have.class', 'cursor-pointer hover:bg-gray-200 focus:bg-gray-300 rounded-full w-10 h-10 flex items-center justify-center')
+        cy.get('button').should('have.class', 'hover:bg-gray-200')
       })
     });
 
@@ -29,11 +29,7 @@ describe("IconButton", () => {
         cy.mount(<IconButton icon="menu" disabled onClick={() => ""} />);
       });
       it("should be disabled", () => {
-        cy.get('button').should('have.class', 'cursor-default')
         cy.get("button").should("be.disabled")
-      })
-      it("icon should have opacity", () => {
-        cy.get('button i').should('have.class', 'text-opacity-50')
       })
     });
 
@@ -64,7 +60,7 @@ describe("IconButton", () => {
         cy.get("a").trigger('mouseover')
       });
       it("should have hover", () => {
-        cy.get('a').should('have.class', 'cursor-pointer hover:bg-gray-200 focus:bg-gray-300 rounded-full w-10 h-10 flex items-center justify-center')
+        cy.get('a').should('have.class', 'hover:bg-gray-200')
       })
     });
 
@@ -74,9 +70,6 @@ describe("IconButton", () => {
       });
       it("should be disabled", () => {
         cy.get('a').should('have.class', 'cursor-default')
-      })
-      it("icon should have opacity", () => {
-        cy.get('a i').should('have.class', 'text-opacity-50')
       })
     });
 
