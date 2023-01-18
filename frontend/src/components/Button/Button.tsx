@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Icon } from "../Icon/Icon";
 
 export type ButtonProps = {
     /** The content inside the Button */
@@ -34,26 +35,26 @@ export const Button: React.FC<ButtonProps> = ({ kind = "primary", disabled, icon
     // When loading should be disabled
     disabled = loading ? true : disabled
 
-    const tertiaryColor = isColored ? "blue" : "grey"
+    const tertiaryColor = isColored ? "blue" : "gray"
 
     // Base Classes 
-    const buttonBaseClasses = "flex items-center justify-center md:justify-start font-semibold border border-transparent rounded-full py-2 px-8 w-full md:w-max"
-    const linkBaseClasses = `flex items-center font-semibold text-${tertiaryColor}-600`
+    const buttonBaseClasses = "flex items-center justify-center md:justify-start font-medium rounded-full py-2 px-8 w-full md:w-max"
+    const linkBaseClasses = `flex items-center font-medium text-${tertiaryColor}-600`
 
     // Disable state classes
     const disabledClassesPrimarySecondary = "text-opacity-75 opacity-80 cursor-default"
     const disabledPrimary = disabled ? disabledClassesPrimarySecondary : "hover:bg-blue-600 focus:bg-blue-700"
-    const disabledSecondary = disabled ? disabledClassesPrimarySecondary : "hover:bg-blue-500 focus:bg-blue-600 hover:text-white focus:text-white"
+    const disabledSecondary = disabled ? disabledClassesPrimarySecondary : "hover:bg-blue-100 focus:bg-blue-200"
     const disabledTertiary = disabled ? disabledClassesPrimarySecondary : `hover:text-${tertiaryColor}-700 focus:text-${tertiaryColor}-800`
 
     // Kind classes
-    const primaryClasses = `bg-blue-500 text-white ${disabledPrimary}`
+    const primaryClasses = `bg-blue-500 border border-transparent text-white ${disabledPrimary}`
     const secondaryClasses = `border border-blue-500 text-blue-500 ${disabledSecondary}`
 
     const innerContent = <>
-        {icon && iconSlot === "start" && (loading ? <i className={`material-symbols-rounded text-xl mr-2 ${loading ? "animate-spin" : ""}`}>sync</i> : <i className="material-symbols-rounded text-xl mr-1">{icon}</i>)}
+        {icon && iconSlot === "start" && (loading ? <Icon className={`text-xl mr-2 ${loading ? "animate-spin" : ""}`}>sync</Icon> : <Icon className="text-xl mr-1">{icon}</Icon>)}
         {children}
-        {icon && iconSlot === "end" && <span className="material-symbols-rounded text-xl ml-2">{icon}</span>}
+        {icon && iconSlot === "end" && <Icon className="text-xl ml-2">{icon}</Icon>}
     </>
 
     return (<>

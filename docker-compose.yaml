@@ -6,11 +6,11 @@ services:
     volumes:
       - ./backend:/home/node
     ports:
-      - 3001:3000
+      - 3001:3001
     working_dir: /home/node
     command: npm run start:dev
     depends_on:
-      - db
+      - mongodb
   frontend:
     image: node:18-alpine3.15
     restart: "always"
@@ -21,8 +21,24 @@ services:
     working_dir: /home/node
     command: npm run dev
     environment:
-      - WATCHPACK_POLLING=true 
-  db:
+      - WATCHPACK_POLLING=true
+  mongodb:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DB_MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_MONGO_PW}
+      MONGO_INITDB_DATABASE: ${DB_MONGO_NAME}
+    ports:
+      - 27018:27017
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/test --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    volumes:
+      - mongodb_data_container:/data/mongodb
+  postgres:
     image: postgres:15
     restart: "always"
     volumes: 
@@ -31,9 +47,9 @@ services:
     ports:
       - 5432:5432
     environment:
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PW}
-      - POSTGRES_DB=${DB_DB}
+      - POSTGRES_USER=${DB_PG_USER}
+      - POSTGRES_PASSWORD=${DB_PG_PW}
+      - POSTGRES_DB=${DB_PG_DB}
     healthcheck:
       # TODO: This can be replaced by a more accurate healthcheck based on PID 1 
       test: ["CMD-SHELL","pg_isready"]
@@ -42,8 +58,5 @@ services:
       retries: 3
 
 volumes:
+  mongodb_data_container:
   postgres-volume:
-
-
-
-

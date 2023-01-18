@@ -2,6 +2,26 @@
 @tailwind utilities;
 @tailwind components;
 
+:root {
+    --primary-color: #0967D2;
+}
+
+:focus-visible {
+    outline: var(--primary-color) auto 2px;
+}
+
+::selection {
+    /* WebKit/Blink Browsers */
+    background: var(--primary-color);
+    color: white;
+}
+
+::-moz-selection {
+    /* Gecko Browsers */
+    background: var(--primary-color);
+    color: white;
+}
+
 body {
-    font-size: 15px;
+    @apply tracking-wide	
 }
