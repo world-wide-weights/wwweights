@@ -25,7 +25,7 @@ export function generateBreadcrumbs(router: NextRouter): Crumb[] {
     // Iterate over the list of nested route parts and build a "crumb" object for each one.
     const crumblist = asPathNestedRoutes.map((subpath, idx) => {
         // We can get the partial nested route for the crumb by joining together the path parts up to this point.
-        const to = "/" + asPathNestedRoutes.slice(0, idx + 1).join("/");
+        const to = "/" + asPathNestedRoutes.slice(0, idx + 1).join("/")
 
         // The text will just be the route string
         const text = capitalizeFirstLetter(subpath)
