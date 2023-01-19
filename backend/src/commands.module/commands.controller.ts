@@ -11,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { getStringified } from '../shared/get-stringified';
 import { InsertItemCommand } from './commands/insert-item.command';
 import { InsertItemDto } from './interfaces/insert-item.dto';
 
@@ -29,7 +28,6 @@ export class CommandsController {
   @ApiOperation({ summary: 'Insert an item' })
   @HttpCode(HttpStatus.OK)
   async insertItem(@Body() insertItemDto: InsertItemDto) {
-    this.logger.log(`Inserting item: ${getStringified(insertItemDto)}`);
     this.commandBus.execute(new InsertItemCommand(insertItemDto));
   }
 }

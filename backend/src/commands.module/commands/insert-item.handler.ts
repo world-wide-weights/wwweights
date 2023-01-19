@@ -7,6 +7,7 @@ import {
 } from '@nestjs/cqrs';
 import { EventStore } from '../../eventstore/eventstore';
 import { Item } from '../../models/item.model';
+import { Tag } from '../../models/tag.model';
 import { getSlug } from '../../shared/get-slug';
 import { ItemInsertedEvent } from '../events/item-inserted.event';
 import { InsertItemCommand } from './insert-item.command';
@@ -23,14 +24,10 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
   // No returns, just Exceptions in CQRS
   async execute({ insertItemDto }: InsertItemCommand) {
     try {
-      const sluggifiedTags = insertItemDto.tags?.map((tag) => ({
-        name: tag,
-        slug: getSlug(tag),
-      }));
       const newItem = new Item({
         ...insertItemDto,
         slug: getSlug(insertItemDto.name),
-        tags: sluggifiedTags,
+        tags: insertItemDto.tags?.map((tag) => new Tag({ name: getSlug(tag) })),
       });
 
       // TODO: Check if Item can be inserted with EventstoreDB Streams?

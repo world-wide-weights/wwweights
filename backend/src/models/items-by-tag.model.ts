@@ -13,7 +13,6 @@ export class ItemsByTag extends AggregateRoot {
   @prop({
     array: true,
     type: () => [Item],
-    default: [],
     excludeIndexes: true,
     _id: false,
   })

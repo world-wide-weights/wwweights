@@ -27,31 +27,32 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
     */
 
     // Increment/Upsert Tags
-    const tags = item.tags;
-    for (const [index, { name, slug }] of item.tags?.entries()) {
-      this.logger.debug({ index, name, slug });
-      try {
-        const result = await this.tagModel.findOneAndUpdate(
-          { name, slug },
-          { $inc: { count: 1 } },
-          { upsert: true, new: true },
-        );
-        tags[index].count = result.count;
-        this.logger.log(`Tag incremented or created: ${slug}`);
-      } catch (error) {
-        this.logger.error(error);
+    const tags = [];
+    if (item.tags) {
+      for (const { name } of item.tags) {
+        try {
+          const result = await this.tagModel.findOneAndUpdate(
+            { name },
+            { $inc: { count: 1 } },
+            { upsert: true, new: true },
+          );
+          tags.push({ name, count: result.count });
+          this.logger.log(`Tag incremented or created: ${name}`);
+        } catch (error) {
+          this.logger.error(error);
+        }
       }
     }
 
     // Insert Item
-    const insertedItem = new this.itemModel({ ...item, tags });
+    item.tags = tags; // Here because we use the item later and need the tags there too
+    const insertedItem = new this.itemModel(item);
     try {
       await insertedItem.save();
       this.logger.log(`Item inserted:  ${insertedItem.slug}`);
     } catch (error) {
       this.logger.error(error);
     }
-    this.logger.debug(`Item inserted: ${getStringified(insertedItem)}`);
 
     // No need for any tag related projection if item has no tags
     if (!tags) return;
@@ -60,43 +61,59 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
     for (const tag of tags) {
       try {
         const res = await this.itemModel.updateMany(
-          { 'tags.slug': tag.slug, slug: { $ne: item.slug } },
+          { 'tags.name': tag.name, slug: { $ne: item.slug } },
           { $inc: { 'tags.$.count': 1 } },
         );
         this.logger.log(`Items updated: ${getStringified(res)}`);
         this.logger.log(
-          `Item count incremented for tags in items, tag: ${tag.slug}`,
+          `Item count incremented for tags in items, tag: ${tag.name}`,
         );
       } catch (error) {
         this.logger.error(error);
       }
     }
 
-    // Create ItemsByTags for new Tags
+    // Create ItemsByTags for new Tags and insert Item into existing ItemsByTags
     for (const tag of tags) {
       if (tag.count === 1) {
-        const itemsByTag = new this.itemsByTagModel({
-          tagName: tag.slug,
-          items: [item],
-        });
-        await itemsByTag.save();
-        this.logger.log(`ItemsByTag created for tag: ${tag.slug}`);
+        try {
+          const itemsByTag = new this.itemsByTagModel({
+            tagName: tag.name,
+            items: [item],
+          });
+          await itemsByTag.save();
+          this.logger.log(`ItemsByTag created for tag: ${itemsByTag.tagName}`);
+        } catch (error) {
+          this.logger.error(error);
+        }
+      } else {
+        try {
+          await this.itemsByTagModel.updateOne(
+            { tagName: tag.name },
+            { $push: { items: item } },
+          );
+        } catch (error) {
+          this.logger.error(error);
+        }
       }
     }
 
-    // Update ItemsByTags
+    // Update ItemsByTags counts
     for (const tag of tags) {
       try {
         await this.itemsByTagModel.updateMany(
-          { tagName: tag.slug },
+          { tagName: tag.name },
           { $inc: { 'items.$[item].tags.$[tag].count': 1 } },
           {
             arrayFilters: [
-              { 'item.slug': { $ne: item.slug }, 'tag.slug': tag.slug },
+              { 'item.slug': { $ne: item.slug } },
+              { 'tag.name': tag.name },
             ],
           },
         );
-      } catch (error) {}
+      } catch (error) {
+        this.logger.error(error);
+      }
     }
   }
 }
