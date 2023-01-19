@@ -12,7 +12,7 @@ type CrumbProps = {
 }
 
 /**
- *  Each individual "crumb" in the breadcrumbs list
+ *  Each individual "crumb" in the breadcrumbs list.
  */
 export const Crumb: React.FC<CrumbProps> = ({ text, to, customEndingText, last = false }) => {
     // The last crumb is rendered as normal text since we are already on the page
