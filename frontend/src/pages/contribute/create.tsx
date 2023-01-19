@@ -141,7 +141,7 @@ const Create: NextPageCustomProps = () => {
 
         <main className="container mt-5">
             {/* Breadcrumb */}
-            <Breadcrumb />
+            <Breadcrumb customEndingText="Create new item" />
 
             {/* Headline */}
             <Headline>Create new item</Headline>
