@@ -1,0 +1,27 @@
+@host=http://localhost:3005/auth
+@refreshToken=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImF1dGgtYmFzZS1rZXkifQ.eyJpZCI6MSwiZW1haWwiOiJzZWFtdXMuaG9lZ2VyMzdAZXRoZXJlYWwuZW1haWwiLCJpYXQiOjE2NzMxOTY4MDQsImV4cCI6MTY3MzIzMjgwNH0.NwWkVOeUTV9k72hHF_qQ_1WtGfG9lz0-vZ1gXdfty2PKxyH6dkSx7lt9yX30LtMzQkMktrWUuqMBUDgrixmiH8XMIOPXeJkgpW_S8XqD5_yn_KMKgEjXKUxmfW_r6GcP9-3m3sERzKtqiiJ4T5AXnsoO_GAhwTg9dSsUHpZYK-0
+POST {{host}}/signup
+Content-Type: application/json
+
+{
+    "username": "test",
+    "email": "seamus.hoeger37@ethereal.email",
+    "password": "alsoSomethingWithtest"
+}
+
+###
+
+POST {{host}}/login
+Content-Type: application/json
+
+{
+  "email": "seamus.hoeger37@ethereal.email",
+  "password": "alsoSomethingWithtest" 
+}
+
+###
+POST {{host}}/refresh
+Authorization: Bearer {{refreshToken}} 
+
+### 
+GET {{host}}/.well-known/jwks.json

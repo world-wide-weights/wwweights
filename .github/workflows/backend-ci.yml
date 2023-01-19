@@ -54,11 +54,15 @@ jobs:
      - name: node modules
        run: npm ci --audit:false --cache ~/.npm --prefer-offline
 
-     - name: end 2 end tests
-       run: npm run test:e2e
-       
-     - name: unit tests
-       run: npm run test
+     - name: tests 
+       run: npm run test:ci
+
+     - name: codecov upload
+       uses: codecov/codecov-action@v3
+       with:
+         token: ${{ secrets.CODECOV_TOKEN }}
+         files: .coverage/coverage-final.json
+         flags: backend       
 
   docker-build:
     runs-on: ubuntu-latest
