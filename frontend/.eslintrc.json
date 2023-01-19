@@ -4,8 +4,12 @@
   ],
   "rules": {
     "semi": [
-      "error",
+      "warn",
       "never"
+    ],
+    "quotes": [
+      "warn",
+      "double"
     ]
   }
 }

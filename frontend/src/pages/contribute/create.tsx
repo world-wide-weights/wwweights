@@ -2,7 +2,7 @@ import { Form, Formik, FormikProps } from "formik"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { useState } from "react"
-import * as yup from 'yup'
+import * as yup from "yup"
 import { Button } from "../../components/Button/Button"
 import { IconButton } from "../../components/Button/IconButton"
 import { FormError } from "../../components/Errors/FormError"
@@ -82,7 +82,7 @@ const Create: NextPageCustomProps = () => {
     const validationSchema: yup.SchemaOf<CreateItemForm> = yup.object().shape({
         name: yup.string().required("Name is required."),
         weight: yup.string().required("Weight is required."),
-        unit: yup.mixed().oneOf(['g', 'kg', 't']),
+        unit: yup.mixed().oneOf(["g", "kg", "t"]),
         additionalValue: yup.string(),
         isCa: yup.boolean().required("IsCa is required."),
         source: yup.string(),
@@ -116,15 +116,15 @@ const Create: NextPageCustomProps = () => {
                 isCa,
                 ...(additionalValue ? { additionalValue } : {}) // Only add additionalValue when defined
             },
-            tags: tags ? tags.split(', ') : []
+            tags: tags ? tags.split(", ") : []
         }
 
         // Create item with api
-        fetch('http://localhost:3004/items', {
-            method: 'POST',
+        fetch("http://localhost:3004/items", {
+            method: "POST",
             body: JSON.stringify(item),
             headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
             },
         })
 

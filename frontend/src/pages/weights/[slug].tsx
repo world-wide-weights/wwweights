@@ -17,7 +17,7 @@ type WeightsSingleProps = {
 export default function WeightsSingle({ item }: InferGetServerSidePropsType<typeof getStaticProps>) {
     const siteTitle = `${item.name} Weight | WWWeights`
     const weightString = generateWeightString(item.weight)
-    const sourceName = item.source ? new URL(item.source).hostname.replace('www.', '') : null
+    const sourceName = item.source ? new URL(item.source).hostname.replace("www.", "") : null
 
     return <>
         {/* Meta Tags */}

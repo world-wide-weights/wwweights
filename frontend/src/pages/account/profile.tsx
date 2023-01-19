@@ -1,6 +1,6 @@
 import { useSession } from "next-auth/react"
 import Head from "next/head"
-import Image from 'next/image'
+import Image from "next/image"
 import { Headline } from "../../components/Headline/Headline"
 import { ItemPreviewList } from "../../components/Item/ItemPreviewList"
 import { StatsCard } from "../../components/Statistics/StatsCard"

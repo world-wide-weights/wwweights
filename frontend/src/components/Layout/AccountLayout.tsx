@@ -1,7 +1,7 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import Link from 'next/link'
-import logo from '../../../public/logo.png'
+import Head from "next/head"
+import Image from "next/image"
+import Link from "next/link"
+import logo from "../../../public/logo.png"
 import { routes } from "../../services/routes/routes"
 import { Button } from "../Button/Button"
 import { Headline } from "../Headline/Headline"
@@ -59,7 +59,7 @@ export const AccountLayout: React.FC<AccountLayoutProps> = ({ page, headline, de
             </div>
 
             {/* Right Side Content: Image */}
-            <div className={`hidden lg:flex items-center justify-center bg-background-half-page bg-no-repeat bg-cover bg-center w-1/2`}>
+            <div className={"hidden lg:flex items-center justify-center bg-background-half-page bg-no-repeat bg-cover bg-center w-1/2"}>
                 <div className="text-white font-bold w-1/2">
                     <h5 className="text-5xl leading-snug mb-5"><span className="text-blue-300">Weight</span> something and wanna share with people?</h5>
                     <h6 className="text-2xl">{descriptionImage}</h6>

@@ -1,6 +1,6 @@
 import { Ellipsis, getTotalPageCount, paginationDataService, PaginationDataServiceParams, paginationService, PaginationServiceParams } from "./pagination"
 
-describe('Pagination', () => {
+describe("Pagination", () => {
 
     describe("pagination data service", () => {
         // BUG: Fix bug with left dots (sollte punkte erst ab 3er seite anzeigen, nicht wenn für die 2 Seite noch platz ist)
@@ -73,7 +73,7 @@ describe('Pagination', () => {
             })
         })
 
-        it('should show no left dots, but show right dots on page 1 with 10 pages and 1 sibling', () => {
+        it("should show no left dots, but show right dots on page 1 with 10 pages and 1 sibling", () => {
             const options: PaginationDataServiceParams = {
                 currentPage: 1,
                 totalPageCount: 10,
@@ -83,7 +83,7 @@ describe('Pagination', () => {
             expect(paginationDataService(options)).deep.equal([1, 2, 3, 4, 5, Ellipsis, 10])
         })
 
-        it('should only show numbers when items are less than max pagination item length', () => {
+        it("should only show numbers when items are less than max pagination item length", () => {
             const options: PaginationDataServiceParams = {
                 currentPage: 1,
                 totalPageCount: 3,
@@ -94,22 +94,22 @@ describe('Pagination', () => {
         })
     })
 
-    describe('Total Page Count', () => {
-        it('should return 0 when either one or both params are 0', () => {
+    describe("Total Page Count", () => {
+        it("should return 0 when either one or both params are 0", () => {
             expect(getTotalPageCount(0, 0)).deep.equal(0)
             expect(getTotalPageCount(0, 1)).deep.equal(0)
             expect(getTotalPageCount(1, 0)).deep.equal(0)
         })
 
-        it('should return 0 when either one or both params are negative', () => {
+        it("should return 0 when either one or both params are negative", () => {
             expect(getTotalPageCount(-1, -1)).deep.equal(0)
             expect(getTotalPageCount(1, -1)).deep.equal(0)
             expect(getTotalPageCount(-1, 1)).deep.equal(0)
         })
     })
 
-    describe('Pagination service', () => {
-        it('should return pagination without links', () => {
+    describe("Pagination service", () => {
+        it("should return pagination without links", () => {
             const options: PaginationServiceParams = {
                 totalItems: 100,
                 itemsPerPage: 10,
@@ -155,7 +155,7 @@ describe('Pagination', () => {
             })
         })
 
-        it('should return empty pages and links null when totalItems is 0', () => {
+        it("should return empty pages and links null when totalItems is 0", () => {
             const options: PaginationServiceParams = {
                 totalItems: 0,
                 itemsPerPage: 10,

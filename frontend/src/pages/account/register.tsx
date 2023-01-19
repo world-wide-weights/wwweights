@@ -2,7 +2,7 @@ import { Form, Formik } from "formik"
 import { signIn, SignInResponse } from "next-auth/react"
 import { useRouter } from "next/router"
 import { useMemo, useState } from "react"
-import * as yup from 'yup'
+import * as yup from "yup"
 import { Button } from "../../components/Button/Button"
 import { TextInput } from "../../components/Form/TextInput/TextInput"
 import { AccountLayout } from "../../components/Layout/AccountLayout"
@@ -48,14 +48,14 @@ const Register: NextPageCustomProps = () => {
         try {
             // Register in our backend
             const registerResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/register`, {
-                method: 'POST',
+                method: "POST",
                 body: JSON.stringify({
                     username,
                     email,
                     password
                 }),
                 headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                 },
             })
 

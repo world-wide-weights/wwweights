@@ -1,12 +1,12 @@
-import { signIn, signOut, useSession } from 'next-auth/react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { useState } from 'react'
-import logo from '../../../public/logo.png'
-import { routes } from '../../services/routes/routes'
-import { Button } from '../Button/Button'
-import { IconButton } from '../Button/IconButton'
+import { signIn, signOut, useSession } from "next-auth/react"
+import Image from "next/image"
+import Link from "next/link"
+import { useRouter } from "next/router"
+import { useState } from "react"
+import logo from "../../../public/logo.png"
+import { routes } from "../../services/routes/routes"
+import { Button } from "../Button/Button"
+import { IconButton } from "../Button/IconButton"
 
 /** 
  * Navbar component, should only be used once at the top 
