@@ -3,6 +3,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import * as yup from 'yup';
+import { RouterBreadcrumb } from "../../components/Breadcrumb/RouterBreadcrumb";
 import { Button } from "../../components/Button/Button";
 import { IconButton } from "../../components/Button/IconButton";
 import { FormError } from "../../components/Errors/FormError";
@@ -139,9 +140,13 @@ const Create: NextPageCustomProps = () => {
         </Head>
 
         <main className="container mt-5">
+            {/* Breadcrumb */}
+            <RouterBreadcrumb />
+
             {/* Headline */}
             <Headline>Create new item</Headline>
 
+            {/* Content */}
             <Formik initialValues={initialFormValues} validationSchema={validationSchema} onSubmit={onFormSubmit}>
                 {({ dirty, isValid, errors, touched }: FormikProps<CreateItemForm>) => (
                     <Form>
