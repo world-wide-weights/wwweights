@@ -1,7 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { STATUS } from '../shared/enums/status.enum';
 import { QueryFailedError, Repository } from 'typeorm';
+import { STATUS } from '../shared/enums/status.enum';
 import { UserEntity } from './entities/users.entity';
 
 @Injectable()
@@ -19,8 +19,8 @@ export class UserService {
     return await this.userEntity.findOneBy({ username: username });
   }
 
-  async findOneById(id) {
-    return await this.userEntity.findOneBy(id);
+  async findOneById(id: number) {
+    return await this.userEntity.findOneBy({ pkUserId: id });
   }
 
   async setLoginTimestamp(id: number) {
