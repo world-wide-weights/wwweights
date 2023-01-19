@@ -1,13 +1,13 @@
-import { GetStaticPaths, GetStaticProps, InferGetServerSidePropsType } from "next";
-import Head from "next/head";
-import Image from "next/image";
-import { Item } from ".";
-import { Chip } from "../../components/Chip/Chip";
-import { SearchHeader } from "../../components/Header/SearchHeader";
-import { Headline } from "../../components/Headline/Headline";
-import { Icon } from "../../components/Icon/Icon";
-import { routes } from "../../services/routes/routes";
-import { generateWeightString } from "../../services/utils/weight";
+import { GetStaticPaths, GetStaticProps, InferGetServerSidePropsType } from "next"
+import Head from "next/head"
+import Image from "next/image"
+import { Item } from "."
+import { Chip } from "../../components/Chip/Chip"
+import { SearchHeader } from "../../components/Header/SearchHeader"
+import { Headline } from "../../components/Headline/Headline"
+import { Icon } from "../../components/Icon/Icon"
+import { routes } from "../../services/routes/routes"
+import { generateWeightString } from "../../services/utils/weight"
 
 type WeightsSingleProps = {
     item: Item
@@ -17,7 +17,7 @@ type WeightsSingleProps = {
 export default function WeightsSingle({ item }: InferGetServerSidePropsType<typeof getStaticProps>) {
     const siteTitle = `${item.name} Weight | WWWeights`
     const weightString = generateWeightString(item.weight)
-    const sourceName = item.source ? new URL(item.source).hostname.replace('www.', '') : null
+    const sourceName = item.source ? new URL(item.source).hostname.replace("www.", "") : null
 
     return <>
         {/* Meta Tags */}

@@ -23,7 +23,7 @@ type TagsListProps = {
 
 /** Base List for tags */
 export default function TagsList({ tags, currentPage, totalItems, limit }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-    const siteTitle = `All Tags ${currentPage > 1 ? `| Page ${currentPage} ` : ``}- World Wide Weights`
+    const siteTitle = `All Tags ${currentPage > 1 ? `| Page ${currentPage} ` : ""}- World Wide Weights`
 
     return (<>
         {/* Meta Tags */}

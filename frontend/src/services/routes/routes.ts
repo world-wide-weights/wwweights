@@ -22,7 +22,7 @@ export const routes = {
                 ...(options.sort && { sort: options.sort })
             }).toString()
 
-            return `/weights${queryString !== "" ? `?${queryString}` : ``}`
+            return `/weights${queryString !== "" ? `?${queryString}` : ""}`
         },
         single: (slug: string) => `/weights/${slug}`
     },
@@ -38,7 +38,7 @@ export const routes = {
                 ...(options.itemsPerPage && hasCustomLimit && { limit: options.itemsPerPage.toString() }),
             }).toString()
 
-            return `/tags${queryString !== "" ? `?${queryString}` : ``}`
+            return `/tags${queryString !== "" ? `?${queryString}` : ""}`
         },
         single: (slug: string) => `/weights?query=${slug}`
     },

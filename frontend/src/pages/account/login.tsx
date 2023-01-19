@@ -1,13 +1,13 @@
-import { Form, Formik } from "formik";
-import { signIn, SignInResponse } from "next-auth/react";
-import { useRouter } from "next/router";
-import { useMemo, useState } from "react";
-import * as yup from 'yup';
-import { Button } from "../../components/Button/Button";
-import { TextInput } from "../../components/Form/TextInput/TextInput";
-import { AccountLayout } from "../../components/Layout/AccountLayout";
-import { routes } from "../../services/routes/routes";
-import { NextPageCustomProps } from "../_app";
+import { Form, Formik } from "formik"
+import { signIn, SignInResponse } from "next-auth/react"
+import { useRouter } from "next/router"
+import { useMemo, useState } from "react"
+import * as yup from "yup"
+import { Button } from "../../components/Button/Button"
+import { TextInput } from "../../components/Form/TextInput/TextInput"
+import { AccountLayout } from "../../components/Layout/AccountLayout"
+import { routes } from "../../services/routes/routes"
+import { NextPageCustomProps } from "../_app"
 
 export type LoginDto = {
     email: string
@@ -45,7 +45,7 @@ const Login: NextPageCustomProps = () => {
     const onFormSubmit = async (values: LoginDto) => {
         try {
             // Sign in with next auth
-            const response = await signIn('credentials', {
+            const response = await signIn("credentials", {
                 redirect: false,
                 email: values.email,
                 password: values.password,

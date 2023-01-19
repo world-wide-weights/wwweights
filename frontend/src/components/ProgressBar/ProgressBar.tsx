@@ -16,7 +16,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ progress, progressAddi
         {/* Additional Progress */}
         {progressAdditional && <div datacy="progressbar-additional-progress" style={{
             width: progressAdditional > 100 ? "100%" : `${progressAdditional}%` // Use style instead of tailwind arbitary values because otherwise need to create safelist for 100 classes
-        }} className={`absolute bg-blue-300 rounded-lg h-2`} />}
+        }} className={"absolute bg-blue-300 rounded-lg h-2"} />}
 
         {/* Progress */}
         <div datacy="progressbar-progress" style={{

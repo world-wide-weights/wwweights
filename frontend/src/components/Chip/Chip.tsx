@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { Color } from "../../types/color";
+import Link from "next/link"
+import { Color } from "../../types/color"
 
 type ChipProps = {
   /** Content of tag */
