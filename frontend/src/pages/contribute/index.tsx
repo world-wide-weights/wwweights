@@ -1,12 +1,12 @@
-import { useSession } from "next-auth/react";
-import Head from "next/head";
-import Image from 'next/image';
-import { Button } from "../../components/Button/Button";
-import { LinkWithIconColored } from "../../components/Button/LinkWithIconColored";
-import { Headline } from "../../components/Headline/Headline";
-import { StatsCard } from "../../components/Statistics/StatsCard";
-import { routes } from "../../services/routes/routes";
-import { NextPageCustomProps } from "../_app";
+import { useSession } from "next-auth/react"
+import Head from "next/head"
+import Image from "next/image"
+import { Button } from "../../components/Button/Button"
+import { LinkWithIconColored } from "../../components/Button/LinkWithIconColored"
+import { Headline } from "../../components/Headline/Headline"
+import { StatsCard } from "../../components/Statistics/StatsCard"
+import { routes } from "../../services/routes/routes"
+import { NextPageCustomProps } from "../_app"
 
 /**
  * Login page is a guest route.
