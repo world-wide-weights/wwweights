@@ -61,9 +61,9 @@ describe('Search /weights', () => {
 
             it('should not display tag in list when search for tag', () => {
                 // Click first tag
-                cy.dataCy('search-header-tag-wrapper', ' a').first().click()
+                cy.dataCy(`search-header-chip-${relatedTags[1].slug}`).click()
 
-                cy.dataCy('search-header-tag-wrapper', ' a').first().should('not.exist')
+                cy.dataCy(`search-header-chip-${relatedTags[1].slug}`).should('not.exist')
             })
         })
 
