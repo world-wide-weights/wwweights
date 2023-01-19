@@ -26,23 +26,6 @@ class Weight {
   aditionalValue?: number;
 }
 
-export class InsertItemTag {
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty()
-  name: string;
-
-  @IsString()
-  @IsOptional()
-  @ApiPropertyOptional()
-  slug?: string;
-
-  @IsNumber()
-  @IsOptional()
-  @ApiPropertyOptional()
-  count?: number;
-}
-
 export class InsertItemDto {
   // TODO: Slug here or on event write
   @IsString()
@@ -57,10 +40,9 @@ export class InsertItemDto {
 
   @IsArray()
   @IsOptional()
-  @ApiPropertyOptional({ type: [InsertItemTag] })
-  @ValidateNested({ each: true })
-  @Type(() => InsertItemTag)
-  tags?: InsertItemTag[];
+  @ApiPropertyOptional({ type: [String] })
+  @Type(() => String)
+  tags?: string[];
 
   @IsString()
   @IsOptional()
