@@ -17,12 +17,12 @@ type CrumbProps = {
 export const Crumb: React.FC<CrumbProps> = ({ text, to, customEndingText, last = false }) => {
     // The last crumb is rendered as normal text since we are already on the page
     if (last) {
-        return <p className="font-medium text-gray-600">{customEndingText ?? text}</p>
+        return <p datacy={`crumb-${customEndingText ?? text}`} className="font-medium text-gray-600">{customEndingText ?? text}</p>
     }
 
     // All other crumbs will be rendered as links that can be visited 
     return (
-        <Button to={to} kind="tertiary">
+        <Button datacy={`crumb-${text}`} to={to} kind="tertiary">
             {text}
         </Button>
     )

@@ -20,8 +20,8 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({ customEndingText }) => {
     // Generate crumbs array
     const breadcrumbs = useMemo(() => generateBreadcrumbs(router), [router])
 
-    return <div className="flex items-center gap-2 mb-2">
-        <IconButton icon="home" to={routes.home} />
+    return <div datacy="breadcrumb" className="flex items-center gap-2 mb-2">
+        <IconButton datacy="breadcrumb-home" icon="home" to={routes.home} />
         {breadcrumbs.map((crumb, id) => <Fragment key={id}>
             <Icon className="text-gray-600">chevron_right</Icon>
             <Crumb {...crumb} customEndingText={customEndingText} last={id === breadcrumbs.length - 1} />
