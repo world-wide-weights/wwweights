@@ -34,7 +34,7 @@ Cypress.Commands.add('mount', mount)
  * @param params custom params for example custom route.
  * @returns next router mock instance.
  */
-export const createRouter = (params?: Partial<NextRouter>) => ({
+export const createRouter = (params?: Partial<NextRouter>): NextRouter => ({
     route: '/',
     pathname: '/',
     query: {},
