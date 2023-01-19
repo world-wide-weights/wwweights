@@ -26,6 +26,8 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
     We decided to go with the first solution to have one less db call but 1 more if.
     */
 
+    let startTime = performance.now();
+
     // Increment/Upsert Tags
     const tags = [];
     if (item.tags) {
@@ -54,11 +56,27 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       this.logger.error(error);
     }
 
+    this.logger.debug(
+      `ItemInsertedHandler Insert took: ${performance.now() - startTime}ms`,
+    );
     // No need for any tag related projection if item has no tags
     if (!tags) return;
 
-    // Update Items tag counts
-    for (const tag of tags) {
+    startTime = performance.now();
+
+    await Promise.all([
+      this.updateItemTagCounts(item),
+      this.createItemsByTagsOrInsertItem(item),
+      this.updateItemsByTagCounts(item),
+    ]);
+
+    this.logger.debug(
+      `ItemInsertedHandler Updates took: ${performance.now() - startTime}ms`,
+    );
+  }
+
+  async updateItemTagCounts(item: Item) {
+    for (const tag of item.tags) {
       try {
         const res = await this.itemModel.updateMany(
           { 'tags.name': tag.name, slug: { $ne: item.slug } },
@@ -72,9 +90,29 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
         this.logger.error(error);
       }
     }
+  }
 
-    // Create ItemsByTags for new Tags and insert Item into existing ItemsByTags
-    for (const tag of tags) {
+  async updateItemsByTagCounts(item: Item) {
+    for (const tag of item.tags) {
+      try {
+        await this.itemsByTagModel.updateMany(
+          { tagName: tag.name },
+          { $inc: { 'items.$[item].tags.$[tag].count': 1 } },
+          {
+            arrayFilters: [
+              { 'item.slug': { $ne: item.slug } },
+              { 'tag.name': tag.name },
+            ],
+          },
+        );
+      } catch (error) {
+        this.logger.error(error);
+      }
+    }
+  }
+
+  async createItemsByTagsOrInsertItem(item: Item) {
+    for (const tag of item.tags) {
       if (tag.count === 1) {
         try {
           const itemsByTag = new this.itemsByTagModel({
@@ -95,24 +133,6 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
         } catch (error) {
           this.logger.error(error);
         }
-      }
-    }
-
-    // Update ItemsByTags counts
-    for (const tag of tags) {
-      try {
-        await this.itemsByTagModel.updateMany(
-          { tagName: tag.name },
-          { $inc: { 'items.$[item].tags.$[tag].count': 1 } },
-          {
-            arrayFilters: [
-              { 'item.slug': { $ne: item.slug } },
-              { 'tag.name': tag.name },
-            ],
-          },
-        );
-      } catch (error) {
-        this.logger.error(error);
       }
     }
   }
