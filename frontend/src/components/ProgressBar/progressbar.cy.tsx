@@ -1,5 +1,5 @@
-import '../../styles/global.css';
-import { ProgressBar } from './ProgressBar';
+import '../../styles/global.css'
+import { ProgressBar } from './ProgressBar'
 
 describe('Progress Bar', () => {
     it('should show progress in percent', () => {
@@ -43,5 +43,5 @@ describe('Progress Bar', () => {
     })
 })
 
-export { };
+export { }
 

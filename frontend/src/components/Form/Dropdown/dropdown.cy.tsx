@@ -1,15 +1,15 @@
-import { Form, Formik } from "formik";
-import 'material-symbols';
-import React from "react";
-import '../../../styles/global.css';
-import { Dropdown } from './Dropdown';
+import { Form, Formik } from "formik"
+import 'material-symbols'
+import React from "react"
+import '../../../styles/global.css'
+import { Dropdown } from './Dropdown'
 
 const initialValues = {
     filter: ""
 }
 
 const submitForm = (values: typeof initialValues) => {
-    console.log(values);
+    console.log(values)
 }
 
 const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {

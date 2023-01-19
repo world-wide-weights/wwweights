@@ -1,15 +1,15 @@
 /** Import font support */
-import localFont from '@next/font/local';
+import localFont from '@next/font/local'
 /** Imports all material symbols globally which we use as our icon pack */
-import 'material-symbols/rounded.css';
-import { NextPage } from 'next';
-import type { Session } from "next-auth";
-import { SessionProvider } from 'next-auth/react';
-import type { AppProps } from 'next/app';
-import React from 'react';
-import { Auth } from '../components/Auth/Auth';
-import { Layout } from '../components/Layout/Layout';
-import '../styles/global.css';
+import 'material-symbols/rounded.css'
+import { NextPage } from 'next'
+import type { Session } from "next-auth"
+import { SessionProvider } from 'next-auth/react'
+import type { AppProps } from 'next/app'
+import React from 'react'
+import { Auth } from '../components/Auth/Auth'
+import { Layout } from '../components/Layout/Layout'
+import '../styles/global.css'
 
 // Font
 const metropolis = localFont({

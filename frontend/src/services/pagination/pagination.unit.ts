@@ -1,4 +1,4 @@
-import { Ellipsis, getTotalPageCount, paginationDataService, PaginationDataServiceParams, paginationService, PaginationServiceParams } from "./pagination";
+import { Ellipsis, getTotalPageCount, paginationDataService, PaginationDataServiceParams, paginationService, PaginationServiceParams } from "./pagination"
 
 describe('Pagination', () => {
 
@@ -176,5 +176,5 @@ describe('Pagination', () => {
     })
 })
 
-export { };
+export { }
 

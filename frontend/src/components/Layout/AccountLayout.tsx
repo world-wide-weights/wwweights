@@ -1,10 +1,10 @@
-import Head from 'next/head';
-import Image from 'next/image';
-import Link from 'next/link';
-import logo from '../../../public/logo.png';
-import { routes } from "../../services/routes/routes";
-import { Button } from "../Button/Button";
-import { Headline } from "../Headline/Headline";
+import Head from 'next/head'
+import Image from 'next/image'
+import Link from 'next/link'
+import logo from '../../../public/logo.png'
+import { routes } from "../../services/routes/routes"
+import { Button } from "../Button/Button"
+import { Headline } from "../Headline/Headline"
 
 type AccountLayoutProps = {
     /** Page content. Is parameter in getLayout. */

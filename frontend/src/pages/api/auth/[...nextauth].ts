@@ -1,8 +1,8 @@
-import { NextAuthOptions, Session, User } from "next-auth";
-import { JWT } from "next-auth/jwt";
-import NextAuth from "next-auth/next";
-import CredentialsProvider from 'next-auth/providers/credentials';
-import { LoginDto } from "../../account/login";
+import { NextAuthOptions, Session, User } from "next-auth"
+import { JWT } from "next-auth/jwt"
+import NextAuth from "next-auth/next"
+import CredentialsProvider from 'next-auth/providers/credentials'
+import { LoginDto } from "../../account/login"
 
 export type UserInfo = {
     email: string

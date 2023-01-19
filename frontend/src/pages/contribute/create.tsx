@@ -1,18 +1,18 @@
-import { Form, Formik, FormikProps } from "formik";
-import Head from "next/head";
-import { useRouter } from "next/router";
-import { useState } from "react";
-import * as yup from 'yup';
-import { Button } from "../../components/Button/Button";
-import { IconButton } from "../../components/Button/IconButton";
-import { FormError } from "../../components/Errors/FormError";
-import { Dropdown } from "../../components/Form/Dropdown/Dropdown";
-import { TextInput } from "../../components/Form/TextInput/TextInput";
-import { Headline } from "../../components/Headline/Headline";
-import { routes } from "../../services/routes/routes";
-import { getWeightInG } from "../../services/utils/unit";
-import { Weight } from "../weights";
-import { NextPageCustomProps } from "../_app";
+import { Form, Formik, FormikProps } from "formik"
+import Head from "next/head"
+import { useRouter } from "next/router"
+import { useState } from "react"
+import * as yup from 'yup'
+import { Button } from "../../components/Button/Button"
+import { IconButton } from "../../components/Button/IconButton"
+import { FormError } from "../../components/Errors/FormError"
+import { Dropdown } from "../../components/Form/Dropdown/Dropdown"
+import { TextInput } from "../../components/Form/TextInput/TextInput"
+import { Headline } from "../../components/Headline/Headline"
+import { routes } from "../../services/routes/routes"
+import { getWeightInG } from "../../services/utils/unit"
+import { Weight } from "../weights"
+import { NextPageCustomProps } from "../_app"
 
 type CreateItemForm = {
     name: string

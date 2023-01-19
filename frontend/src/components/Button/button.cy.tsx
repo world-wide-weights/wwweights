@@ -1,6 +1,6 @@
-import 'material-symbols';
-import '../../styles/global.css';
-import { Button } from './Button';
+import 'material-symbols'
+import '../../styles/global.css'
+import { Button } from './Button'
 
 describe('Button', () => {
   describe('Primary Button', () => {
@@ -284,5 +284,5 @@ describe('Button', () => {
   })
 })
 
-export { };
+export { }
 

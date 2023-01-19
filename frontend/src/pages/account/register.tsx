@@ -1,13 +1,13 @@
-import { Form, Formik } from "formik";
-import { signIn, SignInResponse } from "next-auth/react";
-import { useRouter } from "next/router";
-import { useMemo, useState } from "react";
-import * as yup from 'yup';
-import { Button } from "../../components/Button/Button";
-import { TextInput } from "../../components/Form/TextInput/TextInput";
-import { AccountLayout } from "../../components/Layout/AccountLayout";
-import { routes } from "../../services/routes/routes";
-import { NextPageCustomProps } from "../_app";
+import { Form, Formik } from "formik"
+import { signIn, SignInResponse } from "next-auth/react"
+import { useRouter } from "next/router"
+import { useMemo, useState } from "react"
+import * as yup from 'yup'
+import { Button } from "../../components/Button/Button"
+import { TextInput } from "../../components/Form/TextInput/TextInput"
+import { AccountLayout } from "../../components/Layout/AccountLayout"
+import { routes } from "../../services/routes/routes"
+import { NextPageCustomProps } from "../_app"
 
 type RegisterDto = {
     email: string

@@ -1,7 +1,7 @@
-import { Field, FieldProps } from "formik";
-import { useState } from "react";
-import { Icon } from "../../Icon/Icon";
-import { Label } from "../Label";
+import { Field, FieldProps } from "formik"
+import { useState } from "react"
+import { Icon } from "../../Icon/Icon"
+import { Label } from "../Label"
 
 type DropdownProps = {
     /** Gives the dropdown a unique name */

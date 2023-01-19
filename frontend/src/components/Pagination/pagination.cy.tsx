@@ -1,7 +1,7 @@
-import 'material-symbols';
-import { RoutePagination } from '../../services/routes/routes';
-import '../../styles/global.css';
-import { Pagination } from './Pagination';
+import 'material-symbols'
+import { RoutePagination } from '../../services/routes/routes'
+import '../../styles/global.css'
+import { Pagination } from './Pagination'
 
 const ITEMS_PER_PAGE = 10
 const TOTAL_ITEMS = 100
@@ -107,5 +107,5 @@ describe('Pagination', () => {
     })
 })
 
-export { };
+export { }
 

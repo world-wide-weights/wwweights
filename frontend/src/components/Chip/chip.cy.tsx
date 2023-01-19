@@ -1,5 +1,5 @@
-import '../../styles/global.css';
-import { Chip } from './Chip';
+import '../../styles/global.css'
+import { Chip } from './Chip'
 
 describe('Chip', () => {
     it('should display correct color', () => {
@@ -12,5 +12,5 @@ describe('Chip', () => {
     })
 })
 
-export { };
+export { }
 

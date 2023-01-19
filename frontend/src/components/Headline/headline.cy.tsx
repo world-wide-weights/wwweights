@@ -1,5 +1,5 @@
-import '../../styles/global.css';
-import { Headline, textSizes } from "./Headline";
+import '../../styles/global.css'
+import { Headline, textSizes } from "./Headline"
 
 const LEVEL = 2
 
@@ -28,5 +28,5 @@ describe('Headline', () => {
   })
 })
 
-export { };
+export { }
 

@@ -1,8 +1,8 @@
-import { Field, FieldProps } from "formik";
-import Link from "next/link";
-import { FormError } from "../../Errors/FormError";
-import { Icon } from "../../Icon/Icon";
-import { Label } from "../Label";
+import { Field, FieldProps } from "formik"
+import Link from "next/link"
+import { FormError } from "../../Errors/FormError"
+import { Icon } from "../../Icon/Icon"
+import { Label } from "../Label"
 
 type TextInputProps = {
     /** Gives the input a unique name */

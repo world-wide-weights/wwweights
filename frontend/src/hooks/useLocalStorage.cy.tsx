@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
-import '../styles/global.css';
-import { useLocalStorage } from './useLocalStorage';
+import React, { useRef } from 'react'
+import '../styles/global.css'
+import { useLocalStorage } from './useLocalStorage'
 
 
 const EXAMPLE_KEY = "example_key"
@@ -39,5 +39,5 @@ describe('Local Storage Custom Hook', () => {
     // TODO (Zoe-Bot): Test localstorage
 })
 
-export { };
+export { }
 

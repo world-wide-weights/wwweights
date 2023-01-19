@@ -1,4 +1,4 @@
-import { BaseError } from "../components/Errors/BaseError";
+import { BaseError } from "../components/Errors/BaseError"
 
 /**
  * Custom 500 Page, comes when some error occures on server side.

@@ -1,15 +1,15 @@
-import { Form, Formik } from "formik";
-import 'material-symbols';
-import * as yup from 'yup';
-import '../../../styles/global.css';
-import { TextInput } from "./TextInput";
+import { Form, Formik } from "formik"
+import 'material-symbols'
+import * as yup from 'yup'
+import '../../../styles/global.css'
+import { TextInput } from "./TextInput"
 
 const initialValues = {
     title: ""
 }
 
 const submitForm = (values: typeof initialValues) => {
-    console.log(values);
+    console.log(values)
 }
 
 const schema = yup.object().shape({
