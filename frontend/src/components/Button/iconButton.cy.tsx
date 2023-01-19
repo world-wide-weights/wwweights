@@ -1,88 +1,92 @@
-import "material-symbols";
-import "../../styles/global.css";
-import { IconButton } from "./IconButton";
+import "material-symbols"
+import "../../styles/global.css"
+import { IconButton } from "./IconButton"
+
+const DIMMED_CSS_CLASS = "text-opacity-50"
 
 describe("IconButton", () => {
-  describe("Button with onClick", () => {
-    beforeEach(() => {
-      cy.mount(<IconButton icon="menu" onClick={() => ""} />);
-    });
-    it("should display component", () => {
-      cy.get("button").should("be.visible");
-    });
-    it("should display icon", () => {
-      cy.get("button i").should("be.visible");
-    });
+	describe("Button with onClick", () => {
+		it("should display component", () => {
+			cy.mount(<IconButton icon="menu" onClick={() => ""} />)
 
-    describe("Button should have hover effect", () => {
-      beforeEach(() => {
-        cy.mount(<IconButton icon="menu" onClick={() => ""} />);
-        cy.get("button").trigger('mouseover')
-      });
-      it("should have hover", () => {
-        cy.get('button').should('have.class', 'hover:bg-gray-200')
-      })
-    });
+			cy.get("button").should("be.visible")
+		})
+		
+		it("should display icon", () => {
+			cy.mount(<IconButton icon="menu" onClick={() => ""} />)
 
-    describe("Button should be disabled", () => {
-      beforeEach(() => {
-        cy.mount(<IconButton icon="menu" disabled onClick={() => ""} />);
-      });
-      it("should be disabled", () => {
-        cy.get("button").should("be.disabled")
-      })
-    });
+			cy.get("button i").should("be.visible")
+		})
 
-    describe("Button should be active", () => {
-      beforeEach(() => {
-        cy.mount(<IconButton icon="menu" active onClick={() => ""} />);
-      });
-      it("should be active", () => {
-        cy.get('button').should('have.class', 'cursor-default')
-      })
-    });
-  });
 
-  describe("Button as link", () => {
-    beforeEach(() => {
-      cy.mount(<IconButton icon="menu" to="/weights" />);
-    });
-    it("should display component", () => {
-      cy.get("a").should("be.visible");
-    });
-    it("should display icon", () => {
-      cy.get("a i").should("be.visible");
-    });
+		it("should have hover effect", () => {
+			cy.mount(<IconButton icon="menu" onClick={() => ""} />)
+			cy.get("button").trigger('mouseover')
 
-    describe("Link should have hover effect", () => {
-      beforeEach(() => {
-        cy.mount(<IconButton icon="menu" to="/weights" />);
-        cy.get("a").trigger('mouseover')
-      });
-      it("should have hover", () => {
-        cy.get('a').should('have.class', 'hover:bg-gray-200')
-      })
-    });
+			cy.get('button').should('have.class', 'hover:bg-gray-200')
+		})
 
-    describe("Link should be disabled", () => {
-      beforeEach(() => {
-        cy.mount(<IconButton icon="menu" disabled to="/weights" />);
-      });
-      it("should be disabled", () => {
-        cy.get('a').should('have.class', 'cursor-default')
-      })
-    });
 
-    describe("Link should be active", () => {
-      beforeEach(() => {
-        cy.mount(<IconButton icon="menu" active to="/weights" />);
-      });
-      it("should be active", () => {
-        cy.get('a').should('have.class', 'cursor-default')
-      })
-    });
-  });
+		it("should be disabled", () => {
+			cy.mount(<IconButton icon="menu" disabled onClick={() => ""} />)
 
-});
+			cy.get("button").should("be.disabled")
+		})
 
-export {};
+		it("should be dimmed when disabled", () => {
+			cy.mount(<IconButton icon="menu" disabled onClick={() => ""} />)
+
+			cy.get('i').should('have.class', DIMMED_CSS_CLASS)
+		})
+
+		it("should not be dimmed when flag is set", () => {
+			cy.mount(<IconButton icon="menu" disabled dimOpacityWhenDisabled={false} onClick={() => ""} />)
+
+			cy.get('i').should('not.have.class', DIMMED_CSS_CLASS)
+		})
+
+	})
+
+	describe("Button as link", () => {
+		it("should display component", () => {
+			cy.mount(<IconButton icon="menu" to="/weights" />)
+
+			cy.get("a").should("be.visible")
+		})
+
+		it("should display icon", () => {
+			cy.mount(<IconButton icon="menu" to="/weights" />)
+
+			cy.get("a i").should("be.visible")
+		})
+
+		it("should have hover effect", () => {
+			cy.mount(<IconButton icon="menu" to="/weights" />)
+			cy.get("a").trigger('mouseover')
+
+			cy.get('a').should('have.class', 'hover:bg-gray-200')
+		})
+
+		it("should be disabled", () => {
+			cy.mount(<IconButton icon="menu" disabled to="/weights" />)
+
+			cy.get('a').should('have.class', 'cursor-default')
+		})
+
+		it("should be dimmed when disabled", () => {
+			cy.mount(<IconButton icon="menu" disabled to="/weights" />)
+
+			cy.get('i').should('have.class', DIMMED_CSS_CLASS)
+		})
+
+		it("should not be dimmed when flag is set", () => {
+			cy.mount(<IconButton icon="menu" disabled dimOpacityWhenDisabled={false} to="/weights" />)
+
+			cy.get('i').should('not.have.class', DIMMED_CSS_CLASS)
+		})
+	})
+
+})
+
+export { }
+
