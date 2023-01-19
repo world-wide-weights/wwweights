@@ -1,12 +1,12 @@
-import { Form, Formik, useFormikContext } from "formik";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { Tag } from "../../pages/tags";
-import { routes } from "../../services/routes/routes";
-import { Chip } from "../Chip/Chip";
-import { Headline } from "../Headline/Headline";
-import { Search } from "../Search/Search";
-import { SortType } from "../Sort/Sort";
+import { Form, Formik, useFormikContext } from "formik"
+import { useRouter } from "next/router"
+import { useEffect, useState } from "react"
+import { Tag } from "../../pages/tags"
+import { routes } from "../../services/routes/routes"
+import { Chip } from "../Chip/Chip"
+import { Headline } from "../Headline/Headline"
+import { Search } from "../Search/Search"
+import { SortType } from "../Sort/Sort"
 
 type SearchHeaderProps = {
     /** Search query. */

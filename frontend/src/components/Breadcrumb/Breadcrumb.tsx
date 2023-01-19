@@ -1,9 +1,9 @@
-import { Fragment } from "react";
-import { Crumb as CrumbType } from "../../services/breadcrumb/breadcrumb";
-import { routes } from "../../services/routes/routes";
-import { IconButton } from "../Button/IconButton";
-import { Icon } from "../Icon/Icon";
-import { Crumb } from "./Crumb";
+import { Fragment } from "react"
+import { Crumb as CrumbType } from "../../services/breadcrumb/breadcrumb"
+import { routes } from "../../services/routes/routes"
+import { IconButton } from "../Button/IconButton"
+import { Icon } from "../Icon/Icon"
+import { Crumb } from "./Crumb"
 
 type BreadcrumbProps = {
     /** Breadcrumbs */

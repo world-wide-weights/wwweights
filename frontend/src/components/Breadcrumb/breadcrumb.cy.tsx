@@ -1,10 +1,10 @@
-import 'material-symbols';
-import { RouterContext } from 'next/dist/shared/lib/router-context';
-import { createRouter } from '../../../cypress/support/component';
-import { Crumb } from '../../services/breadcrumb/breadcrumb';
-import '../../styles/global.css';
-import { Breadcrumb } from './Breadcrumb';
-import { RouterBreadcrumb } from './RouterBreadcrumb';
+import "material-symbols"
+import { RouterContext } from "next/dist/shared/lib/router-context"
+import { createRouter } from "../../../cypress/support/component"
+import { Crumb } from "../../services/breadcrumb/breadcrumb"
+import "../../styles/global.css"
+import { Breadcrumb } from "./Breadcrumb"
+import { RouterBreadcrumb } from "./RouterBreadcrumb"
 
 describe("Breadcrumb", () => {
     describe("Base Breadcrumb", () => {
@@ -47,15 +47,15 @@ describe("Breadcrumb", () => {
     })
 })
 
-describe('RouterBreadcrumb', () => {
-    it('should display RouterBreadcrumb', () => {
+describe("RouterBreadcrumb", () => {
+    it("should display RouterBreadcrumb", () => {
         const router = createRouter({ asPath: "/link" })
         cy.mount(<RouterContext.Provider value={router}>
             <RouterBreadcrumb />
         </RouterContext.Provider>)
     })
 
-    describe('Middle Links', () => {
+    describe("Middle Links", () => {
         beforeEach(() => {
             const router = createRouter({ asPath: "/link/link2/end" })
             cy.mount(<RouterContext.Provider value={router}>
@@ -63,18 +63,18 @@ describe('RouterBreadcrumb', () => {
             </RouterContext.Provider>)
         })
 
-        it('should have link to /link at second position', () => {
-            cy.dataCy('crumb-Link').should('be.visible')
-            cy.dataCy('crumb-Link').should('have.attr', 'href', '/link')
+        it("should have link to /link at second position", () => {
+            cy.dataCy("crumb-Link").should("be.visible")
+            cy.dataCy("crumb-Link").should("have.attr", "href", "/link")
         })
 
-        it('should have link to /link/link2 at third position', () => {
-            cy.dataCy('crumb-Link2').should('be.visible')
-            cy.dataCy('crumb-Link2').should('have.attr', 'href', '/link/link2')
+        it("should have link to /link/link2 at third position", () => {
+            cy.dataCy("crumb-Link2").should("be.visible")
+            cy.dataCy("crumb-Link2").should("have.attr", "href", "/link/link2")
         })
     })
 
-    describe('Ending', () => {
+    describe("Ending", () => {
         beforeEach(() => {
             const router = createRouter({ asPath: "/link/end" })
             cy.mount(<RouterContext.Provider value={router}>
@@ -82,13 +82,13 @@ describe('RouterBreadcrumb', () => {
             </RouterContext.Provider>)
         })
 
-        it('should have no link when last element', () => {
-            cy.dataCy('crumb-End').should('be.visible')
-            cy.dataCy('crumb-End').should('not.have.attr', 'href')
+        it("should have no link when last element", () => {
+            cy.dataCy("crumb-End").should("be.visible")
+            cy.dataCy("crumb-End").should("not.have.attr", "href")
         })
     })
 
-    describe('Custom Ending', () => {
+    describe("Custom Ending", () => {
         beforeEach(() => {
             const router = createRouter({ asPath: "/link/end" })
             cy.mount(<RouterContext.Provider value={router}>
@@ -96,20 +96,20 @@ describe('RouterBreadcrumb', () => {
             </RouterContext.Provider>)
         })
 
-        it('should not display end link when customEndingText is set', () => {
-            cy.dataCy('crumb-End').should('not.exist')
+        it("should not display end link when customEndingText is set", () => {
+            cy.dataCy("crumb-End").should("not.exist")
         })
 
-        it('should display customEndingText when customEndingText is set', () => {
-            cy.dataCy('crumb-customEnd').should('be.visible')
+        it("should display customEndingText when customEndingText is set", () => {
+            cy.dataCy("crumb-customEnd").should("be.visible")
         })
 
-        it('should not be link when customEndingText is set', () => {
-            cy.dataCy('crumb-customEnd').should('be.visible')
-            cy.dataCy('crumb-customEnd').should('not.have.attr', 'href')
+        it("should not be link when customEndingText is set", () => {
+            cy.dataCy("crumb-customEnd").should("be.visible")
+            cy.dataCy("crumb-customEnd").should("not.have.attr", "href")
         })
     })
 })
 
-export { };
+export { }
 

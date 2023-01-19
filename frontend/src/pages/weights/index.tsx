@@ -58,7 +58,7 @@ type WeightsListProps = {
  */
 export default function WeightsList({ items, currentPage, totalItems, limit, query, sort, statistics }: InferGetServerSidePropsType<typeof getServerSideProps>) {
     // Strings
-    const siteTitle = `Latest ${currentPage > 1 ? `| Page ${currentPage} ` : ``}- World Wide Weights`
+    const siteTitle = `Latest ${currentPage > 1 ? `| Page ${currentPage} ` : ""}- World Wide Weights`
     const headlineItems = query === "" ? "All items" : query
 
     // Refs
@@ -114,7 +114,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                                 </div>}
 
                                 {/* Weights List View */}
-                                {viewType === "list" && <ul className={`grid gap-2 mb-5 md:mb-8`}>
+                                {viewType === "list" && <ul className={"grid gap-2 mb-5 md:mb-8"}>
                                     {items.map((item) => <ItemPreviewList datacy="weights-list-item" key={item.slug} name={item.name} slug={item.slug} weight={item.weight} heaviestWeight={statistics.heaviest.weight} imageUrl="https://picsum.photos/200" />)}
                                 </ul>}
                             </>}
