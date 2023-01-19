@@ -1,12 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { BehaviorSubject } from 'rxjs';
-import { ItemInsertedToItemsByTagEvent } from '../commands.module/events/item-inserted-to-itemsbytag.event';
 import { ItemInsertedEvent } from '../commands.module/events/item-inserted.event';
-import { ItemRemovedFromItemsByTagEvent } from '../commands.module/events/item-removed-from-itemsbytag.event';
-import { ItemsByTagInsertedEvent } from '../commands.module/events/itemsbytag-inserted.event';
-import { TagDecrementedEvent } from '../commands.module/events/tag-decremented.event';
-import { TagIncrementedEvent } from '../commands.module/events/tag-incremented.event';
-import { TagInsertedEvent } from '../commands.module/events/tag-inserted.event';
 
 export const logStringify = (obj: any) => {
   return JSON.stringify(obj, null, 2);
@@ -22,13 +16,7 @@ export class EventStore {
   }>(null);
 
   private readonly eventMap = new Map<string, any>([
-    [ItemInsertedToItemsByTagEvent.name, ItemInsertedToItemsByTagEvent],
     [ItemInsertedEvent.name, ItemInsertedEvent],
-    [ItemRemovedFromItemsByTagEvent.name, ItemRemovedFromItemsByTagEvent],
-    [ItemsByTagInsertedEvent.name, ItemsByTagInsertedEvent],
-    [TagDecrementedEvent.name, TagDecrementedEvent],
-    [TagIncrementedEvent.name, TagIncrementedEvent],
-    [TagInsertedEvent.name, TagInsertedEvent],
   ]);
 
   constructor() {
