@@ -11,7 +11,7 @@ describe("IconButton", () => {
 
 			cy.get("button").should("be.visible")
 		})
-		
+
 		it("should display icon", () => {
 			cy.mount(<IconButton icon="menu" onClick={() => ""} />)
 
@@ -21,9 +21,9 @@ describe("IconButton", () => {
 
 		it("should have hover effect", () => {
 			cy.mount(<IconButton icon="menu" onClick={() => ""} />)
-			cy.get("button").trigger('mouseover')
+			cy.get("button").trigger("mouseover")
 
-			cy.get('button').should('have.class', 'hover:bg-gray-200')
+			cy.get("button").should("have.class", "hover:bg-gray-200")
 		})
 
 
@@ -36,13 +36,13 @@ describe("IconButton", () => {
 		it("should be dimmed when disabled", () => {
 			cy.mount(<IconButton icon="menu" disabled onClick={() => ""} />)
 
-			cy.get('i').should('have.class', DIMMED_CSS_CLASS)
+			cy.get("i").should("have.class", DIMMED_CSS_CLASS)
 		})
 
 		it("should not be dimmed when flag is set", () => {
 			cy.mount(<IconButton icon="menu" disabled dimOpacityWhenDisabled={false} onClick={() => ""} />)
 
-			cy.get('i').should('not.have.class', DIMMED_CSS_CLASS)
+			cy.get("i").should("not.have.class", DIMMED_CSS_CLASS)
 		})
 
 	})
@@ -62,27 +62,27 @@ describe("IconButton", () => {
 
 		it("should have hover effect", () => {
 			cy.mount(<IconButton icon="menu" to="/weights" />)
-			cy.get("a").trigger('mouseover')
+			cy.get("a").trigger("mouseover")
 
-			cy.get('a').should('have.class', 'hover:bg-gray-200')
+			cy.get("a").should("have.class", "hover:bg-gray-200")
 		})
 
 		it("should be disabled", () => {
 			cy.mount(<IconButton icon="menu" disabled to="/weights" />)
 
-			cy.get('a').should('have.class', 'cursor-default')
+			cy.get("a").should("have.class", "cursor-default")
 		})
 
 		it("should be dimmed when disabled", () => {
 			cy.mount(<IconButton icon="menu" disabled to="/weights" />)
 
-			cy.get('i').should('have.class', DIMMED_CSS_CLASS)
+			cy.get("i").should("have.class", DIMMED_CSS_CLASS)
 		})
 
 		it("should not be dimmed when flag is set", () => {
 			cy.mount(<IconButton icon="menu" disabled dimOpacityWhenDisabled={false} to="/weights" />)
 
-			cy.get('i').should('not.have.class', DIMMED_CSS_CLASS)
+			cy.get("i").should("not.have.class", DIMMED_CSS_CLASS)
 		})
 	})
 
