@@ -3,28 +3,28 @@ import { Color } from "../../types/color"
 import { Icon } from "../Icon/Icon"
 
 type IconButtonProps = {
-    /** icon of the icon button */
+    /** Specify the icon */
     icon: string
-    /** optional icon color */
+    /** Optional property to set the color of the icon button */
     color?: Color
-    /** Optionally specify an href for your Button to become an `<a>` element */
+    /** Optional specify an href for your Button to become an `<a>` element */
     to?: string
-    /** function that happens when you click button */
+    /** Optional callback function to handle click events on the icon button */
     onClick?: (values: any) => void
-    /** Optional can add classes to customize margins for example */
+    /** Optional class name for custom styling of the icon button */
     className?: string
-    /** Optional can add classes to icon to adjust size for example. */
+    /** Optional class name for custom styling of the icon. */
     iconClassName?: string
     /** Specify whether the Button should be disabled, or not */
     disabled?: boolean
-    /** Dim opacity when button is disabled. */
+    /** Optional property to dim the opacity of the icon button when it is disabled */
     dimOpacityWhenDisabled?: boolean
-    /** For testing */
+    /** Optional property to set the data-cy attribute for testing purposes */
     datacy?: string
 }
 
 /**
- * Button only with an icon
+ * Button with an Icon
  */
 export const IconButton: React.FC<IconButtonProps> = ({ icon, to, onClick, datacy, iconClassName = "", disabled = false, className = "", color = "gray", dimOpacityWhenDisabled = true }) => {
     const innerIcon = <Icon className={`${disabled && dimOpacityWhenDisabled ? "text-opacity-50 " : ""}text-${color}-600 ${iconClassName}`}>{icon}</Icon>
