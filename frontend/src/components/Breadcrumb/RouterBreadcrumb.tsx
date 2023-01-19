@@ -4,19 +4,22 @@ import { generateBreadcrumbs } from "../../services/breadcrumb/breadcrumb"
 import { Breadcrumb } from "./Breadcrumb"
 
 export type RouterBreadcrumbType = {
-    /** Replace last item with this text. */
-    customEndingText?: string
+    /** Optional custom text on last crumb */
+    customLastCrumb?: string
 }
 
-export const RouterBreadcrumb: React.FC<RouterBreadcrumbType> = ({ customEndingText }) => {
+/**
+ * Auto generated breadcrumb from current path
+ */
+export const RouterBreadcrumb: React.FC<RouterBreadcrumbType> = ({ customLastCrumb }) => {
     const router = useRouter()
 
-    // Generate crumbs array from current URL
+    // Generate crumbs array from current path
     const breadcrumbs = useMemo(() => generateBreadcrumbs(router), [router])
 
     // Removes link from the last element and replaces custom endting text if set
     breadcrumbs[breadcrumbs.length - 1] = {
-        text: customEndingText ?? breadcrumbs[breadcrumbs.length - 1].text
+        text: customLastCrumb ?? breadcrumbs[breadcrumbs.length - 1].text
     }
 
     return <Breadcrumb breadcrumbs={breadcrumbs} />

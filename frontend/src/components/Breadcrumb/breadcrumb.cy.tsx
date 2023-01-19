@@ -66,7 +66,7 @@ describe('RouterBreadcrumb', () => {
         beforeEach(() => {
             const router = createRouter({ asPath: "/link/end" })
             cy.mount(<RouterContext.Provider value={router}>
-                <RouterBreadcrumb customEndingText="customEnd" />
+                <RouterBreadcrumb customLastCrumb="customEnd" />
             </RouterContext.Provider>)
         })
 
