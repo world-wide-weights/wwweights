@@ -17,7 +17,7 @@ describe("Generate Weight String", () => {
     })
 })
 
-describe('Generate Weight Process Bar Percentage', () => {
+describe("Generate Weight Process Bar Percentage", () => {
     it("should get correct percentage with weight value and heaviestWeight normal", () => {
         expect(generateWeightProgressBarPercentage({ value: 100, isCa: false }, { value: 200, isCa: false })).to.deep.equal({ percentage: 50 })
         expect(generateWeightProgressBarPercentage({ value: 100, isCa: false }, { value: 300, isCa: false })).to.deep.equal({ percentage: 33.33 })
@@ -37,7 +37,7 @@ describe('Generate Weight Process Bar Percentage', () => {
         expect(generateWeightProgressBarPercentage({ value: 100, additionalValue: 200, isCa: false }, { value: 200, additionalValue: 300, isCa: false })).to.deep.equal({ percentage: 33.33, percentageAdditional: 66.67 })
     })
 
-    describe('Weight same as Heaviest', () => {
+    describe("Weight same as Heaviest", () => {
         it("should get correct percentage when weight is heaviest value", () => {
             expect(generateWeightProgressBarPercentage({ value: 100, isCa: true }, { value: 100, isCa: true })).to.deep.equal({ percentage: 100 })
             expect(generateWeightProgressBarPercentage({ value: 100, isCa: false }, { value: 100, isCa: false })).to.deep.equal({ percentage: 100 })

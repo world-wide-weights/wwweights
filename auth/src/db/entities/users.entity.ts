@@ -14,7 +14,7 @@ export class UserEntity {
   @Column('character varying', { name: 'username', unique: true, length: 24 })
   username: string;
 
-  @Expose()
+  @Expose({groups: ['self']})
   @Column('character varying', { name: 'email', unique: true, length: 128 })
   email: string;
 
@@ -38,7 +38,7 @@ export class UserEntity {
   })
   role: string;
 
-  @Exclude()
+  @Expose({groups: ['self']})
   @Column('timestamp with time zone', { name: 'last_login', nullable: true })
   lastLogin: Date | null;
 }

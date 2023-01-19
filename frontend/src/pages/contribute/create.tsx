@@ -1,18 +1,19 @@
-import { Form, Formik, FormikProps } from "formik";
-import Head from "next/head";
-import { useRouter } from "next/router";
-import { useState } from "react";
-import * as yup from 'yup';
-import { Button } from "../../components/Button/Button";
-import { IconButton } from "../../components/Button/IconButton";
-import { FormError } from "../../components/Errors/FormError";
-import { Dropdown } from "../../components/Form/Dropdown/Dropdown";
-import { TextInput } from "../../components/Form/TextInput/TextInput";
-import { Headline } from "../../components/Headline/Headline";
-import { routes } from "../../services/routes/routes";
-import { getWeightInG } from "../../services/utils/unit";
-import { Weight } from "../weights";
-import { NextPageCustomProps } from "../_app";
+import { Form, Formik, FormikProps } from "formik"
+import Head from "next/head"
+import { useRouter } from "next/router"
+import { useState } from "react"
+import * as yup from "yup"
+import { RouterBreadcrumb } from "../../components/Breadcrumb/RouterBreadcrumb"
+import { Button } from "../../components/Button/Button"
+import { IconButton } from "../../components/Button/IconButton"
+import { FormError } from "../../components/Errors/FormError"
+import { Dropdown } from "../../components/Form/Dropdown/Dropdown"
+import { TextInput } from "../../components/Form/TextInput/TextInput"
+import { Headline } from "../../components/Headline/Headline"
+import { routes } from "../../services/routes/routes"
+import { getWeightInG } from "../../services/utils/unit"
+import { Weight } from "../weights"
+import { NextPageCustomProps } from "../_app"
 
 type CreateItemForm = {
     name: string
@@ -82,7 +83,7 @@ const Create: NextPageCustomProps = () => {
     const validationSchema: yup.SchemaOf<CreateItemForm> = yup.object().shape({
         name: yup.string().required("Name is required."),
         weight: yup.string().required("Weight is required."),
-        unit: yup.mixed().oneOf(['g', 'kg', 't']),
+        unit: yup.mixed().oneOf(["g", "kg", "t"]),
         additionalValue: yup.string(),
         isCa: yup.boolean().required("IsCa is required."),
         source: yup.string(),
@@ -116,15 +117,15 @@ const Create: NextPageCustomProps = () => {
                 isCa,
                 ...(additionalValue ? { additionalValue } : {}) // Only add additionalValue when defined
             },
-            tags: tags ? tags.split(', ') : []
+            tags: tags ? tags.split(", ") : []
         }
 
         // Create item with api
-        fetch('http://localhost:3004/items', {
-            method: 'POST',
+        fetch("http://localhost:3004/items", {
+            method: "POST",
             body: JSON.stringify(item),
             headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
             },
         })
 
@@ -139,9 +140,13 @@ const Create: NextPageCustomProps = () => {
         </Head>
 
         <main className="container mt-5">
+            {/* Breadcrumb */}
+            <RouterBreadcrumb />
+
             {/* Headline */}
             <Headline>Create new item</Headline>
 
+            {/* Content */}
             <Formik initialValues={initialFormValues} validationSchema={validationSchema} onSubmit={onFormSubmit}>
                 {({ dirty, isValid, errors, touched }: FormikProps<CreateItemForm>) => (
                     <Form>

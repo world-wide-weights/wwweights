@@ -1,7 +1,7 @@
-import { Field, FieldProps } from "formik";
-import { useState } from "react";
-import { Icon } from "../../Icon/Icon";
-import { Label } from "../Label";
+import { Field, FieldProps } from "formik"
+import { useState } from "react"
+import { Icon } from "../../Icon/Icon"
+import { Label } from "../Label"
 
 type DropdownProps = {
     /** Gives the dropdown a unique name */
@@ -55,7 +55,7 @@ export const Dropdown: React.FC<DropdownProps> = ({ name, placeholder, labelText
                     <button type="button" key={option.value + ""} datacy={`${name}-dropdown-option-${option.value}`} onClick={() => {
                         props.form.setFieldValue(props.field.name, option.value)
                         setIsOpen(false)
-                    }} className={`flex items-center hover:text-blue-500 w-full px-5 py-2 ${props.field.value === option.value ? `text-blue-500` : "text-gray-700"}`}>
+                    }} className={`flex items-center hover:text-blue-500 w-full px-5 py-2 ${props.field.value === option.value ? "text-blue-500" : "text-gray-700"}`}>
                         {option.icon && <Icon className="mr-2">{option.icon}</Icon>}
                         <span className="truncate pr-1">{option.label}</span>
                     </button>
