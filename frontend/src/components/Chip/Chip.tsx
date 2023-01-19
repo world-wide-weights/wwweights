@@ -10,20 +10,22 @@ type ChipProps = {
   onClick?: (values: any) => void
   /** Possibility to change color and background of tag */
   color?: Color
+  /** For testing. */
+  dataCy?: string
 }
 
 /**
  * Chip which can be just display a tag or be a link
  */
-export const Chip: React.FC<ChipProps> = ({ children, to, onClick, color = "blue" }) => {
+export const Chip: React.FC<ChipProps> = ({ children, to, onClick, dataCy, color = "blue" }) => {
   if (onClick && to)
     return <p>Use &quot;onClick&quot; prop or &quot;to&quot; prop not both!</p>
 
   return <>
-    {onClick && <button type="button" onClick={onClick} className={`inline-block bg-${color}-500 bg-opacity-20 text-${color}-600 rounded-full whitespace-nowrap px-5 py-1 mr-2 mb-2`}>
+    {onClick && <button datacy={dataCy} type="button" onClick={onClick} className={`inline-block bg-${color}-500 bg-opacity-20 text-${color}-600 rounded-full whitespace-nowrap px-5 py-1 mr-2 mb-2`}>
       {children}
     </button>}
-    {to && <Link href={to} className={`inline-block bg-${color}-500 bg-opacity-20 text-${color}-600 rounded-full whitespace-nowrap px-5 py-1 mr-2 mb-2`}>
+    {to && <Link datacy={dataCy} href={to} className={`inline-block bg-${color}-500 bg-opacity-20 text-${color}-600 rounded-full whitespace-nowrap px-5 py-1 mr-2 mb-2`}>
       {children}
     </Link>}
   </>
