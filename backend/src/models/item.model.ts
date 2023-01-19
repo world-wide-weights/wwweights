@@ -28,7 +28,7 @@ class Tag {
   slug?: string;
 
   @Expose()
-  @prop()
+  @prop({ default: 0 }) // so we can increment it with everyone else
   count?: number;
 }
 
