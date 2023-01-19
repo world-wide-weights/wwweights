@@ -3,7 +3,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import * as yup from 'yup';
-import { Breadcrumb } from "../../components/Breadcrumb/Breadcrumb";
+import { RouterBreadcrumb } from "../../components/Breadcrumb/RouterBreadcrumb";
 import { Button } from "../../components/Button/Button";
 import { IconButton } from "../../components/Button/IconButton";
 import { FormError } from "../../components/Errors/FormError";
@@ -141,7 +141,7 @@ const Create: NextPageCustomProps = () => {
 
         <main className="container mt-5">
             {/* Breadcrumb */}
-            <Breadcrumb customEndingText="Create new item" />
+            <RouterBreadcrumb />
 
             {/* Headline */}
             <Headline>Create new item</Headline>

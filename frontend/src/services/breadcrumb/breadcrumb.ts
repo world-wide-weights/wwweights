@@ -1,9 +1,9 @@
 import { NextRouter } from "next/router"
 import { capitalizeFirstLetter } from "../utils/capitalizeString"
 
-type Crumb = {
+export type Crumb = {
     /** Link where the crumb is going to. */
-    to: string
+    to?: string
     /** Text the crumb displays. */
     text: string
 }

@@ -4,20 +4,16 @@ type CrumbProps = {
     /** Text from crumb. */
     text: string
     /** Link to where the crumb is going. */
-    to: string
-    /** True when it is the last element of the breadcrumb list. The last element is only text not a link. */
-    last: boolean
-    /** Replace last item with this text. */
-    customEndingText?: string
+    to?: string
 }
 
 /**
  *  Each individual "crumb" in the breadcrumbs list.
  */
-export const Crumb: React.FC<CrumbProps> = ({ text, to, customEndingText, last = false }) => {
+export const Crumb: React.FC<CrumbProps> = ({ text, to }) => {
     // The last crumb is rendered as normal text since we are already on the page
-    if (last) {
-        return <p datacy={`crumb-${customEndingText ?? text}`} className="font-medium text-gray-600">{customEndingText ?? text}</p>
+    if (!to) {
+        return <p datacy={`crumb-${text}`} className="font-medium text-gray-600">{text}</p>
     }
 
     // All other crumbs will be rendered as links that can be visited 

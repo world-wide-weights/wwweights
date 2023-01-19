@@ -2,13 +2,13 @@ import 'material-symbols';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
 import { createRouter } from '../../../cypress/support/component';
 import '../../styles/global.css';
-import { Breadcrumb } from './Breadcrumb';
+import { RouterBreadcrumb } from './RouterBreadcrumb';
 
-describe('Breadcrumb', () => {
-    it('should display breadcrumb', () => {
+describe('RouterBreadcrumb', () => {
+    it('should display RouterBreadcrumb', () => {
         const router = createRouter({ asPath: "/link" })
         cy.mount(<RouterContext.Provider value={router}>
-            <Breadcrumb />
+            <RouterBreadcrumb />
         </RouterContext.Provider>)
     })
 
@@ -16,7 +16,7 @@ describe('Breadcrumb', () => {
         beforeEach(() => {
             const router = createRouter({ asPath: "/link" })
             cy.mount(<RouterContext.Provider value={router}>
-                <Breadcrumb />
+                <RouterBreadcrumb />
             </RouterContext.Provider>)
         })
 
@@ -33,7 +33,7 @@ describe('Breadcrumb', () => {
         beforeEach(() => {
             const router = createRouter({ asPath: "/link/link2/end" })
             cy.mount(<RouterContext.Provider value={router}>
-                <Breadcrumb />
+                <RouterBreadcrumb />
             </RouterContext.Provider>)
         })
 
@@ -52,7 +52,7 @@ describe('Breadcrumb', () => {
         beforeEach(() => {
             const router = createRouter({ asPath: "/link/end" })
             cy.mount(<RouterContext.Provider value={router}>
-                <Breadcrumb />
+                <RouterBreadcrumb />
             </RouterContext.Provider>)
         })
 
@@ -66,7 +66,7 @@ describe('Breadcrumb', () => {
         beforeEach(() => {
             const router = createRouter({ asPath: "/link/end" })
             cy.mount(<RouterContext.Provider value={router}>
-                <Breadcrumb customEndingText="customEnd" />
+                <RouterBreadcrumb customEndingText="customEnd" />
             </RouterContext.Provider>)
         })
 

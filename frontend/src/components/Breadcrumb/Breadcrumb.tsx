@@ -1,30 +1,25 @@
-import { useRouter } from "next/router";
-import { Fragment, useMemo } from "react";
-import { generateBreadcrumbs } from "../../services/breadcrumb/breadcrumb";
+import { Fragment } from "react";
+import { Crumb as CrumbType } from "../../services/breadcrumb/breadcrumb";
 import { routes } from "../../services/routes/routes";
 import { IconButton } from "../Button/IconButton";
 import { Icon } from "../Icon/Icon";
 import { Crumb } from "./Crumb";
 
 type BreadcrumbProps = {
-    /** Replace last item with this text. */
-    customEndingText?: string
+    /** Breadcrumbs */
+    breadcrumbs: CrumbType[]
 }
 
 /**
  * Breadcrumb component, helps with deep nested routes.
  */
-export const Breadcrumb: React.FC<BreadcrumbProps> = ({ customEndingText }) => {
-    const router = useRouter()
-
-    // Generate crumbs array
-    const breadcrumbs = useMemo(() => generateBreadcrumbs(router), [router])
+export const Breadcrumb: React.FC<BreadcrumbProps> = ({ breadcrumbs }) => {
 
     return <div datacy="breadcrumb" className="flex items-center gap-2 mb-2">
         <IconButton datacy="breadcrumb-home" icon="home" to={routes.home} />
-        {breadcrumbs.map((crumb, id) => <Fragment key={id}>
+        {breadcrumbs.map(({ to, text }, id) => <Fragment key={id}>
             <Icon className="text-gray-600">chevron_right</Icon>
-            <Crumb {...crumb} customEndingText={customEndingText} last={id === breadcrumbs.length - 1} />
+            <Crumb text={text} to={to} />
         </Fragment>)}
     </div>
 }
