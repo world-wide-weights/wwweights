@@ -3,24 +3,24 @@ import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserService } from '../src/db/db.service';
+import * as jwkToPem from 'jwk-to-pem';
 import * as request from 'supertest';
 import { DataSource } from 'typeorm';
 import { AppModule } from '../src/app.module';
+import { RefreshJWTPayload } from '../src/auth/dtos/refresh-jwt-payload.dto';
+import { RsaJWK } from '../src/auth/responses/jwks.response';
+import { UserService } from '../src/db/ user.service';
+import { JWTPayload } from '../src/shared/dtos/jwt-payload.dto';
+import { STATUS } from '../src/shared/enums/status.enum';
 import {
   createUser,
   deleteByAttribute,
   getUserByAttribute,
   updateByAttribute,
 } from './helpers/db.helper';
-import { setupDataSource } from './helpers/typeOrmSetup';
 import { comparePassword } from './helpers/general.helper';
-import { RefreshJWTPayload } from '../src/auth/dtos/refresh-jwt-payload.dto';
-import { STATUS } from '../src/shared/enums/status.enum';
 import { SAMPLE_USER } from './helpers/sample-data.helper';
-import { RsaJWK } from '../src/auth/responses/jwks.response';
-import { JWTPayload } from '../src/shared/dtos/jwt-payload.dto';
-import * as jwkToPem from 'jwk-to-pem';
+import { setupDataSource } from './helpers/typeOrmSetup';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
@@ -345,9 +345,12 @@ describe('AuthController (e2e)', () => {
         const expectedItem = res.body.keys.find(
           (e) => e.kid === configService.get<string>('JWT_AUTH_KID'),
         );
-        const publickey = jwkToPem(expectedItem, {private: false}) 
-        const tokenPayload = jwtService.verify(jwtToken, {publicKey: publickey , algorithms: ['RS256']});
-        expect(tokenPayload).toBeDefined()
+        const publickey = jwkToPem(expectedItem, { private: false });
+        const tokenPayload = jwtService.verify(jwtToken, {
+          publicKey: publickey,
+          algorithms: ['RS256'],
+        });
+        expect(tokenPayload).toBeDefined();
       });
     });
   });
