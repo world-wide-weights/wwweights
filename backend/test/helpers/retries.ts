@@ -15,7 +15,6 @@ export const retries = async (
     attempts++;
     await timeout();
   }
-  console.log('attempts', attempts);
   if (attempts >= maxAttempts) return false;
   return true;
 };
@@ -29,7 +28,6 @@ const checkCounts = async (requirements: Requirement[]) => {
   for (const result of results) {
     if (!result) return false;
   }
-  console.log('checkCounts', results);
   return true;
 };
 

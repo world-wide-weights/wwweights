@@ -70,7 +70,6 @@ describe('AppController (e2e)', () => {
       //   { model: tagModel, count: 2 },
       //   { model: itemsByTagModel, count: 2 },
       // ]);
-      // console.log('attemptSuccess', attemptSuccess);
       // expect(attemptSuccess).toBeTruthy();
 
       // Also give it some extra time to make sure the tag updates have been completed
@@ -140,18 +139,15 @@ describe('AppController (e2e)', () => {
 
       expect(itemsByTag1).toBeDefined();
       expect(itemsByTag1.items.length).toEqual(2);
-      console.log('itemsByTag1.items[0].tags', itemsByTag1.items[0].tags);
       expect(itemsByTag1.items[0].tags[0].name).toEqual(tag1.name);
       expect(itemsByTag1.items[0].tags[0].count).toEqual(2);
       expect(itemsByTag1.items[0].tags[1].name).toEqual(tag2.name);
       expect(itemsByTag1.items[0].tags[1].count).toEqual(1);
-      console.log('itemsByTag1.items[1].tags', itemsByTag1.items[1].tags);
       expect(itemsByTag1.items[1].tags[0].name).toEqual(tag1.name);
       expect(itemsByTag1.items[1].tags[0].count).toEqual(2);
 
       expect(itemsByTag2).toBeDefined();
       expect(itemsByTag2.items.length).toEqual(1);
-      console.log('itemsByTag2.items[0].tags', itemsByTag2.items[0].tags);
       expect(itemsByTag2.items[0].tags[0].name).toEqual(tag1.name);
       expect(itemsByTag2.items[0].tags[0].count).toEqual(2);
       expect(itemsByTag2.items[0].tags[1].name).toEqual(tag2.name);
