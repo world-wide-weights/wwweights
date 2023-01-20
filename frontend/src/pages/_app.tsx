@@ -1,33 +1,33 @@
 /** Import font support */
-import localFont from '@next/font/local';
+import localFont from "@next/font/local"
 /** Imports all material symbols globally which we use as our icon pack */
-import 'material-symbols/rounded.css';
-import { NextPage } from 'next';
-import type { Session } from "next-auth";
-import { SessionProvider } from 'next-auth/react';
-import type { AppProps } from 'next/app';
-import React from 'react';
-import { Auth } from '../components/Auth/Auth';
-import { Layout } from '../components/Layout/Layout';
-import '../styles/global.css';
+import "material-symbols/rounded.css"
+import { NextPage } from "next"
+import type { Session } from "next-auth"
+import { SessionProvider } from "next-auth/react"
+import type { AppProps } from "next/app"
+import React from "react"
+import { Auth } from "../components/Auth/Auth"
+import { Layout } from "../components/Layout/Layout"
+import "../styles/global.css"
 
 // Font
 const metropolis = localFont({
   src: [
     {
-      path: '../assets/font/metropolis/Metropolis-Regular.woff2',
-      weight: '400',
-      style: 'normal',
+      path: "../assets/font/metropolis/Metropolis-Regular.woff2",
+      weight: "400",
+      style: "normal",
     },
     {
-      path: '../assets/font/metropolis/Metropolis-Medium.woff2',
-      weight: '500',
-      style: 'normal',
+      path: "../assets/font/metropolis/Metropolis-Medium.woff2",
+      weight: "500",
+      style: "normal",
     },
     {
-      path: '../assets/font/metropolis/Metropolis-Bold.woff2',
-      weight: '700',
-      style: 'normal',
+      path: "../assets/font/metropolis/Metropolis-Bold.woff2",
+      weight: "700",
+      style: "normal",
     },
   ],
   variable: "--font-metropolis"

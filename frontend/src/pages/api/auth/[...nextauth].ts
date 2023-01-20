@@ -1,8 +1,8 @@
-import { NextAuthOptions, Session, User } from "next-auth";
-import { JWT } from "next-auth/jwt";
-import NextAuth from "next-auth/next";
-import CredentialsProvider from 'next-auth/providers/credentials';
-import { LoginDto } from "../../account/login";
+import { NextAuthOptions, Session, User } from "next-auth"
+import { JWT } from "next-auth/jwt"
+import NextAuth from "next-auth/next"
+import CredentialsProvider from "next-auth/providers/credentials"
+import { LoginDto } from "../../account/login"
 
 export type UserInfo = {
     email: string
@@ -13,16 +13,16 @@ export type UserInfo = {
 export const authOptions: NextAuthOptions = {
     providers: [
         CredentialsProvider({
-            id: 'credentials',
-            name: 'DefaultEmailPassword',
+            id: "credentials",
+            name: "DefaultEmailPassword",
             credentials: {
                 email: {
-                    label: 'email',
-                    type: 'email',
+                    label: "email",
+                    type: "email",
                 },
                 password: {
-                    label: 'Password',
-                    type: 'password'
+                    label: "Password",
+                    type: "password"
                 },
             },
             authorize: async (credentials) => {
@@ -34,10 +34,10 @@ export const authOptions: NextAuthOptions = {
 
                 // Login to our api
                 const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/login`, {
-                    method: 'POST',
+                    method: "POST",
                     body: JSON.stringify(payload),
                     headers: {
-                        'Content-Type': 'application/json',
+                        "Content-Type": "application/json",
                     },
                 })
 
@@ -75,7 +75,7 @@ export const authOptions: NextAuthOptions = {
         },
     },
     pages: {
-        signIn: '/account/login',
+        signIn: "/account/login",
     },
 }
 

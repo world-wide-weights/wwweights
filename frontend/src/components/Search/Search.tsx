@@ -1,4 +1,4 @@
-import { TextInput } from "../Form/TextInput/TextInput";
+import { TextInput } from "../Form/TextInput/TextInput"
 
 /** 
  * Search, can only be used with Formik

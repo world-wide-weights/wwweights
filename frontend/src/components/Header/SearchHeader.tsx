@@ -1,12 +1,12 @@
-import { Form, Formik, useFormikContext } from "formik";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { Tag } from "../../pages/tags";
-import { routes } from "../../services/routes/routes";
-import { Chip } from "../Chip/Chip";
-import { Headline } from "../Headline/Headline";
-import { Search } from "../Search/Search";
-import { SortType } from "../Sort/Sort";
+import { Form, Formik, useFormikContext } from "formik"
+import { useRouter } from "next/router"
+import { useEffect, useState } from "react"
+import { Tag } from "../../pages/tags"
+import { routes } from "../../services/routes/routes"
+import { Chip } from "../Chip/Chip"
+import { Headline } from "../Headline/Headline"
+import { Search } from "../Search/Search"
+import { SortType } from "../Sort/Sort"
 
 type SearchHeaderProps = {
     /** Search query. */
@@ -93,12 +93,12 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "
                         {/* TODO (Zoe-bot): Only develop Remove query !== "" condition when normal backend api is set */}
                         {query !== "" && (isLoadingRelatedTags ? <p>Loading...</p> : <div datacy="search-header-tag-wrapper" className="whitespace-nowrap overflow-x-scroll md:whitespace-normal md:overflow-hidden">
                             {/* Only show tags not current searched (should not be the value in query field) */}
-                            {relatedTags.map(relatedTag => relatedTag.slug !== query && <Chip key={relatedTag.slug} to={routes.weights.list({ sort, query: relatedTag.slug })}>{relatedTag.name}</Chip>)}
+                            {relatedTags.map(relatedTag => relatedTag.slug !== query && <Chip dataCy={`search-header-chip-${relatedTag.slug}`} key={relatedTag.slug} to={routes.weights.list({ sort, query: relatedTag.slug })}>{relatedTag.name}</Chip>)}
                         </div>)}
                         <AutoUpdateQueryField />
                     </Form>
                 </Formik>
             </div>
         </div>
-    </header >
+    </header>
 }

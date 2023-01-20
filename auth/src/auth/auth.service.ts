@@ -1,19 +1,21 @@
 import {
+  HttpException,
   Injectable,
   InternalServerErrorException,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { JWTPayload } from '../shared/dtos/jwt-payload.dto';
+import * as bcrypt from 'bcrypt';
+import { UserService } from '../db/ user.service';
 import { UserEntity } from '../db/entities/users.entity';
+import { JWTPayload } from '../shared/dtos/jwt-payload.dto';
 import { ROLES } from '../shared/enums/roles.enum';
 import { STATUS } from '../shared/enums/status.enum';
 import { LoginDTO } from './dtos/login.dto';
-import { SignUpDTO } from './dtos/signup.dto';
-import * as bcrypt from 'bcrypt';
-import { UserService } from '../db/db.service';
-import { ConfigService } from '@nestjs/config';
 import { RefreshJWTPayload } from './dtos/refresh-jwt-payload.dto';
+import { SignUpDTO } from './dtos/signup.dto';
 import { TokenResponse } from './responses/token.response';
 
 import { createPublicKey } from 'crypto';
@@ -21,6 +23,7 @@ import { RsaJWK, RsaJWKBase } from './responses/jwks.response';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
@@ -30,7 +33,7 @@ export class AuthService {
   async signup(body: SignUpDTO): Promise<UserEntity> {
     // hash password
     const hash = await bcrypt.hash(body.password, 10);
-    const newUser = await this.userService.insertNew({
+    const newUser = await this.userService.insertUser({
       ...body,
       password: hash,
     });
@@ -44,12 +47,22 @@ export class AuthService {
   }
 
   async login(body: LoginDTO): Promise<TokenResponse> {
-    const user = await this.userService.findOneByEmail(body.email);
+    let user: UserEntity;
+    try {
+      user = await this.userService.findOneByEmail(body.email);
+    } catch (error) {
+      this.logger.error(error);
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException();
+    }
     if (
       !user ||
       user.status === STATUS.BANNED ||
       !(await bcrypt.compare(body.password, user.password))
     ) {
+      this.logger.warn(`Attempted but invalid login for user ${body.email}`);
       throw new UnauthorizedException();
     }
     return await this.getAuthPayload(user);
