@@ -1,23 +1,52 @@
 import { GetStaticPaths, GetStaticProps, InferGetServerSidePropsType } from "next"
 import Head from "next/head"
 import Image from "next/image"
+import { useRouter } from "next/router"
 import { Item } from "."
 import { Chip } from "../../components/Chip/Chip"
 import { SearchHeader } from "../../components/Header/SearchHeader"
 import { Headline } from "../../components/Headline/Headline"
 import { Icon } from "../../components/Icon/Icon"
+import { Tab } from "../../components/Tabs/Tab"
+import { Tabs } from "../../components/Tabs/Tabs"
 import { routes } from "../../services/routes/routes"
 import { generateWeightString } from "../../services/utils/weight"
+import Custom404 from "../404"
 
 type WeightsSingleProps = {
     item: Item
 }
 
+export const singleWeightTabs = [{
+    title: "Overview",
+    slug: "overview",
+    content: <p>Overview Content</p>
+}, {
+    title: "Similar Items",
+    slug: "similar-items",
+    content: <p>Simlar Items Content</p>
+}, {
+    title: "Compare",
+    slug: "compare",
+    content: <p>Compare Content</p>
+}]
+
 /** Single Page of a weight */
 export default function WeightsSingle({ item }: InferGetServerSidePropsType<typeof getStaticProps>) {
+    // Title
     const siteTitle = `${item.name} Weight | WWWeights`
+
+    // Handle tabs
+    const currentTab = useRouter().query.tab
+    const currentTabIndex = singleWeightTabs.findIndex(singleWeightTab => singleWeightTab.slug === currentTab)
+
+    // Strings Generator
     const weightString = generateWeightString(item.weight)
     const sourceName = item.source ? new URL(item.source).hostname.replace("www.", "") : null
+
+    // Throw error when tab does not exist.
+    if (currentTabIndex === -1 && currentTab)
+        return <Custom404 />
 
     return <>
         {/* Meta Tags */}
@@ -29,7 +58,7 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
         <SearchHeader />
 
         <main className="container mt-10 md:mt-20">
-            <div className="grid grid-cols-[120px_1fr] md:grid-cols-[250px_1fr] items-center lg:grid-cols-2">
+            <div className="grid grid-cols-[120px_1fr] md:grid-cols-[250px_1fr] items-center lg:grid-cols-2 mb-10">
                 {/* Headline and Weight */}
                 <div className="lg:col-start-1 lg:col-end-3 pl-5 lg:pl-0 md:mt-5">
                     <a target="_blank" rel="noopener noreferrer" className="flex items-center text-gray-700 text-lg sm:text-2xl md:mb-2" href={`https://www.google.com/search?q=${item.name}`}>
@@ -54,6 +83,15 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
                     <Image src="https://picsum.photos/1200" priority className="sm:hidden rounded-xl" alt={item.name} width={120} height={120} />
                     <Image src="https://picsum.photos/1200" priority className="hidden sm:block rounded-xl" alt={item.name} width={230} height={230} />
                 </div>
+            </div>
+
+            {/* Tabs Similar Items, Compare,.. */}
+            <div>
+                <Tabs selectedTabIndex={!currentTab ? 0 : currentTabIndex}>
+                    {singleWeightTabs.map(singleWeightTab => <Tab key={singleWeightTab.slug} title={singleWeightTab.title} link={routes.weights.single(item.slug, { tab: singleWeightTab.slug })}>
+                        {singleWeightTab.content}
+                    </Tab>)}
+                </Tabs>
             </div>
         </main>
     </>
