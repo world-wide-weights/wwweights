@@ -9,7 +9,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     MulterModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        dest: configService.get<string>('IMAGE_STORE_INCOMING_CACHE_PATH'),
+        dest:
+          configService.get<string>('IMAGE_STORE_INCOMING_CACHE_PATH') ||
+          './cache',
       }),
       inject: [ConfigService],
     }),
