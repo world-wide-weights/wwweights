@@ -24,7 +24,12 @@ export const routes = {
 
             return `/weights${queryString !== "" ? `?${queryString}` : ""}`
         },
-        single: (slug: string) => `/weights/${slug}`
+        single: (slug: string, options?: { tab: string }) => {
+            if (!options || options.tab === "overview")
+                return `/weights/${slug}`
+
+            return `/weights/${slug}?tab=${options.tab}`
+        }
     },
     tags: {
         list: (options?: PaginationBaseOptions) => {
