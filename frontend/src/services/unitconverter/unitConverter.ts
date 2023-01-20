@@ -27,7 +27,7 @@ export const calculateCommaShift = (
   value: BigNumber,
   unit: number,
   left: Boolean
-) => {
+): BigNumber => {
   if (left) {
     return value.multipliedBy(BigNumber(10).exponentiatedBy(unit));
   } else {
@@ -41,7 +41,10 @@ export const calculateCommaShift = (
  * @param unit the unit of the value.
  * @returns the value in gram.
  */
-export const convertAnyWeightIntoGram = (value: BigNumber, unit: Unit) => {
+export const convertAnyWeightIntoGram = (
+  value: BigNumber,
+  unit: Unit
+): BigNumber => {
   return calculateCommaShift(value, commaShiftsForUnit[unit], true);
 };
 
@@ -54,7 +57,7 @@ export const convertAnyWeightIntoGram = (value: BigNumber, unit: Unit) => {
 export const convertWeightIntoTargetUnit = (
   value: BigNumber,
   targetUnit: Unit
-) => {
+): BigNumber => {
   return calculateCommaShift(value, commaShiftsForUnit[targetUnit], false);
 };
 
