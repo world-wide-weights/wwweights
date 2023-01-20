@@ -1,1 +1,1 @@
-export type Unit = "pg" | "ng" | "µg" | "mg" | "g" | "kg" | "t" | "Mt" | "Gt"
+export type Unit = "pg" | "ng" | "µg" | "mg" | "g" | "kg" | "Mg" | "Tg" | "Pg"

@@ -11,9 +11,9 @@ const commaShiftsForUnit: { [K in Unit]: number } = {
   mg: -3,
   g: 0,
   kg: 3,
-  t: 6,
-  Mt: 12,
-  Gt: 15,
+  Mg: 6,
+  Tg: 12,
+  Pg: 15,
 }
 
 // FOR FUTURE WORK, see: https://en.wikipedia.org/wiki/Orders_of_magnitude_(mass)
