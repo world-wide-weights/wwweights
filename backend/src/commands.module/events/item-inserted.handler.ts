@@ -26,28 +26,9 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
     We decided to go with the first solution to have one less db call but 1 more if.
     */
 
-    let startTime = performance.now();
-
-    // Increment/Upsert Tags
-    const tags = [];
-    if (item.tags) {
-      for (const { name } of item.tags) {
-        try {
-          const result = await this.tagModel.findOneAndUpdate(
-            { name },
-            { $inc: { count: 1 } },
-            { upsert: true, new: true },
-          );
-          tags.push({ name, count: result.count });
-          this.logger.log(`Tag incremented or created: ${name}`);
-        } catch (error) {
-          this.logger.error(error);
-        }
-      }
-    }
+    const startTime = performance.now();
 
     // Insert Item
-    item.tags = tags; // Here because we use the item later and need the tags there too
     const insertedItem = new this.itemModel(item);
     try {
       await insertedItem.save();
@@ -56,23 +37,63 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       this.logger.error(error);
     }
 
+    // No need for any tag related projection if item has no tags
+    if (!item.tags) {
+      this.logger.debug(
+        `ItemInsertedHandler Insert took: ${performance.now() - startTime}ms`,
+      );
+      return;
+    }
+
+    // Increment/Upsert Tags
+    item.tags = await this.incrementOrInsertTags(item);
+
     this.logger.debug(
       `ItemInsertedHandler Insert took: ${performance.now() - startTime}ms`,
     );
-    // No need for any tag related projection if item has no tags
-    if (!tags) return;
 
-    startTime = performance.now();
+    const startTime2 = performance.now();
 
     await Promise.all([
+      // we do this this way around instead of first inserting tags and then insert the item, we get one more db call, but it is a fast one and it enables us to have everything behind the if(!tags)
+      this.updateItemWithCorrectTags(item),
       this.updateItemTagCounts(item),
       this.createItemsByTagsOrInsertItem(item),
       this.updateItemsByTagCounts(item),
     ]);
 
     this.logger.debug(
-      `ItemInsertedHandler Updates took: ${performance.now() - startTime}ms`,
+      `ItemInsertedHandler Updates took: ${performance.now() - startTime2}ms`,
     );
+  }
+
+  async incrementOrInsertTags(item: Item) {
+    const tags = [];
+    for (const { name } of item.tags) {
+      try {
+        const result = await this.tagModel.findOneAndUpdate(
+          { name },
+          { $inc: { count: 1 } },
+          { upsert: true, new: true },
+        );
+        tags.push({ name, count: result.count });
+        this.logger.log(`Tag incremented or created: ${name}`);
+      } catch (error) {
+        this.logger.error(error);
+      }
+    }
+    return tags;
+  }
+
+  async updateItemWithCorrectTags(item: Item) {
+    try {
+      await this.itemModel.findOneAndUpdate(
+        { slug: item.slug },
+        { tags: item.tags },
+      );
+    } catch (error) {
+      this.logger.error(error);
+    }
   }
 
   async updateItemTagCounts(item: Item) {
@@ -85,25 +106,6 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
         this.logger.log(`Items updated: ${getStringified(res)}`);
         this.logger.log(
           `Item count incremented for tags in items, tag: ${tag.name}`,
-        );
-      } catch (error) {
-        this.logger.error(error);
-      }
-    }
-  }
-
-  async updateItemsByTagCounts(item: Item) {
-    for (const tag of item.tags) {
-      try {
-        await this.itemsByTagModel.updateMany(
-          { tagName: tag.name },
-          { $inc: { 'items.$[item].tags.$[tag].count': 1 } },
-          {
-            arrayFilters: [
-              { 'item.slug': { $ne: item.slug } },
-              { 'tag.name': tag.name },
-            ],
-          },
         );
       } catch (error) {
         this.logger.error(error);
@@ -133,6 +135,25 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
         } catch (error) {
           this.logger.error(error);
         }
+      }
+    }
+  }
+
+  async updateItemsByTagCounts(item: Item) {
+    for (const tag of item.tags) {
+      try {
+        await this.itemsByTagModel.updateMany(
+          { tagName: tag.name },
+          { $inc: { 'items.$[item].tags.$[tag].count': 1 } },
+          {
+            arrayFilters: [
+              { 'item.slug': { $ne: item.slug } },
+              { 'tag.name': tag.name },
+            ],
+          },
+        );
+      } catch (error) {
+        this.logger.error(error);
       }
     }
   }
