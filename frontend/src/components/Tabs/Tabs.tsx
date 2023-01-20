@@ -15,10 +15,10 @@ type TabsProps = {
  * @example
  * ```jsx
  * <Tabs>
- *  <Tab tab={{ title: "Test 1", slug: "test1" }} link={routes.test({ tab: test1 })}>
+ *  <Tab title="Test 1" link={routes.test({ tab: test1 })}>
  *     <p>Test 1 Content</p> 
  *  </Tab>
- *  <Tab tab={{ title: "Test 2", slug: "test2" }} link={routes.test({ tab: test2 })}>
+ *  <Tab tab="Test 2" link={routes.test({ tab: test2 })}>
  *     <p>Test 2 Content</p> 
  *  </Tab>
  * </Tabs>
@@ -26,9 +26,9 @@ type TabsProps = {
  */
 export const Tabs: React.FC<TabsProps> = ({ children, selectedTabIndex }) => {
     return <div>
-        <div className="flex items-center gap-3">
-            {children.map(({ props: { tab, link } }, index) => (
-                selectedTabIndex === index ? <Chip to={link} key={index}>{tab.title}</Chip> : <Button key={index} to={link} kind="tertiary" className="mr-2 mb-2">{tab.title}</Button>
+        <div className="flex items-center">
+            {children.map(({ props: { title, link } }, index) => (
+                selectedTabIndex === index ? <Chip to={link} key={index}>{title}</Chip> : <Button key={index} to={link} kind="tertiary" className="px-5 mr-2 mb-2">{title}</Button>
             ))}
         </div>
         {children[selectedTabIndex]}
