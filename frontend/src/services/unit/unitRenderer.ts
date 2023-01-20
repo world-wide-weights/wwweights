@@ -4,9 +4,9 @@ import { getBestHumanReadableUnit } from "./unitHumanReadable"
 import BigNumber from "bignumber.js"
 
 /**
- * Gets value in gram and converts it into best readable Unit 1000g = 1kg.
- * @param weight the weight to convert.
- * @returns object with number and new readable unit.
+ * gets weight and renders it into a human readable string.
+ * @param weight the weight to render.
+ * @returns string with the weight in the best human readable unit.
  */
 export const renderUnitIntoString = (
     weight: Weight
