@@ -70,6 +70,22 @@ describe('UploadController (e2e)', () => {
             .length,
         ).toEqual(1);
       });
+      it('Should accept oversized images', async () => {
+        // ACT
+        const res = await request(app.getHttpServer())
+          .post('/upload/image')
+          .attach(
+            'image',
+            path.join(process.cwd(), 'test', 'helpers', 'test-oversized.png'),
+          );
+        // ASSERT
+        expect(res.statusCode).toEqual(HttpStatus.CREATED);
+        expect(
+          fs.readdirSync(uploadService['pathBuilder'](undefined, 'disk'))
+            .length,
+        ).toEqual(1);
+      });
+      // File size limitation not tested for obvious reasons
     });
     describe('Negative Tests', () => {
       it('Should fail for invalid file types', async () => {
