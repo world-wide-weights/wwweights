@@ -35,7 +35,7 @@ export class UploadService {
       this.storePath,
       `${hash}.${image.mimetype.split('/')[1]}`,
     );
-    if (!fs.existsSync(fileTargetPath)) {
+    if (fs.existsSync(fileTargetPath)) {
       // Image is duplicate => return error along with the hash => no duplicate files
       throw new ConflictException({
         message:
@@ -52,7 +52,7 @@ export class UploadService {
     return hash;
   }
 
-  async hashFile(filePath: string) {
+  async hashFile(filePath: string): Promise<string> {
     const fileBuffer = await fsProm.readFile(filePath);
     const hashSum = createHash('sha256');
     hashSum.update(fileBuffer);

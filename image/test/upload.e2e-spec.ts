@@ -27,10 +27,15 @@ describe('UploadController (e2e)', () => {
     app = moduleFixture.createNestApplication();
     uploadService = app.get<UploadService>(UploadService);
     await app.init();
-    // Clear path
+    fakeGuard.setAuthResponse(true);
     await emptyDir(uploadService['pathBuilder'](undefined, 'disk'));
     await emptyDir(uploadService['pathBuilder'](undefined, 'cache'));
-    fakeGuard.setAuthResponse(true);
+  });
+
+  afterEach(async () => {
+    await emptyDir(uploadService['pathBuilder'](undefined, 'disk'));
+    await emptyDir(uploadService['pathBuilder'](undefined, 'cache'));
+    await app.close();
   });
 
   describe('/upload/image (POST)', () => {
@@ -78,46 +83,47 @@ describe('UploadController (e2e)', () => {
           true,
         );
       });
-    });
-    it('Should fail for unauthorized user', async () => {
-      // ASSERT
-      fakeGuard.setAuthResponse(false);
-      // ACT
-      const res = await request(app.getHttpServer())
-        .post('/upload/image')
-        .attach(
-          'image',
-          path.join(process.cwd(), 'test', 'helpers', 'test.jpg'),
-        );
-      // ASSERT
-      expect(res.statusCode).toEqual(HttpStatus.FORBIDDEN);
-    });
-    it('Should detect duplicates', async () => {
-      // ASSERT
-      // Copy file to disk folder
-      const fileHash = uploadService.hashFile(
-        path.join(process.cwd(), 'test', 'helpers', 'test.png'),
-      );
-      fs.copyFileSync(
-        path.join(process.cwd(), 'test', 'helpers', 'test.png'),
-        path.join(
-          uploadService['pathBuilder'](undefined, 'disk'),
-          `${fileHash}.png`,
-        ),
-      );
-      // ACT
-      const res = await request(app.getHttpServer())
-        .post('/upload/image')
-        .attach(
-          'image',
+      it('Should fail for unauthorized user', async () => {
+        // ASSERT
+        fakeGuard.setAuthResponse(false);
+        // ACT
+        const res = await request(app.getHttpServer())
+          .post('/upload/image')
+          .attach(
+            'image',
+            path.join(process.cwd(), 'test', 'helpers', 'test.jpg'),
+          );
+        // ASSERT
+        expect(res.statusCode).toEqual(HttpStatus.FORBIDDEN);
+      });
+      it('Should detect duplicates', async () => {
+        // ASSERT
+        // Copy file to disk folder
+        const fileHash = await uploadService.hashFile(
           path.join(process.cwd(), 'test', 'helpers', 'test.png'),
         );
-      // ASSERT
-      expect(res.statusCode).toEqual(HttpStatus.CONFLICT);
-      expect(res.body.location).toEqual(`${fileHash}.png`);
-      expect(
-        fs.readdirSync(uploadService['pathBuilder'](undefined, 'disk')).length,
-      ).toEqual(1);
+        fs.copyFileSync(
+          path.join(process.cwd(), 'test', 'helpers', 'test.png'),
+          path.join(
+            uploadService['pathBuilder'](undefined, 'disk'),
+            `${fileHash}.png`,
+          ),
+        );
+        // ACT
+        const res = await request(app.getHttpServer())
+          .post('/upload/image')
+          .attach(
+            'image',
+            path.join(process.cwd(), 'test', 'helpers', 'test.png'),
+          );
+        // ASSERT
+        expect(res.statusCode).toEqual(HttpStatus.CONFLICT);
+        expect(res.body.location).toEqual(`${fileHash}.png`);
+        expect(
+          fs.readdirSync(uploadService['pathBuilder'](undefined, 'disk'))
+            .length,
+        ).toEqual(1);
+      });
     });
   });
 });
