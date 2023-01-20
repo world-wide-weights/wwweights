@@ -15,6 +15,5 @@ export const initializeMockModule = (options?: TypegooseModuleOptions) =>
   });
 
 export async function teardownMockDataSource() {
-  // await dataSource.destroy();
-  // await mongod.stop();
+  await mongod.stop();
 }
