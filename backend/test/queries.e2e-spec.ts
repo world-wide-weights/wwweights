@@ -26,7 +26,7 @@ describe('AppController (e2e)', () => {
   });
 
   describe('Queries /query/v1', () => {
-    const queriesPath = '/query/v1';
+    const queriesPath = '/query/v1/';
 
     it('/ => createItem', async () => {
       expect(true).toBe(true);

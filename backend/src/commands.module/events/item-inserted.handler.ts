@@ -143,7 +143,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
     for (const tag of item.tags) {
       try {
         await this.itemsByTagModel.updateMany(
-          { tagName: tag.name },
+          {},
           { $inc: { 'items.$[item].tags.$[tag].count': 1 } },
           {
             arrayFilters: [

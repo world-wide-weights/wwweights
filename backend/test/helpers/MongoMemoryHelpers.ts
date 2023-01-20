@@ -1,21 +1,18 @@
+import { TypegooseModule, TypegooseModuleOptions } from '@m8a/nestjs-typegoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 
 let mongod: MongoMemoryServer;
 
-export async function initializeMockDataSource() {
-  // mongod = await MongoMemoryServer.create({});
-  // const mongoUri = await mongod.getUri();
-  // dataSource = new DataSource({
-  //   type: 'mongodb',
-  //   url: mongoUri,
-  //   entities: [Item],
-  //   synchronize: true,
-  //   useUnifiedTopology: true,
-  // });
-  // await dataSource.initialize();
-  // await dataSource.synchronize();
-  return 'dataSource';
-}
+export const initializeMockModule = (options?: TypegooseModuleOptions) =>
+  TypegooseModule.forRootAsync({
+    useFactory: async () => {
+      mongod = await MongoMemoryServer.create();
+      const mongoUri = await mongod.getUri();
+      return {
+        uri: mongoUri,
+      };
+    },
+  });
 
 export async function teardownMockDataSource() {
   // await dataSource.destroy();
