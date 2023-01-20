@@ -1,6 +1,6 @@
 // Code stolen from cypress docs
 // https://docs.cypress.io/api/commands/mount#Creating-a-New-cy-mount-Command
-import { mount } from "cypress/react";
+import { mount } from "cypress/react"
 
 declare global {
   namespace Cypress {
@@ -56,6 +56,10 @@ declare global {
        * Mock create item request.
        */
       mockCreateItem(): Chainable<void>
+      /**
+       * Mock requests for single weight page.
+       */
+      mockSingleWeight(): Chainable<void>
     }
   }
 }
