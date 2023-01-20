@@ -1,8 +1,4 @@
-import {
-  FileValidator,
-  Injectable,
-  MaxFileSizeValidator,
-} from '@nestjs/common';
+import { FileValidator, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class FileSizeValidator extends FileValidator<{
@@ -14,12 +10,11 @@ export class FileSizeValidator extends FileValidator<{
     super(validationOptions);
     this.maxFileSize = validationOptions.maxFileSizeInMb * 1000 * 1000;
   }
-  isValid(file: any): boolean {
+  isValid(file: Express.Multer.File): boolean {
     return file.size <= this.maxFileSize;
-    MaxFileSizeValidator;
   }
 
-  buildErrorMessage(file: any): string {
+  buildErrorMessage(_: Express.Multer.File): string {
     return `File too big. Please use a file smaller than ${(
       this.maxFileSize /
       1000 /

@@ -1,17 +1,15 @@
 import {
   Controller,
   HttpStatus,
-  MaxFileSizeValidator,
   ParseFilePipe,
   Post,
   UploadedFile,
   UseInterceptors,
-  UsePipes,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { FileSizeValidator } from './validators/file-size-validation.pipe';
-import { FileTypeValidationPipe } from './validators/file-type-Validation.pipe';
 import { UploadService } from './upload.service';
+import { FileSizeValidator } from './validators/file-size.validator';
+import { FileTypeValidator } from './validators/file-type.validator';
 
 @Controller('upload')
 export class UploadController {
@@ -19,14 +17,17 @@ export class UploadController {
 
   @Post('image')
   //@UseGuards(JwtAuthGuard)
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('image'))
   async uploadImage(
     // @Req() user: RequestWithUser,
     @UploadedFile(
-     // new ParseFilePipe({
-     //   validators: [new FileSizeValidator({ maxFileSizeInMb: 1 })],
-     //   errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-    // }),
+      new ParseFilePipe({
+        validators: [
+          new FileSizeValidator({ maxFileSizeInMb: 1 }),
+          new FileTypeValidator({ supportedFileTypes: ['image/jpeg'] }),
+        ],
+        errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+      }),
     )
     image: Express.Multer.File,
   ) {

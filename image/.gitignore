@@ -35,3 +35,8 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 .env
+
+
+# Exclude Files
+disk/
+cache/
