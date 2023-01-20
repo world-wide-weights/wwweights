@@ -1,5 +1,5 @@
-import { routes } from "../../services/routes/routes";
-import { Button } from "../Button/Button";
+import { routes } from "../../services/routes/routes"
+import { Button } from "../Button/Button"
 
 /**
  * Footer
@@ -22,5 +22,5 @@ export const Footer: React.FC = () => {
         </div>
       </div>
     </footer>
-  );
-};
+  )
+}

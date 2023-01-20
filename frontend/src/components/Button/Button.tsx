@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { Icon } from "../Icon/Icon";
+import Link from "next/link"
+import { Icon } from "../Icon/Icon"
 
 export type ButtonProps = {
     /** The content inside the Button */

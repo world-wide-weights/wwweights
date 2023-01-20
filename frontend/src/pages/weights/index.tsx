@@ -58,7 +58,7 @@ type WeightsListProps = {
  */
 export default function WeightsList({ items, currentPage, totalItems, limit, query, sort, statistics }: InferGetServerSidePropsType<typeof getServerSideProps>) {
     // Strings
-    const siteTitle = `Latest ${currentPage > 1 ? `| Page ${currentPage} ` : ``}- World Wide Weights`
+    const siteTitle = `Latest ${currentPage > 1 ? `| Page ${currentPage} ` : ""}- World Wide Weights`
     const headlineItems = query === "" ? "All items" : query
 
     // Refs
@@ -88,7 +88,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                         {/*** Weights List ***/}
                         <div className={`${statisticsExpanded ? "" : "lg:w-2/3 2xl:w-[70%] lg:mr-10"} mb-10 lg:mb-0`}>
                             {/* Header Weights List */}
-                            <div className="md:flex justify-between items-center mb-2 lg:mb-4">
+                            <div className="md:flex justify-between items-end mb-2 lg:mb-4">
                                 <div className="flex items-end mb-2 lg:mb-0">
                                     {/* Headline */}
                                     <Headline level={3} hasMargin={false} className="mr-4">{headlineItems}</Headline>
@@ -97,8 +97,8 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
 
                                 {/* Sort */}
                                 <div className="flex items-center mb-2 lg:mb-0">
-                                    <IconButton datacy="discover-grid-view-button" icon="grid_view" color={viewType === "grid" ? "blue" : "gray"} active={viewType === "grid"} onClick={() => setViewType("grid")} className="mr-2" />
-                                    <IconButton datacy="discover-grid-list-button" icon="list" color={viewType === "list" ? "blue" : "gray"} active={viewType === "list"} onClick={() => setViewType("list")} className="mr-4" />
+                                    <IconButton datacy="discover-grid-view-button" icon="grid_view" color={viewType === "grid" ? "blue" : "gray"} dimOpacityWhenDisabled={false} onClick={() => setViewType("grid")} className="mr-2" />
+                                    <IconButton datacy="discover-grid-list-button" icon="list" color={viewType === "list" ? "blue" : "gray"} dimOpacityWhenDisabled={false} onClick={() => setViewType("list")} className="mr-4" />
 
                                     {/* Sort Dropdown */}
                                     <div className="flex-grow">
@@ -114,7 +114,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                                 </div>}
 
                                 {/* Weights List View */}
-                                {viewType === "list" && <ul className={`grid gap-2 mb-5 md:mb-8`}>
+                                {viewType === "list" && <ul className={"grid gap-2 mb-5 md:mb-8"}>
                                     {items.map((item) => <ItemPreviewList datacy="weights-list-item" key={item.slug} name={item.name} slug={item.slug} weight={item.weight} heaviestWeight={statistics.heaviest.weight} imageUrl="https://picsum.photos/200" />)}
                                 </ul>}
                             </>}
@@ -126,7 +126,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                         {/*** Statistics ***/}
                         <div className={`${statisticsExpanded ? "" : "lg:items-start lg:w-1/2 xl:w-1/3 2xl:w-[30%]"}`}>
                             {/* Header Statistics */}
-                            <div className={`flex ${statisticsExpanded ? "justify-between" : "lg:items-end lg:justify-end lg:h-[46px]"} mb-2 lg:mb-4`}>
+                            <div className={`flex ${statisticsExpanded ? "justify-between" : "lg:justify-end "} lg:items-end lg:h-[46px] mb-2 lg:mb-4`}>
                                 {/* Headline */}
                                 <Headline level={3} hasMargin={false} className={`${statisticsExpanded ? "" : "lg:hidden"} `}>Statistics</Headline>
 

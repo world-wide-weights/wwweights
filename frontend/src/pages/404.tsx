@@ -1,4 +1,4 @@
-import { BaseError } from "../components/Errors/BaseError";
+import { BaseError } from "../components/Errors/BaseError"
 
 /**
  * Custom 404 Page, occures when we enter a bad link.
