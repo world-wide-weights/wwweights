@@ -28,7 +28,7 @@ export const Tabs: React.FC<TabsProps> = ({ children, selectedTabIndex }) => {
     return <div>
         <div className="flex items-center">
             {children.map(({ props: { title, link } }, index) => (
-                selectedTabIndex === index ? <Chip disabled dimOpacityWhenDisabled={false} to={link} key={index}>{title}</Chip> : <Button key={index} to={link} kind="tertiary" className="px-5 mr-2 mb-2">{title}</Button>
+                selectedTabIndex === index ? <Chip datacy={`tab-chip-${index}`} disabled dimOpacityWhenDisabled={false} to={link} key={index}>{title}</Chip> : <Button datacy={`tab-link-${index}`} key={index} to={link} kind="tertiary" className="px-5 mr-2 mb-2">{title}</Button>
             ))}
         </div>
         {children[selectedTabIndex]}
