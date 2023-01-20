@@ -22,10 +22,6 @@ export const singleWeightTabs = [{
     slug: "overview",
     content: <p>Overview Content</p>
 }, {
-    title: "Similar Items",
-    slug: "similar-items",
-    content: <p>Simlar Items Content</p>
-}, {
     title: "Compare",
     slug: "compare",
     content: <p>Compare Content</p>
