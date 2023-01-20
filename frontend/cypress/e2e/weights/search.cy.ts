@@ -2,13 +2,13 @@ import { routes } from "../../../src/services/routes/routes"
 import items from "../../fixtures/items/list.json"
 import relatedTags from "../../fixtures/tags/related.json"
 
-describe('Search /weights', () => {
-    describe('Search', () => {
+describe("Search /weights", () => {
+    describe("Search", () => {
         beforeEach(() => {
             cy.mockWeightsPage()
 
             cy.visitLocalPage(routes.weights.list())
-            cy.wait('@mockGetRelatedTags')
+            cy.wait("@mockGetRelatedTags")
         })
 
         // This test seems to be flaky: https://github.com/cypress-io/cypress/issues/3817
@@ -25,50 +25,50 @@ describe('Search /weights', () => {
         //     cy.url().should('include', items[0].tags[0].slug)
         // })
 
-        it('should search items when query in url', () => {
+        it("should search items when query in url", () => {
             cy.visitLocalPage(routes.weights.list({ query: items[0].tags[0].slug }))
-            cy.wait('@mockGetRelatedTags')
+            cy.wait("@mockGetRelatedTags")
 
-            cy.dataCy('search').should('have.value', items[0].tags[0].slug)
+            cy.dataCy("search").should("have.value", items[0].tags[0].slug)
         })
     })
 
-    describe('Related Tags', () => {
+    describe("Related Tags", () => {
         beforeEach(() => {
             cy.mockWeightsPage()
 
             cy.visitLocalPage(routes.weights.list())
-            cy.wait('@mockGetRelatedTags')
+            cy.wait("@mockGetRelatedTags")
         })
 
-        describe('Displayed tags', () => {
+        describe("Displayed tags", () => {
             beforeEach(() => {
                 // Search item
-                cy.dataCy('search').type(items[0].tags[0].slug)
-                cy.dataCy('text-input-icon-query').click()
+                cy.dataCy("search").type(items[0].tags[0].slug)
+                cy.dataCy("text-input-icon-query").click()
             })
 
-            it('should display tags when search', () => {
-                cy.dataCy('search-header-tag-wrapper').should('be.visible')
+            it("should display tags when search", () => {
+                cy.dataCy("search-header-tag-wrapper").should("be.visible")
             })
 
-            it('should search tag when click on tag', () => {
+            it("should search tag when click on tag", () => {
                 // Click first tag
-                cy.dataCy('search-header-tag-wrapper', ' a').first().click()
+                cy.dataCy("search-header-tag-wrapper", " a").first().click()
 
-                cy.dataCy('search').should('have.value', relatedTags[0].name)
+                cy.dataCy("search").should("have.value", relatedTags[0].name)
             })
 
-            it('should not display tag in list when search for tag', () => {
+            it("should not display tag in list when search for tag", () => {
                 // Click first tag
                 cy.dataCy(`search-header-chip-${relatedTags[1].slug}`).click()
 
-                cy.dataCy(`search-header-chip-${relatedTags[1].slug}`).should('not.exist')
+                cy.dataCy(`search-header-chip-${relatedTags[1].slug}`).should("not.exist")
             })
         })
 
-        it('should not display tags when no search', () => {
-            cy.dataCy('search-header-tag-wrapper').should('not.exist')
+        it("should not display tags when no search", () => {
+            cy.dataCy("search-header-tag-wrapper").should("not.exist")
         })
     })
 })
