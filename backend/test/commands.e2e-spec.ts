@@ -50,9 +50,11 @@ describe('AppController (e2e)', () => {
   });
 
   afterAll(async () => {
+    await itemModel.deleteMany();
+    await tagModel.deleteMany();
+    await itemsByTagModel.deleteMany();
     await teardownMockDataSource();
     server.close();
-
     await app.close();
   });
 
@@ -73,7 +75,7 @@ describe('AppController (e2e)', () => {
       // expect(attemptSuccess).toBeTruthy();
 
       // Also give it some extra time to make sure the tag updates have been completed
-      await timeout(1000);
+      await timeout(500);
 
       const item = await itemModel.findOne({});
 

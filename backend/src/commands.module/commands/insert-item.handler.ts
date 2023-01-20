@@ -1,10 +1,5 @@
 import { Logger, UnprocessableEntityException } from '@nestjs/common';
-import {
-  CommandBus,
-  CommandHandler,
-  EventPublisher,
-  ICommandHandler,
-} from '@nestjs/cqrs';
+import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { EventStore } from '../../eventstore/eventstore';
 import { Item } from '../../models/item.model';
 import { Tag } from '../../models/tag.model';
@@ -18,7 +13,6 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
   constructor(
     private readonly publisher: EventPublisher,
     private readonly eventStore: EventStore,
-    private commandBus: CommandBus,
   ) {}
 
   // No returns, just Exceptions in CQRS

@@ -38,7 +38,9 @@ export class GetItemListHandler implements IQueryHandler<GetItemListQuery> {
       return result;
     } catch (error) {
       this.logger.error(error);
-      throw new UnprocessableEntityException('Item could not be inserted');
+      throw new UnprocessableEntityException(
+        'Item list could not be retrieved',
+      );
     }
   }
 }

@@ -10,25 +10,21 @@ class Weight {
 
   @Expose()
   @prop()
-  isCa? = false;
+  isCa?: boolean;
 
   @Expose()
   @prop()
   aditionalValue?: number;
 }
 
-// To simplify here is Tag again but without the Aggregate since the Tag in Items does not have to look the same as the Tag alone
+// To simplify here is Tag again but without the Aggregate since the Tag in Items does not have to look the same as the Tag alone and a composition type is too much work
 class Tag {
   @Expose()
   @prop({ required: true })
   name: string;
 
   @Expose()
-  @prop()
-  slug?: string;
-
-  @Expose()
-  @prop({ default: 0 }) // so we can increment it with everyone else
+  @prop({ required: true, default: 0 }) // so we can increment it with everyone else
   count?: number;
 }
 
