@@ -12,6 +12,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { createHash } from 'crypto';
 
+// Code assumes that either UNIX or Windows paths are valid. Any other OS or path format is not supported
+
 @Injectable()
 export class UploadService {
   private storePath: string;
@@ -29,6 +31,9 @@ export class UploadService {
     );
     this.validateOrCreateDirectory(this.cachePath);
   }
+  /**
+   * @description Handle uploaded image including duplicate check, hashing and saving it
+   */
   async handleImageUpload(user: RequestWithUser, image: Express.Multer.File) {
     const cachedFilePath = path.join(this.cachePath, image.filename);
     const hash = await this.hashFile(cachedFilePath);
@@ -54,11 +59,15 @@ export class UploadService {
       }
       throw new InternalServerErrorException();
     }
+    // TODO: Notify Auth backend about user event
     return hash;
   }
 
+  /**
+   * @description Get Hash for file at given path
+   */
   async hashFile(filePath: string): Promise<string> {
-    if (!fs.existsSync(filePath)) {
+    if (!fs.existsSync(filePath) || fs.lstatSync(filePath).isDirectory()) {
       throw new Error('Filepath does not lead to file');
     }
     const fileBuffer = await fsProm.readFile(filePath);
@@ -66,27 +75,34 @@ export class UploadService {
     return hashSum.digest('hex');
   }
 
+  /**
+   * @description Take in path and make sure that it´s a global path and not undefined
+   */
   private pathBuilder(initialPath: string, fallbackFolder: string) {
     // Set OS specific variables for path handling
     const absolutePathIndicator = this.getOSAbsolutePathIndicator();
     // No path? Use local as fallback
     if (!initialPath) {
       this.logger.warn('No path passed, so defaulting to fallback');
-      return path.join(process.cwd(), fallbackFolder);
+      return path.resolve(fallbackFolder);
     }
     // Is absolute path
     if (initialPath.match(absolutePathIndicator)) {
       return initialPath;
     }
-    return path.join(process.cwd(), initialPath);
+    return path.resolve(initialPath);
   }
-
+  /**
+   * @description Get Regex to detect absolute paths for the current OS
+   */
   private getOSAbsolutePathIndicator() {
     return process.platform.startsWith('win')
       ? new RegExp('^[A-Z]:.*')
       : new RegExp('^/.*');
   }
-
+  /**
+   * @description Validate a given path to be a directory. If the directory does not yet exist => create it
+   */
   private validateOrCreateDirectory(path) {
     if (!fs.existsSync(path)) {
       fs.mkdirSync(path, { recursive: true });
