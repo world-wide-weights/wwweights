@@ -16,9 +16,11 @@ const commaShiftsForUnit: { [K in Unit]: number } = {
   Gt: 15,
 }
 
+// FOR FUTURE WORK, see: https://en.wikipedia.org/wiki/Orders_of_magnitude_(mass)
+
 /**
  * Shifts the comma in a given number.
- * @param value the number where the comma shift should be applied .
+ * @param value the number where the comma shift should be applied.
  * @param unit the number of how many comma shifts it should make.
  * @param left in which direction the comma should be shifted.
  * @returns the number with the given comma shift.
