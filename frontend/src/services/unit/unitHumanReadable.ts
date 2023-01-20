@@ -8,9 +8,9 @@ import { convertWeightIntoUnit } from "./unitConverter"
  * @returns object with number and new readable unit.
  */
 export const getBestHumanReadableUnit = (
-  weight: Weight
+  weight: number
 ): { value: number; unit: Unit } => {
-  const weightValueInGram = weight.value
+  const weightValueInGram = weight
   if (weightValueInGram >= 1e15)
     return convertWeightIntoUnit(weightValueInGram, "g", "Pg")
   if (weightValueInGram >= 1e12)
