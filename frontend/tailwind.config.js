@@ -14,7 +14,7 @@ module.exports = {
     {
       pattern: /text-(.*)-(600|700|800)/,
       variants: ['hover', 'focus'],
-    },
+    }
   ],
   theme: {
     container: {

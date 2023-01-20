@@ -29,7 +29,7 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
         <SearchHeader />
 
         <main className="container mt-10 md:mt-20">
-            <div className="grid grid-cols-[120px_1fr] md:grid-cols-[250px_1fr] items-center lg:grid-cols-2">
+            <div className="grid grid-cols-[120px_1fr] md:grid-cols-[250px_1fr] items-center lg:grid-cols-2 mb-10">
                 {/* Headline and Weight */}
                 <div className="lg:col-start-1 lg:col-end-3 pl-5 lg:pl-0 md:mt-5">
                     <a target="_blank" rel="noopener noreferrer" className="flex items-center text-gray-700 text-lg sm:text-2xl md:mb-2" href={`https://www.google.com/search?q=${item.name}`}>
@@ -53,6 +53,35 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
                     {/* No better way yet: https://github.com/vercel/next.js/discussions/21379 Let's take a look at this when we got problems with it */}
                     <Image src="https://picsum.photos/1200" priority className="sm:hidden rounded-xl" alt={item.name} width={120} height={120} />
                     <Image src="https://picsum.photos/1200" priority className="hidden sm:block rounded-xl" alt={item.name} width={230} height={230} />
+                </div>
+            </div>
+
+            <div className="md:w-1/2 mb-2 md:mb-5">
+                <div className="flex items-center justify-between bg-white rounded-lg pl-4 md:pl-8 pr-8 md:pr-14 py-3 md:py-5">
+                    <div>
+                        <Headline level={4} hasMargin={false}>15 People</Headline>
+                        <p className="text-gray-700">are needed to lift up {item.name}.</p>
+                    </div>
+
+                    <div>
+                        {Array.from({ length: 15 }).map((value, index) => <Icon className={`text-5xl text-blue-700 -tracking-[35px] ${index < 6 ? "text-blue-500" : ""} ${index < 3 ? "text-blue-300" : ""} ${index < 1 ? "text-blue-100" : ""}`} key={index}>boy</Icon>)}
+                    </div>
+                </div>
+            </div>
+
+            <div className="md:w-1/2">
+                <div className="bg-white rounded-lg pl-8 pr-14 py-5">
+                    <div className="flex items-center justify-between ">
+                        <div>
+                            <Headline level={4} hasMargin={false}>25 Cars</Headline>
+                            <p className="text-gray-700">weigh as much as one {item.name}.</p>
+                        </div>
+
+                        <span><Icon>directions_car</Icon></span>
+                    </div>
+                    <div>
+                        {Array.from({ length: 15 }).map((value, index) => <Icon className={`text-5xl text-blue-700 -tracking-[35px] ${index < 6 ? "text-blue-500" : ""} ${index < 3 ? "text-blue-300" : ""} ${index < 1 ? "text-blue-100" : ""}`} key={index}>boy</Icon>)}
+                    </div>
                 </div>
             </div>
         </main>
