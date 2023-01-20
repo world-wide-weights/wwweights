@@ -1,26 +1,26 @@
-import BigNumber from "bignumber.js";
 import { Weight } from "../../pages/weights";
 import { Unit } from "../../types/unit";
+import { convertWeightIntoUnit } from "./unitConverter";
 
 export const getBestHumanReadableUnit = (
   weight: Weight
-): { value: BigNumber; unit: Unit } => {
+): { value: number; unit: Unit } => {
   const weightValueInGram = weight.value;
-  const valueAsBigNumber = new BigNumber(weightValueInGram);
   if (weightValueInGram >= 1e14)
-    return { value: weightValueInGram / 1e14, unit: "Gt" };
+    return convertWeightIntoUnit(weightValueInGram, "g", "Pg");
   if (weightValueInGram >= 1e11)
-    return { value: weightValueInGram / 1e12, unit: "Mt" };
+    return convertWeightIntoUnit(weightValueInGram, "g", "Tg");
   if (weightValueInGram >= 1e5)
-    return { value: weightValueInGram / 1e6, unit: "t" };
+    return convertWeightIntoUnit(weightValueInGram, "g", "Mg");
   if (weightValueInGram >= 1e2)
-    return { value: weightValueInGram / 1e3, unit: "kg" };
-  if (weightValueInGram >= 1) return { value: weightValueInGram, unit: "g" };
+    return convertWeightIntoUnit(weightValueInGram, "g", "kg");
+  if (weightValueInGram >= 1)
+    return convertWeightIntoUnit(weightValueInGram, "g", "g");
   if (weightValueInGram >= 1e-2)
-    return { value: weightValueInGram / 1e-3, unit: "mg" };
+    return convertWeightIntoUnit(weightValueInGram, "g", "mg");
   if (weightValueInGram >= 1e-5)
-    return { value: weightValueInGram / 1e-6, unit: "µg" };
+    return convertWeightIntoUnit(weightValueInGram, "g", "µg");
   if (weightValueInGram >= 1e-8)
-    return { value: weightValueInGram / 1e-9, unit: "ng" };
-  return { value: weightValueInGram / 1e-12, unit: "pg" };
+    return convertWeightIntoUnit(weightValueInGram, "g", "ng");
+  return convertWeightIntoUnit(weightValueInGram, "g", "pg");
 };
