@@ -26,7 +26,7 @@ export const renderUnitIntoString = (
     
     if(weight.additionalValue){
         const bestHumanReadableUnitAdditionalValue = convertWeightIntoTargetUnit(BigNumber(weight.additionalValue), bestHumanReadableUnit.unit)
-        if(bestHumanReadableUnitAdditionalValue.toNumber() % 1 !== 0 && bestHumanReadableUnit.unit !== "g"){
+        if(bestHumanReadableUnitAdditionalValue.toNumber() % 1 !== 0){
             renderedText += ` - ${Number(bestHumanReadableUnitAdditionalValue).toFixed(2)}`
         }else{
         renderedText += ` - ${bestHumanReadableUnitAdditionalValue}`
