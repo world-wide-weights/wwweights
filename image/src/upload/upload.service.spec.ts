@@ -151,7 +151,7 @@ describe('UploadService', () => {
         expect('C:\\Documents\\Newsletters\\').not.toMatch(res);
       });
       // But people develop with Windows and Mac so this must work at all times
-      it('Should return linux value correctly', async () => {
+      it('Should return OS X value correctly', async () => {
         // ARRANGE
         Object.defineProperties(process, { platform: { value: 'darwin' } });
         // ACT
