@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  HttpException,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -35,28 +36,33 @@ export class UploadService {
       this.storePath,
       `${hash}.${image.mimetype.split('/')[1]}`,
     );
-    if (fs.existsSync(fileTargetPath)) {
-      // Image is duplicate => return error along with the hash => no duplicate files
-      throw new ConflictException({
-        message:
-          'This file already seems to be uploaded (indicated by m5hash of file)',
-        location: `${hash}.${image.mimetype.split('/')[1]}`,
-      });
-    }
+
     try {
+      if (fs.existsSync(fileTargetPath)) {
+        // Image is duplicate => return error along with the hash => no duplicate files
+        throw new ConflictException({
+          message:
+            'This file already seems to be uploaded (indicated by m5hash of file)',
+          location: `${hash}.${image.mimetype.split('/')[1]}`,
+        });
+      }
       await fsProm.rename(cachedFilePath, fileTargetPath);
     } catch (error) {
       this.logger.error(error);
+      if (error instanceof HttpException) {
+        throw error;
+      }
       throw new InternalServerErrorException();
     }
     return hash;
   }
 
   async hashFile(filePath: string): Promise<string> {
+    if (!fs.existsSync(filePath)) {
+      throw new Error('Filepath does not lead to file');
+    }
     const fileBuffer = await fsProm.readFile(filePath);
-    const hashSum = createHash('sha256');
-    hashSum.update(fileBuffer);
-
+    const hashSum = createHash('sha256').update(fileBuffer);
     return hashSum.digest('hex');
   }
 
