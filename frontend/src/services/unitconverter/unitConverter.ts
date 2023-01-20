@@ -1,5 +1,5 @@
-import BigNumber from "bignumber.js";
-import { Unit } from "../../types/unit";
+import BigNumber from "bignumber.js"
+import { Unit } from "../../types/unit"
 
 /**
  * The number of comma shifts for each unit.
@@ -14,7 +14,7 @@ const commaShiftsForUnit: { [K in Unit]: number } = {
   t: 6,
   Mt: 12,
   Gt: 15,
-};
+}
 
 /**
  * Shifts the comma in a given number.
@@ -29,11 +29,11 @@ export const calculateCommaShift = (
   left: Boolean
 ): BigNumber => {
   if (left) {
-    return value.multipliedBy(BigNumber(10).exponentiatedBy(unit));
+    return value.multipliedBy(BigNumber(10).exponentiatedBy(unit))
   } else {
-    return value.multipliedBy(BigNumber(10).exponentiatedBy(-unit));
+    return value.multipliedBy(BigNumber(10).exponentiatedBy(-unit))
   }
-};
+}
 
 /**
  * Converts given Weight in any unit into gram.
@@ -45,8 +45,8 @@ export const convertAnyWeightIntoGram = (
   value: BigNumber,
   unit: Unit
 ): BigNumber => {
-  return calculateCommaShift(value, commaShiftsForUnit[unit], true);
-};
+  return calculateCommaShift(value, commaShiftsForUnit[unit], true)
+}
 
 /**
  * Converts given Weight in gram into other weight unit.
@@ -58,8 +58,8 @@ export const convertWeightIntoTargetUnit = (
   value: BigNumber,
   targetUnit: Unit
 ): BigNumber => {
-  return calculateCommaShift(value, commaShiftsForUnit[targetUnit], false);
-};
+  return calculateCommaShift(value, commaShiftsForUnit[targetUnit], false)
+}
 
 /**
  * Converts given Weight with any unit into other weight unit.
@@ -73,10 +73,10 @@ export const convertWeightIntoUnit = (
   unit: Unit,
   targetUnit: Unit
 ): { value: number; unit: Unit } => {
-  const weightInGramm = convertAnyWeightIntoGram(new BigNumber(value), unit);
+  const weightInGramm = convertAnyWeightIntoGram(new BigNumber(value), unit)
   const weightInTargetUnit = convertWeightIntoTargetUnit(
     weightInGramm,
     targetUnit
-  ).toNumber();
-  return { value: weightInTargetUnit, unit: targetUnit };
-};
+  ).toNumber()
+  return { value: weightInTargetUnit, unit: targetUnit }
+}
