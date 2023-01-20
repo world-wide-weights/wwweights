@@ -23,7 +23,7 @@ export class UploadController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('image'))
   async uploadImage(
-    @Req() user: RequestWithUser,
+    @Req() { user }: RequestWithUser,
     @UploadedFile(
       new ParseFilePipe({
         validators: [
