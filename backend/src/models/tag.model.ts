@@ -4,12 +4,12 @@ import { Expose } from 'class-transformer';
 
 export class Tag extends AggregateRoot {
   @Expose()
-  @prop({ required: true })
+  @prop({ required: true, unique: true })
   name: string;
 
   @Expose()
-  @prop({ required: true })
-  count: number;
+  @prop({ required: true, default: 1 })
+  count?: number;
 
   constructor(partial: Partial<Tag>) {
     super();

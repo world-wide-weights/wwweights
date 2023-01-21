@@ -6,7 +6,6 @@ import { ReturnModelType } from '@typegoose/typegoose';
 import { Item } from '../../models/item.model';
 import { ItemsByTag } from '../../models/items-by-tag.model';
 import { Tag } from '../../models/tag.model';
-import { getStringified } from '../../shared/get-stringified';
 import { ItemInsertedEvent } from './item-inserted.event';
 
 @EventsHandler(ItemInsertedEvent)
@@ -31,7 +30,6 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       // Performance
       const insertItemStartTime = performance.now();
 
-      // Insert Item
       await this.insertItem(item);
 
       // No need for any tag related projection if item has no tags
@@ -44,10 +42,8 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
         return;
       }
 
-      // Increment/Upsert Tags
       await this.incrementOrInsertTags(item);
-
-      item.tags = await this.getIncrementedTags(item);
+      await this.updateNewItemWithCorrectTags(item);
 
       this.logger.debug(
         `ItemInsertedHandler Insert took: ${
@@ -56,13 +52,14 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       );
 
       const updateTagsStartTime = performance.now();
+      await this.upsertItemIntoItemsByTag(item);
 
+      // TODO: The following 2 calls can be outsourced as chronjobs.
+      // TODO: We failed to find a better solution with jsut "increments $inc" to update the counts, because this does lead to counting errors when multiple items are inserted at the same time.
+      // TODO: But this is fine because its a write db with eventual consistency, we can say something like every 5 minutes or every few hundred items and have "possibly wrong counts before that"
       await Promise.all([
-        // we do this this way around instead of first inserting tags and then insert the item to have a clean cut in case the item insert fails
-        this.updateItemWithCorrectTags(item),
-        this.updateItemTagCounts(item),
-        this.upsertItemIntoItemsByTag(item),
-        this.updateItemsByTagCounts(item),
+        this.updateAllItemTagCounts(),
+        this.updateItemsByTagCounts(),
       ]);
 
       this.logger.debug(
@@ -75,32 +72,11 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
     }
   }
 
-  // 1 updateMany 1 insertMany
-  async incrementOrInsertTags(item: Item) {
-    try {
-      const tagsArray = item.tags.map((tag) => tag.name);
-      const { newTags, existingTags } = await this.splitNewAndExistingTags(
-        tagsArray,
-      );
-      await this.tagModel.updateMany(
-        { name: { $in: existingTags } },
-        { $inc: { count: 1 } },
-      );
-      await this.tagModel.insertMany(
-        newTags.map((tag) => ({ name: tag, count: 1 })),
-      );
-      this.logger.log(`Tags incremented or created: ${tagsArray}`);
-    } catch (error) {
-      this.logger.error(`Increment/insert tags: ${error}`);
-    }
-  }
-
   // 1 save()
   async insertItem(item: Item) {
     try {
       if (item.tags.length > 0) {
       }
-      this.logger.debug(`Item to insert: ${getStringified(item.tags)}`);
       const insertedItem = new this.itemModel(item);
       await insertedItem.save();
       this.logger.log(`Item inserted:  ${insertedItem.slug}`);
@@ -110,106 +86,162 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
     }
   }
 
-  // 1 findOneAndUpdate
-  async updateItemWithCorrectTags(item: Item) {
+  // 1 bulkWrite(N-updateOne)
+  async incrementOrInsertTags(item: Item) {
     try {
-      await this.itemModel.findOneAndUpdate(
-        { slug: item.slug },
-        { tags: item.tags },
-      );
+      // We have to bulkwrite here because we can't use an Array filter for upserts (and it is faster than 2 writes)
+      const tagsArray = item.tags.map((tag) => ({
+        updateOne: {
+          filter: { name: tag.name },
+          update: { $inc: { count: 1 } },
+          upsert: true,
+        },
+      }));
+      await this.tagModel.bulkWrite(tagsArray);
+      this.logger.log(`Tags incremented or created: ${tagsArray}`);
+    } catch (error) {
+      this.logger.error(`Increment/insert tags: ${error}`);
+    }
+  }
+
+  // 1 findOneAndUpdate with lookup
+  async updateNewItemWithCorrectTags(item: Item) {
+    try {
+      const tagsNames = item.tags.map((tag) => tag.name);
+      // Here an aggregate because for some reason a $lookup and then $set did not update the document in a model.findOneAndUpdate()
+      await this.itemModel.aggregate([
+        { $match: { slug: item.slug } },
+        {
+          $lookup: {
+            from: 'tags',
+            pipeline: [
+              { $match: { name: { $in: tagsNames } } },
+              { $project: { _id: 0, __v: 0 } },
+            ],
+            as: 'tags',
+          },
+        },
+        { $merge: { into: 'items' } },
+      ]);
+    } catch (error) {
+      this.logger.error(error);
+    }
+  }
+
+  async updateAllItemTagCounts() {
+    try {
+      // Here an aggregate because for some reason a $lookup and then $set did not update the document in a model.findOneAndUpdate()
+      await this.itemModel.aggregate([
+        {
+          $lookup: {
+            from: 'tags',
+            let: {
+              tagNames: {
+                $map: { input: '$tags', as: 'tag', in: '$$tag.name' },
+              },
+            },
+            pipeline: [
+              { $match: { $expr: { $in: ['$name', '$$tagNames'] } } },
+              { $project: { _id: 0, __v: 0 } },
+            ],
+            as: 'tags',
+          },
+        },
+        { $merge: { into: 'items' } },
+      ]);
     } catch (error) {
       this.logger.error(error);
     }
   }
 
   // 1 updateMany
-  async updateItemTagCounts(item: Item) {
-    try {
-      const tagsArray = item.tags.map((tag) => tag.name);
-      const res = await this.itemModel.updateMany(
-        { 'tags.name': { $in: tagsArray }, slug: { $ne: item.slug } },
-        { $inc: { 'tags.$.count': 1 } },
-      );
-      this.logger.log(`Items updated: ${getStringified(res)}`);
-      this.logger.log(
-        `Item count incremented for tags in items, tag: ${tagsArray}`,
-      );
-    } catch (error) {
-      this.logger.error(`Update Item.tags counts: ${error}`);
-    }
-  }
+  // async incrementOtherItemTagCounts(item: Item) {
+  //   try {
+  //     const tagsArray = item.tags.map((tag) => tag.name);
+  //     const res = await this.itemModel.updateMany(
+  //       { 'tags.name': { $in: tagsArray }, slug: { $ne: item.slug } },
+  //       { $inc: { 'tags.$.count': 1 } },
+  //     );
+  //     this.logger.log(`Items updated: ${getStringified(res)}`);
+  //     this.logger.log(
+  //       `Item count incremented for tags in items, tag: ${tagsArray}`,
+  //     );
+  //   } catch (error) {
+  //     this.logger.error(`Update Item.tags counts: ${error}`);
+  //   }
+  // }
 
   // 1 insertMany 1 updateMany
   async upsertItemIntoItemsByTag(item: Item) {
     try {
-      const newTags = item.tags
-        .filter((tag) => tag.count === 1)
-        .map(
-          (tag) =>
-            new this.itemsByTagModel({ tagName: tag.name, items: [item] }),
-        );
-      await this.itemsByTagModel.insertMany(newTags);
+      // await this.itemsByTagModel.bulkWrite(tagsArray);
+      const newTags = item.tags.map(
+        (tag) => new this.itemsByTagModel({ tagName: tag.name }),
+      );
+      await this.itemsByTagModel.insertMany(newTags, { ordered: false });
       this.logger.log(
         `ItemsByTag created for tags: ${newTags.map((tag) => tag.tagName)}`,
       );
     } catch (error) {
-      this.logger.error(`Create ItemsByTags: ${error}`);
+      this.logger.warn(`Create ItemsByTags: ${error}`);
     }
 
     try {
-      const existingTags = item.tags
-        .filter((tag) => tag.count > 1)
-        .map((tag) => tag.name);
-      await this.itemsByTagModel.updateMany(
-        { tagName: { $in: existingTags } },
-        { $push: { items: item } },
-      );
+      // $lookup is not available on updateMany yet, so we have to use an aggregate
+      const tagsNames = item.tags.map((tag) => tag.name);
+      // TODO: Consider a bulkwrite to concat the two underlying calls this.itemsByTagModel.bulkWrite([]);
+      await this.itemsByTagModel.aggregate([
+        {
+          $match: { tagName: { $in: tagsNames } },
+        },
+        {
+          $lookup: {
+            from: 'items',
+            pipeline: [
+              { $match: { slug: item.slug } },
+              { $project: { _id: 0, __v: 0 } },
+            ],
+            as: 'newItem',
+          },
+        },
+        { $set: { items: { $concatArrays: ['$items', '$newItem'] } } },
+        { $unset: ['newItem'] },
+        { $merge: { into: 'itemsbytags' } },
+      ]);
     } catch (error) {
       this.logger.error(`Insert item to ItemsByTag: ${error}`);
     }
   }
 
   // 1 updateMany
-  async updateItemsByTagCounts(item: Item) {
+  async updateItemsByTagCounts() {
+    // Since other items can be inserted in the meantime, causing the count to be off, we can't go for the fastest solution of $inc, but have to actually fetch the data again.
+    // This is fine since it is a readDB and doesn't have to be written on fast
     try {
-      const tagsArray = item.tags.map((tag) => tag.name);
-      await this.itemsByTagModel.updateMany(
-        {},
-        { $inc: { 'items.$[item].tags.$[tag].count': 1 } },
+      await this.itemsByTagModel.aggregate([
         {
-          arrayFilters: [
-            { 'item.slug': { $ne: item.slug } },
-            { 'tag.name': { $in: tagsArray } },
-          ],
+          $lookup: {
+            from: 'items',
+            let: {
+              slugs: {
+                $map: { input: '$items', as: 'item', in: '$$item.slug' },
+              },
+            },
+            pipeline: [
+              { $match: { $expr: { $in: ['$slug', '$$slugs'] } } },
+              { $project: { _id: 0, __v: 0 } },
+            ],
+            as: 'items',
+          },
         },
-      );
+        {
+          $merge: {
+            into: 'itemsbytags',
+          },
+        },
+      ]);
     } catch (error) {
       this.logger.error(error);
     }
-  }
-
-  // 1 find
-  async getIncrementedTags(item: Item) {
-    const tagsArray = item.tags.map((tag) => tag.name);
-    const currentTags = await this.tagModel.find(
-      {
-        name: { $in: tagsArray },
-      },
-      { name: 1, count: 1 },
-    );
-    return currentTags;
-  }
-
-  // 1 find
-  async splitNewAndExistingTags(tagsArray: string[]) {
-    const tagsInDb = await this.tagModel.find(
-      {
-        name: { $in: tagsArray },
-      },
-      { name: 1 },
-    );
-    const existingTags = tagsInDb.map((tag) => tag.name);
-    const newTags = tagsArray.filter((x) => !existingTags.includes(x));
-    return { newTags, existingTags };
   }
 }

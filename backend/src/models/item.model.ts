@@ -24,7 +24,7 @@ class Tag {
   name: string;
 
   @Expose()
-  @prop({ required: true, default: 0 }) // so we can increment it with everyone else
+  @prop({ required: true, default: -1 }) // so we can increment it with everyone else
   count?: number;
 }
 

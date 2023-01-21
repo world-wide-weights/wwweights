@@ -11,7 +11,7 @@ import {
   teardownMockDataSource,
 } from './helpers/MongoMemoryHelpers';
 import { timeout } from './helpers/timeout';
-import { insertItem, insertItem2 } from './mocks/items';
+import { differentNames, insertItem, insertItem2 } from './mocks/items';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -171,6 +171,27 @@ describe('AppController (e2e)', () => {
 
       const items = await itemModel.find({});
       expect(items.length).toEqual(1);
+    });
+
+    it('items/insert => insert Items in quick succession', async () => {
+      // forEach because we do not want to await in the loop as it would be with for ... of
+      differentNames.forEach(async (name) => {
+        await request(server)
+          .post(commandsPath + 'items/insert')
+          .send({ ...insertItem2, name })
+          .expect(200);
+      });
+      await timeout(300);
+      const items = await itemModel.find({});
+      const tag = await tagModel.findOne({ name: 'tag1' });
+      const itemsByTag = await itemsByTagModel.findOne({ tagName: 'tag1' });
+
+      expect(items.length).toEqual(differentNames.length);
+      expect(tag.count).toEqual(differentNames.length);
+      expect(itemsByTag.items.length).toEqual(differentNames.length);
+      for (const item of itemsByTag.items) {
+        expect(item.tags[0].count).toEqual(differentNames.length);
+      }
     });
   });
 });

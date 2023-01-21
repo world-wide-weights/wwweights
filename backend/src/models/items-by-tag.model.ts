@@ -17,6 +17,7 @@ export class ItemsByTag extends AggregateRoot {
     type: () => [Item],
     excludeIndexes: true,
     _id: false,
+    default: [],
   })
   items: Item[];
 

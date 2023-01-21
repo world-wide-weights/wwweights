@@ -27,3 +27,5 @@ export const insertItem2: Partial<InsertItemDto> = {
   user: 'testUser',
   tags: ['tag1'],
 };
+
+export const differentNames = [...Array(20).keys()];
