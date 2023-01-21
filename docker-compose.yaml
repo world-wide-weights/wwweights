@@ -38,6 +38,23 @@ services:
     restart: unless-stopped
     volumes:
       - mongodb_data_container:/data/mongodb
+  eventstore:
+    image: eventstore/eventstore:20.6.1-buster-slim
+    restart: "always"
+    ports:
+      - 3010:1113
+      - 3011:2113
+    volumes:
+      - eventstore_data_container:/var/lib/eventstore
+    environment:
+      - EVENTSTORE_CLUSTER_SIZE=1
+      - EVENTSTORE_RUN_PROJECTIONS=All
+      - EVENTSTORE_START_STANDARD_PROJECTIONS=true
+      - EVENTSTORE_EXT_TCP_PORT=1113
+      - EVENTSTORE_HTTP_PORT=2113
+      - EVENTSTORE_INSECURE=true
+      - EVENTSTORE_ENABLE_EXTERNAL_TCP=true
+      - EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=true
   postgres:
     image: postgres:15
     restart: "always"
@@ -60,3 +77,4 @@ services:
 volumes:
   mongodb_data_container:
   postgres-volume:
+  eventstore_data_container:

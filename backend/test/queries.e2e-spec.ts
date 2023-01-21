@@ -1,6 +1,6 @@
 // import { INestApplication } from '@nestjs/common';
 
-describe('AppController (e2e)', () => {
+describe('QueryController (e2e)', () => {
   // let app: INestApplication;
   // let itemRepository: any;
 
