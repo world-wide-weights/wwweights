@@ -115,6 +115,6 @@ describe("unitRenderer", () => {
             value: 1,
             additionalValue: 100000000,
             isCa: false
-        })).deep.equal("1 - 100000000 g")
+        })).deep.equal("1 - 100.000.000 g")
     })
 })
