@@ -57,9 +57,12 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
                 </div>
             </div>
 
-            <div className="md:w-1/2">
-                <StatsCompareCard type="cars" count={18} itemName={item.name} />
-                <StatsCompareCard type="earths" count={21} itemName={item.name} />
+            <div className="lg:w-1/2">
+                <StatsCompareCard type="cars" count={32} description={`are needed to lift up ${item.name}`} />
+                <StatsCompareCard type="earths" count={32} description={`are needed to lift up ${item.name}`} />
+                <StatsCompareCard type="people" count={32} description={`are needed to lift up ${item.name}`} />
+                <StatsCompareCard type="titanics" count={32} description={`are needed to lift up ${item.name}`} />
+                <StatsCompareCard type="water_bottle" count={32} description={`are needed to lift up ${item.name}`} />
             </div>
         </main>
     </>
