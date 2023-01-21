@@ -59,7 +59,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       // TODO: But this is fine because its a write db with eventual consistency, we can say something like every 5 minutes or every few hundred items and have "possibly wrong counts before that"
       await Promise.all([
         this.updateAllItemTagCounts(),
-        this.updateItemsByTagCounts(),
+        this.updateAllItemsByTagCounts(),
       ]);
 
       this.logger.debug(
@@ -104,7 +104,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
     }
   }
 
-  // 1 findOneAndUpdate with lookup
+  // Lookup tags that are in the new item from the itemModel and update the item with the correct tags
   async updateNewItemWithCorrectTags(item: Item) {
     try {
       const tagsNames = item.tags.map((tag) => tag.name);
@@ -128,6 +128,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
     }
   }
 
+  // Looksup all the tags the item has from the tagModel and updates its array
   async updateAllItemTagCounts() {
     try {
       // Here an aggregate because for some reason a $lookup and then $set did not update the document in a model.findOneAndUpdate()
@@ -213,8 +214,8 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
     }
   }
 
-  // 1 updateMany
-  async updateItemsByTagCounts() {
+  // Lookup all the items the itemsByTags has from the itemModel and updates its array
+  async updateAllItemsByTagCounts() {
     // Since other items can be inserted in the meantime, causing the count to be off, we can't go for the fastest solution of $inc, but have to actually fetch the data again.
     // This is fine since it is a readDB and doesn't have to be written on fast
     try {
