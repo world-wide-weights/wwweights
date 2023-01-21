@@ -86,7 +86,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
     }
   }
 
-  // 1 bulkWrite(N-updateOne)
+  // DB calls: 1 bulkWrite(tag amount * updateOne)
   async incrementOrInsertTags(item: Item) {
     try {
       // We have to bulkwrite here because we can't use an Array filter for upserts (and it is faster than 2 writes)
