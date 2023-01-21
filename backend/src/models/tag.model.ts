@@ -1,19 +1,18 @@
+import { AggregateRoot } from '@nestjs/cqrs';
 import { prop } from '@typegoose/typegoose';
 import { Expose } from 'class-transformer';
-import { Item } from './item.model';
 
-export class Tag {
+export class Tag extends AggregateRoot {
   @Expose()
-  @prop({ required: true })
+  @prop({ required: true, unique: true })
   name: string;
 
-  // TODO: Add relevant Account data
-
   @Expose()
-  @prop({ required: true })
-  slug: string;
+  @prop({ required: true, default: 1 })
+  count: number;
 
-  @Expose()
-  @prop({ required: true, default: 0 })
-  count: Item;
+  constructor(partial: Partial<Tag>) {
+    super();
+    Object.assign(this, partial);
+  }
 }
