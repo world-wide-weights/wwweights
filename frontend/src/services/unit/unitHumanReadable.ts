@@ -1,5 +1,5 @@
 import { Weight } from "../../pages/weights"
-import { Unit } from "../../types/unit"
+import { Unit, WeightWithUnit } from "../../types/unit"
 import { convertWeightIntoUnit } from "./unitConverter"
 
 /**
@@ -9,7 +9,7 @@ import { convertWeightIntoUnit } from "./unitConverter"
  */
 export const getBestHumanReadableUnit = (
   weight: number
-): { value: number; unit: Unit } => {
+): WeightWithUnit => {
   const weightValueInGram = weight
   if (weightValueInGram >= 1e15)
     return convertWeightIntoUnit(weightValueInGram, "g", "Pg")

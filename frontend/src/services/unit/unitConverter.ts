@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js"
-import { Unit } from "../../types/unit"
+import { Unit, WeightWithUnit } from "../../types/unit"
 
 /**
  * The number of comma shifts for each unit.
@@ -74,7 +74,7 @@ export const convertWeightIntoUnit = (
   value: number,
   unit: Unit,
   targetUnit: Unit
-): { value: number; unit: Unit } => {
+): WeightWithUnit => {
   const weightInGramm = convertAnyWeightIntoGram(new BigNumber(value), unit)
   const weightInTargetUnit = convertWeightIntoTargetUnit(
     weightInGramm,
