@@ -25,11 +25,8 @@ export const routes = {
             return `/weights${queryString !== "" ? `?${queryString}` : ""}`
         },
         single: (slug: string, options?: { tab: string }) => {
-            if (!options || options.tab === "overview")
-                return `/weights/${slug}`
-
             const queryString = new URLSearchParams({
-                ...(options.tab && { tab: options.tab })
+                ...(options && options.tab && { tab: options.tab })
             }).toString()
 
             return `/weights/${slug}${queryString !== "" ? `?${queryString}` : ""}`
