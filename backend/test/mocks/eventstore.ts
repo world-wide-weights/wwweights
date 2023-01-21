@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { BehaviorSubject } from 'rxjs';
-import { ItemCreatedEvent } from '../../src/commands.module/events/item-created.event';
+import { EventBus } from '@nestjs/cqrs';
+import { ItemInsertedEvent } from '../../src/commands.module/events/item-inserted.event';
 
 export const logStringify = (obj: any) => {
   return JSON.stringify(obj, null, 2);
@@ -10,33 +10,26 @@ export class MockEventStore {
   private readonly logger = new Logger(MockEventStore.name);
   private existingStreams: string[] = [];
   private latestId = 0;
-  private eventsStream = new BehaviorSubject<{
-    id: number;
-    event: any;
-    eventType: string;
-  }>(null);
+  eventBus: EventBus;
 
-  private readonly eventMap = new Map([['ItemCreatedEvent', ItemCreatedEvent]]);
-
-  constructor() {
-    this.eventsStream.subscribe((entry) => {
-      if (!entry) return;
-      entry.event.apply(new (this.eventMap.get(entry.eventType))(entry.event));
-      entry.event.commit();
-      this.logger.log(
-        `Handled #${entry.id} ${entry.eventType}: ${logStringify(entry.event)}`,
-      );
-    });
-  }
+  private readonly eventMap = new Map([
+    [ItemInsertedEvent.name, ItemInsertedEvent],
+  ]);
 
   public addEvent(streamId, eventType: any, event: any) {
     const eventEntry = { id: this.latestId++, eventType, event };
-    this.eventsStream.next(eventEntry);
+    this.eventBus.publish(new (this.eventMap.get(eventType))(event));
     this.existingStreams.push(streamId);
     return eventEntry.id;
   }
 
   public doesStreamExist(streamId: string) {
     return this.existingStreams.findIndex((e) => e === streamId) > -1;
+  }
+
+  // Reset eventstore stream state
+  reset() {
+    this.latestId = 0;
+    this.existingStreams = [];
   }
 }

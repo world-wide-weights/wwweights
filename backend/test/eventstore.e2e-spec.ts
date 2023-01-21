@@ -1,9 +1,9 @@
-import { EventStoreDBClient, StreamingRead } from '@eventstore/db-client';
-import { INestApplication, ServiceUnavailableException } from '@nestjs/common';
+import { EventStoreDBClient } from '@eventstore/db-client';
+import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { EventStoreModule } from '../src/eventstore/eventstore.module';
 import { EventStore } from '../src/eventstore/eventstore';
-import { Client, generator } from './mocks/eventstore-connection';
+import { Client } from './mocks/eventstore-connection';
 import { ConfigModule } from '@nestjs/config';
 import { ALLOWED_EVENT_ENTITIES } from '../src/eventstore/enums/allowedEntities.enum';
 

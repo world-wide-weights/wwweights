@@ -57,10 +57,8 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       // TODO: The following 2 calls can be outsourced as chronjobs.
       // TODO: We failed to find a better solution with just "increments $inc" to update the counts, because this does lead to counting errors when multiple items are inserted at the same time.
       // TODO: But this is fine because its a write db with eventual consistency, we can say something like every 5 minutes or every few hundred items and have "possibly wrong counts before that"
-      await Promise.all([
-        this.updateAllItemTagCounts(),
-        this.updateAllItemsByTagCounts(),
-      ]);
+      await this.updateAllItemTagCounts();
+      await this.updateAllItemsByTagCounts();
 
       this.logger.debug(
         `ItemInsertedHandler Updates took: ${
@@ -75,7 +73,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
   // Db calls: 1 save()
   async insertItem(item: Item) {
     try {
-      if (item.tags.length > 0) {
+      if (item.tags?.length > 0) {
       }
       const insertedItem = new this.itemModel(item);
       await insertedItem.save();

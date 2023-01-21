@@ -31,7 +31,6 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
           (tag) => new Tag({ name: getSlug(tag, ' ') }),
         ),
       });
-     
 
       if (
         await this.eventStore.doesStreamExist(
@@ -40,7 +39,7 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
       ) {
         throw new ConflictException('Slug already taken');
       }
-      
+
       const eventItem = this.publisher.mergeObjectContext(newItem);
       await this.eventStore.addEvent(
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${eventItem.slug}`,
