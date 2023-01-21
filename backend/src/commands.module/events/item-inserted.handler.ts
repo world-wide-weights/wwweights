@@ -23,7 +23,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
     /*
       We have to make multiple calls, because we have circular dependencies   
       There are multiple options to either first create the item or first increment the tags, we decided to go for the latter.
-      There is no error handling here, because we are going for eventual consistency, in the commandHandler we tested if everything here should be fine, 
+      We expect all performed actions within this to be valid as they have been verified by the Commandhandler. If an error occurs regardless it merely indicates that an eventstore replay (and therefore ReadDB rebuild) is necessary
       so we expect it to be fine here, is it not it will be after we replayed the events.
     */
     try {
