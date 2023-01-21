@@ -1,9 +1,9 @@
 import { TypegooseModule } from '@m8a/nestjs-typegoose';
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
-import { EventStore } from '../eventstore/eventstore';
-import { Item } from '../models/item.model';
 import { ItemsByTag } from '../models/items-by-tag.model';
+import { EventStoreModule } from '../eventstore/eventstore.module';
+import { Item } from '../models/item.model';
 import { Profile } from '../models/profile.model';
 import { Suggestion } from '../models/suggestion.model';
 import { Tag } from '../models/tag.model';
@@ -15,8 +15,9 @@ import { Sagas } from './sagas';
   imports: [
     CqrsModule,
     TypegooseModule.forFeature([Item, ItemsByTag, Tag, Suggestion, Profile]),
+    EventStoreModule,
   ],
   controllers: [CommandsController],
-  providers: [...CommandHandlers, ...EventHandlers, ...Sagas, EventStore],
+  providers: [...CommandHandlers, ...EventHandlers, ...Sagas],
 })
 export class CommandsModule {}
