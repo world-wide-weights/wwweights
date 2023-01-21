@@ -172,7 +172,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
   //   }
   // }
 
-  // 1 insertMany 1 updateMany
+  // DB Calls: 1 insertMany, 1 updateMany
   async upsertItemIntoItemsByTag(item: Item) {
     try {
       // await this.itemsByTagModel.bulkWrite(tagsArray);
