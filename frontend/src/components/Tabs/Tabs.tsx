@@ -4,7 +4,7 @@ import { Chip } from "../Chip/Chip"
 import { TabProps } from "./Tab"
 
 type TabsProps = {
-    /** Tab childrens. Need to be more than one otherwise don't need to use tab component. */
+    /** Tab children. Should contain one or more `Tab` components. */
     children: ReactElement<TabProps>[]
     /** Index of selected tab get from url and findIndex. */
     selectedTabIndex: number
