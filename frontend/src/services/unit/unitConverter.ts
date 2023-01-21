@@ -21,19 +21,20 @@ const commaShiftsForUnit: { [K in Unit]: number } = {
 /**
  * Shifts the comma in a given number.
  * @param value the number where the comma shift should be applied.
- * @param unit the number of how many comma shifts it should make.
+ * @param movaComma the number of how many comma shifts it should make.
  * @param left in which direction the comma should be shifted.
  * @returns the number with the given comma shift.
  */
 export const calculateCommaShift = (
   value: BigNumber,
-  unit: number,
+  moveComma: number,
   left: Boolean
 ): BigNumber => {
+  if(moveComma === 0) return value
   if (left) {
-    return value.multipliedBy(BigNumber(10).exponentiatedBy(unit))
+    return value.multipliedBy(BigNumber(10).exponentiatedBy(moveComma))
   } else {
-    return value.multipliedBy(BigNumber(10).exponentiatedBy(-unit))
+    return value.multipliedBy(BigNumber(10).exponentiatedBy(-moveComma))
   }
 }
 
