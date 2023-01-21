@@ -1,4 +1,3 @@
-import { getBestHumanReadableUnit } from "./unitHumanReadable"
 import { renderUnitIntoString } from "./unitRenderer"
 
 

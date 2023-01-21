@@ -1,6 +1,5 @@
-import { Weight } from "../../pages/weights"
-import { Unit } from "../../types/unit"
-import { convertWeightIntoUnit } from "./unitConverter"
+import { Unit } from "../../types/unit";
+import { convertWeightIntoUnit } from "./unitConverter";
 
 /**
  * Gets value in gram and converts it into best readable Unit 1000g = 1kg.
