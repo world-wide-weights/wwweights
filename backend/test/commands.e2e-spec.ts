@@ -114,13 +114,14 @@ describe('AppController (e2e)', () => {
         .post(commandsPath + 'items/insert')
         .send(insertItem)
         .expect(200);
+      await timeout(100);
       await request(server)
         .post(commandsPath + 'items/insert')
         .send(insertItem2)
         .expect(200);
 
       // Also give it some extra time to make sure the tag updates have been completed
-      await timeout(2000);
+      await timeout(1000);
 
       const item1 = await itemModel.findOne({ name: insertItem.name });
       const item2 = await itemModel.findOne({ name: insertItem2.name });
@@ -155,6 +156,21 @@ describe('AppController (e2e)', () => {
       expect(itemsByTag2.items[0].tags[1].name).toEqual(tag2.name);
       expect(itemsByTag2.items[0].tags[1].count).toEqual(1);
       return;
+    });
+
+    it('items/insert => insert duplicate Items', async () => {
+      await request(server)
+        .post(commandsPath + 'items/insert')
+        .send({ ...insertItem, name: 'This should be in an error message' })
+        .expect(200);
+
+      await request(server)
+        .post(commandsPath + 'items/insert')
+        .send({ ...insertItem, name: 'This should be in an error message' })
+        .expect(200);
+
+      const items = await itemModel.find({});
+      expect(items.length).toEqual(1);
     });
   });
 });

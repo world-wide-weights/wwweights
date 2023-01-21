@@ -1,5 +1,6 @@
 import { InjectModel } from '@m8a/nestjs-typegoose';
-import { Logger, UnprocessableEntityException } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
+import { UnprocessableEntityException } from '@nestjs/common/exceptions/unprocessable-entity.exception';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { Item } from '../../models/item.model';
@@ -26,49 +27,52 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       There is no error handling here, because we are going for eventual consistency, in the commandHandler we tested if everything here should be fine, 
       so we expect it to be fine here, is it not it will be after we replayed the events.
     */
+    try {
+      // Performance
+      const insertItemStartTime = performance.now();
 
-    // Performance
-    const insertItemStartTime = performance.now();
+      // Insert Item
+      await this.insertItem(item);
 
-    // Insert Item
-    await this.insertItem(item);
+      // No need for any tag related projection if item has no tags
+      if (!item.tags) {
+        this.logger.debug(
+          `ItemInsertedHandler Insert took: ${
+            performance.now() - insertItemStartTime
+          }ms`,
+        );
+        return;
+      }
 
-    // No need for any tag related projection if item has no tags
-    if (!item.tags) {
+      // Increment/Upsert Tags
+      await this.incrementOrInsertTags(item);
+
+      item.tags = await this.getIncrementedTags(item);
+
       this.logger.debug(
         `ItemInsertedHandler Insert took: ${
           performance.now() - insertItemStartTime
         }ms`,
       );
-      return;
+
+      const updateTagsStartTime = performance.now();
+
+      await Promise.all([
+        // we do this this way around instead of first inserting tags and then insert the item to have a clean cut in case the item insert fails
+        this.updateItemWithCorrectTags(item),
+        this.updateItemTagCounts(item),
+        this.upsertItemIntoItemsByTag(item),
+        this.updateItemsByTagCounts(item),
+      ]);
+
+      this.logger.debug(
+        `ItemInsertedHandler Updates took: ${
+          performance.now() - updateTagsStartTime
+        }ms`,
+      );
+    } catch (error) {
+      this.logger.error(`ItemInsertedHandler TopLevel caught error: ${error}`);
     }
-
-    // Increment/Upsert Tags
-    await this.incrementOrInsertTags(item);
-
-    item.tags = await this.getIncrementedTags(item);
-
-    this.logger.debug(
-      `ItemInsertedHandler Insert took: ${
-        performance.now() - insertItemStartTime
-      }ms`,
-    );
-
-    const updateTagsStartTime = performance.now();
-
-    await Promise.all([
-      // we do this this way around instead of first inserting tags and then insert the item to have a clean cut in case the item insert fails
-      this.updateItemWithCorrectTags(item),
-      this.updateItemTagCounts(item),
-      this.upsertItemIntoItemsByTag(item),
-      this.updateItemsByTagCounts(item),
-    ]);
-
-    this.logger.debug(
-      `ItemInsertedHandler Updates took: ${
-        performance.now() - updateTagsStartTime
-      }ms`,
-    );
   }
 
   // 1 updateMany 1 insertMany
@@ -102,7 +106,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       this.logger.log(`Item inserted:  ${insertedItem.slug}`);
     } catch (error) {
       this.logger.error(`Insert Item: ${error}`);
-      throw new UnprocessableEntityException(error);
+      throw new UnprocessableEntityException("Couldn't insert item");
     }
   }
 

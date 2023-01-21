@@ -20,8 +20,10 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
     try {
       const newItem = new Item({
         ...insertItemDto,
-        slug: getSlug(insertItemDto.name),
-        tags: insertItemDto.tags?.map((tag) => new Tag({ name: getSlug(tag) })),
+        slug: getSlug(insertItemDto.name, '-'),
+        tags: insertItemDto.tags?.map(
+          (tag) => new Tag({ name: getSlug(tag, ' ') }),
+        ),
       });
 
       // TODO: Check if Item can be inserted with EventstoreDB Streams?
