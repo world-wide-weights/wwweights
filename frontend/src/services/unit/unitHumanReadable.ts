@@ -1,5 +1,4 @@
-import { Weight } from "../../pages/weights"
-import { Unit, WeightWithUnit } from "../../types/unit"
+import { WeightWithUnit } from "../../types/unit"
 import { convertWeightIntoUnit } from "./unitConverter"
 
 /**

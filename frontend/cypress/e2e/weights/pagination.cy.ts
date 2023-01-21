@@ -3,36 +3,36 @@ import { routes } from "../../../src/services/routes/routes"
 const currentPage = 2
 const limit = 5
 
-describe('Pagination /weights', () => {
+describe("Pagination /weights", () => {
     describe("Base tests", () => {
         beforeEach(() => {
             cy.mockWeightsPage()
         })
 
-        it('should display pagination', () => {
+        it("should display pagination", () => {
             cy.visitLocalPage(routes.weights.list())
-            cy.wait('@mockGetRelatedTags')
-            cy.dataCy('pagination').should('be.visible')
+            cy.wait("@mockGetRelatedTags")
+            cy.dataCy("pagination").should("be.visible")
         })
 
-        it('should show page 1 when query is page=1 or nothing', () => {
+        it("should show page 1 when query is page=1 or nothing", () => {
             cy.visitLocalPage(routes.weights.list())
-            cy.wait('@mockGetRelatedTags')
+            cy.wait("@mockGetRelatedTags")
             cy.checkCurrentActivePage(1)
 
             cy.visitLocalPage(routes.weights.list({ page: 1 }))
-            cy.wait('@mockGetRelatedTags')
+            cy.wait("@mockGetRelatedTags")
             cy.checkCurrentActivePage(1)
         })
 
-        it('should show page 2 when query is page=2', () => {
+        it("should show page 2 when query is page=2", () => {
             cy.visitLocalPage(routes.weights.list({ page: 2 }))
-            cy.wait('@mockGetRelatedTags')
+            cy.wait("@mockGetRelatedTags")
             cy.checkCurrentActivePage(2)
         })
 
-        describe('Errors', () => {
-            it('should show 404 when current page is 0 or less', () => {
+        describe("Errors", () => {
+            it("should show 404 when current page is 0 or less", () => {
                 cy.visitLocalPage("/weights?page=0", { failOnStatusCode: false })
                 cy.check404()
 
@@ -40,7 +40,7 @@ describe('Pagination /weights', () => {
                 cy.check404()
             })
 
-            it('should show 404 when limit is 0 or less', () => {
+            it("should show 404 when limit is 0 or less", () => {
                 cy.visitLocalPage("/weights?page=1&limit=0", { failOnStatusCode: false })
                 cy.check404()
 
@@ -49,42 +49,42 @@ describe('Pagination /weights', () => {
             })
         })
 
-        describe('Buttons', () => {
+        describe("Buttons", () => {
             beforeEach(() => {
                 cy.visitLocalPage(routes.weights.list({ page: currentPage }))
-                cy.wait('@mockGetRelatedTags')
+                cy.wait("@mockGetRelatedTags")
             })
 
-            it('should show next page when click next button', () => {
-                cy.dataCy('pagination-button-next').click()
+            it("should show next page when click next button", () => {
+                cy.dataCy("pagination-button-next").click()
                 cy.checkCurrentActivePage(currentPage + 1)
             })
 
-            it('should show previous page when click previous button', () => {
-                cy.dataCy('pagination-button-previous').click()
+            it("should show previous page when click previous button", () => {
+                cy.dataCy("pagination-button-previous").click()
                 cy.checkCurrentActivePage(currentPage - 1)
             })
         })
     })
 
-    describe('Limit', () => {
+    describe("Limit", () => {
         beforeEach(() => {
             cy.mockWeightsPage(5)
 
             cy.visitLocalPage(routes.weights.list({ itemsPerPage: limit }))
-            cy.wait('@mockGetRelatedTags')
+            cy.wait("@mockGetRelatedTags")
         })
 
-        it('should show limited count of items when set limit', () => {
-            cy.dataCy('weights-grid-item').should('have.length', limit)
+        it("should show limited count of items when set limit", () => {
+            cy.dataCy("weights-grid-item").should("have.length", limit)
         })
 
-        it('should have limit set when change page', () => {
-            cy.dataCy('pagination-button-previous').click()
-            cy.dataCy('weights-grid-item').should('have.length', limit)
+        it("should have limit set when change page", () => {
+            cy.dataCy("pagination-button-previous").click()
+            cy.dataCy("weights-grid-item").should("have.length", limit)
 
-            cy.dataCy('pagination-button-next').click()
-            cy.dataCy('weights-grid-item').should('have.length', limit)
+            cy.dataCy("pagination-button-next").click()
+            cy.dataCy("weights-grid-item").should("have.length", limit)
         })
     })
 })

@@ -1,7 +1,7 @@
+import BigNumber from "bignumber.js"
 import { Weight } from "../../pages/weights"
 import { convertWeightIntoTargetUnit } from "./unitConverter"
 import { getBestHumanReadableUnit } from "./unitHumanReadable"
-import BigNumber from "bignumber.js"
 
 /**
  * gets weight and renders it into a human readable string.
@@ -14,27 +14,27 @@ export const renderUnitIntoString = (
     const bestHumanReadableUnit = getBestHumanReadableUnit(weight.value)
     let renderedText = ""
 
-    if(weight.isCa){
+    if (weight.isCa) {
         renderedText += "ca. "
     }
 
-    if(bestHumanReadableUnit.value % 1 !== 0){
+    if (bestHumanReadableUnit.value % 1 !== 0) {
         renderedText += Number(bestHumanReadableUnit.value).toFixed(2)
-    }else{
+    } else {
         renderedText += bestHumanReadableUnit.value
     }
-    
-    if(weight.additionalValue){
+
+    if (weight.additionalValue) {
         const bestHumanReadableUnitAdditionalValue = convertWeightIntoTargetUnit(BigNumber(weight.additionalValue), bestHumanReadableUnit.unit)
-        if(bestHumanReadableUnitAdditionalValue.toNumber() % 1 !== 0){
+        if (bestHumanReadableUnitAdditionalValue.toNumber() % 1 !== 0) {
             renderedText += ` - ${Number(bestHumanReadableUnitAdditionalValue).toFixed(2)}`
-        }else{
-        renderedText += ` - ${bestHumanReadableUnitAdditionalValue}`
+        } else {
+            renderedText += ` - ${bestHumanReadableUnitAdditionalValue}`
         }
     }
 
     renderedText += ` ${bestHumanReadableUnit.unit}`
 
-  return renderedText
-  
+    return renderedText
+
 }

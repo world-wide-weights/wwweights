@@ -6,7 +6,7 @@ describe("unitHumanReadable", () => {
         expect(getBestHumanReadableUnit(1000000000000000
         )).deep.equal({ value: 1, unit: "Pg" })
         expect(getBestHumanReadableUnit(15300000000000000
-            )).deep.equal({ value: 15.3, unit: "Pg" })
+        )).deep.equal({ value: 15.3, unit: "Pg" })
         expect(getBestHumanReadableUnit(77700000000000000000)).deep.equal({ value: 77700, unit: "Pg" })
     })
     it("it should choose Tg for best readable Unit", () => {
