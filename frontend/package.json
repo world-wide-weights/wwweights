@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@next/font": "^13.0.3",
+    "bignumber.js": "^9.1.1",
     "formik": "^2.2.9",
     "material-symbols": "^0.4.0",
     "next": "^13.0.3",
@@ -30,7 +31,7 @@
     "@types/react-dom": "^18.0.9",
     "autoprefixer": "^10.4.13",
     "concurrently": "^7.6.0",
-    "cypress": "^11.0.1",
+    "cypress": "^12.3.0",
     "eslint": "^8.27.0",
     "eslint-config-next": "^13.0.3",
     "json-server": "^0.17.1",

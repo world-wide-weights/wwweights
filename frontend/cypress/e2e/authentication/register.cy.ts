@@ -2,35 +2,35 @@ import { routes } from "../../../src/services/routes/routes"
 
 const apiBaseUrl = Cypress.env("API_BASE_URL")
 
-describe('Register', () => {
+describe("Register", () => {
     beforeEach(() => {
         cy.visitLocalPage(routes.account.register)
     })
 
-    describe('Register Flow - Email and Password', () => {
-        it('should register successfull, login user and redirect page', () => {
+    describe("Register Flow - Email and Password", () => {
+        it("should register successfull, login user and redirect page", () => {
             // Type credentials
-            cy.dataCy('textinput-email-input').type('hello@gmail.com')
-            cy.dataCy('textinput-username-input').type('Hello')
-            cy.dataCy('textinput-password-input').type('12345678')
+            cy.dataCy("textinput-email-input").type("hello@gmail.com")
+            cy.dataCy("textinput-username-input").type("Hello")
+            cy.dataCy("textinput-password-input").type("12345678")
 
             // Mock register
-            cy.intercept('POST', `${apiBaseUrl}/register`, {
-                fixture: 'authentication/register.json'
-            }).as('mockRegister')
+            cy.intercept("POST", `${apiBaseUrl}/register`, {
+                fixture: "authentication/register.json"
+            }).as("mockRegister")
 
             // Mock login and session
             cy.mockCredentials()
             cy.mockSession()
 
             // Register button
-            cy.dataCy('register-button').click()
+            cy.dataCy("register-button").click()
 
-            cy.wait('@mockRegister')
-            cy.wait('@mockCredentials')
+            cy.wait("@mockRegister")
+            cy.wait("@mockCredentials")
 
             // Check redirect
-            cy.url().should('include', routes.home)
+            cy.url().should("include", routes.home)
         })
     })
 })
