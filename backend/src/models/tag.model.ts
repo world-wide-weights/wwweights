@@ -9,7 +9,7 @@ export class Tag extends AggregateRoot {
 
   @Expose()
   @prop({ required: true, default: 1 })
-  count?: number;
+  count: number;
 
   constructor(partial: Partial<Tag>) {
     super();

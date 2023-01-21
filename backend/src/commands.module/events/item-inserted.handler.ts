@@ -184,7 +184,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
         `ItemsByTag created for tags: ${newTags.map((tag) => tag.tagName)}`,
       );
     } catch (error) {
-      this.logger.warn(`Create ItemsByTags: ${error}`);
+      this.logger.log(`Acceptable Create ItemsByTags BulkWriteError: ${error}`);
     }
 
     try {
