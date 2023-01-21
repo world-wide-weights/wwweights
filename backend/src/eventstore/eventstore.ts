@@ -15,8 +15,8 @@ export class EventStore {
     event: any;
   }>(null);
 
-  private readonly eventMap = new Map([
-    ['ItemInsertedEvent', ItemInsertedEvent],
+  private readonly eventMap = new Map<string, any>([
+    [ItemInsertedEvent.name, ItemInsertedEvent],
   ]);
 
   constructor() {
@@ -32,12 +32,14 @@ export class EventStore {
 
   public addEvent(type: string, event: any) {
     const eventEntry = { id: this.latestId++, type, event };
+    this.logger.log(`EventId created: ${eventEntry.id}`);
+
+    this.eventsStream.next(eventEntry);
     this.logger.log(
       `Added #${eventEntry.id} ${eventEntry.type}: ${logStringify(
         eventEntry.event,
       )}`,
     );
-    this.eventsStream.next(eventEntry);
-    return eventEntry.id;
+    return;
   }
 }

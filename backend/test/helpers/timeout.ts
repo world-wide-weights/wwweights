@@ -1,3 +1,3 @@
 import { setTimeout } from 'timers/promises';
 
-export const timeout = async () => await setTimeout(50);
+export const timeout = async (time = 50) => await setTimeout(time);
