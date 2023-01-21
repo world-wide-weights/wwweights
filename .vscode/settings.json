@@ -2,8 +2,10 @@
     "css.validate": true,
     "css.lint.unknownAtRules": "ignore",
     "editor.formatOnSave": true,
+    "eslint.format.enable": true,
     "typescript.preferences.importModuleSpecifier": "relative",
     "editor.codeActionsOnSave": {
-        "source.organizeImports": true
+        "source.organizeImports": true,
+        "source.fixAll.eslint": true
     }
 }

@@ -1,8 +1,8 @@
-import { INestApplication } from '@nestjs/common';
+// import { INestApplication } from '@nestjs/common';
 
 describe('QueryController (e2e)', () => {
-  let app: INestApplication;
-  let itemRepository: any;
+  // let app: INestApplication;
+  // let itemRepository: any;
 
   beforeAll(async () => {
     // const dataSource = await initializeMockDataSource();
@@ -26,7 +26,7 @@ describe('QueryController (e2e)', () => {
   });
 
   describe('Queries /query/v1', () => {
-    const queriesPath = '/query/v1';
+    // const queriesPath = '/query/v1/';
 
     it('/ => createItem', async () => {
       expect(true).toBe(true);

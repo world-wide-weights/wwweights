@@ -22,9 +22,15 @@ export const routes = {
                 ...(options.sort && { sort: options.sort })
             }).toString()
 
-            return `/weights${queryString !== "" ? `?${queryString}` : ``}`
+            return `/weights${queryString !== "" ? `?${queryString}` : ""}`
         },
-        single: (slug: string) => `/weights/${slug}`
+        single: (slug: string, options?: { tab: string }) => {
+            const queryString = new URLSearchParams({
+                ...(options && options.tab && { tab: options.tab })
+            }).toString()
+
+            return `/weights/${slug}${queryString !== "" ? `?${queryString}` : ""}`
+        }
     },
     tags: {
         list: (options?: PaginationBaseOptions) => {
@@ -38,7 +44,7 @@ export const routes = {
                 ...(options.itemsPerPage && hasCustomLimit && { limit: options.itemsPerPage.toString() }),
             }).toString()
 
-            return `/tags${queryString !== "" ? `?${queryString}` : ``}`
+            return `/tags${queryString !== "" ? `?${queryString}` : ""}`
         },
         single: (slug: string) => `/weights?query=${slug}`
     },

@@ -8,7 +8,9 @@ import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { ALLOWED_EVENT_ENTITIES } from '../../eventstore/enums/allowedEntities.enum';
 import { EventStore } from '../../eventstore/eventstore';
 import { Item } from '../../models/item.model';
+import { Tag } from '../../models/tag.model';
 import { getSlug } from '../../shared/get-slug';
+import { ItemInsertedEvent } from '../events/item-inserted.event';
 import { InsertItemCommand } from './insert-item.command';
 
 @CommandHandler(InsertItemCommand)
@@ -20,25 +22,29 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
   ) {}
 
   // No returns, just Exceptions in CQRS
-  async execute(command: InsertItemCommand) {
+  async execute({ insertItemDto }: InsertItemCommand) {
     try {
       const newItem = new Item({
-        ...command.insertItemDto,
-        slug: getSlug(command.insertItemDto.name),
+        ...insertItemDto,
+        slug: getSlug(insertItemDto.name, '-'),
+        tags: insertItemDto.tags?.map(
+          (tag) => new Tag({ name: getSlug(tag, ' ') }),
+        ),
       });
-      const eventItem = this.publisher.mergeObjectContext(newItem);
+     
 
       if (
         await this.eventStore.doesStreamExist(
-          `${ALLOWED_EVENT_ENTITIES.ITEM}-${eventItem.slug}`,
+          `${ALLOWED_EVENT_ENTITIES.ITEM}-${newItem.slug}`,
         )
       ) {
         throw new ConflictException('Slug already taken');
       }
-
+      
+      const eventItem = this.publisher.mergeObjectContext(newItem);
       await this.eventStore.addEvent(
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${eventItem.slug}`,
-        'ItemInsertedEvent',
+        ItemInsertedEvent.name,
         eventItem,
       );
       this.logger.log(`Event created on stream: item-${eventItem.slug}`);

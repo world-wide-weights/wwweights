@@ -1,4 +1,4 @@
-import { Dispatch, MutableRefObject, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, MutableRefObject, SetStateAction, useEffect, useState } from "react"
 
 /**
  * Custom Hook for sync state with local storage.

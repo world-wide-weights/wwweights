@@ -6,6 +6,7 @@ import {
   IsOptional,
   IsString,
   Length,
+  Max,
   Min,
 } from 'class-validator';
 
@@ -20,6 +21,7 @@ export class QueryItemListDto {
   @IsNumber()
   @IsOptional()
   @Min(1)
+  @Max(64)
   @Type(() => Number)
   @ApiPropertyOptional({ type: Number, default: 16, minimum: 1 })
   limit = 16;

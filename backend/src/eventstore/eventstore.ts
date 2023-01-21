@@ -23,6 +23,7 @@ import { ALLOWED_EVENT_ENTITIES } from './enums/allowedEntities.enum';
  */
 @Injectable()
 export class EventStore {
+
 	private readonly logger = new Logger(EventStore.name);
 	private client: EventStoreDBClient;
 	private readonly eventMap = new Map([['ItemInsertedEvent', ItemInsertedEvent]]);

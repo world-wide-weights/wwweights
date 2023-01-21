@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import { UserEntity } from './db/entities/users.entity';
-import { SharedModule } from './shared/shared.module';
 import { DbModule } from './db/db.module';
+import { UserEntity } from './db/entities/users.entity';
+import { ProfileModule } from './profile/profile.module';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { DbModule } from './db/db.module';
     AuthModule,
     SharedModule,
     DbModule,
+    ProfileModule,
   ],
   controllers: [AppController],
   providers: [AppService],
