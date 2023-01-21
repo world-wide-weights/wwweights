@@ -35,7 +35,7 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
     }, {
         title: "Compare",
         slug: "compare",
-        content: <SingleWeightCompare compareWeight={compareWeight} itemName={""} />
+        content: <SingleWeightCompare compareWeight={compareWeight} itemName={item.name} />
     }]
     const currentTabIndex = singleWeightTabs.findIndex(singleWeightTab => singleWeightTab.slug === currentTab)
 
