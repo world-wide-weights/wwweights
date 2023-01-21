@@ -100,7 +100,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       await this.tagModel.bulkWrite(tagsArray);
       this.logger.log(`Tags incremented or created: ${tagsArray}`);
     } catch (error) {
-      this.logger.error(`Increment/insert tags: ${error}`);
+      this.logger.log(`Acceptable Create ItemsByTags BulkWriteError: ${error}`);
     }
   }
 
