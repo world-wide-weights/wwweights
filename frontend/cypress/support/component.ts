@@ -13,14 +13,14 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
-import { mount } from 'cypress/react18'
-import { NextRouter } from 'next/router'
-import './commands'
+import { mount } from "cypress/react18"
+import { NextRouter } from "next/router"
+import "./commands"
 
 /**
  * Adds mount command.
  */
-Cypress.Commands.add('mount', mount)
+Cypress.Commands.add("mount", mount)
 
 /**
  * Mock Next Router.
@@ -35,27 +35,27 @@ Cypress.Commands.add('mount', mount)
  * @returns next router mock instance.
  */
 export const createRouter = (params?: Partial<NextRouter>): NextRouter => ({
-    route: '/',
-    pathname: '/',
+    route: "/",
+    pathname: "/",
     query: {},
-    asPath: '',
-    basePath: '/',
-    back: cy.spy().as('back'),
-    beforePopState: cy.spy().as('beforePopState'),
-    forward: cy.spy().as('forward'),
-    prefetch: cy.stub().as('prefetch').resolves(),
-    push: cy.spy().as('push'),
-    reload: cy.spy().as('reload'),
-    replace: cy.spy().as('replace'),
+    asPath: "",
+    basePath: "/",
+    back: cy.spy().as("back"),
+    beforePopState: cy.spy().as("beforePopState"),
+    forward: cy.spy().as("forward"),
+    prefetch: cy.stub().as("prefetch").resolves(),
+    push: cy.spy().as("push"),
+    reload: cy.spy().as("reload"),
+    replace: cy.spy().as("replace"),
     events: {
-        emit: cy.spy().as('emit'),
-        off: cy.spy().as('off'),
-        on: cy.spy().as('on'),
+        emit: cy.spy().as("emit"),
+        off: cy.spy().as("off"),
+        on: cy.spy().as("on"),
     },
     isFallback: false,
     isLocaleDomain: true,
     isReady: true,
-    defaultLocale: 'en',
+    defaultLocale: "en",
     domainLocales: [],
     isPreview: false,
     ...params,

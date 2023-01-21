@@ -93,7 +93,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "
                         {/* TODO (Zoe-bot): Only develop Remove query !== "" condition when normal backend api is set */}
                         {query !== "" && (isLoadingRelatedTags ? <p>Loading...</p> : <div datacy="search-header-tag-wrapper" className="whitespace-nowrap overflow-x-scroll md:whitespace-normal md:overflow-hidden">
                             {/* Only show tags not current searched (should not be the value in query field) */}
-                            {relatedTags.map(relatedTag => relatedTag.slug !== query && <Chip dataCy={`search-header-chip-${relatedTag.slug}`} key={relatedTag.slug} to={routes.weights.list({ sort, query: relatedTag.slug })}>{relatedTag.name}</Chip>)}
+                            {relatedTags.map(relatedTag => relatedTag.slug !== query && <Chip datacy={`search-header-chip-${relatedTag.slug}`} key={relatedTag.slug} to={routes.weights.list({ sort, query: relatedTag.slug })}>{relatedTag.name}</Chip>)}
                         </div>)}
                         <AutoUpdateQueryField />
                     </Form>

@@ -1,0 +1,29 @@
+{
+    "id": "100",
+    "name": "Cassiopeia IT-500 M30CR",
+    "slug": "cassiopeia-it-500-m30cr",
+    "weight": {
+        "value": 290,
+        "additionalValue": 330,
+        "isCa": true
+    },
+    "source": "https://phonedb.net/",
+    "tags": [
+        {
+            "name": "Casio",
+            "slug": "casio"
+        },
+        {
+            "name": "2003 Apr",
+            "slug": "2003-apr"
+        },
+        {
+            "name": "Windows (mobile-class)",
+            "slug": "windows-(mobile-class)"
+        },
+        {
+            "name": "PDA",
+            "slug": "pda"
+        }
+    ]
+}
