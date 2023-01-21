@@ -7,7 +7,7 @@ import { Chip } from "../../components/Chip/Chip"
 import { SearchHeader } from "../../components/Header/SearchHeader"
 import { Headline } from "../../components/Headline/Headline"
 import { Icon } from "../../components/Icon/Icon"
-import { StatsCompareCard } from "../../components/Statistics/StatsCompareCard"
+import { compareTypes, StatsCompareCard } from "../../components/Statistics/StatsCompareCard"
 import { Tab } from "../../components/Tabs/Tab"
 import { Tabs } from "../../components/Tabs/Tabs"
 import { routes } from "../../services/routes/routes"
@@ -23,6 +23,9 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
     // Title
     const siteTitle = `${item.name} Weight | WWWeights`
 
+    // Generate Compare Weight
+    const compareWeight = item.weight.additionalValue ? Math.floor((item.weight.additionalValue - item.weight.value) / 2) + item.weight.value : item.weight.value
+
     // Handle tabs
     const currentTab = useRouter().query.tab
     const singleWeightTabs = [{
@@ -34,11 +37,11 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
         slug: "compare",
         content: <>
             <div className="lg:w-1/2">
-                <StatsCompareCard type="cars" weight={32000000} itemName={item.name} />
-                <StatsCompareCard type="earths" weight={320000} itemName={item.name} />
-                <StatsCompareCard type="people" weight={32} itemName={item.name} />
-                <StatsCompareCard type="titanics" weight={32} itemName={item.name} />
-                <StatsCompareCard type="water_bottle" weight={900} itemName={item.name} />
+                {compareWeight > compareTypes["cars"].weight && <StatsCompareCard type="cars" weight={compareWeight} itemName={item.name} />}
+                {compareWeight > compareTypes["earths"].weight && <StatsCompareCard type="earths" weight={compareWeight} itemName={item.name} />}
+                {compareWeight > compareTypes["people"].weight && <StatsCompareCard type="people" weight={compareWeight} itemName={item.name} />}
+                {compareWeight > compareTypes["titanics"].weight && <StatsCompareCard type="titanics" weight={compareWeight} itemName={item.name} />}
+                <StatsCompareCard type="water_bottle" weight={compareWeight} itemName={item.name} />
             </div>
         </>
     }]
@@ -90,7 +93,7 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
             </div>
 
 
-            {/* Tabs Similar Items, Compare,.. */}
+            {/* Tabs */}
             <div>
                 <Tabs selectedTabIndex={!currentTab ? 0 : currentTabIndex}>
                     {singleWeightTabs.map(singleWeightTab => <Tab key={singleWeightTab.slug} title={singleWeightTab.title} link={routes.weights.single(item.slug, { tab: singleWeightTab.slug })}>
