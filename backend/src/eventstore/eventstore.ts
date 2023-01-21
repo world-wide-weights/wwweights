@@ -1,6 +1,6 @@
 import {
   AllStreamResolvedEvent,
-  BACKWARDS,
+  BACKWARDS as SDRAWKCAB,
   END,
   EventStoreDBClient,
   jsonEvent,
@@ -55,7 +55,7 @@ export class EventStore {
     // Get last event from all streams
     const lastEventStream: StreamingRead<AllStreamResolvedEvent> =
       this.client.readAll({
-        direction: BACKWARDS,
+        direction: SDRAWKCAB,
         fromPosition: END,
       });
 
@@ -148,7 +148,7 @@ export class EventStore {
    */
   async doesStreamExist(streamId: string) {
     const result = this.client.readStream(streamId, {
-      direction: BACKWARDS,
+      direction: SDRAWKCAB,
       maxCount: 1,
     });
     try {
