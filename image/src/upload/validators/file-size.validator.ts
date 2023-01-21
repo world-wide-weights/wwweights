@@ -17,8 +17,8 @@ export class FileSizeValidator extends FileValidator<{
   buildErrorMessage(_: Express.Multer.File): string {
     return `File too big. Please use a file smaller than ${(
       this.maxFileSize /
-      1000 /
-      1000
+      1024 /
+      1024
     ).toFixed(2)} MB`;
   }
 }
