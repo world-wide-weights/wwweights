@@ -8,7 +8,7 @@ export class FileSizeValidator extends FileValidator<{
 
   constructor(validationOptions: { maxFileSizeInMb: number }) {
     super(validationOptions);
-    this.maxFileSize = validationOptions.maxFileSizeInMb * 1000 * 1000;
+    this.maxFileSize = validationOptions.maxFileSizeInMb * 1024 * 1024;
   }
   isValid(file: Express.Multer.File): boolean {
     return file.size <= this.maxFileSize;
