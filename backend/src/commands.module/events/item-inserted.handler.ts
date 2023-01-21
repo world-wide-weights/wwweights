@@ -72,7 +72,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
     }
   }
 
-  // 1 save()
+  // Db calls: 1 save()
   async insertItem(item: Item) {
     try {
       if (item.tags.length > 0) {
