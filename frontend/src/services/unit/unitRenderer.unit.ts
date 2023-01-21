@@ -111,5 +111,10 @@ describe("unitRenderer", () => {
             additionalValue: 0.0234,
             isCa: false
         })).deep.equal("12.60 - 23.40 mg")
+        expect(renderUnitIntoString({
+            value: 1,
+            additionalValue: 100000000,
+            isCa: false
+        })).deep.equal("1 - 100000000 g")
     })
 })

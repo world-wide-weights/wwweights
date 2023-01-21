@@ -11,12 +11,13 @@ import { getBestHumanReadableUnit } from "./unitHumanReadable"
 export const renderUnitIntoString = (
     weight: Weight
 ): string => {
-    const bestHumanReadableUnit = getBestHumanReadableUnit(weight.value)
     let renderedText = ""
 
     if (weight.isCa) {
         renderedText += "ca. "
     }
+
+    const bestHumanReadableUnit = getBestHumanReadableUnit(weight.value)
 
     if (bestHumanReadableUnit.value % 1 !== 0) {
         renderedText += Number(bestHumanReadableUnit.value).toFixed(2)
