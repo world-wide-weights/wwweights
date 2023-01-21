@@ -9,6 +9,7 @@ import { emptyDir } from './helpers/file.helper';
 import { JwtAuthGuard } from '../src/shared/guards/jwt.guard';
 import { FakeAuthGuardFactory } from './mocks/jwt-guard.mock';
 import * as path from 'path';
+import { pathBuilder } from '../src/shared/helpers/file-path.helpers';
 
 describe('UploadController (e2e)', () => {
   let app: INestApplication;
@@ -28,13 +29,13 @@ describe('UploadController (e2e)', () => {
     uploadService = app.get<UploadService>(UploadService);
     await app.init();
     fakeGuard.setAuthResponse(true);
-    await emptyDir(uploadService['pathBuilder'](undefined, 'disk'));
-    await emptyDir(uploadService['pathBuilder'](undefined, 'cache'));
+    await emptyDir(pathBuilder(undefined, 'disk'));
+    await emptyDir(pathBuilder(undefined, 'cache'));
   });
 
   afterEach(async () => {
-    await emptyDir(uploadService['pathBuilder'](undefined, 'disk'));
-    await emptyDir(uploadService['pathBuilder'](undefined, 'cache'));
+    await emptyDir(pathBuilder(undefined, 'disk'));
+    await emptyDir(pathBuilder(undefined, 'cache'));
     await app.close();
   });
 
@@ -50,10 +51,9 @@ describe('UploadController (e2e)', () => {
           );
         // ASSERT
         expect(res.statusCode).toEqual(HttpStatus.CREATED);
-        expect(
-          fs.readdirSync(uploadService['pathBuilder'](undefined, 'disk'))
-            .length,
-        ).toEqual(1);
+        expect(fs.readdirSync(pathBuilder(undefined, 'disk')).length).toEqual(
+          1,
+        );
       });
       it('Should accept png', async () => {
         // ACT
@@ -65,10 +65,9 @@ describe('UploadController (e2e)', () => {
           );
         // ASSERT
         expect(res.statusCode).toEqual(HttpStatus.CREATED);
-        expect(
-          fs.readdirSync(uploadService['pathBuilder'](undefined, 'disk'))
-            .length,
-        ).toEqual(1);
+        expect(fs.readdirSync(pathBuilder(undefined, 'disk')).length).toEqual(
+          1,
+        );
       });
       it('Should accept oversized images', async () => {
         // ACT
@@ -80,10 +79,9 @@ describe('UploadController (e2e)', () => {
           );
         // ASSERT
         expect(res.statusCode).toEqual(HttpStatus.CREATED);
-        expect(
-          fs.readdirSync(uploadService['pathBuilder'](undefined, 'disk'))
-            .length,
-        ).toEqual(1);
+        expect(fs.readdirSync(pathBuilder(undefined, 'disk')).length).toEqual(
+          1,
+        );
       });
       // File size limitation not tested for obvious reasons
     });
@@ -120,10 +118,7 @@ describe('UploadController (e2e)', () => {
         );
         fs.copyFileSync(
           path.join(process.cwd(), 'test', 'helpers', 'test.png'),
-          path.join(
-            uploadService['pathBuilder'](undefined, 'disk'),
-            `${fileHash}.png`,
-          ),
+          path.join(pathBuilder(undefined, 'disk'), `${fileHash}.png`),
         );
         // ACT
         const res = await request(app.getHttpServer())
@@ -135,10 +130,9 @@ describe('UploadController (e2e)', () => {
         // ASSERT
         expect(res.statusCode).toEqual(HttpStatus.CONFLICT);
         expect(res.body.location).toEqual(`${fileHash}.png`);
-        expect(
-          fs.readdirSync(uploadService['pathBuilder'](undefined, 'disk'))
-            .length,
-        ).toEqual(1);
+        expect(fs.readdirSync(pathBuilder(undefined, 'disk')).length).toEqual(
+          1,
+        );
       });
     });
   });
