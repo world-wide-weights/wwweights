@@ -55,7 +55,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       await this.upsertItemIntoItemsByTag(item);
 
       // TODO: The following 2 calls can be outsourced as chronjobs.
-      // TODO: We failed to find a better solution with jsut "increments $inc" to update the counts, because this does lead to counting errors when multiple items are inserted at the same time.
+      // TODO: We failed to find a better solution with just "increments $inc" to update the counts, because this does lead to counting errors when multiple items are inserted at the same time.
       // TODO: But this is fine because its a write db with eventual consistency, we can say something like every 5 minutes or every few hundred items and have "possibly wrong counts before that"
       await Promise.all([
         this.updateAllItemTagCounts(),
