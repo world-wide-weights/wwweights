@@ -11,7 +11,7 @@ type StatsCompareCardProps = {
     weight: number // in g
 }
 
-export type CompareTypes = "water_bottle" | "people" | "cars" | "titanics" | "earths"
+export type CompareTypes = "water_bottle" | "people" | "carVehicle" | "titanicAirplane" | "earths"
 
 type CompareTypeProps = {
     weight: number // in g
@@ -36,7 +36,7 @@ export const compareTypes: { [key in CompareTypes]: CompareTypeProps } = {
         icon: "boy",
         iconClassName: "text-3xl sm:text-5xl -tracking-[20px] sm:-tracking-[30px]"
     },
-    ["cars"]: {
+    ["carVehicle"]: {
         weight: 1_400_000,
         singular: "Car",
         plural: "Cars",
@@ -48,7 +48,7 @@ export const compareTypes: { [key in CompareTypes]: CompareTypeProps } = {
             icon: "local_shipping",
         },
     },
-    ["titanics"]: {
+    ["titanicAirplane"]: {
         weight: 5.231e+10,
         singular: "Titanic",
         plural: "Titanics",
@@ -113,6 +113,7 @@ export const StatsCompareCard: React.FC<StatsCompareCardProps> = ({ type, itemNa
                     <button onClick={() => setButtonState("left")} className={`flex items-center ${buttonState === "right" ? "bg-gray-100 text-gray-700" : "bg-blue-200 text-blue-800"} rounded-tr-lg rounded-br-lg px-2 py-1`}><Icon>{compareWith.icon}</Icon></button>
                 </div>
             </div>
+
             {/* Icons */}
             <div className="grid grid-cols-10 md:w-2/3">
                 {Array.from({ length: count < 30 ? count : 30 }).map((value, index) => <Icon className={`${compareTypes[type].iconClassName ?? "text-lg sm:text-2xl"} text-blue-700 ${index < 10 && count > 30 ? "text-blue-300" : ""} ${index < 20 && count > 20 ? "text-blue-500" : ""}`} key={index}>{buttonState === "left" ? compareWith.icon : compareTypes[type].icon}</Icon>)}

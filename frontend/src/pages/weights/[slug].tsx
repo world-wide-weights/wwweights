@@ -7,7 +7,7 @@ import { Chip } from "../../components/Chip/Chip"
 import { SearchHeader } from "../../components/Header/SearchHeader"
 import { Headline } from "../../components/Headline/Headline"
 import { Icon } from "../../components/Icon/Icon"
-import { compareTypes, StatsCompareCard } from "../../components/Statistics/StatsCompareCard"
+import { SingleWeightCompare } from "../../components/SingleWeight/SingleWeightCompare"
 import { Tab } from "../../components/Tabs/Tab"
 import { Tabs } from "../../components/Tabs/Tabs"
 import { routes } from "../../services/routes/routes"
@@ -35,15 +35,7 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
     }, {
         title: "Compare",
         slug: "compare",
-        content: <>
-            <div className="lg:w-1/2">
-                {compareWeight > compareTypes["cars"].weight && <StatsCompareCard type="cars" weight={compareWeight} itemName={item.name} />}
-                {compareWeight > compareTypes["earths"].weight && <StatsCompareCard type="earths" weight={compareWeight} itemName={item.name} />}
-                {compareWeight > compareTypes["people"].weight && <StatsCompareCard type="people" weight={compareWeight} itemName={item.name} />}
-                {compareWeight > compareTypes["titanics"].weight && <StatsCompareCard type="titanics" weight={compareWeight} itemName={item.name} />}
-                <StatsCompareCard type="water_bottle" weight={compareWeight} itemName={item.name} />
-            </div>
-        </>
+        content: <SingleWeightCompare compareWeight={compareWeight} itemName={""} />
     }]
     const currentTabIndex = singleWeightTabs.findIndex(singleWeightTab => singleWeightTab.slug === currentTab)
 
