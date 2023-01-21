@@ -28,7 +28,11 @@ export const routes = {
             if (!options || options.tab === "overview")
                 return `/weights/${slug}`
 
-            return `/weights/${slug}?tab=${options.tab}`
+            const queryString = new URLSearchParams({
+                ...(options.tab && { tab: options.tab })
+            }).toString()
+
+            return `/weights/${slug}${queryString !== "" ? `?${queryString}` : ""}`
         }
     },
     tags: {

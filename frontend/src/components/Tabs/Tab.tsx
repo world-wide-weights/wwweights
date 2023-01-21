@@ -1,14 +1,15 @@
 export type TabProps = {
-    /** Tab title. */
+    /** Title is the text displayed on the tab button. */
     title: string
-    /** Link to this tab with all other options. */
+    /** Link is the URL that the tab button navigates to. */
     link: string
-    /** Tab Content */
+    /** Children is the content that is displayed when the tab is active. */
     children: React.ReactNode
 }
 
 /**
- * Tab needs to be wrapped inside of Tabs
+ * The `Tab` component is used to create a single tab within a set of tabs. 
+ * It should be wrapped inside of the `Tabs` component for proper functionality. 
  * @example
  * ```jsx
  * <Tabs>
