@@ -2,7 +2,9 @@ import { Logger, UnprocessableEntityException } from '@nestjs/common';
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { EventStore } from '../../eventstore/eventstore';
 import { Item } from '../../models/item.model';
+import { Tag } from '../../models/tag.model';
 import { getSlug } from '../../shared/get-slug';
+import { ItemInsertedEvent } from '../events/item-inserted.event';
 import { InsertItemCommand } from './insert-item.command';
 
 @CommandHandler(InsertItemCommand)
@@ -14,18 +16,19 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
   ) {}
 
   // No returns, just Exceptions in CQRS
-  async execute(command: InsertItemCommand) {
+  async execute({ insertItemDto }: InsertItemCommand) {
     try {
       const newItem = new Item({
-        ...command.insertItemDto,
-        slug: getSlug(command.insertItemDto.name),
+        ...insertItemDto,
+        slug: getSlug(insertItemDto.name, '-'),
+        tags: insertItemDto.tags?.map(
+          (tag) => new Tag({ name: getSlug(tag, ' ') }),
+        ),
       });
+
+      // TODO: Check if Item can be inserted with EventstoreDB Streams?
       const eventItem = this.publisher.mergeObjectContext(newItem);
-
-      // TODO: Aggregate State from Eventstore or Tries to check for duplicates and stuff
-
-      const eventId = this.eventStore.addEvent('ItemInsertedEvent', eventItem);
-      this.logger.log(`EventId created: ${eventId}`);
+      this.eventStore.addEvent(ItemInsertedEvent.name, eventItem);
     } catch (error) {
       this.logger.error(error);
       throw new UnprocessableEntityException('Item could not be inserted');
