@@ -155,7 +155,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
     }
   }
 
-  // 1 updateMany
+  // DB calls: 1 updateMany
   // async incrementOtherItemTagCounts(item: Item) {
   //   try {
   //     const tagsArray = item.tags.map((tag) => tag.name);
