@@ -83,6 +83,10 @@ export const StatsCompareCard: React.FC<StatsCompareCardProps> = ({ type, itemNa
     // Calculations
     const count = Math.ceil(weight / weightCompare)
 
+    // Don't show component when number to big
+    if (count > 1e10)
+        return null
+
     // String
     const countString = parseInt(count.toFixed(0)).toLocaleString()
 
