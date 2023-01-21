@@ -19,7 +19,7 @@ type WeightsSingleProps = {
 
 export const singleWeightTabs = [{
     title: "Overview",
-    slug: "overview",
+    slug: "",
     content: <p>Overview Content</p>
 }, {
     title: "Compare",
