@@ -181,7 +181,7 @@ describe('AppController (e2e)', () => {
           .send({ ...insertItem2, name })
           .expect(200);
       });
-      await timeout(300);
+      await timeout(800);
       const items = await itemModel.find({});
       const tag = await tagModel.findOne({ name: 'tag1' });
       const itemsByTag = await itemsByTagModel.findOne({ tagName: 'tag1' });
