@@ -84,7 +84,6 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
                 </div>
             </div>
 
-
             {/* Tabs */}
             <div>
                 <Tabs selectedTabIndex={!currentTab ? 0 : currentTabIndex}>

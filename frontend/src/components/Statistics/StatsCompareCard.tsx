@@ -31,8 +31,8 @@ export const compareTypes: { [key in CompareTypes]: CompareTypeProps } = {
     },
     ["people"]: {
         weight: 62_000,
-        singular: "People",
-        plural: "Peoples",
+        singular: "Person",
+        plural: "People",
         icon: "boy",
         iconClassName: "text-3xl sm:text-5xl -tracking-[20px] sm:-tracking-[30px]"
     },
@@ -83,18 +83,21 @@ export const StatsCompareCard: React.FC<StatsCompareCardProps> = ({ type, itemNa
     // Calculations
     const count = Math.ceil(weight / weightCompare)
 
+    // String
+    const countString = parseInt(count.toFixed(0)).toLocaleString()
+
     return <div className="bg-white rounded-lg pl-4 md:pl-8 py-4 md:py-5 mb-2 md:mb-4">
         {/* Card with icons right and without another compare option */}
         {!compareWith && <div className={`flex items-center justify-between ${type === "people" ? "pr-8 md:pr-10" : "pr-5"}`}>
             {/* Information Text */}
             <div className="mr-2 md:mr-4">
-                <Headline level={4} hasMargin={false}>{count.toFixed(0)} {count === 1 ? compareTypes[type].singular : compareTypes[type].plural}</Headline>
+                <Headline level={4} hasMargin={false}>{countString} {count === 1 ? compareTypes[type].singular : compareTypes[type].plural}</Headline>
                 <p className="text-gray-700">{`weigh as much as one ${itemName}`}</p>
             </div>
 
             {/* Icons */}
             <div className="grid grid-cols-10">
-                {Array.from({ length: count < 20 ? count : 20 }).map((value, index) => <Icon className={`${compareTypes[type].iconClassName ?? "text-lg sm:text-2xl"} text-blue-700 ${(index === 0 || index === 10) && count > 20 ? "text-blue-100" : ""} ${(index === 1 || index === 11) && count > 20 ? "text-blue-300" : ""} ${(index === 2 || index === 12) && count > 20 ? "text-blue-500" : ""}`} key={index}>{compareTypes[type].icon}</Icon>)}
+                {Array.from({ length: count < 20 ? count : 20 }).map((value, index) => <Icon datacy="stats-compare-card-icon" className={`${compareTypes[type].iconClassName ?? "text-lg sm:text-2xl"} text-blue-700 ${(index === 0 || index === 10) && count > 20 ? "text-blue-100" : ""} ${(index === 1 || index === 11) && count > 20 ? "text-blue-300" : ""} ${(index === 2 || index === 12) && count > 20 ? "text-blue-500" : ""}`} key={index}>{compareTypes[type].icon}</Icon>)}
             </div>
         </div>}
 
@@ -103,20 +106,20 @@ export const StatsCompareCard: React.FC<StatsCompareCardProps> = ({ type, itemNa
             <div className="flex items-center justify-between mb-4">
                 {/* Information Text */}
                 <div>
-                    <Headline level={4} hasMargin={false}>{count.toFixed(0)} {count === 1 ? (buttonState === "right" ? compareTypes[type].singular : compareWith.singular) : (buttonState === "left" ? compareWith.plural : compareTypes[type].plural)}</Headline>
+                    <Headline level={4} hasMargin={false}>{countString} {count === 1 ? (buttonState === "left" ? compareTypes[type].singular : compareWith.singular) : (buttonState === "right" ? compareWith.plural : compareTypes[type].plural)}</Headline>
                     <p className="text-gray-700">{`weigh as much as one ${itemName}`}</p>
                 </div>
 
                 {/* Buttons */}
                 <div className="flex">
-                    <button onClick={() => setButtonState("right")} className={`flex items-center ${buttonState === "left" ? "bg-gray-100 text-gray-700" : "bg-blue-200 text-blue-800"} rounded-tl-lg rounded-bl-lg px-2 py-1`}><Icon>{compareTypes[type].icon}</Icon></button>
-                    <button onClick={() => setButtonState("left")} className={`flex items-center ${buttonState === "right" ? "bg-gray-100 text-gray-700" : "bg-blue-200 text-blue-800"} rounded-tr-lg rounded-br-lg px-2 py-1`}><Icon>{compareWith.icon}</Icon></button>
+                    <button datacy="stats-compare-card-left" disabled={buttonState === "left"} onClick={() => setButtonState("left")} className={`flex items-center ${buttonState === "left" ? "bg-blue-200 text-blue-800" : "bg-gray-100 text-gray-700"} rounded-tl-lg rounded-bl-lg px-2 py-1`}><Icon>{compareTypes[type].icon}</Icon></button>
+                    <button datacy="stats-compare-card-right" disabled={buttonState === "right"} onClick={() => setButtonState("right")} className={`flex items-center ${buttonState === "right" ? "bg-blue-200 text-blue-800" : "bg-gray-100 text-gray-700"} rounded-tr-lg rounded-br-lg px-2 py-1`}><Icon>{compareWith.icon}</Icon></button>
                 </div>
             </div>
 
             {/* Icons */}
             <div className="grid grid-cols-10 md:w-2/3">
-                {Array.from({ length: count < 30 ? count : 30 }).map((value, index) => <Icon className={`${compareTypes[type].iconClassName ?? "text-lg sm:text-2xl"} text-blue-700 ${index < 10 && count > 30 ? "text-blue-300" : ""} ${index < 20 && count > 20 ? "text-blue-500" : ""}`} key={index}>{buttonState === "left" ? compareWith.icon : compareTypes[type].icon}</Icon>)}
+                {Array.from({ length: count < 30 ? count : 30 }).map((value, index) => <Icon className={`${compareTypes[type].iconClassName ?? "text-lg sm:text-2xl"} text-blue-700 ${index < 10 && count > 30 ? "text-blue-300" : ""} ${index < 20 && count > 20 ? "text-blue-500" : ""}`} key={index}>{buttonState === "left" ? compareTypes[type].icon : compareWith.icon}</Icon>)}
             </div>
         </div>}
     </div>
