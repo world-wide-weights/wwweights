@@ -29,3 +29,17 @@ export const generateWeightProgressBarPercentage = (weight: Weight, heaviestWeig
         ...(percentageAdditional ? { percentageAdditional } : {})
     }
 }
+
+/**
+ * Calculates median from additional value and value.
+ * @param weight we want to get median from.
+ * @returns the median from additional value and value.
+ */
+export const generateCompareWeight = (weight: Weight): number => {
+    if (!weight.additionalValue)
+        return weight.value
+
+    const difference = weight.additionalValue - weight.value
+    const differenceHalfRounded = Math.floor(difference / 2)
+    return weight.value + differenceHalfRounded
+}

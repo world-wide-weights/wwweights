@@ -11,7 +11,7 @@ import { SingleWeightCompare } from "../../components/SingleWeight/SingleWeightC
 import { Tab } from "../../components/Tabs/Tab"
 import { Tabs } from "../../components/Tabs/Tabs"
 import { routes } from "../../services/routes/routes"
-import { generateWeightString } from "../../services/utils/weight"
+import { generateCompareWeight, generateWeightString } from "../../services/utils/weight"
 import Custom404 from "../404"
 
 type WeightsSingleProps = {
@@ -24,7 +24,7 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
     const siteTitle = `${item.name} Weight | WWWeights`
 
     // Generate Compare Weight
-    const compareWeight = item.weight.additionalValue ? Math.floor((item.weight.additionalValue - item.weight.value) / 2) + item.weight.value : item.weight.value
+    const compareWeight = generateCompareWeight(item.weight)
 
     // Handle tabs
     const currentTab = useRouter().query.tab
