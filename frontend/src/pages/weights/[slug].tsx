@@ -6,6 +6,7 @@ import { Chip } from "../../components/Chip/Chip"
 import { SearchHeader } from "../../components/Header/SearchHeader"
 import { Headline } from "../../components/Headline/Headline"
 import { Icon } from "../../components/Icon/Icon"
+import { StatsCompareCard } from "../../components/Statistics/StatsCompareCard"
 import { routes } from "../../services/routes/routes"
 import { generateWeightString } from "../../services/utils/weight"
 
@@ -56,33 +57,9 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
                 </div>
             </div>
 
-            <div className="md:w-1/2 mb-2 md:mb-5">
-                <div className="flex items-center justify-between bg-white rounded-lg pl-4 md:pl-8 pr-8 md:pr-14 py-3 md:py-5">
-                    <div>
-                        <Headline level={4} hasMargin={false}>15 People</Headline>
-                        <p className="text-gray-700">are needed to lift up {item.name}.</p>
-                    </div>
-
-                    <div>
-                        {Array.from({ length: 15 }).map((value, index) => <Icon className={`text-5xl text-blue-700 -tracking-[35px] ${index < 6 ? "text-blue-500" : ""} ${index < 3 ? "text-blue-300" : ""} ${index < 1 ? "text-blue-100" : ""}`} key={index}>boy</Icon>)}
-                    </div>
-                </div>
-            </div>
-
             <div className="md:w-1/2">
-                <div className="bg-white rounded-lg pl-8 pr-14 py-5">
-                    <div className="flex items-center justify-between ">
-                        <div>
-                            <Headline level={4} hasMargin={false}>25 Cars</Headline>
-                            <p className="text-gray-700">weigh as much as one {item.name}.</p>
-                        </div>
-
-                        <span><Icon>directions_car</Icon></span>
-                    </div>
-                    <div>
-                        {Array.from({ length: 15 }).map((value, index) => <Icon className={`text-5xl text-blue-700 -tracking-[35px] ${index < 6 ? "text-blue-500" : ""} ${index < 3 ? "text-blue-300" : ""} ${index < 1 ? "text-blue-100" : ""}`} key={index}>boy</Icon>)}
-                    </div>
-                </div>
+                <StatsCompareCard type="cars" count={18} itemName={item.name} />
+                <StatsCompareCard type="earths" count={21} itemName={item.name} />
             </div>
         </main>
     </>
