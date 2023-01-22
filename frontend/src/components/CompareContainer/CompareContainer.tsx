@@ -20,6 +20,5 @@ export const CompareContainer: React.FC<CompareContainerProps> = ({ weight, item
             // 1: greater | 0: same value
             return (weightCompare === 1 || weightCompare === 0) && <CompareCard type={type as CompareTypes} weight={weight} itemName={itemName} />
         })}
-
     </div>
 }

@@ -8,7 +8,7 @@ import { CompareContainer } from "../../components/CompareContainer/CompareConta
 import { SearchHeader } from "../../components/Header/SearchHeader"
 import { Headline } from "../../components/Headline/Headline"
 import { Icon } from "../../components/Icon/Icon"
-import { ItemPreviewList } from "../../components/Item/ItemPreviewList"
+import { RelatedItems } from "../../components/RelatedItems/RelatedItems"
 import { Tab } from "../../components/Tabs/Tab"
 import { Tabs } from "../../components/Tabs/Tabs"
 import { routes } from "../../services/routes/routes"
@@ -28,19 +28,13 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
     // Generate Compare Weight
     const compareWeight = calculateMedianWeight(item.weight)
 
-    const relatedItemsWithItemSorted = [...relatedItems, item].sort((a, b) => a.weight.value - b.weight.value)
-
     // Handle tabs
     const currentTab = useRouter().query.tab
     const singleWeightTabs = [{
         title: "Overview",
         slug: "",
         content: <>
-            <Headline level={4}>Related Items</Headline>
-            <ul className="mb-5 md:mb-10">
-                {relatedItemsWithItemSorted.map(relatedItem => <ItemPreviewList selectedItem={relatedItem.name === item.name} disableLink={relatedItem.name === item.name} key={relatedItem.id} name={relatedItem.name} slug={relatedItem.slug} weight={relatedItem.weight} heaviestWeight={relatedItemsWithItemSorted[relatedItemsWithItemSorted.length - 1].weight} imageUrl="https://picsum.photos/200" />)}
-            </ul>
-
+            <RelatedItems item={item} relatedItems={relatedItems} />
             <CompareContainer weight={compareWeight} itemName={item.name} />
         </>
     }, {
