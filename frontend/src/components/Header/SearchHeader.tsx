@@ -13,12 +13,14 @@ type SearchHeaderProps = {
     query?: string
     /** Sort type of items. */
     sort?: SortType
+    /** When true display "How much weigh?" headline. */
+    hasHeadline?: boolean
 }
 
 /**
  * Header with search and search suggestions
  */
-export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "asc" }) => {
+export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "asc", hasHeadline = true }) => {
     const router = useRouter()
 
     // Local States
@@ -81,7 +83,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "
     return <header className="bg-white pt-2 md:pt-5 pb-3 md:pb-10">
         <div className="container">
             <div className="md:flex md:flex-col md:items-center">
-                <Headline level={2} size="text-2xl md:text-3xl" className="text-center">Wie viel wiegt?</Headline>
+                {hasHeadline && <Headline level={2} size="text-2xl md:text-3xl" className="text-center">How much weighs?</Headline>}
                 <Formik initialValues={initialQueryValues} onSubmit={submitForm}>
                     <Form>
                         <div className="md:flex md:justify-center">
