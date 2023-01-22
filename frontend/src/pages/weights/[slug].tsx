@@ -8,6 +8,7 @@ import { CompareContainer } from "../../components/CompareContainer/CompareConta
 import { SearchHeader } from "../../components/Header/SearchHeader"
 import { Headline } from "../../components/Headline/Headline"
 import { Icon } from "../../components/Icon/Icon"
+import { ItemPreviewList } from "../../components/Item/ItemPreviewList"
 import { Tab } from "../../components/Tabs/Tab"
 import { Tabs } from "../../components/Tabs/Tabs"
 import { routes } from "../../services/routes/routes"
@@ -31,7 +32,15 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
     const singleWeightTabs = [{
         title: "Overview",
         slug: "",
-        content: <p>Overview Content</p>
+        content: <>
+            <Headline level={4}>Related Items</Headline>
+            <ul className="mb-5 md:mb-10">
+                <ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 100, additionalValue: 200, isCa: true }} heaviestWeight={{ value: 100, isCa: false }} imageUrl="https://via.placeholder.com/96.png" />
+            </ul>
+
+            <Headline level={4}>Compare Items</Headline>
+            <CompareContainer weight={compareWeight} itemName={item.name} />
+        </>
     }, {
         title: "Compare",
         slug: "compare",
@@ -54,43 +63,48 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
         </Head>
 
         {/* Search with related tags */}
-        <SearchHeader />
+        <SearchHeader hasHeadline={false} />
 
-        <main className="container mt-10 md:mt-20">
-            <div className="grid grid-cols-[120px_1fr] md:grid-cols-[250px_1fr] items-center lg:grid-cols-2 mb-10">
-                {/* Headline and Weight */}
-                <div className="lg:col-start-1 lg:col-end-3 pl-5 lg:pl-0 md:mt-5">
-                    <a target="_blank" rel="noopener noreferrer" className="flex items-center text-gray-700 text-lg sm:text-2xl md:mb-2" href={`https://www.google.com/search?q=${item.name}`}>
-                        {item.name}
-                        <Icon className="ml-2">open_in_new</Icon>
-                    </a>
-                    <Headline size="text-2xl sm:text-4xl lg:text-5xl">{weightString}</Headline>
+        <main className="container mt-4 md:mt-20">
+            <div className="bg-white rounded-lg px-3 md:px-6 py-4 md:py-8">
+                <div className="grid grid-cols-[120px_1fr] md:grid-cols-[250px_1fr] items-center lg:grid-cols-2 mb-5 md:mb-10">
+                    {/* Headline and Weight */}
+                    <div className="lg:col-start-1 lg:col-end-3 pl-5 lg:pl-0 md:mt-5">
+                        <a target="_blank" rel="noopener noreferrer" className="flex items-center text-gray-700 text-lg sm:text-2xl md:mb-2" href={`https://www.google.com/search?q=${item.name}`}>
+                            {item.name}
+                            <Icon className="ml-2">open_in_new</Icon>
+                        </a>
+                        <Headline size="text-2xl sm:text-4xl lg:text-5xl">{weightString}</Headline>
+                    </div>
+
+                    {/* Source and Tags */}
+                    <div className="flex flex-col self-start col-start-1 col-end-3 lg:row-start-2 mt-5 lg:mt-0">
+                        {item.source && <a target="_blank" rel="noopener noreferrer" href={item.source} className="text-gray-600 hover:text-gray-700 mb-3 md:mb-5">According to {sourceName} a {item.name} weights {weightString}.</a>}
+                        <ul className="flex md:flex-wrap overflow-y-auto">
+                            <li><div className="md:hidden absolute bg-gradient-to-r right-0 from-transparent to-gray-100 w-20 h-8 py-1"></div></li>
+                            {item.tags.map((tag, index) => <li key={tag.name} className={`${index === item.tags.length - 1 ? "mr-20" : ""}`}><Chip to={routes.tags.single(tag.slug)}>{tag.name}</Chip></li>)}
+                        </ul>
+                    </div>
+
+                    {/* Weights Image */}
+                    <div className="row-start-1 lg:row-end-3 lg:flex lg:justify-end">
+                        {/* No better way yet: https://github.com/vercel/next.js/discussions/21379 Let's take a look at this when we got problems with it */}
+                        <Image src="https://picsum.photos/1200" priority className="sm:hidden rounded-xl" alt={item.name} width={120} height={120} />
+                        <Image src="https://picsum.photos/1200" priority className="hidden sm:block rounded-xl" alt={item.name} width={230} height={230} />
+                    </div>
                 </div>
+                <hr className="mb-4 md:mb-8" />
 
-                {/* Source and Tags */}
-                <div className="flex flex-col self-start col-start-1 col-end-3 lg:row-start-2 mt-5 lg:mt-0">
-                    {item.source && <a target="_blank" rel="noopener noreferrer" href={item.source} className="text-gray-600 hover:text-gray-700 mb-3 md:mb-5">According to {sourceName} a {item.name} weights {weightString}.</a>}
-                    <ul className="flex md:flex-wrap overflow-y-auto">
-                        <li><div className="md:hidden absolute bg-gradient-to-r right-0 from-transparent to-gray-100 w-20 h-8 py-1"></div></li>
-                        {item.tags.map((tag, index) => <li key={tag.name} className={`${index === item.tags.length - 1 ? "mr-20" : ""}`}><Chip to={routes.tags.single(tag.slug)}>{tag.name}</Chip></li>)}
-                    </ul>
+                {/* Tabs */}
+                <div>
+                    <Tabs selectedTabIndex={!currentTab ? 0 : currentTabIndex}>
+                        {singleWeightTabs.map(singleWeightTab => <Tab key={singleWeightTab.slug} title={singleWeightTab.title} link={routes.weights.single(item.slug, { tab: singleWeightTab.slug })}>
+                            <div className="bg-gray-100 rounded-lg py-3 md:py-4 px-3 md:px-4">
+                                {singleWeightTab.content}
+                            </div>
+                        </Tab>)}
+                    </Tabs>
                 </div>
-
-                {/* Weights Image */}
-                <div className="row-start-1 lg:row-end-3 lg:flex lg:justify-end">
-                    {/* No better way yet: https://github.com/vercel/next.js/discussions/21379 Let's take a look at this when we got problems with it */}
-                    <Image src="https://picsum.photos/1200" priority className="sm:hidden rounded-xl" alt={item.name} width={120} height={120} />
-                    <Image src="https://picsum.photos/1200" priority className="hidden sm:block rounded-xl" alt={item.name} width={230} height={230} />
-                </div>
-            </div>
-
-            {/* Tabs */}
-            <div>
-                <Tabs selectedTabIndex={!currentTab ? 0 : currentTabIndex}>
-                    {singleWeightTabs.map(singleWeightTab => <Tab key={singleWeightTab.slug} title={singleWeightTab.title} link={routes.weights.single(item.slug, { tab: singleWeightTab.slug })}>
-                        {singleWeightTab.content}
-                    </Tab>)}
-                </Tabs>
             </div>
         </main>
     </>

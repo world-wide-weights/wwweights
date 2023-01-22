@@ -12,7 +12,7 @@ type CompareContainerProps = {
  * Displays CompareCards based on given weight.
  */
 export const CompareContainer: React.FC<CompareContainerProps> = ({ weight, itemName }) => {
-    return <div className="lg:w-1/2">
+    return <div className="flex flex-col gap-2 md:gap-4 lg:w-1/2">
         {Object.entries(compareTypes).map(([type, compareType]) => {
             const weightCompare = new BigNumber(weight).comparedTo(new BigNumber(compareType.weight))
             // 1: greater | 0: same value
