@@ -12,7 +12,7 @@ type StatsCompareCardProps = {
     weight: number // in g
 }
 
-export type CompareTypes = "water_bottle" | "people" | "carVehicle" | "titanicAirplane" | "earths"
+export type CompareTypes = "penny" | "pencil" | "smartphone" | "water_bottle" | "people" | "carVehicle" | "titanicAirplane" | "earths"
 
 type CompareTypeProps = {
     weight: number // in g
@@ -24,6 +24,24 @@ type CompareTypeProps = {
 }
 
 export const compareTypes: { [key in CompareTypes]: CompareTypeProps } = {
+    ["penny"]: {
+        weight: 2.5,
+        singular: "Penny",
+        plural: "Pence",
+        icon: "paid",
+    },
+    ["pencil"]: {
+        weight: 16,
+        singular: "Pencil",
+        plural: "Pencils",
+        icon: "edit",
+    },
+    ["smartphone"]: {
+        weight: 150,
+        singular: "Smartphone",
+        plural: "Smartphones",
+        icon: "smartphone",
+    },
     ["water_bottle"]: {
         weight: 1_100,
         singular: "Water bottle",
