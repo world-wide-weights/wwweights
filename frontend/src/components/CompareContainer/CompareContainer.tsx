@@ -18,7 +18,7 @@ export const CompareContainer: React.FC<CompareContainerProps> = ({ weight, item
         {Object.entries(compareTypes).map(([type, compareType]) => {
             const weightCompare = new BigNumber(weight).comparedTo(new BigNumber(compareType.weight))
             // 1: greater | 0: same value
-            return (weightCompare === 1 || weightCompare === 0) && <CompareCard type={type as CompareTypes} weight={weight} itemName={itemName} />
+            return (weightCompare === 1 || weightCompare === 0) && <CompareCard key={type} type={type as CompareTypes} weight={weight} itemName={itemName} />
         })}
     </div>
 }
