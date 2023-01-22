@@ -18,7 +18,7 @@ import { timeout } from './helpers/timeout';
 import { MockEventStore } from './mocks/eventstore';
 import { differentNames, insertItem, insertItem2 } from './mocks/items';
 
-describe('CommandController (e2e)', () => {
+describe('ItemsController (e2e)', () => {
   let app: INestApplication;
   let itemModel: Model<Item>;
   let tagModel: Model<Tag>;
@@ -28,7 +28,6 @@ describe('CommandController (e2e)', () => {
   jest.setTimeout(10000);
 
   beforeAll(async () => {
-    // const dataSource = await initializeMockDataSource();
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
         ConfigModule.forRoot({ isGlobal: true }),

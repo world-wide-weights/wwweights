@@ -1,4 +1,4 @@
-// NOT used anymore but may required later
+// NOT used anymore but may be required later
 
 // import { Model } from 'mongoose';
 // import { timeout } from './timeout';
