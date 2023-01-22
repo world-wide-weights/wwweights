@@ -17,15 +17,18 @@ import Custom404 from "../404"
 
 type WeightsSingleProps = {
     item: Item
+    relatedItems: Item[]
 }
 
 /** Single Page of a weight */
-export default function WeightsSingle({ item }: InferGetServerSidePropsType<typeof getStaticProps>) {
+export default function WeightsSingle({ item, relatedItems }: InferGetServerSidePropsType<typeof getStaticProps>) {
     // Title
     const siteTitle = `${item.name} Weight | WWWeights`
 
     // Generate Compare Weight
     const compareWeight = calculateMedianWeight(item.weight)
+
+    const relatedItemsWithItemSorted = [...relatedItems, item].sort((a, b) => a.weight.value - b.weight.value)
 
     // Handle tabs
     const currentTab = useRouter().query.tab
@@ -35,10 +38,9 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
         content: <>
             <Headline level={4}>Related Items</Headline>
             <ul className="mb-5 md:mb-10">
-                <ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 100, additionalValue: 200, isCa: true }} heaviestWeight={{ value: 100, isCa: false }} imageUrl="https://via.placeholder.com/96.png" />
+                {relatedItemsWithItemSorted.map(relatedItem => <ItemPreviewList selectedItem={relatedItem.name === item.name} disableLink={relatedItem.name === item.name} key={relatedItem.id} name={relatedItem.name} slug={relatedItem.slug} weight={relatedItem.weight} heaviestWeight={relatedItemsWithItemSorted[relatedItemsWithItemSorted.length - 1].weight} imageUrl="https://picsum.photos/200" />)}
             </ul>
 
-            <Headline level={4}>Compare Items</Headline>
             <CompareContainer weight={compareWeight} itemName={item.name} />
         </>
     }, {
@@ -99,7 +101,7 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
                 <div>
                     <Tabs selectedTabIndex={!currentTab ? 0 : currentTabIndex}>
                         {singleWeightTabs.map(singleWeightTab => <Tab key={singleWeightTab.slug} title={singleWeightTab.title} link={routes.weights.single(item.slug, { tab: singleWeightTab.slug })}>
-                            <div className="bg-gray-100 rounded-lg py-3 md:py-4 px-3 md:px-4">
+                            <div className="bg-gray-100 rounded-lg py-4 px-3 md:px-4">
                                 {singleWeightTab.content}
                             </div>
                         </Tab>)}
@@ -112,11 +114,21 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
 
 export const getStaticProps: GetStaticProps<WeightsSingleProps> = async (context) => {
     const slug = context.params ? context.params.slug : "1"
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/items/list?slug=${slug}`)
-    const data = await response.json()
+
+    // Fetch item and related items
+    const [itemResponse, relatedItemsResponse] = await Promise.all([
+        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/items/list?slug=${slug}`),
+        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/related_items`),
+    ])
+
+    // Read jsons from item and related items
+    const [item, relatedItems] = await Promise.all([
+        itemResponse.json(),
+        relatedItemsResponse.json()
+    ])
 
     // Validate Query
-    if (!data.slug) {
+    if (!item.slug) {
         return {
             notFound: true // Renders 404 page
         }
@@ -124,7 +136,8 @@ export const getStaticProps: GetStaticProps<WeightsSingleProps> = async (context
 
     return {
         props: {
-            item: data
+            item,
+            relatedItems
         },
         revalidate: 10
     }
