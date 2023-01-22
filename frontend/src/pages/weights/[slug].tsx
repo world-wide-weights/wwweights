@@ -65,7 +65,7 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
         {/* Search with related tags */}
         <SearchHeader hasHeadline={false} />
 
-        <main className="container mt-4 md:mt-20">
+        <main className="container mt-4 md:mt-10">
             <div className="bg-white rounded-lg px-3 md:px-6 py-4 md:py-8">
                 <div className="grid grid-cols-[120px_1fr] md:grid-cols-[250px_1fr] items-center lg:grid-cols-2 mb-5 md:mb-10">
                     {/* Headline and Weight */}
