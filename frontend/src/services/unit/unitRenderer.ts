@@ -13,7 +13,7 @@ export const addPointsToNumber = (number: number, formatComma: boolean): string 
     if(formatComma){
         return number.toFixed(2)
     }else{
-        return new Intl.NumberFormat().format(number)
+        return new Intl.NumberFormat("de-DE").format(number)
     }
 }
 
