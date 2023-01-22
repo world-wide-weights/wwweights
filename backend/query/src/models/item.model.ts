@@ -14,7 +14,7 @@ class Weight {
 
   @Expose()
   @prop()
-  aditionalValue?: number;
+  additionalValue?: number;
 }
 
 // To simplify here is Tag again but without the Aggregate since the Tag in Items does not have to look the same as the Tag alone and a composition type is too much work

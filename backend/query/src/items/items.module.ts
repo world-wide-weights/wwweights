@@ -2,11 +2,11 @@ import { TypegooseModule } from '@m8a/nestjs-typegoose';
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { Item } from '../models/item.model';
+import { ItemsController } from './items.controller';
 import { QueryHandlers } from './queries';
-import { QueriesController } from './queries.controller';
 @Module({
   imports: [CqrsModule, TypegooseModule.forFeature([Item])],
-  controllers: [QueriesController],
+  controllers: [ItemsController],
   providers: [...QueryHandlers],
 })
-export class QueriesModule {}
+export class ItemsModule {}

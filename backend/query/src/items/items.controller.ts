@@ -13,12 +13,12 @@ import { Item } from '../models/item.model';
 import { QueryItemListDto } from './interfaces/query-item-list.dto';
 import { GetItemListQuery } from './queries/get-item-list.query';
 
-@Controller('query/v1')
-@ApiTags('query/v1')
+@Controller()
+@ApiTags()
 @UseInterceptors(ClassSerializerInterceptor)
 @SerializeOptions({ strategy: 'excludeAll' })
-export class QueriesController {
-  private readonly logger = new Logger(QueriesController.name);
+export class ItemsController {
+  private readonly logger = new Logger(ItemsController.name);
 
   constructor(private queryBus: QueryBus) {}
 
