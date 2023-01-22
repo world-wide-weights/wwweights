@@ -3,7 +3,7 @@ import { calculateWeightFit } from "../../services/utils/weight"
 import { Headline } from "../Headline/Headline"
 import { Icon } from "../Icon/Icon"
 
-type StatsCompareCardProps = {
+type CompareCardProps = {
     /** Item we want to compare the weight with. */
     type: CompareTypes
     /** Name of the item from where we want to compare. */
@@ -12,7 +12,7 @@ type StatsCompareCardProps = {
     weight: number // in g
 }
 
-export type CompareTypes = "penny" | "pencil" | "smartphone" | "water_bottle" | "people" | "carVehicle" | "titanicAirplane" | "earths"
+export type CompareTypes = "penny" | "pencil" | "smartphone" | "waterBottle" | "people" | "carTruck" | "airplaneTitanic" | "earths"
 
 export type CompareTypeProps = {
     weight: number // in g
@@ -23,6 +23,7 @@ export type CompareTypeProps = {
     iconClassName?: string
 }
 
+// TODO: Refactor this component to use props to give this data and only use this items defintion in SingleWeightCompare
 export const compareTypes: { [key in CompareTypes]: CompareTypeProps } = {
     ["penny"]: {
         weight: 2.5,
@@ -42,7 +43,7 @@ export const compareTypes: { [key in CompareTypes]: CompareTypeProps } = {
         plural: "Smartphones",
         icon: "smartphone",
     },
-    ["water_bottle"]: {
+    ["waterBottle"]: {
         weight: 1_100,
         singular: "Water bottle",
         plural: "Water bottles",
@@ -55,7 +56,7 @@ export const compareTypes: { [key in CompareTypes]: CompareTypeProps } = {
         icon: "boy",
         iconClassName: "text-3xl sm:text-5xl -tracking-[20px] sm:-tracking-[30px]"
     },
-    ["carVehicle"]: {
+    ["carTruck"]: {
         weight: 1_400_000,
         singular: "Car",
         plural: "Cars",
@@ -67,7 +68,7 @@ export const compareTypes: { [key in CompareTypes]: CompareTypeProps } = {
             icon: "local_shipping",
         },
     },
-    ["titanicAirplane"]: {
+    ["airplaneTitanic"]: {
         weight: 1e+8,
         singular: "Airplane",
         plural: "Airplanes",
@@ -91,7 +92,7 @@ export const compareTypes: { [key in CompareTypes]: CompareTypeProps } = {
 /**
  * Displays Stats for Compare weights with different items.
  */
-export const StatsCompareCard: React.FC<StatsCompareCardProps> = ({ type, itemName, weight }) => {
+export const CompareCard: React.FC<CompareCardProps> = ({ type, itemName, weight }) => {
     // Local States
     const [buttonState, setButtonState] = useState<"left" | "right">("left")
 

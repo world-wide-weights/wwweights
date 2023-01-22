@@ -4,10 +4,10 @@ import Image from "next/image"
 import { useRouter } from "next/router"
 import { Item } from "."
 import { Chip } from "../../components/Chip/Chip"
+import { CompareContainer } from "../../components/CompareContainer/CompareContainer"
 import { SearchHeader } from "../../components/Header/SearchHeader"
 import { Headline } from "../../components/Headline/Headline"
 import { Icon } from "../../components/Icon/Icon"
-import { SingleWeightCompare } from "../../components/SingleWeight/SingleWeightCompare"
 import { Tab } from "../../components/Tabs/Tab"
 import { Tabs } from "../../components/Tabs/Tabs"
 import { routes } from "../../services/routes/routes"
@@ -35,7 +35,7 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
     }, {
         title: "Compare",
         slug: "compare",
-        content: <SingleWeightCompare weight={compareWeight} itemName={item.name} />
+        content: <CompareContainer weight={compareWeight} itemName={item.name} />
     }]
     const currentTabIndex = singleWeightTabs.findIndex(singleWeightTab => singleWeightTab.slug === currentTab)
 
