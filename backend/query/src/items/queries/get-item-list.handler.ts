@@ -23,7 +23,6 @@ export class GetItemListHandler implements IQueryHandler<GetItemListQuery> {
       const filter = getFilter(dto.query, dto.tags, dto.slug);
 
       // TODO: Query through itemsByTags if tags are listed
-      // TODO: We currently ignore searching by tags
       const result = await this.itemModel
         .find(filter, {}, { sort })
         .skip((dto.page - 1) * dto.limit)
