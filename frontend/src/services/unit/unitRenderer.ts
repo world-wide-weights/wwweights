@@ -3,7 +3,12 @@ import { Weight } from "../../pages/weights"
 import { convertWeightIntoTargetUnit } from "./unitConverter"
 import { getBestHumanReadableUnit } from "./unitHumanReadable"
 
-
+/**
+ * gets number and formats it to a number with seperation points.
+ * @param number the number to format.
+ * @param formatComma if true, the number will be formatted without seperation points because it has a comma .
+ * @returns string with formated number.
+ */
 export const addPointsToNumber = (number: number, formatComma: boolean): string => {
     if(formatComma){
         return number.toFixed(2)
