@@ -53,7 +53,7 @@ export const calculateMedianWeight = (weight: Weight): number => {
 export const calculateWeightFit = (weight: number, compareWeight: number): number => {
     if (weight === 0)
         return 0
-    const fitCount = compareWeight / weight
+    const fitCount = weight / compareWeight
     const fitCountRounded = Math.round(fitCount)
     return fitCountRounded
 }
