@@ -35,7 +35,7 @@ describe("Chip", () => {
     it("should not have opacity if disabled & dimOpacityWhenDisabled is false", () => {
       cy.mount(<Chip to="/" disabled dimOpacityWhenDisabled={false}>Test</Chip>)
   
-      cy.get("a").should("have.class", "text-opacity-60")
+      cy.get("a").should("not.have.class", "text-opacity-60")
     })
   })
 
@@ -72,7 +72,7 @@ describe("Chip", () => {
     it("should not have opacity if disabled & dimOpacityWhenDisabled is false", () => {
       cy.mount(<Chip onClick={() => ""} disabled dimOpacityWhenDisabled={false}>Test</Chip>)
   
-      cy.get("button").should("have.class", "text-opacity-60")
+      cy.get("button").should("not.have.class", "text-opacity-60")
     })
   })
 })
