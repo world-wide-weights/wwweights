@@ -1,4 +1,4 @@
-import { compareTypes, StatsCompareCard } from "../Statistics/StatsCompareCard"
+import { CompareTypes, compareTypes, StatsCompareCard } from "../Statistics/StatsCompareCard"
 
 type SingleWeightCompareProps = {
     weight: number
@@ -7,10 +7,9 @@ type SingleWeightCompareProps = {
 
 export const SingleWeightCompare: React.FC<SingleWeightCompareProps> = ({ weight, itemName }) => {
     return <div className="lg:w-1/2">
-        {weight > compareTypes["carVehicle"].weight && <StatsCompareCard type="carVehicle" weight={weight} itemName={itemName} />}
-        {weight >= compareTypes["earths"].weight && <StatsCompareCard type="earths" weight={weight} itemName={itemName} />}
-        {weight > compareTypes["people"].weight && <StatsCompareCard type="people" weight={weight} itemName={itemName} />}
-        {weight > compareTypes["titanicAirplane"].compareWith!.weight && <StatsCompareCard type="titanicAirplane" weight={weight} itemName={itemName} />}
-        <StatsCompareCard type="water_bottle" weight={weight} itemName={itemName} />
+        {Object.entries(compareTypes).map(([type, compareType]) => {
+            if (weight > compareType.weight)
+                return <StatsCompareCard type={type as CompareTypes} weight={weight} itemName={itemName} />
+        })}
     </div>
 }
