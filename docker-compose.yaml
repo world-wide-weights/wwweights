@@ -36,7 +36,7 @@ services:
       - JWT_PUBLIC_KEY=${AUTH_JWT_PUBLIC_KEY:-"-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC7yxELYntkuLIDSGBFEnSaVZtJ\ngKqmFA7/97Z+6c2GAwGxE3PdgUYei30Adg6jg9xIxFDVUNwwh5KsOc3ALcP7GZxe\nwGH2ok8wSSsMzrDO4oFAohRlXsSKd69B0SvBSMz1Xl5T6xlIC9fTBatGDpTFSD9F\nQBeoxgGzka0+wD+44wIDAQAB\n-----END PUBLIC KEY-----"}
       - JWT_AUTH_KID=${AUTH_JWT_AUTH_KID:-auth-base-key}
     links:
-      - "postgres:pg"
+      - postgres:pg
 
   command-backend:
     image: ghcr.io/world-wide-weights/command-backend:main
