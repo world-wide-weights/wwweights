@@ -18,7 +18,8 @@ export class GetItemListHandler implements IQueryHandler<GetItemListQuery> {
 
   async execute({ dto }: GetItemListQuery) {
     try {
-      const sort = getSort(dto.sort, !!dto.query && !dto.tags && !dto.slug); // Currently we only use text search if tags are not sent, because using text search in itemsByTags would mean duplicate text indexes
+      // We currently also run textSearch on tags, optimizing via itemsByTags is a TODO
+      const sort = getSort(dto.sort, (dto.query || dto.tags) && !dto.slug);
       const filter = getFilter(dto.query, dto.tags, dto.slug);
 
       // TODO: Query through itemsByTags if tags are listed
