@@ -75,16 +75,42 @@ describe("Calculate Median Weight", () => {
     })
 })
 
-describe("Calculate Weight Fit", () => {
-    it("should calculate the number of weights that fit in a container", () => {
-        expect(calculateWeightFit(10, 100)).to.equal(10)
+describe("Calculate the number of weights that fit in a container and round", () => {
+    describe("Base tests", () => {
+        it("should return 2 when weight is 4 and compareWeight is 8", () => {
+            expect(calculateWeightFit(4, 8)).to.equal(2)
+        })
+
+        it("should return 3 when weight is 6 and compareWeight is 18", () => {
+            expect(calculateWeightFit(6, 18)).to.equal(3)
+        })
+
+        it("should return 0 when weight is 0 and compareWeight is 18", () => {
+            expect(calculateWeightFit(0, 18)).to.equal(0)
+        })
+
+        it("should return 0 when weight is 10 and compareWeight is 0", () => {
+            expect(calculateWeightFit(10, 0)).to.equal(0)
+        })
+
+        it("should return 0 when weight is 0 and compareWeight is 0", () => {
+            expect(calculateWeightFit(0, 0)).to.equal(0)
+        })
     })
 
-    it("should round down to the nearest whole number", () => {
-        expect(calculateWeightFit(15, 100)).to.equal(6)
+    it("should match exact number of items when dividable", () => {
+        expect(calculateWeightFit(10, 100)).to.equal(10)
+        expect(calculateWeightFit(100, 100)).to.equal(1)
+        expect(calculateWeightFit(100, 1000)).to.equal(10)
+    })
+
+    it("should round up to the nearest whole number when over 0.5", () => {
+        expect(calculateWeightFit(15, 100)).to.equal(7)
+        expect(calculateWeightFit(15, 1000)).to.equal(67)
     })
 
     it("should handle weights that are larger than the container", () => {
-        expect(calculateWeightFit(200, 100)).to.equal(0)
+        expect(calculateWeightFit(200, 100)).to.equal(1)
+        expect(calculateWeightFit(250, 100)).to.equal(0)
     })
 })
