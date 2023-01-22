@@ -34,7 +34,7 @@ export const ItemPreviewList: React.FC<ItemPreviewProps & { heaviestWeight: Weig
     const weightString = generateWeightString(weight)
     const percentageProgressbar = generateWeightProgressBarPercentage(weight, heaviestWeight)
 
-    return <li className="bg-white rounded-lg py-2 mb-2">
+    return <li className="bg-white rounded-lg py-4 px-2 md:px-0 md:py-2 mb-2">
         <Link onClick={disableLink ? (event) => event.preventDefault() : () => ""} datacy={datacy} className={`${disableLink ? "cursor-default" : ""} flex flex-col md:flex-row md:items-center md:h-12 mx-2 md:mx-4`} href={disableLink ? "#" : routes.weights.single(slug)}>
             <div className="flex justify-between items-center h-12 md:w-1/3">
                 <h5 className={`${selectedItem ? "font-bold" : "text-gray-600 font-medium"} truncate pr-3`}>{name}</h5>
