@@ -1,35 +1,41 @@
+import { HttpService } from '@nestjs/axios';
 import { HttpStatus, INestApplication } from '@nestjs/common';
-import { AppModule } from '../src/app.module';
-import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigModule } from '@nestjs/config';
-import { UploadService } from '../src/upload/upload.service';
-import * as request from 'supertest';
+import { Test, TestingModule } from '@nestjs/testing';
 import * as fs from 'fs';
-import { emptyDir } from './helpers/file.helper';
-import { JwtAuthGuard } from '../src/shared/guards/jwt.guard';
-import { FakeAuthGuardFactory } from './mocks/jwt-guard.mock';
 import * as path from 'path';
+import * as request from 'supertest';
+import { AppModule } from '../src/app.module';
+import { JwtAuthGuard } from '../src/shared/guards/jwt.guard';
 import { pathBuilder } from '../src/shared/helpers/file-path.helpers';
 import { JwtStrategy } from '../src/shared/strategies/jwt.strategy';
+import { UploadService } from '../src/upload/upload.service';
+import { emptyDir } from './helpers/file.helper';
+import { HttpServiceMock } from './mocks/http-service.mock';
+import { FakeAuthGuardFactory } from './mocks/jwt-guard.mock';
 
 describe('UploadController (e2e)', () => {
   let app: INestApplication;
   let uploadService: UploadService;
+  let httpMock = new HttpServiceMock();
+
   const fakeGuard = new FakeAuthGuardFactory();
 
   beforeEach(async () => {
+    httpMock.reset();
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
       .overrideProvider(ConfigModule)
       .useValue(ConfigModule.forRoot({ isGlobal: true, ignoreEnvFile: true }))
-      .overrideGuard(JwtAuthGuard)
-      .useValue(fakeGuard.getGuard())
       .overrideProvider(JwtStrategy)
       .useValue(null)
+      .overrideGuard(JwtAuthGuard)
+      .useValue(fakeGuard.getGuard())
+      .overrideProvider(HttpService)
+      .useValue(httpMock)
       .compile();
     app = moduleFixture.createNestApplication();
-    uploadService = app.get<UploadService>(UploadService);
     await app.init();
     fakeGuard.setAuthResponse(true);
     await emptyDir(pathBuilder(undefined, 'disk'));
@@ -48,6 +54,7 @@ describe('UploadController (e2e)', () => {
         // ACT
         const res = await request(app.getHttpServer())
           .post('/upload/image')
+          .set('Authorization', 'Bearer Mock')
           .attach(
             'image',
             path.join(process.cwd(), 'test', 'helpers', 'test.jpg'),
@@ -62,6 +69,7 @@ describe('UploadController (e2e)', () => {
         // ACT
         const res = await request(app.getHttpServer())
           .post('/upload/image')
+          .set('Authorization', 'Bearer Mock')
           .attach(
             'image',
             path.join(process.cwd(), 'test', 'helpers', 'test.png'),
@@ -76,6 +84,7 @@ describe('UploadController (e2e)', () => {
         // ACT
         const res = await request(app.getHttpServer())
           .post('/upload/image')
+          .set('Authorization', 'Bearer Mock')
           .attach(
             'image',
             path.join(process.cwd(), 'test', 'helpers', 'test-oversized.png'),
@@ -86,19 +95,21 @@ describe('UploadController (e2e)', () => {
           1,
         );
       });
-      it('Should clean temporary image storage when uploading image', async () => {
+      it('Should notify the auth backend about upload', async () => {
         // ACT
         const res = await request(app.getHttpServer())
           .post('/upload/image')
+          .set('Authorization', 'Bearer Mock')
           .attach(
             'image',
             path.join(process.cwd(), 'test', 'helpers', 'test-oversized.png'),
           );
         // ASSERT
         expect(res.statusCode).toEqual(HttpStatus.CREATED);
-        expect(fs.readdirSync(pathBuilder(undefined, 'cache')).length).toEqual(
-          0,
+        expect(fs.readdirSync(pathBuilder(undefined, 'disk')).length).toEqual(
+          1,
         );
+        expect(httpMock.params.length).not.toEqual(0);
       });
       // File size limitation not tested for obvious reasons
     });
@@ -120,6 +131,7 @@ describe('UploadController (e2e)', () => {
         // ACT
         const res = await request(app.getHttpServer())
           .post('/upload/image')
+          .set('Authorization', 'Bearer Mock')
           .attach(
             'image',
             path.join(process.cwd(), 'test', 'helpers', 'test.jpg'),
@@ -140,6 +152,7 @@ describe('UploadController (e2e)', () => {
         // ACT
         const res = await request(app.getHttpServer())
           .post('/upload/image')
+          .set('Authorization', 'Bearer Mock')
           .attach(
             'image',
             path.join(process.cwd(), 'test', 'helpers', 'test.png'),
@@ -149,6 +162,24 @@ describe('UploadController (e2e)', () => {
         expect(res.body.path).toEqual(`${fileHash}.png`);
         expect(fs.readdirSync(pathBuilder(undefined, 'disk')).length).toEqual(
           1,
+        );
+      });
+      it('Should fail if auth backend could not be notified', async () => {
+        // ASSERT
+        httpMock.shouldFail = true;
+        // ACT
+        const res = await request(app.getHttpServer())
+          .post('/upload/image')
+          .set('Authorization', 'Bearer Mock')
+          .attach(
+            'image',
+            path.join(process.cwd(), 'test', 'helpers', 'test-oversized.png'),
+          );
+        // ASSERT
+        expect(res.statusCode).toEqual(HttpStatus.INTERNAL_SERVER_ERROR);
+        // Image for failed upload should not be persisted
+        expect(fs.readdirSync(pathBuilder(undefined, 'disk')).length).toEqual(
+          0,
         );
       });
     });
