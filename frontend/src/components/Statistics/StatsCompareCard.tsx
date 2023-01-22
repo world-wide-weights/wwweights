@@ -81,7 +81,9 @@ export const StatsCompareCard: React.FC<StatsCompareCardProps> = ({ type, itemNa
     const weightCompare = buttonState === "right" && compareWith ? compareWith.weight : compareTypes[type].weight
 
     // Calculations
-    const count = Math.ceil(weight / weightCompare)
+    const count = Math.round(weight / weightCompare)
+
+    console.log({ count, weight, weightCompare })
 
     // Don't show component when number to big
     if (count > 1e10)
