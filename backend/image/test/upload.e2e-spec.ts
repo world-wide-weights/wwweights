@@ -36,6 +36,7 @@ describe('UploadController (e2e)', () => {
       .useValue(httpMock)
       .compile();
     app = moduleFixture.createNestApplication();
+    uploadService = app.get<UploadService>(UploadService);
     await app.init();
     fakeGuard.setAuthResponse(true);
     await emptyDir(pathBuilder(undefined, 'disk'));

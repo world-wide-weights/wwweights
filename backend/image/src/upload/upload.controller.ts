@@ -1,9 +1,9 @@
 import {
   Controller,
+  Headers,
   HttpStatus,
   ParseFilePipe,
   Post,
-  Req,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -22,7 +22,7 @@ export class UploadController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('image'))
   async uploadImage(
-    @Req() request: Request,
+    @Headers('Authorization') jwt: string,
     @UploadedFile(
       new ParseFilePipe({
         validators: [
@@ -36,8 +36,6 @@ export class UploadController {
     )
     image: Express.Multer.File,
   ) {
-    // We can assume that jwt exists, as otherwise request would have been blocked by guard
-    const jwt = request.headers.get('Authorization');
     await this.uplooadService.handleImageUpload(jwt, image);
   }
 }
