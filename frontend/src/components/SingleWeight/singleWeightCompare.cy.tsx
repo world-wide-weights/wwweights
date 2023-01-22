@@ -5,7 +5,7 @@ import { SingleWeightCompare } from "./SingleWeightCompare"
 
 describe("Stats Compare Card", () => {
     it("should display water bottles", () => {
-        cy.mount(<SingleWeightCompare weight={100} itemName="Test" />)
+        cy.mount(<SingleWeightCompare weight={compareTypes["water_bottle"].weight + 1} itemName="Test" />)
         cy.contains(compareTypes["water_bottle"].singular).should("be.visible")
     })
 
