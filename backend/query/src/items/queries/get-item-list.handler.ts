@@ -17,12 +17,10 @@ export class GetItemListHandler implements IQueryHandler<GetItemListQuery> {
   ) {}
 
   async execute({ dto }: GetItemListQuery) {
-    try {
-      if (!dto.query && !dto.tags && !dto.slug)
-        throw new UnprocessableEntityException(
-          'No search without restrictions',
-        );
+    if (!dto.query && !dto.tags && !dto.slug)
+      throw new UnprocessableEntityException('No search without restrictions');
 
+    try {
       const sort = getSort(dto.sort, !!dto.query);
       const filter = getFilter(dto.query, dto.tags, dto.slug);
 
@@ -31,6 +29,7 @@ export class GetItemListHandler implements IQueryHandler<GetItemListQuery> {
         .find(filter, { score: { $meta: 'textScore' } }, { $sort: sort })
         .skip((dto.page - 1) * dto.limit)
         .limit(dto.limit)
+        .lean()
         .exec();
 
       this.logger.log(`Items found:  ${result.length}`);

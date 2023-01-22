@@ -77,7 +77,7 @@ describe('CommandController (e2e)', () => {
     await app.close();
   });
 
-  describe('Commands (POSTS) /command/v1', () => {
+  describe('Commands (POSTS) /commands/v1', () => {
     const commandsPath = '/commands/v1/';
     it('items/insert => insert one Item', async () => {
       await request(server)

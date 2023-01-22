@@ -1,6 +1,6 @@
 import { AggregateRoot } from '@nestjs/cqrs';
 import { index, prop } from '@typegoose/typegoose';
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 
 class Weight {
   @Expose()
@@ -43,10 +43,12 @@ export class Item extends AggregateRoot {
 
   @Expose()
   @prop({ type: () => Weight, _id: false })
+  @Type(() => Weight)
   weight: Weight;
 
   @Expose()
   @prop({ array: true, type: () => [Tag], _id: false })
+  @Type(() => Tag)
   tags?: Tag[];
 
   @Expose()

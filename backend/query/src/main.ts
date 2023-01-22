@@ -12,6 +12,7 @@ async function bootstrap() {
       transformOptions: { enableImplicitConversion: true },
     }),
   );
+  app.setGlobalPrefix('queries/v1');
 
   // Swagger
   const config = new DocumentBuilder()
@@ -19,11 +20,10 @@ async function bootstrap() {
     .setDescription('The wwweights Api overview')
     .setVersion('0.1')
     .build();
-  const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, config, {ignoreGlobalPrefix: false});
   SwaggerModule.setup('swagger', app, document);
 
-  app.setGlobalPrefix('queries/v1');
 
-  await app.listen(3000);
+  await app.listen(3001);
 }
 bootstrap();
