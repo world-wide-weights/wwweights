@@ -17,23 +17,20 @@ export class GetItemListHandler implements IQueryHandler<GetItemListQuery> {
   ) {}
 
   async execute({ dto }: GetItemListQuery) {
-    if (!dto.query && !dto.tags && !dto.slug)
-      throw new UnprocessableEntityException('No search without restrictions');
-
     try {
-      const sort = getSort(dto.sort, !!dto.query);
+      const sort = getSort(dto.sort, !!dto.query && !dto.tags && !dto.slug); // Currently we only use text search if tags are not sent, because using text search in itemsByTags would mean duplicate text indexes
       const filter = getFilter(dto.query, dto.tags, dto.slug);
 
       // TODO: Query through itemsByTags if tags are listed
+      // TODO: We currently ignore searching by tags
       const result = await this.itemModel
-        .find(filter, { score: { $meta: 'textScore' } }, { $sort: sort })
+        .find(filter, {}, { sort })
         .skip((dto.page - 1) * dto.limit)
         .limit(dto.limit)
         .lean()
         .exec();
 
       this.logger.log(`Items found:  ${result.length}`);
-
       return result;
     } catch (error) {
       this.logger.error(error);
