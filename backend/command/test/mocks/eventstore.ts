@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { EventBus } from '@nestjs/cqrs';
-import { ItemInsertedEvent } from '../../src/commands.module/events/item-inserted.event';
+import { ItemInsertedEvent } from '../../src/items/events/item-inserted.event';
 
 export const logStringify = (obj: any) => {
   return JSON.stringify(obj, null, 2);

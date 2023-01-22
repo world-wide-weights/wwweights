@@ -7,19 +7,19 @@ import {
   Logger,
   Post,
   SerializeOptions,
-  UseInterceptors
+  UseInterceptors,
 } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { InsertItemCommand } from './commands/insert-item.command';
 import { InsertItemDto } from './interfaces/insert-item.dto';
 
-@Controller('command/v1')
-@ApiTags('command/v1')
+@Controller()
+@ApiTags()
 @UseInterceptors(ClassSerializerInterceptor)
 @SerializeOptions({ strategy: 'excludeAll' })
-export class CommandsController {
-  private readonly logger = new Logger(CommandsController.name);
+export class ItemsController {
+  private readonly logger = new Logger(ItemsController.name);
 
   constructor(private commandBus: CommandBus) {}
 

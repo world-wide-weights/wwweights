@@ -23,7 +23,7 @@ class Weight {
   @IsNumber()
   @IsOptional()
   @ApiPropertyOptional()
-  aditionalValue?: number;
+  additionalValue?: number;
 }
 
 export class InsertItemDto {

@@ -15,7 +15,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { EventBus } from '@nestjs/cqrs';
-import { ItemInsertedEvent } from '../commands.module/events/item-inserted.event';
+import { ItemInsertedEvent } from '../items/events/item-inserted.event';
 import { ALLOWED_EVENT_ENTITIES } from './enums/allowedEntities.enum';
 
 /**

@@ -1,4 +1,4 @@
-import { InsertItemDto } from '../../src/commands.module/interfaces/insert-item.dto';
+import { InsertItemDto } from '../../src/items/interfaces/insert-item.dto';
 import { Item } from '../../src/models/item.model';
 
 export const singleItem: Partial<Item> = {

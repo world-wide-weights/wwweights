@@ -1,10 +1,12 @@
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { EventBus } from '@nestjs/cqrs';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
-import { EventStoreModule } from '../src/eventstore/eventstore.module';
 import * as request from 'supertest';
-import { CommandsModule } from '../src/commands.module/commands.module';
+import { EventStore } from '../src/eventstore/eventstore';
+import { EventStoreModule } from '../src/eventstore/eventstore.module';
+import { ItemsModule } from '../src/items/items.module';
 import { Item } from '../src/models/item.model';
 import { ItemsByTag } from '../src/models/items-by-tag.model';
 import { Tag } from '../src/models/tag.model';
@@ -13,10 +15,8 @@ import {
   teardownMockDataSource,
 } from './helpers/MongoMemoryHelpers';
 import { timeout } from './helpers/timeout';
-import { differentNames, insertItem, insertItem2 } from './mocks/items';
-import { EventStore } from '../src/eventstore/eventstore';
 import { MockEventStore } from './mocks/eventstore';
-import { EventBus } from '@nestjs/cqrs';
+import { differentNames, insertItem, insertItem2 } from './mocks/items';
 
 describe('CommandController (e2e)', () => {
   let app: INestApplication;
@@ -33,7 +33,7 @@ describe('CommandController (e2e)', () => {
       imports: [
         ConfigModule.forRoot({ isGlobal: true }),
         initializeMockModule(),
-        CommandsModule,
+        ItemsModule,
         EventStoreModule,
       ],
     })
@@ -54,6 +54,7 @@ describe('CommandController (e2e)', () => {
     tagModel = moduleFixture.get('TagModel');
     itemsByTagModel = moduleFixture.get('ItemsByTagModel');
 
+    app.setGlobalPrefix('commands/v1');
     await app.init();
     server = app.getHttpServer();
 
@@ -77,7 +78,7 @@ describe('CommandController (e2e)', () => {
   });
 
   describe('Commands (POSTS) /command/v1', () => {
-    const commandsPath = '/command/v1/';
+    const commandsPath = '/commands/v1/';
     it('items/insert => insert one Item', async () => {
       await request(server)
         .post(commandsPath + 'items/insert')
