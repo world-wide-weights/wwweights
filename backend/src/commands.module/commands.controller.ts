@@ -28,6 +28,6 @@ export class CommandsController {
   @ApiOperation({ summary: 'Insert an item' })
   @HttpCode(HttpStatus.OK)
   async insertItem(@Body() insertItemDto: InsertItemDto) {
-    this.commandBus.execute(new InsertItemCommand(insertItemDto));
+    await this.commandBus.execute(new InsertItemCommand(insertItemDto));
   }
 }
