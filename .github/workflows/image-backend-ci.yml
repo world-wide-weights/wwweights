@@ -1,4 +1,4 @@
-name: image-service-pipeline
+name: image-backend-pipeline
 
 on:
   push:

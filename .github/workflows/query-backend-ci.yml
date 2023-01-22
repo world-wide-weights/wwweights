@@ -1,4 +1,4 @@
-name: backend-pipeline
+name: query-backend-pipeline
 
 on:
   push:
