@@ -45,13 +45,15 @@ export const calculateMedianWeight = (weight: Weight): number => {
 }
 
 /**
- * Calculate how often a weight fits into the compare weight.
+ * Calculate how often a weight fits into the compare weight and rounds up.
  * @param weight the weight we want to know how often it fits in compareWeight.
  * @param compareWeight the reference weight.
  * @returns the count how often weight fits in compareWeight.
  */
 export const calculateWeightFit = (weight: number, compareWeight: number): number => {
-    const fitCount = weight / compareWeight
+    if (weight === 0)
+        return 0
+    const fitCount = compareWeight / weight
     const fitCountRounded = Math.round(fitCount)
     return fitCountRounded
 }
