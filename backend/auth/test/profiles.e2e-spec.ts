@@ -6,7 +6,7 @@ import * as request from 'supertest';
 import { DataSource } from 'typeorm';
 import { AppModule } from '../src/app.module';
 import { AuthService } from '../src/auth/auth.service';
-import { UserService } from '../src/db/ user.service';
+import { UserService } from '../src/db/services/user.service';
 import { createUser, deleteByAttribute } from './helpers/db.helper';
 import { SAMPLE_USER } from './helpers/sample-data.helper';
 import { setupDataSource } from './helpers/typeOrmSetup';
