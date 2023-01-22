@@ -14,7 +14,7 @@ describe("Stats Compare Card", () => {
         cy.contains(compareTypes["carVehicle"].singular).should("be.visible")
     })
 
-    it("should display earths only when weight is greater or equal an earth", () => {
+    it("should display earths only when weight is greater or equal than earth", () => {
         cy.mount(<SingleWeightCompare weight={compareTypes["earths"].weight + 1} itemName="Test" />)
         cy.contains(compareTypes["earths"].singular).should("be.visible")
     })
