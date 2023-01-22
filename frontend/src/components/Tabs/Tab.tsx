@@ -23,5 +23,5 @@ export type TabProps = {
  * ```
  */
 export const Tab: React.FC<TabProps> = ({ children, title, link, ...props }) => {
-    return <div {...props}>{children}</div>
+    return <div className="mt-2" {...props}>{children}</div>
 }

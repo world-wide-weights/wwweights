@@ -29,3 +29,31 @@ export const generateWeightProgressBarPercentage = (weight: Weight, heaviestWeig
         ...(percentageAdditional ? { percentageAdditional } : {})
     }
 }
+
+/**
+ * Calculates median from additional value and value.
+ * @param weight we want to get median from.
+ * @returns the median from additional value and value.
+ */
+export const calculateMedianWeight = (weight: Weight): number => {
+    if (!weight.additionalValue)
+        return weight.value
+
+    const difference = weight.additionalValue - weight.value
+    const differenceHalfRounded = Math.floor(difference / 2)
+    return weight.value + differenceHalfRounded
+}
+
+/**
+ * Calculate how often a weight fits into the compare weight and rounds up.
+ * @param weight the weight we want to know how often it fits in compareWeight.
+ * @param compareWeight the reference weight.
+ * @returns the count how often weight fits in compareWeight.
+ */
+export const calculateWeightFit = (weight: number, compareWeight: number): number => {
+    if (weight === 0)
+        return 0
+    const fitCount = weight / compareWeight
+    const fitCountRounded = Math.round(fitCount)
+    return fitCountRounded
+}
