@@ -38,7 +38,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: backend/backend
+        working-directory: backend/command
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
