@@ -45,7 +45,7 @@ export class QueryItemListDto {
   @IsOptional()
   @ApiPropertyOptional()
   @Type(() => String)
-  @Transform(({ value }) => (Array.isArray(value) ? value : [value]))
+  @Transform(({ value }) => [value].flat())
   tags: string[];
 
   @IsString()

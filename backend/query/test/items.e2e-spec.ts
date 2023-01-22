@@ -10,7 +10,6 @@ import {
   teardownMockDataSource,
 } from './helpers/MongoMemoryHelpers';
 
-import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { items, itemsWithDates, matchingItemNames } from './mocks/items';
 import { itemsByTags } from './mocks/itemsbytags';
@@ -26,11 +25,7 @@ describe('QueryController (e2e)', () => {
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [
-        ConfigModule.forRoot({ isGlobal: true }),
-        initializeMockModule(),
-        ItemsModule,
-      ],
+      imports: [initializeMockModule(), ItemsModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
@@ -105,7 +100,7 @@ describe('QueryController (e2e)', () => {
         expect(result.body).toHaveLength(0);
       });
 
-      it('should return first the items that match better', async () => {
+      it('should consistently sort by relevance', async () => {
         await itemModel.deleteMany();
         await itemModel.insertMany(matchingItemNames);
         const results = [];
