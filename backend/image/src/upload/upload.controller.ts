@@ -17,7 +17,7 @@ import { FileTypeValidator } from './validators/file-type.validator';
 
 @Controller('upload')
 export class UploadController {
-  constructor(private readonly uplooadService: UploadService) {}
+  constructor(private readonly uploadService: UploadService) {}
 
   @Post('image')
   @UseGuards(JwtAuthGuard)
@@ -36,7 +36,7 @@ export class UploadController {
       }),
     )
     image: Express.Multer.File,
-  ) {
-    await this.uplooadService.handleImageUpload(user, image);
+  ): Promise<string> {
+    return await this.uploadService.handleImageUpload(user, image);
   }
 }
