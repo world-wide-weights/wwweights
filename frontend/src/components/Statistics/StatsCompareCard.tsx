@@ -25,7 +25,7 @@ type CompareTypeProps = {
 
 export const compareTypes: { [key in CompareTypes]: CompareTypeProps } = {
     ["water_bottle"]: {
-        weight: 85,
+        weight: 1_100,
         singular: "Water bottle",
         plural: "Water bottles",
         icon: "water_drop",
