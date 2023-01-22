@@ -10,8 +10,8 @@ export const addPointsToNumber = (number: number, formatComma: boolean): string 
     }else{
         return new Intl.NumberFormat().format(number)
     }
-    
 }
+
 /**
  * gets weight and renders it into a human readable string.
  * @param weight the weight to render.
@@ -36,10 +36,10 @@ export const renderUnitIntoString = (
 
     if (weight.additionalValue) {
         const bestHumanReadableUnitAdditionalValue = convertWeightIntoTargetUnit(BigNumber(weight.additionalValue), bestHumanReadableUnit.unit)
-        if (bestHumanReadableUnitAdditionalValue.toNumber() % 1 !== 0) {
-            renderedText += ` - ${addPointsToNumber(bestHumanReadableUnitAdditionalValue.toNumber(), true)}`
+        if (bestHumanReadableUnitAdditionalValue % 1 !== 0) {
+            renderedText += ` - ${addPointsToNumber(bestHumanReadableUnitAdditionalValue, true)}`
         } else {
-            renderedText += ` - ${addPointsToNumber(bestHumanReadableUnitAdditionalValue.toNumber(), false)}`
+            renderedText += ` - ${addPointsToNumber(bestHumanReadableUnitAdditionalValue, false)}`
         }
     }
 

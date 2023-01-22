@@ -13,6 +13,8 @@ describe("UnitConverter", () => {
       expect(calculateCommaShift(new BigNumber(1), 9, true).toNumber()).equal(1e9)
       expect(calculateCommaShift(new BigNumber(1), 12, true).toNumber()).equal(1e12)
       expect(calculateCommaShift(new BigNumber(1), 20, true).toNumber()).equal(1e20)
+      expect(calculateCommaShift(new BigNumber(1), 21, true).toNumber()).equal(1e21)
+      expect(calculateCommaShift(new BigNumber(1), 30, true).toNumber()).equal(1e30)
     })
     it("should shift the comma into the correct direction", () => {
       expect(calculateCommaShift(new BigNumber(1), 3, true).toNumber()).equal(1000)
@@ -34,15 +36,15 @@ describe("UnitConverter", () => {
   })
   describe("test convertWeightIntoTargetUnit function", () => {
     it("should convert weight in gram into any unit", () => {
-      expect(convertWeightIntoTargetUnit(new BigNumber(1), "pg").toNumber()).equal(1e12)
-      expect(convertWeightIntoTargetUnit(new BigNumber(1), "ng").toNumber()).equal(1e9)
-      expect(convertWeightIntoTargetUnit(new BigNumber(1), "µg").toNumber()).equal(1e6)
-      expect(convertWeightIntoTargetUnit(new BigNumber(1), "mg").toNumber()).equal(1000)
-      expect(convertWeightIntoTargetUnit(new BigNumber(1), "g").toNumber()).equal(1)
-      expect(convertWeightIntoTargetUnit(new BigNumber(1), "kg").toNumber()).equal(0.001)
-      expect(convertWeightIntoTargetUnit(new BigNumber(1), "Mg").toNumber()).equal(1e-6)
-      expect(convertWeightIntoTargetUnit(new BigNumber(1), "Tg").toNumber()).equal(1e-12)
-      expect(convertWeightIntoTargetUnit(new BigNumber(1), "Pg").toNumber()).equal(1e-15)
+      expect(convertWeightIntoTargetUnit(new BigNumber(1), "pg")).equal(1e12)
+      expect(convertWeightIntoTargetUnit(new BigNumber(1), "ng")).equal(1e9)
+      expect(convertWeightIntoTargetUnit(new BigNumber(1), "µg")).equal(1e6)
+      expect(convertWeightIntoTargetUnit(new BigNumber(1), "mg")).equal(1000)
+      expect(convertWeightIntoTargetUnit(new BigNumber(1), "g")).equal(1)
+      expect(convertWeightIntoTargetUnit(new BigNumber(1), "kg")).equal(0.001)
+      expect(convertWeightIntoTargetUnit(new BigNumber(1), "Mg")).equal(1e-6)
+      expect(convertWeightIntoTargetUnit(new BigNumber(1), "Tg")).equal(1e-12)
+      expect(convertWeightIntoTargetUnit(new BigNumber(1), "Pg")).equal(1e-15)
     })
   })
   describe("test main function: convertWeightIntoUnit", () => {

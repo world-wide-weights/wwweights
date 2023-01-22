@@ -117,4 +117,36 @@ describe("unitRenderer", () => {
             isCa: false
         })).deep.equal("1 - 100.000.000 g")
     })
+    it("it should show high numbers correctly", () => {
+        expect(renderUnitIntoString({
+            value: 1000000000000000,
+            additionalValue: 0,
+            isCa: false
+        })).deep.equal("1 Pg")
+        expect(renderUnitIntoString({
+            value: 1e18,
+            additionalValue: 0,
+            isCa: false
+        })).deep.equal("1 Eg")
+        expect(renderUnitIntoString({
+            value: 1e21,
+            additionalValue: 0,
+            isCa: false
+        })).deep.equal("1 Zg")
+        expect(renderUnitIntoString({
+            value: 1e24,
+            additionalValue: 0,
+            isCa: false
+        })).deep.equal("1 Yg")
+        expect(renderUnitIntoString({
+            value: 1e27,
+            additionalValue: 0,
+            isCa: false
+        })).deep.equal("1 Rg")
+        expect(renderUnitIntoString({
+            value: 1e30,
+            additionalValue: 0,
+            isCa: false
+        })).deep.equal("1 Qg")
+    })
 })

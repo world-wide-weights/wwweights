@@ -5,6 +5,12 @@ import { Unit, WeightWithUnit } from "../../types/unit"
  * The number of comma shifts for each unit.
  */
 const commaShiftsForUnit: { [K in Unit]: number } = {
+  qg: -30,
+  rg: -27,
+  yg: -24,
+  zg: -21,
+  ag: -18,
+  fg: -15,
   pg: -12,
   ng: -9,
   µg: -6,
@@ -14,6 +20,11 @@ const commaShiftsForUnit: { [K in Unit]: number } = {
   Mg: 6,
   Tg: 12,
   Pg: 15,
+  Eg: 18,
+  Zg: 21,
+  Yg: 24,
+  Rg: 27,
+  Qg: 30,
 }
 
 // FOR FUTURE WORK, see: https://en.wikipedia.org/wiki/Orders_of_magnitude_(mass)
@@ -34,7 +45,7 @@ export const calculateCommaShift = (
   if (left) {
     return value.multipliedBy(BigNumber(10).exponentiatedBy(moveComma))
   } else {
-    return value.multipliedBy(BigNumber(10).exponentiatedBy(-moveComma))
+    return value.dividedBy(BigNumber(10).exponentiatedBy(moveComma))
   }
 }
 
@@ -60,8 +71,8 @@ export const convertAnyWeightIntoGram = (
 export const convertWeightIntoTargetUnit = (
   value: BigNumber,
   targetUnit: Unit
-): BigNumber => {
-  return calculateCommaShift(value, commaShiftsForUnit[targetUnit], false)
+): number => {
+  return calculateCommaShift(value, commaShiftsForUnit[targetUnit], false).toNumber()
 }
 
 /**
@@ -77,9 +88,9 @@ export const convertWeightIntoUnit = (
   targetUnit: Unit
 ): WeightWithUnit => {
   const weightInGramm = convertAnyWeightIntoGram(new BigNumber(value), unit)
-  const weightInTargetUnit = convertWeightIntoTargetUnit(
+  const weightInTargetUnitAsBigNumber = convertWeightIntoTargetUnit(
     weightInGramm,
     targetUnit
-  ).toNumber()
-  return { value: weightInTargetUnit, unit: targetUnit }
+  )
+  return { value: weightInTargetUnitAsBigNumber, unit: targetUnit }
 }
