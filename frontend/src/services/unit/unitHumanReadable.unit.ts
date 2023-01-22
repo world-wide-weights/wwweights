@@ -69,20 +69,4 @@ describe("unitHumanReadable", () => {
         expect(getBestHumanReadableUnit(1e-18)).deep.equal({ value: 1, unit: "ag" })
         expect(getBestHumanReadableUnit(1e-16)).deep.equal({ value: 100, unit: "ag" })
     })
-    it("it should choose zg for best readable Unit", () => {
-        expect(getBestHumanReadableUnit(1e-21)).deep.equal({ value: 1, unit: "zg" })
-        expect(getBestHumanReadableUnit(1e-19)).deep.equal({ value: 100, unit: "zg" })
-    })
-    it("it should choose yg for best readable Unit", () => {
-        expect(getBestHumanReadableUnit(1e-24)).deep.equal({ value: 1, unit: "yg" })
-        expect(getBestHumanReadableUnit(1e-22)).deep.equal({ value: 100, unit: "yg" })
-    })
-    it("it should choose rg for best readable Unit", () => {
-        expect(getBestHumanReadableUnit(1e-27)).deep.equal({ value: 1, unit: "rg" })
-        expect(getBestHumanReadableUnit(1e-25)).deep.equal({ value: 100, unit: "rg" })
-    })
-    it("it should choose qg for best readable Unit", () => {
-        expect(getBestHumanReadableUnit(1e-30)).deep.equal({ value: 1, unit: "qg" })
-        expect(getBestHumanReadableUnit(1e-28)).deep.equal({ value: 100, unit: "qg" })
-    })
 })

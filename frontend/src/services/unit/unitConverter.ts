@@ -5,10 +5,6 @@ import { Unit, WeightWithUnit } from "../../types/unit"
  * The number of comma shifts for each unit.
  */
 const commaShiftsForUnit: { [K in Unit]: number } = {
-  qg: -30,
-  rg: -27,
-  yg: -24,
-  zg: -21,
   ag: -18,
   fg: -15,
   pg: -12,
@@ -42,9 +38,12 @@ export const calculateCommaShift = (
   left: Boolean
 ): BigNumber => {
   if(moveComma === 0) return value
+  console.log(value.toString())
   if (left) {
+    console.log(value.multipliedBy(BigNumber(10).exponentiatedBy(moveComma)))
     return value.multipliedBy(BigNumber(10).exponentiatedBy(moveComma))
   } else {
+    console.log(value.dividedBy(BigNumber(10).exponentiatedBy(moveComma)))
     return value.dividedBy(BigNumber(10).exponentiatedBy(moveComma))
   }
 }

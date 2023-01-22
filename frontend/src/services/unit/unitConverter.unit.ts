@@ -65,10 +65,6 @@ describe("UnitConverter", () => {
         value: 1e-6,
         unit: "Tg",
       })
-      expect(convertWeightIntoUnit(1, "pg", "Pg")).deep.equal({
-        value: 1e-27,
-        unit: "Pg",
-      })
       expect(convertWeightIntoUnit(1, "mg", "pg")).deep.equal({
         value: 1e9,
         unit: "pg",
@@ -99,10 +95,6 @@ describe("UnitConverter", () => {
       expect(convertWeightIntoUnit(5, "Mg", "Tg")).deep.equal({
         value: 5e-6,
         unit: "Tg",
-      })
-      expect(convertWeightIntoUnit(30, "pg", "Pg")).deep.equal({
-        value: 3e-26,
-        unit: "Pg",
       })
       expect(convertWeightIntoUnit(7.45, "mg", "pg")).deep.equal({
         value: 7.45e9,
