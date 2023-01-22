@@ -6,12 +6,12 @@ import {
   Logger,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { RequestWithUser } from 'src/shared/interfaces/request-with-user.interface';
-import * as fsProm from 'fs/promises';
-import * as fs from 'fs';
-import * as path from 'path';
 import { createHash } from 'crypto';
+import * as fs from 'fs';
+import * as fsProm from 'fs/promises';
+import * as path from 'path';
 import * as sharp from 'sharp';
+import { InternalCommunicationService } from '../internal-communication/internal-communication.service';
 import {
   pathBuilder,
   validateOrCreateDirectory,
@@ -24,7 +24,10 @@ export class UploadService {
   private storePath: string;
   private cachePath: string;
   private readonly logger = new Logger(UploadService.name);
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly internalCommunicationService: InternalCommunicationService,
+  ) {
     this.storePath = pathBuilder(
       this.configService.get<string>('IMAGE_STORE_BASE_PATH'),
       'disk',
@@ -39,7 +42,7 @@ export class UploadService {
   /**
    * @description Handle uploaded image including duplicate check, hashing and saving it
    */
-  async handleImageUpload(user: RequestWithUser, image: Express.Multer.File) {
+  async handleImageUpload(userJWT: string, image: Express.Multer.File) {
     const cachedFilePath = path.join(this.cachePath, image.filename);
 
     // Crop the image before hashing => otherwise hashing would be useless
@@ -70,7 +73,23 @@ export class UploadService {
       }
       throw new InternalServerErrorException();
     }
-    // TODO: Notify Auth backend about user event
+
+    try {
+      await this.internalCommunicationService.notifyAuthAboutNewImage(
+        userJWT,
+        `${hash}.${image.mimetype.split('/')[1]}`,
+      );
+    } catch (error) {
+      this.logger.warn(
+        `An upload failed because the auth backend could not be reached. This could indicate a crashed auth service`,
+      );
+      // A file without an owner is not allowed => cleanup
+      fs.rmSync(fileTargetPath);
+      if (error instanceof HttpException) {
+        throw error;
+      }
+    }
+
     return hash;
   }
 
