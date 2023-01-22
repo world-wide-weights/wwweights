@@ -13,3 +13,6 @@ CREATE TABLE users(
 
 ALTER TABLE users ADD CONSTRAINT username_unique UNIQUE(username);
 ALTER TABLE users ADD CONSTRAINT email_unique UNIQUE(email);
+
+-- Set migrations as applied
+INSERT INTO migration_state(version) VALUES (1670610831);
