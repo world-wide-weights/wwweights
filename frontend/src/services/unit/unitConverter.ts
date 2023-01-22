@@ -38,12 +38,11 @@ export const calculateCommaShift = (
   left: Boolean
 ): BigNumber => {
   if(moveComma === 0) return value
-  console.log(value.toString())
+  //maybe rework on this return later.
+  //Problem: if value is smaller then 1e-21 it will return BigNumber = infinity
   if (left) {
-    console.log(value.multipliedBy(BigNumber(10).exponentiatedBy(moveComma)))
     return value.multipliedBy(BigNumber(10).exponentiatedBy(moveComma))
   } else {
-    console.log(value.dividedBy(BigNumber(10).exponentiatedBy(moveComma)))
     return value.dividedBy(BigNumber(10).exponentiatedBy(moveComma))
   }
 }
