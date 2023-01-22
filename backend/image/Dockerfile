@@ -15,15 +15,18 @@ FROM node:lts-alpine As build
 
 WORKDIR /usr/src/app
 
-COPY --chown=node:node package*.json ./
+COPY --chown=root:root package*.json ./
 
-COPY --chown=node:node --from=dev /usr/src/app/node_modules ./node_modules
+COPY --chown=root:root --from=dev /usr/src/app/node_modules ./node_modules
 
-COPY --chown=node:node . .
+COPY --chown=root:root . .
 
 RUN npm run build
 
-RUN npm ci --only=production && npm cache clean --force
+# Up until here dir has to be owned by root for sharp to install properly
+RUN npm ci --omit=dev && npm cache clean --force
+
+RUN chown node:node .
 
 USER node
 
