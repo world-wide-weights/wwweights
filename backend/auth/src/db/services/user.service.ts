@@ -1,8 +1,8 @@
 import { ConflictException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
-import { STATUS } from '../shared/enums/status.enum';
-import { UserEntity } from './entities/users.entity';
+import { STATUS } from '../../shared/enums/status.enum';
+import { UserEntity } from '../entities/users.entity';
 
 @Injectable()
 export class UserService {

@@ -9,8 +9,8 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { UserService } from '../db/ user.service';
 import { UserEntity } from '../db/entities/users.entity';
+import { UserService } from '../db/services/user.service';
 import { JWTPayload } from '../shared/dtos/jwt-payload.dto';
 import { ROLES } from '../shared/enums/roles.enum';
 import { STATUS } from '../shared/enums/status.enum';
