@@ -4,36 +4,39 @@ import Image from "next/image"
 import { useRouter } from "next/router"
 import { Item } from "."
 import { Chip } from "../../components/Chip/Chip"
+import { CompareContainer } from "../../components/CompareContainer/CompareContainer"
 import { SearchHeader } from "../../components/Header/SearchHeader"
 import { Headline } from "../../components/Headline/Headline"
 import { Icon } from "../../components/Icon/Icon"
 import { Tab } from "../../components/Tabs/Tab"
 import { Tabs } from "../../components/Tabs/Tabs"
 import { routes } from "../../services/routes/routes"
-import { generateWeightString } from "../../services/utils/weight"
+import { calculateMedianWeight, generateWeightString } from "../../services/utils/weight"
 import Custom404 from "../404"
 
 type WeightsSingleProps = {
     item: Item
 }
 
-export const singleWeightTabs = [{
-    title: "Overview",
-    slug: "",
-    content: <p>Overview Content</p>
-}, {
-    title: "Compare",
-    slug: "compare",
-    content: <p>Compare Content</p>
-}]
-
 /** Single Page of a weight */
 export default function WeightsSingle({ item }: InferGetServerSidePropsType<typeof getStaticProps>) {
     // Title
     const siteTitle = `${item.name} Weight | WWWeights`
 
+    // Generate Compare Weight
+    const compareWeight = calculateMedianWeight(item.weight)
+
     // Handle tabs
     const currentTab = useRouter().query.tab
+    const singleWeightTabs = [{
+        title: "Overview",
+        slug: "",
+        content: <p>Overview Content</p>
+    }, {
+        title: "Compare",
+        slug: "compare",
+        content: <CompareContainer weight={compareWeight} itemName={item.name} />
+    }]
     const currentTabIndex = singleWeightTabs.findIndex(singleWeightTab => singleWeightTab.slug === currentTab)
 
     // Strings Generator
@@ -81,7 +84,7 @@ export default function WeightsSingle({ item }: InferGetServerSidePropsType<type
                 </div>
             </div>
 
-            {/* Tabs Similar Items, Compare,.. */}
+            {/* Tabs */}
             <div>
                 <Tabs selectedTabIndex={!currentTab ? 0 : currentTabIndex}>
                     {singleWeightTabs.map(singleWeightTab => <Tab key={singleWeightTab.slug} title={singleWeightTab.title} link={routes.weights.single(item.slug, { tab: singleWeightTab.slug })}>
