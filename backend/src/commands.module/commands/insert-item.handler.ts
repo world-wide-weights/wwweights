@@ -1,5 +1,11 @@
-import { Logger, UnprocessableEntityException } from '@nestjs/common';
+import {
+  ConflictException,
+  HttpException,
+  Logger,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
+import { ALLOWED_EVENT_ENTITIES } from '../../eventstore/enums/allowedEntities.enum';
 import { EventStore } from '../../eventstore/eventstore';
 import { Item } from '../../models/item.model';
 import { Tag } from '../../models/tag.model';
@@ -26,10 +32,26 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
         ),
       });
 
-      // TODO: Check if Item can be inserted with EventstoreDB Streams?
+      if (
+        await this.eventStore.doesStreamExist(
+          `${ALLOWED_EVENT_ENTITIES.ITEM}-${newItem.slug}`,
+        )
+      ) {
+        throw new ConflictException('Slug already taken');
+      }
+
       const eventItem = this.publisher.mergeObjectContext(newItem);
-      this.eventStore.addEvent(ItemInsertedEvent.name, eventItem);
+      await this.eventStore.addEvent(
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${eventItem.slug}`,
+        ItemInsertedEvent.name,
+        eventItem,
+      );
+      this.logger.log(`Event created on stream: item-${eventItem.slug}`);
     } catch (error) {
+      // If thrown error is already a valid HttpException => Throw that one instead
+      if (error instanceof HttpException) {
+        throw error;
+      }
       this.logger.error(error);
       throw new UnprocessableEntityException('Item could not be inserted');
     }

@@ -2,6 +2,7 @@ import { TypegooseModule } from '@m8a/nestjs-typegoose';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CommandsModule } from './commands.module/commands.module';
+import { EventStoreModule } from './eventstore/eventstore.module';
 import { QueriesModule } from './queries.module/queries.module';
 import { SharedModule } from './shared/shared.module';
 
@@ -27,6 +28,7 @@ import { SharedModule } from './shared/shared.module';
       },
       inject: [ConfigService],
     }),
+    EventStoreModule,
     CommandsModule,
     QueriesModule,
     SharedModule,

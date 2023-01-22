@@ -1,6 +1,8 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
+import { EventStoreModule } from '../src/eventstore/eventstore.module';
 import * as request from 'supertest';
 import { CommandsModule } from '../src/commands.module/commands.module';
 import { Item } from '../src/models/item.model';
@@ -12,20 +14,33 @@ import {
 } from './helpers/MongoMemoryHelpers';
 import { timeout } from './helpers/timeout';
 import { differentNames, insertItem, insertItem2 } from './mocks/items';
+import { EventStore } from '../src/eventstore/eventstore';
+import { MockEventStore } from './mocks/eventstore';
+import { EventBus } from '@nestjs/cqrs';
 
-describe('AppController (e2e)', () => {
+describe('CommandController (e2e)', () => {
   let app: INestApplication;
   let itemModel: Model<Item>;
   let tagModel: Model<Tag>;
   let itemsByTagModel: Model<ItemsByTag>;
+  const mockEventStore: MockEventStore = new MockEventStore();
   let server: any; // Has to be any because of supertest not having a type for it either
   jest.setTimeout(10000);
 
   beforeAll(async () => {
     // const dataSource = await initializeMockDataSource();
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [initializeMockModule(), CommandsModule],
-    }).compile();
+      imports: [
+        ConfigModule.forRoot({ isGlobal: true }),
+        initializeMockModule(),
+        CommandsModule,
+        EventStoreModule,
+      ],
+    })
+      .overrideProvider(EventStore)
+      .useValue(mockEventStore)
+      .compile();
+
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(
       new ValidationPipe({
@@ -41,9 +56,12 @@ describe('AppController (e2e)', () => {
 
     await app.init();
     server = app.getHttpServer();
+
+    mockEventStore.eventBus = app.get<EventBus>(EventBus);
   });
 
   beforeEach(async () => {
+    mockEventStore.reset();
     await itemModel.deleteMany();
     await tagModel.deleteMany();
     await itemsByTagModel.deleteMany();
@@ -64,7 +82,7 @@ describe('AppController (e2e)', () => {
       await request(server)
         .post(commandsPath + 'items/insert')
         .send(insertItem)
-        .expect(200);
+        .expect(HttpStatus.OK);
 
       // We have to wait because of the async nature of the command
       // const attemptSuccess = await retries([
@@ -113,12 +131,12 @@ describe('AppController (e2e)', () => {
       await request(server)
         .post(commandsPath + 'items/insert')
         .send(insertItem)
-        .expect(200);
+        .expect(HttpStatus.OK);
       await timeout(100);
       await request(server)
         .post(commandsPath + 'items/insert')
         .send(insertItem2)
-        .expect(200);
+        .expect(HttpStatus.OK);
 
       // Also give it some extra time to make sure the tag updates have been completed
       await timeout(1000);
@@ -162,12 +180,12 @@ describe('AppController (e2e)', () => {
       await request(server)
         .post(commandsPath + 'items/insert')
         .send({ ...insertItem, name: 'This should be in an error message' })
-        .expect(200);
+        .expect(HttpStatus.OK);
 
       await request(server)
         .post(commandsPath + 'items/insert')
         .send({ ...insertItem, name: 'This should be in an error message' })
-        .expect(200);
+        .expect(HttpStatus.CONFLICT);
 
       const items = await itemModel.find({});
       expect(items.length).toEqual(1);
@@ -179,7 +197,7 @@ describe('AppController (e2e)', () => {
         await request(server)
           .post(commandsPath + 'items/insert')
           .send({ ...insertItem2, name })
-          .expect(200);
+          .expect(HttpStatus.OK);
       });
       await timeout(800);
       const items = await itemModel.find({});
