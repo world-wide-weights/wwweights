@@ -1,15 +1,15 @@
-name: image-service-pipeline
+name: auth-service-pipeline
 
 on:
   push:
     paths:
-      - 'image/**'
-      - '.github/workflows/**.yml'
+      - "backend/auth/**"
+      - ".github/workflows/auth-backend-ci.yml"
   pull_request:
     branches: [main]
     paths:
-      - 'image/**'
-      - '.github/workflows/**.yml'
+      - "backend/auth/**"
+      - ".github/workflows/auth-backend-ci.yml"
 
 jobs:
   setup:
@@ -17,7 +17,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: image 
+        working-directory: backend/auth
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -38,33 +38,37 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: image 
+        working-directory: backend/auth
     steps:
-     
-     - name: Checkout repository
-       uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-     - name: Load cache
-       id: cache
-       uses: actions/cache@v3
-       with:
-         path: ~/.npm
-         key: node-modules-${{ hashFiles('package-lock.json') }}
+      - name: Load cache
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: node-modules-${{ hashFiles('package-lock.json') }}
 
-     - name: node modules
-       run: npm ci --audit:false --cache ~/.npm --prefer-offline
-     
-     - name: .env
-       run: cp sample.env .env
-     - name: end 2 end tests
-       run: npm run test:e2e
-       
-     - name: unit tests
-       run: npm run test
+      - name: node modules
+        run: npm ci --audit:false --cache ~/.npm --prefer-offline
+
+      - name: .env
+        run: cp sample.env .env
+
+      - name: tests
+        run: npm run test:ci
+
+      - name: codecov upload
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: .coverage/coverage-final.json
+          flags: auth-backend
 
   docker-build:
     runs-on: ubuntu-latest
-    needs: tests 
+    needs: tests
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -75,15 +79,15 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
-          context: ./image
-          tags: image:pipeline_internal
-          outputs: type=docker,dest=/tmp/image-image.tar
-       
+          context: ./backend/auth
+          tags: auth-backend:pipeline_internal
+          outputs: type=docker,dest=/tmp/auth-backend-image.tar
+
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: image-image
-          path: /tmp/image-image.tar
+          name: auth-backend-image
+          path: /tmp/auth-backend-image.tar
 
   docker-push:
     runs-on: ubuntu-latest
@@ -92,26 +96,26 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v2
         with:
-          name: image-image 
+          name: auth-backend-image
           path: /tmp
-      
+
       - name: Load Docker image
-        run: docker load --input /tmp/image-image.tar
-     
+        run: docker load --input /tmp/auth-backend-image.tar
+
         # Extract branch name and replace / with _ as slashes are invalid as image tags
       - name: Extract branch name
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/} | tr '/' '_')"
         id: extract_branch
-  
+
       - name: tag docker image
-        run: docker tag image:pipeline_internal ghcr.io/world-wide-weights/image:${{ steps.extract_branch.outputs.branch }}
+        run: docker tag auth-backend:pipeline_internal ghcr.io/world-wide-weights/auth-backend:${{ steps.extract_branch.outputs.branch }}
 
       - name: Login to Packages Container registry
-        uses: docker/login-action@v1 
+        uses: docker/login-action@v1
         with:
-          registry: ghcr.io 
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: push
-        run: docker push ghcr.io/world-wide-weights/image:${{ steps.extract_branch.outputs.branch }}
+        run: docker push ghcr.io/world-wide-weights/auth-backend:${{ steps.extract_branch.outputs.branch }}
