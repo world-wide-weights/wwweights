@@ -11,7 +11,8 @@ import {
 } from './helpers/MongoMemoryHelpers';
 
 import { Test, TestingModule } from '@nestjs/testing';
-import { items, itemsWithDates, matchingItemNames } from './mocks/items';
+import { SortEnum } from '../src/items/interfaces/sortEnum';
+import { items, itemsWithDates, relatedItems } from './mocks/items';
 import { itemsByTags } from './mocks/itemsbytags';
 import { tags } from './mocks/tags';
 
@@ -102,7 +103,7 @@ describe('QueryController (e2e)', () => {
 
       it('should consistently sort by relevance', async () => {
         await itemModel.deleteMany();
-        await itemModel.insertMany(matchingItemNames);
+        await itemModel.insertMany(relatedItems);
         const results = [];
         for (let i = 0; i < 20; i++) {
           const result = await request(server)
@@ -119,12 +120,12 @@ describe('QueryController (e2e)', () => {
 
       it('should return lightest first by same partial name', async () => {
         await itemModel.deleteMany();
-        await itemModel.insertMany(matchingItemNames);
+        await itemModel.insertMany(relatedItems);
         const results = [];
         for (let i = 0; i < 20; i++) {
           const result = await request(server)
             .get(queriesPath + subPath)
-            .query({ query: 'matching', sort: 'lightest' })
+            .query({ query: 'matching', sort: SortEnum.LIGHTEST })
             .expect(HttpStatus.OK);
           results.push(result.body[0]);
         }
@@ -136,12 +137,12 @@ describe('QueryController (e2e)', () => {
 
       it('should return heaviest first by same partial name', async () => {
         await itemModel.deleteMany();
-        await itemModel.insertMany(matchingItemNames);
+        await itemModel.insertMany(relatedItems);
         const results = [];
         for (let i = 0; i < 20; i++) {
           const result = await request(server)
             .get(queriesPath + subPath)
-            .query({ query: 'matching', sort: 'heaviest' })
+            .query({ query: 'matching', sort: SortEnum.HEAVIEST })
             .expect(HttpStatus.OK);
           results.push(result.body[0]);
         }
@@ -153,11 +154,11 @@ describe('QueryController (e2e)', () => {
 
       it('should return one item if searched by slug', async () => {
         await itemModel.deleteMany();
-        await itemModel.insertMany(matchingItemNames);
+        await itemModel.insertMany(relatedItems);
 
         const result = await request(server)
           .get(queriesPath + subPath)
-          .query({ sort: 'heaviest', slug: 'matching-1' })
+          .query({ sort: SortEnum.HEAVIEST, slug: 'matching-1' })
           .expect(HttpStatus.OK);
 
         expect(result.body).toHaveLength(1);
@@ -174,6 +175,26 @@ describe('QueryController (e2e)', () => {
         expect(result.body).toHaveLength(16);
         expect(result.body[0].name).toEqual('item 29');
         expect(result.body[15].name).toEqual('item 14');
+      });
+    });
+    describe('items/related', () => {
+      const subPath = 'items/related';
+      it('should return the related items', async () => {
+        await itemModel.deleteMany();
+        await itemModel.insertMany(relatedItems);
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({ slug: relatedItems[0].slug })
+          .expect(HttpStatus.OK);
+
+        const otherItemNames = relatedItems
+          .filter((item) => item.slug !== relatedItems[0].slug)
+          .map((item) => item.name);
+
+        expect(result.body).toHaveLength(2);
+        for (const item of result.body) {
+          expect(otherItemNames).toContain(item.name);
+        }
       });
     });
   });
