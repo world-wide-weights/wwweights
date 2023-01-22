@@ -5,18 +5,18 @@ import { ReturnModelType } from '@typegoose/typegoose';
 import { Item } from '../../models/item.model';
 import { getFilter } from '../../shared/get-filter';
 import { getSort } from '../../shared/get-sort';
-import { GetItemListQuery } from './get-item-list.query';
+import { ItemListQuery } from './item-list.query';
 
-@QueryHandler(GetItemListQuery)
-export class GetItemListHandler implements IQueryHandler<GetItemListQuery> {
-  private readonly logger = new Logger(GetItemListHandler.name);
+@QueryHandler(ItemListQuery)
+export class ItemListHandler implements IQueryHandler<ItemListQuery> {
+  private readonly logger = new Logger(ItemListHandler.name);
 
   constructor(
     @InjectModel(Item)
     private readonly itemModel: ReturnModelType<typeof Item>,
   ) {}
 
-  async execute({ dto }: GetItemListQuery) {
+  async execute({ dto }: ItemListQuery) {
     try {
       // We currently also run textSearch on tags, optimizing via itemsByTags is a TODO
       const sort = getSort(dto.sort, (dto.query || dto.tags) && !dto.slug);
