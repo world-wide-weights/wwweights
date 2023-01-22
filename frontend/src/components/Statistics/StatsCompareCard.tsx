@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { calculateWeightFit } from "../../services/utils/weight"
 import { Headline } from "../Headline/Headline"
 import { Icon } from "../Icon/Icon"
 
@@ -81,9 +82,7 @@ export const StatsCompareCard: React.FC<StatsCompareCardProps> = ({ type, itemNa
     const weightCompare = buttonState === "right" && compareWith ? compareWith.weight : compareTypes[type].weight
 
     // Calculations
-    const count = Math.round(weight / weightCompare)
-
-    console.log({ count, weight, weightCompare })
+    const count = calculateWeightFit(weight, weightCompare)
 
     // Don't show component when number to big
     if (count > 1e10)

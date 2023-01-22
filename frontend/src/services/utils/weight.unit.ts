@@ -1,4 +1,4 @@
-import { generateCompareWeight, generateWeightProgressBarPercentage, generateWeightString } from "./weight"
+import { calculateMedianWeight, calculateWeightFit, generateWeightProgressBarPercentage, generateWeightString } from "./weight"
 
 describe("Generate Weight String", () => {
     it("should create string with weight value", () => {
@@ -60,17 +60,31 @@ describe("Generate Weight Process Bar Percentage", () => {
     })
 })
 
-describe("Generate Compare Weight", () => {
+describe("Calculate Median Weight", () => {
     it("should calculate median from additional value and value", () => {
-        expect(generateCompareWeight({ value: 200, additionalValue: 400, isCa: false })).equal(300)
-        expect(generateCompareWeight({ value: 10, additionalValue: 100, isCa: false })).equal(55)
+        expect(calculateMedianWeight({ value: 200, additionalValue: 400, isCa: false })).equal(300)
+        expect(calculateMedianWeight({ value: 10, additionalValue: 100, isCa: false })).equal(55)
 
-        expect(generateCompareWeight({ value: 10, additionalValue: 10, isCa: false })).equal(10)
-        expect(generateCompareWeight({ value: 9, additionalValue: 10, isCa: false })).equal(9)
+        expect(calculateMedianWeight({ value: 10, additionalValue: 10, isCa: false })).equal(10)
+        expect(calculateMedianWeight({ value: 9, additionalValue: 10, isCa: false })).equal(9)
     })
 
     it("should return value when additional not defined", () => {
-        expect(generateCompareWeight({ value: 200, isCa: false })).equal(200)
-        expect(generateCompareWeight({ value: 200, isCa: true })).equal(200)
+        expect(calculateMedianWeight({ value: 200, isCa: false })).equal(200)
+        expect(calculateMedianWeight({ value: 200, isCa: true })).equal(200)
+    })
+})
+
+describe("Calculate Weight Fit", () => {
+    it("should calculate the number of weights that fit in a container", () => {
+        expect(calculateWeightFit(10, 100)).to.equal(10)
+    })
+
+    it("should round down to the nearest whole number", () => {
+        expect(calculateWeightFit(15, 100)).to.equal(6)
+    })
+
+    it("should handle weights that are larger than the container", () => {
+        expect(calculateWeightFit(200, 100)).to.equal(0)
     })
 })
