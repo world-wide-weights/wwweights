@@ -149,4 +149,16 @@ describe("unitRenderer", () => {
             isCa: false
         })).deep.equal("1 Qg")
     })
+    it("it should make points for seperation", () => {
+        expect(renderUnitIntoString({
+            value: 1,
+            additionalValue: 100000000,
+            isCa: false
+        })).deep.equal("1 - 100.000.000 g")
+        expect(renderUnitIntoString({
+            value: 1e38,
+            additionalValue: 0,
+            isCa: false
+        })).deep.equal("100.000.000 Qg")
+    })
 })
