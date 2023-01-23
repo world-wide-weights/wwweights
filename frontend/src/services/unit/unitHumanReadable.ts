@@ -73,9 +73,7 @@ const valueForEachUnit: { value: number, unit: Unit}[] = [
  * @param weight the weight to convert.
  * @returns object with number and new readable unit.
  */
-export const getBestHumanReadableUnit = (
-  weight: number
-): WeightWithUnit => {
+export const getBestHumanReadableUnit = (weight: number): WeightWithUnit => {
   for (const value of valueForEachUnit) {
     if(weight >= value.value)
       return convertWeightIntoUnit(weight, "g", value.unit)

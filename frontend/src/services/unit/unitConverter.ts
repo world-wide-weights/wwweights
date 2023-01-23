@@ -32,14 +32,9 @@ const commaShiftsForUnit: { [K in Unit]: number } = {
  * @param left in which direction the comma should be shifted.
  * @returns the number with the given comma shift.
  */
-export const calculateCommaShift = (
-  value: BigNumber,
-  moveComma: number,
-  left: Boolean
-): BigNumber => {
+export const calculateCommaShift = (value: BigNumber,moveComma: number,left: Boolean): BigNumber => {
   if(moveComma === 0) return value
-  //maybe rework on this return later.
-  //Problem: if value is smaller then 1e-21 it will return BigNumber = infinity
+  //TODO: if value is smaller then 1e-21 it will return BigNumber = infinity
   if (left) {
     return value.multipliedBy(BigNumber(10).exponentiatedBy(moveComma))
   } else {
@@ -53,10 +48,7 @@ export const calculateCommaShift = (
  * @param unit the unit of the value.
  * @returns the value in gram.
  */
-export const convertAnyWeightIntoGram = (
-  value: BigNumber,
-  unit: Unit
-): BigNumber => {
+export const convertAnyWeightIntoGram = (value: BigNumber,unit: Unit): BigNumber => {
   return calculateCommaShift(value, commaShiftsForUnit[unit], true)
 }
 
@@ -66,10 +58,7 @@ export const convertAnyWeightIntoGram = (
  * @param targetUnit the target unit of the value.
  * @returns the value in the given target Unit.
  */
-export const convertWeightIntoTargetUnit = (
-  value: BigNumber,
-  targetUnit: Unit
-): number => {
+export const convertWeightIntoTargetUnit = (value: BigNumber,targetUnit: Unit): number => {
   return calculateCommaShift(value, commaShiftsForUnit[targetUnit], false).toNumber()
 }
 
@@ -80,11 +69,7 @@ export const convertWeightIntoTargetUnit = (
  * @param targetUnit the unit we want to have.
  * @returns object with the value in the given target Unit.
  */
-export const convertWeightIntoUnit = (
-  value: number,
-  unit: Unit,
-  targetUnit: Unit
-): WeightWithUnit => {
+export const convertWeightIntoUnit = (value: number,unit: Unit,targetUnit: Unit): WeightWithUnit => {
   const weightInGramm = convertAnyWeightIntoGram(new BigNumber(value), unit)
   const weightInTargetUnitAsBigNumber = convertWeightIntoTargetUnit(
     weightInGramm,
