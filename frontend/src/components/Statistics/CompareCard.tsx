@@ -112,7 +112,7 @@ export const CompareCard: React.FC<CompareCardProps> = ({ type, itemName, weight
     // String
     const countString = parseInt(count.toFixed(0)).toLocaleString()
 
-    return <div className="bg-white rounded-lg pl-4 md:pl-8 py-4 md:py-5 mb-2 md:mb-4">
+    return <div className="bg-white rounded-lg pl-4 md:pl-8 py-4 md:py-5">
         {/* Card with icons right and without another compare option */}
         {!shouldDisplayToggle && <div className={`flex items-center justify-between ${type === "people" ? "pr-8 md:pr-10" : "pr-5"}`}>
             {/* Information Text */}
