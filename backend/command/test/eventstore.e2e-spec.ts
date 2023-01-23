@@ -29,6 +29,7 @@ describe('EventstoreModule', () => {
   }
 
   beforeEach(async () => {
+    process.env.SKIP_READ_DB_REBUILD = 'false';
     await replaceApp();
   });
   afterEach(async () => {
@@ -42,6 +43,7 @@ describe('EventstoreModule', () => {
       // ASSERT
       expect(eventStore.isReady).toEqual(true);
     });
+
     it('Should not be ready if necessary event has not been read', async () => {
       await app.close();
       // ARRANGE
@@ -57,6 +59,45 @@ describe('EventstoreModule', () => {
         [{ event: { ...eventList.event, id: 'def' } }],
       ];
       // Rebuild app to restart init process
+      await replaceApp();
+      // ASSERT
+      expect(eventStore.isReady).toEqual(false);
+    });
+
+    it('Should be ready instantly "SKIP_READ_DB_REBUILD" is is true', async () => {
+      // ARRANGE
+      await app.close();
+      process.env.SKIP_READ_DB_REBUILD = 'true';
+      const eventList = {
+        event: {
+          streamId: `${ALLOWED_EVENT_ENTITIES.ITEM}-`,
+          id: 'abc',
+          data: { eventType: 1, type: 'ItemCreatedEvent' },
+        },
+      } as any;
+      client.forcedResult = [
+        [eventList],
+        [{ event: { ...eventList.event, id: 'def' } }],
+      ];
+      await replaceApp();
+      // ASSERT
+      expect(eventStore.isReady).toEqual(true);
+    });
+    it('Should default "SKIP_READ_DB_REBUILD" to false', async () => {
+      // ARRANGE
+      await app.close();
+      process.env.SKIP_READ_DB_REBUILD = undefined;
+      const eventList = {
+        event: {
+          streamId: `${ALLOWED_EVENT_ENTITIES.ITEM}-`,
+          id: 'abc',
+          data: { eventType: 1, type: 'ItemCreatedEvent' },
+        },
+      } as any;
+      client.forcedResult = [
+        [eventList],
+        [{ event: { ...eventList.event, id: 'def' } }],
+      ];
       await replaceApp();
       // ASSERT
       expect(eventStore.isReady).toEqual(false);
