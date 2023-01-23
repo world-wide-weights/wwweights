@@ -54,6 +54,7 @@ services:
       - DB_EVENTSTORE_PW=${CMD_DB_EVENTSTORE_PW:-changeit}
       - DB_EVENTSTORE_USE_TLS=${CMD_DB_EVENTSTORE_USE_TLS:-false}
       - JWKS_AUTH_URL=${CMD_JWKS_AUTH_URL:-http://auth:3001/auth/.well-known/jwks.json}
+      - SKIP_READ_DB_REBUILD=${CMD_SKIP_READ_DB_REBUILD:-true}
     links:
       - auth-backend:auth
       - eventstore:eventstore
