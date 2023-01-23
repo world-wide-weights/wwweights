@@ -1,5 +1,72 @@
-import { WeightWithUnit } from "../../types/unit"
+import { Unit, WeightWithUnit } from "../../types/unit"
 import { convertWeightIntoUnit } from "./unitConverter"
+
+const valueForEachUnit: { value: number, unit: Unit}[] = [
+{
+  "value": 1e30,
+  "unit": "Qg"
+},
+{
+  "value": 1e27,
+  "unit": "Rg"
+},
+{
+  "value": 1e24,
+  "unit": "Yg"
+},
+{
+  "value": 1e21,
+  "unit": "Zg"
+},
+{
+  "value": 1e18,
+  "unit": "Eg"
+},
+{
+  "value": 1e15,
+  "unit": "Pg"
+},
+{
+  "value": 1e12,  
+  "unit": "Tg"
+},
+{
+  "value": 1e6,
+  "unit": "Mg"
+},
+{
+  "value": 1e3,
+  "unit": "kg" 
+},
+{
+  "value": 1,
+  "unit": "g"
+},
+{
+  "value": 1e-3,
+  "unit": "mg"
+},
+{
+  "value": 1e-6,
+  "unit": "µg"
+},
+{
+  "value": 1e-9,
+  "unit": "ng"
+},
+{
+  "value": 1e-12,
+  "unit": "pg"
+},
+{
+  "value": 1e-15,
+  "unit": "fg"
+},
+{
+  "value": 1e-18,
+  "unit": "ag"
+}
+]
 
 /**
  * Gets value in gram and converts it into best readable Unit 1000g = 1kg.
@@ -9,35 +76,9 @@ import { convertWeightIntoUnit } from "./unitConverter"
 export const getBestHumanReadableUnit = (
   weight: number
 ): WeightWithUnit => {
-  if (weight >= 1e30)
-    return convertWeightIntoUnit(weight, "g", "Qg")
-  if (weight >= 1e27)
-    return convertWeightIntoUnit(weight, "g", "Rg")
-  if (weight >= 1e24)
-    return convertWeightIntoUnit(weight, "g", "Yg")
-  if (weight >= 1e21)
-    return convertWeightIntoUnit(weight, "g", "Zg")
-  if (weight >= 1e18)
-    return convertWeightIntoUnit(weight, "g", "Eg")
-  if (weight >= 1e15)
-    return convertWeightIntoUnit(weight, "g", "Pg")
-  if (weight >= 1e12)
-    return convertWeightIntoUnit(weight, "g", "Tg")
-  if (weight >= 1e6)
-    return convertWeightIntoUnit(weight, "g", "Mg")
-  if (weight >= 1e3)
-    return convertWeightIntoUnit(weight, "g", "kg")
-  if (weight >= 1)
-    return convertWeightIntoUnit(weight, "g", "g")
-  if (weight >= 1e-3)
-    return convertWeightIntoUnit(weight, "g", "mg")
-  if (weight >= 1e-6)
-    return convertWeightIntoUnit(weight, "g", "µg")
-  if (weight >= 1e-9)
-    return convertWeightIntoUnit(weight, "g", "ng")
-  if (weight >= 1e-12)
-    return convertWeightIntoUnit(weight, "g", "pg")
-  if (weight >= 1e-15)
-    return convertWeightIntoUnit(weight, "g", "fg")
-  return convertWeightIntoUnit(weight, "g", "ag")
+  for (const value of valueForEachUnit) {
+    if(weight >= value.value)
+      return convertWeightIntoUnit(weight, "g", value.unit)
+  }
+  return convertWeightIntoUnit(weight, "g", "g")
 }
