@@ -33,7 +33,7 @@ export class ItemListHandler implements IQueryHandler<ItemListQuery> {
         { $sort: sort },
         {
           $facet: {
-            items: [
+            data: [
               { $skip: (dto.page - 1) * dto.limit },
               { $limit: dto.limit },
             ],
@@ -42,19 +42,13 @@ export class ItemListHandler implements IQueryHandler<ItemListQuery> {
         },
       ]);
 
-      const result = await this.itemModel
-        .find(filter, {}, { sort })
-        .skip((dto.page - 1) * dto.limit)
-        .limit(dto.limit)
-        .lean()
-        .exec();
+      this.logger.log(`Items found:  ${facetedResult[0].total[0]?.count || 0}`);
 
-      this.logger.log(`Items found:  ${result.length}`);
       return {
         total: facetedResult[0].total[0]?.count || 0,
         page: dto.page,
         limit: dto.limit,
-        items: facetedResult[0].items,
+        data: facetedResult[0].items,
       };
     } catch (error) {
       this.logger.error(error);

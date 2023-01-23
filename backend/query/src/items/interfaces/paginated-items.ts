@@ -9,7 +9,7 @@ export class PaginatedResult<T> {
   limit: number;
   @Expose()
   @Transform(({ obj }) =>
-    obj.items.map((item) => new obj.classConstructor(item)),
+    obj.data.map((data) => new obj.classConstructor(data)),
   )
   data: T[];
 
