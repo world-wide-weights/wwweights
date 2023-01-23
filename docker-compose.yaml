@@ -13,7 +13,7 @@ services:
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:-secret}
 
   auth-backend:
-    image: ghcr.io/world-wide-weights/auth-backend:feature_207-rework-docker-compose
+    image: ghcr.io/world-wide-weights/auth-backend:main
     restart: "always"
     ports:
       - 3001:3001
@@ -39,7 +39,7 @@ services:
       - postgres:pg
 
   command-backend:
-    image: ghcr.io/world-wide-weights/command-backend:feature_207-rework-docker-compose
+    image: ghcr.io/world-wide-weights/command-backend:main
     restart: "always"
     ports:
       - 3002:3002
@@ -60,7 +60,7 @@ services:
       - mongodb:mongo
 
   image-backend:
-    image: ghcr.io/world-wide-weights/image-backend:feature_207-rework-docker-compose
+    image: ghcr.io/world-wide-weights/image-backend:main
     restart: "always"
     ports:
       - 3003:3003
@@ -75,7 +75,7 @@ services:
       - auth-backend:auth
 
   query-backend:
-    image: ghcr.io/world-wide-weights/query-backend:feature_207-rework-docker-compose
+    image: ghcr.io/world-wide-weights/query-backend:main
     restart: "always"
     ports:
       - 3004:3004
