@@ -1,3 +1,5 @@
+import { SortEnum } from '../items/interfaces/sortEnum';
+
 // There has not been any obvious way how to deal with this kind of syntax to reduce lines of code
 const textSearchParams = {
   boosted: 'DESC',
@@ -6,29 +8,29 @@ const textSearchParams = {
 };
 
 export const getSort = (sort: string, textSearch: boolean) => {
-  if (sort === 'lightest' && textSearch)
+  if (sort === SortEnum.LIGHTEST && textSearch)
     return {
       'weight.value': 'ASC',
       ...textSearchParams,
     };
-  if (sort === 'lightest')
+  if (sort === SortEnum.LIGHTEST)
     return {
       'weight.value': 'ASC',
     };
 
-  if (sort === 'heaviest' && textSearch)
+  if (sort === SortEnum.HEAVIEST && textSearch)
     return {
       'weight.value': 'DESC',
       ...textSearchParams,
     };
-  if (sort === 'heaviest')
+  if (sort === SortEnum.HEAVIEST)
     return {
       ['weight.value']: 'DESC',
     };
-  if (sort === 'relevance' && textSearch) {
+  if (sort === SortEnum.RELEVANCE && textSearch) {
     return textSearchParams;
   }
-  if (sort === 'relevance') {
+  if (sort === SortEnum.RELEVANCE) {
     return { createdAt: 'DESC' };
   }
 };

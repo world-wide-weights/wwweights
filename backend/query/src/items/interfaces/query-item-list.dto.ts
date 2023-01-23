@@ -1,43 +1,22 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import {
-  IsArray,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Length,
-  Max,
-  Min,
-} from 'class-validator';
+import { IsArray, IsOptional, IsString, Length } from 'class-validator';
+import { Page } from './page';
+import { SortEnum } from './sortEnum';
 
-export class QueryItemListDto {
-  @IsNumber()
-  @IsOptional()
-  @Min(1)
-  @Type(() => Number)
-  @ApiPropertyOptional({ type: Number, default: 1, minimum: 1 })
-  page = 1;
-
-  @IsNumber()
-  @IsOptional()
-  @Min(1)
-  @Max(64)
-  @Type(() => Number)
-  @ApiPropertyOptional({ type: Number, default: 16, minimum: 1 })
-  limit = 16;
-
+export class QueryItemListDto extends Page {
   @IsString()
   @IsOptional()
   @ApiPropertyOptional({
-    enum: ['relevance', 'lightest', 'heaviest'], // This is just for show and does not clash with the no ENUM rule
-    default: 'relevance',
+    enum: SortEnum,
+    default: SortEnum.RELEVANCE,
   })
-  sort = 'relevance'; // Maybe: lightest | heaviest | newest | oldest | relevance // Not an ENUM because ENUMS are inperformant and can lead to spaghetti code
+  sort = SortEnum.RELEVANCE; // Maybe: also newest | oldest
 
   @IsString()
   @IsOptional()
   @Length(0, 100)
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ minLength: 0, maxLength: 100 })
   query: string;
 
   @IsString({ each: true })

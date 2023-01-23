@@ -1,4 +1,4 @@
-export const getFilter = (query: string, tags: string[], slug: string) => {
+export const getFilter = (query: string, tags?: string[], slug?: string) => {
   const tagsSearch = { 'tags.name': { $all: tags } };
   const textSearch = { $text: { $search: query } };
   if (slug) return { slug };

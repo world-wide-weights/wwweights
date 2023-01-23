@@ -1,4 +1,4 @@
-export const matchingItemNames = [...Array(3).keys()].map((index) => ({
+export const relatedItems = [...Array(3).keys()].map((index) => ({
   _id: 'aaaaaaaaaaaaaaaaaaaaaaa' + index,
   name: 'matching ' + index,
   slug: 'matching-' + index,
