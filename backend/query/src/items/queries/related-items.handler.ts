@@ -5,7 +5,7 @@ import { ReturnModelType } from '@typegoose/typegoose';
 import { Item } from '../../models/item.model';
 import { getFilter } from '../../shared/get-filter';
 import { getSort } from '../../shared/get-sort';
-import { CountedItems } from '../interfaces/counted-items';
+import { CountedData } from '../interfaces/counted-items';
 import { SortEnum } from '../interfaces/sortEnum';
 import { ItemRelatedQuery } from './related-items.query';
 
@@ -44,7 +44,7 @@ export class ItemRelatedHandler implements IQueryHandler<ItemRelatedQuery> {
       const filter = getFilter(item.name + ' ' + itemTagNames.join(' '));
       const sort = getSort(SortEnum.RELEVANCE, true);
 
-      const facetedResult = await this.itemModel.aggregate<CountedItems>([
+      const facetedResult = await this.itemModel.aggregate<CountedData>([
         {
           $match: {
             $and: [filter, { slug: { $ne: dto.slug } }],
@@ -57,7 +57,7 @@ export class ItemRelatedHandler implements IQueryHandler<ItemRelatedQuery> {
         { $sort: sort },
         {
           $facet: {
-            items: [
+            data: [
               { $skip: (dto.page - 1) * dto.limit },
               { $limit: dto.limit },
             ],
@@ -74,7 +74,7 @@ export class ItemRelatedHandler implements IQueryHandler<ItemRelatedQuery> {
         total: facetedResult[0].total[0]?.count || 0,
         page: dto.page,
         limit: dto.limit,
-        items: facetedResult[0].items,
+        data: facetedResult[0].data,
       };
     } catch (error) {
       this.logger.error(error);
