@@ -28,4 +28,4 @@ Run e2e tests:
 ```sh
 npm run test:e2e
 ```
-This message was solely creat
+This message was solely create
