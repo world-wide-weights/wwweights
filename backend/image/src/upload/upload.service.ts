@@ -6,12 +6,12 @@ import {
   Logger,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { RequestWithUser } from 'src/shared/interfaces/request-with-user.interface';
-import * as fsProm from 'fs/promises';
-import * as fs from 'fs';
-import * as path from 'path';
 import { createHash } from 'crypto';
+import * as fs from 'fs';
+import * as fsProm from 'fs/promises';
+import * as path from 'path';
 import * as sharp from 'sharp';
+import { RequestWithUser } from 'src/shared/interfaces/request-with-user.interface';
 import {
   pathBuilder,
   validateOrCreateDirectory,
@@ -69,6 +69,9 @@ export class UploadService {
         throw error;
       }
       throw new InternalServerErrorException();
+    } finally {
+      // Cleanup cache
+      await fsProm.rm(cachedFilePath, { force: true });
     }
     // TODO: Notify Auth backend about user event
     return hash;

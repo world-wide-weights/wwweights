@@ -1,6 +1,8 @@
 # Image backend
 Backend for handling image upload and serving for wwweights
 
+Available on port 3003
+
 ## Quick start 
 
 Setup
