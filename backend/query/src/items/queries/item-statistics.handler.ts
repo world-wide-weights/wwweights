@@ -22,26 +22,21 @@ export class ItemStatisticsHandler
     try {
       // We currently also run textSearch on tags, optimizing via itemsByTags is a TODO
       const filter = getFilter(dto.query, dto.tags);
-
-      // TODO: Query through itemsByTags if tags are listed
-      const facetedStatistics = await this.itemModel.aggregate([
+      const facetedStatistics = await this.itemModel.aggregate<ItemStatistics>([
         { $match: filter },
+        { $sort: { 'weight.value': -1 } },
         {
-          $facet: {
-            heaviest: [
-              { $group: { _id: null, max: { $max: '$weight.value' } } },
-            ],
-            lightest: [
-              { $group: { _id: null, min: { $min: '$weight.value' } } },
-            ],
-            averageWeight: [
-              { $group: { _id: null, avg: { $avg: '$weight.value' } } },
-            ],
+          $group: {
+            _id: null,
+            averageWeight: { $avg: '$weight.value' },
+            items: { $push: '$$ROOT' }, // We have to pushb an array and can't just se it
           },
         },
+        { $set: { heaviest: { $first: '$items' } } },
+        { $set: { lightest: { $last: '$items' } } },
+        { $project: { heaviest: 1, lightest: 1, averageWeight: 1 } },
       ]);
 
-      this.logger.error(facetedStatistics[0]);
       return facetedStatistics[0];
     } catch (error) {
       this.logger.error(error);
