@@ -4,13 +4,12 @@ import { Chip } from "./Chip"
 describe("Chip", () => {
   describe("Chip as Link", () => {
     it("chip as link should be visible", () => {
-
       cy.mount(<Chip to="/">Test</Chip>)
   
       cy.get("a").should("be.visible")
     })
-    it("should display default color", () => {
 
+    it("should display default color", () => {
       cy.mount(<Chip to="/">Test</Chip>)
   
       cy.get("a").should("have.class", "bg-blue-500")
@@ -19,7 +18,6 @@ describe("Chip", () => {
   
     it("should display correct color", () => {
       const color = "amber"
-  
       cy.mount(<Chip to="/" color={"amber"}>Test</Chip>)
   
       cy.get("a").should("have.class", `bg-${color}-500`)
@@ -41,13 +39,12 @@ describe("Chip", () => {
 
   describe("Chip as Button", () => {
     it("chip as button should be visible", () => {
-
       cy.mount(<Chip onClick={() => ""}>Test</Chip>)
-  
+
       cy.get("button").should("be.visible")
     })
-    it("should display default color", () => {
 
+    it("should display default color", () => {
       cy.mount(<Chip onClick={() => ""}>Test</Chip>)
   
       cy.get("button").should("have.class", "bg-blue-500")
@@ -56,7 +53,6 @@ describe("Chip", () => {
   
     it("should display correct color", () => {
       const color = "amber"
-  
       cy.mount(<Chip onClick={() => ""} color={"amber"}>Test</Chip>)
   
       cy.get("button").should("have.class", `bg-${color}-500`)
@@ -73,6 +69,12 @@ describe("Chip", () => {
       cy.mount(<Chip onClick={() => ""} disabled dimOpacityWhenDisabled={false}>Test</Chip>)
   
       cy.get("button").should("not.have.class", "text-opacity-60")
+    })
+    
+    it("should show error if it has onclick and link ", () => {
+      cy.mount(<Chip to="/weights" onClick={() => ""}>Test</Chip>)
+  
+      cy.get("p").should("be.visible")
     })
   })
 })
