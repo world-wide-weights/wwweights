@@ -1,18 +1,8 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsArray, IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import { IsArray, IsOptional, IsString } from 'class-validator';
+import { Page } from './page';
 
-export class QueryTagRelatedDto {
-  @IsNumber()
-  @IsOptional()
-  @Min(1)
-  @ApiPropertyOptional()
-  page = 1;
-
-  @IsString()
-  @IsOptional()
-  @ApiPropertyOptional()
-  limit = 16;
-
+export class QueryTagRelatedDto extends Page {
   @IsString()
   @IsOptional()
   @ApiPropertyOptional()
