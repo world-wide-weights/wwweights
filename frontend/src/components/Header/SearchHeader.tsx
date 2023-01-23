@@ -64,21 +64,21 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "
     /**
      * Fetch related tags
      */
-    useEffect(() => {
-        const fetchRelatedTags = async () => {
-            setIsLoadingRelatedTags(true)
+    // useEffect(() => {
+    //     const fetchRelatedTags = async () => {
+    //         setIsLoadingRelatedTags(true)
 
-            try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/tags/related`)
-                const data = await response.json()
-                setRelatedTags(data)
-                setIsLoadingRelatedTags(false)
-            } catch (error) {
-                console.error(error)
-            }
-        }
-        fetchRelatedTags()
-    }, [])
+    //         try {
+    //             const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/tags/related`)
+    //             const data = await response.json()
+    //             setRelatedTags(data)
+    //             setIsLoadingRelatedTags(false)
+    //         } catch (error) {
+    //             console.error(error)
+    //         }
+    //     }
+    //     fetchRelatedTags()
+    // }, [])
 
     return <header className="bg-white pt-2 md:pt-5 pb-3 md:pb-10">
         <div className="container">

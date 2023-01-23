@@ -44,7 +44,7 @@ type Statistics = {
 }
 
 type WeightsListProps = {
-    items: Item[]
+    data: Item[]
     currentPage: number
     totalItems: number
     limit: number
@@ -56,7 +56,7 @@ type WeightsListProps = {
 /** 
  * Discover Page, list all items, search results and single tags
  */
-export default function WeightsList({ items, currentPage, totalItems, limit, query, sort, statistics }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function WeightsList({ data, currentPage, totalItems, limit, query, sort, statistics }: InferGetServerSidePropsType<typeof getServerSideProps>) {
     // Strings
     const siteTitle = `Latest ${currentPage > 1 ? `| Page ${currentPage} ` : ""}- World Wide Weights`
     const headlineItems = query === "" ? "All items" : query
@@ -80,7 +80,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
 
         {/* Content */}
         <main className="container mt-5">
-            {items.length === 0 ?
+            {data.length === 0 ?
                 // Empty State
                 <SearchEmptyState query={query} />
                 : <>
@@ -110,12 +110,12 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                             {loading ? <p>Loading...</p> : <>
                                 {/* Weights Box View */}
                                 {viewType === "grid" && <div className={`grid ${statisticsExpanded ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" : "grid-cols-1 md:grid-cols-2 2xl:grid-cols-3"} gap-2 md:gap-5 mb-5 md:mb-8`}>
-                                    {items.map((item) => <ItemPreviewGrid datacy="weights-grid-item" key={item.slug} name={item.name} slug={item.slug} weight={item.weight} imageUrl="https://picsum.photos/200" />)}
+                                    {data.map((item) => <ItemPreviewGrid datacy="weights-grid-item" key={item.slug} name={item.name} slug={item.slug} weight={item.weight} imageUrl={item.image} />)}
                                 </div>}
 
                                 {/* Weights List View */}
                                 {viewType === "list" && <ul className={"grid md:gap-2 mb-5 md:mb-8"}>
-                                    {items.map((item) => <ItemPreviewList datacy="weights-list-item" key={item.slug} name={item.name} slug={item.slug} weight={item.weight} heaviestWeight={statistics.heaviest.weight} imageUrl="https://picsum.photos/200" />)}
+                                    {data.map((item) => <ItemPreviewList datacy="weights-list-item" key={item.slug} name={item.name} slug={item.slug} weight={item.weight} heaviestWeight={statistics.heaviest.weight} imageUrl={item.image} />)}
                                 </ul>}
                             </>}
 
@@ -159,7 +159,7 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
     const currentPage = parseInt(context.query.page as string ?? FIRST_PAGE)
     const limit = parseInt(context.query.limit as string ?? DEFAULT_ITEMS_PER_PAGE)
     const query = context.query.query as string ?? ""
-    const sort = context.query.sort as SortType ?? "asc"
+    const sort = context.query.sort as SortType ?? "relevance"
 
     // Validate Query
     if (currentPage < 1 || limit < 1 || limit > ITEMS_PER_PAGE_MAXIMUM) {
@@ -171,7 +171,7 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
     // Fetch items and statistics
     const [itemsResponse, statisticResponse] = await Promise.all([
         // TODO (Zoe-Bot): Update api endpoint when correct api is used
-        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/items?_page=${currentPage}&_limit=${limit}&_sort=weight.value&_order=${sort}&q=${query}`),
+        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/items/list?page=${currentPage}&limit=${limit}&sort=${sort}&query=${query}`),
         fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/items/statistics`),
     ])
 
@@ -181,17 +181,75 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
         statisticResponse.json()
     ])
 
-    const totalItems = parseInt(itemsResponse.headers.get("x-total-count") ?? "100") // Faalback For tests its 100 in future (when our api is used) this information will come from body and this will be removed anyway
+    const totalItems = parseInt(items.total)
 
     return {
         props: {
-            items,
+            data: items.data,
             currentPage,
             limit,
             totalItems,
             query,
             sort,
-            statistics
+            statistics: {
+                "heaviest": {
+                    "id": "230",
+                    "name": "Clio C-1000",
+                    "slug": "clio-c-1000",
+                    "weight": {
+                        "value": 998,
+                        "isCa": false
+                    },
+                    "source": "https://phonedb.net/",
+                    "tags": [
+                        {
+                            "name": "Vadem",
+                            "slug": "vadem"
+                        },
+                        {
+                            "name": "1998 Nov",
+                            "slug": "1998-nov"
+                        },
+                        {
+                            "name": "Windows (mobile-class)",
+                            "slug": "windows-(mobile-class)"
+                        },
+                        {
+                            "name": "Notebook",
+                            "slug": "notebook"
+                        }
+                    ]
+                },
+                "lightest": {
+                    "id": "105",
+                    "name": "iPAQ H6340 / H6345",
+                    "slug": "ipaq-h6340-h6345",
+                    "weight": {
+                        "value": 1,
+                        "isCa": false
+                    },
+                    "source": "https://phonedb.net/",
+                    "tags": [
+                        {
+                            "name": "Hewlett-Packard",
+                            "slug": "hewlett-packard"
+                        },
+                        {
+                            "name": "2004 Jul",
+                            "slug": "2004-jul"
+                        },
+                        {
+                            "name": "Windows (mobile-class)",
+                            "slug": "windows-(mobile-class)"
+                        },
+                        {
+                            "name": "Smartphone",
+                            "slug": "smartphone"
+                        }
+                    ]
+                },
+                "averageWeight": 500
+            }
         }
     }
 }

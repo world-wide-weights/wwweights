@@ -46,7 +46,7 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
 
     // Strings Generator
     const weightString = generateWeightString(item.weight)
-    const sourceName = item.source ? new URL(item.source).hostname.replace("www.", "") : null
+    const sourceName = null
 
     // Throw error when tab does not exist.
     if (currentTabIndex === -1 && currentTab)
@@ -83,11 +83,11 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
                     </div>
 
                     {/* Weights Image */}
-                    <div className="row-start-1 lg:row-end-3 lg:flex lg:justify-end">
+                    {item.image && <div className="row-start-1 lg:row-end-3 lg:flex lg:justify-end">
                         {/* No better way yet: https://github.com/vercel/next.js/discussions/21379 Let's take a look at this when we got problems with it */}
-                        <Image src="https://picsum.photos/1200" priority className="sm:hidden rounded-xl" alt={item.name} width={120} height={120} />
-                        <Image src="https://picsum.photos/1200" priority className="hidden sm:block rounded-xl" alt={item.name} width={230} height={230} />
-                    </div>
+                        <Image src={item.image} priority className="sm:hidden rounded-xl" alt={item.name} width={120} height={120} />
+                        <Image src={item.image} priority className="hidden sm:block rounded-xl" alt={item.name} width={230} height={230} />
+                    </div>}
                 </div>
                 <hr className="mb-4 md:mb-8" />
 
@@ -111,8 +111,8 @@ export const getStaticProps: GetStaticProps<WeightsSingleProps> = async (context
 
     // Fetch item and related items
     const [itemResponse, relatedItemsResponse] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/items/list?slug=${slug}`),
-        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/related_items`),
+        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/items/list?slug=${slug}`),
+        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/items/related?slug=${slug}`),
     ])
 
     // Read jsons from item and related items
@@ -122,7 +122,7 @@ export const getStaticProps: GetStaticProps<WeightsSingleProps> = async (context
     ])
 
     // Validate Query
-    if (!item.slug) {
+    if (!item.data[0].slug) {
         return {
             notFound: true // Renders 404 page
         }
@@ -130,8 +130,8 @@ export const getStaticProps: GetStaticProps<WeightsSingleProps> = async (context
 
     return {
         props: {
-            item,
-            relatedItems
+            item: item.data[0],
+            relatedItems: relatedItems.data
         },
         revalidate: 10
     }
