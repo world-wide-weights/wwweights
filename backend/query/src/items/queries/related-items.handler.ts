@@ -26,6 +26,11 @@ export class ItemRelatedHandler implements IQueryHandler<ItemRelatedQuery> {
         .lean()
         .exec();
 
+      if (!item) {
+        this.logger.error('Item not found');
+        throw new UnprocessableEntityException('Item not found');
+      }
+
       const itemTagNames = item.tags.map((tag) => tag.name);
       const filter = getFilter(item.name + ' ' + itemTagNames.join(' '));
       const sort = getSort(SortEnum.RELEVANCE, true);
