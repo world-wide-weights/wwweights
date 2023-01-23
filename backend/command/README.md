@@ -30,4 +30,4 @@ npm run test:e2e
 ```
 This message was solely created to make sure that the beutiful backend with wonderful developers 
 does not fall behind in commits against the frontend team.
-We realized we 
+We realized we d
