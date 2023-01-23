@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
   IsArray,
   IsNumber,
@@ -36,7 +36,7 @@ export class QueryItemListDto {
 
   @IsString()
   @IsOptional()
-  @Length(2, 100)
+  @Length(0, 100)
   @ApiPropertyOptional()
   query: string;
 
@@ -44,6 +44,8 @@ export class QueryItemListDto {
   @IsArray()
   @IsOptional()
   @ApiPropertyOptional()
+  @Type(() => String)
+  @Transform(({ value }) => [value].flat())
   tags: string[];
 
   @IsString()

@@ -30,6 +30,7 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
         tags: insertItemDto.tags?.map(
           (tag) => new Tag({ name: getSlug(tag, ' ') }),
         ),
+        createdAt: Date.now(),
       });
 
       if (
