@@ -10,6 +10,7 @@ import {
 import { QueryBus } from '@nestjs/cqrs';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Item } from '../models/item.model';
+import { PaginatedResult } from './interfaces/paginated-items';
 import { QueryItemListDto } from './interfaces/query-item-list.dto';
 import { QueryItemRelatedDto } from './interfaces/query-item-related.dto';
 import { ItemListQuery } from './queries/item-list.query';
@@ -28,18 +29,16 @@ export class ItemsController {
   @ApiOperation({ summary: 'Get a list of items' })
   async getItemList(@Query() dto: QueryItemListDto) {
     this.logger.log(`Get item list`);
-    return (await this.queryBus.execute(new ItemListQuery(dto))).map(
-      (item) => new Item(item),
-    );
+    const result = await this.queryBus.execute(new ItemListQuery(dto));
+    return new PaginatedResult<Item>(result, Item);
   }
 
   @Get('items/related')
   @ApiOperation({ summary: 'Get an item by slug' })
   async getItem(@Query() dto: QueryItemRelatedDto) {
     this.logger.log(`Get item list`);
-    return (await this.queryBus.execute(new ItemRelatedQuery(dto))).map(
-      (item) => new Item(item),
-    );
+    const result = await this.queryBus.execute(new ItemRelatedQuery(dto));
+    return new PaginatedResult<Item>(result, Item);
   }
 
   // @Get('items/statistics')
