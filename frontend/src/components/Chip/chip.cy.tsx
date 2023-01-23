@@ -70,7 +70,9 @@ describe("Chip", () => {
   
       cy.get("button").should("not.have.class", "text-opacity-60")
     })
-    
+  })
+
+  describe("Error Handling", () => {
     it("should show error if it has onclick and link ", () => {
       cy.mount(<Chip to="/weights" onClick={() => ""}>Test</Chip>)
   
