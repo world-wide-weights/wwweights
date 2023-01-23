@@ -82,6 +82,8 @@ describe('EventstoreModule', () => {
       await replaceApp();
       // ASSERT
       expect(eventStore.isReady).toEqual(true);
+      // Should subscribe to all from the end => all previous are expected already be applied to read db 
+      expect(client.params[0].fromPosition).toEqual('end');
     });
     it('Should default "SKIP_READ_DB_REBUILD" to false', async () => {
       // ARRANGE
@@ -101,6 +103,8 @@ describe('EventstoreModule', () => {
       await replaceApp();
       // ASSERT
       expect(eventStore.isReady).toEqual(false);
+      // Should subscribe to all from the beginning => needs all events for replay
+      expect(client.params[0].fromPosition).toEqual('start');
     });
   });
   describe('Protection during setup', () => {

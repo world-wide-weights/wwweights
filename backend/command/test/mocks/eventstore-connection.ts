@@ -1,5 +1,6 @@
 export class Client {
   forcedResult: any[] = [];
+  params = [];
 
   constructor(...args: any[]) {
     return;
@@ -11,7 +12,8 @@ export class Client {
     (g as any).cancel = () => {};
     return g;
   }
-  subscribeToAll() {
+  subscribeToAll(...args: any[]) {
+    this.params = args;
     return generator(this.forcedResult.pop());
   }
 }
