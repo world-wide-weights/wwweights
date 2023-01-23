@@ -12,7 +12,9 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             <Navbar />
             {children}
             <div className="mt-auto">
-                <Footer />
+                <div className="mt-10">
+                    <Footer />
+                </div>
             </div>
         </div>
     </>
