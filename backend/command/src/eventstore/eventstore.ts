@@ -4,6 +4,8 @@ import {
   END,
   EventStoreDBClient,
   jsonEvent,
+  ReadPosition,
+  START,
   StreamingRead,
   streamNameFilter,
   StreamNotFoundError,
@@ -15,6 +17,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { EventBus } from '@nestjs/cqrs';
+import { last } from 'rxjs';
 import { ItemInsertedEvent } from '../items/events/item-inserted.event';
 import { ALLOWED_EVENT_ENTITIES } from './enums/allowedEntities.enum';
 
@@ -50,33 +53,25 @@ export class EventStore {
    * @description Handle past events and the respective rebuild, initialize event subscription
    */
   private async init() {
+    // Convert string to boolean
+    const SKIP_READ_DB_REBUILD =
+      this.configService.get<string>('SKIP_READ_DB_REBUILD')?.toLowerCase() ===
+      'true';
     this.logger.debug('Starting subscription to Eventstore');
-    let lastEvent: AllStreamResolvedEvent;
-    // Get last event from all streams
-    const lastEventStream: StreamingRead<AllStreamResolvedEvent> =
-      this.client.readAll({
-        direction: SDRAWKCAB,
-        fromPosition: END,
-      });
-
-    for await (const resolvedEvent of lastEventStream) {
-      // Check if stream of event is one of the content relevant streams
-      if (
-        resolvedEvent?.event?.streamId?.match(
-          `(${Object.values(ALLOWED_EVENT_ENTITIES)
-            .map((e) => `${e}-`)
-            .join('|')}).*`,
-        ) &&
-        !lastEvent
-      ) {
-        lastEvent = resolvedEvent;
-        // Event found, there is no need for this anymore
-        await lastEventStream.cancel();
-      }
+    let lastEvent: AllStreamResolvedEvent = null;
+    let readAllStart: ReadPosition = END;
+    // If not skip => get last stream event
+    if (!SKIP_READ_DB_REBUILD) {
+      lastEvent = await this.getLastEvent();
+      readAllStart = START;
     }
+
     // Skip protective rebuild period of no events are in eventstore
     if (!lastEvent) {
-      this.logger.verbose('Eventstore Replay skipped as it was empty');
+      const skipMessage = !SKIP_READ_DB_REBUILD
+        ? 'Eventstore Replay skipped as it was empty'
+        : 'Eventstore Replay skipped as "SKIP_READ_DB_REBUILD" is set to true';
+      this.logger.verbose(skipMessage);
       this.isReady = true;
     }
 
@@ -85,6 +80,7 @@ export class EventStore {
         // Build valid stream names by eventmap
         prefixes: Object.values(ALLOWED_EVENT_ENTITIES).map((e) => `${e}-`),
       }),
+      fromPosition: readAllStart,
     });
     for await (const resolvedEvent of subscription) {
       this.logger.debug(
@@ -111,6 +107,33 @@ export class EventStore {
     this.logger.verbose(
       'Initialized Stream listener for content streams of eventstore',
     );
+  }
+
+  /**
+   * @description Get last event in content streams
+   */
+  private async getLastEvent(): Promise<AllStreamResolvedEvent> {
+    // Get last event from all streams
+    const lastEventStream: StreamingRead<AllStreamResolvedEvent> =
+      this.client.readAll({
+        direction: SDRAWKCAB,
+        fromPosition: END,
+      });
+
+    for await (const resolvedEvent of lastEventStream) {
+      // Check if stream of event is one of the content relevant streams
+      if (
+        resolvedEvent?.event?.streamId?.match(
+          `(${Object.values(ALLOWED_EVENT_ENTITIES)
+            .map((e) => `${e}-`)
+            .join('|')}).*`,
+        )
+      ) {
+        // Event found, there is no need for this anymore
+        await lastEventStream.cancel();
+        return resolvedEvent;
+      }
+    }
   }
 
   /**
