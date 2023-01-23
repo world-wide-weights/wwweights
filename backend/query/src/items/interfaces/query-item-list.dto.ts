@@ -16,7 +16,7 @@ export class QueryItemListDto extends Page {
   @IsString()
   @IsOptional()
   @Length(0, 100)
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ minLength: 0, maxLength: 100 })
   query: string;
 
   @IsString({ each: true })

@@ -15,6 +15,6 @@ export class Page {
   @Min(1)
   @Max(64)
   @Type(() => Number)
-  @ApiPropertyOptional({ type: Number, default: 16, minimum: 1 })
+  @ApiPropertyOptional({ type: Number, default: 16, minimum: 1, maximum: 64 })
   limit = 16;
 }
