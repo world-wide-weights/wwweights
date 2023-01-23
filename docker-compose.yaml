@@ -1,3 +1,4 @@
+# TODO: Update this once the backend split have been merged => Main images for every service exist
 version: "3.9"
 services:
   backend:

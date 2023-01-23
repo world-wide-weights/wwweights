@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 
 import items from "../fixtures/items/list.json"
+import relatedItems from "../fixtures/items/related.json"
 import singleItem from "../fixtures/items/single.json"
 import statistics from "../fixtures/items/statistics.json"
 
@@ -64,6 +65,16 @@ Cypress.Commands.add("mockSingleWeight", () => {
         statusCode: 200,
         body: singleItem
     })
+
+    cy.task("nock", {
+        hostname: apiBaseUrl,
+        method: "get",
+        path: "/related_items", // TODO (Zoe-Bot): Update url when correct api is used
+        statusCode: 200,
+        body: relatedItems
+    })
+
+    cy.mockGetRelatedTags()
 })
 
 Cypress.Commands.add("mockSession", () => {
