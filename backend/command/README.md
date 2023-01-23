@@ -28,4 +28,4 @@ Run e2e tests:
 ```sh
 npm run test:e2e
 ```
-This message was solely created to make sure that the beutiful backend with wo
+This message was solely created to make sure that the beutiful backend with won
