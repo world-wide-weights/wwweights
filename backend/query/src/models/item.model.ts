@@ -63,6 +63,10 @@ export class Item extends AggregateRoot {
   @prop()
   user: string;
 
+  @Expose()
+  @prop()
+  createdAt?: number;
+
   constructor(partial: Partial<Item>) {
     super();
     Object.assign(this, partial);

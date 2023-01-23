@@ -1,42 +1,201 @@
-// import { INestApplication } from '@nestjs/common';
+import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
+import { Model } from 'mongoose';
+import * as request from 'supertest';
+import { ItemsModule } from '../src/items/items.module';
+import { Item } from '../src/models/item.model';
+import { ItemsByTag } from '../src/models/items-by-tag.model';
+import { Tag } from '../src/models/tag.model';
+import {
+  initializeMockModule,
+  teardownMockDataSource,
+} from './helpers/MongoMemoryHelpers';
+
+import { Test, TestingModule } from '@nestjs/testing';
+import { SortEnum } from '../src/items/interfaces/sortEnum';
+import { items, itemsWithDates, relatedItems } from './mocks/items';
+import { itemsByTags } from './mocks/itemsbytags';
+import { tags } from './mocks/tags';
 
 describe('QueryController (e2e)', () => {
-  // let app: INestApplication;
-  // let itemRepository: any;
+  let app: INestApplication;
+  let itemModel: Model<Item>;
+  let tagModel: Model<Tag>;
+  let itemsByTagModel: Model<ItemsByTag>;
+  let server: any; // Has to be any because of supertest not having a type for it either
+  jest.setTimeout(10000);
 
   beforeAll(async () => {
-    // const dataSource = await initializeMockDataSource();
-    // const moduleFixture: TestingModule = await Test.createTestingModule({
-    //   imports: [TypegooseModule.forRoot(''), CommandsModule],
-    // }).compile();
-    // app = moduleFixture.createNestApplication();
-    // app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
-    // await app.init();
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [initializeMockModule(), ItemsModule],
+    }).compile();
+
+    app = moduleFixture.createNestApplication();
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        transform: true,
+        transformOptions: { enableImplicitConversion: true },
+      }),
+    );
+
+    itemModel = moduleFixture.get('ItemModel');
+    tagModel = moduleFixture.get('TagModel');
+    itemsByTagModel = moduleFixture.get('ItemsByTagModel');
+
+    app.setGlobalPrefix('queries/v1');
+    await app.init();
+    server = app.getHttpServer();
   });
 
   beforeEach(async () => {
-    // await itemRepository.clear();
-    // await itemRepository.insert(singleItem);
+    await itemModel.deleteMany();
+    await tagModel.deleteMany();
+    await itemsByTagModel.deleteMany();
+
+    await itemModel.insertMany(items);
+    await tagModel.insertMany(tags);
+    await itemsByTagModel.insertMany(itemsByTags);
   });
 
   afterAll(async () => {
-    // await itemRepository.clear();
-    //await teardownMockDataSource();
-    //await app.close();
+    await itemModel.deleteMany();
+    await tagModel.deleteMany();
+    await itemsByTagModel.deleteMany();
+    await teardownMockDataSource();
+    server.close();
+    await app.close();
   });
 
-  describe('Queries /query/v1', () => {
-    // const queriesPath = '/query/v1/';
+  describe('Queries /queries/v1', () => {
+    const queriesPath = '/queries/v1/';
 
-    it('/ => mock', async () => {
-      expect(true).toBe(true);
+    describe('items/list', () => {
+      const subPath = 'items/list';
+
+      it('should return 16 items searching for android (74 total)', async () => {
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({ query: 'android' })
+          .expect(HttpStatus.OK);
+
+        expect(result.body).toHaveLength(16);
+      });
+
+      it('should return 16 items searching with tags for android (74 total)', async () => {
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({ tags: ['android'] })
+          .expect(HttpStatus.OK);
+
+        expect(result.body).toHaveLength(16);
+      });
+
+      it('should not return items if we remove the tags containing android', async () => {
+        await itemModel.updateMany({}, { $set: { tags: [] } });
+
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({ query: 'android' })
+          .expect(HttpStatus.OK);
+
+        expect(result.body).toHaveLength(0);
+      });
+
+      it('should consistently sort by relevance', async () => {
+        await itemModel.deleteMany();
+        await itemModel.insertMany(relatedItems);
+        const results = [];
+        for (let i = 0; i < 20; i++) {
+          const result = await request(server)
+            .get(queriesPath + subPath)
+            .query({ query: 'matching 1' })
+            .expect(HttpStatus.OK);
+          results.push(result.body[0]);
+        }
+
+        for (const result of results) {
+          expect(result.name).toEqual('matching 1');
+        }
+      });
+
+      it('should return lightest first by same partial name', async () => {
+        await itemModel.deleteMany();
+        await itemModel.insertMany(relatedItems);
+        const results = [];
+        for (let i = 0; i < 20; i++) {
+          const result = await request(server)
+            .get(queriesPath + subPath)
+            .query({ query: 'matching', sort: SortEnum.LIGHTEST })
+            .expect(HttpStatus.OK);
+          results.push(result.body[0]);
+        }
+
+        for (const result of results) {
+          expect(result.weight.value).toEqual(100);
+        }
+      });
+
+      it('should return heaviest first by same partial name', async () => {
+        await itemModel.deleteMany();
+        await itemModel.insertMany(relatedItems);
+        const results = [];
+        for (let i = 0; i < 20; i++) {
+          const result = await request(server)
+            .get(queriesPath + subPath)
+            .query({ query: 'matching', sort: SortEnum.HEAVIEST })
+            .expect(HttpStatus.OK);
+          results.push(result.body[0]);
+        }
+
+        for (const result of results) {
+          expect(result.weight.value).toEqual(102);
+        }
+      });
+
+      it('should return one item if searched by slug', async () => {
+        await itemModel.deleteMany();
+        await itemModel.insertMany(relatedItems);
+
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({ sort: SortEnum.HEAVIEST, slug: 'matching-1' })
+          .expect(HttpStatus.OK);
+
+        expect(result.body).toHaveLength(1);
+        expect(result.body[0].name).toEqual('matching 1');
+      });
+
+      it('should return the latest items without any specifications', async () => {
+        await itemModel.deleteMany();
+        await itemModel.insertMany(itemsWithDates);
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .expect(HttpStatus.OK);
+
+        expect(result.body).toHaveLength(16);
+        expect(result.body[0].name).toEqual('item 29');
+        expect(result.body[15].name).toEqual('item 14');
+      });
     });
+    describe('items/related', () => {
+      const subPath = 'items/related';
+      it('should return the related items', async () => {
+        await itemModel.deleteMany();
+        await itemModel.insertMany(relatedItems);
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({ slug: relatedItems[0].slug })
+          .expect(HttpStatus.OK);
 
-    // it('/:slug => getOneItem', async () => {
-    //   const res = await request(app.getHttpServer())
-    //     .get(queriesPath + 'get-one-item/' + singleItem.slug)
-    //     .expect(HttpStatus.OK);
-    //   expect(res.body.name).toBe(singleItem.name);
-    // });
+        const otherItemNames = relatedItems
+          .filter((item) => item.slug !== relatedItems[0].slug)
+          .map((item) => item.name);
+
+        expect(result.body).toHaveLength(2);
+        for (const item of result.body) {
+          expect(otherItemNames).toContain(item.name);
+        }
+      });
+    });
   });
 });

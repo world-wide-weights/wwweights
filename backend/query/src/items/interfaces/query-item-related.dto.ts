@@ -1,18 +1,8 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString } from 'class-validator';
+import { Page } from './page';
 
-export class QueryItemRelatedDto {
-  @IsNumber()
-  @IsOptional()
-  @Min(1)
-  @ApiPropertyOptional()
-  page = 1;
-
-  @IsString()
-  @IsOptional()
-  @ApiPropertyOptional()
-  limit = 16;
-
+export class QueryItemRelatedDto extends Page {
   @IsString()
   @ApiProperty()
   slug: string;

@@ -11,7 +11,9 @@ import { QueryBus } from '@nestjs/cqrs';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Item } from '../models/item.model';
 import { QueryItemListDto } from './interfaces/query-item-list.dto';
-import { GetItemListQuery } from './queries/get-item-list.query';
+import { QueryItemRelatedDto } from './interfaces/query-item-related.dto';
+import { ItemListQuery } from './queries/item-list.query';
+import { ItemRelatedQuery } from './queries/related-items.query';
 
 @Controller()
 @ApiTags()
@@ -26,18 +28,19 @@ export class ItemsController {
   @ApiOperation({ summary: 'Get a list of items' })
   async getItemList(@Query() dto: QueryItemListDto) {
     this.logger.log(`Get item list`);
-    return (await this.queryBus.execute(new GetItemListQuery(dto))).map(
+    return (await this.queryBus.execute(new ItemListQuery(dto))).map(
       (item) => new Item(item),
     );
   }
 
-  // @Get('items/related')
-  // @ApiQuery({ name: 'dto', required: false, type: QueryItemRelatedDto })
-  // @ApiOperation({ summary: 'Get an item by slug' })
-  // async getItem(@Query() dto: QueryItemRelatedDto) {
-  //   this.logger.log(`Get item list`);
-  //   return await this.queryBus.execute(new GetItemRelatedQuery(dto));
-  // }
+  @Get('items/related')
+  @ApiOperation({ summary: 'Get an item by slug' })
+  async getItem(@Query() dto: QueryItemRelatedDto) {
+    this.logger.log(`Get item list`);
+    return (await this.queryBus.execute(new ItemRelatedQuery(dto))).map(
+      (item) => new Item(item),
+    );
+  }
 
   // @Get('items/statistics')
   // @ApiQuery({ name: 'dto', required: false, type: QueryItemStatisticsDto })

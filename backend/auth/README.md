@@ -1,5 +1,7 @@
 # Auth Backend
 
+Listens on 3001
+
 ## Quickstart
  **Note:** All migrations should be applied
  ```sh

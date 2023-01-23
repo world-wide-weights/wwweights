@@ -20,10 +20,11 @@ async function bootstrap() {
     .setDescription('The wwweights Api overview')
     .setVersion('0.1')
     .build();
-  const document = SwaggerModule.createDocument(app, config, {ignoreGlobalPrefix: false});
+  const document = SwaggerModule.createDocument(app, config, {
+    ignoreGlobalPrefix: false,
+  });
   SwaggerModule.setup('swagger', app, document);
 
-
-  await app.listen(3001);
+  await app.listen(process.env.port || 3004);
 }
 bootstrap();
