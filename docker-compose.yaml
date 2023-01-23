@@ -1,30 +1,96 @@
 # TODO: Update this once the backend split have been merged => Main images for every service exist
 version: "3.9"
 services:
-  backend:
-    image: node:18-alpine3.15
-    restart: "always"
-    volumes:
-      - ./backend:/home/node
-    ports:
-      - 3001:3001
-    working_dir: /home/node
-    command: npm run start:dev
-    depends_on:
-      - mongodb
   frontend:
-    image: node:18-alpine3.15
+    image: ghcr.io/world-wide-weights/frontend:main
     restart: "always"
-    volumes:
-      - ./frontend:/home/node
     ports:
       - 3000:3000
-    working_dir: /home/node
-    command: npm run dev
     environment:
-      - WATCHPACK_POLLING=true
+      - NEXT_PUBLIC_CLIENT_BASE_URL=${NEXT_PUBLIC_CLIENT_BASE_URL:-http://localhost:3000}
+      - NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL:-http://localhost:3004}
+      - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:3000}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:-secret}
+
+  auth-backend:
+    image: ghcr.io/world-wide-weights/auth-backend:main
+    restart: "always"
+    ports:
+      - 3001:3001
+    environment:
+      - DB_HOST=${AUTH_DB_HOST:-pg}
+      - DB_PORT=${AUTH_DB_PORT:-5432}
+      - DB_DB=${AUTH_DB_DB:-auth}
+      - DB_USER=${AUTH_DB_USER:-admin}
+      - DB_PW=${AUTH_DB_PW:-admin}
+      - MAIL_HOST=${AUTH_MAIL_HOST:-smtp.ethereal.email}
+      - MAIL_PORT=${AUTH_MAIL_PORT:-587}
+      - MAIL_USERNAME=${AUTH_MAIL_USERNAME:-seamus.hoeger37@ethereal.email}
+      - MAIL_PASSWORD=${AUTH_MAIL_PASSWORD:-eCthbsb1DezensDnFf}
+      - MAIL_MAX_RETRIES=${AUTH_MAIL_MAX_RETRIES:-5}
+      - MAIL_ERROR_DELAY=${AUTH_MAIL_ERROR_DELAY_MS:-100}
+      - MAIL_ADDRESS=${AUTH_MAIL_ADDRESS:-seamus.hoeger37@ethereal.email}
+      - JWT_EXPIRE_TIME=${AUTH_JWT_EXPIRE_TIME:-15m}
+      - JWT_REFRESH_EXPIRE_TIME=${AUTH_JWT_REFRESH_EXPIRE_TIME:-10h}
+      - JWT_PRIVATE_KEY=${AUTH_JWT_PRIVATE_KEY:-"-----BEGIN RSA PRIVATE KEY-----\nMIICXQIBAAKBgQC7yxELYntkuLIDSGBFEnSaVZtJgKqmFA7/97Z+6c2GAwGxE3Pd\ngUYei30Adg6jg9xIxFDVUNwwh5KsOc3ALcP7GZxewGH2ok8wSSsMzrDO4oFAohRl\nXsSKd69B0SvBSMz1Xl5T6xlIC9fTBatGDpTFSD9FQBeoxgGzka0+wD+44wIDAQAB\nAoGBAJXwylgjttAx4/hZBnzAApfjuExUzmwyYdOgjncA6NeSePxQwtdeS4VB7Hm8\nyW1ncDAthzj7CgQ5izO2J4DFSc9Kc1lH8iGP6NBWDuUjdBs9QjC5wHYmPkorBApZ\nUqRLytmq7ghqp1/0MDO7BlM0c80+7ra8JWuI5N9HseXNfVvJAkEA3qpo7ADi8HKR\nNZiH5Tw5C+m47pR+3AdPvjOMfxkDm4Xf6VVHUoC2ZK+zl2K60dmpWcXyyg8X5CVJ\n79xaq+LcNQJBANfoLo31Dp3JbDn0z0X7hYuJb3cGWzfetxrtYl6i/1viMTtdwgTq\n7FRGet8z2mpdyOuLKn8X4CQdlk+QyNeW87cCQEtLEnmjfxnRk9qsvl88swmdOeSr\nIA6lBkkJw1uDCN5BMcsEBD8YuRRo+XCaeRPW51YtAoFjAzApj8vlFmADMXUCQQDU\n2Yfz2RBky6sPY+JnirQ4QPCLdc+9v6niOP6Ob8Cxc8e3UBIzSOpdlvIRU4xS6kxm\nsdbeXspQsH57yC/IIn/3AkAvLgUC6Nhp93y4xDvbFS20KK8XcKlJroeGPzciixsY\n6Tk99M744yJIfJXvEylo1J1Ur3wvRRqj/9EN0mGje+CB\n-----END RSA PRIVATE KEY-----"}
+      - JWT_PUBLIC_KEY=${AUTH_JWT_PUBLIC_KEY:-"-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC7yxELYntkuLIDSGBFEnSaVZtJ\ngKqmFA7/97Z+6c2GAwGxE3PdgUYei30Adg6jg9xIxFDVUNwwh5KsOc3ALcP7GZxe\nwGH2ok8wSSsMzrDO4oFAohRlXsSKd69B0SvBSMz1Xl5T6xlIC9fTBatGDpTFSD9F\nQBeoxgGzka0+wD+44wIDAQAB\n-----END PUBLIC KEY-----"}
+      - JWT_AUTH_KID=${AUTH_JWT_AUTH_KID:-auth-base-key}
+    links:
+      - postgres:pg
+
+  command-backend:
+    image: ghcr.io/world-wide-weights/command-backend:main
+    restart: "always"
+    ports:
+      - 3002:3002
+    environment:
+      - DB_MONGO_HOST=${CMD_DB_MONGO_HOST:-mongo}
+      - DB_MONGO_PORT=${CMD_DB_MONGO_PORT:-27017}
+      - DB_MONGO_USER=${CMD_DB_MONGO_USER:-admin}
+      - DB_MONGO_PW=${CMD_DB_MONGO_PW:-admin}
+      - DB_MONGO_NAME=${CMD_DB_MONGO_NAME:-wwweights}
+      - DB_EVENTSTORE_HOST=${CMD_DB_EVENTSTORE_HOST:-eventstore:2113}
+      - DB_EVENTSTORE_USERNAME=${CMD_DB_EVENTSTORE_USERNAME:-ops}
+      - DB_EVENTSTORE_PW=${CMD_DB_EVENTSTORE_PW:-changeit}
+      - DB_EVENTSTORE_USE_TLS=${CMD_DB_EVENTSTORE_USE_TLS:-false}
+      - JWKS_AUTH_URL=${CMD_JWKS_AUTH_URL:-http://auth:3001/auth/.well-known/jwks.json}
+    links:
+      - auth-backend:auth
+      - eventstore:eventstore
+      - mongodb:mongo
+
+  image-backend:
+    image: ghcr.io/world-wide-weights/image-backend:main
+    restart: "always"
+    ports:
+      - 3003:3003
+    environment:
+      - JWKS_AUTH_URL=${IMG_JWKS_AUTH_URL:-http://auth:3001/auth/.well-known/jwks.json}
+      - IMAGE_STORE_BASE_PATH=${IMG_IMAGE_STORE_BASE_PATH:-./disk}
+      - IMAGE_STORE_INCOMING_CACHE_PATH=${IMG_IMAGE_STORE_INCOMING_CACHE_PATH:-./cache}
+    # Currently disabled as this causes an error => fs.rename does not moving files between devices
+    #volumes:
+    #  - image_backend_volume:${IMG_IMAGE_STORE_BASE_PATH}
+    links:
+      - auth-backend:auth
+
+  query-backend:
+    image: ghcr.io/world-wide-weights/query-backend:main
+    restart: "always"
+    ports:
+      - 3004:3004
+    environment:
+      - DB_MONGO_HOST=${QRY_DB_MONGO_HOST:-mongo}
+      - DB_MONGO_PORT=${QRY_DB_MONGO_PORT:-27017}
+      - DB_MONGO_USER=${QRY_DB_MONGO_USER:-mongo}
+      - DB_MONGO_PW=${QRY_DB_MONGO_PW:-mongo}
+      - DB_MONGO_NAME=${QRY_DB_MONGO_NAME:-wwweights}
+      - JWKS_AUTH_URL=${QRY_JWKS_AUTH_URL:-http://auth:3001/auth/.well-known/jwks.json}
+    links:
+      - mongodb:mongo
+
   mongodb:
-    image: mongo:latest
+    image: mongo:6.0.3
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${DB_MONGO_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${DB_MONGO_PW}
@@ -36,46 +102,51 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-    restart: unless-stopped
+    restart: "always"
     volumes:
-      - mongodb_data_container:/data/mongodb
+      - mongodb_data_volume:/data/mongodb
+
   eventstore:
     image: eventstore/eventstore:20.6.1-buster-slim
     restart: "always"
     ports:
-      - 3010:1113
-      - 3011:2113
+      # Web admin ui
+      - 1114:${EVENTSTORE_EXT_TCP_PORT:-1113}
+      # Actual db connection endpoint
+      - 2114:${EVENTSTORE_HTTP_PORT:-2113}
     volumes:
-      - eventstore_data_container:/var/lib/eventstore
+      - eventstore_data_volume:/var/lib/eventstore
     environment:
-      - EVENTSTORE_CLUSTER_SIZE=1
-      - EVENTSTORE_RUN_PROJECTIONS=All
-      - EVENTSTORE_START_STANDARD_PROJECTIONS=true
-      - EVENTSTORE_EXT_TCP_PORT=1113
-      - EVENTSTORE_HTTP_PORT=2113
-      - EVENTSTORE_INSECURE=true
-      - EVENTSTORE_ENABLE_EXTERNAL_TCP=true
-      - EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=true
+      - EVENTSTORE_CLUSTER_SIZE=${EVENTSTORE_CLUSTER_SIZE:-1}
+      - EVENTSTORE_RUN_PROJECTIONS=${EVENTSTORE_RUN_PROJECTIONS:-All}
+      - EVENTSTORE_START_STANDARD_PROJECTIONS=${EVENTSTORE_START_STANDARD_PROJECTIONS:-true}
+      - EVENTSTORE_EXT_TCP_PORT=${EVENTSTORE_EXT_TCP_PORT:-1113}
+      - EVENTSTORE_HTTP_PORT=${EVENTSTORE_HTTP_PORT:-2113}
+      - EVENTSTORE_INSECURE=${EVENTSTORE_INSECURE:-true}
+      - EVENTSTORE_ENABLE_EXTERNAL_TCP=${EVENTSTORE_ENABLE_EXTERNAL_TCP:-true}
+      - EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=${EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP:-true}
+
   postgres:
     image: postgres:15
     restart: "always"
-    volumes: 
-      - postgres-volume:/var/lib/pgsql/data
+    volumes:
+      - postgres_data_volume:/var/lib/pgsql/data
       - ./db/setup:/docker-entrypoint-initdb.d/
     ports:
-      - 5432:5432
+      - 5433:5432
     environment:
       - POSTGRES_USER=${DB_PG_USER}
       - POSTGRES_PASSWORD=${DB_PG_PW}
       - POSTGRES_DB=${DB_PG_DB}
     healthcheck:
-      # TODO: This can be replaced by a more accurate healthcheck based on PID 1 
-      test: ["CMD-SHELL","pg_isready"]
+      # TODO: This can be replaced by a more accurate healthcheck based on PID 1
+      test: ["CMD-SHELL", "pg_isready"]
       interval: 60s
       timeout: 5s
       retries: 3
 
 volumes:
-  mongodb_data_container:
-  postgres-volume:
-  eventstore_data_container:
+  mongodb_data_volume:
+  postgres_data_volume:
+  eventstore_data_volume:
+  image_backend_volume:

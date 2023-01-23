@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 COPY --chown=node:node package*.json ./
 
-RUN npm ci --ignore-scripts
+RUN npm ci 
 
 COPY --chown=node:node . .
 
@@ -23,7 +23,7 @@ COPY --chown=node:node . .
 
 RUN npm run build
 
-RUN npm ci --only=production --ignore-scripts && npm cache clean --force
+RUN npm ci --omit=dev && npm cache clean --force
 
 USER node
 
