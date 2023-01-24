@@ -26,5 +26,5 @@ export const StatsCard: React.FC<StatsProps> = ({ icon, descriptionTop, value, d
             <h5 className="font-bold text-xl leading-6">{value}</h5>
             {descriptionBottom && <p className="text-gray-700">{descriptionBottom}</p>}
         </div>
-    </div >
+    </div>
 }
