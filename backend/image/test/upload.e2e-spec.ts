@@ -86,7 +86,7 @@ describe('UploadController (e2e)', () => {
           1,
         );
       });
-      it('Should clean cache', async () => {
+      it('Should clean temporary image storage when uploading image', async () => {
         // ACT
         const res = await request(app.getHttpServer())
           .post('/upload/image')

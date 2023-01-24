@@ -59,7 +59,7 @@ export class UploadService {
         throw new ConflictException({
           message:
             'This file already seems to be uploaded (indicated by m5hash of file)',
-          location: `${hash}.${image.mimetype.split('/')[1]}`,
+          path: `${hash}.${image.mimetype.split('/')[1]}`,
         });
       }
       // Copy rather than move to allow for "moving" accross devices (i.e. docker volumes)
@@ -75,7 +75,7 @@ export class UploadService {
       await fsProm.rm(cachedFilePath, { force: true });
     }
     // TODO: Notify Auth backend about user event
-    return { location: `${hash}.${image.mimetype.split('/')[1]}` };
+    return { path: `${hash}.${image.mimetype.split('/')[1]}` };
   }
 
   /**
