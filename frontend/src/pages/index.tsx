@@ -39,7 +39,7 @@ function Home({ items }: InferGetServerSidePropsType<typeof getStaticProps>) {
 	return (
 		<div>
 			<Head>
-				<title>World largest database about weights! | World Wide Weights</title>
+				<title>World largest database of weights! | World Wide Weights</title>
 				<meta charSet="utf-8" />
 				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
 			</Head>
@@ -51,7 +51,7 @@ function Home({ items }: InferGetServerSidePropsType<typeof getStaticProps>) {
 				{/* Header */}
 				<div className="container flex flex-col items-center justify-center py-10 md:min-h-[30rem]">
 					<h1 className="text-white text-2xl md:text-4xl font-bold mb-1">How much weighs?</h1>
-					<p className="text-gray-200 mb-3 md:mb-6">World largest database about weights!</p>
+					<p className="text-gray-200 mb-3 md:mb-6">World largest database of weights!</p>
 
 					{/* Search */}
 					{/* TODO (Zoe-bot): Move formik stuff to search component */}
@@ -69,7 +69,7 @@ function Home({ items }: InferGetServerSidePropsType<typeof getStaticProps>) {
 				{/* Items */}
 				<div className="container flex flex-col items-center mb-5 md:mb-10">
 					<h2 className="text-2xl md:text-3xl text-blue-800 text-center font-bold mb-1">Explore 31,000+ weights</h2>
-					<p className="text-gray-600 text-center mb-4 md:mb-8">World Wide weights is a website where you can discover the weights of all the items you can imagine. Explore the largest database about weights!</p>
+					<p className="text-gray-600 text-center mb-4 md:mb-8">World Wide weights is a website where you can discover the weights of all the items you can imagine. Explore the largest database of weights!</p>
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-2 md:gap-5 mb-5 md:mb-8 w-full">
 						{items.map((item) => <ItemPreviewGrid key={item.slug} {...item} imageUrl={item.image} />)}
 					</div>
@@ -90,7 +90,7 @@ function Home({ items }: InferGetServerSidePropsType<typeof getStaticProps>) {
 				<div className="bg-blue-900 py-10">
 					<div className="container flex flex-col items-center">
 						<h1 className="text-white text-3xl md:text-4xl text-center font-bold mb-1">Search for over <span className="text-blue-300">31,000+ weights</span></h1>
-						<p className="text-gray-200 text-center mb-3 md:mb-6">World largest database about weights!</p>
+						<p className="text-gray-200 text-center mb-3 md:mb-6">World largest database of weights!</p>
 
 						<Formik initialValues={initialQueryValues} onSubmit={submitForm}>
 							<Form className="flex justify-center w-full">
