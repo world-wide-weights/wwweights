@@ -116,3 +116,16 @@ jobs:
 
       - name: push
         run: docker push ghcr.io/world-wide-weights/command-backend:${{ steps.extract_branch.outputs.branch }}
+
+        
+  redeploy:
+    if: github.ref == 'refs/heads/stable'
+    needs: docker-push
+    runs-on:  ubuntu-latest
+    env:
+      deploy_secret: ${{ secrets.DEPLOY_SECRET }}
+      webhook: ${{ secrets.COMMAND_REDEPLOY_WEBHOOK }}
+    steps:
+      - name: trigger redeploy
+        run: |
+          curl -X GET -H "x-deploy-secret: $deploy_secret" $webhook 
