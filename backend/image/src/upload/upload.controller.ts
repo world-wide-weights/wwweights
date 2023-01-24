@@ -1,4 +1,5 @@
 import {
+  ClassSerializerInterceptor,
   Controller,
   HttpStatus,
   ParseFilePipe,
@@ -11,11 +12,13 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../shared/guards/jwt.guard';
 import { RequestWithUser } from '../shared/interfaces/request-with-user.interface';
+import { ImageUploadResponse } from './responses/upload-image.response';
 import { UploadService } from './upload.service';
 import { FileSizeValidator } from './validators/file-size.validator';
 import { FileTypeValidator } from './validators/file-type.validator';
 
 @Controller('upload')
+@UseInterceptors(ClassSerializerInterceptor)
 export class UploadController {
   constructor(private readonly uploadService: UploadService) {}
 
@@ -36,7 +39,7 @@ export class UploadController {
       }),
     )
     image: Express.Multer.File,
-  ): Promise<string> {
+  ): Promise<ImageUploadResponse> {
     return await this.uploadService.handleImageUpload(user, image);
   }
 }
