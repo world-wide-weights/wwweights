@@ -20,7 +20,7 @@ type SearchHeaderProps = {
 /**
  * Header with search and search suggestions
  */
-export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "asc", hasHeadline = true }) => {
+export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "relevance", hasHeadline = true }) => {
     const router = useRouter()
 
     // Local States
