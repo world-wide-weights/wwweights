@@ -1,3 +1,4 @@
+import axios from "axios"
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Head from "next/head"
 import { useRef, useState } from "react"
@@ -171,15 +172,15 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
     // Fetch items and statistics
     const [itemsResponse, statisticResponse] = await Promise.all([
         // TODO (Zoe-Bot): Update api endpoint when correct api is used
-        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/items/list?page=${currentPage}&limit=${limit}&sort=${sort}&query=${query}`),
-        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/items/statistics?query=${query}`),
+        axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/items/list?page=${currentPage}&limit=${limit}&sort=${sort}&query=${query}`),
+        axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/items/statistics?query=${query}`),
     ])
 
     // Read jsons from items and statistics
-    const [items, statistics] = await Promise.all([
-        itemsResponse.json(),
-        statisticResponse.json()
-    ])
+    const [items, statistics] = [
+        itemsResponse.data,
+        statisticResponse.data
+    ]
 
     const totalItems = parseInt(items.total)
 

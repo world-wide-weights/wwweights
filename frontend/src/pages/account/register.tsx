@@ -47,21 +47,21 @@ const Register: NextPageCustomProps = () => {
     const onFormSubmit = async ({ username, email, password }: RegisterDto) => {
         try {
             // Register in our backend
-            const registerResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/register`, {
-                method: "POST",
-                body: JSON.stringify({
-                    username,
-                    email,
-                    password
-                }),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            })
+            // const registerResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/register`, {
+            //     method: "POST",
+            //     body: JSON.stringify({
+            //         username,
+            //         email,
+            //         password
+            //     }),
+            //     headers: {
+            //         "Content-Type": "application/json",
+            //     },
+            // })
 
             // If something went wrong when register backend set Error
-            if (!registerResponse.ok) {
-                setError(registerResponse.status + " " + registerResponse.statusText)
+            if (true) {
+                // setError(registerResponse.status + " " + registerResponse.statusText)
                 return
             }
 
@@ -76,7 +76,7 @@ const Register: NextPageCustomProps = () => {
             if (response.ok) {
                 router.push(callbackUrl ?? routes.home)
             } else if (response.error) {
-                setError(response.error)
+                // setError(response.error)
             }
         } catch (error) {
             console.error(error)

@@ -1,3 +1,4 @@
+import axios from "axios"
 import { Form, Formik } from "formik"
 import { GetStaticProps, InferGetServerSidePropsType } from "next"
 import Head from "next/head"
@@ -109,12 +110,11 @@ function Home({ items }: InferGetServerSidePropsType<typeof getStaticProps>) {
 }
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
-	const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/items/list?page=1&limit=20&query=iphone 2020`)
-	const items = await response.json()
+	const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/items/list?page=1&limit=20&query=iphone 2020`)
 
 	return {
 		props: {
-			items: items.data
+			items: response.data.data
 		}
 	}
 }
