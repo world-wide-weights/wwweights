@@ -39,7 +39,7 @@ function Home({ items }: InferGetServerSidePropsType<typeof getStaticProps>) {
 	return (
 		<div>
 			<Head>
-				<title>World&lsquo;s largest database about weights! | World Wide Weights</title>
+				<title>World largest database about weights! | World Wide Weights</title>
 				<meta charSet="utf-8" />
 				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
 			</Head>
@@ -50,8 +50,8 @@ function Home({ items }: InferGetServerSidePropsType<typeof getStaticProps>) {
 
 				{/* Header */}
 				<div className="container flex flex-col items-center justify-center py-10 md:min-h-[30rem]">
-					<h1 className="text-white text-2xl md:text-4xl font-bold mb-1">How much weigh?</h1>
-					<p className="text-gray-200 mb-3 md:mb-6">World&lsquo;s largest database about weights!</p>
+					<h1 className="text-white text-2xl md:text-4xl font-bold mb-1">How much weighs?</h1>
+					<p className="text-gray-200 mb-3 md:mb-6">World largest database about weights!</p>
 
 					{/* Search */}
 					{/* TODO (Zoe-bot): Move formik stuff to search component */}
@@ -81,7 +81,7 @@ function Home({ items }: InferGetServerSidePropsType<typeof getStaticProps>) {
 				<div className="bg-blue-200 py-6">
 					<div className="container flex flex-col md:flex-row gap-5 justify-around">
 						<Stat icon="weight" value="31.000+" description="Weights" />
-						<Stat icon="person" value="300+" description="User" />
+						<Stat icon="person" value="300+" description="Users" />
 						<Stat icon="chat_bubble" value="10.000+" description="Contributions" />
 					</div>
 				</div>
@@ -90,7 +90,7 @@ function Home({ items }: InferGetServerSidePropsType<typeof getStaticProps>) {
 				<div className="bg-blue-900 py-10">
 					<div className="container flex flex-col items-center">
 						<h1 className="text-white text-3xl md:text-4xl text-center font-bold mb-1">Search for over <span className="text-blue-300">31,000+ weights</span></h1>
-						<p className="text-gray-200 text-center mb-3 md:mb-6">World&lsquo;s largest database about weights!</p>
+						<p className="text-gray-200 text-center mb-3 md:mb-6">World largest database about weights!</p>
 
 						<Formik initialValues={initialQueryValues} onSubmit={submitForm}>
 							<Form className="flex justify-center w-full">
