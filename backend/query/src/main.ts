@@ -15,15 +15,17 @@ async function bootstrap() {
   app.setGlobalPrefix('queries/v1');
 
   // Swagger
-  const config = new DocumentBuilder()
-    .setTitle('World Wide Weights Api')
-    .setDescription('The wwweights Api overview')
-    .setVersion('0.1')
-    .build();
-  const document = SwaggerModule.createDocument(app, config, {
-    ignoreGlobalPrefix: false,
-  });
-  SwaggerModule.setup('swagger', app, document);
+  if (process.env.RUNTIME_ENV === 'dev') {
+    const config = new DocumentBuilder()
+      .setTitle('World Wide Weights - Query API')
+      .setDescription('The wwweights Api overview')
+      .setVersion('0.1')
+      .build();
+    const document = SwaggerModule.createDocument(app, config, {
+      ignoreGlobalPrefix: false,
+    });
+    SwaggerModule.setup('swagger', app, document);
+  }
   app.enableCors();
   await app.listen(process.env.port || 3004);
 }
