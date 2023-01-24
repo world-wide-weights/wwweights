@@ -22,7 +22,7 @@ export class ItemStatisticsHandler
     try {
       // We currently also run textSearch on tags, optimizing via itemsByTags is a TODO
       const filter = getFilter(dto.query, dto.tags);
-      const facetedStatistics = await this.itemModel.aggregate<ItemStatistics>([
+      const statistics = await this.itemModel.aggregate<ItemStatistics>([
         { $match: filter },
         { $sort: { 'weight.value': -1 } },
         {
@@ -37,7 +37,7 @@ export class ItemStatisticsHandler
         { $project: { heaviest: 1, lightest: 1, averageWeight: 1 } },
       ]);
 
-      return facetedStatistics[0];
+      return statistics[0];
     } catch (error) {
       this.logger.error(error);
       throw new UnprocessableEntityException(

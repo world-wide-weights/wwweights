@@ -5,7 +5,7 @@ import { ReturnModelType } from '@typegoose/typegoose';
 import { Item } from '../../models/item.model';
 import { getFilter } from '../../shared/get-filter';
 import { getSort } from '../../shared/get-sort';
-import { CountedData } from '../interfaces/counted-items';
+import { DataWithCount } from '../interfaces/counted-items';
 import { ItemListQuery } from './item-list.query';
 
 @QueryHandler(ItemListQuery)
@@ -24,7 +24,7 @@ export class ItemListHandler implements IQueryHandler<ItemListQuery> {
       const filter = getFilter(dto.query, dto.tags, dto.slug);
 
       // TODO: Query through itemsByTags if tags are listed
-      const facetedResult = await this.itemModel.aggregate<CountedData>([
+      const facetedResult = await this.itemModel.aggregate<DataWithCount>([
         { $match: filter },
         // TODO: Find a fix for @ts-ignore
         // Unfortunately, we need to ignore the following line, because the fields are not known at compile time
