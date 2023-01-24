@@ -11,7 +11,7 @@ import * as fs from 'fs';
 import * as fsProm from 'fs/promises';
 import * as path from 'path';
 import * as sharp from 'sharp';
-import { RequestWithUser } from 'src/shared/interfaces/request-with-user.interface';
+import { RequestWithUser } from '../shared/interfaces/request-with-user.interface';
 import {
   pathBuilder,
   validateOrCreateDirectory,
@@ -59,10 +59,11 @@ export class UploadService {
         throw new ConflictException({
           message:
             'This file already seems to be uploaded (indicated by m5hash of file)',
-          location: `${hash}.${image.mimetype.split('/')[1]}`,
+          path: `${hash}.${image.mimetype.split('/')[1]}`,
         });
       }
-      await fsProm.rename(cachedFilePath, fileTargetPath);
+      // Copy rather than move to allow for "moving" accross devices (i.e. docker volumes)
+      await fsProm.copyFile(cachedFilePath, fileTargetPath);
     } catch (error) {
       this.logger.error(error);
       if (error instanceof HttpException) {
@@ -74,7 +75,7 @@ export class UploadService {
       await fsProm.rm(cachedFilePath, { force: true });
     }
     // TODO: Notify Auth backend about user event
-    return hash;
+    return { path: `${hash}.${image.mimetype.split('/')[1]}` };
   }
 
   /**

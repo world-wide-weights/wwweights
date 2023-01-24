@@ -10,6 +10,7 @@ import { JwtAuthGuard } from '../src/shared/guards/jwt.guard';
 import { FakeAuthGuardFactory } from './mocks/jwt-guard.mock';
 import * as path from 'path';
 import { pathBuilder } from '../src/shared/helpers/file-path.helpers';
+import { JwtStrategy } from '../src/shared/strategies/jwt.strategy';
 
 describe('UploadController (e2e)', () => {
   let app: INestApplication;
@@ -24,6 +25,8 @@ describe('UploadController (e2e)', () => {
       .useValue(ConfigModule.forRoot({ isGlobal: true, ignoreEnvFile: true }))
       .overrideGuard(JwtAuthGuard)
       .useValue(fakeGuard.getGuard())
+      .overrideProvider(JwtStrategy)
+      .useValue(null)
       .compile();
     app = moduleFixture.createNestApplication();
     uploadService = app.get<UploadService>(UploadService);
@@ -83,6 +86,20 @@ describe('UploadController (e2e)', () => {
           1,
         );
       });
+      it('Should clean temporary image storage when uploading image', async () => {
+        // ACT
+        const res = await request(app.getHttpServer())
+          .post('/upload/image')
+          .attach(
+            'image',
+            path.join(process.cwd(), 'test', 'helpers', 'test-oversized.png'),
+          );
+        // ASSERT
+        expect(res.statusCode).toEqual(HttpStatus.CREATED);
+        expect(fs.readdirSync(pathBuilder(undefined, 'cache')).length).toEqual(
+          0,
+        );
+      });
       // File size limitation not tested for obvious reasons
     });
     describe('Negative Tests', () => {
@@ -129,7 +146,7 @@ describe('UploadController (e2e)', () => {
           );
         // ASSERT
         expect(res.statusCode).toEqual(HttpStatus.CONFLICT);
-        expect(res.body.location).toEqual(`${fileHash}.png`);
+        expect(res.body.path).toEqual(`${fileHash}.png`);
         expect(fs.readdirSync(pathBuilder(undefined, 'disk')).length).toEqual(
           1,
         );
