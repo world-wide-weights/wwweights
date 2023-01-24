@@ -78,7 +78,7 @@ describe('QueryController (e2e)', () => {
           .query({ query: 'android' })
           .expect(HttpStatus.OK);
 
-        expect(result.body).toHaveLength(16);
+        expect(result.body.data).toHaveLength(16);
       });
 
       it('should return 16 items searching with tags for android (74 total)', async () => {
@@ -87,7 +87,7 @@ describe('QueryController (e2e)', () => {
           .query({ tags: ['android'] })
           .expect(HttpStatus.OK);
 
-        expect(result.body).toHaveLength(16);
+        expect(result.body.data).toHaveLength(16);
       });
 
       it('should not return items if we remove the tags containing android', async () => {
@@ -98,7 +98,7 @@ describe('QueryController (e2e)', () => {
           .query({ query: 'android' })
           .expect(HttpStatus.OK);
 
-        expect(result.body).toHaveLength(0);
+        expect(result.body.data).toHaveLength(0);
       });
 
       it('should consistently sort by relevance', async () => {
@@ -110,7 +110,7 @@ describe('QueryController (e2e)', () => {
             .get(queriesPath + subPath)
             .query({ query: 'matching 1' })
             .expect(HttpStatus.OK);
-          results.push(result.body[0]);
+          results.push(result.body.data[0]);
         }
 
         for (const result of results) {
@@ -118,7 +118,7 @@ describe('QueryController (e2e)', () => {
         }
       });
 
-      it('should return lightest first by same partial name', async () => {
+      it('should consistently return lightest first by same partial name', async () => {
         await itemModel.deleteMany();
         await itemModel.insertMany(relatedItems);
         const results = [];
@@ -127,7 +127,7 @@ describe('QueryController (e2e)', () => {
             .get(queriesPath + subPath)
             .query({ query: 'matching', sort: SortEnum.LIGHTEST })
             .expect(HttpStatus.OK);
-          results.push(result.body[0]);
+          results.push(result.body.data[0]);
         }
 
         for (const result of results) {
@@ -135,7 +135,7 @@ describe('QueryController (e2e)', () => {
         }
       });
 
-      it('should return heaviest first by same partial name', async () => {
+      it('should consistently return heaviest first by same partial name', async () => {
         await itemModel.deleteMany();
         await itemModel.insertMany(relatedItems);
         const results = [];
@@ -144,7 +144,7 @@ describe('QueryController (e2e)', () => {
             .get(queriesPath + subPath)
             .query({ query: 'matching', sort: SortEnum.HEAVIEST })
             .expect(HttpStatus.OK);
-          results.push(result.body[0]);
+          results.push(result.body.data[0]);
         }
 
         for (const result of results) {
@@ -161,8 +161,8 @@ describe('QueryController (e2e)', () => {
           .query({ sort: SortEnum.HEAVIEST, slug: 'matching-1' })
           .expect(HttpStatus.OK);
 
-        expect(result.body).toHaveLength(1);
-        expect(result.body[0].name).toEqual('matching 1');
+        expect(result.body.data).toHaveLength(1);
+        expect(result.body.data[0].name).toEqual('matching 1');
       });
 
       it('should return the latest items without any specifications', async () => {
@@ -172,11 +172,12 @@ describe('QueryController (e2e)', () => {
           .get(queriesPath + subPath)
           .expect(HttpStatus.OK);
 
-        expect(result.body).toHaveLength(16);
-        expect(result.body[0].name).toEqual('item 29');
-        expect(result.body[15].name).toEqual('item 14');
+        expect(result.body.data).toHaveLength(16);
+        expect(result.body.data[0].name).toEqual('item 29');
+        expect(result.body.data[15].name).toEqual('item 14');
       });
     });
+
     describe('items/related', () => {
       const subPath = 'items/related';
       it('should return the related items', async () => {
@@ -191,8 +192,8 @@ describe('QueryController (e2e)', () => {
           .filter((item) => item.slug !== relatedItems[0].slug)
           .map((item) => item.name);
 
-        expect(result.body).toHaveLength(2);
-        for (const item of result.body) {
+        expect(result.body.data).toHaveLength(2);
+        for (const item of result.body.data) {
           expect(otherItemNames).toContain(item.name);
         }
       });
