@@ -15,7 +15,7 @@ async function bootstrap() {
   app.setGlobalPrefix('commands/v1');
 
   // Swagger
-  if (process.env.RUNTIME_ENV === 'dev') {
+  if (process.env.RUNTIME_ENV !== 'prod') {
     const config = new DocumentBuilder()
       .setTitle('World Wide Weights - Command API')
       .setDescription('The wwweights Api overview')
