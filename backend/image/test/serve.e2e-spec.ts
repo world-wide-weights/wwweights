@@ -1,12 +1,11 @@
-import { HttpStatus, INestApplication } from '@nestjs/common';
+import { HttpStatus } from '@nestjs/common';
 import { AppModule } from '../src/app.module';
 import { pathBuilder } from '../src/shared/helpers/file-path.helpers';
 import { copyTestFile, emptyDir } from './helpers/file.helper';
-import * as fs from 'fs';
-import * as path from 'path';
 import * as request from 'supertest';
 import { NestFactory } from '@nestjs/core';
 import * as dotenv from 'dotenv';
+jest.mock('../src/shared/strategies/jwt.strategy');
 
 describe('Image serve e2e', () => {
   dotenv.config();
