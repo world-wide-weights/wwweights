@@ -10,6 +10,7 @@ import { JwtAuthGuard } from '../src/shared/guards/jwt.guard';
 import { FakeAuthGuardFactory } from './mocks/jwt-guard.mock';
 import * as path from 'path';
 import { pathBuilder } from '../src/shared/helpers/file-path.helpers';
+import { JwtStrategy } from '../src/shared/strategies/jwt.strategy';
 
 describe('UploadController (e2e)', () => {
   let app: INestApplication;
@@ -24,6 +25,8 @@ describe('UploadController (e2e)', () => {
       .useValue(ConfigModule.forRoot({ isGlobal: true, ignoreEnvFile: true }))
       .overrideGuard(JwtAuthGuard)
       .useValue(fakeGuard.getGuard())
+      .overrideProvider(JwtStrategy)
+      .useValue(null)
       .compile();
     app = moduleFixture.createNestApplication();
     uploadService = app.get<UploadService>(UploadService);
