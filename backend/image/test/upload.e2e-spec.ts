@@ -146,7 +146,7 @@ describe('UploadController (e2e)', () => {
           );
         // ASSERT
         expect(res.statusCode).toEqual(HttpStatus.CONFLICT);
-        expect(res.body.location).toEqual(`${fileHash}.png`);
+        expect(res.body.path).toEqual(`${fileHash}.png`);
         expect(fs.readdirSync(pathBuilder(undefined, 'disk')).length).toEqual(
           1,
         );
