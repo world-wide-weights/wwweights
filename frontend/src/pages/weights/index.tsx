@@ -157,6 +157,7 @@ export default function WeightsList({ data, currentPage, totalItems, limit, quer
 }
 
 export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (context) => {
+    console.log("getall")
     const currentPage = parseInt(context.query.page as string ?? FIRST_PAGE)
     const limit = parseInt(context.query.limit as string ?? DEFAULT_ITEMS_PER_PAGE)
     const query = context.query.query as string ?? ""
@@ -176,13 +177,17 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
         axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/items/statistics?query=${query}`),
     ])
 
+    console.log(itemsResponse, statisticResponse)
+
     // Read jsons from items and statistics
     const [items, statistics] = [
         itemsResponse.data,
         statisticResponse.data
     ]
 
-    const totalItems = parseInt(items.total)
+    console.log(items, statistics)
+
+    const totalItems = items.total
 
     return {
         props: {
