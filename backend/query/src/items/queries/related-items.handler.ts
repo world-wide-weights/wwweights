@@ -5,7 +5,7 @@ import { ReturnModelType } from '@typegoose/typegoose';
 import { Item } from '../../models/item.model';
 import { getFilter } from '../../shared/get-filter';
 import { getSort } from '../../shared/get-sort';
-import { CountedItems } from '../interfaces/counted-items';
+import { DataWithCount } from '../interfaces/counted-items';
 import { SortEnum } from '../interfaces/sortEnum';
 import { ItemRelatedQuery } from './related-items.query';
 
@@ -44,37 +44,38 @@ export class ItemRelatedHandler implements IQueryHandler<ItemRelatedQuery> {
       const filter = getFilter(item.name + ' ' + itemTagNames.join(' '));
       const sort = getSort(SortEnum.RELEVANCE, true);
 
-      const facetedResult = await this.itemModel.aggregate<CountedItems>([
-        {
-          $match: {
-            $and: [filter, { slug: { $ne: dto.slug } }],
+      const relatedItemsWithCount =
+        await this.itemModel.aggregate<DataWithCount>([
+          {
+            $match: {
+              $and: [filter, { slug: { $ne: dto.slug } }],
+            },
           },
-        },
-        // TODO: Find a fix for @ts-ignore
-        // Unfortunately, we need to ignore the following line, because the fields are not known at compile time
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-ignore
-        { $sort: sort },
-        {
-          $facet: {
-            items: [
-              { $skip: (dto.page - 1) * dto.limit },
-              { $limit: dto.limit },
-            ],
-            total: [{ $count: 'count' }],
+          // TODO: Find a fix for @ts-ignore
+          // Unfortunately, we need to ignore the following line, because the fields are not known at compile time
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          { $sort: sort },
+          {
+            $facet: {
+              data: [
+                { $skip: (dto.page - 1) * dto.limit },
+                { $limit: dto.limit },
+              ],
+              total: [{ $count: 'count' }],
+            },
           },
-        },
-      ]);
+        ]);
 
       this.logger.log(
-        `Related Items found:  ${facetedResult[0].total[0].count}`,
+        `Related Items found:  ${relatedItemsWithCount[0].total[0].count}`,
       );
 
       return {
-        total: facetedResult[0].total[0]?.count || 0,
+        total: relatedItemsWithCount[0].total[0]?.count || 0,
         page: dto.page,
         limit: dto.limit,
-        items: facetedResult[0].items,
+        data: relatedItemsWithCount[0].data,
       };
     } catch (error) {
       this.logger.error(error);
