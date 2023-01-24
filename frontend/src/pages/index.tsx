@@ -32,7 +32,7 @@ function Home({ items }: InferGetServerSidePropsType<typeof getStaticProps>) {
 	 * @param formValues 
 	 */
 	const submitForm = (formValues: typeof initialQueryValues) => {
-		router.push(routes.weights.list({ sort: "asc", query: formValues.query }))
+		router.push(routes.weights.list({ query: formValues.query }))
 	}
 
 	return (
@@ -70,7 +70,7 @@ function Home({ items }: InferGetServerSidePropsType<typeof getStaticProps>) {
 					<h2 className="text-2xl md:text-3xl text-blue-800 text-center font-bold mb-1">Explore 31,000+ weights</h2>
 					<p className="text-gray-600 text-center mb-4 md:mb-8">World Wide weights is a website wehere you can discover the weights for all items you can imagine. Explore the largest database about weights!</p>
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-2 md:gap-5 mb-5 md:mb-8 w-full">
-						{items.map((item) => <ItemPreviewGrid key={item.slug} {...item} imageUrl="https://picsum.photos/200" />)}
+						{items.map((item) => <ItemPreviewGrid key={item.slug} {...item} imageUrl={item.image} />)}
 					</div>
 
 					<Button className="mb-2" to={routes.weights.list()} icon="weight">Show all weights</Button>
@@ -109,12 +109,12 @@ function Home({ items }: InferGetServerSidePropsType<typeof getStaticProps>) {
 }
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
-	const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/items?_page=1&_limit=20`)
+	const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/items/list?page=1&limit=20&query=iphone 2020`)
 	const items = await response.json()
 
 	return {
 		props: {
-			items
+			items: items.data
 		}
 	}
 }

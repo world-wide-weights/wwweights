@@ -144,7 +144,7 @@ export default function WeightsList({ data, currentPage, totalItems, limit, quer
                                     <div className={`${statisticsExpanded ? "flex flex-col lg:flex-row" : "grid"} flex-grow md:flex-auto gap-2 lg:gap-4`}>
                                         <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="weight" value={generateWeightString(statistics.heaviest.weight)} descriptionTop={statistics.heaviest.name} descriptionBottom="Heaviest" />
                                         <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="eco" value={generateWeightString(statistics.lightest.weight)} descriptionTop={statistics.lightest.name} descriptionBottom="Lightest" />
-                                        <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="scale" value={`${statistics.averageWeight} g`} descriptionBottom="Average" />
+                                        <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="scale" value={`${Number(statistics.averageWeight).toFixed(2)} g`} descriptionBottom="Average" />
                                     </div>
                                 </div>
                             </div>
@@ -172,7 +172,7 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
     const [itemsResponse, statisticResponse] = await Promise.all([
         // TODO (Zoe-Bot): Update api endpoint when correct api is used
         fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/items/list?page=${currentPage}&limit=${limit}&sort=${sort}&query=${query}`),
-        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/items/statistics`),
+        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/items/statistics?query=${query}`),
     ])
 
     // Read jsons from items and statistics
@@ -191,65 +191,7 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
             totalItems,
             query,
             sort,
-            statistics: {
-                "heaviest": {
-                    "id": "230",
-                    "name": "Clio C-1000",
-                    "slug": "clio-c-1000",
-                    "weight": {
-                        "value": 998,
-                        "isCa": false
-                    },
-                    "source": "https://phonedb.net/",
-                    "tags": [
-                        {
-                            "name": "Vadem",
-                            "slug": "vadem"
-                        },
-                        {
-                            "name": "1998 Nov",
-                            "slug": "1998-nov"
-                        },
-                        {
-                            "name": "Windows (mobile-class)",
-                            "slug": "windows-(mobile-class)"
-                        },
-                        {
-                            "name": "Notebook",
-                            "slug": "notebook"
-                        }
-                    ]
-                },
-                "lightest": {
-                    "id": "105",
-                    "name": "iPAQ H6340 / H6345",
-                    "slug": "ipaq-h6340-h6345",
-                    "weight": {
-                        "value": 1,
-                        "isCa": false
-                    },
-                    "source": "https://phonedb.net/",
-                    "tags": [
-                        {
-                            "name": "Hewlett-Packard",
-                            "slug": "hewlett-packard"
-                        },
-                        {
-                            "name": "2004 Jul",
-                            "slug": "2004-jul"
-                        },
-                        {
-                            "name": "Windows (mobile-class)",
-                            "slug": "windows-(mobile-class)"
-                        },
-                        {
-                            "name": "Smartphone",
-                            "slug": "smartphone"
-                        }
-                    ]
-                },
-                "averageWeight": 500
-            }
+            statistics
         }
     }
 }
