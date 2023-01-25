@@ -32,7 +32,7 @@ const valueForEachUnit: { value: number, unit: Unit}[] = [
 },
 {
   "value": 1e6,
-  "unit": "Mg"
+  "unit": "T"
 },
 {
   "value": 1e3,

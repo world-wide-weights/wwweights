@@ -13,7 +13,7 @@ const commaShiftsForUnit: { [K in Unit]: number } = {
   mg: -3,
   g: 0,
   kg: 3,
-  Mg: 6,
+  T: 6,
   Tg: 12,
   Pg: 15,
   Eg: 18,

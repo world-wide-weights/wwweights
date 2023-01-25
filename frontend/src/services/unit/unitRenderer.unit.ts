@@ -11,7 +11,7 @@ describe("unitRenderer", () => {
             value: 123243342,
             additionalValue: 123289765,
             isCa: true
-        })).deep.equal("ca. 123.24 - 123.29 Mg")
+        })).deep.equal("ca. 123.24 - 123.29 T")
         expect(renderUnitIntoString({
             value: 9,
             additionalValue: 0,
@@ -34,7 +34,7 @@ describe("unitRenderer", () => {
             value: 123243342,
             additionalValue: 123289765,
             isCa: false
-        })).deep.equal("123.24 - 123.29 Mg")
+        })).deep.equal("123.24 - 123.29 T")
         expect(renderUnitIntoString({
             value: 9,
             additionalValue: 0,
@@ -57,7 +57,7 @@ describe("unitRenderer", () => {
             value: 123243342,
             additionalValue: 123289765,
             isCa: false
-        })).deep.equal("123.24 - 123.29 Mg")
+        })).deep.equal("123.24 - 123.29 T")
         expect(renderUnitIntoString({
             value: 9,
             additionalValue: 40,
@@ -80,7 +80,7 @@ describe("unitRenderer", () => {
             value: 123243342,
             additionalValue: 0,
             isCa: false
-        })).deep.equal("123.24 Mg")
+        })).deep.equal("123.24 T")
         expect(renderUnitIntoString({
             value: 9,
             additionalValue: 0,
@@ -103,7 +103,7 @@ describe("unitRenderer", () => {
             value: 123243342.1233413,
             additionalValue: 153474223.1233413,
             isCa: false
-        })).deep.equal("123.24 - 153.47 Mg")
+        })).deep.equal("123.24 - 153.47 T")
         expect(renderUnitIntoString({
             value: 0.273213,
             additionalValue: 0.671823,

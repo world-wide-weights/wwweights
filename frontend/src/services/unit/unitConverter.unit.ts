@@ -29,7 +29,7 @@ describe("UnitConverter", () => {
       expect(convertAnyWeightIntoGram(new BigNumber(1), "mg").toNumber()).equal(0.001)
       expect(convertAnyWeightIntoGram(new BigNumber(1), "g").toNumber()).equal(1)
       expect(convertAnyWeightIntoGram(new BigNumber(1), "kg").toNumber()).equal(1000)
-      expect(convertAnyWeightIntoGram(new BigNumber(1), "Mg").toNumber()).equal(1e6)
+      expect(convertAnyWeightIntoGram(new BigNumber(1), "T").toNumber()).equal(1e6)
       expect(convertAnyWeightIntoGram(new BigNumber(1), "Tg").toNumber()).equal(1e12)
       expect(convertAnyWeightIntoGram(new BigNumber(1), "Pg").toNumber()).equal(1e15)
     })
@@ -42,7 +42,7 @@ describe("UnitConverter", () => {
       expect(convertWeightIntoTargetUnit(new BigNumber(1), "mg")).equal(1000)
       expect(convertWeightIntoTargetUnit(new BigNumber(1), "g")).equal(1)
       expect(convertWeightIntoTargetUnit(new BigNumber(1), "kg")).equal(0.001)
-      expect(convertWeightIntoTargetUnit(new BigNumber(1), "Mg")).equal(1e-6)
+      expect(convertWeightIntoTargetUnit(new BigNumber(1), "T")).equal(1e-6)
       expect(convertWeightIntoTargetUnit(new BigNumber(1), "Tg")).equal(1e-12)
       expect(convertWeightIntoTargetUnit(new BigNumber(1), "Pg")).equal(1e-15)
     })
@@ -53,7 +53,7 @@ describe("UnitConverter", () => {
         value: 1e18,
         unit: "mg",
       })
-      expect(convertWeightIntoUnit(1, "Mg", "ng")).deep.equal({
+      expect(convertWeightIntoUnit(1, "T", "ng")).deep.equal({
         value: 1e15,
         unit: "ng",
       })
@@ -61,7 +61,7 @@ describe("UnitConverter", () => {
         value: 1e6,
         unit: "mg",
       })
-      expect(convertWeightIntoUnit(1, "Mg", "Tg")).deep.equal({
+      expect(convertWeightIntoUnit(1, "T", "Tg")).deep.equal({
         value: 1e-6,
         unit: "Tg",
       })
@@ -69,9 +69,9 @@ describe("UnitConverter", () => {
         value: 1e9,
         unit: "pg",
       })
-      expect(convertWeightIntoUnit(1, "pg", "Mg")).deep.equal({
+      expect(convertWeightIntoUnit(1, "pg", "T")).deep.equal({
         value: 1e-18,
-        unit: "Mg",
+        unit: "T",
       })
       expect(convertWeightIntoUnit(1, "kg", "µg")).deep.equal({
         value: 1e9,
@@ -84,7 +84,7 @@ describe("UnitConverter", () => {
         value: 1e20,
         unit: "mg",
       })
-      expect(convertWeightIntoUnit(0.23, "Mg", "ng")).deep.equal({
+      expect(convertWeightIntoUnit(0.23, "T", "ng")).deep.equal({
         value: 2.3e14,
         unit: "ng",
       })
@@ -92,7 +92,7 @@ describe("UnitConverter", () => {
         value: 1.444423e12,
         unit: "mg",
       })
-      expect(convertWeightIntoUnit(5, "Mg", "Tg")).deep.equal({
+      expect(convertWeightIntoUnit(5, "T", "Tg")).deep.equal({
         value: 5e-6,
         unit: "Tg",
       })
@@ -112,9 +112,9 @@ describe("UnitConverter", () => {
         value: 12.34,
         unit: "g",
       })
-      expect(convertWeightIntoUnit(1.234e-2, "Mg", "Mg")).deep.equal({
+      expect(convertWeightIntoUnit(1.234e-2, "T", "T")).deep.equal({
         value: 0.01234,
-        unit: "Mg",
+        unit: "T",
       })
     })
   })

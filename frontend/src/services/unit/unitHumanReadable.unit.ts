@@ -41,8 +41,8 @@ describe("unitHumanReadable", () => {
     })
 
     it("it should choose Mg for best readable Unit", () => {
-        expect(getBestHumanReadableUnit(145000000)).deep.equal({ value: 145, unit: "Mg" })
-        expect(getBestHumanReadableUnit(8240000000)).deep.equal({ value: 8240, unit: "Mg" })
+        expect(getBestHumanReadableUnit(145000000)).deep.equal({ value: 145, unit: "T" })
+        expect(getBestHumanReadableUnit(8240000000)).deep.equal({ value: 8240, unit: "T" })
     })
 
     it("it should choose kg for best readable Unit", () => {
