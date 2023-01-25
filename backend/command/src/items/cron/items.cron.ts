@@ -19,7 +19,7 @@ export class ItemCronJobHandler {
    * @description  Looksup all the tags the item has from the tagModel and updates its array
    */
   @Cron(CronExpression.EVERY_HOUR)
-  async updateAllItemTagCounts() {
+  async correctAllItemTagCounts() {
     try {
       // Here an aggregate because for some reason a $lookup and then $set did not update the document in a model.findOneAndUpdate()
       await this.itemModel.aggregate([
@@ -43,13 +43,14 @@ export class ItemCronJobHandler {
     } catch (error) {
       this.logger.error(error);
     }
+    this.logger.log('Sucessfully updated item tag counts');
   }
 
   /**
    * @description Lookup all the items the itemsByTags has from the itemModel and updates its array
    */
   @Cron(CronExpression.EVERY_HOUR)
-  async updateAllItemsByTagCounts() {
+  async correctAllItemsByTagCounts() {
     // Since other items can be inserted in the meantime, causing the count to be off, we can't go for the fastest solution of $inc, but have to actually fetch the data again.
     // This is fine since it is a readDB and doesn't have to be written on fast
     try {
