@@ -24,7 +24,9 @@ export class ItemListHandler implements IQueryHandler<ItemListQuery> {
       const filter = getFilter(dto.query, dto.tags, dto.slug);
 
       // TODO: Query through itemsByTags if tags are listed
-      const itemListWithCount = await this.itemModel.aggregate<DataWithCount>([
+      const itemListWithCount = await this.itemModel.aggregate<
+        DataWithCount<Item>
+      >([
         { $match: filter },
         // TODO: Find a fix for @ts-ignore
         // Unfortunately, we need to ignore the following line, because the fields are not known at compile time

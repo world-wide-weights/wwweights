@@ -44,33 +44,32 @@ export class ItemRelatedHandler implements IQueryHandler<ItemRelatedQuery> {
       const filter = getFilter(item.name + ' ' + itemTagNames.join(' '));
       const sort = getSort(ItemSortEnum.RELEVANCE, true);
 
-      const relatedItemsWithCount =
-        await this.itemModel.aggregate<DataWithCount>([
-          {
-            $match: {
-              $and: [filter, { slug: { $ne: dto.slug } }],
-            },
+      const relatedItemsWithCount = await this.itemModel.aggregate<
+        DataWithCount<Item>
+      >([
+        {
+          $match: {
+            $and: [filter, { slug: { $ne: dto.slug } }],
           },
-          // TODO: Find a fix for @ts-ignore
-          // Unfortunately, we need to ignore the following line, because the fields are not known at compile time
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          //@ts-ignore
-          { $sort: sort },
-          {
-            $facet: {
-              data: [
-                { $skip: (dto.page - 1) * dto.limit },
-                { $limit: dto.limit },
-              ],
-              total: [{ $count: 'count' }],
-            },
+        },
+        // TODO: Find a fix for @ts-ignore
+        // Unfortunately, we need to ignore the following line, because the fields are not known at compile time
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        { $sort: sort },
+        {
+          $facet: {
+            data: [
+              { $skip: (dto.page - 1) * dto.limit },
+              { $limit: dto.limit },
+            ],
+            total: [{ $count: 'count' }],
           },
-        ]);
+        },
+      ]);
 
       this.logger.log(
-        `Related Items found:  ${
-          relatedItemsWithCount[0].total[0]?.count || 0
-        }`,
+        `Related Items found: ${relatedItemsWithCount[0].total[0]?.count || 0}`,
       );
 
       return {

@@ -28,7 +28,6 @@ export class TagsController {
   async getTagsList(@Query() dto: QueryTagListDto) {
     this.logger.log(`Get tag list`);
     const result = await this.queryBus.execute(new TagListQuery(dto));
-    this.logger.debug(result);
     return new PaginatedResult<Tag>(result, Tag);
   }
 

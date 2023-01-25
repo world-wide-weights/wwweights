@@ -2,6 +2,7 @@ import { InjectModel } from '@m8a/nestjs-typegoose';
 import { Logger, UnprocessableEntityException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
+import { DataWithCount } from '../../items/interfaces/counted-items';
 import { TagSortEnum } from '../interfaces/tag-sort-enum';
 import { Tag } from '../models/tag.model';
 import { TagListQuery } from './tag-list.query';
@@ -23,25 +24,35 @@ export class TagListHandler implements IQueryHandler<TagListQuery> {
           : dto.sort === TagSortEnum.MOST_USED
           ? { count: -1 }
           : { name: 1 };
-      const tagCount = await this.tagModel.count();
-      const tagList = await this.tagModel
-        .find<Tag>()
+
+      const tagListWithCount = await this.tagModel.aggregate<
+        DataWithCount<Tag>
+      >([
+        // TODO: Find a fix for @ts-ignore
+        // Unfortunately, we need to ignore the following line, because the fields are not known at compile time
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
-        .sort(sort)
-        .select({ _id: 0 })
-        .skip((dto.page - 1) * dto.limit)
-        .limit(dto.limit)
-        .exec();
+        { $sort: sort },
+        {
+          $facet: {
+            data: [
+              { $skip: (dto.page - 1) * dto.limit },
+              { $limit: dto.limit },
+            ],
+            total: [{ $count: 'count' }],
+          },
+        },
+      ]);
 
-      this.logger.log(`Tags found:  ${tagCount}`);
+      this.logger.log(
+        `Tags found: ${tagListWithCount[0].total[0]?.count || 0}`,
+      );
 
-      this.logger.debug(tagList);
       return {
-        total: tagCount,
+        total: tagListWithCount[0].total[0]?.count || 0,
         page: dto.page,
         limit: dto.limit,
-        data: tagList,
+        data: tagListWithCount[0].data,
       };
     } catch (error) {
       this.logger.error(error);

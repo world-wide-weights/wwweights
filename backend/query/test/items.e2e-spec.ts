@@ -212,7 +212,6 @@ describe('QueryController (e2e)', () => {
           .query({ query: relatedItems[0].tags[0].name })
           .expect(HttpStatus.OK);
 
-        console.log(result.body.heaviest);
         expect(result.body.heaviest.weight.value).toEqual(102);
         expect(result.body.lightest.weight.value).toEqual(100);
         expect(result.body.averageWeight).toEqual(101);
