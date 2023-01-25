@@ -2,10 +2,10 @@ import { InjectModel } from '@m8a/nestjs-typegoose';
 import { Logger, UnprocessableEntityException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
-import { Item } from '../../models/item.model';
 import { getFilter } from '../../shared/get-filter';
 import { getSort } from '../../shared/get-sort';
 import { DataWithCount } from '../interfaces/counted-items';
+import { Item } from '../models/item.model';
 import { ItemListQuery } from './item-list.query';
 
 @QueryHandler(ItemListQuery)
@@ -24,7 +24,7 @@ export class ItemListHandler implements IQueryHandler<ItemListQuery> {
       const filter = getFilter(dto.query, dto.tags, dto.slug);
 
       // TODO: Query through itemsByTags if tags are listed
-      const facetedResult = await this.itemModel.aggregate<DataWithCount>([
+      const itemListWithCount = await this.itemModel.aggregate<DataWithCount>([
         { $match: filter },
         // TODO: Find a fix for @ts-ignore
         // Unfortunately, we need to ignore the following line, because the fields are not known at compile time
@@ -42,13 +42,15 @@ export class ItemListHandler implements IQueryHandler<ItemListQuery> {
         },
       ]);
 
-      this.logger.log(`Items found:  ${facetedResult[0].total[0]?.count || 0}`);
+      this.logger.log(
+        `Items found: ${itemListWithCount[0].total[0]?.count || 0}`,
+      );
 
       return {
-        total: facetedResult[0].total[0]?.count || 0,
+        total: itemListWithCount[0].total[0]?.count || 0,
         page: dto.page,
         limit: dto.limit,
-        data: facetedResult[0].data,
+        data: itemListWithCount[0].data,
       };
     } catch (error) {
       this.logger.error(error);

@@ -2,16 +2,16 @@ import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { Model } from 'mongoose';
 import * as request from 'supertest';
 import { ItemsModule } from '../src/items/items.module';
-import { Item } from '../src/models/item.model';
+import { Item } from '../src/items/models/item.model';
 import { ItemsByTag } from '../src/models/items-by-tag.model';
-import { Tag } from '../src/models/tag.model';
+import { Tag } from '../src/tags/models/tag.model';
 import {
   initializeMockModule,
   teardownMockDataSource,
 } from './helpers/MongoMemoryHelpers';
 
 import { Test, TestingModule } from '@nestjs/testing';
-import { SortEnum } from '../src/items/interfaces/sortEnum';
+import { ItemSortEnum } from '../src/items/interfaces/item-sort-enum';
 import { items, itemsWithDates, relatedItems } from './mocks/items';
 import { itemsByTags } from './mocks/itemsbytags';
 import { tags } from './mocks/tags';
@@ -125,7 +125,7 @@ describe('QueryController (e2e)', () => {
         for (let i = 0; i < 20; i++) {
           const result = await request(server)
             .get(queriesPath + subPath)
-            .query({ query: 'matching', sort: SortEnum.LIGHTEST })
+            .query({ query: 'matching', sort: ItemSortEnum.LIGHTEST })
             .expect(HttpStatus.OK);
           results.push(result.body.data[0]);
         }
@@ -142,7 +142,7 @@ describe('QueryController (e2e)', () => {
         for (let i = 0; i < 20; i++) {
           const result = await request(server)
             .get(queriesPath + subPath)
-            .query({ query: 'matching', sort: SortEnum.HEAVIEST })
+            .query({ query: 'matching', sort: ItemSortEnum.HEAVIEST })
             .expect(HttpStatus.OK);
           results.push(result.body.data[0]);
         }
@@ -158,7 +158,7 @@ describe('QueryController (e2e)', () => {
 
         const result = await request(server)
           .get(queriesPath + subPath)
-          .query({ sort: SortEnum.HEAVIEST, slug: 'matching-1' })
+          .query({ sort: ItemSortEnum.HEAVIEST, slug: 'matching-1' })
           .expect(HttpStatus.OK);
 
         expect(result.body.data).toHaveLength(1);

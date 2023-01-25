@@ -2,11 +2,11 @@ import { InjectModel } from '@m8a/nestjs-typegoose';
 import { Logger, UnprocessableEntityException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
-import { Item } from '../../models/item.model';
 import { getFilter } from '../../shared/get-filter';
 import { getSort } from '../../shared/get-sort';
 import { DataWithCount } from '../interfaces/counted-items';
-import { SortEnum } from '../interfaces/sortEnum';
+import { ItemSortEnum } from '../interfaces/item-sort-enum';
+import { Item } from '../models/item.model';
 import { ItemRelatedQuery } from './related-items.query';
 
 @QueryHandler(ItemRelatedQuery)
@@ -42,7 +42,7 @@ export class ItemRelatedHandler implements IQueryHandler<ItemRelatedQuery> {
     try {
       const itemTagNames = item.tags.map((tag) => tag.name);
       const filter = getFilter(item.name + ' ' + itemTagNames.join(' '));
-      const sort = getSort(SortEnum.RELEVANCE, true);
+      const sort = getSort(ItemSortEnum.RELEVANCE, true);
 
       const relatedItemsWithCount =
         await this.itemModel.aggregate<DataWithCount>([
@@ -68,7 +68,9 @@ export class ItemRelatedHandler implements IQueryHandler<ItemRelatedQuery> {
         ]);
 
       this.logger.log(
-        `Related Items found:  ${relatedItemsWithCount[0].total[0]?.count || 0}`,
+        `Related Items found:  ${
+          relatedItemsWithCount[0].total[0]?.count || 0
+        }`,
       );
 
       return {
