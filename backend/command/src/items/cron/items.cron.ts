@@ -18,7 +18,7 @@ export class ItemCronJobHandler {
   /**
    * @description  Looksup all the tags the item has from the tagModel and updates its array
    */
-  @Cron(CronExpression.EVERY_HOUR)
+  @Cron(CronExpression.EVERY_10_MINUTES)
   async correctAllItemTagCounts() {
     // Performance
     const updateTagCountStart = performance.now();
@@ -60,7 +60,7 @@ export class ItemCronJobHandler {
   /**
    * @description Lookup all the items the itemsByTags has from the itemModel and updates its array
    */
-  @Cron(CronExpression.EVERY_HOUR)
+  @Cron(CronExpression.EVERY_10_MINUTES)
   async correctAllItemsByTagCounts() {
     // Since other items can be inserted in the meantime, causing the count to be off, we can't go for the fastest solution of $inc, but have to actually fetch the data again.
     // This is fine since it is a readDB and doesn't have to be written on fast
