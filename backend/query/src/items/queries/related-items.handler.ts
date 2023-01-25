@@ -68,7 +68,7 @@ export class ItemRelatedHandler implements IQueryHandler<ItemRelatedQuery> {
         ]);
 
       this.logger.log(
-        `Related Items found:  ${relatedItemsWithCount[0].total[0].count}`,
+        `Related Items found:  ${relatedItemsWithCount[0].total[0]?.count || 0}`,
       );
 
       return {
