@@ -226,7 +226,7 @@ describe('QueryController (e2e)', () => {
         expect(result.body.averageWeight).toEqual(101);
       });
 
-      it('should return empty objects if no item can be found', async () => {
+      it('should throw unproccessable Entity if no item can be found', async () => {
         await itemModel.deleteMany();
         await request(server)
           .get(queriesPath + subPath)
