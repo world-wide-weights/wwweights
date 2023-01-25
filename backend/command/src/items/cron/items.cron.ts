@@ -49,7 +49,7 @@ export class ItemCronJobHandler {
           performance.now() - updateTagCountStart
         } (Job failed)`,
       );
-      return
+      return;
     }
     this.logger.log(
       `Cronjob for Tag count in Items finished in${
@@ -96,7 +96,7 @@ export class ItemCronJobHandler {
           performance.now() - updateTagCountStart
         } (Job failed)`,
       );
-      return
+      return;
     }
     this.logger.log(
       `Cronjob for updating Tag Counts in ItemsByTag finished in${
