@@ -20,6 +20,8 @@ export class ItemCronJobHandler {
    */
   @Cron(CronExpression.EVERY_HOUR)
   async correctAllItemTagCounts() {
+    // Performance
+    const updateTagCountStart = performance.now();
     try {
       // Here an aggregate because for some reason a $lookup and then $set did not update the document in a model.findOneAndUpdate()
       await this.itemModel.aggregate([
@@ -42,8 +44,17 @@ export class ItemCronJobHandler {
       ]);
     } catch (error) {
       this.logger.error(error);
+      this.logger.log(
+        `Cronjob for updating Tag count in Items finished in${
+          performance.now() - updateTagCountStart
+        } (Job failed)`,
+      );
     }
-    this.logger.log('Sucessfully updated item tag counts');
+    this.logger.log(
+      `Cronjob for Tag count in Items finished in${
+        performance.now() - updateTagCountStart
+      } (Job succeeded)`,
+    );
   }
 
   /**
@@ -53,6 +64,7 @@ export class ItemCronJobHandler {
   async correctAllItemsByTagCounts() {
     // Since other items can be inserted in the meantime, causing the count to be off, we can't go for the fastest solution of $inc, but have to actually fetch the data again.
     // This is fine since it is a readDB and doesn't have to be written on fast
+    const updateTagCountStart = performance.now();
     try {
       await this.itemsByTagModel.aggregate([
         {
@@ -78,6 +90,16 @@ export class ItemCronJobHandler {
       ]);
     } catch (error) {
       this.logger.error(error);
+      this.logger.log(
+        `Cronjob for updating Tag Counts in ItemsByTag finished in${
+          performance.now() - updateTagCountStart
+        } (Job failed)`,
+      );
     }
+    this.logger.log(
+      `Cronjob for updating Tag Counts in ItemsByTag finished in${
+        performance.now() - updateTagCountStart
+      } (Job succeeded)`,
+    );
   }
 }
