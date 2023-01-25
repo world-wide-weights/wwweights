@@ -36,7 +36,10 @@ export class EventStore {
     private readonly eventBus: EventBus,
     private readonly configService: ConfigService,
   ) {
-
+    // Add to allow for testing
+    if (process.env.TEST_MODE === 'true') {
+      return;
+    }
     // Locally we can run with this
     let sslOptions: ChannelCredentialOptions = {
       insecure: true,

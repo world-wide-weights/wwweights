@@ -1,4 +1,3 @@
-import { EventStoreDBClient } from '@eventstore/db-client';
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { EventStoreModule } from '../src/eventstore/eventstore.module';
@@ -8,6 +7,8 @@ import { ConfigModule } from '@nestjs/config';
 import { ALLOWED_EVENT_ENTITIES } from '../src/eventstore/enums/allowedEntities.enum';
 
 describe('EventstoreModule', () => {
+  // Basically disable the constructor to skip Eventstoredb connection
+  process.env.TEST_MODE = 'true';
   let app: INestApplication;
   let eventStore: EventStore;
   const client = new Client();
@@ -15,10 +16,7 @@ describe('EventstoreModule', () => {
   async function replaceApp() {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [ConfigModule.forRoot({ isGlobal: true }), EventStoreModule],
-    })
-      .overrideProvider(EventStoreDBClient)
-      .useClass(Client)
-      .compile();
+    }).compile();
     app = moduleFixture.createNestApplication();
     eventStore = app.get<EventStore>(EventStore);
     await app.init();
