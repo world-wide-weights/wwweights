@@ -54,11 +54,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       const updateTagsStartTime = performance.now();
       await this.upsertItemIntoItemsByTag(item);
 
-      // TODO: The following 2 calls can be outsourced as chronjobs.
-      // TODO: We failed to find a better solution with just "increments $inc" to update the counts, because this does lead to counting errors when multiple items are inserted at the same time.
-      // TODO: But this is fine because its a write db with eventual consistency, we can say something like every 5 minutes or every few hundred items and have "possibly wrong counts before that"
-      await this.updateAllItemTagCounts();
-      await this.updateAllItemsByTagCounts();
+      // Further updates and recovery from inconsistency is handled via cronjobs rather than for every projector run
 
       this.logger.debug(
         `ItemInsertedHandler Updates took: ${
@@ -114,33 +110,6 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
             from: 'tags',
             pipeline: [
               { $match: { name: { $in: tagsNames } } },
-              { $project: { _id: 0, __v: 0 } },
-            ],
-            as: 'tags',
-          },
-        },
-        { $merge: { into: 'items' } },
-      ]);
-    } catch (error) {
-      this.logger.error(error);
-    }
-  }
-
-  // Looksup all the tags the item has from the tagModel and updates its array
-  async updateAllItemTagCounts() {
-    try {
-      // Here an aggregate because for some reason a $lookup and then $set did not update the document in a model.findOneAndUpdate()
-      await this.itemModel.aggregate([
-        {
-          $lookup: {
-            from: 'tags',
-            let: {
-              tagNames: {
-                $map: { input: '$tags', as: 'tag', in: '$$tag.name' },
-              },
-            },
-            pipeline: [
-              { $match: { $expr: { $in: ['$name', '$$tagNames'] } } },
               { $project: { _id: 0, __v: 0 } },
             ],
             as: 'tags',
@@ -209,38 +178,6 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       ]);
     } catch (error) {
       this.logger.error(`Insert item to ItemsByTag: ${error}`);
-    }
-  }
-
-  // Lookup all the items the itemsByTags has from the itemModel and updates its array
-  async updateAllItemsByTagCounts() {
-    // Since other items can be inserted in the meantime, causing the count to be off, we can't go for the fastest solution of $inc, but have to actually fetch the data again.
-    // This is fine since it is a readDB and doesn't have to be written on fast
-    try {
-      await this.itemsByTagModel.aggregate([
-        {
-          $lookup: {
-            from: 'items',
-            let: {
-              slugs: {
-                $map: { input: '$items', as: 'item', in: '$$item.slug' },
-              },
-            },
-            pipeline: [
-              { $match: { $expr: { $in: ['$slug', '$$slugs'] } } },
-              { $project: { _id: 0, __v: 0 } },
-            ],
-            as: 'items',
-          },
-        },
-        {
-          $merge: {
-            into: 'itemsbytags',
-          },
-        },
-      ]);
-    } catch (error) {
-      this.logger.error(error);
     }
   }
 }
