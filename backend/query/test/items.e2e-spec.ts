@@ -3,8 +3,6 @@ import { Model } from 'mongoose';
 import * as request from 'supertest';
 import { ItemsModule } from '../src/items/items.module';
 import { Item } from '../src/items/models/item.model';
-import { ItemsByTag } from '../src/models/items-by-tag.model';
-import { Tag } from '../src/tags/models/tag.model';
 import {
   initializeMockModule,
   teardownMockDataSource,
@@ -13,14 +11,10 @@ import {
 import { Test, TestingModule } from '@nestjs/testing';
 import { ItemSortEnum } from '../src/items/interfaces/item-sort-enum';
 import { items, itemsWithDates, relatedItems } from './mocks/items';
-import { itemsByTags } from './mocks/itemsbytags';
-import { tags } from './mocks/tags';
 
 describe('QueryController (e2e)', () => {
   let app: INestApplication;
   let itemModel: Model<Item>;
-  let tagModel: Model<Tag>;
-  let itemsByTagModel: Model<ItemsByTag>;
   let server: any; // Has to be any because of supertest not having a type for it either
   jest.setTimeout(10000);
 
@@ -39,8 +33,6 @@ describe('QueryController (e2e)', () => {
     );
 
     itemModel = moduleFixture.get('ItemModel');
-    tagModel = moduleFixture.get('TagModel');
-    itemsByTagModel = moduleFixture.get('ItemsByTagModel');
 
     app.setGlobalPrefix('queries/v1');
     await app.init();
@@ -49,18 +41,12 @@ describe('QueryController (e2e)', () => {
 
   beforeEach(async () => {
     await itemModel.deleteMany();
-    await tagModel.deleteMany();
-    await itemsByTagModel.deleteMany();
 
     await itemModel.insertMany(items);
-    await tagModel.insertMany(tags);
-    await itemsByTagModel.insertMany(itemsByTags);
   });
 
   afterAll(async () => {
     await itemModel.deleteMany();
-    await tagModel.deleteMany();
-    await itemsByTagModel.deleteMany();
     await teardownMockDataSource();
     server.close();
     await app.close();

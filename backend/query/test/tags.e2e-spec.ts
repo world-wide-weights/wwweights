@@ -1,7 +1,6 @@
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { Model } from 'mongoose';
 import * as request from 'supertest';
-import { ItemsModule } from '../src/items/items.module';
 import { Tag } from '../src/tags/models/tag.model';
 import {
   initializeMockModule,
@@ -9,6 +8,7 @@ import {
 } from './helpers/MongoMemoryHelpers';
 
 import { Test, TestingModule } from '@nestjs/testing';
+import { TagsModule } from '../src/tags/tags.module';
 import { tags } from './mocks/tags';
 
 describe('QueryController (e2e)', () => {
@@ -19,7 +19,7 @@ describe('QueryController (e2e)', () => {
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [initializeMockModule(), ItemsModule],
+      imports: [initializeMockModule(), TagsModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
@@ -60,22 +60,30 @@ describe('QueryController (e2e)', () => {
       it('should return the alphabetical first 5)', async () => {
         const result = await request(server)
           .get(queriesPath + subPath)
-          .query({ limit: 5, query: 'android' })
-          .expect(HttpStatus.NOT_IMPLEMENTED);
+          .query({ limit: 5 })
+          .expect(HttpStatus.OK);
+
+        expect(result.body.data[0].name).toEqual(tags[0].name);
+        expect(result.body.data[4].name).toEqual(tags[4].name);
       });
 
       it('should return the alphabetical last 5)', async () => {
         const result = await request(server)
           .get(queriesPath + subPath)
-          .query({ limit: 5, query: 'android' })
-          .expect(HttpStatus.NOT_IMPLEMENTED);
+          .query({ limit: 5, sort: 'desc' })
+          .expect(HttpStatus.OK);
+
+        expect(result.body.data[4].name).toEqual(tags[0].name);
+        expect(result.body.data[0].name).toEqual(tags[4].name);
       });
 
       it('should return the 5 most used)', async () => {
         const result = await request(server)
           .get(queriesPath + subPath)
-          .query({ limit: 5, query: 'android' })
-          .expect(HttpStatus.NOT_IMPLEMENTED);
+          .query({ limit: 5, sort: 'most-used' })
+          .expect(HttpStatus.OK);
+
+        expect(result.body.data[0].name).toEqual(tags[2].name);
       });
     });
 
