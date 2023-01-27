@@ -5,7 +5,7 @@ import relatedTags from "../../fixtures/tags/related.json"
 describe("Search /weights", () => {
     describe("Search", () => {
         beforeEach(() => {
-            cy.mockWeightsPage()
+            cy.mockItemsPage()
 
             cy.visitLocalPage(routes.weights.list())
             cy.wait("@mockGetRelatedTags")
@@ -35,7 +35,7 @@ describe("Search /weights", () => {
 
     describe("Related Tags", () => {
         beforeEach(() => {
-            cy.mockWeightsPage()
+            cy.mockItemsPage()
 
             cy.visitLocalPage(routes.weights.list())
             cy.wait("@mockGetRelatedTags")
