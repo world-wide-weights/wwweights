@@ -1,6 +1,6 @@
 import axios from "axios"
 import { Form, Formik } from "formik"
-import { GetStaticProps, InferGetServerSidePropsType } from "next"
+import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { Button } from "../components/Button/Button"
@@ -19,7 +19,7 @@ type HomeProps = {
 /**
  * Landing Page.
  */
-function Home({ items }: InferGetServerSidePropsType<typeof getStaticProps>) {
+function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 	const router = useRouter()
 
 	// Formik Initial Values
@@ -109,12 +109,12 @@ function Home({ items }: InferGetServerSidePropsType<typeof getStaticProps>) {
 	)
 }
 
-export const getStaticProps: GetStaticProps<HomeProps> = async () => {
-	const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/items/list?page=1&limit=20&query=iphone 2020`)
+export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
+	const itemsResponse = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/items/list?page=1&limit=20&query=iphone 2020`)
 
 	return {
 		props: {
-			items: response.data.data
+			items: itemsResponse.data.data
 		}
 	}
 }

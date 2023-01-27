@@ -2,7 +2,7 @@ import { routes } from "../../../src/services/routes/routes"
 
 describe("View Type Grid/List /weights", () => {
     beforeEach(() => {
-        cy.mockWeightsPage()
+        cy.mockItemsPage()
 
         cy.visitLocalPage(routes.weights.list())
         cy.wait("@mockGetRelatedTags")
