@@ -10,10 +10,13 @@ import {
 import { QueryBus } from '@nestjs/cqrs';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Item } from '../models/item.model';
+import { ItemStatistics } from './interfaces/item-statistics';
 import { PaginatedResult } from './interfaces/paginated-items';
 import { QueryItemListDto } from './interfaces/query-item-list.dto';
 import { QueryItemRelatedDto } from './interfaces/query-item-related.dto';
+import { QueryItemStatisticsDto } from './interfaces/query-item-statistics.dto';
 import { ItemListQuery } from './queries/item-list.query';
+import { ItemStatisticsQuery } from './queries/item-statistics.query';
 import { ItemRelatedQuery } from './queries/related-items.query';
 
 @Controller()
@@ -41,13 +44,13 @@ export class ItemsController {
     return new PaginatedResult<Item>(result, Item);
   }
 
-  // @Get('items/statistics')
-  // @ApiQuery({ name: 'dto', required: false, type: QueryItemStatisticsDto })
-  // @ApiOperation({ summary: 'Get an item by slug' })
-  // async getItemStatistics(@Query() dto: QueryItemStatisticsDto) {
-  //   this.logger.log(`Get item list`);
-  //   return await this.queryBus.execute(new GetItemStatisticsQuery(dto));
-  // }
+  @Get('items/statistics')
+  @ApiOperation({ summary: 'Get an item by slug' })
+  async getItemStatistics(@Query() dto: QueryItemStatisticsDto) {
+    this.logger.log(`Get item list`);
+    const result = await this.queryBus.execute(new ItemStatisticsQuery(dto));
+    return new ItemStatistics(result);
+  }
 
   // @Get('tags/list')
   // @ApiQuery({ name: 'dto', required: false, type: QueryTagListDto })
