@@ -29,6 +29,9 @@ describe("Register", () => {
             cy.wait("@mockRegister")
             cy.wait("@mockCredentials")
 
+            // Mock home
+            cy.mockItemsList()
+
             // Check redirect
             cy.url().should("include", routes.home)
         })
