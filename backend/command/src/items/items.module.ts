@@ -8,6 +8,7 @@ import { Profile } from '../models/profile.model';
 import { Suggestion } from '../models/suggestion.model';
 import { Tag } from '../models/tag.model';
 import { CommandHandlers } from './commands';
+import { ItemCronJobHandler } from './cron/items.cron';
 import { EventHandlers } from './events';
 import { ItemsController } from './items.controller';
 import { Sagas } from './sagas';
@@ -18,6 +19,11 @@ import { Sagas } from './sagas';
     EventStoreModule,
   ],
   controllers: [ItemsController],
-  providers: [...CommandHandlers, ...EventHandlers, ...Sagas],
+  providers: [
+    ...CommandHandlers,
+    ...EventHandlers,
+    ...Sagas,
+    ItemCronJobHandler,
+  ],
 })
 export class ItemsModule {}
