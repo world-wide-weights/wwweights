@@ -1,8 +1,8 @@
-import { defineConfig } from "cypress";
-import { createServer } from 'http';
-import next from 'next';
-import nock from 'nock';
-import { parse } from "url";
+import { defineConfig } from "cypress"
+import { createServer } from "http"
+import next from "next"
+import nock from "nock"
+import { parse } from "url"
 
 type NockType = {
   hostname: string,
@@ -15,8 +15,8 @@ type NockType = {
 export default defineConfig({
   e2e: {
     async setupNodeEvents(on, config) {
-      const dev = process.env.NODE_ENV !== 'production'
-      const hostname = 'localhost'
+      const dev = process.env.NODE_ENV !== "production"
+      const hostname = "localhost"
       const port = 3002
       const app = next({ dev, hostname, port })
       const handle = app.getRequestHandler()
@@ -28,16 +28,16 @@ export default defineConfig({
             const parsedUrl = parse(req.url!, true)
             await handle(req, res, parsedUrl)
           } catch (err) {
-            console.error('Error occurred handling', req.url, err)
+            console.error("Error occurred handling", req.url, err)
             res.statusCode = 500
-            res.end('internal server error')
+            res.end("internal server error")
           }
         }).listen(port, () => {
           console.log(`> Ready on https://${hostname}:${port}`)
         })
       })
 
-      on('task', {
+      on("task", {
         /**
          * Clears HTTP interceptor and the interceptor list.
          * Goes into unmocked state.
@@ -82,11 +82,11 @@ export default defineConfig({
       framework: "next",
       bundler: "webpack",
     },
-    specPattern: '**/*.{cy,unit}.{js,jsx,ts,tsx}'
+    specPattern: "**/*.{cy,unit}.{js,jsx,ts,tsx}"
   },
   env: {
-    CLIENT_BASE_URL: 'http://localhost:3002',
-    API_BASE_URL: 'http://localhost:3004'
+    CLIENT_BASE_URL: "http://localhost:3002",
+    API_BASE_URL: "http://localhost:3004"
   }
 })
 

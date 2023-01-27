@@ -9,7 +9,7 @@ import { Navbar } from "../components/Navbar/Navbar"
 import { Search } from "../components/Search/Search"
 import { Stat } from "../components/Statistics/Stat"
 import { routes } from "../services/routes/routes"
-import { Item } from "./weights"
+import { Item } from "../types/item"
 
 type HomeProps = {
 	items: Item[]
