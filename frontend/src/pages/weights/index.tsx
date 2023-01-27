@@ -90,7 +90,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                         {/*** Weights List ***/}
                         <div className={`${statisticsExpanded ? "" : "lg:w-2/3 2xl:w-[70%] lg:mr-10"} mb-10 lg:mb-0`}>
                             {/* Header Weights List */}
-                            <div className="md:flex justify-between items-end mb-2 lg:mb-4">
+                            <div className="md:flex justify-between items-end mb-4">
                                 <div className="flex items-end mb-2 lg:mb-0">
                                     {/* Headline */}
                                     <Headline level={3} hasMargin={false} className="mr-4">{headlineItems}</Headline>
@@ -111,12 +111,12 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
 
                             {loading ? <p>Loading...</p> : <>
                                 {/* Weights Box View */}
-                                {viewType === "grid" && <div className={`grid ${statisticsExpanded ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" : "grid-cols-1 md:grid-cols-2 2xl:grid-cols-3"} gap-5 mb-5 md:mb-8`}>
+                                {viewType === "grid" && <div className={`grid ${statisticsExpanded ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" : "grid-cols-1 md:grid-cols-2 2xl:grid-cols-3"} gap-2 md:gap-5 mb-5 md:mb-8`}>
                                     {items.map((item) => <ItemPreviewGrid datacy="weights-grid-item" key={item.slug} name={item.name} slug={item.slug} weight={item.weight} imageUrl="https://picsum.photos/200" />)}
                                 </div>}
 
                                 {/* Weights List View */}
-                                {viewType === "list" && <ul className={"grid gap-2 mb-5 md:mb-8"}>
+                                {viewType === "list" && <ul className={"grid md:gap-2 mb-5 md:mb-8"}>
                                     {items.map((item) => <ItemPreviewList datacy="weights-list-item" key={item.slug} name={item.name} slug={item.slug} weight={item.weight} heaviestWeight={statistics.heaviest.weight} imageUrl="https://picsum.photos/200" />)}
                                 </ul>}
                             </>}
