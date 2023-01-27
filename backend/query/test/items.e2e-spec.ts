@@ -198,6 +198,14 @@ describe('QueryController (e2e)', () => {
           expect(otherItemNames).toContain(item.name);
         }
       });
+
+      it('should throw unproccessable Entity if nothing can be found when no item can be found', async () => {
+        await itemModel.deleteMany();
+        await request(server)
+          .get(queriesPath + subPath)
+          .query({ slug: relatedItems[0].slug })
+          .expect(HttpStatus.UNPROCESSABLE_ENTITY);
+      });
     });
 
     describe('items/statistics', () => {
@@ -216,6 +224,14 @@ describe('QueryController (e2e)', () => {
         expect(result.body.heaviest.weight.value).toEqual(102);
         expect(result.body.lightest.weight.value).toEqual(100);
         expect(result.body.averageWeight).toEqual(101);
+      });
+
+      it('should throw unproccessable Entity if no item can be found', async () => {
+        await itemModel.deleteMany();
+        await request(server)
+          .get(queriesPath + subPath)
+          .query({ slug: relatedItems[0].slug })
+          .expect(HttpStatus.UNPROCESSABLE_ENTITY);
       });
     });
   });
