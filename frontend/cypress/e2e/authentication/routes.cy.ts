@@ -4,6 +4,8 @@ const clientBaseUrl = Cypress.env("CLIENT_BASE_URL")
 
 describe("Routes protected/guest", () => {
     it("should not redirect when nothing is set (on /)", () => {
+        cy.mockItemsList()
+
         cy.visitLocalPage(routes.home)
 
         cy.url().should("eq", clientBaseUrl + routes.home)
@@ -35,6 +37,9 @@ describe("Routes protected/guest", () => {
             // "Login"
             cy.mockSession()
             cy.wait("@mockSession")
+
+            // Mock home
+            cy.mockItemsList()
 
             // Redirected to /
             cy.url().should("eq", clientBaseUrl + routes.home)
