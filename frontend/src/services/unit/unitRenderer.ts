@@ -10,9 +10,9 @@ import { getBestHumanReadableUnit } from "./unitHumanReadable"
  * @returns string with formated number.
  */
 export const addPointsToNumber = (number: number, formatComma: boolean): string => {
-    if(formatComma){
+    if (formatComma) {
         return number.toFixed(2)
-    }else{
+    } else {
         return new Intl.NumberFormat("de-DE").format(number)
     }
 }

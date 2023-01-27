@@ -1,6 +1,6 @@
 import { renderUnitIntoString } from "./unitRenderer"
 
-describe("unitRenderer", () => {
+describe("UnitRenderer", () => {
     it("it should display 'ca.'", () => {
         expect(renderUnitIntoString({
             value: 9,
