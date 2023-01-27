@@ -16,7 +16,7 @@ describe("Create Item", () => {
 
         // Mock create and weights page
         cy.mockCreateItem()
-        cy.mockWeightsPage()
+        cy.mockItemsPage()
 
         // Submit form
         cy.dataCy("create-submit-button").click()
@@ -47,7 +47,7 @@ describe("Create Item", () => {
 
         // Mock create and weights page
         cy.mockCreateItem()
-        cy.mockWeightsPage()
+        cy.mockItemsPage()
 
         // Submit form
         cy.dataCy("create-submit-button").click()

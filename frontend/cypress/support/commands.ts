@@ -31,7 +31,7 @@ Cypress.Commands.add("mockGetRelatedTags", () => {
     }).as("mockGetRelatedTags")
 })
 
-Cypress.Commands.add("mockWeightsPage", (itemCount?: number) => {
+Cypress.Commands.add("mockItemsList", (itemCount?: number) => {
     const body = itemCount || itemCount === 0 ? items.slice(0, itemCount) : items
 
     cy.task("clearNock")
@@ -43,6 +43,10 @@ Cypress.Commands.add("mockWeightsPage", (itemCount?: number) => {
         statusCode: 200,
         body
     })
+})
+
+Cypress.Commands.add("mockItemsPage", (itemCount?: number) => {
+    cy.mockItemsList(itemCount)
 
     cy.task("nock", {
         hostname: apiBaseUrl,

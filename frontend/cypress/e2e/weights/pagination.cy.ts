@@ -6,7 +6,7 @@ const limit = 5
 describe("Pagination /weights", () => {
     describe("Base tests", () => {
         beforeEach(() => {
-            cy.mockWeightsPage()
+            cy.mockItemsPage()
         })
 
         it("should display pagination", () => {
@@ -69,7 +69,7 @@ describe("Pagination /weights", () => {
 
     describe("Limit", () => {
         beforeEach(() => {
-            cy.mockWeightsPage(5)
+            cy.mockItemsPage(5)
 
             cy.visitLocalPage(routes.weights.list({ itemsPerPage: limit }))
             cy.wait("@mockGetRelatedTags")
