@@ -66,7 +66,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "
      * Fetch related tags
      */
     useEffect(() => {
-        const fetchRelatedTags = async () => {
+        const getRelatedTags = async () => {
             setIsLoadingRelatedTags(true)
 
             try {
@@ -79,7 +79,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "
                 console.error(error)
             }
         }
-        fetchRelatedTags()
+        getRelatedTags()
     }, [])
 
     return <header className="bg-white pt-2 md:pt-5 pb-3 md:pb-10">
