@@ -120,6 +120,7 @@ const Create: NextPageCustomProps = () => {
             tags: tags ? tags.split(", ") : []
         }
 
+        // TODO: This will be correct implemented in other issue https://github.com/world-wide-weights/wwweights/issues/259
         // Create item with api
         // fetch("http://localhost:3004/items", {
         //     method: "POST",
