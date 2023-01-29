@@ -1,171 +1,178 @@
-[
-    {
-        "id": "108",
-        "name": "MDA III",
-        "slug": "mda-iii",
-        "weight": {
-            "value": 212,
-            "additionalValue": 225,
-            "isCa": true
+{
+    "total": 296,
+    "page": 1,
+    "limit": 16,
+    "data": [
+        {
+            "name": "ZTE A261",
+            "slug": "zte-a261",
+            "weight": {
+                "value": 75
+            },
+            "tags": [],
+            "image": "https://fdn2.gsmarena.com/vv/bigpic/ZTE-A261.jpg",
+            "user": "mc",
+            "createdAt": 1674596008774
         },
-        "source": "https://phonedb.net/",
-        "tags": [
-            {
-                "name": "T-Mobile",
-                "slug": "t-mobile"
+        {
+            "name": "ZTE Amigo",
+            "slug": "zte-amigo",
+            "weight": {
+                "value": 120
             },
-            {
-                "name": "2004 Sep",
-                "slug": "2004-sep"
-            },
-            {
-                "name": "Windows (mobile-class)",
-                "slug": "windows-(mobile-class)"
-            },
-            {
-                "name": "Smartphone",
-                "slug": "smartphone"
-            }
-        ]
-    },
-    {
-        "id": "101",
-        "name": "Cassiopeia IT-500 M30CB",
-        "slug": "cassiopeia-it-500-m30cb",
-        "weight": {
-            "value": 260,
-            "isCa": true
+            "tags": [],
+            "user": "mc",
+            "createdAt": 1674596003817
         },
-        "source": "https://phonedb.net/",
-        "tags": [
-            {
-                "name": "Casio",
-                "slug": "casio"
+        {
+            "name": "ZTE Avail",
+            "slug": "zte-avail",
+            "weight": {
+                "value": 127
             },
-            {
-                "name": "2003 Apr",
-                "slug": "2003-apr"
-            },
-            {
-                "name": "Windows (mobile-class)",
-                "slug": "windows-(mobile-class)"
-            },
-            {
-                "name": "PDA",
-                "slug": "pda"
-            }
-        ]
-    },
-    {
-        "id": "102",
-        "name": "Cassiopeia EM-500",
-        "slug": "cassiopeia-em-500",
-        "weight": {
-            "value": 218,
-            "isCa": true
+            "tags": [],
+            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-avail.jpg",
+            "user": "mc",
+            "createdAt": 1674596002648
         },
-        "source": "https://phonedb.net/",
-        "tags": [
-            {
-                "name": "Casio",
-                "slug": "casio"
+        {
+            "name": "ZTE Axon",
+            "slug": "zte-axon",
+            "weight": {
+                "value": 169
             },
-            {
-                "name": "2000 Sep",
-                "slug": "2000-sep"
-            },
-            {
-                "name": "Windows (mobile-class)",
-                "slug": "windows-(mobile-class)"
-            },
-            {
-                "name": "PDA",
-                "slug": "pda"
-            }
-        ]
-    },
-    {
-        "id": "103",
-        "name": "Cassiopeia EG-800",
-        "slug": "cassiopeia-eg-800",
-        "weight": {
-            "value": 295,
-            "isCa": false
+            "tags": [],
+            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-axon-pro-r.jpg",
+            "user": "mc",
+            "createdAt": 1674595981637
         },
-        "source": "https://phonedb.net/",
-        "tags": [
-            {
-                "name": "Casio",
-                "slug": "casio"
+        {
+            "name": "ZTE Blade",
+            "slug": "zte-blade",
+            "weight": {
+                "value": 110
             },
-            {
-                "name": "2001 Jan",
-                "slug": "2001-jan"
-            },
-            {
-                "name": "Windows (mobile-class)",
-                "slug": "windows-(mobile-class)"
-            },
-            {
-                "name": "PDA",
-                "slug": "pda"
-            }
-        ]
-    },
-    {
-        "id": "104",
-        "name": "Cassiopeia IT-700M30E",
-        "slug": "cassiopeia-it-700m30e",
-        "weight": {
-            "value": 340,
-            "isCa": false
+            "tags": [],
+            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-blade-new.jpg",
+            "user": "mc",
+            "createdAt": 1674596004194
         },
-        "source": "https://phonedb.net/",
-        "tags": [
-            {
-                "name": "Casio",
-                "slug": "casio"
+        {
+            "name": "ZTE Chorus",
+            "slug": "zte-chorus",
+            "weight": {
+                "value": 105
             },
-            {
-                "name": "2000 Dec",
-                "slug": "2000-dec"
-            },
-            {
-                "name": "Windows (mobile-class)",
-                "slug": "windows-(mobile-class)"
-            },
-            {
-                "name": "PDA",
-                "slug": "pda"
-            }
-        ]
-    },
-    {
-        "id": "105",
-        "name": "iPAQ H6340 / H6345",
-        "slug": "ipaq-h6340-h6345",
-        "weight": {
-            "value": 190,
-            "isCa": true
+            "tags": [],
+            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-chorus.jpg",
+            "user": "mc",
+            "createdAt": 1674596001252
         },
-        "source": "https://phonedb.net/",
-        "tags": [
-            {
-                "name": "Hewlett-Packard",
-                "slug": "hewlett-packard"
+        {
+            "name": "ZTE Director",
+            "slug": "zte-director",
+            "weight": {
+                "value": 140
             },
-            {
-                "name": "2004 Jul",
-                "slug": "2004-jul"
+            "tags": [],
+            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-director.jpg",
+            "user": "mc",
+            "createdAt": 1674595994855
+        },
+        {
+            "name": "ZTE E811",
+            "slug": "zte-e811",
+            "weight": {
+                "value": 130
             },
-            {
-                "name": "Windows (mobile-class)",
-                "slug": "windows-(mobile-class)"
+            "tags": [],
+            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-e811.jpg",
+            "user": "mc",
+            "createdAt": 1674596007750
+        },
+        {
+            "name": "ZTE F100",
+            "slug": "zte-f100",
+            "weight": {
+                "value": 90
             },
-            {
-                "name": "Smartphone",
-                "slug": "smartphone"
-            }
-        ]
-    }
-]
+            "tags": [],
+            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-f100.jpg",
+            "user": "mc",
+            "createdAt": 1674596010843
+        },
+        {
+            "name": "ZTE F101",
+            "slug": "zte-f101",
+            "weight": {
+                "value": 90
+            },
+            "tags": [],
+            "user": "mc",
+            "createdAt": 1674596010520
+        },
+        {
+            "name": "ZTE F103",
+            "slug": "zte-f103",
+            "weight": {
+                "value": 90
+            },
+            "tags": [],
+            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-f103.jpg",
+            "user": "mc",
+            "createdAt": 1674596010216
+        },
+        {
+            "name": "ZTE F107",
+            "slug": "zte-f107",
+            "weight": {
+                "value": 90
+            },
+            "tags": [],
+            "user": "mc",
+            "createdAt": 1674596006514
+        },
+        {
+            "name": "ZTE F233",
+            "slug": "zte-f233",
+            "weight": {
+                "value": 90
+            },
+            "tags": [],
+            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-f233.jpg",
+            "user": "mc",
+            "createdAt": 1674596009004
+        },
+        {
+            "name": "ZTE F600",
+            "slug": "zte-f600",
+            "weight": {
+                "value": 90
+            },
+            "tags": [],
+            "user": "mc",
+            "createdAt": 1674596010128
+        },
+        {
+            "name": "ZTE F870",
+            "slug": "zte-f870",
+            "weight": {
+                "value": 100
+            },
+            "tags": [],
+            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-f870.jpg",
+            "user": "mc",
+            "createdAt": 1674596009744
+        },
+        {
+            "name": "ZTE F928",
+            "slug": "zte-f928",
+            "weight": {
+                "value": 100
+            },
+            "tags": [],
+            "user": "mc",
+            "createdAt": 1674596009456
+        }
+    ]
+}

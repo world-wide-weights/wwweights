@@ -14,7 +14,7 @@ import { Tabs } from "../../components/Tabs/Tabs"
 import { queryRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { calculateMedianWeight, generateWeightString } from "../../services/utils/weight"
-import { ItemResponse, ItemsResponse } from "../../types/item"
+import { ItemsResponse } from "../../types/item"
 import Custom404 from "../404"
 
 type WeightsSingleProps = {
@@ -113,12 +113,12 @@ export const getStaticProps: GetStaticProps<WeightsSingleProps> = async (context
 
     // Fetch item and related items
     const [itemResponse, relatedItemsResponse] = await Promise.all([
-        queryRequest.get<ItemResponse>(`/items/list?slug=${slug}`),
+        queryRequest.get<ItemsResponse>(`/items/list?slug=${slug}`),
         queryRequest.get<ItemsResponse>(`/items/related?slug=${slug}`),
     ])
 
     // Items and RelatedItems
-    const item = itemResponse.data.data
+    const item = itemResponse.data.data[0]
     const relatedItems = relatedItemsResponse.data.data
 
     // Validate Query
