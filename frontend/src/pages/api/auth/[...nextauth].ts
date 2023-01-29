@@ -33,20 +33,20 @@ export const authOptions: NextAuthOptions = {
                 }
 
                 // Login to our api
-                // const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/login`, {
-                //     method: "POST",
-                //     body: JSON.stringify(payload),
-                //     headers: {
-                //         "Content-Type": "application/json",
-                //     },
-                // })
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL_AUTH}/login`, {
+                    method: "POST",
+                    body: JSON.stringify(payload),
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
 
-                // const user = await response.json()
+                const user = await response.json()
 
-                // // If no error and we have user data, return it
-                // if (response.ok && user) {
-                //     return user
-                // }
+                // If no error and we have user data, return it
+                if (response.ok && user) {
+                    return user
+                }
 
                 // Some error occured
                 return null

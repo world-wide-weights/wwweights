@@ -111,8 +111,8 @@ export const getStaticProps: GetStaticProps<WeightsSingleProps> = async (context
 
     // Fetch item and related items
     const [itemResponse, relatedItemsResponse] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/items/list?slug=${slug}`),
-        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/items/related?slug=${slug}`),
+        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL_QUERY}/items/list?slug=${slug}`),
+        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL_QUERY}/items/related?slug=${slug}`),
     ])
 
     // Read jsons from item and related items

@@ -10,6 +10,7 @@ import { Navbar } from "../components/Navbar/Navbar"
 import { Search } from "../components/Search/Search"
 import { Stat } from "../components/Statistics/Stat"
 import { routes } from "../services/routes/routes"
+import { ItemsResponse } from "../types/item"
 import { Item } from "./weights"
 
 type HomeProps = {
@@ -110,11 +111,12 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 }
 
 export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
-	const itemsResponse = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/items/list?page=1&limit=20&query=iphone 2020`)
+	const response = await axios.get<ItemsResponse>(`${process.env.NEXT_PUBLIC_API_BASE_URL_QUERY}/items/list?page=1&limit=20&query=iphone 2020`)
+	const itemsResponse = response.data
 
 	return {
 		props: {
-			items: itemsResponse.data.data
+			items: itemsResponse.data
 		}
 	}
 }

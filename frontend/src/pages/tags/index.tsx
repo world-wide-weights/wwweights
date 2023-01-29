@@ -58,14 +58,15 @@ export const getServerSideProps: GetServerSideProps<TagsListProps> = async (cont
         }
     }
 
-    // const data = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/tags/list?page=${currentPage}&limit=${limit}`)
-    // const totalItems = parseInt(response.headers.get("x-total-count") ?? "100")
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/tags/list?page=${currentPage}&limit=${limit}`)
+    const data = await response.json()
+    const totalItems = parseInt(response.headers.get("x-total-count") ?? "100")
 
     return {
         props: {
-            tags: [],
+            tags: data,
             currentPage,
-            totalItems: 100,
+            totalItems,
             limit
         }
     }

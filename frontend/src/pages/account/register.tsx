@@ -47,21 +47,21 @@ const Register: NextPageCustomProps = () => {
     const onFormSubmit = async ({ username, email, password }: RegisterDto) => {
         try {
             // Register in our backend
-            // const registerResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/register`, {
-            //     method: "POST",
-            //     body: JSON.stringify({
-            //         username,
-            //         email,
-            //         password
-            //     }),
-            //     headers: {
-            //         "Content-Type": "application/json",
-            //     },
-            // })
+            const registerResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL_AUTH}/register`, {
+                method: "POST",
+                body: JSON.stringify({
+                    username,
+                    email,
+                    password
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
 
             // If something went wrong when register backend set Error
-            if (true) {
-                // setError(registerResponse.status + " " + registerResponse.statusText)
+            if (!registerResponse.ok) {
+                setError(registerResponse.status + " " + registerResponse.statusText)
                 return
             }
 
