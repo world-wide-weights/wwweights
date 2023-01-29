@@ -12,8 +12,12 @@ on:
       - ".github/workflows/**.yml"
 
 env:
-  NEXT_PUBLIC_CLIENT_BASE_URL: http://localhost:3000
-  NEXT_PUBLIC_API_BASE_URL: http://localhost:3004
+  CLIENT_BASE_URL: http://localhost:3002
+  PUBLIC_API_BASE_URL_MOCK: http://localhost:3004
+  PUBLIC_API_BASE_URL_QUERY: https://query.wwweights.com/queries/v1
+  PUBLIC_API_BASE_URL_COMMAND: http://localhost:3004
+  PUBLIC_API_BASE_URL_AUTH: http://localhost:3004
+  PUBLIC_API_BASE_URL_IMAGE: http://localhost:3004
 
 jobs:
   setup:
