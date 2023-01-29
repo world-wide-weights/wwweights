@@ -11,8 +11,10 @@ import { Icon } from "../../components/Icon/Icon"
 import { RelatedItems } from "../../components/RelatedItems/RelatedItems"
 import { Tab } from "../../components/Tabs/Tab"
 import { Tabs } from "../../components/Tabs/Tabs"
+import { queryRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { calculateMedianWeight, generateWeightString } from "../../services/utils/weight"
+import { ItemResponse, ItemsResponse } from "../../types/item"
 import Custom404 from "../404"
 
 type WeightsSingleProps = {
@@ -111,18 +113,16 @@ export const getStaticProps: GetStaticProps<WeightsSingleProps> = async (context
 
     // Fetch item and related items
     const [itemResponse, relatedItemsResponse] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL_QUERY}/items/list?slug=${slug}`),
-        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL_QUERY}/items/related?slug=${slug}`),
+        queryRequest.get<ItemResponse>(`/items/list?slug=${slug}`),
+        queryRequest.get<ItemsResponse>(`/items/related?slug=${slug}`),
     ])
 
-    // Read jsons from item and related items
-    const [item, relatedItems] = await Promise.all([
-        itemResponse.json(),
-        relatedItemsResponse.json()
-    ])
+    // Items and RelatedItems
+    const item = itemResponse.data.data
+    const relatedItems = relatedItemsResponse.data.data
 
     // Validate Query
-    if (!item.data[0].slug) {
+    if (!item.slug) {
         return {
             notFound: true // Renders 404 page
         }
@@ -130,8 +130,8 @@ export const getStaticProps: GetStaticProps<WeightsSingleProps> = async (context
 
     return {
         props: {
-            item: item.data[0],
-            relatedItems: relatedItems.data
+            item,
+            relatedItems
         },
         revalidate: 10
     }

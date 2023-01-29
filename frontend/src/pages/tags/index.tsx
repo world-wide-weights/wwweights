@@ -3,6 +3,7 @@ import Head from "next/head"
 import { Chip } from "../../components/Chip/Chip"
 import { Headline } from "../../components/Headline/Headline"
 import { Pagination } from "../../components/Pagination/Pagination"
+import { mockRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 
 const DEFAULT_ITEMS_PER_PAGE = 64
@@ -58,13 +59,14 @@ export const getServerSideProps: GetServerSideProps<TagsListProps> = async (cont
         }
     }
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/tags/list?page=${currentPage}&limit=${limit}`)
-    const data = await response.json()
-    const totalItems = parseInt(response.headers.get("x-total-count") ?? "100")
+    // TODO (Zoe-Bot): Update mock to be real api
+    const response = await mockRequest.get<Tag[]>(`/api/query/v1/tags/list?page=${currentPage}&limit=${limit}`)
+    const tags = response.data
+    const totalItems = parseInt(response.headers["x-total-count"] ?? "100")
 
     return {
         props: {
-            tags: data,
+            tags,
             currentPage,
             totalItems,
             limit

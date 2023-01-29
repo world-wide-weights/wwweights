@@ -1,4 +1,3 @@
-import axios from "axios"
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Head from "next/head"
 import { useRef, useState } from "react"
@@ -14,8 +13,10 @@ import { Pagination } from "../../components/Pagination/Pagination"
 import { Sort, SortType } from "../../components/Sort/Sort"
 import { StatsCard } from "../../components/Statistics/StatsCard"
 import { useLocalStorage } from "../../hooks/useLocalStorage"
+import { queryRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { generateWeightString } from "../../services/utils/weight"
+import { ItemsResponse } from "../../types/item"
 import { Tag } from "../tags"
 
 const DEFAULT_ITEMS_PER_PAGE = 16
@@ -45,7 +46,7 @@ type Statistics = {
 }
 
 type WeightsListProps = {
-    data: Item[]
+    items: Item[]
     currentPage: number
     totalItems: number
     limit: number
@@ -57,7 +58,7 @@ type WeightsListProps = {
 /** 
  * Discover Page, list all items, search results and single tags
  */
-export default function WeightsList({ data, currentPage, totalItems, limit, query, sort, statistics }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function WeightsList({ items, currentPage, totalItems, limit, query, sort, statistics }: InferGetServerSidePropsType<typeof getServerSideProps>) {
     // Strings
     const siteTitle = `Latest ${currentPage > 1 ? `| Page ${currentPage} ` : ""}- World Wide Weights`
     const headlineItems = query === "" ? "All items" : query
@@ -81,7 +82,7 @@ export default function WeightsList({ data, currentPage, totalItems, limit, quer
 
         {/* Content */}
         <main className="container mt-5">
-            {data.length === 0 ?
+            {items.length === 0 ?
                 // Empty State
                 <SearchEmptyState query={query} />
                 : <>
@@ -111,12 +112,12 @@ export default function WeightsList({ data, currentPage, totalItems, limit, quer
                             {loading ? <p>Loading...</p> : <>
                                 {/* Weights Box View */}
                                 {viewType === "grid" && <div className={`grid ${statisticsExpanded ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" : "grid-cols-1 md:grid-cols-2 2xl:grid-cols-3"} gap-2 md:gap-5 mb-5 md:mb-8`}>
-                                    {data.map((item) => <ItemPreviewGrid datacy="weights-grid-item" key={item.slug} name={item.name} slug={item.slug} weight={item.weight} imageUrl={item.image} />)}
+                                    {items.map((item) => <ItemPreviewGrid datacy="weights-grid-item" key={item.slug} name={item.name} slug={item.slug} weight={item.weight} imageUrl={item.image} />)}
                                 </div>}
 
                                 {/* Weights List View */}
                                 {viewType === "list" && <ul className={"grid md:gap-2 mb-5 md:mb-8"}>
-                                    {data.map((item) => <ItemPreviewList datacy="weights-list-item" key={item.slug} name={item.name} slug={item.slug} weight={item.weight} heaviestWeight={statistics.heaviest.weight} imageUrl={item.image} />)}
+                                    {items.map((item) => <ItemPreviewList datacy="weights-list-item" key={item.slug} name={item.name} slug={item.slug} weight={item.weight} heaviestWeight={statistics.heaviest.weight} imageUrl={item.image} />)}
                                 </ul>}
                             </>}
 
@@ -171,22 +172,18 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
 
     // Fetch items and statistics
     const [itemsResponse, statisticResponse] = await Promise.all([
-        axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL_QUERY}/items/list?page=${currentPage}&limit=${limit}&sort=${sort}&query=${query}`),
-        axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL_QUERY}/items/statistics?query=${query}`),
+        queryRequest.get<ItemsResponse>(`/items/list?page=${currentPage}&limit=${limit}&sort=${sort}&query=${query}`),
+        queryRequest.get<Statistics>(`/items/statistics?query=${query}`),
     ])
 
-    // Read jsons from items and statistics
-    const [items, statistics] = [
-        itemsResponse.data,
-        statisticResponse.data
-    ]
-
-
-    const totalItems = items.total
+    // Items, statistics and total items
+    const items = itemsResponse.data.data
+    const statistics = statisticResponse.data
+    const totalItems = itemsResponse.data.total
 
     return {
         props: {
-            data: items.data,
+            items,
             currentPage,
             limit,
             totalItems,

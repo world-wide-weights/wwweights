@@ -2,7 +2,7 @@ import { NextAuthOptions, Session, User } from "next-auth"
 import { JWT } from "next-auth/jwt"
 import NextAuth from "next-auth/next"
 import CredentialsProvider from "next-auth/providers/credentials"
-import { LoginDto } from "../../account/login"
+import { authRequest } from "../../../services/axios/axios"
 
 export type UserInfo = {
     email: string
@@ -27,24 +27,16 @@ export const authOptions: NextAuthOptions = {
             },
             authorize: async (credentials) => {
                 // TODO (Zoe-Bot): Maybe add csrf token?
-                const payload: LoginDto = {
+                // Login to our api
+                const response = await authRequest.post<User>("/login", {
                     email: credentials!.email,
                     password: credentials!.password
-                }
-
-                // Login to our api
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL_AUTH}/login`, {
-                    method: "POST",
-                    body: JSON.stringify(payload),
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
                 })
 
-                const user = await response.json()
+                const user = response.data
 
                 // If no error and we have user data, return it
-                if (response.ok && user) {
+                if (response.status === 200 && user) {
                     return user
                 }
 

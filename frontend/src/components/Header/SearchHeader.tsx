@@ -2,6 +2,7 @@ import { Form, Formik, useFormikContext } from "formik"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { Tag } from "../../pages/tags"
+import { mockRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { Chip } from "../Chip/Chip"
 import { Headline } from "../Headline/Headline"
@@ -69,9 +70,10 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "
             setIsLoadingRelatedTags(true)
 
             try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/tags/related`)
-                const data = await response.json()
-                setRelatedTags(data)
+                // TODO (Zoe-Bot): Update mock to be real api
+                const response = await mockRequest.get<Tag[]>("/api/query/v1/tags/related")
+                const relatedTags = response.data
+                setRelatedTags(relatedTags)
                 setIsLoadingRelatedTags(false)
             } catch (error) {
                 console.error(error)

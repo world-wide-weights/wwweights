@@ -1,4 +1,3 @@
-import axios from "axios"
 import { Form, Formik } from "formik"
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Head from "next/head"
@@ -9,6 +8,7 @@ import { ItemPreviewGrid } from "../components/Item/ItemPreviewGrid"
 import { Navbar } from "../components/Navbar/Navbar"
 import { Search } from "../components/Search/Search"
 import { Stat } from "../components/Statistics/Stat"
+import { queryRequest } from "../services/axios/axios"
 import { routes } from "../services/routes/routes"
 import { ItemsResponse } from "../types/item"
 import { Item } from "./weights"
@@ -111,12 +111,12 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 }
 
 export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
-	const response = await axios.get<ItemsResponse>(`${process.env.NEXT_PUBLIC_API_BASE_URL_QUERY}/items/list?page=1&limit=20&query=iphone 2020`)
-	const itemsResponse = response.data
+	const response = await queryRequest.get<ItemsResponse>("/items/list?page=1&limit=20&query=iphone 2020")
+	const items = response.data.data
 
 	return {
 		props: {
-			items: itemsResponse.data
+			items
 		}
 	}
 }

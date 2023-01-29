@@ -1,4 +1,6 @@
+import axios from "axios"
 import { Form, Formik } from "formik"
+import { User } from "next-auth"
 import { signIn, SignInResponse } from "next-auth/react"
 import { useRouter } from "next/router"
 import { useMemo, useState } from "react"
@@ -6,6 +8,7 @@ import * as yup from "yup"
 import { Button } from "../../components/Button/Button"
 import { TextInput } from "../../components/Form/TextInput/TextInput"
 import { AccountLayout } from "../../components/Layout/AccountLayout"
+import { authRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { NextPageCustomProps } from "../_app"
 
@@ -45,27 +48,21 @@ const Register: NextPageCustomProps = () => {
      * @param values input from form
      */
     const onFormSubmit = async ({ username, email, password }: RegisterDto) => {
+        // Register in our backend
         try {
-            // Register in our backend
-            const registerResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL_AUTH}/register`, {
-                method: "POST",
-                body: JSON.stringify({
-                    username,
-                    email,
-                    password
-                }),
-                headers: {
-                    "Content-Type": "application/json",
-                },
+            await authRequest.post<User>("/register", {
+                username,
+                email,
+                password
             })
-
+        } catch (error) {
             // If something went wrong when register backend set Error
-            if (!registerResponse.ok) {
-                setError(registerResponse.status + " " + registerResponse.statusText)
-                return
-            }
+            axios.isAxiosError(error) && error.response ? setError(error.response.data) : setError("Netzwerk-Zeitüberschreitung")
+            return
+        }
 
-            // When register backend was ok sign in with next auth
+        // When register backend was ok sign in with next auth
+        try {
             const response = await signIn("credentials", {
                 password,
                 email,
@@ -76,10 +73,10 @@ const Register: NextPageCustomProps = () => {
             if (response.ok) {
                 router.push(callbackUrl ?? routes.home)
             } else if (response.error) {
-                // setError(response.error)
+                setError(response.error)
             }
         } catch (error) {
-            console.error(error)
+            setError("Something went wrong. Try again or come later.")
         }
     }
 
