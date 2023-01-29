@@ -25,10 +25,9 @@ const FIRST_PAGE = 1
 const KEY_VIEW_TYPE = "discover_view_type"
 
 export type Item = {
-    id: string,
     name: string
     slug: string
-    weight: Weight,
+    weight: Weight
     source?: string
     image?: string
     tags: Tag[]
@@ -36,7 +35,7 @@ export type Item = {
 export type Weight = {
     value: number
     additionalValue?: number
-    isCa: boolean
+    isCa?: boolean
 }
 
 type Statistics = {
