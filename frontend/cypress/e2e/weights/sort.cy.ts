@@ -6,7 +6,7 @@ const SORT_TYPE = "desc"
 
 describe("Sort /weights", () => {
     beforeEach(() => {
-        cy.mockWeightsPage()
+        cy.mockItemsPage()
 
         cy.visitLocalPage(routes.weights.list())
         cy.wait("@mockGetRelatedTags")

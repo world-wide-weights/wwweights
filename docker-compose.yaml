@@ -1,4 +1,3 @@
-# TODO: Update this once the backend split have been merged => Main images for every service exist
 version: "3.9"
 services:
   frontend:
@@ -70,8 +69,8 @@ services:
       - IMAGE_STORE_BASE_PATH=${IMG_IMAGE_STORE_BASE_PATH:-./disk}
       - IMAGE_STORE_INCOMING_CACHE_PATH=${IMG_IMAGE_STORE_INCOMING_CACHE_PATH:-./cache}
     # Currently disabled as this causes an error => fs.rename does not moving files between devices
-    #volumes:
-    #  - image_backend_volume:${IMG_IMAGE_STORE_BASE_PATH}
+    volumes:
+      - image_backend_volume:${IMG_IMAGE_STORE_BASE_PATH}
     links:
       - auth-backend:auth
 

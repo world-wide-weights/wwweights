@@ -2,9 +2,6 @@ export class Client {
   forcedResult: any[] = [];
   params = [];
 
-  constructor(...args: any[]) {
-    return;
-  }
   readAll() {
     const g = generator(this.forcedResult.pop());
     // This needs a cancel function

@@ -1,6 +1,7 @@
 import { TypegooseModule } from '@m8a/nestjs-typegoose';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ScheduleModule } from '@nestjs/schedule';
 import { EventStoreModule } from './eventstore/eventstore.module';
 import { ItemsModule } from './items/items.module';
 import { SharedModule } from './shared/shared.module';
@@ -30,6 +31,7 @@ import { SharedModule } from './shared/shared.module';
     EventStoreModule,
     ItemsModule,
     SharedModule,
+    ScheduleModule.forRoot()
   ],
 })
 export class AppModule {}

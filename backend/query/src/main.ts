@@ -24,7 +24,7 @@ async function bootstrap() {
     ignoreGlobalPrefix: false,
   });
   SwaggerModule.setup('swagger', app, document);
-
+  app.enableCors();
   await app.listen(process.env.port || 3004);
 }
 bootstrap();

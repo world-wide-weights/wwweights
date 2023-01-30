@@ -1,4 +1,3 @@
-import { EventStoreDBClient } from '@eventstore/db-client';
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { EventStoreModule } from '../src/eventstore/eventstore.module';
@@ -8,24 +7,21 @@ import { ConfigModule } from '@nestjs/config';
 import { ALLOWED_EVENT_ENTITIES } from '../src/eventstore/enums/allowedEntities.enum';
 
 describe('EventstoreModule', () => {
+  // Basically disable the constructor to skip Eventstoredb connection
+  process.env.TEST_MODE = 'true';
   let app: INestApplication;
   let eventStore: EventStore;
   const client = new Client();
 
   async function replaceApp() {
-    EventStoreDBClient.connectionString = jest.fn().mockImplementation(() => {
-      return client;
-    });
-
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [ConfigModule.forRoot({ isGlobal: true }), EventStoreModule],
-    })
-      .overrideProvider(EventStoreDBClient)
-      .useValue(client)
-      .compile();
+    }).compile();
     app = moduleFixture.createNestApplication();
     eventStore = app.get<EventStore>(EventStore);
     await app.init();
+    eventStore.isReady = false;
+    eventStore['client'] = client as any;
   }
 
   beforeEach(async () => {
@@ -37,14 +33,16 @@ describe('EventstoreModule', () => {
   });
 
   describe('Playback functionality', () => {
-    it('Should be ready instantly if eventstore is empty', () => {
+    it('Should be ready instantly if eventstore is empty', async () => {
       // ARRANGE
       client.forcedResult = [];
+      //ACT
+      await eventStore['init']();
       // ASSERT
       expect(eventStore.isReady).toEqual(true);
     });
 
-    it('Should not be ready if necessary event has not been read', async () => {
+    it('Should not be ready if necessary event has not been ready', async () => {
       await app.close();
       // ARRANGE
       const eventList = {
@@ -60,6 +58,8 @@ describe('EventstoreModule', () => {
       ];
       // Rebuild app to restart init process
       await replaceApp();
+      // ACT
+      await eventStore['init']();
       // ASSERT
       expect(eventStore.isReady).toEqual(false);
     });

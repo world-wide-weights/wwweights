@@ -180,6 +180,7 @@ describe('QueryController (e2e)', () => {
 
     describe('items/related', () => {
       const subPath = 'items/related';
+
       it('should return the related items', async () => {
         await itemModel.deleteMany();
         await itemModel.insertMany(relatedItems);
@@ -196,6 +197,41 @@ describe('QueryController (e2e)', () => {
         for (const item of result.body.data) {
           expect(otherItemNames).toContain(item.name);
         }
+      });
+
+      it('should throw unproccessable Entity if nothing can be found when no item can be found', async () => {
+        await itemModel.deleteMany();
+        await request(server)
+          .get(queriesPath + subPath)
+          .query({ slug: relatedItems[0].slug })
+          .expect(HttpStatus.UNPROCESSABLE_ENTITY);
+      });
+    });
+
+    describe('items/statistics', () => {
+      const subPath = 'items/statistics';
+
+      it('should return the proper statistic values', async () => {
+        await itemModel.deleteMany();
+        await itemModel.insertMany(relatedItems);
+
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({ query: relatedItems[0].tags[0].name })
+          .expect(HttpStatus.OK);
+
+        console.log(result.body.heaviest);
+        expect(result.body.heaviest.weight.value).toEqual(102);
+        expect(result.body.lightest.weight.value).toEqual(100);
+        expect(result.body.averageWeight).toEqual(101);
+      });
+
+      it('should throw unproccessable Entity if no item can be found', async () => {
+        await itemModel.deleteMany();
+        await request(server)
+          .get(queriesPath + subPath)
+          .query({ slug: relatedItems[0].slug })
+          .expect(HttpStatus.UNPROCESSABLE_ENTITY);
       });
     });
   });

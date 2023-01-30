@@ -1,6 +1,7 @@
 import {
   AllStreamResolvedEvent,
   BACKWARDS as SDRAWKCAB,
+  ChannelCredentialOptions,
   END,
   EventStoreDBClient,
   jsonEvent,
@@ -17,6 +18,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { EventBus } from '@nestjs/cqrs';
+import { readFileSync } from 'fs';
 import { ItemInsertedEvent } from '../items/events/item-inserted.event';
 import { ALLOWED_EVENT_ENTITIES } from './enums/allowedEntities.enum';
 
@@ -36,15 +38,35 @@ export class EventStore {
     private readonly eventBus: EventBus,
     private readonly configService: ConfigService,
   ) {
-    this.client = EventStoreDBClient.connectionString(
-      `esdb://${configService.get<string>(
-        'DB_EVENTSTORE_USERNAME',
-      )}:${configService.get<string>(
-        'DB_EVENTSTORE_PW',
-      )}@${configService.get<string>(
-        'DB_EVENTSTORE_HOST',
-      )}?tls=${configService.get<string>('DB_EVENTSTORE_USE_TLS')}`,
+    // Add to allow for testing
+    if (process.env.TEST_MODE === 'true') {
+      return;
+    }
+    // Locally we can run with this
+    let sslOptions: ChannelCredentialOptions = {
+      insecure: true,
+    };
+    // If connecting to secure instance we need this
+    if (this.configService.get<string>('DB_EVENTSTORE_USE_TLS') === 'true') {
+      sslOptions = {
+        insecure: false,
+        rootCertificate: readFileSync(
+          this.configService.get<string>('DB_EVENTSTORE_ROOT_CA_PATH'),
+        ),
+      };
+    }
+
+    this.client = new EventStoreDBClient(
+      {
+        endpoint: this.configService.get<string>('DB_EVENTSTORE_HOST'),
+      },
+      sslOptions,
+      {
+        username: this.configService.get<string>('DB_EVENTSTORE_USERNAME'),
+        password: this.configService.get<string>('DB_EVENTSTORE_PW'),
+      },
     );
+
     this.init();
   }
 
