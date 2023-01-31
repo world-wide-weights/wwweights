@@ -2,7 +2,7 @@ import { Form, Formik } from "formik"
 import "material-symbols"
 import "../../../styles/global.css"
 import { Button } from "../../Button/Button"
-import { Checkbox } from "./Checkbox"
+import { CheckboxList } from "./CheckboxList"
 
 const initialValues = {
     box: ""
@@ -42,10 +42,10 @@ const data = {
     ]
 }
 
-describe("Checkbox", () => {
+describe("CheckboxList", () => {
     beforeEach(() => {
         cy.mount(<Wrapper>
-            <Checkbox name={data.name} options={data.options} labelText={data.labelText} helperText={data.helperText} />
+            <CheckboxList name={data.name} options={data.options} labelText={data.labelText} helperText={data.helperText} />
             <Button kind="primary" type="submit" className="mt-2">Hello</Button>
         </Wrapper>)
     })
