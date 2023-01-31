@@ -1,6 +1,6 @@
 import { Field } from "formik"
+import { ComponentOptions } from "../../../types/options"
 import { Icon } from "../../Icon/Icon"
-import { ComponentOptions } from "../Dropdown/Dropdown"
 
 type CheckboxProps = {
     /** Gives the input a unique name */
