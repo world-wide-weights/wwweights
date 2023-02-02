@@ -27,7 +27,7 @@ export const CheckboxList: React.FC<CheckboxProps> = ({ name, labelText, helperT
                     <span className="text-darkgrey">{option.label}</span>
                 </label>
             ))}
-            <p data-cy={`${name}-helpertext`} className="text-lightgrey text-sm mb-4">{helperText}</p>
+            {helperText && <small data-cy={`${name}-helpertext`} className="text-lightgrey text-sm mb-4">{helperText}</small>}
         </>
     )
 }
