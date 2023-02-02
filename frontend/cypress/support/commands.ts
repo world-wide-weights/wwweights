@@ -2,7 +2,7 @@
 
 import paginatedItems from "../fixtures/items/list.json"
 import paginatedRelatedItems from "../fixtures/items/related.json"
-import singleItem from "../fixtures/items/single.json"
+import paginatedSingleItem from "../fixtures/items/single.json"
 import statistics from "../fixtures/items/statistics.json"
 
 const apiBaseUrlMock = Cypress.env("PUBLIC_API_BASE_URL_MOCK")
@@ -75,7 +75,7 @@ Cypress.Commands.add("mockSingleWeight", () => {
         method: "get",
         path: "/items/list",
         statusCode: 200,
-        body: singleItem
+        body: paginatedSingleItem
     })
 
     // Mock items related
