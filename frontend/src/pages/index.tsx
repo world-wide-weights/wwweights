@@ -1,5 +1,5 @@
 import { Form, Formik } from "formik"
-import { GetStaticProps, InferGetServerSidePropsType } from "next"
+import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { Button } from "../components/Button/Button"
@@ -18,7 +18,7 @@ type HomeProps = {
 /**
  * Landing Page.
  */
-function Home({ items }: InferGetServerSidePropsType<typeof getStaticProps>) {
+function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 	const router = useRouter()
 
 	// Formik Initial Values
@@ -43,7 +43,7 @@ function Home({ items }: InferGetServerSidePropsType<typeof getStaticProps>) {
 				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
 			</Head>
 
-			<header className="bg-background-header-index bg-no-repeat bg-cover bg-center">
+			<header className="bg-background-header-index bg-no-repeat bg-cover bg-center md:border-t-4 md:border-blue-500">
 				{/* Navbar */}
 				<Navbar />
 
@@ -108,7 +108,7 @@ function Home({ items }: InferGetServerSidePropsType<typeof getStaticProps>) {
 	)
 }
 
-export const getStaticProps: GetStaticProps<HomeProps> = async () => {
+export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
 	const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/items?_page=1&_limit=20`)
 	const items = await response.json()
 
