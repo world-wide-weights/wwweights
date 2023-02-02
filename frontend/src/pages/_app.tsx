@@ -12,6 +12,8 @@ import { Auth } from "../components/Auth/Auth"
 import { Layout } from "../components/Layout/Layout"
 import "../styles/global.css"
 
+const SHOULD_DISPLAY_ADS = process.env.NODE_ENV !== "development"
+
 // Font
 const metropolis = localFont({
   src: [
@@ -71,15 +73,14 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsCustom
       <Component {...pageProps} />
     </Auth> :
     <Component {...pageProps} />
-
   return <>
     {/** Google AdSense */}
-    <Script
+    {SHOULD_DISPLAY_ADS && <Script
       async
       strategy="afterInteractive"
       onError={(e) => { console.error("Script failed to load", e) }}
       src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9373286643303244"
-    />
+    />}
 
     <SessionProvider session={session}>
       <div className={`${metropolis.variable} font-sans`}>
