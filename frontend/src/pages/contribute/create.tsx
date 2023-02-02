@@ -12,7 +12,7 @@ import { TextInput } from "../../components/Form/TextInput/TextInput"
 import { Headline } from "../../components/Headline/Headline"
 import { routes } from "../../services/routes/routes"
 import { getWeightInG } from "../../services/utils/unit"
-import { Weight } from "../weights"
+import { Weight } from "../../types/item"
 import { NextPageCustomProps } from "../_app"
 
 type CreateItemForm = {

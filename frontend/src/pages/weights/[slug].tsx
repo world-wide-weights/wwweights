@@ -2,7 +2,6 @@ import { GetStaticPaths, GetStaticProps, InferGetServerSidePropsType } from "nex
 import Head from "next/head"
 import Image from "next/image"
 import { useRouter } from "next/router"
-import { Item } from "."
 import { Chip } from "../../components/Chip/Chip"
 import { CompareContainer } from "../../components/CompareContainer/CompareContainer"
 import { SearchHeader } from "../../components/Header/SearchHeader"
@@ -13,6 +12,7 @@ import { Tab } from "../../components/Tabs/Tab"
 import { Tabs } from "../../components/Tabs/Tabs"
 import { routes } from "../../services/routes/routes"
 import { calculateMedianWeight, generateWeightString } from "../../services/utils/weight"
+import { Item } from "../../types/item"
 import Custom404 from "../404"
 
 type WeightsSingleProps = {

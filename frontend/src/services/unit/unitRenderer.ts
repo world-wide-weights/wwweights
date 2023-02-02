@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js"
-import { Weight } from "../../pages/weights"
+import { Weight } from "../../types/item"
 import { convertWeightIntoTargetUnit } from "./unitConverter"
 import { getBestHumanReadableUnit } from "./unitHumanReadable"
 
