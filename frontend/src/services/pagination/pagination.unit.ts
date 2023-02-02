@@ -120,7 +120,7 @@ describe("Pagination", () => {
                 sort: "relevance",
                 baseRoute: () => "/"
             }
-            //Test
+
             expect(paginationService(options)).deep.equal({
                 prev: "/",
                 next: "/",
