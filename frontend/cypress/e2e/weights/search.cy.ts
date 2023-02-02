@@ -1,5 +1,5 @@
 import { routes } from "../../../src/services/routes/routes"
-import items from "../../fixtures/items/list.json"
+import paginatedItems from "../../fixtures/items/list.json"
 import relatedTags from "../../fixtures/tags/related.json"
 
 describe("Search /weights", () => {
@@ -13,23 +13,23 @@ describe("Search /weights", () => {
 
         // This test seems to be flaky: https://github.com/cypress-io/cypress/issues/3817
         // it('should search items when click search items', () => {
-        //     cy.dataCy('search').type(items.data[0].name)
+        //     cy.dataCy('search').type(paginatedItems.data[0].name)
         //     cy.dataCy('text-input-icon-query').click()
 
-        //     cy.url().should('include', items.data[0].name)
+        //     cy.url().should('include', paginatedItems.data[0].name)
         // })
 
         // This test seems to be flaky: https://github.com/cypress-io/cypress/issues/3817
         // it('should search items when hit enter', () => {
-        //     cy.dataCy('search').type(`${items.data[0].name}{enter}`)
-        //     cy.url().should('include', items.data[0].name)
+        //     cy.dataCy('search').type(`${paginatedItems.data[0].name}{enter}`)
+        //     cy.url().should('include', paginatedItems.data[0].name)
         // })
 
         it("should search items when query in url", () => {
-            cy.visitLocalPage(routes.weights.list({ query: items.data[0].name }))
+            cy.visitLocalPage(routes.weights.list({ query: paginatedItems.data[0].name }))
             cy.wait("@mockGetRelatedTags")
 
-            cy.dataCy("search").should("have.value", items.data[0].name)
+            cy.dataCy("search").should("have.value", paginatedItems.data[0].name)
         })
     })
 
@@ -44,7 +44,7 @@ describe("Search /weights", () => {
         describe("Displayed tags", () => {
             beforeEach(() => {
                 // Search item
-                cy.dataCy("search").type(items.data[0].name)
+                cy.dataCy("search").type(paginatedItems.data[0].name)
                 cy.dataCy("text-input-icon-query").click()
             })
 

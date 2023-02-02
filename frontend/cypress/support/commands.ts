@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
-import items from "../fixtures/items/list.json"
-import relatedItems from "../fixtures/items/related.json"
+import paginatedItems from "../fixtures/items/list.json"
+import paginatedRelatedItems from "../fixtures/items/related.json"
 import singleItem from "../fixtures/items/single.json"
 import statistics from "../fixtures/items/statistics.json"
 
@@ -35,9 +35,9 @@ Cypress.Commands.add("mockGetRelatedTags", () => {
 
 Cypress.Commands.add("mockItemsList", (itemCount?: number) => {
     const body = itemCount || itemCount === 0 ? {
-        ...items,
-        data: items.data.slice(0, itemCount)
-    } : items
+        ...paginatedItems,
+        data: paginatedItems.data.slice(0, itemCount)
+    } : paginatedItems
 
     cy.task("clearNock")
     cy.task("activateNock")
@@ -84,7 +84,7 @@ Cypress.Commands.add("mockSingleWeight", () => {
         method: "get",
         path: "/items/related",
         statusCode: 200,
-        body: relatedItems
+        body: paginatedRelatedItems
     })
 
     cy.mockGetRelatedTags()

@@ -1,5 +1,5 @@
 import { routes } from "../../../src/services/routes/routes"
-import items from "../../fixtures/items/list.json"
+import paginatedItems from "../../fixtures/items/list.json"
 
 // TODO (Zoe-Bot): Update when correct api implemented  
 const SORT_TYPE = "heaviest"
@@ -38,7 +38,7 @@ describe("Sort /weights", () => {
         cy.wait(1000)
 
         // Search something
-        cy.dataCy("search").type(items.data[0].name)
+        cy.dataCy("search").type(paginatedItems.data[0].name)
         cy.dataCy("text-input-icon-query").click()
 
         // WARNING HERE is a bug in the software
