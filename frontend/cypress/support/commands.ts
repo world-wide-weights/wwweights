@@ -39,8 +39,6 @@ Cypress.Commands.add("mockItemsList", (itemCount?: number) => {
         data: items.data.slice(0, itemCount)
     } : items
 
-    console.log(body)
-
     cy.task("clearNock")
     cy.task("activateNock")
     cy.task("nock", {
