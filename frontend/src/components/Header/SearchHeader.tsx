@@ -1,9 +1,9 @@
 import { Form, Formik, useFormikContext } from "formik"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-import { Tag } from "../../pages/tags"
 import { mockRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
+import { Tag } from "../../types/tag"
 import { Chip } from "../Chip/Chip"
 import { Headline } from "../Headline/Headline"
 import { Search } from "../Search/Search"
@@ -50,7 +50,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "
     const AutoUpdateQueryField = (): null => {
         const { setFieldValue } = useFormikContext()
         useEffect(() => {
-            const tag = relatedTags.find(relatedTag => relatedTag.slug === query)
+            const tag = relatedTags.find(relatedTag => relatedTag.name === query)
             let queryField = query
 
             if (tag)
@@ -73,10 +73,12 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "
                 // TODO (Zoe-Bot): Update mock to be real api
                 const response = await mockRequest.get<Tag[]>("/api/query/v1/tags/related")
                 const relatedTags = response.data
+
                 setRelatedTags(relatedTags)
-                setIsLoadingRelatedTags(false)
             } catch (error) {
                 console.error(error)
+            } finally {
+                setIsLoadingRelatedTags(false)
             }
         }
         getRelatedTags()
@@ -97,7 +99,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "
                         {/* TODO (Zoe-bot): Only develop Remove query !== "" condition when normal backend api is set */}
                         {query !== "" && (isLoadingRelatedTags ? <p>Loading...</p> : <div datacy="search-header-tag-wrapper" className="whitespace-nowrap overflow-x-scroll md:whitespace-normal md:overflow-hidden">
                             {/* Only show tags not current searched (should not be the value in query field) */}
-                            {relatedTags.map(relatedTag => relatedTag.slug !== query && <Chip datacy={`search-header-chip-${relatedTag.slug}`} key={relatedTag.slug} to={routes.weights.list({ sort, query: relatedTag.slug })}>{relatedTag.name}</Chip>)}
+                            {relatedTags.map(relatedTag => relatedTag.name !== query && <Chip datacy={`search-header-chip-${relatedTag.name}`} key={relatedTag.name} to={routes.weights.list({ sort, query: relatedTag.name })}>{relatedTag.name}</Chip>)}
                         </div>)}
                         <AutoUpdateQueryField />
                     </Form>
