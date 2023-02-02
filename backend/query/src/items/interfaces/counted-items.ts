@@ -1,6 +1,4 @@
-import { Item } from '../../models/item.model';
-
-export class DataWithCount {
+export class DataWithCount<T> {
   total: [{ count: number }];
-  data: Item[];
+  data: T[];
 }
