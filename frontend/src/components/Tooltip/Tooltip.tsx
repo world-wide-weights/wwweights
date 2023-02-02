@@ -11,14 +11,16 @@ type TooltipProps = {
     delay?: number
     /** Adjust margin for top and left position when tooltip gets bigger. */
     customMargin?: string
+    /** Add custom classname to tooltip wrapper. */
+    wrapperClassname?: string
 }
 
 /**
  * Wrap around Component and show tooltip when hover over it.
  */
-export const Tooltip: React.FC<TooltipProps> = ({ children, content, delay, direction = "top", customMargin = "-40px" }) => {
+export const Tooltip: React.FC<TooltipProps> = ({ children, content, delay, wrapperClassname = "", direction = "top", customMargin = "-40px" }) => {
     let timeout: NodeJS.Timeout
-    const [isShown, setIsShown] = useState(true)
+    const [isShown, setIsShown] = useState(false)
 
     /**
      * Shows Tooltip
@@ -47,10 +49,12 @@ export const Tooltip: React.FC<TooltipProps> = ({ children, content, delay, dire
         ["left"]: "left-auto right-[calc(100%_+_30px)] top-1/2 translate-x-0 -translate-y-1/2 before:left-auto before:right-[-16px] before:top-1/2 before:translate-x-0 before:-translate-y-1/2 before:border-l-blue-900",
     }
 
-    return <div datacy="tooltip-wrapper" className="relative inline-block" onMouseEnter={showTooltip} onMouseLeave={hideTooltip}>
+    return <div datacy="tooltip-wrapper" className={`relative inline-block ${wrapperClassname}`} onMouseEnter={showTooltip} onMouseLeave={hideTooltip} >
         {children}
-        {isShown && <div datacy="tooltip" style={direction == "top" ? { top: customMargin } : direction == "bottom" ? { bottom: customMargin } : {}} className={`${baseClass} ${triangleBaseClass} ${tooltipClassesDirection[direction]}`}>
-            {content}
-        </div>}
-    </div>
+        {
+            isShown && <div datacy="tooltip" style={direction == "top" ? { top: customMargin } : direction == "bottom" ? { bottom: customMargin } : {}} className={`${baseClass} ${triangleBaseClass} ${tooltipClassesDirection[direction]}`}>
+                {content}
+            </div>
+        }
+    </div >
 }

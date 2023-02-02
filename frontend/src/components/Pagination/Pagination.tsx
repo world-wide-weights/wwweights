@@ -4,6 +4,7 @@ import { RoutePagination } from "../../services/routes/routes"
 import { Button } from "../Button/Button"
 import { IconButton } from "../Button/IconButton"
 import { SortType } from "../Sort/Sort"
+import { Tooltip } from "../Tooltip/Tooltip"
 
 export type PaginationProps = {
     /** The total number of items. */
@@ -40,7 +41,9 @@ export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage,
             {/* Left navigation arrow */}
             <li>
                 <Button datacy="pagination-button-previous" to={paginationService.prev ?? " "} disabled={!paginationService.prev} icon="arrow_back_ios_new" className={`${!paginationService.prev ? "hidden" : "flex"} sm:hidden md:flex mr-5`} kind="tertiary">Previous</Button>
-                <IconButton datacy="pagination-button-previous-tablet" to={paginationService.prev ?? " "} className="hidden sm:flex md:hidden" disabled={!paginationService.prev} icon="arrow_back_ios_new" />
+                <Tooltip wrapperClassname="hidden sm:flex md:hidden" content="Previus page">
+                    <IconButton datacy="pagination-button-previous-tablet" to={paginationService.prev ?? " "} disabled={!paginationService.prev} icon="arrow_back_ios_new" />
+                </Tooltip>
             </li>
 
             {paginationService.pages.map((page, index) =>
@@ -57,7 +60,9 @@ export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage,
             {/*  Right navigation arrow */}
             <li>
                 <Button datacy="pagination-button-next" to={paginationService.next ?? " "} disabled={!paginationService.next} icon="arrow_forward_ios" iconSlot="end" className={`${!paginationService.next ? "hidden" : "flex"} sm:hidden md:flex ml-5`} kind="tertiary">Next</Button>
-                <IconButton datacy="pagination-button-next-tablet" to={paginationService.next ?? " "} className="hidden sm:flex md:hidden" disabled={!paginationService.next} icon="arrow_forward_ios" />
+                <Tooltip wrapperClassname="hidden sm:flex md:hidden" content="Next page">
+                    <IconButton datacy="pagination-button-next-tablet" to={paginationService.next ?? " "} disabled={!paginationService.next} icon="arrow_forward_ios" />
+                </Tooltip>
             </li>
         </ul>
     </>
