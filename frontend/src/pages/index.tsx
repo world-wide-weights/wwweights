@@ -43,7 +43,7 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
 			</Head>
 
-			<header className="bg-background-header-index bg-no-repeat bg-cover bg-center">
+			<header className="bg-background-header-index bg-no-repeat bg-cover bg-center md:border-t-4 md:border-blue-500">
 				{/* Navbar */}
 				<Navbar />
 

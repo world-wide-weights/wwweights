@@ -1,17 +1,17 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { IsArray, IsOptional, IsString, Length } from 'class-validator';
-import { Page } from './page';
-import { SortEnum } from './sortEnum';
+import { IsArray, IsEnum, IsOptional, IsString, Length } from 'class-validator';
+import { Page } from '../../shared/page';
+import { ItemSortEnum } from './item-sort-enum';
 
 export class QueryItemListDto extends Page {
-  @IsString()
   @IsOptional()
+  @IsEnum(ItemSortEnum)
   @ApiPropertyOptional({
-    enum: SortEnum,
-    default: SortEnum.RELEVANCE,
+    enum: ItemSortEnum,
+    default: ItemSortEnum.RELEVANCE,
   })
-  sort = SortEnum.RELEVANCE; // Maybe: also newest | oldest
+  sort = ItemSortEnum.RELEVANCE; // Maybe: also newest | oldest
 
   @IsString()
   @IsOptional()
