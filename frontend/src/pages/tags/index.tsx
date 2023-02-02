@@ -3,17 +3,14 @@ import Head from "next/head"
 import { Chip } from "../../components/Chip/Chip"
 import { Headline } from "../../components/Headline/Headline"
 import { Pagination } from "../../components/Pagination/Pagination"
-import { mockRequest } from "../../services/axios/axios"
+import { queryRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
+import { PaginatedResponse } from "../../types/item"
+import { Tag } from "../../types/tag"
 
 const DEFAULT_ITEMS_PER_PAGE = 64
 const ITEMS_PER_PAGE_MAXIMUM = 100
 const FIRST_PAGE = 1
-
-export type Tag = {
-    name: string
-    slug: string
-}
 
 type TagsListProps = {
     tags: Tag[]
@@ -38,7 +35,7 @@ export default function TagsList({ tags, currentPage, totalItems, limit }: Infer
 
             {/* tags */}
             <div className="flex flex-wrap pb-3">
-                {tags.map((tag) => <Chip key={tag.name} to={routes.tags.single(tag.slug)}>{tag.name}</Chip>)}
+                {tags.map((tag) => <Chip key={tag.name} to={routes.tags.single(tag.name)}>{tag.name}</Chip>)}
             </div>
 
             {/* Pagination */}
@@ -59,16 +56,15 @@ export const getServerSideProps: GetServerSideProps<TagsListProps> = async (cont
         }
     }
 
-    // TODO (Zoe-Bot): Update mock to be real api
-    const response = await mockRequest.get<Tag[]>(`/api/query/v1/tags/list?page=${currentPage}&limit=${limit}`)
-    const tags = response.data
-    const totalItems = parseInt(response.headers["x-total-count"] ?? "100")
+    // Fetch tags
+    const responseTags = await queryRequest.get<PaginatedResponse<Tag>>(`/tags/list?page=${currentPage}&limit=${limit}`)
+    const tags = responseTags.data.data
 
     return {
         props: {
             tags,
             currentPage,
-            totalItems,
+            totalItems: responseTags.data.total,
             limit
         }
     }
