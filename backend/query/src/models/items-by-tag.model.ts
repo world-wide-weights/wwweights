@@ -1,7 +1,7 @@
 import { AggregateRoot } from '@nestjs/cqrs';
 import { prop } from '@typegoose/typegoose';
 import { Expose } from 'class-transformer';
-import { Item } from './item.model';
+import { Item } from '../items/models/item.model';
 
 // TODO: Figure out if we can exclude some indexes or if it is usefull to have 2 full text search indexes
 // TODO: If we do not exclude the indexes, they are considered the same, meaning that we can't insert an Item into the ItemsByTag collection if it already exists in the Item collection

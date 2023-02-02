@@ -1,5 +1,5 @@
 import { Expose, Transform } from 'class-transformer';
-import { Item } from '../../models/item.model';
+import { Item } from '../models/item.model';
 
 export class ItemStatistics {
   @Expose()
