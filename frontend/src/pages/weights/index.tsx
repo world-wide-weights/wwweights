@@ -15,27 +15,12 @@ import { StatsCard } from "../../components/Statistics/StatsCard"
 import { useLocalStorage } from "../../hooks/useLocalStorage"
 import { routes } from "../../services/routes/routes"
 import { generateWeightString } from "../../services/utils/weight"
-import { Tag } from "../tags"
+import { Item } from "../../types/item"
 
 const DEFAULT_ITEMS_PER_PAGE = 16
 const ITEMS_PER_PAGE_MAXIMUM = 100
 const FIRST_PAGE = 1
 const KEY_VIEW_TYPE = "discover_view_type"
-
-export type Item = {
-    id: string,
-    name: string
-    slug: string
-    weight: Weight,
-    source?: string
-    image?: string
-    tags: Tag[]
-}
-export type Weight = {
-    value: number
-    additionalValue?: number
-    isCa: boolean
-}
 
 type Statistics = {
     heaviest: Item
