@@ -73,6 +73,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsCustom
     <Component {...pageProps} />
 
   return <>
+    {/** Google AdSense */}
     <Script
       async
       strategy="afterInteractive"
