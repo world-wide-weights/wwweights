@@ -37,11 +37,15 @@ export class ItemStatisticsHandler
         { $project: { heaviest: 1, lightest: 1, averageWeight: 1 } },
       ]);
 
+      if (!statistics[0].averageWeight) {
+        this.logger.log('No items found');
+        throw new UnprocessableEntityException('No items found');
+      }
       return statistics[0];
     } catch (error) {
       this.logger.error(error);
       throw new UnprocessableEntityException(
-        'Item list could not be retrieved',
+        'Item statistics could not be retrieved',
       );
     }
   }
