@@ -6,8 +6,6 @@ export type Item = {
     source?: string
     image?: string
     tags: Tag[]
-    user: string
-    createdAt: number // timestamp when item got created
 }
 
 export type Weight = {
