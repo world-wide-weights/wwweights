@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ItemsModule } from './items/items.module';
 import { SharedModule } from './shared/shared.module';
+import { TagsModule } from './tags/tags.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { SharedModule } from './shared/shared.module';
       },
       inject: [ConfigService],
     }),
+    TagsModule,
     ItemsModule,
     SharedModule,
   ],
