@@ -8,6 +8,7 @@ import { ItemPreviewGrid } from "../components/Item/ItemPreviewGrid"
 import { Navbar } from "../components/Navbar/Navbar"
 import { Search } from "../components/Search/Search"
 import { Stat } from "../components/Statistics/Stat"
+import { Tooltip } from "../components/Tooltip/Tooltip"
 import { routes } from "../services/routes/routes"
 import { Item } from "./weights"
 
@@ -49,8 +50,14 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 
 				{/* Header */}
 				<div className="container flex flex-col items-center justify-center py-10 md:min-h-[30rem]">
-					<h1 className="text-white text-2xl md:text-4xl font-bold mb-1">How much weigh?</h1>
-					<p className="text-gray-200 mb-3 md:mb-6">World&lsquo;s largest database about weights!</p>
+					<Tooltip customMargin="-60px" direction="bottom" content={<>
+						<p>Displayed on public <br /> forums such as Front.</p>
+					</>}>
+						<h1 className="text-white text-2xl md:text-4xl font-bold mb-1">How much weigh?</h1>
+					</Tooltip>
+					<Tooltip content={"Displayed on public forums such as Front."}>
+						<p className="text-gray-200 mb-3 md:mb-6">World&lsquo;s largest database about weights!</p>
+					</Tooltip>
 
 					{/* Search */}
 					{/* TODO (Zoe-bot): Move formik stuff to search component */}
@@ -62,7 +69,7 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 						</Form>
 					</Formik>
 				</div>
-			</header>
+			</header >
 
 			<main className="bg-gray-100 pt-5 md:pt-10">
 				{/* Items */}
@@ -104,7 +111,7 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 
 			{/* Footer */}
 			<Footer />
-		</div>
+		</div >
 	)
 }
 
