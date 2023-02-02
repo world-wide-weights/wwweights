@@ -6,13 +6,14 @@ export type PaginatedResponse<T> = {
 }
 
 export type Item = {
-    id: string,
     name: string
     slug: string
-    weight: Weight,
+    weight: Weight
     source?: string
     image?: string
     tags: Tag[]
+    user: string // TODO (Zoe-Bot): Update this to real user when api updated
+    createdAt: number
 }
 
 export type Weight = {
