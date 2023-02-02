@@ -36,7 +36,7 @@ type WeightsListProps = {
     limit: number
     query: string
     sort: SortType
-    statistics: Statistics
+    statistics?: Statistics
 }
 
 /** 
@@ -66,7 +66,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
 
         {/* Content */}
         <main className="container mt-5">
-            {items.length === 0 ?
+            {(items.length === 0 || statistics === undefined) ?
                 // Empty State
                 <SearchEmptyState query={query} />
                 : <>
@@ -121,7 +121,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                             </div>
 
                             {/* Statistics Content */}
-                            <div className={`${statisticsExpanded ? "lg:flex-col" : "lg:items-start"} lg:flex`}>
+                            {statistics && <div className={`${statisticsExpanded ? "lg:flex-col" : "lg:items-start"} lg:flex`}>
                                 <div className="flex mb-5 lg:mb-10">
                                     <button onClick={() => setStatisticsExpanded(!statisticsExpanded)} className="hidden lg:block bg-white self-stretch rounded-lg px-1 mr-2">
                                         <Icon>chevron_left</Icon>
@@ -133,7 +133,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                                         <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="scale" value={`${Number(statistics.averageWeight).toFixed(2)} g`} descriptionBottom="Average" />
                                     </div>
                                 </div>
-                            </div>
+                            </div>}
                         </div>
                     </div>
                 </>}
@@ -154,26 +154,41 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
         }
     }
 
-    // Fetch items and statistics
-    const [itemsResponse, statisticResponse] = await Promise.all([
-        queryRequest.get<PaginatedResponse<Item>>(`/items/list?page=${currentPage}&limit=${limit}&sort=${sort}&query=${query}`),
-        queryRequest.get<Statistics>(`/items/statistics?query=${query}`),
-    ])
+    try {
+        // Fetch items and statistics
+        const [itemsResponse, statisticResponse] = await Promise.all([
+            queryRequest.get<PaginatedResponse<Item>>(`/items/list?page=${currentPage}&limit=${limit}&sort=${sort}&query=${query}`),
+            queryRequest.get<Statistics>(`/items/statistics?query=${query}`),
+        ])
 
-    // Items, statistics and total items
-    const items = itemsResponse.data.data
-    const statistics = statisticResponse.data
-    const totalItems = itemsResponse.data.total
+        // Items, statistics and total items
+        const items = itemsResponse.data.data
+        const statistics = statisticResponse.data
+        const totalItems = itemsResponse.data.total
 
-    return {
-        props: {
-            items,
-            currentPage,
-            limit,
-            totalItems,
-            query,
-            sort,
-            statistics
+        return {
+            props: {
+                items,
+                currentPage,
+                limit,
+                totalItems,
+                query,
+                sort,
+                statistics
+            }
         }
+    } catch (error) {
+        return {
+            props: {
+                items: [],
+                currentPage,
+                limit,
+                totalItems: 0,
+                query,
+                sort
+            }
+        }
+
     }
+
 }
