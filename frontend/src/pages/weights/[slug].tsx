@@ -48,7 +48,7 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
 
     // Strings Generator
     const weightString = generateWeightString(item.weight)
-    const sourceName = null
+    const sourceName = item.source ? new URL(item.source).hostname.replace("www.", "") : null
 
     // Throw error when tab does not exist.
     if (currentTabIndex === -1 && currentTab)
