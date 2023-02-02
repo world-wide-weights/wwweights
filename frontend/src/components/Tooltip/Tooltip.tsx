@@ -47,9 +47,9 @@ export const Tooltip: React.FC<TooltipProps> = ({ children, content, delay, dire
         ["left"]: "left-auto right-[calc(100%_+_30px)] top-1/2 translate-x-0 -translate-y-1/2 before:left-auto before:right-[-16px] before:top-1/2 before:translate-x-0 before:-translate-y-1/2 before:border-l-blue-900",
     }
 
-    return <div className="relative inline-block" onMouseEnter={showTooltip} onMouseLeave={hideTooltip}>
+    return <div datacy="tooltip-wrapper" className="relative inline-block" onMouseEnter={showTooltip} onMouseLeave={hideTooltip}>
         {children}
-        {isShown && <div style={direction == "top" ? { top: customMargin } : direction == "bottom" ? { bottom: customMargin } : {}} className={`${baseClass} ${triangleBaseClass} ${tooltipClassesDirection[direction]}`}>
+        {isShown && <div datacy="tooltip" style={direction == "top" ? { top: customMargin } : direction == "bottom" ? { bottom: customMargin } : {}} className={`${baseClass} ${triangleBaseClass} ${tooltipClassesDirection[direction]}`}>
             {content}
         </div>}
     </div>
