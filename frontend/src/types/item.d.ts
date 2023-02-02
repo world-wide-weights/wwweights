@@ -1,10 +1,10 @@
 import { Item } from "../pages/weights"
 
-export type ItemsResponse = {
+export type PaginatedResponse<T> = {
     total: number,
     page: number,
     limit: number,
-    data: Item[]
+    data: T[]
 }
 
 export type StatisticResponse = {

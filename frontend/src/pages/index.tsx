@@ -10,7 +10,7 @@ import { Search } from "../components/Search/Search"
 import { Stat } from "../components/Statistics/Stat"
 import { queryRequest } from "../services/axios/axios"
 import { routes } from "../services/routes/routes"
-import { ItemsResponse } from "../types/item"
+import { PaginatedResponse } from "../types/item"
 import { Item } from "./weights"
 
 type HomeProps = {
@@ -111,7 +111,7 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 }
 
 export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
-	const response = await queryRequest.get<ItemsResponse>("/items/list?page=1&limit=20&query=iphone 2020")
+	const response = await queryRequest.get<PaginatedResponse<Item>>("/items/list?page=1&limit=20&query=iphone 2020")
 	const items = response.data.data
 
 	return {

@@ -16,7 +16,7 @@ import { useLocalStorage } from "../../hooks/useLocalStorage"
 import { queryRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { generateWeightString } from "../../services/utils/weight"
-import { ItemsResponse } from "../../types/item"
+import { PaginatedResponse } from "../../types/item"
 import { Tag } from "../tags"
 
 const DEFAULT_ITEMS_PER_PAGE = 16
@@ -171,7 +171,7 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
 
     // Fetch items and statistics
     const [itemsResponse, statisticResponse] = await Promise.all([
-        queryRequest.get<ItemsResponse>(`/items/list?page=${currentPage}&limit=${limit}&sort=${sort}&query=${query}`),
+        queryRequest.get<PaginatedResponse<Item>>(`/items/list?page=${currentPage}&limit=${limit}&sort=${sort}&query=${query}`),
         queryRequest.get<Statistics>(`/items/statistics?query=${query}`),
     ])
 
