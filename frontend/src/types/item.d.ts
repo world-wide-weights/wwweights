@@ -13,5 +13,5 @@ export type Item = {
 export type Weight = {
     value: number
     additionalValue?: number
-    isCa: boolean
+    isCa?: boolean
 }
