@@ -2,25 +2,19 @@ import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { Model } from 'mongoose';
 import * as request from 'supertest';
 import { ItemsModule } from '../src/items/items.module';
-import { Item } from '../src/models/item.model';
-import { ItemsByTag } from '../src/models/items-by-tag.model';
-import { Tag } from '../src/models/tag.model';
+import { Item } from '../src/items/models/item.model';
 import {
   initializeMockModule,
   teardownMockDataSource,
 } from './helpers/MongoMemoryHelpers';
 
 import { Test, TestingModule } from '@nestjs/testing';
-import { SortEnum } from '../src/items/interfaces/sortEnum';
+import { ItemSortEnum } from '../src/items/interfaces/item-sort-enum';
 import { items, itemsWithDates, relatedItems } from './mocks/items';
-import { itemsByTags } from './mocks/itemsbytags';
-import { tags } from './mocks/tags';
 
 describe('QueryController (e2e)', () => {
   let app: INestApplication;
   let itemModel: Model<Item>;
-  let tagModel: Model<Tag>;
-  let itemsByTagModel: Model<ItemsByTag>;
   let server: any; // Has to be any because of supertest not having a type for it either
   jest.setTimeout(10000);
 
@@ -39,8 +33,6 @@ describe('QueryController (e2e)', () => {
     );
 
     itemModel = moduleFixture.get('ItemModel');
-    tagModel = moduleFixture.get('TagModel');
-    itemsByTagModel = moduleFixture.get('ItemsByTagModel');
 
     app.setGlobalPrefix('queries/v1');
     await app.init();
@@ -49,18 +41,12 @@ describe('QueryController (e2e)', () => {
 
   beforeEach(async () => {
     await itemModel.deleteMany();
-    await tagModel.deleteMany();
-    await itemsByTagModel.deleteMany();
 
     await itemModel.insertMany(items);
-    await tagModel.insertMany(tags);
-    await itemsByTagModel.insertMany(itemsByTags);
   });
 
   afterAll(async () => {
     await itemModel.deleteMany();
-    await tagModel.deleteMany();
-    await itemsByTagModel.deleteMany();
     await teardownMockDataSource();
     server.close();
     await app.close();
@@ -125,7 +111,7 @@ describe('QueryController (e2e)', () => {
         for (let i = 0; i < 20; i++) {
           const result = await request(server)
             .get(queriesPath + subPath)
-            .query({ query: 'matching', sort: SortEnum.LIGHTEST })
+            .query({ query: 'matching', sort: ItemSortEnum.LIGHTEST })
             .expect(HttpStatus.OK);
           results.push(result.body.data[0]);
         }
@@ -142,7 +128,7 @@ describe('QueryController (e2e)', () => {
         for (let i = 0; i < 20; i++) {
           const result = await request(server)
             .get(queriesPath + subPath)
-            .query({ query: 'matching', sort: SortEnum.HEAVIEST })
+            .query({ query: 'matching', sort: ItemSortEnum.HEAVIEST })
             .expect(HttpStatus.OK);
           results.push(result.body.data[0]);
         }
@@ -158,7 +144,7 @@ describe('QueryController (e2e)', () => {
 
         const result = await request(server)
           .get(queriesPath + subPath)
-          .query({ sort: SortEnum.HEAVIEST, slug: 'matching-1' })
+          .query({ sort: ItemSortEnum.HEAVIEST, slug: 'matching-1' })
           .expect(HttpStatus.OK);
 
         expect(result.body.data).toHaveLength(1);
@@ -220,7 +206,6 @@ describe('QueryController (e2e)', () => {
           .query({ query: relatedItems[0].tags[0].name })
           .expect(HttpStatus.OK);
 
-        console.log(result.body.heaviest);
         expect(result.body.heaviest.weight.value).toEqual(102);
         expect(result.body.lightest.weight.value).toEqual(100);
         expect(result.body.averageWeight).toEqual(101);
