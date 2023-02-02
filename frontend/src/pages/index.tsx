@@ -10,8 +10,7 @@ import { Search } from "../components/Search/Search"
 import { Stat } from "../components/Statistics/Stat"
 import { queryRequest } from "../services/axios/axios"
 import { routes } from "../services/routes/routes"
-import { PaginatedResponse } from "../types/item"
-import { Item } from "./weights"
+import { Item, PaginatedResponse } from "../types/item"
 
 type HomeProps = {
 	items: Item[]

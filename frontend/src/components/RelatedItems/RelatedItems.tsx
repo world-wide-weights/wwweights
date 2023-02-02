@@ -1,4 +1,4 @@
-import { Item } from "../../pages/weights"
+import { Item } from "../../types/item"
 import { Headline } from "../Headline/Headline"
 import { ItemPreviewList } from "../Item/ItemPreviewList"
 

@@ -16,27 +16,12 @@ import { useLocalStorage } from "../../hooks/useLocalStorage"
 import { queryRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { generateWeightString } from "../../services/utils/weight"
-import { PaginatedResponse } from "../../types/item"
-import { Tag } from "../tags"
+import { Item, PaginatedResponse } from "../../types/item"
 
 const DEFAULT_ITEMS_PER_PAGE = 16
 const ITEMS_PER_PAGE_MAXIMUM = 100
 const FIRST_PAGE = 1
 const KEY_VIEW_TYPE = "discover_view_type"
-
-export type Item = {
-    name: string
-    slug: string
-    weight: Weight
-    source?: string
-    image?: string
-    tags: Tag[]
-}
-export type Weight = {
-    value: number
-    additionalValue?: number
-    isCa?: boolean
-}
 
 type Statistics = {
     heaviest: Item
