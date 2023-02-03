@@ -1,7 +1,6 @@
 import { routes } from "../../../src/services/routes/routes"
 import paginatedItems from "../../fixtures/items/list.json"
 
-// TODO (Zoe-Bot): Update when correct api implemented  
 const SORT_TYPE = "heaviest"
 
 describe("Sort /weights", () => {
