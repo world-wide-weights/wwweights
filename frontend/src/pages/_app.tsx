@@ -87,18 +87,15 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsCustom
     {/** Google Analytics */}
     {SHOULD_LOAD_GA && <>
       <Script async strategy="afterInteractive" src="https://www.googletagmanager.com/gtag/js?id=G-TPQQFLWM0Q" />
-      <Script
-        id="google-analytics"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
+      <Script id="google-analytics" strategy="afterInteractive" >
+        {`
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
   
-        gtag('config', 'G-TPQQFLWM0Q');`
-        }}
-      />
+        gtag('config', 'G-TPQQFLWM0Q');
+        `}
+      </Script>
     </>}
 
     <SessionProvider session={session}>
