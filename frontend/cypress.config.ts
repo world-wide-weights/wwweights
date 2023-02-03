@@ -15,6 +15,8 @@ type NockType = {
 export default defineConfig({
   e2e: {
     async setupNodeEvents(on, config) {
+      require("@cypress/code-coverage/task")(on, config)
+
       const dev = process.env.NODE_ENV !== "production"
       const hostname = "localhost"
       const port = 3010

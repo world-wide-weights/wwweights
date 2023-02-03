@@ -26,6 +26,7 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@cypress/code-coverage": "^3.10.0",
     "@svgr/webpack": "^6.5.1",
     "@types/node": "^18.11.9",
     "@types/react": "^18.0.25",
