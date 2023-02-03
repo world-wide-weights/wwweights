@@ -7,9 +7,11 @@ import { Footer } from "../components/Footer/Footer"
 import { ItemPreviewGrid } from "../components/Item/ItemPreviewGrid"
 import { Navbar } from "../components/Navbar/Navbar"
 import { Search } from "../components/Search/Search"
+import { Seo } from "../components/Seo/Seo"
 import { Stat } from "../components/Statistics/Stat"
 import { queryRequest } from "../services/axios/axios"
 import { routes } from "../services/routes/routes"
+import { getStructuredDataWebsite } from "../services/seo/structuredData/website"
 import { Item, PaginatedResponse } from "../types/item"
 
 type HomeProps = {
@@ -38,10 +40,17 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 
 	return (
 		<div>
+			<Seo
+				title="World largest database of weights!"
+				description="World Wide weights is a website where you can discover the weights of all the items you can imagine. Explore the largest database of weights!"
+			/>
+			{/** Website Structured data has to be on / page. Only once. */}
 			<Head>
-				<title>World largest database of weights! | World Wide Weights</title>
-				<meta charSet="utf-8" />
-				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+				<script
+					type="application/ld+json"
+					dangerouslySetInnerHTML={getStructuredDataWebsite()}
+					key="websiteLdJson"
+				/>
 			</Head>
 
 			<header className="bg-background-header-index bg-no-repeat bg-cover bg-center md:border-t-4 md:border-blue-500">

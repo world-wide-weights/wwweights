@@ -1,10 +1,10 @@
-import Head from "next/head"
 import Image from "next/image"
 import Link from "next/link"
 import logo from "../../../public/logo.png"
 import { routes } from "../../services/routes/routes"
 import { Button } from "../Button/Button"
 import { Headline } from "../Headline/Headline"
+import { Seo } from "../Seo/Seo"
 
 type AccountLayoutProps = {
     /** Page content. Is parameter in getLayout. */
@@ -24,15 +24,11 @@ type AccountLayoutProps = {
  * Adds image right, centers the content horizontal, adds header information and add footer at bottom of the page.
  */
 export const AccountLayout: React.FC<AccountLayoutProps> = ({ page, headline, description, descriptionImage, siteTitle }) => {
-    const siteTitleString = `WWWeights | ${siteTitle}`
-
     return <>
-        <Head>
-            <title>{siteTitleString}</title>
-            <meta charSet="utf-8" />
-            <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        </Head>
-
+        <Seo
+            title={siteTitle}
+            description={description}
+        />
         <div className="lg:flex h-screen">
             {/* Left Side Content: Form */}
             <div className="flex flex-col lg:grid lg:grid-rows-5 lg:w-1/2 h-screen">
