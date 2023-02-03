@@ -41,10 +41,11 @@ describe("Search /weights", () => {
             cy.wait("@mockGetRelatedTags")
         })
 
+        // TODO (Zoe-Bot): Update tests when related tags are implemented
         describe("Displayed tags", () => {
             beforeEach(() => {
                 // Search item
-                cy.dataCy("search").type(paginatedItems.data[0].name)
+                cy.dataCy("search").type(relatedTags[1].name)
                 cy.dataCy("text-input-icon-query").click()
             })
 
@@ -56,15 +57,14 @@ describe("Search /weights", () => {
                 // Click first tag
                 cy.dataCy("search-header-tag-wrapper", " a").first().click()
 
-                cy.dataCy("search").should("have.value", relatedTags[0].name)
+                cy.dataCy("search").should("have.value", relatedTags[1].name)
             })
 
-            // TODO (Zoe-Bot): Fix test when correct api implemented
-            it.skip("should not display tag in list when search for tag", () => {
+            it("should not display tag in list when search for tag", () => {
                 // Click first tag
-                cy.dataCy(`search-header-chip-${relatedTags[1].slug}`).click()
+                cy.dataCy("search-header-chip-0").click()
 
-                cy.dataCy(`search-header-chip-${relatedTags[1].slug}`).should("not.exist")
+                cy.dataCy("search-header-chip-0").should("not.exist")
             })
         })
 
