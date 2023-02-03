@@ -1,6 +1,6 @@
-import Head from "next/head"
 import { Button } from "../Button/Button"
 import { Headline } from "../Headline/Headline"
+import { Seo } from "../Seo/Seo"
 
 type BaseErrorProps = {
     /** The headline of the page will also be document title of page */
@@ -19,12 +19,11 @@ type BaseErrorProps = {
  * Base Error Component, is used as a wrapper for errors like 404, 500,...
  */
 export const BaseError: React.FC<BaseErrorProps> = ({ headline, children, backButtonTo = "/", backButtonText = "Back home", ctaContent }) => {
-    const siteTitle = `${headline} | World Wide Weights`
-
     return <>
-        <Head>
-            <title>{siteTitle}</title>
-        </Head>
+        <Seo
+            title={headline}
+            description={"An error occured! Please try again later."}
+        />
         <main className="container flex items-center min-h-[calc(100vh-88.5px-102.5px)]"> { /* 100vh page - 88.5px Navbar - 102.5px Footer*/}
             <div className="md:w-2/3">
                 <Headline>{headline}</Headline>
