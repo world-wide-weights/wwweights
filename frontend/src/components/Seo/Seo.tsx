@@ -20,7 +20,17 @@ export const siteTitle = "World Wide Weights"
 export const baseTitleSuffix = ` | ${siteTitle}`
 export const baseKeywords = ["weights database", "World Wide Weights", "wwweights"]
 
-export const Seo: React.FC<BaseSeoProps> = ({ title, shouldDisplayTitleSuffix = true, description, keywords = [], canonicalLink = "", ogImage, ogImageHeight, ogImageWidth, twitterImage, ogImageDescription }) => (<Head>
+export const Seo: React.FC<BaseSeoProps> = ({
+    title,
+    shouldDisplayTitleSuffix = true,
+    description, keywords = [],
+    canonicalLink = "",
+    ogImage = `${process.env.NEXT_PUBLIC_CLIENT_BASE_URL}/img/og_default.jpg`,
+    ogImageHeight = "630px",
+    ogImageWidth = "1200px",
+    ogImageDescription = `Preview Image of page "${title}"`,
+    twitterImage = `${process.env.NEXT_PUBLIC_CLIENT_BASE_URL}/img/twitter_default.jpg`
+}) => (<Head>
     {/** Define per page */}
     <title key="title">{title}{shouldDisplayTitleSuffix && baseTitleSuffix}</title>
     <meta name="description" content={description} key="metaDescription" />
