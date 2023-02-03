@@ -79,7 +79,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsCustom
       async
       strategy="afterInteractive"
       onError={(e) => { console.error("Script failed to load", e) }}
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9373286643303244"
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7697189508841626"
     />}
 
     <SessionProvider session={session}>
