@@ -1,9 +1,9 @@
 import { InjectModel } from '@m8a/nestjs-typegoose';
 import { Injectable, Logger } from '@nestjs/common';
+import { Cron, CronExpression } from '@nestjs/schedule';
+import { ReturnModelType } from '@typegoose/typegoose';
 import { Item } from '../../models/item.model';
 import { ItemsByTag } from '../../models/items-by-tag.model';
-import { ReturnModelType } from '@typegoose/typegoose';
-import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class ItemCronJobHandler {
@@ -52,7 +52,7 @@ export class ItemCronJobHandler {
       return;
     }
     this.logger.log(
-      `Cronjob for Tag count in Items finished in${
+      `Cronjob for Tag count in Items finished in ${
         performance.now() - updateTagCountStart
       } (Job succeeded)`,
     );
@@ -92,14 +92,14 @@ export class ItemCronJobHandler {
     } catch (error) {
       this.logger.error(error);
       this.logger.log(
-        `Cronjob for updating Tag Counts in ItemsByTag finished in${
+        `Cronjob for updating Tag Counts in ItemsByTag finished in ${
           performance.now() - updateTagCountStart
         } (Job failed)`,
       );
       return;
     }
     this.logger.log(
-      `Cronjob for updating Tag Counts in ItemsByTag finished in${
+      `Cronjob for updating Tag Counts in ItemsByTag finished in ${
         performance.now() - updateTagCountStart
       } (Job succeeded)`,
     );
