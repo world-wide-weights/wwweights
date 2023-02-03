@@ -44,6 +44,7 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 				title="World largest database of weights!"
 				description="World Wide weights is a website where you can discover the weights of all the items you can imagine. Explore the largest database of weights!"
 			/>
+			{/** Website Structured data has to be on / page. Only once. */}
 			<Head>
 				<script
 					type="application/ld+json"
