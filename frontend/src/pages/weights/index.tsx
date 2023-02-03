@@ -62,8 +62,8 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
         <Seo
             title={
                 query === "" ?
-                    `Discover ${totalItems ? totalItems : ""} weights ${generatePageString(currentPage)}` :
-                    `${query} Weights ${generatePageString(currentPage)}`}
+                    `Discover ${totalItems ? totalItems : ""} weights${generatePageString(currentPage)}` :
+                    `${query} Weights${generatePageString(currentPage)}`}
             description={"Get all the information you need about the weights of various objects, from smartphones to cars. Our advanced search and filter options make it easy to find the weight you're looking for."}
             canonicalLink={router.asPath}
         />

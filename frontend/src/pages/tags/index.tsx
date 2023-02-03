@@ -26,7 +26,7 @@ export default function TagsList({ tags, currentPage, totalItems, limit }: Infer
     return (<>
         {/* Meta Tags */}
         <Seo
-            title={`All Tags ${generatePageString(currentPage)}`}
+            title={`All Tags${generatePageString(currentPage)}`}
             description={"Discover all tags in the world largest database about weights."}
         />
 
