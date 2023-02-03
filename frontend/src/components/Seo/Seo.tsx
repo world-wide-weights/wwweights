@@ -2,19 +2,30 @@ import Head from "next/head"
 import { generateKeywordString } from "../../services/seo/keywords"
 
 type BaseSeoProps = {
-    title: string
-    shouldDisplayTitleSuffix?: boolean
-    description: string
-    keywords?: string[]
-    canonicalLink?: string
+    /** The page title */
+    title: string,
+    /** Flag to determine if the title suffix should be displayed */
+    shouldDisplayTitleSuffix?: boolean,
+    /** The page description */
+    description: string,
+    /** The page keywords */
+    keywords?: string[],
+    /** The canonical link for the page */
+    canonicalLink?: string,
 
-    ogImage?: string
-    ogImageWidth?: string
-    ogImageHeight?: string
-    ogImageDescription?: string
+    /** The image for Open Graph */
+    ogImage?: string,
+    /** The width of the Open Graph image */
+    ogImageWidth?: string,
+    /** The height of the Open Graph image */
+    ogImageHeight?: string,
+    /** The description of the Open Graph image */
+    ogImageDescription?: string,
 
+    /** The image for Twitter */
     twitterImage?: string
 }
+
 
 export const siteTitle = "World Wide Weights"
 export const baseTitleSuffix = ` | ${siteTitle}`
