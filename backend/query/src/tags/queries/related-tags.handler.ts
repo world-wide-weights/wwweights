@@ -65,7 +65,7 @@ export class TagRelatedHandler implements IQueryHandler<TagRelatedQuery> {
             data: [
               { $skip: (dto.page - 1) * dto.limit },
               { $limit: dto.limit },
-              { $project: { occurence: 0 } },
+              { $project: { occurence: 0, name: '$_id', _id: 0 } },
             ],
           },
         },
@@ -89,3 +89,71 @@ export class TagRelatedHandler implements IQueryHandler<TagRelatedQuery> {
     }
   }
 }
+
+// Some thoughts:
+/*
+[
+  {
+    '$match': {
+      '$and': [
+        {
+          '$text': {
+            '$search': 'android replacethis'
+          }
+        }, {
+          'tags.name': {
+            '$all': [
+              'android', 'smartphone'
+            ]
+          }
+        }
+      ]
+    }
+  }, {
+    '$unwind': {
+      'path': '$tags', 
+      'preserveNullAndEmptyArrays': false
+    }
+  }, {
+    '$project': {
+      '_id': 0, 
+      'name': '$tags.name', 
+      'count': '$tags.count'
+    }
+  }, {
+    '$group': {
+      '_id': '$name', 
+      'count': {
+        '$max': '$count'
+      }, 
+      'occurence': {
+        '$count': {}
+      }
+    }
+  }, {
+    '$sort': {
+      'occurence': -1, 
+      'percent': -1
+    }
+  }, {
+    '$match': {
+      '_id': {
+        '$nin': [
+          1000000000000000000000
+        ]
+      }
+    }
+  }, {
+    '$facet': {
+      'total': [
+        {
+          '$count': 'count'
+        }
+      ], 
+      'data': [
+        {}
+      ]
+    }
+  }
+]
+*/
