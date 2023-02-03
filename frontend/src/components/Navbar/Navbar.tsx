@@ -8,6 +8,15 @@ import { routes } from "../../services/routes/routes"
 import { Button } from "../Button/Button"
 import { IconButton } from "../Button/IconButton"
 
+type NavLink = {
+    shouldDisplay: boolean
+    text: string
+} & ({
+    to: string
+} | {
+    onClick: () => void
+})
+
 /** 
  * Navbar component, should only be used once at the top 
  */
@@ -16,23 +25,24 @@ export const Navbar: React.FC = () => {
     const [isNavMobileOpen, setIsNavMobileOpen] = useState<boolean>(false)
     const router = useRouter()
 
-    const navLinks = [{
+    const navLinks: NavLink[] = [{
+        shouldDisplay: true,
         to: routes.weights.list(),
         text: "Discover",
     }, {
-        viewCondition: session,
+        shouldDisplay: Boolean(session),
         to: routes.account.profile(),
         text: "My Profile",
     }, {
-        viewCondition: !session,
+        shouldDisplay: Boolean(!session),
         onClick: () => signIn(),
         text: "Login",
     }, {
-        viewCondition: !session,
+        shouldDisplay: Boolean(!session),
         to: routes.account.register + "?callbackUrl=" + router.pathname,
         text: "Register",
     }, {
-        viewCondition: session,
+        shouldDisplay: Boolean(session),
         onClick: () => signOut(),
         text: "Logout"
     }]
@@ -49,7 +59,7 @@ export const Navbar: React.FC = () => {
             <ul className={`${isNavMobileOpen ? "block" : "hidden"} md:flex items-center gap-4 py-5 md:py-0`}>
                 {/* TODO (Zoe-Bot): Find better solution if active state is onclick */}
                 {/* When viewCondition is set then show based on it, when not then just show */}
-                {navLinks.map(navLink => (navLink.viewCondition === undefined ? true : navLink.viewCondition) && <li key={navLink.text} className="mb-4 md:mb-0"><Button {...navLink} isColored={navLink.to === router.pathname} kind="tertiary">{navLink.text}</Button></li>)}
+                {navLinks.map(navLink => (navLink.shouldDisplay) && <li key={navLink.text} className="mb-4 md:mb-0"><Button {...navLink} isColored={"to" in navLink && (navLink.to === router.pathname)} kind="tertiary">{navLink.text}</Button></li>)}
                 {/* TODO (Zoe-Bot): Here is a dropdown in the future */}
                 {/* <li className="hidden md:inline"><IconButton onClick={() => ""} icon="more_horiz" /></li> */}
                 {/* TODO (Zoe-Bot): Add correct link when contribute exist */}
