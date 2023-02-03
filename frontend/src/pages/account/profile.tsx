@@ -1,20 +1,20 @@
 import { useSession } from "next-auth/react"
-import Head from "next/head"
 import Image from "next/image"
 import { Headline } from "../../components/Headline/Headline"
 import { ItemPreviewList } from "../../components/Item/ItemPreviewList"
+import { Seo } from "../../components/Seo/Seo"
 import { StatsCard } from "../../components/Statistics/StatsCard"
 import { NextPageCustomProps } from "../_app"
 
 const Profile: NextPageCustomProps = () => {
     const { data: session } = useSession()
-    const siteTitle = `Profile ${session?.user.username} - World Wide Weights`
 
     return <>
         {/* Meta Tags */}
-        <Head>
-            <title>{siteTitle}</title>
-        </Head>
+        <Seo
+            title={`My Profile ${session?.user.username}`}
+            description="Your profile page. Here you can see your contributions and statistics."
+        />
 
         <main className="container mt-5">
             <Headline level={1}>Profile</Headline>
