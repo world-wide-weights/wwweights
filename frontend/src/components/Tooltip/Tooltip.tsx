@@ -28,7 +28,7 @@ export const Tooltip: React.FC<TooltipProps> = ({ children, content, delay, wrap
     const showTooltip = () => {
         timeout = setTimeout(() => {
             setIsShown(true)
-        }, delay || 400)
+        }, delay || 0)
     }
 
     /**
