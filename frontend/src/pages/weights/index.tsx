@@ -16,6 +16,7 @@ import { StatsCard } from "../../components/Statistics/StatsCard"
 import { useLocalStorage } from "../../hooks/useLocalStorage"
 import { queryRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
+import { generatePageString } from "../../services/seo/pageString"
 import { generateWeightString } from "../../services/utils/weight"
 import { Item, PaginatedResponse } from "../../types/item"
 
@@ -59,7 +60,10 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
     return <>
         {/* Meta Tags */}
         <Seo
-            title={`Discover ${totalItems ? totalItems : ""} weights ${currentPage > 1 ? `| Page ${currentPage} ` : ""}`}
+            title={
+                query === "" ?
+                    `Discover ${totalItems ? totalItems : ""} weights ${generatePageString(currentPage)}` :
+                    `${query} Weights ${generatePageString(currentPage)}`}
             description={"Get all the information you need about the weights of various objects, from smartphones to cars. Our advanced search and filter options make it easy to find the weight you're looking for."}
             canonicalLink={router.asPath}
         />
