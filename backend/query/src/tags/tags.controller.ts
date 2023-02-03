@@ -8,10 +8,12 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PaginatedResult } from '../shared/paginated-result';
 import { QueryTagListDto } from './interfaces/query-tag-list.dto';
+import { QueryTagRelatedDto } from './interfaces/query-tag-related.dto';
 import { Tag } from './models/tag.model';
+import { TagRelatedQuery } from './queries/related-tags.query';
 import { TagListQuery } from './queries/tag-list.query';
 
 @Controller('tags')
@@ -25,17 +27,29 @@ export class TagsController {
 
   @Get('list')
   @ApiOperation({ summary: 'Get tag list paginated' })
+  @ApiResponse({
+    type: PaginatedResult<Tag>,
+    status: 200,
+    description: 'Paginated result of tags',
+    isArray: false,
+  })
   async getTagsList(@Query() dto: QueryTagListDto) {
     this.logger.log(`Get tag list`);
     const result = await this.queryBus.execute(new TagListQuery(dto));
     return new PaginatedResult<Tag>(result, Tag);
   }
 
-  // @Get('tags/related')
-  // @ApiQuery({ name: 'dto', required: false, type: QueryTagRelatedDto })
-  // @ApiOperation({ summary: 'Get an tag by slug' })
-  // async getTagsRelated(@Query() dto: QueryItemListDto) {
-  //   this.logger.log(`Get tag list`);
-  //   return await this.queryBus.execute(new GetTagsRelatedQuery(dto));
-  // }
+  @Get('tags/related')
+  @ApiOperation({ summary: 'Get tags related to the itemssearch' })
+  @ApiResponse({
+    type: PaginatedResult<Tag>,
+    status: 200,
+    description: 'Paginated result of tags',
+    isArray: false,
+  })
+  async getTagsRelated(@Query() dto: QueryTagRelatedDto) {
+    this.logger.log(`Get related tag list`);
+    const result = await this.queryBus.execute(new TagRelatedQuery(dto));
+    return new PaginatedResult<Tag>(result, Tag);
+  }
 }
