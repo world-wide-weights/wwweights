@@ -58,7 +58,7 @@ const Login: NextPageCustomProps = () => {
                 setError(response.error)
             }
         } catch (error) {
-            console.error(error)
+            setError("Something went wrong. Try again or come later.")
         }
     }
 

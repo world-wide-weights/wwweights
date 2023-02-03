@@ -27,7 +27,7 @@ export type PaginationProps = {
 /**
  * Pagination component contains the complete logic for paginate correct
  */
-export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage, baseRoute, itemsPerPage, query = "", sort = "", defaultItemsPerPage = 16, siblingCount = 1 }) => {
+export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage, baseRoute, itemsPerPage, query = "", sort = "relevance", defaultItemsPerPage = 16, siblingCount = 1 }) => {
     const paginationService = usePagination({ currentPage, totalItems, siblingCount, itemsPerPage, baseRoute, defaultItemsPerPage, query, sort })
 
     // If our pagination array length is less than 2 to we should not render component (because there are not enough items for pagination)

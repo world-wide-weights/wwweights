@@ -17,7 +17,7 @@ export default defineConfig({
     async setupNodeEvents(on, config) {
       const dev = process.env.NODE_ENV !== "production"
       const hostname = "localhost"
-      const port = 3002
+      const port = 3010
       const app = next({ dev, hostname, port })
       const handle = app.getRequestHandler()
 
@@ -85,8 +85,12 @@ export default defineConfig({
     specPattern: "**/*.{cy,unit}.{js,jsx,ts,tsx}"
   },
   env: {
-    CLIENT_BASE_URL: "http://localhost:3002",
-    API_BASE_URL: "http://localhost:3004"
+    CLIENT_BASE_URL: "http://localhost:3010",
+    PUBLIC_API_BASE_URL_MOCK: "http://localhost:3008",
+    PUBLIC_API_BASE_URL_QUERY: "http://localhost:3004/queries/v1",
+    PUBLIC_API_BASE_URL_COMMAND: "http://localhost:3002/commands/v1",
+    PUBLIC_API_BASE_URL_AUTH: "http://localhost:3001",
+    PUBLIC_API_BASE_URL_IMAGE: "http://localhost:3003"
   }
 })
 

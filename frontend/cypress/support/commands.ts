@@ -1,11 +1,13 @@
 /// <reference types="cypress" />
 
-import items from "../fixtures/items/list.json"
-import relatedItems from "../fixtures/items/related.json"
-import singleItem from "../fixtures/items/single.json"
+import paginatedItems from "../fixtures/items/list.json"
+import paginatedRelatedItems from "../fixtures/items/related.json"
+import paginatedSingleItem from "../fixtures/items/single.json"
 import statistics from "../fixtures/items/statistics.json"
 
-const apiBaseUrl = Cypress.env("API_BASE_URL")
+const apiBaseUrlMock = Cypress.env("PUBLIC_API_BASE_URL_MOCK")
+const apiBaseUrlQuery = Cypress.env("PUBLIC_API_BASE_URL_QUERY")
+const apiBaseUrlCommand = Cypress.env("PUBLIC_API_BASE_URL_COMMAND")
 const clientBaseUrl = Cypress.env("CLIENT_BASE_URL")
 
 Cypress.Commands.add("dataCy", (dataCy, customSelector = "") => {
@@ -26,32 +28,36 @@ Cypress.Commands.add("checkCurrentActivePage", (activePageNumber) => {
 })
 
 Cypress.Commands.add("mockGetRelatedTags", () => {
-    cy.intercept("GET", `${apiBaseUrl}/api/query/v1/tags/related`, {
+    cy.intercept("GET", `${apiBaseUrlMock}/api/query/v1/tags/related`, {
         fixture: "tags/related.json"
     }).as("mockGetRelatedTags")
 })
 
 Cypress.Commands.add("mockItemsList", (itemCount?: number) => {
-    const body = itemCount || itemCount === 0 ? items.slice(0, itemCount) : items
+    const body = itemCount || itemCount === 0 ? {
+        ...paginatedItems,
+        data: paginatedItems.data.slice(0, itemCount)
+    } : paginatedItems
 
     cy.task("clearNock")
     cy.task("activateNock")
     cy.task("nock", {
-        hostname: apiBaseUrl,
+        hostname: apiBaseUrlQuery,
         method: "get",
-        path: "/items", // TODO (Zoe-Bot): Update url when correct api is used
+        path: "/items/list",
         statusCode: 200,
         body
     })
 })
 
-Cypress.Commands.add("mockItemsPage", (itemCount?: number) => {
+Cypress.Commands.add("mockDiscoverPage", (itemCount?: number) => {
     cy.mockItemsList(itemCount)
 
+    // Mock Statistics
     cy.task("nock", {
-        hostname: apiBaseUrl,
+        hostname: apiBaseUrlQuery,
         method: "get",
-        path: "/api/query/v1/items/statistics",
+        path: "/items/statistics",
         statusCode: 200,
         body: statistics,
     })
@@ -61,21 +67,24 @@ Cypress.Commands.add("mockItemsPage", (itemCount?: number) => {
 
 Cypress.Commands.add("mockSingleWeight", () => {
     cy.task("clearNock")
+
+    // Mock items single
     cy.task("activateNock")
     cy.task("nock", {
-        hostname: apiBaseUrl,
+        hostname: apiBaseUrlQuery,
         method: "get",
-        path: "/api/query/v1/items/list", // TODO (Zoe-Bot): Update url when correct api is used
+        path: "/items/list",
         statusCode: 200,
-        body: singleItem
+        body: paginatedSingleItem
     })
 
+    // Mock items related
     cy.task("nock", {
-        hostname: apiBaseUrl,
+        hostname: apiBaseUrlQuery,
         method: "get",
-        path: "/related_items", // TODO (Zoe-Bot): Update url when correct api is used
+        path: "/items/related",
         statusCode: 200,
-        body: relatedItems
+        body: paginatedRelatedItems
     })
 
     cy.mockGetRelatedTags()
@@ -94,7 +103,7 @@ Cypress.Commands.add("mockCredentials", () => {
 })
 
 Cypress.Commands.add("mockCreateItem", () => {
-    cy.intercept("POST", `${apiBaseUrl}/items`, {
+    cy.intercept("POST", `${apiBaseUrlCommand}/items`, {
         url: `${clientBaseUrl}/account/login`
     }).as("mockCreateItem")
 })

@@ -1,59 +1,25 @@
 {
     "heaviest": {
-        "id": "230",
-        "name": "Clio C-1000",
-        "slug": "clio-c-1000",
+        "name": "Allview Viva Home",
+        "slug": "allview-viva-home",
         "weight": {
-            "value": 1451,
-            "isCa": false
+            "value": 2018
         },
-        "source": "https://phonedb.net/",
-        "tags": [
-            {
-                "name": "Vadem",
-                "slug": "vadem"
-            },
-            {
-                "name": "1998 Nov",
-                "slug": "1998-nov"
-            },
-            {
-                "name": "Windows (mobile-class)",
-                "slug": "windows-(mobile-class)"
-            },
-            {
-                "name": "Notebook",
-                "slug": "notebook"
-            }
-        ]
+        "tags": [],
+        "image": "https://fdn2.gsmarena.com/vv/bigpic/allview-vivahome.jpg",
+        "user": "mc",
+        "createdAt": 1674594267645
     },
     "lightest": {
-        "id": "105",
-        "name": "iPAQ H6340 / H6345",
-        "slug": "ipaq-h6340-h6345",
+        "name": "Samsung Galaxy View",
+        "slug": "samsung-galaxy-view",
         "weight": {
-            "value": "190",
-            "isCa": false
+            "value": 2
         },
-        "source": "https://phonedb.net/",
-        "tags": [
-            {
-                "name": "Hewlett-Packard",
-                "slug": "hewlett-packard"
-            },
-            {
-                "name": "2004 Jul",
-                "slug": "2004-jul"
-            },
-            {
-                "name": "Windows (mobile-class)",
-                "slug": "windows-(mobile-class)"
-            },
-            {
-                "name": "Smartphone",
-                "slug": "smartphone"
-            }
-        ]
+        "tags": [],
+        "image": "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-view.jpg",
+        "user": "mc",
+        "createdAt": 1674595331892
     },
-    "averageWeight": 200
+    "averageWeight": 156.55436785845927
 }
