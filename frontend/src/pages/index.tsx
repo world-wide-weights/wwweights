@@ -1,5 +1,6 @@
 import { Form, Formik } from "formik"
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
+import Head from "next/head"
 import { useRouter } from "next/router"
 import { Button } from "../components/Button/Button"
 import { Footer } from "../components/Footer/Footer"
@@ -10,6 +11,7 @@ import { Seo } from "../components/Seo/Seo"
 import { Stat } from "../components/Statistics/Stat"
 import { queryRequest } from "../services/axios/axios"
 import { routes } from "../services/routes/routes"
+import { getStructuredDataWebsite } from "../services/seo/structuredData/website"
 import { Item, PaginatedResponse } from "../types/item"
 
 type HomeProps = {
@@ -42,6 +44,13 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 				title="World largest database of weights!"
 				description="World Wide weights is a website where you can discover the weights of all the items you can imagine. Explore the largest database of weights!"
 			/>
+			<Head>
+				<script
+					type="application/ld+json"
+					dangerouslySetInnerHTML={getStructuredDataWebsite()}
+					key="websiteLdJson"
+				/>
+			</Head>
 
 			<header className="bg-background-header-index bg-no-repeat bg-cover bg-center md:border-t-4 md:border-blue-500">
 				{/* Navbar */}
