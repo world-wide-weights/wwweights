@@ -121,7 +121,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                             </div>
 
                             {/* Statistics Content */}
-                            {statistics && <div className={`${statisticsExpanded ? "lg:flex-col" : "lg:items-start"} lg:flex`}>
+                            <div className={`${statisticsExpanded ? "lg:flex-col" : "lg:items-start"} lg:flex`}>
                                 <div className="flex mb-5 lg:mb-10">
                                     <button onClick={() => setStatisticsExpanded(!statisticsExpanded)} className="hidden lg:block bg-white self-stretch rounded-lg px-1 mr-2">
                                         <Icon>chevron_left</Icon>
@@ -133,7 +133,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                                         <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="scale" value={`${Number(statistics.averageWeight).toFixed(2)} g`} descriptionBottom="Average" />
                                     </div>
                                 </div>
-                            </div>}
+                            </div>
                         </div>
                     </div>
                 </>}
