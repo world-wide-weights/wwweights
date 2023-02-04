@@ -1,4 +1,4 @@
-import { Item } from "../../pages/weights"
+import { Item } from "../../types/item"
 import { Headline } from "../Headline/Headline"
 import { ItemPreviewList } from "../Item/ItemPreviewList"
 
@@ -23,7 +23,7 @@ export const RelatedItems: React.FC<RelatedItemsProps> = ({ relatedItems, item }
                 const currentItem = relatedItem.name === item.name
                 const difference = relatedItem.weight.value - item.weight.value
 
-                return <ItemPreviewList datacy={`related-items-item${currentItem ? "-" + "current" : ""}`} key={relatedItem.id} selectedItem={currentItem} disableLink={currentItem} difference={difference} {...relatedItem} heaviestWeight={heaviestWeight} imageUrl="https://picsum.photos/200" />
+                return <ItemPreviewList datacy={`related-items-item${currentItem ? "-" + "current" : ""}`} key={relatedItem.slug} selectedItem={currentItem} disableLink={currentItem} difference={difference} {...relatedItem} heaviestWeight={heaviestWeight} imageUrl={relatedItem.image} />
             })}
         </ul>
     </>

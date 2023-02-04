@@ -4,7 +4,7 @@ const SEARCH_QUERY = "apple"
 
 describe("Empty State /weights", () => {
     beforeEach(() => {
-        cy.mockItemsPage(0)
+        cy.mockDiscoverPage(0)
 
         cy.visitLocalPage(routes.weights.list({ query: SEARCH_QUERY }))
         cy.wait("@mockGetRelatedTags")

@@ -1,11 +1,11 @@
 import { routes } from "../../../src/services/routes/routes"
-import items from "../../fixtures/items/list.json"
+import paginatedItems from "../../fixtures/items/list.json"
 import relatedTags from "../../fixtures/tags/related.json"
 
 describe("Search /weights", () => {
     describe("Search", () => {
         beforeEach(() => {
-            cy.mockItemsPage()
+            cy.mockDiscoverPage()
 
             cy.visitLocalPage(routes.weights.list())
             cy.wait("@mockGetRelatedTags")
@@ -13,38 +13,39 @@ describe("Search /weights", () => {
 
         // This test seems to be flaky: https://github.com/cypress-io/cypress/issues/3817
         // it('should search items when click search items', () => {
-        //     cy.dataCy('search').type(items[0].tags[0].slug)
+        //     cy.dataCy('search').type(paginatedItems.data[0].name)
         //     cy.dataCy('text-input-icon-query').click()
 
-        //     cy.url().should('include', items[0].tags[0].slug)
+        //     cy.url().should('include', paginatedItems.data[0].name)
         // })
 
         // This test seems to be flaky: https://github.com/cypress-io/cypress/issues/3817
         // it('should search items when hit enter', () => {
-        //     cy.dataCy('search').type(`${items[0].tags[0].slug}{enter}`)
-        //     cy.url().should('include', items[0].tags[0].slug)
+        //     cy.dataCy('search').type(`${paginatedItems.data[0].name}{enter}`)
+        //     cy.url().should('include', paginatedItems.data[0].name)
         // })
 
         it("should search items when query in url", () => {
-            cy.visitLocalPage(routes.weights.list({ query: items[0].tags[0].slug }))
+            cy.visitLocalPage(routes.weights.list({ query: paginatedItems.data[0].name }))
             cy.wait("@mockGetRelatedTags")
 
-            cy.dataCy("search").should("have.value", items[0].tags[0].slug)
+            cy.dataCy("search").should("have.value", paginatedItems.data[0].name)
         })
     })
 
     describe("Related Tags", () => {
         beforeEach(() => {
-            cy.mockItemsPage()
+            cy.mockDiscoverPage()
 
             cy.visitLocalPage(routes.weights.list())
             cy.wait("@mockGetRelatedTags")
         })
 
+        // TODO (Zoe-Bot): Update tests when related tags are implemented
         describe("Displayed tags", () => {
             beforeEach(() => {
                 // Search item
-                cy.dataCy("search").type(items[0].tags[0].slug)
+                cy.dataCy("search").type(relatedTags[1].name)
                 cy.dataCy("text-input-icon-query").click()
             })
 
@@ -56,14 +57,14 @@ describe("Search /weights", () => {
                 // Click first tag
                 cy.dataCy("search-header-tag-wrapper", " a").first().click()
 
-                cy.dataCy("search").should("have.value", relatedTags[0].name)
+                cy.dataCy("search").should("have.value", relatedTags[1].name)
             })
 
             it("should not display tag in list when search for tag", () => {
                 // Click first tag
-                cy.dataCy(`search-header-chip-${relatedTags[1].slug}`).click()
+                cy.dataCy("search-header-chip-0").click()
 
-                cy.dataCy(`search-header-chip-${relatedTags[1].slug}`).should("not.exist")
+                cy.dataCy("search-header-chip-0").should("not.exist")
             })
         })
 

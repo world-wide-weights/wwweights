@@ -12,7 +12,7 @@ type SearchEmptyStateProps = {
  */
 export const SearchEmptyState: React.FC<SearchEmptyStateProps> = ({ query }) => {
     return <BaseEmptyState datacy="search-empty-state" headline={`No results for "${query}"`}>
-        <p className="text-center">Do you know what &quot;{query}&quot; weights? Contribute!</p>
+        <p className="text-center">Do you know what &quot;{query}&quot; weighs? Contribute!</p>
         <p className="text-center mb-5">Or try search again.</p>
 
         {/* TODO (Zoe-Bot): Adjust link when contribute implemented. */}

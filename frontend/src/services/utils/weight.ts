@@ -1,4 +1,4 @@
-import { Weight } from "../../pages/weights"
+import { Weight } from "../../types/item"
 
 /**
  * Generates the string for showing the weight with ca and range support.
