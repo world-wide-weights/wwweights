@@ -54,7 +54,7 @@ export const AccountLayout: React.FC<AccountLayoutProps> = ({ page, headline, de
                     <ul className="flex gap-3 py-4">
                         <li><Button to={routes.misc.contact} kind="tertiary">Contact</Button></li>
                         <li><Button to={routes.misc.privacy} kind="tertiary">Privacy Policy</Button></li>
-                        <li><Button to={routes.misc.terms} kind="tertiary">Terms of Use</Button></li>
+                        <li><Button to={routes.misc.terms} kind="tertiary">Terms and Conditions</Button></li>
                     </ul>
                 </footer>
             </div>

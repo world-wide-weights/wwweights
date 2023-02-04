@@ -59,7 +59,7 @@ export const routes = {
     misc: {
         index: "/misc",
         contact: "/misc/contact",
-        terms: "/misc/terms-of-use",
+        terms: "/misc/terms-and-conditions",
         privacy: "/misc/privacy-policy"
     }
 } as const

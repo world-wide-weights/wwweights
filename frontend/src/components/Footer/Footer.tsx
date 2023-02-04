@@ -18,7 +18,7 @@ export const Footer: React.FC = () => {
           <ul className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
             <li><Button to={routes.misc.contact} kind="tertiary">Contact</Button></li>
             <li><Button to={routes.misc.privacy} kind="tertiary">Privacy Policy</Button></li>
-            <li><Button to={routes.misc.terms} kind="tertiary">Terms of Use</Button></li>
+            <li><Button to={routes.misc.terms} kind="tertiary">Terms and Conditions</Button></li>
           </ul>
         </div>
       </div>
