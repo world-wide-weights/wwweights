@@ -128,7 +128,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                             {/* Statistics Content */}
                             <div className={`${statisticsExpanded ? "lg:flex-col" : "lg:items-start"} lg:flex`}>
                                 <div className="flex mb-5 lg:mb-10">
-                                    <button onClick={() => setStatisticsExpanded(!statisticsExpanded)} className="hidden lg:block bg-white self-stretch rounded-lg px-1 mr-2">
+                                    <button onClick={() => setStatisticsExpanded(!statisticsExpanded)} className={`hidden ${statisticsExpanded ? "" : "lg:block"} bg-white self-stretch rounded-lg px-1 mr-2`}>
                                         <Icon>chevron_left</Icon>
                                     </button>
 
