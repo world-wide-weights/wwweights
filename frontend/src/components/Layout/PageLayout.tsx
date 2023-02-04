@@ -13,6 +13,7 @@ export const PageLayout: React.FC<PageLayoutProps> = ({ children, title }) => {
     const siteTitle = `${title} - World Wide Weights`
 
     return <Layout>
+        {/* Meta Tags */}
         <Head>
             <title>{siteTitle}</title>
         </Head>

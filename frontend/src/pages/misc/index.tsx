@@ -1,18 +1,20 @@
-import Head from "next/head"
+import { PageLayout } from "../../components/Layout/PageLayout"
 import { NextPageCustomProps } from "../_app"
 
+/**
+ * Index page for miscelaneous pages like legal and contact.
+ */
 const Misc: NextPageCustomProps = () => {
-
     return <>
-        {/* Meta Tags */}
-        <Head>
-            <title>Misc - World Wide Weights</title>
-        </Head>
 
-        <main>
-            <h1>Misc</h1>
-        </main>
     </>
 }
+
+Misc.getLayout = (page) => {
+    return <PageLayout title="Misc">
+        {page}
+    </PageLayout>
+}
+
 
 export default Misc

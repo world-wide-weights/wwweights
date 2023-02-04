@@ -1,18 +1,19 @@
-import Head from "next/head"
+import { PageLayout } from "../../components/Layout/PageLayout"
 import { NextPageCustomProps } from "../_app"
 
+/**
+ * Legal page, contains privacy policy with cookies.
+ */
 const PrivacyPolicy: NextPageCustomProps = () => {
-
     return <>
-        {/* Meta Tags */}
-        <Head>
-            <title>Privacy Policy - World Wide Weights</title>
-        </Head>
 
-        <main>
-            <h1>Privacy Policy</h1>
-        </main>
     </>
+}
+
+PrivacyPolicy.getLayout = (page) => {
+    return <PageLayout title="Contact">
+        {page}
+    </PageLayout>
 }
 
 export default PrivacyPolicy

@@ -1,18 +1,19 @@
-import Head from "next/head"
+import { PageLayout } from "../../components/Layout/PageLayout"
 import { NextPageCustomProps } from "../_app"
 
+/**
+ * Contact page, contains email where the people can contact us.
+ */
 const Contact: NextPageCustomProps = () => {
-
     return <>
-        {/* Meta Tags */}
-        <Head>
-            <title>Contact - World Wide Weights</title>
-        </Head>
 
-        <main>
-            <h1>Contact</h1>
-        </main>
     </>
+}
+
+Contact.getLayout = (page) => {
+    return <PageLayout title="Contact">
+        {page}
+    </PageLayout>
 }
 
 export default Contact

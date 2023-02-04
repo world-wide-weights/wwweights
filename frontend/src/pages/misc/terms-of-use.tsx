@@ -1,18 +1,19 @@
-import Head from "next/head"
+import { PageLayout } from "../../components/Layout/PageLayout"
 import { NextPageCustomProps } from "../_app"
 
+/**
+ * Legal page, contains terms of use.
+ */
 const TermsOfUse: NextPageCustomProps = () => {
-
     return <>
-        {/* Meta Tags */}
-        <Head>
-            <title>Terms of use - World Wide Weights</title>
-        </Head>
 
-        <main>
-            <h1>Terms of use</h1>
-        </main>
     </>
+}
+
+TermsOfUse.getLayout = (page) => {
+    return <PageLayout title="Terms of use">
+        {page}
+    </PageLayout>
 }
 
 export default TermsOfUse
