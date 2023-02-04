@@ -1,9 +1,9 @@
 import { useSession } from "next-auth/react"
 import Head from "next/head"
 import Image from "next/image"
+import { Card } from "../../components/Card/Card"
 import { Headline } from "../../components/Headline/Headline"
 import { ItemPreviewList } from "../../components/Item/ItemPreviewList"
-import { StatsCard } from "../../components/Statistics/StatsCard"
 import { NextPageCustomProps } from "../_app"
 
 const Profile: NextPageCustomProps = () => {
@@ -29,9 +29,9 @@ const Profile: NextPageCustomProps = () => {
                     </div>
                     <div className="flex flex-col gap-3 flex-grow">
                         {/* TODO (Zoe-Bot): Implement correct stats */}
-                        <StatsCard icon="volunteer_activism" value="300" descriptionTop="Contribution" />
-                        <StatsCard icon="visibility" value="300.000.000" descriptionTop="Views" />
-                        <StatsCard icon="chat" value="200" descriptionTop="Feedback" />
+                        <Card icon="volunteer_activism" value="300" descriptionTop="Contribution" />
+                        <Card icon="visibility" value="300.000.000" descriptionTop="Views" />
+                        <Card icon="chat" value="200" descriptionTop="Feedback" />
                     </div>
                 </div>
                 <div className="lg:w-3/4">
