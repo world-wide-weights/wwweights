@@ -1,5 +1,5 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
-import Head from "next/head"
+import { useRouter } from "next/router"
 import { useRef, useState } from "react"
 import { Button } from "../../components/Button/Button"
 import { IconButton } from "../../components/Button/IconButton"
@@ -11,11 +11,13 @@ import { Icon } from "../../components/Icon/Icon"
 import { ItemPreviewGrid } from "../../components/Item/ItemPreviewGrid"
 import { ItemPreviewList } from "../../components/Item/ItemPreviewList"
 import { Pagination } from "../../components/Pagination/Pagination"
+import { Seo } from "../../components/Seo/Seo"
 import { Sort, SortType } from "../../components/Sort/Sort"
 import { Tooltip } from "../../components/Tooltip/Tooltip"
 import { useLocalStorage } from "../../hooks/useLocalStorage"
 import { queryRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
+import { generatePageString } from "../../services/seo/pageString"
 import { generateWeightString } from "../../services/utils/weight"
 import { Item, PaginatedResponse } from "../../types/item"
 
@@ -45,8 +47,9 @@ type WeightsListProps = {
  */
 export default function WeightsList({ items, currentPage, totalItems, limit, query, sort, statistics }: InferGetServerSidePropsType<typeof getServerSideProps>) {
     // Strings
-    const siteTitle = `Latest ${currentPage > 1 ? `| Page ${currentPage} ` : ""}- World Wide Weights`
     const headlineItems = query === "" ? "All items" : query
+
+    const router = useRouter()
 
     // Refs
     const initialRender = useRef<boolean>(true)
@@ -57,9 +60,14 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
 
     return <>
         {/* Meta Tags */}
-        <Head>
-            <title>{siteTitle}</title>
-        </Head>
+        <Seo
+            title={
+                query === "" ?
+                    `Discover ${totalItems ? totalItems : ""} weights${generatePageString(currentPage)}` :
+                    `${query} Weights${generatePageString(currentPage)}`}
+            description={"Get all the information you need about the weights of various objects, from smartphones to cars. Our advanced search and filter options make it easy to find the weight you're looking for."}
+            canonicalLink={router.asPath}
+        />
 
         {/* TODO (Zoe-Bot): Find a better solution instead of give sort and query */}
         {/* Search with related tags */}

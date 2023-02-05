@@ -7,9 +7,11 @@ import { Footer } from "../components/Footer/Footer"
 import { ItemPreviewGrid } from "../components/Item/ItemPreviewGrid"
 import { Navbar } from "../components/Navbar/Navbar"
 import { Search } from "../components/Search/Search"
+import { Seo } from "../components/Seo/Seo"
 import { Stat } from "../components/Statistics/Stat"
 import { queryRequest } from "../services/axios/axios"
 import { routes } from "../services/routes/routes"
+import { getStructuredDataWebsite } from "../services/seo/structuredData/website"
 import { Item, PaginatedResponse } from "../types/item"
 
 type HomeProps = {
@@ -38,10 +40,18 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 
 	return (
 		<div>
+			<Seo
+				title="World largest database of weights!"
+				description="World Wide Weights is a website where you can discover the weights of all the items you can imagine. Explore the largest database of weights!"
+			/>
+			{/** Website Structured data has to be on / page. Only once. */}
 			<Head>
-				<title>World largest database of weights! | World Wide Weights</title>
-				<meta charSet="utf-8" />
-				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+				<script
+					type="application/ld+json"
+					/** We have to use "dangerouslySetInnerHTML" here to make it easier to write JSON-LD  */
+					dangerouslySetInnerHTML={getStructuredDataWebsite}
+					key="websiteLdJson"
+				/>
 			</Head>
 
 			<header className="bg-background-header-index bg-no-repeat bg-cover bg-center md:border-t-4 md:border-blue-500">
@@ -69,7 +79,7 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 				{/* Items */}
 				<div className="container flex flex-col items-center mb-5 md:mb-10">
 					<h2 className="text-2xl md:text-3xl text-blue-800 text-center font-bold mb-1">Explore 31,000+ weights</h2>
-					<p className="text-gray-600 text-center mb-4 md:mb-8">World Wide weights is a website where you can discover the weights of all the items you can imagine. Explore the largest database of weights!</p>
+					<p className="text-gray-600 text-center mb-4 md:mb-8">World Wide Weights is a website where you can discover the weights of all the items you can imagine. Explore the largest database of weights!</p>
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-2 md:gap-5 mb-5 md:mb-8 w-full">
 						{items.map((item) => <ItemPreviewGrid key={item.slug} {...item} imageUrl={item.image} />)}
 					</div>

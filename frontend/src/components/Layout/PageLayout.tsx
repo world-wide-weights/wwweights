@@ -1,6 +1,6 @@
-import Head from "next/head"
 import { RouterBreadcrumb } from "../Breadcrumb/RouterBreadcrumb"
 import { Headline } from "../Headline/Headline"
+import { Seo } from "../Seo/Seo"
 import { Layout } from "./Layout"
 
 type PageLayoutProps = {
@@ -10,13 +10,12 @@ type PageLayoutProps = {
 }
 
 export const PageLayout: React.FC<PageLayoutProps> = ({ children, title }) => {
-    const siteTitle = `${title} - World Wide Weights`
 
     return <Layout>
         {/* Meta Tags */}
-        <Head>
-            <title>{siteTitle}</title>
-        </Head>
+        <Seo
+            title={title}
+        />
 
         <main className="container mt-2 md:mt-5">
             <RouterBreadcrumb />
