@@ -3,6 +3,7 @@ import { useRouter } from "next/router"
 import { useRef, useState } from "react"
 import { Button } from "../../components/Button/Button"
 import { IconButton } from "../../components/Button/IconButton"
+import { Card } from "../../components/Card/Card"
 import { SearchEmptyState } from "../../components/EmptyState/SearchEmptyState"
 import { SearchHeader } from "../../components/Header/SearchHeader"
 import { Headline } from "../../components/Headline/Headline"
@@ -12,7 +13,6 @@ import { ItemPreviewList } from "../../components/Item/ItemPreviewList"
 import { Pagination } from "../../components/Pagination/Pagination"
 import { Seo } from "../../components/Seo/Seo"
 import { Sort, SortType } from "../../components/Sort/Sort"
-import { StatsCard } from "../../components/Statistics/StatsCard"
 import { Tooltip } from "../../components/Tooltip/Tooltip"
 import { useLocalStorage } from "../../hooks/useLocalStorage"
 import { queryRequest } from "../../services/axios/axios"
@@ -141,9 +141,9 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                                     </button>
 
                                     <div className={`${statisticsExpanded ? "flex flex-col lg:flex-row" : "grid"} flex-grow md:flex-auto gap-2 lg:gap-4`}>
-                                        <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} to={routes.weights.single(statistics.heaviest.slug)} icon="weight" value={generateWeightString(statistics.heaviest.weight)} descriptionTop={statistics.heaviest.name} descriptionBottom="Heaviest" />
-                                        <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} to={routes.weights.single(statistics.lightest.slug)} icon="eco" value={generateWeightString(statistics.lightest.weight)} descriptionTop={statistics.lightest.name} descriptionBottom="Lightest" />
-                                        <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="scale" value={`${Number(statistics.averageWeight).toFixed(2)} g`} descriptionBottom="Average" />
+                                        <Card classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} to={routes.weights.single(statistics.heaviest.slug)} icon="weight" value={generateWeightString(statistics.heaviest.weight)} descriptionTop={statistics.heaviest.name} descriptionBottom="Heaviest" />
+                                        <Card classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} to={routes.weights.single(statistics.lightest.slug)} icon="eco" value={generateWeightString(statistics.lightest.weight)} descriptionTop={statistics.lightest.name} descriptionBottom="Lightest" />
+                                        <Card classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="scale" value={`${Number(statistics.averageWeight).toFixed(2)} g`} descriptionBottom="Average" />
                                     </div>
                                 </div>
                             </div>
