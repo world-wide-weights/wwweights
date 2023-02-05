@@ -8,18 +8,21 @@ import {
 } from './helpers/MongoMemoryHelpers';
 
 import { Test, TestingModule } from '@nestjs/testing';
+import { ItemsModule } from '../src/items/items.module';
+import { Item } from '../src/items/models/item.model';
 import { TagsModule } from '../src/tags/tags.module';
 import { tags } from './mocks/tags';
 
 describe('QueryController (e2e)', () => {
   let app: INestApplication;
   let tagModel: Model<Tag>;
+  let itemModel: Model<Item>;
   let server: any; // Has to be any because of supertest not having a type for it either
   jest.setTimeout(10000);
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [initializeMockModule(), TagsModule],
+      imports: [initializeMockModule(), TagsModule, ItemsModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
@@ -32,10 +35,12 @@ describe('QueryController (e2e)', () => {
     );
 
     tagModel = moduleFixture.get('TagModel');
+    itemModel = moduleFixture.get('ItemModel');
 
     app.setGlobalPrefix('queries/v1');
     await app.init();
     server = app.getHttpServer();
+    await itemModel.syncIndexes();
   });
 
   beforeEach(async () => {
@@ -106,5 +111,8 @@ describe('QueryController (e2e)', () => {
     //     }
     //   });
     // });
+
+    // empty tags
+    // empty query
   });
 });

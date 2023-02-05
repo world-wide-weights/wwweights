@@ -37,6 +37,8 @@ describe('QueryController (e2e)', () => {
     app.setGlobalPrefix('queries/v1');
     await app.init();
     server = app.getHttpServer();
+    // We came across a bug where occasionally the tests started before indexes were created.
+    await itemModel.syncIndexes();
   });
 
   beforeEach(async () => {
