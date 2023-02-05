@@ -49,7 +49,7 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 				<script
 					type="application/ld+json"
 					/** We require dangerouslySetInnerHTML because we have to set innerHTML here */
-					dangerouslySetInnerHTML={getStructuredDataWebsite()}
+					dangerouslySetInnerHTML={getStructuredDataWebsite}
 					key="websiteLdJson"
 				/>
 			</Head>
