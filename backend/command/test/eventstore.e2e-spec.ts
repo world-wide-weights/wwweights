@@ -5,6 +5,7 @@ import { EventStore } from '../src/eventstore/eventstore';
 import { Client } from './mocks/eventstore-connection';
 import { ConfigModule } from '@nestjs/config';
 import { ALLOWED_EVENT_ENTITIES } from '../src/eventstore/enums/allowedEntities.enum';
+import { timeout } from './helpers/timeout';
 
 describe('EventstoreModule', () => {
   // Basically disable the constructor to skip Eventstoredb connection
@@ -37,6 +38,8 @@ describe('EventstoreModule', () => {
       client.forcedResult = [];
       //ACT
       await eventStore['init']();
+      // delay as init takes a little bit of time
+      await timeout(100)
       // ASSERT
       expect(eventStore.isReady).toEqual(true);
     });
