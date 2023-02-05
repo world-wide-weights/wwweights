@@ -2,6 +2,7 @@ import Image from "next/image"
 import email from "../../../public/email.png"
 import discord from "../../assets/img/logos/discord-logo-blue.svg"
 import github from "../../assets/img/logos/github-logo.png"
+import twitter from "../../assets/img/logos/twitter-logo-blue.svg"
 import { PageLayout } from "../../components/Layout/PageLayout"
 import { Seo } from "../../components/Seo/Seo"
 import { NextPageCustomProps } from "../_app"
@@ -22,8 +23,11 @@ const Contact: NextPageCustomProps = () => {
             <a href="https://discord.gg/UmxWf2FEQx" className="mb-2 mr-2" target="_blank" title="Link to our discord server!" rel="noreferrer">
                 <Image height={40} alt="Image of Discord Logo" src={discord} />
             </a>
-            <a href="https://github.com/world-wide-weights" className="mb-2" target="_blank" title="Link to our GitHub Orga!" rel="noreferrer">
+            <a href="https://github.com/world-wide-weights" className="mb-2 mr-2" target="_blank" title="Link to our GitHub Orga!" rel="noreferrer">
                 <Image height={40} alt="Image of GitHub Logo" src={github} />
+            </a>
+            <a href="https://twitter.com/wwweights" className="mb-2" target="_blank" title="Link to our Twitter!" rel="noreferrer">
+                <Image height={40} alt="Image of GitHub Logo" src={twitter} />
             </a>
         </div>
     </>
