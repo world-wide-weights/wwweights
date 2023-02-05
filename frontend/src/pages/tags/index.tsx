@@ -3,6 +3,7 @@ import Head from "next/head"
 import { Chip } from "../../components/Chip/Chip"
 import { Headline } from "../../components/Headline/Headline"
 import { Pagination } from "../../components/Pagination/Pagination"
+import { Tooltip } from "../../components/Tooltip/Tooltip"
 import { queryRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { PaginatedResponse } from "../../types/item"
@@ -35,7 +36,9 @@ export default function TagsList({ tags, currentPage, totalItems, limit }: Infer
 
             {/* tags */}
             <div className="flex flex-wrap pb-3">
-                {tags.map((tag) => <Chip key={tag.name} to={routes.tags.single(tag.name)}>{tag.name}</Chip>)}
+                {tags.map((tag) => <Tooltip key={tag.name} content={`Tags is used ${tag.count} ${tag.count === 1 ? "once" : "times"}.`}>
+                    <Chip to={routes.tags.single(tag.name)}>{tag.name}</Chip>
+                </Tooltip>)}
             </div>
 
             {/* Pagination */}
