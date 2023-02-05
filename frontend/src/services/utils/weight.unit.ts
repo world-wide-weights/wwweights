@@ -1,4 +1,4 @@
-import { calculateMedianWeight, calculateWeightFit, generateWeightProgressBarPercentage, generateWeightString } from "./weight"
+import { calculateMedianWeight, calculateWeightFit, generateWeightProgressBarPercentage, generateWeightString, getSortedItemsAndHeaviest } from "./weight"
 
 describe("Generate Weight String", () => {
     it("should create string with weight value", () => {
@@ -112,5 +112,88 @@ describe("Calculate the number of weights that fit in a container and round", ()
     it("should handle weights that are larger than the container", () => {
         expect(calculateWeightFit(100, 200)).to.equal(1)
         expect(calculateWeightFit(100, 250)).to.equal(0)
+    })
+})
+
+describe("Get SortedItems and Get HeaviestWeight", () => {
+    const items = [{
+        name: "test",
+        slug: "test",
+        weight: { value: 10 },
+        tags: [],
+        user: "test",
+        createdAt: 123,
+    }, {
+        name: "test",
+        slug: "test",
+        weight: { value: 20 },
+        tags: [],
+        user: "test",
+        createdAt: 123,
+    }, {
+        name: "test",
+        slug: "test",
+        weight: { value: 5 },
+        tags: [],
+        user: "test",
+        createdAt: 123,
+    }]
+
+    it("should sort items in ascending order and return the heaviest weight", () => {
+        const result = getSortedItemsAndHeaviest(items, "asc")
+        expect(result).to.deep.equal({
+            items: [{
+                name: "test",
+                slug: "test",
+                weight: { value: 5 },
+                tags: [],
+                user: "test",
+                createdAt: 123,
+            }, {
+                name: "test",
+                slug: "test",
+                weight: { value: 10 },
+                tags: [],
+                user: "test",
+                createdAt: 123,
+            }, {
+                name: "test",
+                slug: "test",
+                weight: { value: 20 },
+                tags: [],
+                user: "test",
+                createdAt: 123,
+            }],
+            heaviestWeight: { value: 20 }
+        })
+    })
+
+    it("should sort items in descending order and return the heaviest weight", () => {
+        const result = getSortedItemsAndHeaviest(items, "desc")
+        expect(result).to.deep.equal({
+            items: [{
+                name: "test",
+                slug: "test",
+                weight: { value: 20 },
+                tags: [],
+                user: "test",
+                createdAt: 123,
+            }, {
+                name: "test",
+                slug: "test",
+                weight: { value: 10 },
+                tags: [],
+                user: "test",
+                createdAt: 123,
+            }, {
+                name: "test",
+                slug: "test",
+                weight: { value: 5 },
+                tags: [],
+                user: "test",
+                createdAt: 123,
+            }],
+            heaviestWeight: { value: 20 }
+        })
     })
 })
