@@ -13,6 +13,7 @@ import { Pagination } from "../../components/Pagination/Pagination"
 import { Seo } from "../../components/Seo/Seo"
 import { Sort, SortType } from "../../components/Sort/Sort"
 import { StatsCard } from "../../components/Statistics/StatsCard"
+import { Tooltip } from "../../components/Tooltip/Tooltip"
 import { useLocalStorage } from "../../hooks/useLocalStorage"
 import { queryRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
@@ -91,8 +92,12 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
 
                                 {/* Sort */}
                                 <div className="flex items-center mb-2 lg:mb-0">
-                                    <IconButton datacy="discover-grid-view-button" icon="grid_view" color={viewType === "grid" ? "blue" : "gray"} dimOpacityWhenDisabled={false} onClick={() => setViewType("grid")} className="mr-2" />
-                                    <IconButton datacy="discover-grid-list-button" icon="list" color={viewType === "list" ? "blue" : "gray"} dimOpacityWhenDisabled={false} onClick={() => setViewType("list")} className="mr-4" />
+                                    <Tooltip wrapperClassname="mr-2" content="Switch to grid view">
+                                        <IconButton datacy="discover-grid-view-button" icon="grid_view" color={viewType === "grid" ? "blue" : "gray"} dimOpacityWhenDisabled={false} onClick={() => setViewType("grid")} />
+                                    </Tooltip>
+                                    <Tooltip wrapperClassname="mr-4" content="Switch to list view">
+                                        <IconButton datacy="discover-grid-list-button" icon="list" color={viewType === "list" ? "blue" : "gray"} dimOpacityWhenDisabled={false} onClick={() => setViewType("list")} />
+                                    </Tooltip>
 
                                     {/* Sort Dropdown */}
                                     <div className="flex-grow">
