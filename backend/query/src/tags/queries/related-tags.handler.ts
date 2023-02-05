@@ -2,8 +2,11 @@ import { InjectModel } from '@m8a/nestjs-typegoose';
 import { Logger, UnprocessableEntityException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
-import { DataWithCount } from '../../items/interfaces/counted-items';
-import { ItemsByTag } from '../../models/items-by-tag.model';
+import { ItemSortEnum } from '../../items/interfaces/item-sort-enum';
+import { Item } from '../../items/models/item.model';
+import { DataWithCount } from '../../shared/data-with-count';
+import { getFilter } from '../../shared/get-filter';
+import { getSort } from '../../shared/get-sort';
 import { Tag } from '../models/tag.model';
 import { TagRelatedQuery } from './related-tags.query';
 
@@ -12,61 +15,77 @@ export class TagRelatedHandler implements IQueryHandler<TagRelatedQuery> {
   private readonly logger = new Logger(TagRelatedHandler.name);
 
   constructor(
-    @InjectModel(ItemsByTag)
-    private readonly itemsByTagModel: ReturnModelType<typeof ItemsByTag>,
+    @InjectModel(Item)
+    private readonly itemModel: ReturnModelType<typeof Item>,
   ) {}
 
   async execute({ dto }: TagRelatedQuery) {
     try {
-      // This aggregates looks at all the items that have the looked for tag via the itemsByTag collection
-      // and then counts the occurences of all the tags in all the items,
-      // sorts them by it and returns total count and paginated Tags
-      const relatedTagsWithCount = await this.itemsByTagModel.aggregate<
+      const filter = getFilter(dto.query, dto.tags);
+      const sort = getSort(ItemSortEnum.RELEVANCE, !!dto.query || !!dto.tags);
+
+      // After searching for the normal filter parameters, this aggregation counts the number of items
+      // Then it unwinds all tags and counts their occurences
+      // After that it filters out all tags that do not build a subset, this automattically strips those from the search aswell
+      // Lastly we flatten the result, and then facet to get a total count and the actual paginated data
+      const relatedTagsWithCount = await this.itemModel.aggregate<
         DataWithCount<Tag>
       >([
-        { $match: { tagName: 'android' } },
-        // Reduce to get all the tags in all the items in one array
+        { $match: filter },
+        // TODO: Find a fix for @ts-ignore
+        // Unfortunately, we need to ignore the following line, because the fields are not known at compile time
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        { $sort: sort },
+        { $limit: 1000 },
         {
-          $addFields: {
-            relatedTags: {
-              $reduce: {
-                input: '$items.tags',
-                initialValue: [],
-                in: { $concatArrays: ['$$value', '$$this'] },
-              },
-            },
+          $group: {
+            _id: 'null',
+            tags: { $push: '$tags' },
+            size: { $sum: 1 },
           },
         },
         {
           $unwind: {
-            path: '$relatedTags',
+            path: '$tags',
             preserveNullAndEmptyArrays: false,
           },
         },
-        // Remove the overheads and flatten the object to more easily group them
         {
-          $project: {
-            _id: 0,
-            name: '$relatedTags.name',
-            count: '$relatedTags.count',
+          $unwind: {
+            path: '$tags',
+            preserveNullAndEmptyArrays: false,
           },
         },
         {
           $group: {
-            _id: '$name',
-            count: { $first: '$count' },
+            _id: '$tags.name',
+            count: { $max: '$tags.count' },
+            size: { $first: '$size' },
             occurence: { $count: {} },
           },
         },
-        { $sort: { count: -1 } },
+        { $match: { $expr: { $ne: ['$occurence', '$size'] } } },
+        {
+          $project: {
+            _id: 0,
+            name: '$_id',
+            count: '$count',
+            relevance: {
+              $floor: {
+                $multiply: [{ $divide: ['$occurence', '$size'] }, 100],
+              },
+            },
+          },
+        },
+        { $sort: { relevance: -1 } },
         {
           $facet: {
-            total: [{ $count: 'count' }],
             data: [
               { $skip: (dto.page - 1) * dto.limit },
               { $limit: dto.limit },
-              { $project: { occurence: 0, name: '$_id', _id: 0 } },
             ],
+            total: [{ $count: 'count' }],
           },
         },
       ]);
@@ -84,76 +103,8 @@ export class TagRelatedHandler implements IQueryHandler<TagRelatedQuery> {
     } catch (error) {
       this.logger.error(error);
       throw new UnprocessableEntityException(
-        'Searching for this slug caused an error',
+        'Searching for related tags caused an error',
       );
     }
   }
 }
-
-// Some thoughts:
-/*
-[
-  {
-    '$match': {
-      '$and': [
-        {
-          '$text': {
-            '$search': 'android replacethis'
-          }
-        }, {
-          'tags.name': {
-            '$all': [
-              'android', 'smartphone'
-            ]
-          }
-        }
-      ]
-    }
-  }, {
-    '$unwind': {
-      'path': '$tags', 
-      'preserveNullAndEmptyArrays': false
-    }
-  }, {
-    '$project': {
-      '_id': 0, 
-      'name': '$tags.name', 
-      'count': '$tags.count'
-    }
-  }, {
-    '$group': {
-      '_id': '$name', 
-      'count': {
-        '$max': '$count'
-      }, 
-      'occurence': {
-        '$count': {}
-      }
-    }
-  }, {
-    '$sort': {
-      'occurence': -1, 
-      'percent': -1
-    }
-  }, {
-    '$match': {
-      '_id': {
-        '$nin': [
-          1000000000000000000000
-        ]
-      }
-    }
-  }, {
-    '$facet': {
-      'total': [
-        {
-          '$count': 'count'
-        }
-      ], 
-      'data': [
-        {}
-      ]
-    }
-  }
-]
-*/

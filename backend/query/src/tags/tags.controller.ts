@@ -32,7 +32,6 @@ export class TagsController {
     type: PaginatedResult<Tag>,
     status: 200,
     description: 'Paginated result of tags',
-    isArray: false,
   })
   async getTagsList(@Query() dto: QueryTagListDto) {
     this.logger.log(`Get tag list`);
@@ -46,7 +45,6 @@ export class TagsController {
     type: PaginatedResult<TagWithRelevance>,
     status: 200,
     description: 'Paginated result of tags',
-    isArray: false,
   })
   async getTagsRelated(@Query() dto: QueryTagRelatedDto) {
     this.logger.log(`Get related tag list`);

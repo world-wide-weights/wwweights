@@ -37,7 +37,7 @@ export class ItemStatisticsHandler
         { $project: { heaviest: 1, lightest: 1, averageWeight: 1 } },
       ]);
 
-      if (!statistics[0].averageWeight) {
+      if (!statistics[0]?.averageWeight) {
         this.logger.log('No items found');
         throw new UnprocessableEntityException('No items found');
       }
