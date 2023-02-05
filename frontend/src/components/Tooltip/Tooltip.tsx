@@ -21,6 +21,7 @@ type TooltipProps = {
 export const Tooltip: React.FC<TooltipProps> = ({ children, content, delay, wrapperClassname = "", position = "top", customMargin = "-40px" }) => {
     // TODO in future: Fix bug when tooltip is shown and you hover over it. There is a small area where you can not click the children element
     // TODO in future: Move this to CSS only with before
+    // TODO in future: Fix bug where tooltip is out of viewport when you hover over it
     let timeout: NodeJS.Timeout
     const [isShown, setIsShown] = useState(false)
 
