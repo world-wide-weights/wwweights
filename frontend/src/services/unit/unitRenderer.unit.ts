@@ -11,7 +11,7 @@ describe("UnitRenderer", () => {
             value: 123243342,
             additionalValue: 123289765,
             isCa: true
-        })).deep.equal("ca. 123.24 - 123.29 T")
+        })).deep.equal("ca. 123.243 - 123.29 T")
         expect(renderUnitIntoString({
             value: 9,
             additionalValue: 0,
@@ -21,7 +21,7 @@ describe("UnitRenderer", () => {
             value: 0.0126,
             additionalValue: 0.0645,
             isCa: true
-        })).deep.equal("ca. 12.60 - 64.50 mg")
+        })).deep.equal("ca. 12.6 - 64.5 mg")
     })
 
     it("it should NOT display 'ca.'", () => {
@@ -34,7 +34,7 @@ describe("UnitRenderer", () => {
             value: 123243342,
             additionalValue: 123289765,
             isCa: false
-        })).deep.equal("123.24 - 123.29 T")
+        })).deep.equal("123.243 - 123.29 T")
         expect(renderUnitIntoString({
             value: 9,
             additionalValue: 0,
@@ -44,7 +44,7 @@ describe("UnitRenderer", () => {
             value: 0.0126,
             additionalValue: 0.0645,
             isCa: false
-        })).deep.equal("12.60 - 64.50 mg")
+        })).deep.equal("12.6 - 64.5 mg")
     })
 
     it("it should display additionalValue", () => {
@@ -57,7 +57,7 @@ describe("UnitRenderer", () => {
             value: 123243342,
             additionalValue: 123289765,
             isCa: false
-        })).deep.equal("123.24 - 123.29 T")
+        })).deep.equal("123.243 - 123.29 T")
         expect(renderUnitIntoString({
             value: 9,
             additionalValue: 40,
@@ -67,7 +67,7 @@ describe("UnitRenderer", () => {
             value: 0.0126,
             additionalValue: 0.0645,
             isCa: false
-        })).deep.equal("12.60 - 64.50 mg")
+        })).deep.equal("12.6 - 64.5 mg")
     })
 
     it("it should NOT display additionalValue", () => {
@@ -80,7 +80,7 @@ describe("UnitRenderer", () => {
             value: 123243342,
             additionalValue: 0,
             isCa: false
-        })).deep.equal("123.24 T")
+        })).deep.equal("123.243 T")
         expect(renderUnitIntoString({
             value: 9,
             additionalValue: 0,
@@ -90,7 +90,7 @@ describe("UnitRenderer", () => {
             value: 0.0126,
             additionalValue: 0,
             isCa: false
-        })).deep.equal("12.60 mg")
+        })).deep.equal("12.6 mg")
     })
 
     it("it should format numbers to two numbers after comma", () => {
@@ -98,27 +98,27 @@ describe("UnitRenderer", () => {
             value: 9.123,
             additionalValue: 99.1233413,
             isCa: false
-        })).deep.equal("9.12 - 99.12 g")
+        })).deep.equal("9.123 - 99.123 g")
         expect(renderUnitIntoString({
             value: 123243342.1233413,
             additionalValue: 153474223.1233413,
             isCa: false
-        })).deep.equal("123.24 - 153.47 T")
+        })).deep.equal("123.243 - 153.474 T")
         expect(renderUnitIntoString({
             value: 0.273213,
             additionalValue: 0.671823,
             isCa: false
-        })).deep.equal("273.21 - 671.82 mg")
+        })).deep.equal("273.213 - 671.823 mg")
         expect(renderUnitIntoString({
             value: 0.0126,
             additionalValue: 0.0234,
             isCa: false
-        })).deep.equal("12.60 - 23.40 mg")
+        })).deep.equal("12.6 - 23.4 mg")
         expect(renderUnitIntoString({
             value: 1,
             additionalValue: 100000000,
             isCa: false
-        })).deep.equal("1 - 100.000.000 g")
+        })).deep.equal("1 - 100,000,000 g")
     })
 
     it("it should show high numbers correctly", () => {
@@ -159,11 +159,16 @@ describe("UnitRenderer", () => {
             value: 1,
             additionalValue: 100000000,
             isCa: false
-        })).deep.equal("1 - 100.000.000 g")
+        })).deep.equal("1 - 100,000,000 g")
         expect(renderUnitIntoString({
             value: 1e38,
             additionalValue: 0,
             isCa: false
-        })).deep.equal("100.000.000 Qg")
+        })).deep.equal("100,000,000 Qg")
+        expect(renderUnitIntoString({
+            value: 1000,
+            additionalValue: 1000000,
+            isCa: false
+        })).deep.equal("1 - 1,000 kg")
     })
 })
