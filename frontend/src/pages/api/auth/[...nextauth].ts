@@ -49,8 +49,9 @@ export const authOptions: NextAuthOptions = {
     callbacks: {
         jwt: async ({ token, user }: { token: JWT, user?: User }) => {
             if (user) {
-                // Add accessToken and user information to the token
-                token.accessToken = user.accessToken
+                // Add access token, refresh token and user information to the token
+                token.accessToken = user.access_token
+                token.refreshToken = user.refresh_token
                 token.user = user
             }
 
@@ -58,9 +59,14 @@ export const authOptions: NextAuthOptions = {
             return token
         },
         session: async ({ session, token }: { session: Session, token: JWT }) => {
-            // Add accessToken and user to session
+            // Add access token, refresh token and user to session
             session.accessToken = token.accessToken
-            session.user = token.user.user
+            session.refreshToken = token.refreshToken
+            session.user = {
+                email: "test@gmail.com",
+                username: "test",
+                slug: 1
+            }
 
             // Send properties to the client
             return session
