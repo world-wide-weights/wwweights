@@ -2,7 +2,7 @@ import { InjectModel } from '@m8a/nestjs-typegoose';
 import { Logger, UnprocessableEntityException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
-import { DataWithCount } from '../../items/interfaces/counted-items';
+import { DataWithCount } from '../../shared/data-with-count';
 import { TagSortEnum } from '../interfaces/tag-sort-enum';
 import { Tag } from '../models/tag.model';
 import { TagListQuery } from './tag-list.query';
