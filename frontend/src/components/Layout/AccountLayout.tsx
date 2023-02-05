@@ -1,4 +1,3 @@
-import Head from "next/head"
 import Image from "next/image"
 import Link from "next/link"
 import logo from "../../../public/logo.png"
@@ -24,15 +23,7 @@ type AccountLayoutProps = {
  * Adds image right, centers the content horizontal, adds header information and add footer at bottom of the page.
  */
 export const AccountLayout: React.FC<AccountLayoutProps> = ({ page, headline, description, descriptionImage, siteTitle }) => {
-    const siteTitleString = `WWWeights | ${siteTitle}`
-
     return <>
-        <Head>
-            <title>{siteTitleString}</title>
-            <meta charSet="utf-8" />
-            <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        </Head>
-
         <div className="lg:flex h-screen">
             {/* Left Side Content: Form */}
             <div className="flex flex-col lg:grid lg:grid-rows-5 lg:w-1/2 h-screen">
@@ -52,8 +43,9 @@ export const AccountLayout: React.FC<AccountLayoutProps> = ({ page, headline, de
                 {/* Footer */}
                 <footer className="container row-start-5 mt-auto">
                     <ul className="flex gap-3 py-4">
-                        <li><Button to={routes.legal.terms} kind="tertiary">Terms of Service</Button></li>
-                        <li><Button to={routes.legal.privacy} kind="tertiary">Privacy Policy</Button></li>
+                        <li><Button to={routes.misc.contact} kind="tertiary">Contact</Button></li>
+                        <li><Button to={routes.misc.privacy} kind="tertiary">Privacy Policy</Button></li>
+                        <li><Button to={routes.misc.terms} kind="tertiary">Terms and Conditions</Button></li>
                     </ul>
                 </footer>
             </div>
