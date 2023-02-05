@@ -8,11 +8,10 @@ import { NextPageCustomProps } from "../_app"
 
 const Profile: NextPageCustomProps = () => {
     const { data: session } = useSession()
-
+    const seoTitle = `My Profile ${session?.user.username}`
     return <>
-        {/* Meta Tags */}
         <Seo
-            title={`My Profile ${session?.user.username}`}
+            title={seoTitle}
             description="Your profile page. Here you can see your contributions and statistics."
         />
 
