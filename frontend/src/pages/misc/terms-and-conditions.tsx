@@ -101,7 +101,6 @@ const TermsAndConditions: NextPageCustomProps = () => {
         <h2 className="text-lg md:text-xl font-semibold" id="contact">Contact Us</h2>
         <p>If you have any questions about these Terms and Conditions, You can contact us by email:</p>
 
-
         <Image alt="email" src={email} />
     </>
 }
