@@ -4,7 +4,6 @@ import { Card } from "../../components/Card/Card"
 import { Headline } from "../../components/Headline/Headline"
 import { ItemPreviewList } from "../../components/Item/ItemPreviewList"
 import { Seo } from "../../components/Seo/Seo"
-import { StatsCard } from "../../components/Statistics/StatsCard"
 import { NextPageCustomProps } from "../_app"
 
 const Profile: NextPageCustomProps = () => {
