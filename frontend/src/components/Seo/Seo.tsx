@@ -31,6 +31,11 @@ export const siteTitle = "World Wide Weights"
 export const baseTitleSuffix = ` | ${siteTitle}`
 export const baseKeywords = ["weights database", "World Wide Weights", "wwweights"]
 
+/**
+ * Sets metadata into the `<head>` for search engines and social media.
+ * @param {BaseSeoProps} Properties for the Seo component
+ * @returns Seo component
+ */
 export const Seo: React.FC<BaseSeoProps> = ({
     title,
     shouldDisplayTitleSuffix = true,
