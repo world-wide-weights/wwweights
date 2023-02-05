@@ -1,3 +1,5 @@
+import Image from "next/image"
+import email from "../../../public/email.png"
 import { PageLayout } from "../../components/Layout/PageLayout"
 import { NextPageCustomProps } from "../_app"
 
@@ -99,7 +101,8 @@ const TermsAndConditions: NextPageCustomProps = () => {
         <h2 className="text-lg md:text-xl font-semibold" id="contact">Contact Us</h2>
         <p>If you have any questions about these Terms and Conditions, You can contact us by email:</p>
 
-        <a href="mailto:support@wwweights.com">support@wwweights.com</a>
+
+        <Image alt="email" src={email} />
     </>
 }
 
