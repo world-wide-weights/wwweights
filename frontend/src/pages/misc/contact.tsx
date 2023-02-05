@@ -3,6 +3,7 @@ import email from "../../../public/email.png"
 import discord from "../../assets/img/logos/discord-logo-blue.svg"
 import github from "../../assets/img/logos/github-logo.png"
 import { PageLayout } from "../../components/Layout/PageLayout"
+import { Seo } from "../../components/Seo/Seo"
 import { NextPageCustomProps } from "../_app"
 
 /**
@@ -10,6 +11,11 @@ import { NextPageCustomProps } from "../_app"
  */
 const Contact: NextPageCustomProps = () => {
     return <>
+        <Seo
+            title="Contact Information for World Wide Weights"
+            description="Contact us via email or social media!"
+        />
+
         <Image className="mb-4" alt="Image of E-Mail Adresse" src={email} />
         <p className="mb-4">You are more than welcome to share feedback and request with us.</p>
         <div className="flex">
