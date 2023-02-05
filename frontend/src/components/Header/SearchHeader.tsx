@@ -1,8 +1,9 @@
 import { Form, Formik, useFormikContext } from "formik"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-import { Tag } from "../../pages/tags"
+import { mockRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
+import { Tag } from "../../types/tag"
 import { Chip } from "../Chip/Chip"
 import { Headline } from "../Headline/Headline"
 import { Search } from "../Search/Search"
@@ -20,7 +21,7 @@ type SearchHeaderProps = {
 /**
  * Header with search and search suggestions
  */
-export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "asc", hasHeadline = true }) => {
+export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "relevance", hasHeadline = true }) => {
     const router = useRouter()
 
     // Local States
@@ -49,7 +50,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "
     const AutoUpdateQueryField = (): null => {
         const { setFieldValue } = useFormikContext()
         useEffect(() => {
-            const tag = relatedTags.find(relatedTag => relatedTag.slug === query)
+            const tag = relatedTags.find(relatedTag => relatedTag.name === query)
             let queryField = query
 
             if (tag)
@@ -65,19 +66,22 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "
      * Fetch related tags
      */
     useEffect(() => {
-        const fetchRelatedTags = async () => {
+        const getRelatedTags = async () => {
             setIsLoadingRelatedTags(true)
 
             try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/tags/related`)
-                const data = await response.json()
-                setRelatedTags(data)
-                setIsLoadingRelatedTags(false)
+                // TODO (Zoe-Bot): Update mock to be real api
+                const response = await mockRequest.get<Tag[]>("/api/query/v1/tags/related")
+                const relatedTags = response.data
+
+                setRelatedTags(relatedTags)
             } catch (error) {
                 console.error(error)
+            } finally {
+                setIsLoadingRelatedTags(false)
             }
         }
-        fetchRelatedTags()
+        getRelatedTags()
     }, [])
 
     return <header className="bg-white pt-2 md:pt-5 pb-3 md:pb-10">
@@ -95,7 +99,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "
                         {/* TODO (Zoe-bot): Only develop Remove query !== "" condition when normal backend api is set */}
                         {query !== "" && (isLoadingRelatedTags ? <p>Loading...</p> : <div datacy="search-header-tag-wrapper" className="whitespace-nowrap overflow-x-scroll md:whitespace-normal md:overflow-hidden">
                             {/* Only show tags not current searched (should not be the value in query field) */}
-                            {relatedTags.map(relatedTag => relatedTag.slug !== query && <Chip datacy={`search-header-chip-${relatedTag.slug}`} key={relatedTag.slug} to={routes.weights.list({ sort, query: relatedTag.slug })}>{relatedTag.name}</Chip>)}
+                            {relatedTags.map((relatedTag, index) => relatedTag.name !== query && <Chip datacy={`search-header-chip-${index}`} key={relatedTag.name} to={routes.weights.list({ sort, query: relatedTag.name })}>{relatedTag.name}</Chip>)}
                         </div>)}
                         <AutoUpdateQueryField />
                     </Form>

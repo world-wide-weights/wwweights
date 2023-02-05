@@ -1,11 +1,11 @@
 import { routes } from "../../../src/services/routes/routes"
-import singleItem from "../../fixtures/items/single.json"
+import paginatedSingleItem from "../../fixtures/items/single.json"
 
 describe("Single Weight Tabs", () => {
     describe("Routing", () => {
         it("should display overview when url without tab query", () => {
             cy.mockSingleWeight()
-            cy.visitLocalPage(routes.weights.single(singleItem.slug))
+            cy.visitLocalPage(routes.weights.single(paginatedSingleItem.data[0].slug))
 
             cy.wait("@mockGetRelatedTags")
 
@@ -16,7 +16,7 @@ describe("Single Weight Tabs", () => {
         // This test does not work correct because of https://github.com/world-wide-weights/wwweights/issues/194
         it.skip("should display compare when url with tab compare query", () => {
             cy.mockSingleWeight()
-            cy.visitLocalPage(routes.weights.single(singleItem.slug, { tab: "compare" }))
+            cy.visitLocalPage(routes.weights.single(paginatedSingleItem.data[0].slug, { tab: "compare" }))
 
             cy.wait("@mockGetRelatedTags")
 
@@ -25,7 +25,7 @@ describe("Single Weight Tabs", () => {
 
         it("should display 404 when url with tab that does not exist", () => {
             cy.mockSingleWeight()
-            cy.visitLocalPage(routes.weights.single(singleItem.slug, { tab: "this-tab-does-not-exist" }))
+            cy.visitLocalPage(routes.weights.single(paginatedSingleItem.data[0].slug, { tab: "this-tab-does-not-exist" }))
 
             cy.check404()
         })

@@ -1,6 +1,6 @@
 import { routes } from "../../../src/services/routes/routes"
 
-const apiBaseUrl = Cypress.env("API_BASE_URL")
+const apiBaseUrl = Cypress.env("PUBLIC_API_BASE_URL_AUTH")
 
 describe("Register", () => {
     beforeEach(() => {
