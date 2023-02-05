@@ -1,4 +1,6 @@
+import { Button } from "../../components/Button/Button"
 import { PageLayout } from "../../components/Layout/PageLayout"
+import { routes } from "../../services/routes/routes"
 import { NextPageCustomProps } from "../_app"
 
 /**
@@ -65,6 +67,9 @@ const PrivacyPolicy: NextPageCustomProps = () => {
 
         <h4 className="text-lg md:text-xl font-semibold md:mb-2">Changes to this policy</h4>
         <p className="mb-4 md:mb-6">We may make changes to this policy at any time. You may be asked to review and re-accept the information in this policy if it changes in the future.</p>
+
+        <p className="mb-4 md:mb-6">If you have any questions about these policies. Feel free to can contact us:</p>
+        <Button to={routes.misc.contact} className="mb-4 md:mb-6">Contact us</Button>
     </>
 }
 

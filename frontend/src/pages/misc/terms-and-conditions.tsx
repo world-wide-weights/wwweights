@@ -99,9 +99,9 @@ const TermsAndConditions: NextPageCustomProps = () => {
         <p className="mb-4 md:mb-6">By continuing to access or use Our Service after those revisions become effective, You agree to be bound by the revised terms. If You do not agree to the new terms, in whole or in part, please stop using the website and the Service.</p>
 
         <h2 className="text-lg md:text-xl font-semibold" id="contact">Contact Us</h2>
-        <p>If you have any questions about these Terms and Conditions, You can contact us:</p>
+        <p className="mb-4 md:mb-6">If you have any questions about these Terms and Conditions. Feel free to can contact us:</p>
 
-        <Button to={routes.misc.contact} kind="tertiary" isColored>Contact</Button>
+        <Button to={routes.misc.contact} isColored>Contact us</Button>
     </>
 }
 
