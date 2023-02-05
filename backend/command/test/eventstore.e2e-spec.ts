@@ -80,6 +80,8 @@ describe('EventstoreModule', () => {
         [{ event: { ...eventList.event, id: 'def' } }],
       ];
       await replaceApp();
+      //ACT
+      await eventStore['init']()
       // ASSERT
       expect(eventStore.isReady).toEqual(true);
       // Should subscribe to all from the end => all previous are expected already be applied to read db 
@@ -101,6 +103,8 @@ describe('EventstoreModule', () => {
         [{ event: { ...eventList.event, id: 'def' } }],
       ];
       await replaceApp();
+      // ACT
+      await eventStore['init']()
       // ASSERT
       expect(eventStore.isReady).toEqual(false);
       // Should subscribe to all from the beginning => needs all events for replay
