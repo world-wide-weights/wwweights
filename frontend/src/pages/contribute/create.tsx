@@ -139,7 +139,7 @@ const Create: NextPageCustomProps = () => {
         {/* Meta Tags */}
         <Seo
             title="Create new item"
-            description="Contribute to the world wide weights database and create a new item."
+            description="Contribute to the World Wide Weights database and create a new item."
         />
 
         <main className="container mt-5">
