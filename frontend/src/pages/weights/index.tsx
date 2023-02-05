@@ -17,6 +17,7 @@ import { useLocalStorage } from "../../hooks/useLocalStorage"
 import { queryRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { generateWeightString } from "../../services/utils/weight"
+import { renderUnitIntoString, renderWeightAsNumberIntoString } from "../../services/unit/unitRenderer"
 import { Item, PaginatedResponse } from "../../types/item"
 
 const DEFAULT_ITEMS_PER_PAGE = 16
@@ -133,9 +134,9 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                                     </button>
 
                                     <div className={`${statisticsExpanded ? "flex flex-col lg:flex-row" : "grid"} flex-grow md:flex-auto gap-2 lg:gap-4`}>
-                                        <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} to={routes.weights.single(statistics.heaviest.slug)} icon="weight" value={generateWeightString(statistics.heaviest.weight)} descriptionTop={statistics.heaviest.name} descriptionBottom="Heaviest" />
-                                        <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} to={routes.weights.single(statistics.lightest.slug)} icon="eco" value={generateWeightString(statistics.lightest.weight)} descriptionTop={statistics.lightest.name} descriptionBottom="Lightest" />
-                                        <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="scale" value={`${Number(statistics.averageWeight).toFixed(2)} g`} descriptionBottom="Average" />
+                                        <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} to={routes.weights.single(statistics.heaviest.slug)} icon="weight" value={renderUnitIntoString(statistics.heaviest.weight)} descriptionTop={statistics.heaviest.name} descriptionBottom="Heaviest" />
+                                        <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} to={routes.weights.single(statistics.lightest.slug)} icon="eco" value={renderUnitIntoString(statistics.lightest.weight)} descriptionTop={statistics.lightest.name} descriptionBottom="Lightest" />
+                                        <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="scale" value={renderWeightAsNumberIntoString(statistics.averageWeight)} descriptionBottom="Average" />
                                     </div>
                                 </div>
                             </div>
