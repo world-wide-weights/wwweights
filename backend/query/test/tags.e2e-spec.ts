@@ -8,9 +8,9 @@ import {
 } from './helpers/MongoMemoryHelpers';
 
 import { Test, TestingModule } from '@nestjs/testing';
-import { ItemsModule } from '../src/items/items.module';
 import { Item } from '../src/items/models/item.model';
 import { TagsModule } from '../src/tags/tags.module';
+import { items } from './mocks/items';
 import { tags } from './mocks/tags';
 
 describe('QueryController (e2e)', () => {
@@ -22,7 +22,7 @@ describe('QueryController (e2e)', () => {
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [initializeMockModule(), TagsModule, ItemsModule],
+      imports: [initializeMockModule(), TagsModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
@@ -40,12 +40,13 @@ describe('QueryController (e2e)', () => {
     app.setGlobalPrefix('queries/v1');
     await app.init();
     server = app.getHttpServer();
-    await itemModel.syncIndexes();
   });
 
   beforeEach(async () => {
     await tagModel.deleteMany();
+    await itemModel.deleteMany();
 
+    await itemModel.insertMany(items);
     await tagModel.insertMany(tags);
   });
 
@@ -92,27 +93,56 @@ describe('QueryController (e2e)', () => {
       });
     });
 
-    // describe('tags/related', () => {
-    //   const subPath = 'tags/related';
+    describe('tags/related', () => {
+      const subPath = 'tags/related';
 
-    //   it('should return the related items', async () => {
-    //     const result = await request(server)
-    //       .get(queriesPath + subPath)
-    //       .query({ slug: relatedItems[0].slug })
-    //       .expect(HttpStatus.NOT_IMPLEMENTED);
+      it('should return base results if query is empty', async () => {
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({})
+          .expect(HttpStatus.OK);
 
-    //     const otherItemNames = relatedItems
-    //       .filter((item) => item.slug !== relatedItems[0].slug)
-    //       .map((item) => item.name);
+        expect(result.body.data).toHaveLength(16);
+        expect(result.body.total).toBe(66);
+        expect(result.body.limit).toBe(16);
+        expect(result.body.page).toBe(1);
+        for (const tag of result.body.data) {
+          expect(tag.relevance).toBeLessThan(100);
+        }
+      });
 
-    //     expect(result.body.data).toHaveLength(2);
-    //     for (const item of result.body.data) {
-    //       expect(otherItemNames).toContain(item.name);
-    //     }
-    //   });
-    // });
+      it('should not contain data if db is empty', async () => {
+        await tagModel.deleteMany();
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({})
+          .expect(HttpStatus.OK);
 
-    // empty tags
-    // empty query
+        expect(result.body.total).toBe(0);
+        expect(result.body.data).toHaveLength(0);
+      });
+
+      it('should not return android tag if querytag contains android', async () => {
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({ query: 'android', tags: ['android'] })
+          .expect(HttpStatus.OK);
+
+        for (const tag of result.body.data) {
+          expect(tag.name).not.toBe('android');
+        }
+      });
+
+      it('should return decending relevance', async () => {
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({ query: 'android', tags: ['android'] })
+          .expect(HttpStatus.OK);
+
+        expect(result.body.data[0].relevance).toBeGreaterThan(
+          result.body.data.at(-1).relevance,
+        );
+      });
+    });
   });
 });
