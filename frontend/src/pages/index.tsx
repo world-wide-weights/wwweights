@@ -63,7 +63,7 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 						</Form>
 					</Formik>
 				</div>
-			</header >
+			</header>
 
 			<main className="bg-gray-100 pt-5 md:pt-10">
 				{/* Items */}
@@ -105,7 +105,7 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 
 			{/* Footer */}
 			<Footer />
-		</div >
+		</div>
 	)
 }
 
