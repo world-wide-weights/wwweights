@@ -2,9 +2,9 @@ import { InjectModel } from '@m8a/nestjs-typegoose';
 import { Logger, UnprocessableEntityException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
+import { DataWithCount } from '../../shared/data-with-count';
 import { getFilter } from '../../shared/get-filter';
 import { getSort } from '../../shared/get-sort';
-import { DataWithCount } from '../interfaces/counted-items';
 import { Item } from '../models/item.model';
 import { ItemListQuery } from './item-list.query';
 
