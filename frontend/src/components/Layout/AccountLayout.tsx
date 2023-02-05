@@ -61,7 +61,7 @@ export const AccountLayout: React.FC<AccountLayoutProps> = ({ page, headline, de
             {/* Right Side Content: Image */}
             <div className={"hidden lg:flex items-center justify-center bg-background-half-page bg-no-repeat bg-cover bg-center w-1/2"}>
                 <div className="text-white font-bold w-1/2">
-                    <h5 className="text-5xl leading-snug mb-5"><span className="text-blue-300">Weight</span> something and wanna share with people?</h5>
+                    <h5 className="text-5xl leading-snug mb-5"><span className="text-blue-300">Weigh</span> something and wanna share it with people?</h5>
                     <h6 className="text-2xl">{descriptionImage}</h6>
                 </div>
             </div>

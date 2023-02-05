@@ -13,29 +13,15 @@ import { Pagination } from "../../components/Pagination/Pagination"
 import { Sort, SortType } from "../../components/Sort/Sort"
 import { StatsCard } from "../../components/Statistics/StatsCard"
 import { useLocalStorage } from "../../hooks/useLocalStorage"
+import { queryRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { generateWeightString } from "../../services/utils/weight"
-import { Tag } from "../tags"
+import { Item, PaginatedResponse } from "../../types/item"
 
 const DEFAULT_ITEMS_PER_PAGE = 16
 const ITEMS_PER_PAGE_MAXIMUM = 100
 const FIRST_PAGE = 1
 const KEY_VIEW_TYPE = "discover_view_type"
-
-export type Item = {
-    id: string,
-    name: string
-    slug: string
-    weight: Weight,
-    source?: string
-    image?: string
-    tags: Tag[]
-}
-export type Weight = {
-    value: number
-    additionalValue?: number
-    isCa: boolean
-}
 
 type Statistics = {
     heaviest: Item
@@ -50,7 +36,7 @@ type WeightsListProps = {
     limit: number
     query: string
     sort: SortType
-    statistics: Statistics
+    statistics?: Statistics
 }
 
 /** 
@@ -80,7 +66,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
 
         {/* Content */}
         <main className="container mt-5">
-            {items.length === 0 ?
+            {(items.length === 0 || statistics === undefined) ?
                 // Empty State
                 <SearchEmptyState query={query} />
                 : <>
@@ -110,12 +96,12 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                             {loading ? <p>Loading...</p> : <>
                                 {/* Weights Box View */}
                                 {viewType === "grid" && <div className={`grid ${statisticsExpanded ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" : "grid-cols-1 md:grid-cols-2 2xl:grid-cols-3"} gap-2 md:gap-5 mb-5 md:mb-8`}>
-                                    {items.map((item) => <ItemPreviewGrid datacy="weights-grid-item" key={item.slug} name={item.name} slug={item.slug} weight={item.weight} imageUrl="https://picsum.photos/200" />)}
+                                    {items.map((item) => <ItemPreviewGrid datacy="weights-grid-item" key={item.slug} name={item.name} slug={item.slug} weight={item.weight} imageUrl={item.image} />)}
                                 </div>}
 
                                 {/* Weights List View */}
                                 {viewType === "list" && <ul className={"grid md:gap-2 mb-5 md:mb-8"}>
-                                    {items.map((item) => <ItemPreviewList datacy="weights-list-item" key={item.slug} name={item.name} slug={item.slug} weight={item.weight} heaviestWeight={statistics.heaviest.weight} imageUrl="https://picsum.photos/200" />)}
+                                    {items.map((item) => <ItemPreviewList datacy="weights-list-item" key={item.slug} name={item.name} slug={item.slug} weight={item.weight} heaviestWeight={statistics.heaviest.weight} imageUrl={item.image} />)}
                                 </ul>}
                             </>}
 
@@ -137,14 +123,14 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                             {/* Statistics Content */}
                             <div className={`${statisticsExpanded ? "lg:flex-col" : "lg:items-start"} lg:flex`}>
                                 <div className="flex mb-5 lg:mb-10">
-                                    <button onClick={() => setStatisticsExpanded(!statisticsExpanded)} className="hidden lg:block bg-white self-stretch rounded-lg px-1 mr-2">
+                                    <button onClick={() => setStatisticsExpanded(!statisticsExpanded)} className={`hidden ${statisticsExpanded ? "" : "lg:block"} bg-white self-stretch rounded-lg px-1 mr-2`}>
                                         <Icon>chevron_left</Icon>
                                     </button>
 
                                     <div className={`${statisticsExpanded ? "flex flex-col lg:flex-row" : "grid"} flex-grow md:flex-auto gap-2 lg:gap-4`}>
                                         <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} to={routes.weights.single(statistics.heaviest.slug)} icon="weight" value={generateWeightString(statistics.heaviest.weight)} descriptionTop={statistics.heaviest.name} descriptionBottom="Heaviest" />
                                         <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} to={routes.weights.single(statistics.lightest.slug)} icon="eco" value={generateWeightString(statistics.lightest.weight)} descriptionTop={statistics.lightest.name} descriptionBottom="Lightest" />
-                                        <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="scale" value={`${statistics.averageWeight} g`} descriptionBottom="Average" />
+                                        <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="scale" value={`${Number(statistics.averageWeight).toFixed(2)} g`} descriptionBottom="Average" />
                                     </div>
                                 </div>
                             </div>
@@ -159,7 +145,7 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
     const currentPage = parseInt(context.query.page as string ?? FIRST_PAGE)
     const limit = parseInt(context.query.limit as string ?? DEFAULT_ITEMS_PER_PAGE)
     const query = context.query.query as string ?? ""
-    const sort = context.query.sort as SortType ?? "asc"
+    const sort = context.query.sort as SortType ?? "relevance"
 
     // Validate Query
     if (currentPage < 1 || limit < 1 || limit > ITEMS_PER_PAGE_MAXIMUM) {
@@ -168,30 +154,41 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
         }
     }
 
-    // Fetch items and statistics
-    const [itemsResponse, statisticResponse] = await Promise.all([
-        // TODO (Zoe-Bot): Update api endpoint when correct api is used
-        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/items?_page=${currentPage}&_limit=${limit}&_sort=weight.value&_order=${sort}&q=${query}`),
-        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/items/statistics`),
-    ])
+    try {
+        // Fetch items and statistics
+        const [itemsResponse, statisticResponse] = await Promise.all([
+            queryRequest.get<PaginatedResponse<Item>>(`/items/list?page=${currentPage}&limit=${limit}&sort=${sort}&query=${query}`),
+            queryRequest.get<Statistics>(`/items/statistics?query=${query}`),
+        ])
 
-    // Read jsons from items and statistics
-    const [items, statistics] = await Promise.all([
-        itemsResponse.json(),
-        statisticResponse.json()
-    ])
+        // Items, statistics and total items
+        const items = itemsResponse.data.data
+        const statistics = statisticResponse.data
+        const totalItems = itemsResponse.data.total
 
-    const totalItems = parseInt(itemsResponse.headers.get("x-total-count") ?? "100") // Faalback For tests its 100 in future (when our api is used) this information will come from body and this will be removed anyway
-
-    return {
-        props: {
-            items,
-            currentPage,
-            limit,
-            totalItems,
-            query,
-            sort,
-            statistics
+        return {
+            props: {
+                items,
+                currentPage,
+                limit,
+                totalItems,
+                query,
+                sort,
+                statistics
+            }
         }
+    } catch (error) {
+        return {
+            props: {
+                items: [],
+                currentPage,
+                limit,
+                totalItems: 0,
+                query,
+                sort
+            }
+        }
+
     }
+
 }

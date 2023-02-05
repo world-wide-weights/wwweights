@@ -1,5 +1,6 @@
 import { Field, FieldProps } from "formik"
 import { useState } from "react"
+import { ComponentOptions } from "../../../types/options"
 import { Icon } from "../../Icon/Icon"
 import { Label } from "../Label"
 
@@ -18,15 +19,6 @@ type DropdownProps = {
     light?: boolean
     /** When true add margin to dropdown like other inputs */
     hasMargin?: boolean
-}
-
-export type ComponentOptions = {
-    /** Unique value of option. */
-    value: number | string | boolean
-    /** Label which is shown as option. */
-    label: string
-    /** Icon in front of label. */
-    icon?: string
 }
 
 /**

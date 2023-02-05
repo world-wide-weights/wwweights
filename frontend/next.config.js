@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-	output: "standalone",
+  output: "standalone",
   swcMinify: true,
   images: {
     remotePatterns: [
@@ -12,6 +12,11 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'picsum.photos'
+      },
+      /** TODO: This is only for the mobile content. We have to remove this when mobile images are on our server. */
+      {
+        protocol: 'https',
+        hostname: 'fdn2.gsmarena.com'
       }
     ]
   }

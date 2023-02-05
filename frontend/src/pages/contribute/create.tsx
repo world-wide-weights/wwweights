@@ -12,7 +12,7 @@ import { TextInput } from "../../components/Form/TextInput/TextInput"
 import { Headline } from "../../components/Headline/Headline"
 import { routes } from "../../services/routes/routes"
 import { getWeightInG } from "../../services/utils/unit"
-import { Weight } from "../weights"
+import { Weight } from "../../types/item"
 import { NextPageCustomProps } from "../_app"
 
 type CreateItemForm = {
@@ -120,14 +120,15 @@ const Create: NextPageCustomProps = () => {
             tags: tags ? tags.split(", ") : []
         }
 
+        // TODO: This will be correct implemented in other issue https://github.com/world-wide-weights/wwweights/issues/259
         // Create item with api
-        fetch("http://localhost:3004/items", {
-            method: "POST",
-            body: JSON.stringify(item),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
+        // fetch("http://localhost:3004/items", {
+        //     method: "POST",
+        //     body: JSON.stringify(item),
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //     },
+        // })
 
         // Redirect to discover
         router.push(routes.weights.list())

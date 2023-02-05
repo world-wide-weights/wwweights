@@ -1,8 +1,8 @@
 import Image from "next/image"
 import Link from "next/link"
-import { Weight } from "../../pages/weights"
 import { routes } from "../../services/routes/routes"
 import { generateWeightProgressBarPercentage, generateWeightString } from "../../services/utils/weight"
+import { Weight } from "../../types/item"
 import { Icon } from "../Icon/Icon"
 import { ProgressBar } from "../ProgressBar/ProgressBar"
 
