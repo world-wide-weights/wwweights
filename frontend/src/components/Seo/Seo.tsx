@@ -7,7 +7,7 @@ type BaseSeoProps = {
     /** Flag to determine if the title suffix should be displayed */
     shouldDisplayTitleSuffix?: boolean,
     /** The page description */
-    description: string,
+    description?: string,
     /** The page keywords */
     keywords?: string[],
     /** The canonical link for the page */
@@ -39,7 +39,8 @@ export const baseKeywords = ["weights database", "World Wide Weights", "wwweight
 export const Seo: React.FC<BaseSeoProps> = ({
     title,
     shouldDisplayTitleSuffix = true,
-    description, keywords = [],
+    description = "World largest database of weights! World Wide Weights is a community project to create a global database of weights.",
+    keywords = [],
     canonicalLink = "",
     ogImage = `${process.env.NEXT_PUBLIC_CLIENT_BASE_URL}/img/og_default.jpg`,
     ogImageHeight = "630px",
