@@ -12,6 +12,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PaginatedResult } from '../shared/paginated-result';
 import { QueryTagListDto } from './interfaces/query-tag-list.dto';
 import { QueryTagRelatedDto } from './interfaces/query-tag-related.dto';
+import { TagWithRelevance } from './models/tag-with-relevance';
 import { Tag } from './models/tag.model';
 import { TagRelatedQuery } from './queries/related-tags.query';
 import { TagListQuery } from './queries/tag-list.query';
@@ -39,10 +40,10 @@ export class TagsController {
     return new PaginatedResult<Tag>(result, Tag);
   }
 
-  @Get('tags/related')
+  @Get('related')
   @ApiOperation({ summary: 'Get tags related to the itemssearch' })
   @ApiResponse({
-    type: PaginatedResult<Tag>,
+    type: PaginatedResult<TagWithRelevance>,
     status: 200,
     description: 'Paginated result of tags',
     isArray: false,
@@ -50,6 +51,6 @@ export class TagsController {
   async getTagsRelated(@Query() dto: QueryTagRelatedDto) {
     this.logger.log(`Get related tag list`);
     const result = await this.queryBus.execute(new TagRelatedQuery(dto));
-    return new PaginatedResult<Tag>(result, Tag);
+    return new PaginatedResult<TagWithRelevance>(result, TagWithRelevance);
   }
 }
