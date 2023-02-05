@@ -66,7 +66,7 @@ const Login: NextPageCustomProps = () => {
     return <>
         <Seo
             title="Login"
-            description="Login to your account to start contributing items to the community. "
+            description="Login to your account to start contributing items to the community."
         />
         {/* Login Form */}
         <Formik initialValues={initialFormValues} validationSchema={validationSchema} onSubmit={onFormSubmit}>
