@@ -7,9 +7,12 @@ import { Footer } from "../components/Footer/Footer"
 import { ItemPreviewGrid } from "../components/Item/ItemPreviewGrid"
 import { Navbar } from "../components/Navbar/Navbar"
 import { Search } from "../components/Search/Search"
+import { Seo } from "../components/Seo/Seo"
 import { Stat } from "../components/Statistics/Stat"
+import { queryRequest } from "../services/axios/axios"
 import { routes } from "../services/routes/routes"
-import { Item } from "./weights"
+import { getStructuredDataWebsite } from "../services/seo/structuredData/website"
+import { Item, PaginatedResponse } from "../types/item"
 
 type HomeProps = {
 	items: Item[]
@@ -32,15 +35,23 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 	 * @param formValues 
 	 */
 	const submitForm = (formValues: typeof initialQueryValues) => {
-		router.push(routes.weights.list({ sort: "asc", query: formValues.query }))
+		router.push(routes.weights.list({ query: formValues.query }))
 	}
 
 	return (
 		<div>
+			<Seo
+				title="World largest database of weights!"
+				description="World Wide Weights is a website where you can discover the weights of all the items you can imagine. Explore the largest database of weights!"
+			/>
+			{/** Website Structured data has to be on / page. Only once. */}
 			<Head>
-				<title>World&lsquo;s largest database about weights! | World Wide Weights</title>
-				<meta charSet="utf-8" />
-				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+				<script
+					type="application/ld+json"
+					/** We have to use "dangerouslySetInnerHTML" here to make it easier to write JSON-LD  */
+					dangerouslySetInnerHTML={getStructuredDataWebsite}
+					key="websiteLdJson"
+				/>
 			</Head>
 
 			<header className="bg-background-header-index bg-no-repeat bg-cover bg-center md:border-t-4 md:border-blue-500">
@@ -49,8 +60,8 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 
 				{/* Header */}
 				<div className="container flex flex-col items-center justify-center py-10 md:min-h-[30rem]">
-					<h1 className="text-white text-2xl md:text-4xl font-bold mb-1">How much weigh?</h1>
-					<p className="text-gray-200 mb-3 md:mb-6">World&lsquo;s largest database about weights!</p>
+					<h1 className="text-white text-2xl md:text-4xl font-bold mb-1">How much weighs?</h1>
+					<p className="text-gray-200 mb-3 md:mb-6">World largest database of weights!</p>
 
 					{/* Search */}
 					{/* TODO (Zoe-bot): Move formik stuff to search component */}
@@ -68,9 +79,9 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 				{/* Items */}
 				<div className="container flex flex-col items-center mb-5 md:mb-10">
 					<h2 className="text-2xl md:text-3xl text-blue-800 text-center font-bold mb-1">Explore 31,000+ weights</h2>
-					<p className="text-gray-600 text-center mb-4 md:mb-8">World Wide weights is a website wehere you can discover the weights for all items you can imagine. Explore the largest database about weights!</p>
+					<p className="text-gray-600 text-center mb-4 md:mb-8">World Wide Weights is a website where you can discover the weights of all the items you can imagine. Explore the largest database of weights!</p>
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-2 md:gap-5 mb-5 md:mb-8 w-full">
-						{items.map((item) => <ItemPreviewGrid key={item.slug} {...item} imageUrl="https://picsum.photos/200" />)}
+						{items.map((item) => <ItemPreviewGrid key={item.slug} {...item} imageUrl={item.image} />)}
 					</div>
 
 					<Button className="mb-2" to={routes.weights.list()} icon="weight">Show all weights</Button>
@@ -80,7 +91,7 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 				<div className="bg-blue-200 py-6">
 					<div className="container flex flex-col md:flex-row gap-5 justify-around">
 						<Stat icon="weight" value="31.000+" description="Weights" />
-						<Stat icon="person" value="300+" description="User" />
+						<Stat icon="person" value="300+" description="Users" />
 						<Stat icon="chat_bubble" value="10.000+" description="Contributions" />
 					</div>
 				</div>
@@ -89,7 +100,7 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 				<div className="bg-blue-900 py-10">
 					<div className="container flex flex-col items-center">
 						<h1 className="text-white text-3xl md:text-4xl text-center font-bold mb-1">Search for over <span className="text-blue-300">31,000+ weights</span></h1>
-						<p className="text-gray-200 text-center mb-3 md:mb-6">World&lsquo;s largest database about weights!</p>
+						<p className="text-gray-200 text-center mb-3 md:mb-6">World largest database of weights!</p>
 
 						<Formik initialValues={initialQueryValues} onSubmit={submitForm}>
 							<Form className="flex justify-center w-full">
@@ -109,8 +120,8 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 }
 
 export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
-	const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/items?_page=1&_limit=20`)
-	const items = await response.json()
+	const response = await queryRequest.get<PaginatedResponse<Item>>("/items/list?page=1&limit=20&query=iphone 2020")
+	const items = response.data.data
 
 	return {
 		props: {

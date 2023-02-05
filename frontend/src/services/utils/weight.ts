@@ -1,4 +1,4 @@
-import { Weight } from "../../pages/weights"
+import { Item, Weight } from "../../types/item"
 
 /**
  * Generates the string for showing the weight with ca and range support.
@@ -56,4 +56,27 @@ export const calculateWeightFit = (weight: number, compareWeight: number): numbe
     const fitCount = weight / compareWeight
     const fitCountRounded = Math.round(fitCount)
     return fitCountRounded
+}
+
+/**
+ * This function sorts an array of items based on their weight in either ascending or descending order, and returns the sorted items and the heaviest weight in the array.
+ * @param items The array of items to be sorted and analyzed.
+ * @param sortDirection The desired sorting direction, either "asc" for ascending or "desc" for descending.
+ * @returns An object containing the sorted items and the heaviest weight in the array.
+ *  - items: The sorted array of items.
+ *  - heaviestWeight: The weight object of the heaviest item in the array.
+ */
+export const getSortedItemsAndHeaviest = (items: Item[], sortDirection: "asc" | "desc" = "asc"): { items: Item[], heaviestWeight: Weight } => {
+    // Sort descending
+    if (sortDirection === "desc")
+        return {
+            items: items.sort((a, b) => b.weight.value - a.weight.value),
+            heaviestWeight: items[0].weight
+        }
+
+    // Sort ascending
+    return {
+        items: items.sort((a, b) => a.weight.value - b.weight.value),
+        heaviestWeight: items[items.length - 1].weight
+    }
 }

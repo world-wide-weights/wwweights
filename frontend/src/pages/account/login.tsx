@@ -6,6 +6,7 @@ import * as yup from "yup"
 import { Button } from "../../components/Button/Button"
 import { TextInput } from "../../components/Form/TextInput/TextInput"
 import { AccountLayout } from "../../components/Layout/AccountLayout"
+import { Seo } from "../../components/Seo/Seo"
 import { routes } from "../../services/routes/routes"
 import { NextPageCustomProps } from "../_app"
 
@@ -58,11 +59,15 @@ const Login: NextPageCustomProps = () => {
                 setError(response.error)
             }
         } catch (error) {
-            console.error(error)
+            setError("Something went wrong. Try again or come later.")
         }
     }
 
     return <>
+        <Seo
+            title="Login"
+            description="Login to your account to start contributing items to the community."
+        />
         {/* Login Form */}
         <Formik initialValues={initialFormValues} validationSchema={validationSchema} onSubmit={onFormSubmit}>
             {({ dirty, isValid }) => (

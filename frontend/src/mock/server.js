@@ -15,7 +15,7 @@ server.use(middlewares)
 server.use(auth.rewriter(routes))
 server.use(auth)
 server.use(router)
-server.listen(3004, () => {
+server.listen(3008, () => {
     console.log("JSON Server is running")
 })
 

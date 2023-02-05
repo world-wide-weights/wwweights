@@ -42,7 +42,7 @@ declare global {
        * - mock item statistics
        * @param itemCount count of items getting back with body
        */
-      mockItemsPage(itemCount?: number): Chainable<void>
+      mockDiscoverPage(itemCount?: number): Chainable<void>
       /**
        * Mocks user session
        */
