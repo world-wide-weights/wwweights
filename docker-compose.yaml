@@ -107,7 +107,7 @@ services:
       - mongodb_data_volume:/data/mongodb
 
   eventstore:
-    image: eventstore/eventstore:20.6.1-buster-slim
+    image: eventstore/eventstore:${EVENTSTORE_ARM_TAG:-22.10.0-buster-slim}
     restart: "always"
     ports:
       # Web admin ui
