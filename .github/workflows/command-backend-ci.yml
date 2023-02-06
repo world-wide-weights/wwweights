@@ -5,6 +5,8 @@ on:
     paths:
       - "backend/command/**"
       - ".github/workflows/command-backend-ci.yml"
+    branches:
+      - "stable"
   pull_request:
     branches: [main]
     paths:
