@@ -1,5 +1,5 @@
 import { InjectModel } from '@m8a/nestjs-typegoose';
-import { Logger, UnprocessableEntityException } from '@nestjs/common';
+import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { ItemSortEnum } from '../../items/interfaces/item-sort-enum';
@@ -102,8 +102,8 @@ export class TagRelatedHandler implements IQueryHandler<TagRelatedQuery> {
       };
     } catch (error) {
       this.logger.error(error);
-      throw new UnprocessableEntityException(
-        'Searching for related tags caused an error',
+      throw new InternalServerErrorException(
+        'Related Tags could not be retrieved',
       );
     }
   }

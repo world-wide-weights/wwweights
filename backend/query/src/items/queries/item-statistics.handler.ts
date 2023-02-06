@@ -1,5 +1,9 @@
 import { InjectModel } from '@m8a/nestjs-typegoose';
-import { Logger, UnprocessableEntityException } from '@nestjs/common';
+import {
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { getFilter } from '../../shared/get-filter';
@@ -19,6 +23,7 @@ export class ItemStatisticsHandler
   ) {}
 
   async execute({ dto }: ItemStatisticsQuery): Promise<ItemStatistics> {
+    let notFoundError = false;
     try {
       // We currently also run textSearch on tags, optimizing via itemsByTags is a TODO
       const filter = getFilter(dto.query, dto.tags);
@@ -29,7 +34,7 @@ export class ItemStatisticsHandler
           $group: {
             _id: null,
             averageWeight: { $avg: '$weight.value' },
-            items: { $push: '$$ROOT' }, // We have to pushb an array and can't just se it
+            items: { $push: '$$ROOT' }, // We have to push an array and can't just set it
           },
         },
         { $set: { heaviest: { $first: '$items' } } },
@@ -39,14 +44,19 @@ export class ItemStatisticsHandler
 
       if (!statistics[0]?.averageWeight) {
         this.logger.log('No items found');
-        throw new UnprocessableEntityException('No items found');
+        notFoundError = true;
+        // Just to jump into the catch
+        throw new NotFoundException('No items found');
       }
       return statistics[0];
     } catch (error) {
       this.logger.error(error);
-      throw new UnprocessableEntityException(
-        'Item statistics could not be retrieved',
-      );
+      if (notFoundError) throw error;
+      else {
+        throw new InternalServerErrorException(
+          'Item statistics could not be retrieved',
+        );
+      }
     }
   }
 }

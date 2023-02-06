@@ -194,12 +194,12 @@ describe('QueryController (e2e)', () => {
         }
       });
 
-      it('should throw unproccessable Entity if nothing can be found when no item can be found', async () => {
+      it('should throw not found if nothing can be found', async () => {
         await itemModel.deleteMany();
         await request(server)
           .get(queriesPath + subPath)
           .query({ slug: relatedItems[0].slug })
-          .expect(HttpStatus.UNPROCESSABLE_ENTITY);
+          .expect(HttpStatus.NOT_FOUND);
       });
     });
 
@@ -220,12 +220,12 @@ describe('QueryController (e2e)', () => {
         expect(result.body.averageWeight).toEqual(101);
       });
 
-      it('should throw unproccessable Entity if no item can be found', async () => {
+      it('should throw not found if no item can be found', async () => {
         await itemModel.deleteMany();
         await request(server)
           .get(queriesPath + subPath)
           .query({ slug: relatedItems[0].slug })
-          .expect(HttpStatus.UNPROCESSABLE_ENTITY);
+          .expect(HttpStatus.NOT_FOUND);
       });
     });
   });
