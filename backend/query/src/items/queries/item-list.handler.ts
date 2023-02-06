@@ -5,7 +5,7 @@ import { ReturnModelType } from '@typegoose/typegoose';
 import { DataWithCount } from '../../shared/data-with-count';
 import { getFilter } from '../../shared/get-filter';
 import { getSort } from '../../shared/get-sort';
-import { PaginatedResult } from '../../shared/paginated-result';
+import { PaginatedResponse } from '../../shared/paginated-result';
 import { Item } from '../models/item.model';
 import { ItemListQuery } from './item-list.query';
 
@@ -18,7 +18,7 @@ export class ItemListHandler implements IQueryHandler<ItemListQuery> {
     private readonly itemModel: ReturnModelType<typeof Item>,
   ) {}
 
-  async execute({ dto }: ItemListQuery): Promise<PaginatedResult<Item>> {
+  async execute({ dto }: ItemListQuery): Promise<PaginatedResponse<Item>> {
     try {
       // We currently also run textSearch on tags, optimizing via itemsByTags is a TODO
       const sort = getSort(dto.sort, (dto.query || dto.tags) && !dto.slug);

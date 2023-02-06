@@ -3,7 +3,7 @@ import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { DataWithCount } from '../../shared/data-with-count';
-import { PaginatedResult } from '../../shared/paginated-result';
+import { PaginatedResponse } from '../../shared/paginated-result';
 import { TagSortEnum } from '../interfaces/tag-sort-enum';
 import { Tag } from '../models/tag.model';
 import { TagListQuery } from './tag-list.query';
@@ -17,7 +17,7 @@ export class TagListHandler implements IQueryHandler<TagListQuery> {
     private readonly tagModel: ReturnModelType<typeof Tag>,
   ) {}
 
-  async execute({ dto }: TagListQuery): Promise<PaginatedResult<Tag>> {
+  async execute({ dto }: TagListQuery): Promise<PaginatedResponse<Tag>> {
     try {
       const sort: { name: number } | { count: -1 } =
         dto.sort === TagSortEnum.DESC

@@ -7,7 +7,7 @@ import { Item } from '../../items/models/item.model';
 import { DataWithCount } from '../../shared/data-with-count';
 import { getFilter } from '../../shared/get-filter';
 import { getSort } from '../../shared/get-sort';
-import { PaginatedResult } from '../../shared/paginated-result';
+import { PaginatedResponse } from '../../shared/paginated-result';
 import { TagWithRelevance } from '../models/tag-with-relevance';
 import { TagRelatedQuery } from './related-tags.query';
 
@@ -22,7 +22,7 @@ export class TagRelatedHandler implements IQueryHandler<TagRelatedQuery> {
 
   async execute({
     dto,
-  }: TagRelatedQuery): Promise<PaginatedResult<TagWithRelevance>> {
+  }: TagRelatedQuery): Promise<PaginatedResponse<TagWithRelevance>> {
     try {
       const filter = getFilter(dto.query, dto.tags);
       const sort = getSort(ItemSortEnum.RELEVANCE, !!dto.query || !!dto.tags);

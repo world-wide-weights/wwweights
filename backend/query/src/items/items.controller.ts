@@ -14,7 +14,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { PaginatedResult } from '../shared/paginated-result';
+import { PaginatedResponse } from '../shared/paginated-result';
 import { ItemStatistics } from './interfaces/item-statistics';
 import { QueryItemListDto } from './interfaces/query-item-list.dto';
 import { QueryItemRelatedDto } from './interfaces/query-item-related.dto';
@@ -37,25 +37,25 @@ export class ItemsController {
   @ApiOperation({ summary: 'Get a list of items' })
   @ApiOkResponse({
     description: 'Paginated result of items',
-    type: PaginatedResult<Item>,
+    type: PaginatedResponse<Item>,
   })
   async getItemList(@Query() dto: QueryItemListDto) {
     this.logger.log(`Get item list`);
     const result = await this.queryBus.execute(new ItemListQuery(dto));
-    return new PaginatedResult<Item>(result, Item);
+    return new PaginatedResponse<Item>(result, Item);
   }
 
   @Get('related')
   @ApiOperation({ summary: 'Get related items' })
   @ApiOkResponse({
     description: 'Paginated result of related items',
-    type: PaginatedResult<Item>,
+    type: PaginatedResponse<Item>,
   })
   @ApiNotFoundResponse({ description: 'The item could not be found' })
   async getItem(@Query() dto: QueryItemRelatedDto) {
     this.logger.log(`Get item list`);
     const result = await this.queryBus.execute(new ItemRelatedQuery(dto));
-    return new PaginatedResult<Item>(result, Item);
+    return new PaginatedResponse<Item>(result, Item);
   }
 
   @Get('statistics')

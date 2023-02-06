@@ -1,7 +1,7 @@
 import { ApiResponseProperty } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
 
-export class PaginatedResult<T> {
+export class PaginatedResponse<T> {
   @Expose()
   @ApiResponseProperty({ type: Number, example: 69 })
   total: number;
@@ -24,7 +24,7 @@ export class PaginatedResult<T> {
   classConstructor?: new (params: any) => T;
 
   constructor(
-    partial: Partial<PaginatedResult<T>>,
+    partial: Partial<PaginatedResponse<T>>,
     classConstructor: new (params: any) => T,
   ) {
     Object.assign(this, partial);
