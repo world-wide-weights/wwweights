@@ -14,14 +14,15 @@ describe("Create Item", () => {
         cy.dataCy("textinput-name-input").type("apple")
         cy.dataCy("textinput-weight-input").type("150")
 
+        // TODO (Zoe-Bot): Add when correct api implemented
         // Mock create and weights page
-        cy.mockCreateItem()
-        cy.mockItemsPage()
+        // cy.mockCreateItem()
+        // cy.mockDiscoverPage()
 
         // Submit form
         cy.dataCy("create-submit-button").click()
 
-        cy.wait("@mockCreateItem")
+        // cy.wait("@mockCreateItem")
     })
 
     it("should create item when fill all fields", () => {
@@ -45,14 +46,15 @@ describe("Create Item", () => {
         cy.dataCy("textinput-tags-input").type("fruit")
         cy.dataCy("textinput-image-input").type("https://picsum.photos/120")
 
+        // TODO (Zoe-Bot): Add when correct api implemented
         // Mock create and weights page
-        cy.mockCreateItem()
-        cy.mockItemsPage()
+        // cy.mockCreateItem()
+        // cy.mockDiscoverPage()
 
         // Submit form
         cy.dataCy("create-submit-button").click()
 
-        cy.wait("@mockCreateItem")
+        // cy.wait("@mockCreateItem")
     })
 
     describe("Details", () => {

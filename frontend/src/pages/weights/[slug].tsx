@@ -1,5 +1,4 @@
 import { GetStaticPaths, GetStaticProps, InferGetServerSidePropsType } from "next"
-import Head from "next/head"
 import Image from "next/image"
 import { useRouter } from "next/router"
 import { Chip } from "../../components/Chip/Chip"
@@ -8,11 +7,13 @@ import { SearchHeader } from "../../components/Header/SearchHeader"
 import { Headline } from "../../components/Headline/Headline"
 import { Icon } from "../../components/Icon/Icon"
 import { RelatedItems } from "../../components/RelatedItems/RelatedItems"
+import { Seo } from "../../components/Seo/Seo"
 import { Tab } from "../../components/Tabs/Tab"
 import { Tabs } from "../../components/Tabs/Tabs"
+import { queryRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { calculateMedianWeight, generateWeightString } from "../../services/utils/weight"
-import { Item } from "../../types/item"
+import { Item, PaginatedResponse } from "../../types/item"
 import Custom404 from "../404"
 
 type WeightsSingleProps = {
@@ -22,9 +23,6 @@ type WeightsSingleProps = {
 
 /** Single Page of a weight */
 export default function WeightsSingle({ item, relatedItems }: InferGetServerSidePropsType<typeof getStaticProps>) {
-    // Title
-    const siteTitle = `${item.name} Weight | WWWeights`
-
     // Generate Compare Weight
     const compareWeight = calculateMedianWeight(item.weight)
 
@@ -54,9 +52,15 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
 
     return <>
         {/* Meta Tags */}
-        <Head>
-            <title>{siteTitle}</title>
-        </Head>
+        <Seo
+            title={`${item.name} Weight`}
+            description={`The weight of ${item.name} is ${weightString}. ${item.tags.length ? `Discover more weights with topics like ${item.tags.map(tag => tag.name).join(", ")}` : "Discover more weights in the world largest database about weights!"}.`}
+            ogImage={item.image}
+            ogImageHeight={"512px"}
+            ogImageWidth={"512px"}
+            ogImageDescription={`${item.name}`}
+            twitterImage={item.image}
+        />
 
         {/* Search with related tags */}
         <SearchHeader hasHeadline={false} />
@@ -78,16 +82,16 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
                         {item.source && <a target="_blank" rel="noopener noreferrer" href={item.source} className="text-gray-600 hover:text-gray-700 mb-3 md:mb-5">According to {sourceName} a {item.name} weights {weightString}.</a>}
                         <ul className="flex md:flex-wrap overflow-y-auto">
                             <li><div className="md:hidden absolute bg-gradient-to-r right-0 from-transparent to-gray-100 w-20 h-8 py-1"></div></li>
-                            {item.tags.map((tag, index) => <li key={tag.name} className={`${index === item.tags.length - 1 ? "mr-20" : ""}`}><Chip to={routes.tags.single(tag.slug)}>{tag.name}</Chip></li>)}
+                            {item.tags.map((tag, index) => <li key={tag.name} className={`${index === item.tags.length - 1 ? "mr-20" : ""}`}><Chip to={routes.tags.single(tag.name)}>{tag.name}</Chip></li>)}
                         </ul>
                     </div>
 
                     {/* Weights Image */}
-                    <div className="row-start-1 lg:row-end-3 lg:flex lg:justify-end">
+                    {item.image && <div className="row-start-1 lg:row-end-3 lg:flex lg:justify-end">
                         {/* No better way yet: https://github.com/vercel/next.js/discussions/21379 Let's take a look at this when we got problems with it */}
-                        <Image src="https://picsum.photos/1200" priority className="sm:hidden rounded-xl" alt={item.name} width={120} height={120} />
-                        <Image src="https://picsum.photos/1200" priority className="hidden sm:block rounded-xl" alt={item.name} width={230} height={230} />
-                    </div>
+                        <Image src={item.image} priority className="sm:hidden rounded-xl" alt={item.name} width={120} height={120} />
+                        <Image src={item.image} priority className="hidden sm:block rounded-xl" alt={item.name} width={230} height={230} />
+                    </div>}
                 </div>
                 <hr className="mb-4 md:mb-8" />
 
@@ -111,15 +115,13 @@ export const getStaticProps: GetStaticProps<WeightsSingleProps> = async (context
 
     // Fetch item and related items
     const [itemResponse, relatedItemsResponse] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/query/v1/items/list?slug=${slug}`),
-        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/related_items`),
+        queryRequest.get<PaginatedResponse<Item>>(`/items/list?slug=${slug}`),
+        queryRequest.get<PaginatedResponse<Item>>(`/items/related?slug=${slug}`),
     ])
 
-    // Read jsons from item and related items
-    const [item, relatedItems] = await Promise.all([
-        itemResponse.json(),
-        relatedItemsResponse.json()
-    ])
+    // Items and RelatedItems
+    const item = itemResponse.data.data[0]
+    const relatedItems = relatedItemsResponse.data.data
 
     // Validate Query
     if (!item.slug) {
