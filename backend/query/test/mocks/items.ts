@@ -2378,3 +2378,10 @@ export const items = [
     user: 'mc',
   },
 ];
+
+export const itemsTagCount = () => {
+  const tagNames = items.map((item) => item.tags.map((tag) => tag.name)).flat();
+
+  const tagNameSet = new Set(tagNames);
+  return tagNameSet.size;
+};

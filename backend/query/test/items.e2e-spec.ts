@@ -67,6 +67,15 @@ describe('QueryController (e2e)', () => {
         expect(result.body.data).toHaveLength(16);
       });
 
+      it('should return 16 items searching for nothing', async () => {
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({})
+          .expect(HttpStatus.OK);
+
+        expect(result.body.data).toHaveLength(16);
+      });
+
       it('should return 16 items searching with tags for android (74 total)', async () => {
         const result = await request(server)
           .get(queriesPath + subPath)
