@@ -21,7 +21,7 @@ export class PaginatedResult<T> {
   )
   data: T[];
 
-  classConstructor: new (params: any) => T;
+  classConstructor?: new (params: any) => T;
 
   constructor(
     partial: Partial<PaginatedResult<T>>,

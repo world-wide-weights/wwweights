@@ -7,7 +7,8 @@ import { Item } from '../../items/models/item.model';
 import { DataWithCount } from '../../shared/data-with-count';
 import { getFilter } from '../../shared/get-filter';
 import { getSort } from '../../shared/get-sort';
-import { Tag } from '../models/tag.model';
+import { PaginatedResult } from '../../shared/paginated-result';
+import { TagWithRelevance } from '../models/tag-with-relevance';
 import { TagRelatedQuery } from './related-tags.query';
 
 @QueryHandler(TagRelatedQuery)
@@ -19,7 +20,9 @@ export class TagRelatedHandler implements IQueryHandler<TagRelatedQuery> {
     private readonly itemModel: ReturnModelType<typeof Item>,
   ) {}
 
-  async execute({ dto }: TagRelatedQuery) {
+  async execute({
+    dto,
+  }: TagRelatedQuery): Promise<PaginatedResult<TagWithRelevance>> {
     try {
       const filter = getFilter(dto.query, dto.tags);
       const sort = getSort(ItemSortEnum.RELEVANCE, !!dto.query || !!dto.tags);
@@ -29,7 +32,7 @@ export class TagRelatedHandler implements IQueryHandler<TagRelatedQuery> {
       // After that it filters out all tags that do not build a subset, this automattically strips those from the search aswell
       // Lastly we flatten the result, and then facet to get a total count and the actual paginated data
       const relatedTagsWithCount = await this.itemModel.aggregate<
-        DataWithCount<Tag>
+        DataWithCount<TagWithRelevance>
       >([
         { $match: filter },
         // TODO: Find a fix for @ts-ignore
