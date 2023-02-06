@@ -16,7 +16,6 @@ import { Tooltip } from "../../components/Tooltip/Tooltip"
 import { useLocalStorage } from "../../hooks/useLocalStorage"
 import { queryRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
-import { generateWeightString } from "../../services/utils/weight"
 import { renderUnitIntoString, renderWeightAsNumberIntoString } from "../../services/unit/unitRenderer"
 import { Item, PaginatedResponse } from "../../types/item"
 
