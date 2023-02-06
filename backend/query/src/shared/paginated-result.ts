@@ -3,15 +3,15 @@ import { Expose, Transform } from 'class-transformer';
 
 export class PaginatedResult<T> {
   @Expose()
-  @ApiResponseProperty()
+  @ApiResponseProperty({ type: Number, example: 69 })
   total: number;
 
   @Expose()
-  @ApiResponseProperty()
+  @ApiResponseProperty({ type: Number, example: 2 })
   page: number;
 
   @Expose()
-  @ApiResponseProperty()
+  @ApiResponseProperty({ type: Number, example: 16 })
   limit: number;
 
   @Expose()

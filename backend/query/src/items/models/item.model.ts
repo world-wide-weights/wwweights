@@ -6,18 +6,18 @@ import { Expose, Type } from 'class-transformer';
 class Weight {
   @Expose()
   @prop({ required: true })
-  @ApiResponseProperty({ type: Number })
+  @ApiResponseProperty({ type: Number, example: 1.234e10 })
   // This is always in grams and scientific notation example: 1.234e10
   value: number;
 
   @Expose()
   @prop()
-  @ApiResponseProperty({ type: Boolean })
+  @ApiResponseProperty({ type: Boolean, example: true })
   isCa?: boolean;
 
   @Expose()
   @prop()
-  @ApiResponseProperty({ type: Number })
+  @ApiResponseProperty({ type: Number, example: 5.678e10 })
   additionalValue?: number;
 }
 
@@ -25,12 +25,12 @@ class Weight {
 class Tag {
   @Expose()
   @prop({ required: true })
-  @ApiResponseProperty({ type: String })
+  @ApiResponseProperty({ type: String, example: 'Tag Name' })
   name: string;
 
   @Expose()
   @prop({ required: true, default: -1 }) // so we can increment it with everyone else
-  @ApiResponseProperty({ type: Number })
+  @ApiResponseProperty({ type: Number, example: 3 })
   count?: number;
 }
 
@@ -41,44 +41,51 @@ class Tag {
 export class Item extends AggregateRoot {
   @Expose()
   @prop({ required: true })
-  @ApiResponseProperty({ type: String })
+  @ApiResponseProperty({ type: String, example: 'Item Name' })
   name: string;
 
   @Expose()
   @prop({ required: true, unique: true })
-  @ApiResponseProperty({ type: String })
+  @ApiResponseProperty({ type: String, example: 'item-name' })
   slug: string;
 
   @Expose()
   @prop({ type: () => Weight, _id: false })
   @Type(() => Weight)
-  @ApiResponseProperty({ type: Weight })
+  @ApiResponseProperty({
+    type: Weight,
+    example: { value: 1.234e10, isCa: true, additionalValue: 5.678e10 },
+  })
   weight: Weight;
 
   @Expose()
   @prop({ array: true, type: () => [Tag], _id: false })
   @Type(() => Tag)
-  @ApiResponseProperty({ type: [Tag] })
+  @ApiResponseProperty({
+    type: [Tag],
+    example: [{ name: 'Tag Name', count: 3 }],
+  })
   tags?: Tag[];
 
   @Expose()
   @prop()
-  @ApiResponseProperty({ type: String })
-  image?: string; // Link to static store or base-64 Encoded?
+  @ApiResponseProperty({ type: String, example: 'https://link.de/img.png' })
+  image?: string;
 
   @Expose()
   @prop()
-  @ApiResponseProperty({ type: String })
+  @ApiResponseProperty({ type: String, example: 'https://link.de/stuff' })
   source?: string;
 
   @Expose()
   @prop()
-  @ApiResponseProperty({ type: String })
+  // TODO: Fix example when users implemented
+  @ApiResponseProperty({ type: String, example: 'jeff' })
   user: string;
 
   @Expose()
   @prop()
-  @ApiResponseProperty({ type: Number })
+  @ApiResponseProperty({ type: Number, example: 1234567890000 })
   createdAt?: number;
 
   constructor(partial: Partial<Item>) {

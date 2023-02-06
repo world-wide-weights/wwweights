@@ -26,7 +26,7 @@ export class ItemsController {
   @Post('items/insert')
   @ApiBody({ type: InsertItemDto })
   @ApiOperation({ summary: 'Insert an item' })
-  @ApiOkResponse({ description: 'The command has been received' })
+  @ApiOkResponse({ description: 'The item has been received.' })
   @HttpCode(HttpStatus.OK)
   async insertItem(@Body() insertItemDto: InsertItemDto) {
     await this.commandBus.execute(new InsertItemCommand(insertItemDto));
