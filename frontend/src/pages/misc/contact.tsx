@@ -27,7 +27,7 @@ const Contact: NextPageCustomProps = () => {
                 <Image height={40} alt="Image of GitHub Logo" src={github} />
             </a>
             <a href="https://twitter.com/wwweights" className="mb-2" target="_blank" title="Link to our Twitter!" rel="noreferrer">
-                <Image height={40} alt="Image of GitHub Logo" src={twitter} />
+                <Image height={40} alt="Image of Twitter Logo" src={twitter} />
             </a>
         </div>
     </>
