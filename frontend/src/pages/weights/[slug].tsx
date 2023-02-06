@@ -1,5 +1,4 @@
 import { GetStaticPaths, GetStaticProps, InferGetServerSidePropsType } from "next"
-import Head from "next/head"
 import Image from "next/image"
 import { useRouter } from "next/router"
 import { Chip } from "../../components/Chip/Chip"
@@ -8,6 +7,7 @@ import { SearchHeader } from "../../components/Header/SearchHeader"
 import { Headline } from "../../components/Headline/Headline"
 import { Icon } from "../../components/Icon/Icon"
 import { RelatedItems } from "../../components/RelatedItems/RelatedItems"
+import { Seo } from "../../components/Seo/Seo"
 import { Tab } from "../../components/Tabs/Tab"
 import { Tabs } from "../../components/Tabs/Tabs"
 import { queryRequest } from "../../services/axios/axios"
@@ -23,9 +23,6 @@ type WeightsSingleProps = {
 
 /** Single Page of a weight */
 export default function WeightsSingle({ item, relatedItems }: InferGetServerSidePropsType<typeof getStaticProps>) {
-    // Title
-    const siteTitle = `${item.name} Weight | WWWeights`
-
     // Generate Compare Weight
     const compareWeight = calculateMedianWeight(item.weight)
 
@@ -55,9 +52,15 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
 
     return <>
         {/* Meta Tags */}
-        <Head>
-            <title>{siteTitle}</title>
-        </Head>
+        <Seo
+            title={`${item.name} Weight`}
+            description={`The weight of ${item.name} is ${weightString}. ${item.tags.length ? `Discover more weights with topics like ${item.tags.map(tag => tag.name).join(", ")}` : "Discover more weights in the world largest database about weights!"}.`}
+            ogImage={item.image}
+            ogImageHeight={"512px"}
+            ogImageWidth={"512px"}
+            ogImageDescription={`${item.name}`}
+            twitterImage={item.image}
+        />
 
         {/* Search with related tags */}
         <SearchHeader hasHeadline={false} />

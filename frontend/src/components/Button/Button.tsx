@@ -22,6 +22,8 @@ export type ButtonProps = {
     className?: string
     /** Disabled state when set to true button is disabled */
     disabled?: boolean
+    /** Optional property to dim the opacity of the button when it is disabled */
+    dimOpacityWhenDisabled?: boolean
     /** Loading state when set to true button is loading */
     loading?: boolean
     /** For testing */
@@ -31,7 +33,7 @@ export type ButtonProps = {
 /**
  *  Button component (with link and button functionality), can look like a link when kind tertiary
  */
-export const Button: React.FC<ButtonProps> = ({ kind = "primary", disabled, icon, datacy, iconSlot = "start", loading, className, children, to, onClick, isColored = false, type = "button" }) => {
+export const Button: React.FC<ButtonProps> = ({ kind = "primary", disabled, dimOpacityWhenDisabled = true, icon, datacy, iconSlot = "start", loading, className, children, to, onClick, isColored = false, type = "button" }) => {
     // When loading should be disabled
     disabled = loading ? true : disabled
 
@@ -42,10 +44,10 @@ export const Button: React.FC<ButtonProps> = ({ kind = "primary", disabled, icon
     const linkBaseClasses = `flex items-center font-medium text-${tertiaryColor}-600`
 
     // Disable state classes
-    const disabledClassesPrimarySecondary = "text-opacity-75 opacity-80 cursor-default"
+    const disabledClassesPrimarySecondary = `${dimOpacityWhenDisabled ? "text-opacity-75 opacity-80" : ""} cursor-default`
     const disabledPrimary = disabled ? disabledClassesPrimarySecondary : "hover:bg-blue-600 focus:bg-blue-700"
     const disabledSecondary = disabled ? disabledClassesPrimarySecondary : "hover:bg-blue-100 focus:bg-blue-200"
-    const disabledTertiary = disabled ? disabledClassesPrimarySecondary : `hover:text-${tertiaryColor}-700 focus:text-${tertiaryColor}-800`
+    const disabledTertiary = disabled ? disabledClassesPrimarySecondary : `hover:text-${tertiaryColor}-800`
 
     // Kind classes
     const primaryClasses = `bg-blue-500 border border-transparent text-white ${disabledPrimary}`
