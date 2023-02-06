@@ -8,7 +8,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PaginatedResult } from '../shared/paginated-result';
 import { QueryTagListDto } from './interfaces/query-tag-list.dto';
 import { QueryTagRelatedDto } from './interfaces/query-tag-related.dto';
@@ -28,9 +28,8 @@ export class TagsController {
 
   @Get('list')
   @ApiOperation({ summary: 'Get tag list paginated' })
-  @ApiResponse({
+  @ApiOkResponse({
     type: PaginatedResult<Tag>,
-    status: 200,
     description: 'Paginated result of tags',
   })
   async getTagsList(@Query() dto: QueryTagListDto) {
@@ -41,7 +40,7 @@ export class TagsController {
 
   @Get('related')
   @ApiOperation({ summary: 'Get tags related to the itemssearch' })
-  @ApiResponse({
+  @ApiOkResponse({
     type: PaginatedResult<TagWithRelevance>,
     status: 200,
     description: 'Paginated result of tags',

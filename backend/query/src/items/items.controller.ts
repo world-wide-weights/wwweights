@@ -8,7 +8,12 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { PaginatedResult } from '../shared/paginated-result';
 import { ItemStatistics } from './interfaces/item-statistics';
 import { QueryItemListDto } from './interfaces/query-item-list.dto';
@@ -30,6 +35,10 @@ export class ItemsController {
 
   @Get('list')
   @ApiOperation({ summary: 'Get a list of items' })
+  @ApiOkResponse({
+    description: 'Paginated result of items',
+    type: PaginatedResult<Item>,
+  })
   async getItemList(@Query() dto: QueryItemListDto) {
     this.logger.log(`Get item list`);
     const result = await this.queryBus.execute(new ItemListQuery(dto));
@@ -38,6 +47,11 @@ export class ItemsController {
 
   @Get('related')
   @ApiOperation({ summary: 'Get related items' })
+  @ApiOkResponse({
+    description: 'Paginated result of related items',
+    type: PaginatedResult<Item>,
+  })
+  @ApiNotFoundResponse({ description: 'The item could not be found' })
   async getItem(@Query() dto: QueryItemRelatedDto) {
     this.logger.log(`Get item list`);
     const result = await this.queryBus.execute(new ItemRelatedQuery(dto));
@@ -46,6 +60,8 @@ export class ItemsController {
 
   @Get('statistics')
   @ApiOperation({ summary: 'Get statistics' })
+  @ApiNotFoundResponse({ description: 'No items found' })
+  @ApiOkResponse({ description: 'Item statistics', type: ItemStatistics })
   async getItemStatistics(@Query() dto: QueryItemStatisticsDto) {
     this.logger.log(`Get item list`);
     const result = await this.queryBus.execute(new ItemStatisticsQuery(dto));
