@@ -23,7 +23,6 @@ export class ItemStatisticsHandler
   ) {}
 
   async execute({ dto }: ItemStatisticsQuery): Promise<ItemStatistics> {
-    let notFoundError = false;
     try {
       // We currently also run textSearch on tags, optimizing via itemsByTags is a TODO
       const filter = getFilter(dto.query, dto.tags);
@@ -44,14 +43,13 @@ export class ItemStatisticsHandler
 
       if (!statistics[0]?.averageWeight) {
         this.logger.log('No items found');
-        notFoundError = true;
         // Just to jump into the catch
         throw new NotFoundException('No items found');
       }
       return statistics[0];
     } catch (error) {
       this.logger.error(error);
-      if (notFoundError) throw error;
+      if (error instanceof NotFoundException) throw error;
       else {
         throw new InternalServerErrorException(
           'Item statistics could not be retrieved',

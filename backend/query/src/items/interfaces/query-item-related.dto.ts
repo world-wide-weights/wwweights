@@ -4,6 +4,10 @@ import { Page } from '../../shared/page';
 
 export class QueryItemRelatedDto extends Page {
   @IsString()
-  @ApiProperty()
+  @ApiProperty({
+    type: String,
+    description: 'The slug of the item for which we want to get related items',
+    example: 'test',
+  })
   slug: string;
 }
