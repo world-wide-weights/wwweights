@@ -10,6 +10,7 @@ declare module "next-auth" {
      */
     interface Session {
         user: UserInfo
+        error?: string
         accessToken: string
         expires: Date
     }
@@ -36,9 +37,7 @@ declare module "next-auth/jwt" {
             role: string
             iat: number
             exp: number
-        },
-        iat: number,
-        exp: number,
-        jti: string
+        }
+        error?: string
     }
 }

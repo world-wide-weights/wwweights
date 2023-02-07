@@ -51,10 +51,19 @@ export const authOptions: NextAuthOptions = {
     callbacks: {
         jwt: async ({ token, user }: { token: JWT, user?: User }) => {
             if (user) {
-                // Add access token, refresh token and user information to the token
-                token.accessToken = user.access_token
-                token.refreshToken = user.refresh_token
-                token.user = parseJwt(user.access_token)
+                // Parse jwt to get payload
+                const parsedToken = parseJwt(user.access_token)
+                let refreshedTokens
+
+                // Refresh token when expired
+                if (Date.now() >= parsedToken.exp * 1000) {
+                    console.log("refreshing token")
+                    refreshedTokens = await refreshAccessToken(user.access_token)
+                }
+
+                // Add access token and user information to the token
+                token.accessToken = refreshedTokens?.accessToken ?? user.access_token
+                token.user = parsedToken
             }
 
             // This will be forwarded to the session callback
@@ -66,6 +75,7 @@ export const authOptions: NextAuthOptions = {
             // Add access token, refresh token and user to session
             session.accessToken = token.accessToken
             session.user = user
+            session.error = token.error
 
             // Send properties to the client
             return session
@@ -74,6 +84,36 @@ export const authOptions: NextAuthOptions = {
     pages: {
         signIn: "/account/login",
     },
+}
+
+/**
+* Takes a token, and returns a new token with updated `accessToken` and `accessTokenExpires`. If an error occurs, returns the old token and an error property
+* @param token The token which we want to refresh.
+*/
+async function refreshAccessToken(token: string) {
+    try {
+        const refreshedTokens = await authRequest.post<{ access_token: string, refresh_token: string }>("/refresh", {}, {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        })
+
+        if (!(refreshedTokens.status === 200)) {
+            throw refreshedTokens
+        }
+
+        return {
+            accessToken: refreshedTokens.data.access_token,
+            refreshToken: refreshedTokens.data.refresh_token ?? token, // Fall back to old refresh token
+        }
+    } catch (error) {
+        console.log(error)
+
+        return {
+            refreshToken: token,
+            error: "RefreshAccessTokenError",
+        }
+    }
 }
 
 export default NextAuth(authOptions)
