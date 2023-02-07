@@ -7,9 +7,17 @@ services:
       - 3000:3000
     environment:
       - NEXT_PUBLIC_CLIENT_BASE_URL=${NEXT_PUBLIC_CLIENT_BASE_URL:-http://localhost:3000}
-      - NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL:-http://localhost:3004}
+      - NEXT_PUBLIC_API_BASE_URL_QUERY=${NEXT_PUBLIC_API_BASE_URL_QUERY:-http://query:3004/queries/v1}
+      - NEXT_PUBLIC_API_BASE_URL_COMMAND=${NEXT_PUBLIC_API_BASE_URL_COMMAND:-http://cmd:3002/commands/v1}
+      - NEXT_PUBLIC_API_BASE_URL_AUTH=${NEXT_PUBLIC_API_BASE_URL_AUTH:-http://auth:3001}
+      - NEXT_PUBLIC_API_BASE_URL_IMAGE=${NEXT_PUBLIC_API_BASE_URL_IMAGE:-http://img:3003}
       - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:3000}
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:-secret}
+    links:
+      - command-backend:cmd
+      - query-backend:query
+      - auth-backend:auth
+      - image-backend:img
 
   auth-backend:
     image: ghcr.io/world-wide-weights/auth-backend:main
