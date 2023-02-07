@@ -3,11 +3,14 @@ import { JWT } from "next-auth/jwt"
 import NextAuth from "next-auth/next"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { authRequest } from "../../../services/axios/axios"
+import { parseJwt } from "../../../services/utils/jwt"
 
 export type UserInfo = {
+    id: number
     email: string
     username: string
-    slug: 1 // TODO (Zoe-Bot): Adjust type when correct api implemented
+    status: string
+    role: string
 }
 
 export const authOptions: NextAuthOptions = {
@@ -52,21 +55,18 @@ export const authOptions: NextAuthOptions = {
                 // Add access token, refresh token and user information to the token
                 token.accessToken = user.access_token
                 token.refreshToken = user.refresh_token
-                token.user = user
+                token.user = parseJwt(user.access_token)
             }
 
             // This will be forwarded to the session callback
             return token
         },
         session: async ({ session, token }: { session: Session, token: JWT }) => {
+            const { iat, exp, ...user } = token.user
+
             // Add access token, refresh token and user to session
             session.accessToken = token.accessToken
-            session.refreshToken = token.refreshToken
-            session.user = {
-                email: "test@gmail.com",
-                username: "test",
-                slug: 1
-            }
+            session.user = user
 
             // Send properties to the client
             return session

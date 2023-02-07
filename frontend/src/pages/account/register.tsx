@@ -51,14 +51,14 @@ const Register: NextPageCustomProps = () => {
     const onFormSubmit = async ({ username, email, password }: RegisterDto) => {
         // Register in our backend
         try {
-            const response = await authRequest.post<User>("/signup", {
+            await authRequest.post<User>("/signup", {
                 username,
                 email,
                 password
             })
         } catch (error) {
             // If something went wrong when register backend set Error
-            axios.isAxiosError(error) && error.response ? setError(error.response.data) : setError("Netzwerk-Zeitüberschreitung")
+            axios.isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Netzwerk-Zeitüberschreitung")
             return
         }
 

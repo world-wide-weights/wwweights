@@ -10,16 +10,13 @@ declare module "next-auth" {
      */
     interface Session {
         user: UserInfo
-        refreshToken: string
         accessToken: string
         expires: Date
     }
-
     // Auth Response
     interface User {
         access_token: string
         refresh_token: string
-        user: UserInfo
     }
 
     interface Account { }
@@ -32,9 +29,13 @@ declare module "next-auth/jwt" {
         accessToken: string
         refreshToken: string
         user: {
-            refresh_token: string
-            access_token: string
-            user: UserInfo
+            username: string
+            id: number
+            email: string
+            status: string
+            role: string
+            iat: number
+            exp: number
         },
         iat: number,
         exp: number,
