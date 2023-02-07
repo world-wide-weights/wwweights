@@ -39,12 +39,12 @@ describe("Register", () => {
 
     describe("check password text-field", () => {
         it("should hide password", () => {
-            cy.dataCy("textinput-password-input").invoke("attr", "type").should("eq", "password")
+            cy.dataCy("textinput-password-input").should("have.attr", "type", "password")
         })
 
         it("should show password", () => {
             cy.dataCy("text-input-icon-password").click()
-            cy.dataCy("textinput-password-input").invoke("attr", "type").should("eq", "text")
+            cy.dataCy("textinput-password-input").should("have.attr", "type", "text")
         })
     })
 })
