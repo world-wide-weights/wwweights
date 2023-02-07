@@ -1,0 +1,12 @@
+# Codecov settings
+codecov:
+  bot: "Kobi"
+comment:
+  behavior: once
+github_checks:
+  annotations: false
+coverage:
+  status:
+    project:
+      default:
+        informational: true

@@ -1,8 +1,9 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
-import Head from "next/head"
+import { useRouter } from "next/router"
 import { useRef, useState } from "react"
 import { Button } from "../../components/Button/Button"
 import { IconButton } from "../../components/Button/IconButton"
+import { Card } from "../../components/Card/Card"
 import { SearchEmptyState } from "../../components/EmptyState/SearchEmptyState"
 import { SearchHeader } from "../../components/Header/SearchHeader"
 import { Headline } from "../../components/Headline/Headline"
@@ -10,11 +11,13 @@ import { Icon } from "../../components/Icon/Icon"
 import { ItemPreviewGrid } from "../../components/Item/ItemPreviewGrid"
 import { ItemPreviewList } from "../../components/Item/ItemPreviewList"
 import { Pagination } from "../../components/Pagination/Pagination"
+import { Seo } from "../../components/Seo/Seo"
 import { Sort, SortType } from "../../components/Sort/Sort"
-import { StatsCard } from "../../components/Statistics/StatsCard"
+import { Tooltip } from "../../components/Tooltip/Tooltip"
 import { useLocalStorage } from "../../hooks/useLocalStorage"
 import { queryRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
+import { generatePageString } from "../../services/seo/pageString"
 import { generateWeightString } from "../../services/utils/weight"
 import { Item, PaginatedResponse } from "../../types/item"
 
@@ -44,8 +47,9 @@ type WeightsListProps = {
  */
 export default function WeightsList({ items, currentPage, totalItems, limit, query, sort, statistics }: InferGetServerSidePropsType<typeof getServerSideProps>) {
     // Strings
-    const siteTitle = `Latest ${currentPage > 1 ? `| Page ${currentPage} ` : ""}- World Wide Weights`
     const headlineItems = query === "" ? "All items" : query
+
+    const router = useRouter()
 
     // Refs
     const initialRender = useRef<boolean>(true)
@@ -56,9 +60,14 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
 
     return <>
         {/* Meta Tags */}
-        <Head>
-            <title>{siteTitle}</title>
-        </Head>
+        <Seo
+            title={
+                query === "" ?
+                    `Discover ${totalItems ? totalItems : ""} weights${generatePageString(currentPage)}` :
+                    `${query} Weights${generatePageString(currentPage)}`}
+            description={"Get all the information you need about the weights of various objects, from smartphones to cars. Our advanced search and filter options make it easy to find the weight you're looking for."}
+            canonicalLink={router.asPath}
+        />
 
         {/* TODO (Zoe-Bot): Find a better solution instead of give sort and query */}
         {/* Search with related tags */}
@@ -83,8 +92,12 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
 
                                 {/* Sort */}
                                 <div className="flex items-center mb-2 lg:mb-0">
-                                    <IconButton datacy="discover-grid-view-button" icon="grid_view" color={viewType === "grid" ? "blue" : "gray"} dimOpacityWhenDisabled={false} onClick={() => setViewType("grid")} className="mr-2" />
-                                    <IconButton datacy="discover-grid-list-button" icon="list" color={viewType === "list" ? "blue" : "gray"} dimOpacityWhenDisabled={false} onClick={() => setViewType("list")} className="mr-4" />
+                                    <Tooltip wrapperClassname="mr-2" content="Switch to grid view">
+                                        <IconButton datacy="discover-grid-view-button" icon="grid_view" color={viewType === "grid" ? "blue" : "gray"} dimOpacityWhenDisabled={false} onClick={() => setViewType("grid")} />
+                                    </Tooltip>
+                                    <Tooltip wrapperClassname="mr-4" content="Switch to list view">
+                                        <IconButton datacy="discover-grid-list-button" icon="list" color={viewType === "list" ? "blue" : "gray"} dimOpacityWhenDisabled={false} onClick={() => setViewType("list")} />
+                                    </Tooltip>
 
                                     {/* Sort Dropdown */}
                                     <div className="flex-grow">
@@ -128,9 +141,9 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                                     </button>
 
                                     <div className={`${statisticsExpanded ? "flex flex-col lg:flex-row" : "grid"} flex-grow md:flex-auto gap-2 lg:gap-4`}>
-                                        <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} to={routes.weights.single(statistics.heaviest.slug)} icon="weight" value={generateWeightString(statistics.heaviest.weight)} descriptionTop={statistics.heaviest.name} descriptionBottom="Heaviest" />
-                                        <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} to={routes.weights.single(statistics.lightest.slug)} icon="eco" value={generateWeightString(statistics.lightest.weight)} descriptionTop={statistics.lightest.name} descriptionBottom="Lightest" />
-                                        <StatsCard classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="scale" value={`${Number(statistics.averageWeight).toFixed(2)} g`} descriptionBottom="Average" />
+                                        <Card classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} to={routes.weights.single(statistics.heaviest.slug)} icon="weight" value={generateWeightString(statistics.heaviest.weight)} descriptionTop={statistics.heaviest.name} descriptionBottom="Heaviest" />
+                                        <Card classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} to={routes.weights.single(statistics.lightest.slug)} icon="eco" value={generateWeightString(statistics.lightest.weight)} descriptionTop={statistics.lightest.name} descriptionBottom="Lightest" />
+                                        <Card classNameWrapper={`${statisticsExpanded ? "flex-1" : ""}`} icon="scale" value={`${Number(statistics.averageWeight).toFixed(2)} g`} descriptionBottom="Average" />
                                     </div>
                                 </div>
                             </div>

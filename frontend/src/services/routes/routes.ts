@@ -56,9 +56,11 @@ export const routes = {
     contribute: {
         create: "/contribute/create"
     },
-    legal: {
-        terms: "/legal/terms-of-service",
-        privacy: "/legal/privacy-policy"
+    misc: {
+        index: "/misc",
+        contact: "/misc/contact",
+        terms: "/misc/terms-and-conditions",
+        privacy: "/misc/privacy-policy"
     }
 } as const
 

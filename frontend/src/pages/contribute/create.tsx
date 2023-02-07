@@ -1,5 +1,4 @@
 import { Form, Formik, FormikProps } from "formik"
-import Head from "next/head"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import * as yup from "yup"
@@ -10,6 +9,8 @@ import { FormError } from "../../components/Errors/FormError"
 import { Dropdown } from "../../components/Form/Dropdown/Dropdown"
 import { TextInput } from "../../components/Form/TextInput/TextInput"
 import { Headline } from "../../components/Headline/Headline"
+import { Seo } from "../../components/Seo/Seo"
+import { Tooltip } from "../../components/Tooltip/Tooltip"
 import { routes } from "../../services/routes/routes"
 import { getWeightInG } from "../../services/utils/unit"
 import { Weight } from "../../types/item"
@@ -136,9 +137,10 @@ const Create: NextPageCustomProps = () => {
 
     return <>
         {/* Meta Tags */}
-        <Head>
-            <title>Create new item - World Wide Weights</title>
-        </Head>
+        <Seo
+            title="Create new item"
+            description="Contribute to the World Wide Weights database and create a new item."
+        />
 
         <main className="container mt-5">
             {/* Breadcrumb */}
@@ -190,7 +192,9 @@ const Create: NextPageCustomProps = () => {
                                     <Headline level={3} hasMargin={false}>Add more details</Headline>
                                     <p>Add Image, tags and a source to help verify this item.</p>
                                 </div>
-                                <IconButton icon="expand_more" iconClassName="text-3xl md:text-5xl" className={`transform-gpu transition-transform duration-200 ease-linear min-w-[40px] md:w-12 h-10 md:h-12 ml-3 ${isOpenDetails ? "-rotate-180" : "rotate-0"}`} />
+                                <Tooltip wrapperClassname="ml-3" content="Expand Details">
+                                    <IconButton icon="expand_more" iconClassName="text-3xl md:text-5xl" className={`transform-gpu transition-transform duration-200 ease-linear min-w-[40px] md:w-12 h-10 md:h-12 ${isOpenDetails ? "-rotate-180" : "rotate-0"}`} />
+                                </Tooltip>
                             </div>
 
                             {isOpenDetails && <div className="mt-4">
