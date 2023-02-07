@@ -17,6 +17,7 @@ services:
     ports:
       - 3001:3001
     environment:
+      - NODE_ENV=${NODE_ENV:-dev}
       - DB_HOST=${AUTH_DB_HOST:-pg}
       - DB_PORT=${AUTH_DB_PORT:-5432}
       - DB_DB=${AUTH_DB_DB:-auth}
@@ -43,6 +44,7 @@ services:
     ports:
       - 3002:3002
     environment:
+      - NODE_ENV=${NODE_ENV:-dev}
       - DB_MONGO_HOST=${CMD_DB_MONGO_HOST:-mongo}
       - DB_MONGO_PORT=${CMD_DB_MONGO_PORT:-27017}
       - DB_MONGO_USER=${CMD_DB_MONGO_USER:-admin}
@@ -65,6 +67,7 @@ services:
     ports:
       - 3003:3003
     environment:
+      - NODE_ENV=${NODE_ENV:-dev}
       - JWKS_AUTH_URL=${IMG_JWKS_AUTH_URL:-http://auth:3001/auth/.well-known/jwks.json}
       - IMAGE_STORE_BASE_PATH=${IMG_IMAGE_STORE_BASE_PATH:-./disk}
       - IMAGE_STORE_INCOMING_CACHE_PATH=${IMG_IMAGE_STORE_INCOMING_CACHE_PATH:-./cache}
@@ -80,6 +83,7 @@ services:
     ports:
       - 3004:3004
     environment:
+      - NODE_ENV=${NODE_ENV:-dev}
       - DB_MONGO_HOST=${QRY_DB_MONGO_HOST:-mongo}
       - DB_MONGO_PORT=${QRY_DB_MONGO_PORT:-27017}
       - DB_MONGO_USER=${QRY_DB_MONGO_USER:-mongo}
