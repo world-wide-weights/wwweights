@@ -5,11 +5,13 @@ on:
     paths:
       - "frontend/**"
       - ".github/workflows/frontend-ci.yml"
+    branches:
+      - "stable"
   pull_request:
     branches: [main]
     paths:
       - "frontend/**"
-      - ".github/workflows/**.yml"
+      - ".github/workflows/frontend-ci.yml"
 
 env:
   NEXT_PUBLIC_CLIENT_BASE_URL: http://localhost:3002
