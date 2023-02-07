@@ -1,6 +1,17 @@
-import { renderUnitIntoString } from "./unitRenderer"
+import { renderUnitIntoString, roundNumber } from "./unitRenderer"
+describe("roundNumber Function", () => {
+    it("it should round number", () => {   
+        expect(roundNumber(1.234)).deep.equal("1.234")
+        expect(roundNumber(1.2345)).deep.equal("1.235")
+        expect(roundNumber(1.234567)).deep.equal("1.235")
+        expect(roundNumber(1.234267)).deep.equal("1.234")
+        expect(roundNumber(1.23)).deep.equal("1.23")
+        expect(roundNumber(1.2)).deep.equal("1.2")
+        expect(roundNumber(5)).deep.equal("5")
+    })
+})
 
-describe("UnitRenderer", () => {
+describe("renderUnitIntoString Function", () => {
     it("it should display 'ca.'", () => {
         expect(renderUnitIntoString({
             value: 9,
