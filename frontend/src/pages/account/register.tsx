@@ -8,6 +8,7 @@ import * as yup from "yup"
 import { Button } from "../../components/Button/Button"
 import { TextInput } from "../../components/Form/TextInput/TextInput"
 import { AccountLayout } from "../../components/Layout/AccountLayout"
+import { Seo } from "../../components/Seo/Seo"
 import { authRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { NextPageCustomProps } from "../_app"
@@ -82,6 +83,10 @@ const Register: NextPageCustomProps = () => {
     }
 
     return <>
+        <Seo
+            title="Register an account"
+            description="Register an account on World Wide Weights to start contributing items. It is free and easy. Just fill out the form and you are ready to go."
+        />
         {/* Register Form */}
         <Formik initialValues={initialFormValues} validationSchema={validationSchema} onSubmit={onFormSubmit}>
             {({ dirty, isValid }) => (
