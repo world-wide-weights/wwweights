@@ -1,7 +1,6 @@
 import { ItemSortEnum } from '../items/interfaces/item-sort-enum';
 
-// There has not been any obvious way how to deal with this kind of syntax to reduce lines of code
-const textSearchParams: { score: any; name: 1 | -1 } = {
+const textSearchParams = {
   score: { $meta: 'textScore' },
   name: 1,
 };

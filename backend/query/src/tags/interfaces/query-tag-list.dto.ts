@@ -6,6 +6,11 @@ import { TagSortEnum } from './tag-sort-enum';
 export class QueryTagListDto extends Page {
   @IsOptional()
   @IsEnum(TagSortEnum)
-  @ApiPropertyOptional({ enum: TagSortEnum, default: TagSortEnum.ASC })
+  @ApiPropertyOptional({
+    enum: TagSortEnum,
+    default: TagSortEnum.ASC,
+    example: TagSortEnum.ASC,
+    description: 'Sort order',
+  })
   sort = TagSortEnum.ASC;
 }
