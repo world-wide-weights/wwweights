@@ -10,7 +10,14 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBody,
+  ApiConflictResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { InsertItemCommand } from './commands/insert-item.command';
 import { InsertItemDto } from './interfaces/insert-item.dto';
 
@@ -26,7 +33,18 @@ export class ItemsController {
   @Post('items/insert')
   @ApiBody({ type: InsertItemDto })
   @ApiOperation({ summary: 'Insert an item' })
-  @ApiOkResponse({ description: 'The item has been received.' })
+  @ApiOkResponse({
+    status: HttpStatus.OK,
+    description: 'Item inserted successfully',
+  })
+  @ApiConflictResponse({
+    status: HttpStatus.CONFLICT,
+    description: 'Slug already taken',
+  })
+  @ApiBadRequestResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Invalid request. Data validation failed.',
+  })
   @HttpCode(HttpStatus.OK)
   async insertItem(@Body() insertItemDto: InsertItemDto) {
     await this.commandBus.execute(new InsertItemCommand(insertItemDto));
