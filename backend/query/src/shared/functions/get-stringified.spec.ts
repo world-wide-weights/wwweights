@@ -7,7 +7,9 @@ describe('getStringified', () => {
       tags: ['tag1', 'tag2'],
     };
     expect(getStringified(obj)).toEqual(
-      `{
+      // Since we expect something formatted, we have to force it here
+      // eslint-disable-next-line prettier/prettier
+`{
   "query": "query",
   "tags": [
     "tag1",

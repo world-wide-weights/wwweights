@@ -1,8 +1,14 @@
 import slugify from 'slugify';
 
-export const getSlug = (str: string, space = '-') => {
+/**
+ *
+ * @param str is the String to be converted to slug
+ * @param replacement is the replacer for spaces and defaults to '-'
+ * @returns the slugified string
+ */
+export const getSlug = (str: string, replacement = '-') => {
   return slugify(str, {
-    replacement: space,
+    replacement,
     strict: true,
     lower: true,
     trim: true,
