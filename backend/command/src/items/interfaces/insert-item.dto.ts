@@ -76,7 +76,10 @@ export class InsertItemDto {
 
   @IsString()
   @IsOptional()
-  @ApiPropertyOptional({ description: 'Image data' })
+  @ApiPropertyOptional({
+    description: 'Image URL or path for imageStore',
+    example: 'https://example.com/image.png',
+  })
   image?: string;
 
   @IsString()
@@ -84,12 +87,15 @@ export class InsertItemDto {
   @ApiPropertyOptional({
     description:
       'Source of weight for item. Can be an URL or any other format of string.',
-    example: 'https://www.google.com',
+    example: 'https://example.com',
   })
   source?: string;
 
   @IsString()
-  @ApiProperty()
-  // TODO: Replace with user from context
+  @ApiProperty({
+    type: String,
+    description: 'User ID',
+    example: '5f9e9b9e7c9d440000a1c1c7',
+  })
   user: string;
 }

@@ -30,7 +30,7 @@ class Tag {
 
 @index(
   { name: 'text', 'tags.name': 'text' },
-  { weights: { name: 10, tags: 5 }, name: 'ItemTextIndex' },
+  { weights: { name: 1000, tags: 1 }, name: 'ItemTextIndex' },
 )
 export class Item extends AggregateRoot {
   @Expose()
