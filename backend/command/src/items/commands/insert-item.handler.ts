@@ -1,8 +1,8 @@
 import {
   ConflictException,
   HttpException,
+  InternalServerErrorException,
   Logger,
-  UnprocessableEntityException,
 } from '@nestjs/common';
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { ALLOWED_EVENT_ENTITIES } from '../../eventstore/enums/allowedEntities.enum';
@@ -54,7 +54,7 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
         throw error;
       }
       this.logger.error(error);
-      throw new UnprocessableEntityException('Item could not be inserted');
+      throw new InternalServerErrorException('Item could not be inserted');
     }
   }
 }
