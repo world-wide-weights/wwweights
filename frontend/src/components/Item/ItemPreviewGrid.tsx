@@ -1,8 +1,8 @@
 import Image from "next/image"
 import Link from "next/link"
 import { routes } from "../../services/routes/routes"
-import { generateWeightString } from "../../services/utils/weight"
 import { ItemPreviewProps } from "./ItemPreviewList"
+import { renderUnitIntoString } from "../../services/unit/unitRenderer"
 
 /**
  * Excerpt component for Item
@@ -13,7 +13,7 @@ import { ItemPreviewProps } from "./ItemPreviewList"
  * ```
  */
 export const ItemPreviewGrid: React.FC<ItemPreviewProps> = ({ slug, datacy, name, weight, imageUrl }) => {
-    const weightString = generateWeightString(weight)
+    const weightString = renderUnitIntoString(weight)
 
     return <Link datacy={datacy} className="flex items-center justify-between rounded-lg bg-white pl-5 pr-2 md:pr-3 py-2 md:py-3" href={routes.weights.single(slug)}>
         <div className="pr-3">
