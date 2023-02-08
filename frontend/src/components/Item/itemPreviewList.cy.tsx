@@ -63,7 +63,7 @@ describe("ItemPreviewList", () => {
         })
 
         it("should display item name blue", () => {
-            cy.dataCy("compared-weight-text").should("have.class", "text-blue-500")
+            cy.dataCy("item-weight").should("have.class", "text-blue-500")
         })
 
     })

@@ -52,7 +52,7 @@ export const ItemPreviewList: React.FC<ItemPreviewProps & { heaviestWeight: Weig
                     <span className="font-medium mr-1">{renderWeightAsNumberIntoString(Math.abs(difference))}</span>
                     <Icon datacy="arrow-icon" className="text-xl">{difference === 0 ? "remove" : (difference >= 0 ? "arrow_upward" : "arrow_downward")}</Icon>
                 </div>}
-                <h5 datacy="compared-weight-text"className={`${selectedItem ? "text-blue-500" : "text-gray-800"} text-right font-bold ${hasDifference ? selectedItem ? "w-2/3 md:w-1/4" : "w-3/6 md:w-1/4" : "w-1/3"} mr-4`} title={`${name} has a weight of ${weightString}`}>{weightString}</h5>
+                <h5 datacy="item-weight"className={`${selectedItem ? "text-blue-500" : "text-gray-800"} text-right font-bold ${hasDifference ? selectedItem ? "w-2/3 md:w-1/4" : "w-3/6 md:w-1/4" : "w-1/3"} mr-4`} title={`${name} has a weight of ${weightString}`}>{weightString}</h5>
                 <div className={`${hasDifference ? "w-1/5 md:w-2/4" : "w-2/3"}`}>
                     {/* TODO (Zoe-Bot): Maybe add little icon with weight at the end when heaviest item */}
                     <ProgressBar progress={percentageProgressbar.percentage} isCa={weight.isCa} progressAdditional={percentageProgressbar.percentageAdditional} />
