@@ -96,6 +96,29 @@ describe('QueryController (e2e)', () => {
     describe('tags/related', () => {
       const subPath = 'tags/related';
 
+      it("should find list of tags when querying 'android'", async () => {
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({ query: 'android' })
+          .expect(HttpStatus.OK);
+
+        expect(result.body.data).toHaveLength(16);
+        for (const tag of result.body.data) {
+          expect(tag).toHaveProperty('relevance');
+          expect(tag.relevance).toBeLessThan(100);
+          expect(tag).toHaveProperty('name');
+          expect(tag).toHaveProperty('count');
+        }
+      });
+
+      it('should find most relevance tag "smartphone" when querying "android"', async () => {
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({ query: 'android' })
+          .expect(HttpStatus.OK);
+        expect(result.body.data[0].name).toEqual('smartphone');
+      });
+
       it('should return base results if query is empty', async () => {
         const result = await request(server)
           .get(queriesPath + subPath)
