@@ -17,6 +17,8 @@ cp sample.env .env
 docker compose up -d
 ```
 
+**Note:** When using an arm based system uncheck the first env variable in sample.env to use arm friendly eventstore image
+
 **Note:** Older version of docker might require a - between docker and compose (`docker-compose`)
 
 Frontend: [Website](http://localhost:3000)
