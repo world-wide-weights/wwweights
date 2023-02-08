@@ -4,6 +4,16 @@ import { convertWeightIntoTargetUnit } from "./unitConverter"
 import { getBestHumanReadableUnit } from "./unitHumanReadable"
 
 /**
+ * Gets number and and rounds it.
+ * @param number the number to round.
+ * @returns string with rounded number.
+ */
+export const roundNumber = (number: number): string => {
+    let roundedNumber = Math.round(number * 1000) / 1000
+    return roundedNumber.toString()
+  }
+
+/**
  * Gets number and formats it to a number with seperation points.
  * @param number the number to format.
  * @param formatComma if true, the number will be formatted without seperation points because it has a comma .
@@ -11,9 +21,9 @@ import { getBestHumanReadableUnit } from "./unitHumanReadable"
  */
 export const addPointsToNumber = (number: number, formatComma: boolean): string => {
     if (formatComma) {
-        return number.toFixed(2)
+        return roundNumber(number)
     } else {
-        return new Intl.NumberFormat("de-DE").format(number)
+        return new Intl.NumberFormat("en-EN").format(number)
     }
 }
 
@@ -34,6 +44,7 @@ export const renderUnitIntoString = (weight: Weight): string => {
 
     //Add weight value to String, if large number it will add Seperation Points.
     if (bestHumanReadableUnit.value % 1 !== 0) {
+        console.log(bestHumanReadableUnit.value)
         renderedText += addPointsToNumber(bestHumanReadableUnit.value, true)
     } else {
         renderedText += addPointsToNumber(bestHumanReadableUnit.value, false)
@@ -47,6 +58,30 @@ export const renderUnitIntoString = (weight: Weight): string => {
         } else {
             renderedText += ` - ${addPointsToNumber(bestHumanReadableUnitAdditionalValue, false)}`
         }
+    }
+
+    //Add weight unit to String.
+    renderedText += ` ${bestHumanReadableUnit.unit}`
+
+    return renderedText
+
+}
+
+/**
+ * Gets weight as number and renders it into a human readable string.
+ * @param weight the weight as number to render.
+ * @returns string with the weight in the best human readable unit.
+ */
+export const renderWeightAsNumberIntoString = (weight: number): string => {
+    let renderedText = ""
+
+    const bestHumanReadableUnit = getBestHumanReadableUnit(weight)
+
+    //Add weight value to String, if large number it will add Seperation Points.
+    if (bestHumanReadableUnit.value % 1 !== 0) {
+        renderedText += addPointsToNumber(bestHumanReadableUnit.value, true)
+    } else {
+        renderedText += addPointsToNumber(bestHumanReadableUnit.value, false)
     }
 
     //Add weight unit to String.
