@@ -17,6 +17,28 @@ describe('IsBiggerThan', () => {
       expect(test.max).toBeGreaterThan(test.min); // Sanity check
       expect(validationErrorsArray).toEqual([]);
       expect(validationErrorsArray).toHaveLength(0);
+
+      // Left number is bigge
+      const allowedNumberPairs = [
+        [10, 5],
+        [10, 9],
+        [10, 0],
+        [0, -10],
+        [0, -1],
+        [0, -100],
+        [-10, -20],
+        [Number.MAX_VALUE, Number.MIN_VALUE],
+        [Number.MAX_VALUE, Number.MIN_SAFE_INTEGER],
+      ];
+
+      for (const [max, min] of allowedNumberPairs) {
+        test.max = max;
+        test.min = min;
+        const validationErrorsArray = await validate(test);
+        expect(test.max).toBeGreaterThan(test.min); // Sanity check
+        expect(validationErrorsArray).toEqual([]);
+        expect(validationErrorsArray).toHaveLength(0);
+      }
     });
 
     it('should contain error message when max is not bigger than min', async () => {
