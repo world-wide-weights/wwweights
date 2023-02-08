@@ -7,6 +7,7 @@ import { IconButton } from "../../components/Button/IconButton"
 import { FormError } from "../../components/Errors/FormError"
 import { CheckboxList } from "../../components/Form/CheckboxList/CheckboxList"
 import { Dropdown } from "../../components/Form/Dropdown/Dropdown"
+import { Label } from "../../components/Form/Label"
 import { TextInput } from "../../components/Form/TextInput/TextInput"
 import { Headline } from "../../components/Headline/Headline"
 import { Icon } from "../../components/Icon/Icon"
@@ -152,15 +153,27 @@ const Create: NextPageCustomProps = () => {
                                 <TextInput name="name" labelText="Name" labelRequired placeholder="elephant" />
 
                                 {/* Weight */}
+                                <Label name="" labelText="Weight" labelRequired></Label>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="flex items-center flex-col bg-gray-100 pt-3 pb-5 px-3">
+                                        <Icon className="ml-auto">check</Icon>
+                                        <p className="font-medium">Exact Value</p>
+                                        <p>150 kg</p>
+                                    </div>
+                                    <div className="text-center bg-gray-100">
+                                        <p className="font-medium">Exact Value</p>
+                                        <p>150 kg</p>
+                                    </div>
+                                </div>
                                 <div className="md:flex items-end justify-between gap-3">
-                                    <div className="md:w-1/4 lg:w-1/4">
+                                    <div className="w-1/3">
                                         <TextInput name="weight" type="number" noError min={1} placeholder="150" />
                                     </div>
                                     <div className="flex justify-center md:items-center md:h-[72px]"><span>-</span></div>
-                                    <div className="md:w-1/4 lg:w-1/4">
+                                    <div className="w-1/3">
                                         <TextInput type="number" min={0} name="additionalValue" placeholder="300" />
                                     </div>
-                                    <div className="md:w-1/4 lg:w-1/4">
+                                    <div className="w-1/3">
                                         <Dropdown name="unit" options={unitTypeDropdownOptions} hasMargin light />
                                     </div>
                                 </div>
