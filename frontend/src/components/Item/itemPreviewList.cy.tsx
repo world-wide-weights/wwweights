@@ -4,8 +4,8 @@ import { ItemPreviewList } from "./ItemPreviewList"
 
 describe("ItemPreviewList", () => {
     describe("should display item preview list correct", () => {
-        beforeEach(() => { 
-            cy.mount(<ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} heaviestWeight={{ value: 100, isCa: false }} imageUrl="https://via.placeholder.com/96.png" />)
+        beforeEach(() => {
+            cy.mount(<ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} heaviestWeight={{ value: 100, isCa: false }} imageUrl="https://via.placeholder.com/96.png" datacy="item-preview-list" />)
         })
 
         it("should display item preview list correct", () => {
@@ -54,21 +54,25 @@ describe("ItemPreviewList", () => {
     })
 
     describe("should display selected item correct", () => {
-        beforeEach(() => { 
-            cy.mount(<ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} heaviestWeight={{ value: 100, isCa: false }} imageUrl="https://via.placeholder.com/96.png" selectedItem/>)
+        beforeEach(() => {
+            cy.mount(<ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} heaviestWeight={{ value: 100, isCa: false }} imageUrl="https://via.placeholder.com/96.png" selectedItem />)
         })
 
         it("should display bold font", () => {
             cy.dataCy("item-name").should("have.class", "font-bold")
         })
 
-        it("should display item name blue", () => {
+        it("should display item weight blue", () => {
             cy.dataCy("item-weight").should("have.class", "text-blue-500")
         })
-
     })
 
+    describe("should disable link", () => {
+        it("should disable link", () => {
+            cy.mount(<ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} heaviestWeight={{ value: 100, isCa: false }} imageUrl="https://via.placeholder.com/96.png" datacy="item-preview-list" disableLink />)
 
-
-
+            cy.dataCy("item-preview-list").invoke("attr", "href").should("eq", "#")
+            cy.dataCy("item-preview-list").should("have.class", "cursor-default")
+        })
+    })
 })
