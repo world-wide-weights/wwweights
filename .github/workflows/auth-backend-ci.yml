@@ -5,6 +5,8 @@ on:
     paths:
       - "backend/auth/**"
       - ".github/workflows/auth-backend-ci.yml"
+    branches:
+      - "stable"
   pull_request:
     branches: [main]
     paths:

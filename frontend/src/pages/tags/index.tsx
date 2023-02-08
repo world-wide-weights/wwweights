@@ -1,11 +1,12 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
-import Head from "next/head"
 import { Chip } from "../../components/Chip/Chip"
 import { Headline } from "../../components/Headline/Headline"
 import { Pagination } from "../../components/Pagination/Pagination"
+import { Seo } from "../../components/Seo/Seo"
 import { Tooltip } from "../../components/Tooltip/Tooltip"
 import { queryRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
+import { generatePageString } from "../../services/seo/pageString"
 import { PaginatedResponse } from "../../types/item"
 import { Tag } from "../../types/tag"
 
@@ -22,13 +23,13 @@ type TagsListProps = {
 
 /** Base List for tags */
 export default function TagsList({ tags, currentPage, totalItems, limit }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-    const siteTitle = `All Tags ${currentPage > 1 ? `| Page ${currentPage} ` : ""}- World Wide Weights`
 
     return (<>
         {/* Meta Tags */}
-        <Head>
-            <title>{siteTitle}</title>
-        </Head>
+        <Seo
+            title={`All Tags${generatePageString(currentPage)}`}
+            description={"Discover all tags in the world largest database about weights."}
+        />
 
         <main className="container mt-5">
             {/* Headline */}
