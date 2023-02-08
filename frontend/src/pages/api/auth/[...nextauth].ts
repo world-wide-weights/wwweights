@@ -18,6 +18,7 @@ export const authOptions: NextAuthOptions = {
         CredentialsProvider({
             id: "credentials",
             name: "DefaultEmailPassword",
+            type: "credentials",
             credentials: {
                 email: {
                     label: "email",
@@ -28,13 +29,13 @@ export const authOptions: NextAuthOptions = {
                     type: "password"
                 },
             },
-            authorize: async (credentials) => {
+            authorize: async (credentials, req) => {
+                console.log("authorize", credentials, req)
                 // Login to our api
-                const response = await authRequest.post<User>("/login", {
+                const response = await authRequest.post<User>("/auth/login", {
                     email: credentials!.email,
                     password: credentials!.password
                 })
-
                 const user = response.data
 
                 // If no error and we have user data, return it
@@ -50,6 +51,7 @@ export const authOptions: NextAuthOptions = {
     secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
         jwt: async ({ token, user }: { token: JWT, user?: User }) => {
+            console.log("jwt", token, user)
             if (user) {
                 // Parse jwt to get payload
                 const parsedToken = parseJwt(user.access_token)
@@ -70,6 +72,7 @@ export const authOptions: NextAuthOptions = {
             return token
         },
         session: async ({ session, token }: { session: Session, token: JWT }) => {
+            console.log("session", session, token)
             const { iat, exp, ...user } = token.user
 
             // Add access token, refresh token and user to session
