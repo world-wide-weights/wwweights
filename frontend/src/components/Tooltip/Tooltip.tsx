@@ -47,9 +47,9 @@ export const Tooltip: React.FC<TooltipProps> = ({ children, content, delay, wrap
     const triangleBaseClass = "before:content-[' '] before:left-1/2 before:h-0 before:w-0 before:absolute before:border-transparent before:border-solid before:border-[8px] before:ml-[-8px]"
     const tooltipClassesPosition = {
         ["top"]: "before:top-full before:border-t-blue-900",
-        ["right"]: "left-[calc(100%_+_30px)] top-1/2 translate-x-0 -translate-y-1/2 before:left-[-8px] before:top-1/2 before:translate-x-0 before:-translate-y-1/2 before:border-r-blue-900",
+        ["right"]: "left-[calc(100%_+_20px)] top-1/2 translate-x-0 -translate-y-1/2 before:left-[-8px] before:top-1/2 before:translate-x-0 before:-translate-y-1/2 before:border-r-blue-900",
         ["bottom"]: "before:bottom-full before:border-b-blue-900",
-        ["left"]: "left-auto right-[calc(100%_+_30px)] top-1/2 translate-x-0 -translate-y-1/2 before:left-auto before:right-[-16px] before:top-1/2 before:translate-x-0 before:-translate-y-1/2 before:border-l-blue-900",
+        ["left"]: "left-auto right-[calc(100%_+_20px)] top-1/2 translate-x-0 -translate-y-1/2 before:left-auto before:right-[-16px] before:top-1/2 before:translate-x-0 before:-translate-y-1/2 before:border-l-blue-900",
     }
 
     return <div datacy="tooltip-wrapper" className={`relative inline-block ${wrapperClassname}`} onMouseEnter={showTooltip} onMouseLeave={hideTooltip}>

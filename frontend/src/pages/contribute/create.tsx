@@ -5,9 +5,11 @@ import * as yup from "yup"
 import { Button } from "../../components/Button/Button"
 import { IconButton } from "../../components/Button/IconButton"
 import { FormError } from "../../components/Errors/FormError"
+import { CheckboxList } from "../../components/Form/CheckboxList/CheckboxList"
 import { Dropdown } from "../../components/Form/Dropdown/Dropdown"
 import { TextInput } from "../../components/Form/TextInput/TextInput"
 import { Headline } from "../../components/Headline/Headline"
+import { Icon } from "../../components/Icon/Icon"
 import { Seo } from "../../components/Seo/Seo"
 import { Tooltip } from "../../components/Tooltip/Tooltip"
 import { routes } from "../../services/routes/routes"
@@ -20,7 +22,7 @@ type CreateItemForm = {
     weight: number | string
     unit: "g" | "kg" | "t" // TODO (Zoe-Bot): define units
     additionalValue?: number | string
-    isCa: boolean
+    isCa: boolean[]
     source?: string
     image?: string
     tags?: string
@@ -34,16 +36,6 @@ type CreateItemDto = {
     image?: string
     tags: string[]
 }
-
-const weightIsCaOptions = [
-    {
-        value: true,
-        label: "ca.",
-    }, {
-        value: false,
-        label: "-",
-    }
-]
 
 const unitTypeDropdownOptions = [
     {
@@ -73,7 +65,7 @@ const Create: NextPageCustomProps = () => {
         weight: "",
         unit: "g",
         additionalValue: "",
-        isCa: false,
+        isCa: [],
         source: "",
         image: "",
         tags: ""
@@ -85,7 +77,7 @@ const Create: NextPageCustomProps = () => {
         weight: yup.string().required("Weight is required."),
         unit: yup.mixed().oneOf(["g", "kg", "t"]),
         additionalValue: yup.string(),
-        isCa: yup.boolean().required("IsCa is required."),
+        isCa: yup.array(),
         source: yup.string(),
         image: yup.string(),
         tags: yup.string(),
@@ -99,6 +91,8 @@ const Create: NextPageCustomProps = () => {
         // Prepare weight in g
         const weightNumber = parseInt(weight as string)
         const valueInG = getWeightInG(weightNumber, unit)
+
+        console.log(isCa)
 
         // Prepare additionalValue in g
         if (additionalValue !== "") {
@@ -114,7 +108,6 @@ const Create: NextPageCustomProps = () => {
             slug: name, // TODO (Zoe-Bot): remove with correct api
             weight: {
                 value: valueInG,
-                isCa,
                 ...(additionalValue ? { additionalValue } : {}) // Only add additionalValue when defined
             },
             tags: tags ? tags.split(", ") : []
@@ -143,7 +136,10 @@ const Create: NextPageCustomProps = () => {
 
         <main className="container mt-5">
             {/* Headline */}
-            <Headline>Create new item</Headline>
+            <Tooltip position="right" content="Hello">
+                <Headline>Create new item</Headline>
+
+            </Tooltip>
 
             {/* Content */}
             <Formik initialValues={initialFormValues} validationSchema={validationSchema} onSubmit={onFormSubmit}>
@@ -157,9 +153,6 @@ const Create: NextPageCustomProps = () => {
 
                                 {/* Weight */}
                                 <div className="md:flex items-end justify-between gap-3">
-                                    <div className="md:w-1/5">
-                                        <Dropdown name="isCa" labelText="Weight" labelRequired options={weightIsCaOptions} hasMargin light />
-                                    </div>
                                     <div className="md:w-1/4 lg:w-1/4">
                                         <TextInput name="weight" type="number" noError min={1} placeholder="150" />
                                     </div>
@@ -172,7 +165,15 @@ const Create: NextPageCustomProps = () => {
                                     </div>
                                 </div>
                                 <FormError field="weight" />
-                                {!(errors.weight && touched.weight) && <p className="text-gray-600 text-sm">Leave additional weight empty when it is an exact value.</p>}
+                            </div>
+                            <div className="flex items-center">
+                                <CheckboxList name="isCa" options={[{ value: true, label: "is circa" }]} />
+                                <Tooltip position="right" content={<>
+                                    <p>When checked it is a circa value and will</p>
+                                    <p> be displayed for example as ca. 300 g.</p>
+                                </>}>
+                                    <Icon className="text-xl text-gray-600 ml-2">info</Icon>
+                                </Tooltip>
                             </div>
                         </div>
 
@@ -218,7 +219,7 @@ const Create: NextPageCustomProps = () => {
                     </Form>
                 )}
             </Formik>
-        </main>
+        </main >
     </>
 }
 
