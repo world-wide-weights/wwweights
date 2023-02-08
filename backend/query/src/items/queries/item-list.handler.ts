@@ -1,10 +1,11 @@
 import { InjectModel } from '@m8a/nestjs-typegoose';
-import { Logger, UnprocessableEntityException } from '@nestjs/common';
+import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
+import { DataWithCount } from '../../shared/data-with-count';
 import { getFilter } from '../../shared/get-filter';
 import { getSort } from '../../shared/get-sort';
-import { DataWithCount } from '../interfaces/counted-items';
+import { PaginatedResponse } from '../../shared/paginated-result';
 import { Item } from '../models/item.model';
 import { ItemListQuery } from './item-list.query';
 
@@ -17,7 +18,7 @@ export class ItemListHandler implements IQueryHandler<ItemListQuery> {
     private readonly itemModel: ReturnModelType<typeof Item>,
   ) {}
 
-  async execute({ dto }: ItemListQuery) {
+  async execute({ dto }: ItemListQuery): Promise<PaginatedResponse<Item>> {
     try {
       // We currently also run textSearch on tags, optimizing via itemsByTags is a TODO
       const sort = getSort(dto.sort, (dto.query || dto.tags) && !dto.slug);
@@ -56,7 +57,7 @@ export class ItemListHandler implements IQueryHandler<ItemListQuery> {
       };
     } catch (error) {
       this.logger.error(error);
-      throw new UnprocessableEntityException(
+      throw new InternalServerErrorException(
         'Item list could not be retrieved',
       );
     }

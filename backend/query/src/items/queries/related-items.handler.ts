@@ -1,10 +1,15 @@
 import { InjectModel } from '@m8a/nestjs-typegoose';
-import { Logger, UnprocessableEntityException } from '@nestjs/common';
+import {
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
+import { DataWithCount } from '../../shared/data-with-count';
 import { getFilter } from '../../shared/get-filter';
 import { getSort } from '../../shared/get-sort';
-import { DataWithCount } from '../interfaces/counted-items';
+import { PaginatedResponse } from '../../shared/paginated-result';
 import { ItemSortEnum } from '../interfaces/item-sort-enum';
 import { Item } from '../models/item.model';
 import { ItemRelatedQuery } from './related-items.query';
@@ -18,10 +23,10 @@ export class ItemRelatedHandler implements IQueryHandler<ItemRelatedQuery> {
     private readonly itemModel: ReturnModelType<typeof Item>,
   ) {}
 
-  async execute({ dto }: ItemRelatedQuery) {
+  // KISS, 2 requests instead of a lookup
+  async execute({ dto }: ItemRelatedQuery): Promise<PaginatedResponse<Item>> {
     let item: Item;
     try {
-      // KISS, 2 requests instead of a lookup
       item = await this.itemModel
         .findOne<Item>({ slug: dto.slug })
         .select('name tags.name')
@@ -29,14 +34,14 @@ export class ItemRelatedHandler implements IQueryHandler<ItemRelatedQuery> {
         .exec();
     } catch (error) {
       this.logger.error(error);
-      throw new UnprocessableEntityException(
-        'Searching for this slug caused an error',
+      throw new InternalServerErrorException(
+        'Searching for an item by slug caused an error',
       );
     }
 
     if (!item) {
       this.logger.error('Item not found');
-      throw new UnprocessableEntityException('Item not found');
+      throw new NotFoundException('Item not found');
     }
 
     try {
@@ -80,7 +85,7 @@ export class ItemRelatedHandler implements IQueryHandler<ItemRelatedQuery> {
       };
     } catch (error) {
       this.logger.error(error);
-      throw new UnprocessableEntityException(
+      throw new InternalServerErrorException(
         'Related Items could not be retrieved',
       );
     }
