@@ -14,7 +14,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { PaginatedResponse } from '../shared/paginated-result';
+import { PaginatedResponse } from '../shared/interfaces/paginated-result';
 import { ItemStatistics } from './interfaces/item-statistics';
 import { QueryItemListDto } from './interfaces/query-item-list.dto';
 import { QueryItemRelatedDto } from './interfaces/query-item-related.dto';

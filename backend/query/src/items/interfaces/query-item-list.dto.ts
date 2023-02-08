@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
-import { QueryTagsAndPage } from '../../shared/queryTagsAndPage';
+import { QueryTagsAndPage } from '../../shared/interfaces/queryTagsAndPage';
 import { ItemSortEnum } from './item-sort-enum';
 
 export class QueryItemListDto extends QueryTagsAndPage {
