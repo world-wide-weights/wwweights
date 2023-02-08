@@ -1,6 +1,5 @@
 import { InjectModel } from '@m8a/nestjs-typegoose';
-import { Logger } from '@nestjs/common';
-import { UnprocessableEntityException } from '@nestjs/common/exceptions/unprocessable-entity.exception';
+import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { Item } from '../../models/item.model';
@@ -76,7 +75,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       this.logger.log(`Item inserted:  ${insertedItem.slug}`);
     } catch (error) {
       this.logger.error(`Insert Item: ${error}`);
-      throw new UnprocessableEntityException("Couldn't insert item");
+      throw new InternalServerErrorException("Couldn't insert item");
     }
   }
 
@@ -122,24 +121,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
     }
   }
 
-  // DB calls: 1 updateMany
-  // async incrementOtherItemTagCounts(item: Item) {
-  //   try {
-  //     const tagsArray = item.tags.map((tag) => tag.name);
-  //     const res = await this.itemModel.updateMany(
-  //       { 'tags.name': { $in: tagsArray }, slug: { $ne: item.slug } },
-  //       { $inc: { 'tags.$.count': 1 } },
-  //     );
-  //     this.logger.log(`Items updated: ${getStringified(res)}`);
-  //     this.logger.log(
-  //       `Item count incremented for tags in items, tag: ${tagsArray}`,
-  //     );
-  //   } catch (error) {
-  //     this.logger.error(`Update Item.tags counts: ${error}`);
-  //   }
-  // }
-
-  // DB Calls: 1 insertMany, 1 updateMany
+  // DB Calls: 1 insertMany, 1 aggregate
   async upsertItemIntoItemsByTag(item: Item) {
     try {
       // await this.itemsByTagModel.bulkWrite(tagsArray);
@@ -156,11 +138,10 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
 
     try {
       // $lookup is not available on updateMany yet, so we have to use an aggregate
-      const tagsNames = item.tags.map((tag) => tag.name);
-      // TODO: Consider a bulkwrite to concat the two underlying calls this.itemsByTagModel.bulkWrite([]);
+      const tagNames = item.tags.map((tag) => tag.name);
       await this.itemsByTagModel.aggregate([
         {
-          $match: { tagName: { $in: tagsNames } },
+          $match: { tagName: { $in: tagNames } },
         },
         {
           $lookup: {
@@ -178,6 +159,10 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       ]);
     } catch (error) {
       this.logger.error(`Insert item to ItemsByTag: ${error}`);
+      // TODO: Theoretically we should spawn a saga here to fix things, but this error is ultimately unlikely
+      throw new InternalServerErrorException(
+        "Couldn't insert item to ItemsByTag",
+      );
     }
   }
 }
