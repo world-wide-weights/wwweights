@@ -10,14 +10,14 @@ declare module "next-auth" {
      */
     interface Session {
         user: UserInfo
+        error?: string
         accessToken: string
         expires: Date
     }
-
     // Auth Response
     interface User {
-        accessToken: string,
-        user: UserInfo
+        access_token: string
+        refresh_token: string
     }
 
     interface Account { }
@@ -28,12 +28,16 @@ declare module "next-auth" {
 declare module "next-auth/jwt" {
     interface JWT {
         accessToken: string
+        refreshToken: string
         user: {
-            accessToken: string
-            user: UserInfo
-        },
-        iat: number,
-        exp: number,
-        jti: string
+            username: string
+            id: number
+            email: string
+            status: string
+            role: string
+            iat: number
+            exp: number
+        }
+        error?: string
     }
 }

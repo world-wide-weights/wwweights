@@ -3,11 +3,14 @@ import { JWT } from "next-auth/jwt"
 import NextAuth from "next-auth/next"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { authRequest } from "../../../services/axios/axios"
+import { parseJwt } from "../../../services/utils/jwt"
 
 export type UserInfo = {
+    id: number
     email: string
     username: string
-    slug: 1 // TODO (Zoe-Bot): Adjust type when correct api implemented
+    status: string
+    role: string
 }
 
 export const authOptions: NextAuthOptions = {
@@ -26,7 +29,6 @@ export const authOptions: NextAuthOptions = {
                 },
             },
             authorize: async (credentials) => {
-                // TODO (Zoe-Bot): Maybe add csrf token?
                 // Login to our api
                 const response = await authRequest.post<User>("/login", {
                     email: credentials!.email,
@@ -49,18 +51,31 @@ export const authOptions: NextAuthOptions = {
     callbacks: {
         jwt: async ({ token, user }: { token: JWT, user?: User }) => {
             if (user) {
-                // Add accessToken and user information to the token
-                token.accessToken = user.accessToken
-                token.user = user
+                // Parse jwt to get payload
+                const parsedToken = parseJwt(user.access_token)
+                let refreshedTokens
+
+                // Refresh token when expired
+                if (Date.now() >= parsedToken.exp * 1000) {
+                    console.log("refreshing token")
+                    refreshedTokens = await refreshAccessToken(user.access_token)
+                }
+
+                // Add access token and user information to the token
+                token.accessToken = refreshedTokens?.accessToken ?? user.access_token
+                token.user = parsedToken
             }
 
             // This will be forwarded to the session callback
             return token
         },
         session: async ({ session, token }: { session: Session, token: JWT }) => {
-            // Add accessToken and user to session
+            const { iat, exp, ...user } = token.user
+
+            // Add access token, refresh token and user to session
             session.accessToken = token.accessToken
-            session.user = token.user.user
+            session.user = user
+            session.error = token.error
 
             // Send properties to the client
             return session
@@ -69,6 +84,36 @@ export const authOptions: NextAuthOptions = {
     pages: {
         signIn: "/account/login",
     },
+}
+
+/**
+* Takes a token, and returns a new token with updated `accessToken` and `accessTokenExpires`. If an error occurs, returns the old token and an error property
+* @param token The token which we want to refresh.
+*/
+async function refreshAccessToken(token: string) {
+    try {
+        const refreshedTokens = await authRequest.post<{ access_token: string, refresh_token: string }>("/refresh", {}, {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        })
+
+        if (!(refreshedTokens.status === 200)) {
+            throw refreshedTokens
+        }
+
+        return {
+            accessToken: refreshedTokens.data.access_token,
+            refreshToken: refreshedTokens.data.refresh_token ?? token, // Fall back to old refresh token
+        }
+    } catch (error) {
+        console.log(error)
+
+        return {
+            refreshToken: token,
+            error: "RefreshAccessTokenError",
+        }
+    }
 }
 
 export default NextAuth(authOptions)

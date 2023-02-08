@@ -12,7 +12,8 @@ import { Tab } from "../../components/Tabs/Tab"
 import { Tabs } from "../../components/Tabs/Tabs"
 import { queryRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
-import { calculateMedianWeight, generateWeightString } from "../../services/utils/weight"
+import { calculateMedianWeight } from "../../services/utils/weight"
+import { renderUnitIntoString } from "../../services/unit/unitRenderer"
 import { Item, PaginatedResponse } from "../../types/item"
 import Custom404 from "../404"
 
@@ -42,8 +43,8 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
     }]
     const currentTabIndex = singleWeightTabs.findIndex(singleWeightTab => singleWeightTab.slug === currentTab)
 
-    // Strings Generator
-    const weightString = generateWeightString(item.weight)
+    // Strings + Unit Generator
+    const weightString = renderUnitIntoString(item.weight)
     const sourceName = item.source ? new URL(item.source).hostname.replace("www.", "") : null
 
     // Throw error when tab does not exist.

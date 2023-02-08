@@ -14,8 +14,8 @@ describe("Register", () => {
             cy.dataCy("textinput-username-input").type("Hello")
             cy.dataCy("textinput-password-input").type("12345678")
 
-            // Mock register
-            cy.intercept("POST", `${apiBaseUrl}/register`, {
+            // Mock register //TODO (Zoe-Bot): update when renamed
+            cy.intercept("POST", `${apiBaseUrl}/signup`, {
                 fixture: "authentication/register.json"
             }).as("mockRegister")
 
@@ -34,6 +34,17 @@ describe("Register", () => {
 
             // Check redirect
             cy.url().should("include", routes.home)
+        })
+    })
+
+    describe("check password text-field", () => {
+        it("should hide password", () => {
+            cy.dataCy("textinput-password-input").should("have.attr", "type", "password")
+        })
+
+        it("should show password", () => {
+            cy.dataCy("text-input-icon-password").click()
+            cy.dataCy("textinput-password-input").should("have.attr", "type", "text")
         })
     })
 })

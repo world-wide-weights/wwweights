@@ -28,6 +28,7 @@ const Register: NextPageCustomProps = () => {
     const callbackUrl = useMemo(() => typeof router.query.callbackUrl == "string" ? router.query.callbackUrl : router.query.callbackUrl?.[0] ?? null, [router])
 
     // Local State
+    const [isPasswordEyeOpen, setIsPasswordEyeOpen] = useState<boolean>(false)
     const [error, setError] = useState("")
 
     // Formik Form Initial Values
@@ -51,14 +52,14 @@ const Register: NextPageCustomProps = () => {
     const onFormSubmit = async ({ username, email, password }: RegisterDto) => {
         // Register in our backend
         try {
-            await authRequest.post<User>("/register", {
+            await authRequest.post<User>("/signup", {
                 username,
                 email,
                 password
             })
         } catch (error) {
             // If something went wrong when register backend set Error
-            axios.isAxiosError(error) && error.response ? setError(error.response.data) : setError("Netzwerk-Zeitüberschreitung")
+            axios.isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Netzwerk-Zeitüberschreitung")
             return
         }
 
@@ -92,7 +93,7 @@ const Register: NextPageCustomProps = () => {
                 <Form className="mb-5 lg:mb-10">
                     <TextInput name="email" labelText="E-Mail" placeholder="E-Mail" />
                     <TextInput name="username" labelText="Username" placeholder="Username" />
-                    <TextInput name="password" labelText="Password" placeholder="Password" />
+                    <TextInput type={isPasswordEyeOpen ? "text" : "password"} name="password" labelText="Password" placeholder="Password" icon={isPasswordEyeOpen ? "visibility" : "visibility_off"} iconOnClick={() => setIsPasswordEyeOpen(!isPasswordEyeOpen)} />
 
                     <Button datacy="register-button" type="submit" disabled={!(dirty && isValid)} className="md:mt-8">Register</Button>
                 </Form>
