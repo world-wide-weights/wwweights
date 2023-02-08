@@ -127,11 +127,10 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async (context)
 		getServerSession(context.req, context.res, authOptions)
 	])
 	const items = response.data.data
-
+	console.log("session start", session, "session end")
 	return {
 		props: {
-			items,
-			session
+			items
 		}
 	}
 }
