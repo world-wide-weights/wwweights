@@ -30,7 +30,12 @@ export const authOptions: NextAuthOptions = {
                 },
             },
             authorize: async (credentials, req) => {
-                console.log("authorize", credentials, req)
+                console.log({
+                    id: "nextauth authorize",
+                    data: {
+                        credentials, req
+                    },
+                })
                 // Login to our api
                 const response = await authRequest.post<User>("/auth/login", {
                     email: credentials!.email,
@@ -51,7 +56,12 @@ export const authOptions: NextAuthOptions = {
     secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
         jwt: async ({ token, user }: { token: JWT, user?: User }) => {
-            console.log("jwt", token, user)
+            console.log({
+                id: "nextauth jwt",
+                data: {
+                    token, user
+                },
+            })
             if (user) {
                 // Parse jwt to get payload
                 const parsedToken = parseJwt(user.access_token)
@@ -72,7 +82,12 @@ export const authOptions: NextAuthOptions = {
             return token
         },
         session: async ({ session, token }: { session: Session, token: JWT }) => {
-            console.log("session", session, token)
+            console.log({
+                id: "nextauth session",
+                data: {
+                    session, token
+                },
+            })
             const { iat, exp, ...user } = token.user
 
             // Add access token, refresh token and user to session
