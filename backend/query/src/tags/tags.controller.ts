@@ -9,8 +9,8 @@ import {
 } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { getStringified } from '../shared/get-stringified';
-import { PaginatedResponse } from '../shared/paginated-result';
+import { getStringified } from '../shared/functions/get-stringified';
+import { PaginatedResponse } from '../shared/interfaces/paginated-result';
 import { QueryTagListDto } from './interfaces/query-tag-list.dto';
 import { QueryTagRelatedDto } from './interfaces/query-tag-related.dto';
 import { TagWithRelevance } from './models/tag-with-relevance';
