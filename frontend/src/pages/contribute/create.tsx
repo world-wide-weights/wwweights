@@ -2,7 +2,6 @@ import { Form, Formik, FormikProps } from "formik"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import * as yup from "yup"
-import { RouterBreadcrumb } from "../../components/Breadcrumb/RouterBreadcrumb"
 import { Button } from "../../components/Button/Button"
 import { IconButton } from "../../components/Button/IconButton"
 import { FormError } from "../../components/Errors/FormError"
@@ -143,9 +142,6 @@ const Create: NextPageCustomProps = () => {
         />
 
         <main className="container mt-5">
-            {/* Breadcrumb */}
-            <RouterBreadcrumb />
-
             {/* Headline */}
             <Headline>Create new item</Headline>
 
@@ -156,10 +152,6 @@ const Create: NextPageCustomProps = () => {
                         {/*** General Information ***/}
                         <div className="bg-white rounded-lg p-6 mb-4">
                             <div className="lg:w-3/4 2xl:w-1/2">
-                                {/* General Information Header */}
-                                <Headline level={3} hasMargin={false}>General Information</Headline>
-                                <p className="mb-4">Give us some general info about the item so. These ones are needed for contribution. If this is approved by us it will be listed public.</p>
-
                                 {/* Name */}
                                 <TextInput name="name" labelText="Name" labelRequired placeholder="elephant" />
 

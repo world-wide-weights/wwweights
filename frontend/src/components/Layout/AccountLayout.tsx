@@ -35,7 +35,7 @@ export const AccountLayout: React.FC<AccountLayoutProps> = ({ page, headline, de
                     <Link href={routes.home}>
                         <Image src={logo} alt="Logo" className="min-w-[40px] w-[40px] mb-12 lg:mb-14" />
                     </Link>
-                    <Headline>{headline}</Headline>
+                    <Headline size="text-xl md:text-2xl">{headline}</Headline>
                     <p className="mb-4 lg:mb-5">{description}</p>
                     {page}
                 </main>
