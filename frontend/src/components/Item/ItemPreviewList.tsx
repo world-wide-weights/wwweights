@@ -44,7 +44,7 @@ export const ItemPreviewList: React.FC<ItemPreviewProps & { heaviestWeight: Weig
             <div className="flex justify-between items-center h-12 md:w-1/3">
                 <h5 datacy="item-name" className={`${selectedItem ? "font-bold" : "text-gray-600 font-medium"} truncate pr-3`}>{name}</h5>
                 <div className="min-w-[48px] w-[48px]">
-                    {imageUrl && <Image className="object-cover rounded-lg w-12 h-12 md:mr-5" alt={`Image of ${name}`} src={imageUrl} width={96} height={96} />}
+                    {imageUrl && <Image datacy="item-image" className="object-cover rounded-lg w-12 h-12 md:mr-5" alt={`Image of ${name}`} src={imageUrl} width={96} height={96} />}
                 </div>
             </div>
             <div className={`flex items-center ${hasDifference && selectedItem ? "justify-end" : ""} md:w-2/3`}>

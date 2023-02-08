@@ -3,7 +3,7 @@ import "../../styles/global.css"
 import { ItemPreviewList } from "./ItemPreviewList"
 
 describe("ItemPreviewList", () => {
-    describe("should display item preview list correct", () => {
+    describe("should display item preview list", () => {
         beforeEach(() => {
             cy.mount(<ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} heaviestWeight={{ value: 100, isCa: false }} imageUrl="https://via.placeholder.com/96.png" datacy="item-preview-list" />)
         })
@@ -14,6 +14,14 @@ describe("ItemPreviewList", () => {
 
         it("should display item name", () => {
             cy.dataCy("item-name").should("have.text", "Smartphone")
+        })
+
+        it("should display item weight", () => {
+            cy.dataCy("item-weight").should("have.text", "100 g")
+        })
+
+        it("should display item image", () => {
+            cy.dataCy("item-image").should("be.visible")
         })
 
         it("should not display weight difference", () => {
