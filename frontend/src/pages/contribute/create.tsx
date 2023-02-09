@@ -88,7 +88,7 @@ const Create: NextPageCustomProps = () => {
         unit: yup.mixed().oneOf(["g", "kg", "t"]),
         valueType: yup.mixed().oneOf(["exact", "additional"]),
         additionalValue: yup.number().when("valueType", {
-            is: "additional",
+            is: "range",
             then: yup.number().required("Additional value is required.").moreThan(yup.ref("weight"), "Additional value must be greater than weight.")
         }),
         isCa: yup.array(),
