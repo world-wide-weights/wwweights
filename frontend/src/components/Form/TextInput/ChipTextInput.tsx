@@ -1,7 +1,7 @@
 import React from "react"
 
 type ChipTextInputProps = {
-  /** Gives the input a unique name */
+  /** Array of chips in textfield */
   chips: string[]
 }
 
@@ -20,9 +20,9 @@ export const ChipTextInput: React.FC<ChipTextInputProps> = ({ chips }) => {
     }
   }
   return (
-    <div className=" h-12 flex items-center justify-center bg-gray-100">
-      <div className="flex items-center flex-wrap min-h-3 w-96 pr-2 border-solid rounded-md">
-        <ul className="flex flex-wrap p-0 mt-2 ">
+    <div className="flex bg-gray-100 rounded-lg focus:border focus:border-blue-500">
+      <div className="flex flex-wrap pr-4 border-solid focus:border focus:border-blue-500 pl-4">
+        <ul className="flex flex-wrap mt-2">
           {tags.map((tag, index) => (
             <li key={index} className=" w-auto h-8 flex items-center content-center text-blue-600 pl-2 pr-2 text-sm list-none rounded-full mr-2 mb-2 bg-blue-500 bg-opacity-20">
               <span className="mt-0.5">{tag}</span>
@@ -36,8 +36,8 @@ export const ChipTextInput: React.FC<ChipTextInputProps> = ({ chips }) => {
           ))}
         </ul>
         <input
-          className="flex-1 border-none h-12 text-sm pt-1 text-gray-500 bg-gray-100"
-          type="text"
+          className="flex-1 focus:border-none h-12 pr-2 text-base text-gray-500 bg-gray-100"
+          type=""
           onKeyUp={addTags}
           placeholder="Press enter to add tags"
         />
