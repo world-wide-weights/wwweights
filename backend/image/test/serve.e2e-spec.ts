@@ -17,9 +17,6 @@ describe('Image serve e2e', () => {
 
   beforeAll(async () => {
     await emptyDir(diskPath);
-  });
-
-  beforeEach(async () => {
     // Use normal nestjs application because nestjs
     // https://github.com/nestjs/serve-static/issues/240#issuecomment-648100347
     app = await NestFactory.create(AppModule);
@@ -27,6 +24,10 @@ describe('Image serve e2e', () => {
     app.useLogger(new EmptyLogger());
     await app.init();
   });
+  
+  afterEach(async ()=> {
+    await emptyDir(diskPath);
+  })
 
   afterAll(async () => {
     await emptyDir(diskPath);

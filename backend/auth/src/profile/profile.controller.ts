@@ -24,7 +24,6 @@ import { ProfileService } from './profile.service';
 
 @Controller('profile')
 @UseInterceptors(ClassSerializerInterceptor)
-@ApiTags()
 @SerializeOptions({ strategy: 'excludeAll' })
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) { }
