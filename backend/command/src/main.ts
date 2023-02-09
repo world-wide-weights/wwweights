@@ -20,6 +20,7 @@ async function bootstrap() {
       .setTitle('World Wide Weights - Command API')
       .setDescription('The wwweights Api overview')
       .setVersion('0.1')
+      .addBearerAuth()
       .build();
     const document = SwaggerModule.createDocument(app, config, {
       ignoreGlobalPrefix: false,

@@ -5,18 +5,23 @@ import {
   HttpStatus,
   Logger,
   Post,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
   ApiConflictResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../shared/guards/jwt.guard';
 import { InsertItemCommand } from './commands/insert-item.command';
 import { InsertItemDto } from './interfaces/insert-item.dto';
+import { JwtWithUserDto } from './interfaces/request-with-user.dto';
 
 @Controller()
 @ApiTags()
@@ -40,8 +45,13 @@ export class ItemsController {
     status: HttpStatus.BAD_REQUEST,
     description: 'Invalid request. Data validation failed.',
   })
+  @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)
-  async insertItem(@Body() insertItemDto: InsertItemDto) {
-    await this.commandBus.execute(new InsertItemCommand(insertItemDto));
+  @UseGuards(JwtAuthGuard)
+  async insertItem(
+    @Req() { user }: JwtWithUserDto,
+    @Body() insertItemDto: InsertItemDto,
+  ) {
+    await this.commandBus.execute(new InsertItemCommand(insertItemDto, user));
   }
 }
