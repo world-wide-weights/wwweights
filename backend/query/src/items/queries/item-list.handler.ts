@@ -22,7 +22,13 @@ export class ItemListHandler implements IQueryHandler<ItemListQuery> {
     try {
       // We currently also run textSearch on tags, optimizing via itemsByTags is a TODO
       const sort = getSort(dto.sort, (dto.query || dto.tags) && !dto.slug);
-      const filter = getFilter(dto.query, dto.tags, dto.slug);
+      const filter = getFilter(
+        dto.query,
+        dto.tags,
+        dto.slug,
+        dto.hasimage,
+        dto.userid,
+      );
 
       // TODO: Query through itemsByTags if tags are listed
       const itemListWithCount = await this.itemModel.aggregate<
