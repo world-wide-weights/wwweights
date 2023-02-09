@@ -1,4 +1,5 @@
 import axios from "axios"
+import BigNumber from "bignumber.js"
 import { Form, Formik, FormikProps } from "formik"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/router"
@@ -18,14 +19,14 @@ import { Seo } from "../../components/Seo/Seo"
 import { Tooltip } from "../../components/Tooltip/Tooltip"
 import { commandRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
-import { getWeightInG } from "../../services/utils/unit"
+import { convertAnyWeightIntoGram } from "../../services/unit/unitConverter"
 import { Weight } from "../../types/item"
 import { NextPageCustomProps } from "../_app"
 
 type CreateItemForm = {
     name: string
     weight: number | string
-    unit: "g" | "kg" | "t" // TODO (Zoe-Bot): define units
+    unit: "g" | "kg" | "T" // TODO (Zoe-Bot): define units
     additionalValue?: number | string
     isCa: boolean[]
     valueType: "exact" | "additional"
@@ -51,8 +52,8 @@ const unitTypeDropdownOptions = [
         value: "kg",
         label: "kg",
     }, {
-        value: "t",
-        label: "t",
+        value: "T",
+        label: "T",
     },
 ]
 
@@ -83,7 +84,7 @@ const Create: NextPageCustomProps = () => {
     // Formik Form Validation
     const validationSchema: yup.SchemaOf<CreateItemForm> = yup.object().shape({
         name: yup.string().required("Name is required."),
-        weight: yup.string().required("Weight is required."),
+        weight: yup.number().required("Weight is required."),
         unit: yup.mixed().oneOf(["g", "kg", "t"]),
         valueType: yup.mixed().oneOf(["exact", "additional"]),
         additionalValue: yup.number().when("valueType", {
@@ -101,23 +102,20 @@ const Create: NextPageCustomProps = () => {
      * @param values input from form
      */
     const onFormSubmit = async ({ name, weight, unit, additionalValue, valueType, isCa, source, image, tags }: CreateItemForm) => {
-        // Prepare weight in g
-        const weightNumber = parseInt(weight as string)
-        const valueInG = getWeightInG(weightNumber, unit)
+        // Convert weight in g
+        weight = convertAnyWeightIntoGram(new BigNumber(weight), unit).toNumber()
 
-        // Prepare additionalValue in g
-        if (additionalValue !== "") {
-            const additionalValueNumber = parseInt(additionalValue as string)
-            additionalValue = getWeightInG(additionalValueNumber, unit)
-        }
+        // Convert additionalValue in g
+        additionalValue = additionalValue ? convertAnyWeightIntoGram(new BigNumber(additionalValue), unit).toNumber() : undefined
 
         // Prepare item data
         const item: CreateItemDto = {
             name,
             weight: {
-                value: valueInG,
+                value: weight,
                 isCa: isCa[0],
-                ...(additionalValue && (valueType === "additional") ? { additionalValue } : {}) // Only add additionalValue when defined and value type is additional
+                // Only add additionalValue when defined and value type is additional
+                ...(additionalValue && (valueType === "additional") ? { additionalValue } : {})
             },
             ...(image !== "" ? { image } : {}), // Only add image when defined
             ...(source !== "" ? { source } : {}), // Only add source when defined

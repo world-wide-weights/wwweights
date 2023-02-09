@@ -5,6 +5,7 @@ import { UploadModule } from './upload/upload.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { pathBuilder } from './shared/helpers/file-path.helpers';
 import { ServeFileTypeMiddleware } from './serve/middlewares/serve-file-type.middleware';
+import { InternalCommunicationModule } from './internal-communication/internal-communication.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { ServeFileTypeMiddleware } from './serve/middlewares/serve-file-type.mid
       ],
       inject: [ConfigService],
     }),
+    InternalCommunicationModule,
   ],
 })
 export class AppModule {

@@ -1,17 +1,16 @@
 import {
   ClassSerializerInterceptor,
   Controller,
+  Headers,
   HttpStatus,
   ParseFilePipe,
   Post,
-  Req,
   UploadedFile,
   UseGuards,
-  UseInterceptors,
+  UseInterceptors
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../shared/guards/jwt.guard';
-import { RequestWithUser } from '../shared/interfaces/request-with-user.interface';
 import { ImageUploadResponse } from './responses/upload-image.response';
 import { UploadService } from './upload.service';
 import { FileSizeValidator } from './validators/file-size.validator';
@@ -20,13 +19,13 @@ import { FileTypeValidator } from './validators/file-type.validator';
 @Controller('upload')
 @UseInterceptors(ClassSerializerInterceptor)
 export class UploadController {
-  constructor(private readonly uploadService: UploadService) {}
+  constructor(private readonly uploadService: UploadService) { }
 
   @Post('image')
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('image'))
   async uploadImage(
-    @Req() { user }: RequestWithUser,
+    @Headers('Authorization') jwt: string,
     @UploadedFile(
       new ParseFilePipe({
         validators: [
@@ -40,6 +39,6 @@ export class UploadController {
     )
     image: Express.Multer.File,
   ): Promise<ImageUploadResponse> {
-    return await this.uploadService.handleImageUpload(user, image);
+    return await this.uploadService.handleImageUpload(jwt, image);
   }
 }
