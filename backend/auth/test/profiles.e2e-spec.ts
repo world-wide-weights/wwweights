@@ -45,7 +45,7 @@ describe('ProfilesController (e2e)', () => {
   afterEach(async () => {
     await app.close();
   });
-  describe('/profile/me', () => {
+  describe('/profile/me (GET)', () => {
     let jwtToken: string;
     let user: UserEntity;
     beforeEach(async () => {
@@ -94,7 +94,7 @@ describe('ProfilesController (e2e)', () => {
     });
   });
 
-  describe('/profile/:userId', () => {
+  describe('/profile/:userId (GET)', () => {
     let jwtToken: string;
     let user: UserEntity;
     beforeEach(async () => {
