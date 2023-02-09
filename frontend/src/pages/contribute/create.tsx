@@ -14,6 +14,7 @@ import { Headline } from "../../components/Headline/Headline"
 import { Icon } from "../../components/Icon/Icon"
 import { Seo } from "../../components/Seo/Seo"
 import { Tooltip } from "../../components/Tooltip/Tooltip"
+import { commandRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { getWeightInG } from "../../services/utils/unit"
 import { Weight } from "../../types/item"
@@ -32,7 +33,7 @@ type CreateItemForm = {
 
 type CreateItemDto = {
     name: string
-    slug: string // TODO (Zoe-Bot): remove with correct api
+    slug: string
     weight: Weight
     source?: string
     image?: string
@@ -114,15 +115,8 @@ const Create: NextPageCustomProps = () => {
             tags: tags ? tags.split(", ") : []
         }
 
-        // TODO: This will be correct implemented in other issue https://github.com/world-wide-weights/wwweights/issues/259
         // Create item with api
-        // fetch("http://localhost:3004/items", {
-        //     method: "POST",
-        //     body: JSON.stringify(item),
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //     },
-        // })
+        commandRequest.post("/items/insert", JSON.stringify(item))
 
         // Redirect to discover
         router.push(routes.weights.list())
@@ -152,7 +146,7 @@ const Create: NextPageCustomProps = () => {
                             <div className="bg-white rounded-lg p-6 mb-4">
                                 <div className="lg:w-3/4 2xl:w-1/2">
                                     {/* Name */}
-                                    <TextInput name="name" labelText="Name" labelRequired placeholder="Apple" />
+                                    <TextInput name="name" labelText="Name" labelRequired placeholder="Name of item" />
 
                                     {/* Weight */}
                                     <Label name="" labelText="Weight" labelRequired></Label>
@@ -161,21 +155,26 @@ const Create: NextPageCustomProps = () => {
                                         <CustomSelectionButton active={!isExactValue} onClick={() => setIsExactValue(false)} headline="Range Value" description="150 - 200 kg" />
                                     </div>
                                     <div className={`grid ${isExactValue ? "grid-cols-1 md:grid-cols-2" : "grid-cols-[1fr_16px_1fr] md:grid-cols-[1fr_8px_1fr_128px]"} md:gap-3`}>
+                                        {/** Exact Value **/}
                                         <div className="min-w-0">
                                             <TextInput name="weight" type="number" noError min={1} placeholder="150" />
                                         </div>
+                                        {/** Additional Value **/}
                                         {!isExactValue && <>
                                             <div className="flex justify-center items-center mb-2 md:mb-3"><Icon className="text-base text-gray-700">remove</Icon></div>
                                             <div className="min-w-0">
                                                 <TextInput type="number" min={0} name="additionalValue" placeholder="300" />
                                             </div>
                                         </>}
+                                        {/** Unit **/}
                                         <div className={`col-start-1 col-end-4 md:row-start-1 ${isExactValue ? "md:col-start-2 md:w-32" : "md:col-start-4 md:col-end-6"}`}>
                                             <Dropdown name="unit" options={unitTypeDropdownOptions} hasMargin light />
                                         </div>
                                     </div>
                                     <FormError field="weight" />
                                 </div>
+
+                                {/* Is circa */}
                                 <div className="flex items-center">
                                     <CheckboxList name="isCa" options={[{ value: true, label: "is circa" }]} />
                                     <Tooltip wrapperClassname="cursor-help" position="right" content={<>
@@ -202,19 +201,20 @@ const Create: NextPageCustomProps = () => {
 
                                 {isOpenDetails && <div className="mt-4">
                                     {/* Source */}
-                                    <TextInput name="source" labelText="Source" placeholder="https://en.wikipedia.org/wiki/Main_Page" />
+                                    <TextInput name="source" labelText="Source" placeholder="Link to source" />
 
                                     {/* TODO (Zoe-bot): Add tags design */}
                                     {/* Source */}
-                                    <TextInput name="tags" labelText="Tags" helperText="Tags seperated with commas." placeholder="animal, mammal,..." />
+                                    <TextInput name="tags" labelText="Tags" helperText="Tags seperated with commas." placeholder="Tags of item" />
 
                                     {/* TODO (Zoe-bot): Add image upload */}
                                     {/* Image */}
-                                    <TextInput name="image" labelText="Image Url" placeholder="https://picsum.photos/120" />
+                                    <TextInput name="image" labelText="Image Url" placeholder="Image of item" />
                                 </div>}
                             </div>
                         </div>
 
+                        {/*** Actions Text Mobile ***/}
                         <div className="container">
                             <p className="block sm:hidden">We will give you Feedback about the Status in the profile.</p>
                         </div>
