@@ -103,8 +103,8 @@ Cypress.Commands.add("mockCredentials", () => {
 })
 
 Cypress.Commands.add("mockCreateItem", () => {
-    cy.intercept("POST", `${apiBaseUrlCommand}/items`, {
-        url: `${clientBaseUrl}/account/login`
+    cy.intercept("POST", `${apiBaseUrlCommand}/items/insert`, {
+        statusCode: 204,
     }).as("mockCreateItem")
 })
 

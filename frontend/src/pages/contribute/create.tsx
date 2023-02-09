@@ -86,7 +86,7 @@ const Create: NextPageCustomProps = () => {
         name: yup.string().required("Name is required."),
         weight: yup.number().required("Weight is required."),
         unit: yup.mixed().oneOf(["g", "kg", "t"]),
-        valueType: yup.mixed().oneOf(["exact", "additional"]),
+        valueType: yup.mixed().oneOf(["exact", "range"]),
         additionalValue: yup.number().when("valueType", {
             is: "range",
             then: yup.number().required("Additional value is required.").moreThan(yup.ref("weight"), "Additional value must be greater than weight.")
