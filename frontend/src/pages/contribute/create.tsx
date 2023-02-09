@@ -28,6 +28,7 @@ type CreateItemForm = {
     unit: "g" | "kg" | "t" // TODO (Zoe-Bot): define units
     additionalValue?: number | string
     isCa: boolean[]
+    valueType: "exact" | "additional"
     source?: string
     image?: string
     tags?: string
@@ -61,7 +62,6 @@ const unitTypeDropdownOptions = [
 const Create: NextPageCustomProps = () => {
     // Local state
     const [isOpenDetails, setIsOpenDetails] = useState<boolean>(false)
-    const [isExactValue, setIsExactValue] = useState<boolean>(true)
     const [error, setError] = useState<string>()
 
     const { data: session } = useSession()
@@ -72,6 +72,7 @@ const Create: NextPageCustomProps = () => {
         name: "",
         weight: "",
         unit: "g",
+        valueType: "exact",
         additionalValue: "",
         isCa: [false],
         source: "",
@@ -84,7 +85,11 @@ const Create: NextPageCustomProps = () => {
         name: yup.string().required("Name is required."),
         weight: yup.string().required("Weight is required."),
         unit: yup.mixed().oneOf(["g", "kg", "t"]),
-        additionalValue: yup.string(),
+        valueType: yup.mixed().oneOf(["exact", "additional"]),
+        additionalValue: yup.number().when("valueType", {
+            is: "additional",
+            then: yup.number().required("Additional value is required.").moreThan(yup.ref("weight"), "Additional value must be greater than weight.")
+        }),
         isCa: yup.array(),
         source: yup.string(),
         image: yup.string(),
@@ -95,7 +100,7 @@ const Create: NextPageCustomProps = () => {
      * Handle submit create item.
      * @param values input from form
      */
-    const onFormSubmit = async ({ name, weight, unit, additionalValue, isCa, source, image, tags }: CreateItemForm) => {
+    const onFormSubmit = async ({ name, weight, unit, additionalValue, valueType, isCa, source, image, tags }: CreateItemForm) => {
         // Prepare weight in g
         const weightNumber = parseInt(weight as string)
         const valueInG = getWeightInG(weightNumber, unit)
@@ -112,7 +117,7 @@ const Create: NextPageCustomProps = () => {
             weight: {
                 value: valueInG,
                 isCa: isCa[0],
-                ...(additionalValue && !isExactValue ? { additionalValue } : {}) // Only add additionalValue when defined
+                ...(additionalValue && (valueType === "additional") ? { additionalValue } : {}) // Only add additionalValue when defined
             },
             ...(image !== "" ? { image } : {}), // Only add image when defined
             ...(source !== "" ? { source } : {}), // Only add source when defined
@@ -151,7 +156,7 @@ const Create: NextPageCustomProps = () => {
 
             {/* Content */}
             <Formik initialValues={initialFormValues} validationSchema={validationSchema} onSubmit={onFormSubmit}>
-                {({ dirty, isValid, errors }: FormikProps<CreateItemForm>) => (
+                {({ dirty, isValid, errors, values, setFieldValue }: FormikProps<CreateItemForm>) => (
                     <Form>
                         <div className="container">
                             {/*** General Information ***/}
@@ -163,28 +168,31 @@ const Create: NextPageCustomProps = () => {
                                     {/* Weight */}
                                     <Label name="" labelText="Weight" labelRequired></Label>
                                     <div className="grid grid-cols-2 gap-3 mb-2">
-                                        <CustomSelectionButton active={isExactValue} onClick={() => setIsExactValue(true)} headline="Exact Value" description="150 kg" />
-                                        <CustomSelectionButton active={!isExactValue} onClick={() => setIsExactValue(false)} headline="Range Value" description="150 - 200 kg" />
+                                        <CustomSelectionButton active={values.valueType === "exact"} onClick={() => setFieldValue("valueType", "exact")} headline="Exact Value" description="150 kg" />
+                                        <CustomSelectionButton active={values.valueType === "additional"} onClick={() => setFieldValue("valueType", "additional")} headline="Range Value" description="150 - 200 kg" />
                                     </div>
-                                    <div className={`grid ${isExactValue ? "grid-cols-1 md:grid-cols-2" : "grid-cols-[1fr_16px_1fr] md:grid-cols-[1fr_8px_1fr_128px]"} md:gap-3`}>
+                                    <div className={`grid ${values.valueType === "exact" ? "grid-cols-1 md:grid-cols-2" : "grid-cols-[1fr_16px_1fr] md:grid-cols-[1fr_8px_1fr_128px]"} md:gap-3`}>
                                         {/** Exact Value **/}
                                         <div className="min-w-0">
                                             <TextInput name="weight" type="number" noError min={1} placeholder="150" />
                                         </div>
                                         {/** Additional Value **/}
-                                        {!isExactValue && <>
+                                        {values.valueType === "additional" && <>
                                             <div className="flex justify-center items-center mb-2 md:mb-3"><Icon className="text-base text-gray-700">remove</Icon></div>
                                             <div className="min-w-0">
-                                                <TextInput type="number" min={0} name="additionalValue" placeholder="300" />
+                                                <TextInput type="number" min={0} noError name="additionalValue" placeholder="300" />
                                             </div>
                                         </>}
                                         {/** Unit **/}
-                                        <div className={`col-start-1 col-end-4 md:row-start-1 ${isExactValue ? "md:col-start-2 md:w-32" : "md:col-start-4 md:col-end-6"}`}>
+                                        <div className={`col-start-1 col-end-4 md:row-start-1 ${values.valueType === "exact" ? "md:col-start-2 md:w-32" : "md:col-start-4 md:col-end-6"}`}>
                                             <Dropdown name="unit" options={unitTypeDropdownOptions} hasMargin light />
                                         </div>
                                     </div>
                                     <div className="mt-[-10px]">
                                         <FormError field="weight" />
+                                    </div>
+                                    <div>
+                                        <FormError field="additionalValue" />
                                     </div>
                                 </div>
 
