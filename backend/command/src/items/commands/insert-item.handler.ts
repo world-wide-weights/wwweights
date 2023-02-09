@@ -1,15 +1,15 @@
 import {
   ConflictException,
   HttpException,
+  InternalServerErrorException,
   Logger,
-  UnprocessableEntityException,
 } from '@nestjs/common';
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { ALLOWED_EVENT_ENTITIES } from '../../eventstore/enums/allowedEntities.enum';
 import { EventStore } from '../../eventstore/eventstore';
 import { Item } from '../../models/item.model';
 import { Tag } from '../../models/tag.model';
-import { getSlug } from '../../shared/get-slug';
+import { getSlug } from '../../shared/functions/get-slug';
 import { ItemInsertedEvent } from '../events/item-inserted.event';
 import { InsertItemCommand } from './insert-item.command';
 
@@ -26,7 +26,7 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
     try {
       const newItem = new Item({
         ...insertItemDto,
-        slug: getSlug(insertItemDto.name, '-'),
+        slug: getSlug(insertItemDto.name),
         tags: insertItemDto.tags?.map(
           (tag) => new Tag({ name: getSlug(tag, ' ') }),
         ),
@@ -54,7 +54,7 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
         throw error;
       }
       this.logger.error(error);
-      throw new UnprocessableEntityException('Item could not be inserted');
+      throw new InternalServerErrorException('Item could not be inserted');
     }
   }
 }

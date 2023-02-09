@@ -51,6 +51,7 @@ export const items = [
       },
     ],
     user: 'mc',
+    createdAt: 1674412369090,
   },
   {
     _id: '63cd54ad24dd59ab4088faf7',
@@ -2378,3 +2379,10 @@ export const items = [
     user: 'mc',
   },
 ];
+
+export const itemsTagCount = () => {
+  const tagNames = items.map((item) => item.tags.map((tag) => tag.name)).flat();
+
+  const tagNameSet = new Set(tagNames);
+  return tagNameSet.size;
+};
