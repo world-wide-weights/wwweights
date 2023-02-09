@@ -28,6 +28,7 @@ import { LoginDTO } from './dtos/login.dto';
 import { SignUpDTO } from './dtos/signup.dto';
 import { RefreshTokenGuard } from './guards/refresh-token.guard';
 import { RequestWithRefreshPayload } from './interfaces/request-with-refresh-payload.interface';
+import { AuthStatisticsResponse } from './responses/auth-statistics.response';
 import { JWKSResponse } from './responses/jwks.response';
 import { TokenResponse } from './responses/token.response';
 
@@ -104,5 +105,17 @@ export class AuthController {
   @ApiOkResponse({ type: JWKSResponse })
   getJWKSInfo() {
     return new JWKSResponse({ keys: [this.authService.getJWKSPayload()] });
+  }
+
+  @Get('statistics')
+  @ApiOperation({ description: 'Get auth statistics' })
+  @ApiOkResponse({
+    description: 'Returned statistics',
+    type: AuthStatisticsResponse,
+  })
+  async getAuthStatistics(): Promise<AuthStatisticsResponse> {
+    return new AuthStatisticsResponse(
+      await this.authService.getAuthStatistics(),
+    );
   }
 }

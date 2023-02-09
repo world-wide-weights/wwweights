@@ -92,4 +92,10 @@ export class UserService {
   async getCurrentDbTime(): Promise<{ now: string }> {
     return (await this.userEntity.query('SELECT NOW()::timestamptz'))[0];
   }
+  /**
+   * @description Get the total amount of registered users in DB
+   */
+  async getUserCount(): Promise<number> {
+    return await this.userEntity.count();
+  }
 }
