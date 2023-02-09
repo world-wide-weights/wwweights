@@ -43,6 +43,7 @@ services:
       - JWT_PRIVATE_KEY=${AUTH_JWT_PRIVATE_KEY:-"-----BEGIN RSA PRIVATE KEY-----\nMIICXQIBAAKBgQC7yxELYntkuLIDSGBFEnSaVZtJgKqmFA7/97Z+6c2GAwGxE3Pd\ngUYei30Adg6jg9xIxFDVUNwwh5KsOc3ALcP7GZxewGH2ok8wSSsMzrDO4oFAohRl\nXsSKd69B0SvBSMz1Xl5T6xlIC9fTBatGDpTFSD9FQBeoxgGzka0+wD+44wIDAQAB\nAoGBAJXwylgjttAx4/hZBnzAApfjuExUzmwyYdOgjncA6NeSePxQwtdeS4VB7Hm8\nyW1ncDAthzj7CgQ5izO2J4DFSc9Kc1lH8iGP6NBWDuUjdBs9QjC5wHYmPkorBApZ\nUqRLytmq7ghqp1/0MDO7BlM0c80+7ra8JWuI5N9HseXNfVvJAkEA3qpo7ADi8HKR\nNZiH5Tw5C+m47pR+3AdPvjOMfxkDm4Xf6VVHUoC2ZK+zl2K60dmpWcXyyg8X5CVJ\n79xaq+LcNQJBANfoLo31Dp3JbDn0z0X7hYuJb3cGWzfetxrtYl6i/1viMTtdwgTq\n7FRGet8z2mpdyOuLKn8X4CQdlk+QyNeW87cCQEtLEnmjfxnRk9qsvl88swmdOeSr\nIA6lBkkJw1uDCN5BMcsEBD8YuRRo+XCaeRPW51YtAoFjAzApj8vlFmADMXUCQQDU\n2Yfz2RBky6sPY+JnirQ4QPCLdc+9v6niOP6Ob8Cxc8e3UBIzSOpdlvIRU4xS6kxm\nsdbeXspQsH57yC/IIn/3AkAvLgUC6Nhp93y4xDvbFS20KK8XcKlJroeGPzciixsY\n6Tk99M744yJIfJXvEylo1J1Ur3wvRRqj/9EN0mGje+CB\n-----END RSA PRIVATE KEY-----"}
       - JWT_PUBLIC_KEY=${AUTH_JWT_PUBLIC_KEY:-"-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC7yxELYntkuLIDSGBFEnSaVZtJ\ngKqmFA7/97Z+6c2GAwGxE3PdgUYei30Adg6jg9xIxFDVUNwwh5KsOc3ALcP7GZxe\nwGH2ok8wSSsMzrDO4oFAohRlXsSKd69B0SvBSMz1Xl5T6xlIC9fTBatGDpTFSD9F\nQBeoxgGzka0+wD+44wIDAQAB\n-----END PUBLIC KEY-----"}
       - JWT_AUTH_KID=${AUTH_JWT_AUTH_KID:-auth-base-key}
+      - API_KEYS=${AUTH_API_KEYS:-cmd,img,qry}
     links:
       - postgres:pg
 
@@ -64,6 +65,7 @@ services:
       - DB_EVENTSTORE_USE_TLS=${CMD_DB_EVENTSTORE_USE_TLS:-false}
       - JWKS_AUTH_URL=${CMD_JWKS_AUTH_URL:-http://auth:3001/auth/.well-known/jwks.json}
       - SKIP_READ_DB_REBUILD=${CMD_SKIP_READ_DB_REBUILD:-true}
+      - AUTH_API_KEY=${CMD_AUTH_API_KEY:-cmd}
     links:
       - auth-backend:auth
       - eventstore:eventstore
@@ -77,9 +79,10 @@ services:
     environment:
       - NODE_ENV=${DOCKER_NODE_ENV:-development}
       - JWKS_AUTH_URL=${IMG_JWKS_AUTH_URL:-http://auth:3001/auth/.well-known/jwks.json}
+      - AUTH_BACKEND_BASE_URL=${IMG_AUTH_BACKEND_BASE_URL:-http://auth:3001}
       - IMAGE_STORE_BASE_PATH=${IMG_IMAGE_STORE_BASE_PATH:-./disk}
       - IMAGE_STORE_INCOMING_CACHE_PATH=${IMG_IMAGE_STORE_INCOMING_CACHE_PATH:-./cache}
-    # Currently disabled as this causes an error => fs.rename does not moving files between devices
+      - AUTH_API_KEY=${IMG_AUTH_API_KEY:-img}
     volumes:
       - image_backend_volume:${IMG_IMAGE_STORE_BASE_PATH}
     links:
@@ -98,6 +101,7 @@ services:
       - DB_MONGO_PW=${QRY_DB_MONGO_PW:-mongo}
       - DB_MONGO_NAME=${QRY_DB_MONGO_NAME:-wwweights}
       - JWKS_AUTH_URL=${QRY_JWKS_AUTH_URL:-http://auth:3001/auth/.well-known/jwks.json}
+      - AUTH_API_KEY=${QRY_AUTH_API_KEY:-qry}
     links:
       - mongodb:mongo
 
