@@ -79,7 +79,7 @@ export class Item extends AggregateRoot {
 
   @Expose()
   @prop()
-  @ApiResponseProperty({ type: String, example: 123 })
+  @ApiResponseProperty({ type: Number, example: 123 })
   user: number;
 
   @Expose()
