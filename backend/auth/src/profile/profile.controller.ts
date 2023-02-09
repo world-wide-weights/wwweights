@@ -7,7 +7,7 @@ import {
   Req,
   SerializeOptions,
   UseGuards,
-  UseInterceptors,
+  UseInterceptors
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -15,7 +15,7 @@ import {
   ApiOperation,
   ApiParam,
   ApiTags,
-  ApiUnauthorizedResponse,
+  ApiUnauthorizedResponse
 } from '@nestjs/swagger';
 import { UserEntity } from '../db/entities/users.entity';
 import { JwtGuard } from '../shared/guards/jwt.guard';
@@ -24,17 +24,16 @@ import { ProfileService } from './profile.service';
 
 @Controller('profile')
 @UseInterceptors(ClassSerializerInterceptor)
-@ApiTags()
 @SerializeOptions({ strategy: 'excludeAll' })
 export class ProfileController {
-  constructor(private readonly profileService: ProfileService) {}
+  constructor(private readonly profileService: ProfileService) { }
 
   @Get('me')
   @SerializeOptions({
     groups: ['self'],
   })
   @UseGuards(JwtGuard)
-  @ApiBearerAuth('access token')
+  @ApiBearerAuth('access_token')
   @ApiOperation({
     description: 'Get own profile with confidential information',
   })

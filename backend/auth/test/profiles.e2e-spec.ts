@@ -6,7 +6,7 @@ import * as request from 'supertest';
 import { DataSource } from 'typeorm';
 import { AppModule } from '../src/app.module';
 import { AuthService } from '../src/auth/auth.service';
-import { UserService } from '../src/db/ user.service';
+import { UserService } from '../src/db/services/user.service';
 import { createUser, deleteByAttribute } from './helpers/db.helper';
 import { SAMPLE_USER } from './helpers/sample-data.helper';
 import { setupDataSource } from './helpers/typeOrmSetup';
@@ -45,7 +45,7 @@ describe('ProfilesController (e2e)', () => {
   afterEach(async () => {
     await app.close();
   });
-  describe('/profile/me', () => {
+  describe('/profile/me (GET)', () => {
     let jwtToken: string;
     let user: UserEntity;
     beforeEach(async () => {
@@ -94,7 +94,7 @@ describe('ProfilesController (e2e)', () => {
     });
   });
 
-  describe('/profile/:userId', () => {
+  describe('/profile/:userId (GET)', () => {
     let jwtToken: string;
     let user: UserEntity;
     beforeEach(async () => {

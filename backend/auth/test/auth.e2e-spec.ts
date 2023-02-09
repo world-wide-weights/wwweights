@@ -9,7 +9,7 @@ import { DataSource } from 'typeorm';
 import { AppModule } from '../src/app.module';
 import { RefreshJWTPayload } from '../src/auth/dtos/refresh-jwt-payload.dto';
 import { RsaJWK } from '../src/auth/responses/jwks.response';
-import { UserService } from '../src/db/ user.service';
+import { UserService } from '../src/db/services/user.service';
 import { JWTPayload } from '../src/shared/dtos/jwt-payload.dto';
 import { STATUS } from '../src/shared/enums/status.enum';
 import {

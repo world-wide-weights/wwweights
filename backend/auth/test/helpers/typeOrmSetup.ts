@@ -1,5 +1,6 @@
 import { newDb } from 'pg-mem';
 import { DataSource } from 'typeorm';
+import { ImageUserLookupEntity } from '../../src/db/entities/image-user-lookup.entity';
 import { UserEntity } from '../../src/db/entities/users.entity';
 
 export const setupDataSource = async () => {
@@ -22,7 +23,7 @@ export const setupDataSource = async () => {
 
   const ds: DataSource = await db.adapters.createTypeormDataSource({
     type: 'postgres',
-    entities: [UserEntity],
+    entities: [UserEntity, ImageUserLookupEntity],
     migrationsRun: false,
   });
   await ds.initialize();
