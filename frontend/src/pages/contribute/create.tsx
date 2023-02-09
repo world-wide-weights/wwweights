@@ -1,4 +1,5 @@
 import { Form, Formik, FormikProps } from "formik"
+import { useSession } from "next-auth/react"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import * as yup from "yup"
@@ -33,11 +34,11 @@ type CreateItemForm = {
 
 type CreateItemDto = {
     name: string
-    slug: string
     weight: Weight
     source?: string
     image?: string
     tags: string[]
+    user: string
 }
 
 const unitTypeDropdownOptions = [
@@ -61,6 +62,8 @@ const Create: NextPageCustomProps = () => {
     const [isOpenDetails, setIsOpenDetails] = useState<boolean>(false)
     const [isExactValue, setIsExactValue] = useState<boolean>(true)
 
+    const { data: session } = useSession()
+
     const router = useRouter()
 
     // Formik Form Initial Values
@@ -69,7 +72,7 @@ const Create: NextPageCustomProps = () => {
         weight: "",
         unit: "g",
         additionalValue: "",
-        isCa: [],
+        isCa: [false],
         source: "",
         image: "",
         tags: ""
@@ -105,18 +108,19 @@ const Create: NextPageCustomProps = () => {
         // Prepare item data
         const item: CreateItemDto = {
             name,
-            ...(source ? { source } : {}), // Only add source when defined
-            ...(image ? { image } : {}), // Only add image when defined
-            slug: name, // TODO (Zoe-Bot): remove with correct api
             weight: {
                 value: valueInG,
-                ...(additionalValue ? { additionalValue } : {}) // Only add additionalValue when defined
+                isCa: isCa[0],
+                ...(additionalValue && !isExactValue ? { additionalValue } : {}) // Only add additionalValue when defined
             },
-            tags: tags ? tags.split(", ") : []
+            ...(image !== "" ? { image } : {}), // Only add image when defined
+            ...(source !== "" ? { source } : {}), // Only add source when defined
+            tags: tags ? tags.split(",") : [],
+            user: session?.user?.username ?? ""
         }
 
         // Create item with api
-        commandRequest.post("/items/insert", JSON.stringify(item))
+        commandRequest.post("/items/insert", item)
 
         // Redirect to discover
         router.push(routes.weights.list())
