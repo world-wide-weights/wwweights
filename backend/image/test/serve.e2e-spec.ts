@@ -1,16 +1,17 @@
 import { HttpStatus } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { Test, TestingModule } from '@nestjs/testing';
-import * as dotenv from 'dotenv';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { pathBuilder } from '../src/shared/helpers/file-path.helpers';
-import { JwtStrategy } from '../src/shared/strategies/jwt.strategy';
 import { copyTestFile, emptyDir } from './helpers/file.helper';
+import { EmptyLogger } from './mocks/logger.mock';
+jest.mock('jwks-rsa', () => ({
+  passportJwtSecret: () => {
+    return () => 'abc';
+  },
+}));
 
 describe('Image serve e2e', () => {
-  dotenv.config();
   let app;
   const diskPath = pathBuilder(process.env.IMAGE_STORE_BASE_PATH, 'disk');
 
@@ -19,17 +20,11 @@ describe('Image serve e2e', () => {
   });
 
   beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    })
-      .overrideProvider(ConfigModule)
-      .useValue(ConfigModule.forRoot({ isGlobal: true, ignoreEnvFile: true }))
-      .overrideProvider(JwtStrategy)
-      .useValue(null)
-      .compile();
     // Use normal nestjs application because nestjs
     // https://github.com/nestjs/serve-static/issues/240#issuecomment-648100347
-    app = await NestFactory.create(moduleFixture);
+    app = await NestFactory.create(AppModule);
+    // Make logger shut up
+    app.useLogger(new EmptyLogger());
     await app.init();
   });
 

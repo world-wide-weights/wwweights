@@ -13,6 +13,7 @@ import { UploadService } from '../src/upload/upload.service';
 import { emptyDir } from './helpers/file.helper';
 import { HttpServiceMock } from './mocks/http-service.mock';
 import { FakeAuthGuardFactory } from './mocks/jwt-guard.mock';
+import { EmptyLogger } from './mocks/logger.mock';
 
 describe('UploadController (e2e)', () => {
   let app: INestApplication;
@@ -37,6 +38,7 @@ describe('UploadController (e2e)', () => {
       .compile();
     app = moduleFixture.createNestApplication();
     uploadService = app.get<UploadService>(UploadService);
+    app.useLogger(new EmptyLogger());
     await app.init();
     fakeGuard.setAuthResponse(true);
     await emptyDir(pathBuilder(undefined, 'disk'));
