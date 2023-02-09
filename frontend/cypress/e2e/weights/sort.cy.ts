@@ -1,38 +1,43 @@
 import { routes } from "../../../src/services/routes/routes"
-import items from "../../fixtures/items/list.json"
+import paginatedItems from "../../fixtures/items/list.json"
 
-// TODO (Zoe-Bot): Update when correct api implemented  
-const SORT_TYPE = "desc"
+const SORT_TYPE = "heaviest"
 
 describe("Sort /weights", () => {
     beforeEach(() => {
-        cy.mockWeightsPage()
+        cy.mockDiscoverPage()
 
         cy.visitLocalPage(routes.weights.list())
         cy.wait("@mockGetRelatedTags")
+    })
 
+    it("should initial sort by relevance", () => {
+        cy.dataCy("sort-dropdown-button").should("contain", "Relevance")
+    })
+
+    it("should change url with sort when change sort option", () => {
         // open dropdown
         cy.dataCy("sort-dropdown-button").click()
 
         // Click sort type
         cy.dataCy(`sort-dropdown-option-${SORT_TYPE}`).click()
-    })
 
-    it.skip("should initial sort by relevance", () => {
-        // TODO (Zoe-Bot): Test when correct api implemented  
-    })
-
-    it("should change url with sort when change sort option", () => {
         // Check sort type via url
         cy.url().should("include", `sort=${SORT_TYPE}`)
     })
 
     it("should keep sort in url when search for something", () => {
+        // open dropdown
+        cy.dataCy("sort-dropdown-button").click()
+
+        // Click sort type
+        cy.dataCy(`sort-dropdown-option-${SORT_TYPE}`).click()
+
         // WARNING this is hotfix for the bug related to the next router
         cy.wait(1000)
 
         // Search something
-        cy.dataCy("search").type(items[0].tags[0].slug)
+        cy.dataCy("search").type(paginatedItems.data[0].name)
         cy.dataCy("text-input-icon-query").click()
 
         // WARNING HERE is a bug in the software

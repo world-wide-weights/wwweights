@@ -1,0 +1,178 @@
+{
+    "total": 296,
+    "page": 1,
+    "limit": 16,
+    "data": [
+        {
+            "name": "ZTE A261",
+            "slug": "zte-a261",
+            "weight": {
+                "value": 75
+            },
+            "tags": [],
+            "image": "https://fdn2.gsmarena.com/vv/bigpic/ZTE-A261.jpg",
+            "user": "mc",
+            "createdAt": 1674596008774
+        },
+        {
+            "name": "ZTE Amigo",
+            "slug": "zte-amigo",
+            "weight": {
+                "value": 120
+            },
+            "tags": [],
+            "user": "mc",
+            "createdAt": 1674596003817
+        },
+        {
+            "name": "ZTE Avail",
+            "slug": "zte-avail",
+            "weight": {
+                "value": 127
+            },
+            "tags": [],
+            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-avail.jpg",
+            "user": "mc",
+            "createdAt": 1674596002648
+        },
+        {
+            "name": "ZTE Axon",
+            "slug": "zte-axon",
+            "weight": {
+                "value": 169
+            },
+            "tags": [],
+            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-axon-pro-r.jpg",
+            "user": "mc",
+            "createdAt": 1674595981637
+        },
+        {
+            "name": "ZTE Blade",
+            "slug": "zte-blade",
+            "weight": {
+                "value": 110
+            },
+            "tags": [],
+            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-blade-new.jpg",
+            "user": "mc",
+            "createdAt": 1674596004194
+        },
+        {
+            "name": "ZTE Chorus",
+            "slug": "zte-chorus",
+            "weight": {
+                "value": 105
+            },
+            "tags": [],
+            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-chorus.jpg",
+            "user": "mc",
+            "createdAt": 1674596001252
+        },
+        {
+            "name": "ZTE Director",
+            "slug": "zte-director",
+            "weight": {
+                "value": 140
+            },
+            "tags": [],
+            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-director.jpg",
+            "user": "mc",
+            "createdAt": 1674595994855
+        },
+        {
+            "name": "ZTE E811",
+            "slug": "zte-e811",
+            "weight": {
+                "value": 130
+            },
+            "tags": [],
+            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-e811.jpg",
+            "user": "mc",
+            "createdAt": 1674596007750
+        },
+        {
+            "name": "ZTE F100",
+            "slug": "zte-f100",
+            "weight": {
+                "value": 90
+            },
+            "tags": [],
+            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-f100.jpg",
+            "user": "mc",
+            "createdAt": 1674596010843
+        },
+        {
+            "name": "ZTE F101",
+            "slug": "zte-f101",
+            "weight": {
+                "value": 90
+            },
+            "tags": [],
+            "user": "mc",
+            "createdAt": 1674596010520
+        },
+        {
+            "name": "ZTE F103",
+            "slug": "zte-f103",
+            "weight": {
+                "value": 90
+            },
+            "tags": [],
+            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-f103.jpg",
+            "user": "mc",
+            "createdAt": 1674596010216
+        },
+        {
+            "name": "ZTE F107",
+            "slug": "zte-f107",
+            "weight": {
+                "value": 90
+            },
+            "tags": [],
+            "user": "mc",
+            "createdAt": 1674596006514
+        },
+        {
+            "name": "ZTE F233",
+            "slug": "zte-f233",
+            "weight": {
+                "value": 90
+            },
+            "tags": [],
+            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-f233.jpg",
+            "user": "mc",
+            "createdAt": 1674596009004
+        },
+        {
+            "name": "ZTE F600",
+            "slug": "zte-f600",
+            "weight": {
+                "value": 90
+            },
+            "tags": [],
+            "user": "mc",
+            "createdAt": 1674596010128
+        },
+        {
+            "name": "ZTE F870",
+            "slug": "zte-f870",
+            "weight": {
+                "value": 100
+            },
+            "tags": [],
+            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-f870.jpg",
+            "user": "mc",
+            "createdAt": 1674596009744
+        },
+        {
+            "name": "ZTE F928",
+            "slug": "zte-f928",
+            "weight": {
+                "value": 100
+            },
+            "tags": [],
+            "user": "mc",
+            "createdAt": 1674596009456
+        }
+    ]
+}

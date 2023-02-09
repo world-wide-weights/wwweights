@@ -1,25 +1,31 @@
 import { routes } from "../../../src/services/routes/routes"
-import singleItem from "../../fixtures/items/single.json"
+import paginatedSingleItem from "../../fixtures/items/single.json"
 
 describe("Single Weight Tabs", () => {
     describe("Routing", () => {
-        it.skip("should display overview when url without tab query", () => {
+        it("should display overview when url without tab query", () => {
             cy.mockSingleWeight()
-            cy.visitLocalPage(routes.weights.single(singleItem.slug))
+            cy.visitLocalPage(routes.weights.single(paginatedSingleItem.data[0].slug))
 
-            // TODO (Zoe-Bot): Test when overview component is there 
+            cy.wait("@mockGetRelatedTags")
+
+            cy.contains("Related Items").should("be.visible")
+            cy.contains("Compare Items").should("be.visible")
         })
 
-        it.skip("should display similar items tab when url with tab similar items", () => {
+        // This test does not work correct because of https://github.com/world-wide-weights/wwweights/issues/194
+        it.skip("should display compare when url with tab compare query", () => {
             cy.mockSingleWeight()
-            cy.visitLocalPage(routes.weights.single(singleItem.slug, { tab : "similar-items" }))
+            cy.visitLocalPage(routes.weights.single(paginatedSingleItem.data[0].slug, { tab: "compare" }))
 
-            // TODO (Zoe-Bot): Test when similar items component is there 
+            cy.wait("@mockGetRelatedTags")
+
+            cy.contains("Pencils").should("be.visible")
         })
 
         it("should display 404 when url with tab that does not exist", () => {
             cy.mockSingleWeight()
-            cy.visitLocalPage(routes.weights.single(singleItem.slug, { tab : "this-tab-does-not-exist" }))
+            cy.visitLocalPage(routes.weights.single(paginatedSingleItem.data[0].slug, { tab: "this-tab-does-not-exist" }))
 
             cy.check404()
         })

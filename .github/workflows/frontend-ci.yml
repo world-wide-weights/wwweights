@@ -4,16 +4,23 @@ on:
   push:
     paths:
       - "frontend/**"
-      - ".github/workflows/**.yml"
+      - ".github/workflows/frontend-ci.yml"
+    branches:
+      - "stable"
+      - "main"
   pull_request:
     branches: [main]
     paths:
       - "frontend/**"
-      - ".github/workflows/**.yml"
+      - ".github/workflows/frontend-ci.yml"
 
 env:
-  NEXT_PUBLIC_CLIENT_BASE_URL: http://localhost:3000
-  NEXT_PUBLIC_API_BASE_URL: http://localhost:3004
+  NEXT_PUBLIC_CLIENT_BASE_URL: http://localhost:3002
+  NEXT_PUBLIC_API_BASE_URL_MOCK: http://localhost:3008
+  NEXT_PUBLIC_API_BASE_URL_QUERY: http://localhost:3004/queries/v1
+  NEXT_PUBLIC_API_BASE_URL_COMMAND: http://localhost:3002/commands/v1
+  NEXT_PUBLIC_API_BASE_URL_AUTH: http://localhost:3001
+  NEXT_PUBLIC_API_BASE_URL_IMAGE: http://localhost:3003
 
 jobs:
   setup:
@@ -166,3 +173,15 @@ jobs:
       
       - name: push
         run: docker push ghcr.io/world-wide-weights/frontend:${{ steps.extract_branch.outputs.branch }}
+
+  redeploy:
+    if: github.ref == 'refs/heads/stable'
+    needs: docker-push
+    runs-on:  ubuntu-latest
+    env:
+      deploy_secret: ${{ secrets.DEPLOY_SECRET }}
+      webhook: ${{ secrets.FRONTEND_REDEPLOY_WEBHOOK }}
+    steps:
+      - name: trigger redeploy
+        run: |
+          curl -X GET -H "x-deploy-secret: $deploy_secret" $webhook

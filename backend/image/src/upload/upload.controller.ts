@@ -1,4 +1,5 @@
 import {
+  ClassSerializerInterceptor,
   Controller,
   Headers,
   HttpStatus,
@@ -15,8 +16,9 @@ import { FileSizeValidator } from './validators/file-size.validator';
 import { FileTypeValidator } from './validators/file-type.validator';
 
 @Controller('upload')
+@UseInterceptors(ClassSerializerInterceptor)
 export class UploadController {
-  constructor(private readonly uplooadService: UploadService) {}
+  constructor(private readonly uploadService: UploadService) {}
 
   @Post('image')
   @UseGuards(JwtAuthGuard)

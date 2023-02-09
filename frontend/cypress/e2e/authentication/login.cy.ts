@@ -21,6 +21,9 @@ describe("Login", () => {
             cy.dataCy("login-button").click()
             cy.wait("@mockCredentials")
 
+            // Mock home
+            cy.mockItemsList()
+
             // Check for redirect
             cy.url().should("eq", clientBaseUrl + routes.home)
         })

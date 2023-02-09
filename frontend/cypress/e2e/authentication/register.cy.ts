@@ -1,6 +1,6 @@
 import { routes } from "../../../src/services/routes/routes"
 
-const apiBaseUrl = Cypress.env("API_BASE_URL")
+const apiBaseUrl = Cypress.env("PUBLIC_API_BASE_URL_AUTH")
 
 describe("Register", () => {
     beforeEach(() => {
@@ -29,8 +29,22 @@ describe("Register", () => {
             cy.wait("@mockRegister")
             cy.wait("@mockCredentials")
 
+            // Mock home
+            cy.mockItemsList()
+
             // Check redirect
             cy.url().should("include", routes.home)
+        })
+    })
+
+    describe("check password text-field", () => {
+        it("should hide password", () => {
+            cy.dataCy("textinput-password-input").should("have.attr", "type", "password")
+        })
+
+        it("should show password", () => {
+            cy.dataCy("text-input-icon-password").click()
+            cy.dataCy("textinput-password-input").should("have.attr", "type", "text")
         })
     })
 })

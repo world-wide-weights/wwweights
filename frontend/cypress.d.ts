@@ -1,6 +1,6 @@
 // Code stolen from cypress docs
 // https://docs.cypress.io/api/commands/mount#Creating-a-New-cy-mount-Command
-import { mount } from "cypress/react"
+import { mount } from "cypress/react";
 
 declare global {
   namespace Cypress {
@@ -42,7 +42,7 @@ declare global {
        * - mock item statistics
        * @param itemCount count of items getting back with body
        */
-      mockWeightsPage(itemCount?: number): Chainable<void>
+      mockDiscoverPage(itemCount?: number): Chainable<void>
       /**
        * Mocks user session
        */
@@ -60,6 +60,11 @@ declare global {
        * Mock requests for single weight page.
        */
       mockSingleWeight(): Chainable<void>
+      /**
+       * Mock items list
+       * @param itemCount count of items getting back with body
+       */
+      mockItemsList(itemCount?: number): Chainable<void>
     }
   }
 }

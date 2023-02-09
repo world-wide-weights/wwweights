@@ -11,15 +11,20 @@ type SortProps = {
     query: string
 }
 
-export type SortType = "asc" | "desc" | ""
+export type SortType = "relevance" | "heaviest" | "lightest"
 
 const sortDropdownOptions = [
     {
-        value: "desc",
+        value: "relevance",
+        label: "Relevance",
+        icon: "sort"
+    },
+    {
+        value: "heaviest",
         label: "Heaviest",
         icon: "weight"
     }, {
-        value: "asc",
+        value: "lightest",
         label: "Lightest",
         icon: "eco"
     },

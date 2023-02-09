@@ -1,4 +1,6 @@
+import axios from "axios"
 import { Form, Formik } from "formik"
+import { User } from "next-auth"
 import { signIn, SignInResponse } from "next-auth/react"
 import { useRouter } from "next/router"
 import { useMemo, useState } from "react"
@@ -6,6 +8,8 @@ import * as yup from "yup"
 import { Button } from "../../components/Button/Button"
 import { TextInput } from "../../components/Form/TextInput/TextInput"
 import { AccountLayout } from "../../components/Layout/AccountLayout"
+import { Seo } from "../../components/Seo/Seo"
+import { authRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { NextPageCustomProps } from "../_app"
 
@@ -24,6 +28,7 @@ const Register: NextPageCustomProps = () => {
     const callbackUrl = useMemo(() => typeof router.query.callbackUrl == "string" ? router.query.callbackUrl : router.query.callbackUrl?.[0] ?? null, [router])
 
     // Local State
+    const [isPasswordEyeOpen, setIsPasswordEyeOpen] = useState<boolean>(false)
     const [error, setError] = useState("")
 
     // Formik Form Initial Values
@@ -45,27 +50,21 @@ const Register: NextPageCustomProps = () => {
      * @param values input from form
      */
     const onFormSubmit = async ({ username, email, password }: RegisterDto) => {
+        // Register in our backend
         try {
-            // Register in our backend
-            const registerResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/register`, {
-                method: "POST",
-                body: JSON.stringify({
-                    username,
-                    email,
-                    password
-                }),
-                headers: {
-                    "Content-Type": "application/json",
-                },
+            await authRequest.post<User>("/register", {
+                username,
+                email,
+                password
             })
-
+        } catch (error) {
             // If something went wrong when register backend set Error
-            if (!registerResponse.ok) {
-                setError(registerResponse.status + " " + registerResponse.statusText)
-                return
-            }
+            axios.isAxiosError(error) && error.response ? setError(error.response.data) : setError("Netzwerk-Zeitüberschreitung")
+            return
+        }
 
-            // When register backend was ok sign in with next auth
+        // When register backend was ok sign in with next auth
+        try {
             const response = await signIn("credentials", {
                 password,
                 email,
@@ -79,18 +78,22 @@ const Register: NextPageCustomProps = () => {
                 setError(response.error)
             }
         } catch (error) {
-            console.error(error)
+            setError("Something went wrong. Try again or come later.")
         }
     }
 
     return <>
+        <Seo
+            title="Register an account"
+            description="Register an account on World Wide Weights to start contributing items. It is free and easy. Just fill out the form and you are ready to go."
+        />
         {/* Register Form */}
         <Formik initialValues={initialFormValues} validationSchema={validationSchema} onSubmit={onFormSubmit}>
             {({ dirty, isValid }) => (
                 <Form className="mb-5 lg:mb-10">
                     <TextInput name="email" labelText="E-Mail" placeholder="E-Mail" />
                     <TextInput name="username" labelText="Username" placeholder="Username" />
-                    <TextInput name="password" labelText="Password" placeholder="Password" />
+                    <TextInput type={isPasswordEyeOpen ? "text" : "password"} name="password" labelText="Password" placeholder="Password" icon={isPasswordEyeOpen ? "visibility" : "visibility_off"} iconOnClick={() => setIsPasswordEyeOpen(!isPasswordEyeOpen)} />
 
                     <Button datacy="register-button" type="submit" disabled={!(dirty && isValid)} className="md:mt-8">Register</Button>
                 </Form>

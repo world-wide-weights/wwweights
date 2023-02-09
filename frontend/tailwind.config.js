@@ -12,9 +12,9 @@ module.exports = {
       variants: ['hover', 'focus'],
     },
     {
-      pattern: /text-(.*)-(600|700|800)/,
+      pattern: /text-(.*)-(500|600|700|800)/,
       variants: ['hover', 'focus'],
-    },
+    }
   ],
   theme: {
     container: {
@@ -54,6 +54,7 @@ module.exports = {
         }
       }, backgroundImage: {
         'background-half-page': `url('../../public/background_half_page.svg')`,
+        'background-header-index': `url('../../public/background_header_index.svg')`,
       }
     },
     fontFamily: {

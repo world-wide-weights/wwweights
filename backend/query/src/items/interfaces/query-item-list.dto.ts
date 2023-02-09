@@ -1,53 +1,25 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import {
-  IsArray,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Length,
-  Max,
-  Min,
-} from 'class-validator';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { QueryTagsAndPage } from '../../shared/interfaces/queryTagsAndPage';
+import { ItemSortEnum } from './item-sort-enum';
 
-export class QueryItemListDto {
-  @IsNumber()
+export class QueryItemListDto extends QueryTagsAndPage {
   @IsOptional()
-  @Min(1)
-  @Type(() => Number)
-  @ApiPropertyOptional({ type: Number, default: 1, minimum: 1 })
-  page = 1;
-
-  @IsNumber()
-  @IsOptional()
-  @Min(1)
-  @Max(64)
-  @Type(() => Number)
-  @ApiPropertyOptional({ type: Number, default: 16, minimum: 1 })
-  limit = 16;
+  @IsEnum(ItemSortEnum)
+  @ApiPropertyOptional({
+    enum: ItemSortEnum,
+    default: ItemSortEnum.RELEVANCE,
+    description: 'Sort by relevance | heaviest | lieghtest',
+    example: ItemSortEnum.RELEVANCE,
+  })
+  sort = ItemSortEnum.RELEVANCE; // Maybe: also newest | oldest
 
   @IsString()
   @IsOptional()
   @ApiPropertyOptional({
-    enum: ['relevance', 'lightest', 'heaviest'], // This is just for show and does not clash with the no ENUM rule
-    default: 'relevance',
+    type: String,
+    description: 'The item slug to search for',
+    example: 'item-name',
   })
-  sort = 'relevance'; // Maybe: lightest | heaviest | newest | oldest | relevance // Not an ENUM because ENUMS are inperformant and can lead to spaghetti code
-
-  @IsString()
-  @IsOptional()
-  @Length(2, 100)
-  @ApiPropertyOptional()
-  query: string;
-
-  @IsString({ each: true })
-  @IsArray()
-  @IsOptional()
-  @ApiPropertyOptional()
-  tags: string[];
-
-  @IsString()
-  @IsOptional()
-  @ApiPropertyOptional()
   slug: string;
 }

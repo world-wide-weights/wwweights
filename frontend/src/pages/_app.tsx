@@ -6,10 +6,15 @@ import { NextPage } from "next"
 import type { Session } from "next-auth"
 import { SessionProvider } from "next-auth/react"
 import type { AppProps } from "next/app"
+import Script from "next/script"
 import React from "react"
 import { Auth } from "../components/Auth/Auth"
 import { Layout } from "../components/Layout/Layout"
 import "../styles/global.css"
+
+// Hide ads and analytics in development
+const SHOULD_DISPLAY_ADS = process.env.NODE_ENV !== "development"
+const SHOULD_LOAD_GA = process.env.NODE_ENV !== "development"
 
 // Font
 const metropolis = localFont({
@@ -70,8 +75,29 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsCustom
       <Component {...pageProps} />
     </Auth> :
     <Component {...pageProps} />
-
   return <>
+    {/** Google AdSense */}
+    {SHOULD_DISPLAY_ADS && <Script
+      async
+      strategy="afterInteractive"
+      onError={(e) => { console.error("Script failed to load", e) }}
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7697189508841626"
+    />}
+
+    {/** Google Analytics */}
+    {SHOULD_LOAD_GA && <>
+      <Script async strategy="afterInteractive" src="https://www.googletagmanager.com/gtag/js?id=G-TPQQFLWM0Q" />
+      <Script id="google-analytics" strategy="afterInteractive" >
+        {`
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+  
+        gtag('config', 'G-TPQQFLWM0Q');
+        `}
+      </Script>
+    </>}
+
     <SessionProvider session={session}>
       <div className={`${metropolis.variable} font-sans`}>
         {setLayout(auth)}

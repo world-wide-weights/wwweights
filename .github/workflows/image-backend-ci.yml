@@ -5,6 +5,9 @@ on:
     paths:
       - "backend/image/**"
       - ".github/workflows/image-backend-ci.yml"
+    branches:
+      - "stable"
+      - "main"
   pull_request:
     branches: [main]
     paths:
@@ -119,3 +122,15 @@ jobs:
 
       - name: push
         run: docker push ghcr.io/world-wide-weights/image-backend:${{ steps.extract_branch.outputs.branch }}
+ 
+  redeploy:
+    if: github.ref == 'refs/heads/stable'
+    needs: docker-push
+    runs-on:  ubuntu-latest
+    env:
+      deploy_secret: ${{ secrets.DEPLOY_SECRET }}
+      webhook: ${{ secrets.IMAGE_REDEPLOY_WEBHOOK }}
+    steps:
+      - name: trigger redeploy
+        run: |
+          curl -X GET -H "x-deploy-secret: $deploy_secret" $webhook 

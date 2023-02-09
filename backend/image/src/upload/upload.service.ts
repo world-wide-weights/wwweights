@@ -62,16 +62,20 @@ export class UploadService {
         throw new ConflictException({
           message:
             'This file already seems to be uploaded (indicated by m5hash of file)',
-          location: `${hash}.${image.mimetype.split('/')[1]}`,
+          path: `${hash}.${image.mimetype.split('/')[1]}`,
         });
       }
-      await fsProm.rename(cachedFilePath, fileTargetPath);
+      // Copy rather than move to allow for "moving" accross devices (i.e. docker volumes)
+      await fsProm.copyFile(cachedFilePath, fileTargetPath);
     } catch (error) {
       this.logger.error(error);
       if (error instanceof HttpException) {
         throw error;
       }
       throw new InternalServerErrorException();
+    } finally {
+      // Cleanup cache
+      await fsProm.rm(cachedFilePath, { force: true });
     }
 
     try {
