@@ -34,7 +34,7 @@ export class QueryItemListDto extends QueryTagsAndPage {
   @Transform(({ value }) => (value === '1' ? true : false))
   hasimage?: boolean;
 
-  @IsNumber()
+  @IsInt()
   @IsOptional()
   @ApiPropertyOptional({
     type: Number,
