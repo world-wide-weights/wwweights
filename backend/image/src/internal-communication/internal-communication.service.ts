@@ -43,7 +43,10 @@ export class InternalCommunicationService {
       `${this.configService.get<string>('AUTH_BACKEND_BASE_URL')}${endpoint}`,
       data,
       {
-        headers: headers,
+        headers: {
+          ...headers,
+          'x-api-key': this.configService.get<string>('AUTH_API_KEY')
+        }
       },
     ).pipe(
       catchError((error: AxiosError) => {
