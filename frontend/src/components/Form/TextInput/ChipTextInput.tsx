@@ -3,6 +3,7 @@ import React from "react"
 type ChipTextInputProps = {
   /** Array of chips in textfield */
   chips: string[],
+  /** Callback function to get selected chips */
   selectedChips: (chips: string[]) => void;
 }
 
@@ -45,7 +46,5 @@ export const ChipTextInput: React.FC<ChipTextInputProps> = (props) => {
         />
       </div>
     </div>
-
-
   )
 }
