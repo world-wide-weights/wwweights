@@ -29,7 +29,7 @@ type CreateItemForm = {
     unit: "g" | "kg" | "T" // TODO (Zoe-Bot): define units
     additionalValue?: number | string
     isCa: boolean[]
-    valueType: "exact" | "additional"
+    valueType: "exact" | "range"
     source?: string
     image?: string
     tags?: string
@@ -115,7 +115,7 @@ const Create: NextPageCustomProps = () => {
                 value: weight,
                 isCa: isCa[0],
                 // Only add additionalValue when defined and value type is additional
-                ...(additionalValue && (valueType === "additional") ? { additionalValue } : {})
+                ...(additionalValue && (valueType === "range") ? { additionalValue } : {})
             },
             ...(image !== "" ? { image } : {}), // Only add image when defined
             ...(source !== "" ? { source } : {}), // Only add source when defined
@@ -167,7 +167,7 @@ const Create: NextPageCustomProps = () => {
                                     <Label name="" labelText="Weight" labelRequired></Label>
                                     <div className="grid grid-cols-2 gap-3 mb-2">
                                         <CustomSelectionButton datacy="create-select-button-exact" active={values.valueType === "exact"} onClick={() => setFieldValue("valueType", "exact")} headline="Exact Value" description="150 kg" />
-                                        <CustomSelectionButton datacy="create-select-button-additional" active={values.valueType === "additional"} onClick={() => setFieldValue("valueType", "additional")} headline="Range Value" description="150 - 200 kg" />
+                                        <CustomSelectionButton datacy="create-select-button-range" active={values.valueType === "range"} onClick={() => setFieldValue("valueType", "additional")} headline="Range Value" description="150 - 200 kg" />
                                     </div>
                                     <div className={`grid ${values.valueType === "exact" ? "grid-cols-1 md:grid-cols-2" : "grid-cols-[1fr_16px_1fr] md:grid-cols-[1fr_8px_1fr_128px]"} md:gap-3`}>
                                         {/** Exact Value **/}
@@ -175,7 +175,7 @@ const Create: NextPageCustomProps = () => {
                                             <TextInput name="weight" type="number" noError min={1} placeholder="150" />
                                         </div>
                                         {/** Additional Value **/}
-                                        {values.valueType === "additional" && <>
+                                        {values.valueType === "range" && <>
                                             <div className="flex justify-center items-center mb-2 md:mb-3"><Icon className="text-base text-gray-700">remove</Icon></div>
                                             <div className="min-w-0">
                                                 <TextInput type="number" min={0} noError name="additionalValue" placeholder="300" />
