@@ -93,10 +93,5 @@ export class InsertItemDto {
   source?: string;
 
   @IsInt()
-  @ApiProperty({
-    type: Number,
-    description: 'User ID',
-    example: 123,
-  })
   user: number;
 }
