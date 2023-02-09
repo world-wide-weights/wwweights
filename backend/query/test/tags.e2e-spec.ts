@@ -10,7 +10,7 @@ import {
 import { Test, TestingModule } from '@nestjs/testing';
 import { Item } from '../src/items/models/item.model';
 import { TagsModule } from '../src/tags/tags.module';
-import { items, itemsTagCount } from './mocks/items';
+import { getItemsTagCount, items } from './mocks/items';
 import { tags } from './mocks/tags';
 
 describe('QueryController (e2e)', () => {
@@ -126,7 +126,7 @@ describe('QueryController (e2e)', () => {
           .expect(HttpStatus.OK);
 
         expect(result.body.data).toHaveLength(16);
-        expect(result.body.total).toBe(itemsTagCount());
+        expect(result.body.total).toBe(getItemsTagCount());
         expect(result.body.limit).toBe(16);
         expect(result.body.page).toBe(1);
         for (const tag of result.body.data) {

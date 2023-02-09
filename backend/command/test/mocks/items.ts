@@ -12,7 +12,7 @@ export const singleItem: Partial<Item> = {
   ],
   image: null,
   source: 'no source available',
-  user: 'testUser',
+  user: 1,
 };
 
 export const singleItemTags: Partial<Tag>[] = [
@@ -23,14 +23,14 @@ export const singleItemTags: Partial<Tag>[] = [
 export const insertItem: Partial<InsertItemDto> = {
   name: 'test Name with SpAcEs ',
   weight: { value: 1123675e30 },
-  user: 'testUser',
+  user: 1,
   tags: ['tag1', 'tag2'],
 };
 
 export const insertItem2: Partial<InsertItemDto> = {
   name: 'test2',
   weight: { value: 1123675e30 },
-  user: 'testUser',
+  user: 1,
   tags: ['tag1'],
 };
 
