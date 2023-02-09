@@ -1,3 +1,7 @@
+import { HttpStatus } from '@nestjs/common';
+import { AxiosError } from 'axios';
+import { of, throwError } from 'rxjs';
+
 export class HttpServiceMock {
   params = [];
   shouldFail = false;
@@ -5,8 +9,20 @@ export class HttpServiceMock {
   post(...args: any[]) {
     this.params = args;
     if (this.shouldFail) {
-      throw new Error('Oh no! The icecream machine has stopped working');
+      return throwError(
+        () =>
+          new Error(
+            'Oh no! The icecream machine has stopped working',
+          ) as AxiosError,
+      );
     }
+    // Mock successfull axios post
+    return of({
+      data: {},
+      status: HttpStatus.CREATED,
+      statusText: 'CREATED',
+      headers: {},
+    });
   }
 
   reset() {

@@ -3,7 +3,7 @@ import {
   HttpException,
   Injectable,
   InternalServerErrorException,
-  Logger
+  Logger,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createHash } from 'crypto';
@@ -14,7 +14,7 @@ import * as sharp from 'sharp';
 import { InternalCommunicationService } from '../internal-communication/internal-communication.service';
 import {
   pathBuilder,
-  validateOrCreateDirectory
+  validateOrCreateDirectory,
 } from '../shared/helpers/file-path.helpers';
 import { ImageUploadResponse } from './responses/upload-image.response';
 
@@ -43,7 +43,10 @@ export class UploadService {
   /**
    * @description Handle uploaded image including duplicate check, hashing and saving it
    */
-  async handleImageUpload(userJWT: string, image: Express.Multer.File): Promise<ImageUploadResponse> {
+  async handleImageUpload(
+    userJWT: string,
+    image: Express.Multer.File,
+  ): Promise<ImageUploadResponse> {
     const cachedFilePath = path.join(this.cachePath, image.filename);
 
     // Crop the image before hashing => otherwise hashing would be useless
@@ -86,16 +89,17 @@ export class UploadService {
       );
     } catch (error) {
       this.logger.warn(
-        `An upload failed because the auth backend could not be reached. This could indicate a crashed auth service`,
+        `An upload failed because the communication to the  auth backend failed. This could indicate a crashed auth service. ${error}`,
       );
       // A file without an owner is not allowed => cleanup
       fs.rmSync(fileTargetPath);
       if (error instanceof HttpException) {
         throw error;
       }
+      throw new InternalServerErrorException();
     }
 
-    return { path: hash };
+    return { path: `${hash}.${image.mimetype.split('/')[1]}` };
   }
 
   /**

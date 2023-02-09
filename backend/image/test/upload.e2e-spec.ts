@@ -112,6 +112,36 @@ describe('UploadController (e2e)', () => {
         );
         expect(httpMock.params.length).not.toEqual(0);
       });
+      it('Should clean temporary image storage when uploading image', async () => {
+        // ACT
+        const res = await request(app.getHttpServer())
+          .post('/upload/image')
+          .attach(
+            'image',
+            path.join(process.cwd(), 'test', 'helpers', 'test-oversized.png'),
+          );
+        // ASSERT
+        expect(res.statusCode).toEqual(HttpStatus.CREATED);
+        expect(fs.readdirSync(pathBuilder(undefined, 'cache')).length).toEqual(
+          0,
+        );
+      });
+      it('Should return correct hash', async () => {
+        // ACT
+        const res = await request(app.getHttpServer())
+          .post('/upload/image')
+          .set('Authorization', 'Bearer Mock')
+          .attach(
+            'image',
+            path.join(process.cwd(), 'test', 'helpers', 'test.png'),
+          );
+        // ASSERT
+        expect(res.statusCode).toEqual(HttpStatus.CREATED);
+        const imagePath = res.body.path;
+        expect(
+          fs.existsSync(path.join(pathBuilder(undefined, 'disk'), imagePath)),
+        ).toEqual(true);
+      });
       // File size limitation not tested for obvious reasons
     });
     describe('Negative Tests', () => {
