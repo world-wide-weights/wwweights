@@ -67,7 +67,9 @@ describe('AuthController (e2e)', () => {
   afterEach(async () => {
     await app.close();
   });
+
   describe('/account/add-image (POST)', () => {
+
     describe('Positive Tests', () => {
       it('Should add entry for user without image', async () => {
         // ARRANGE
@@ -127,6 +129,7 @@ describe('AuthController (e2e)', () => {
         expect(entries.length).toEqual(1);
       });
     });
+
     describe('Negative Tests', () => {
       it('Should fail for no auth headers', async () => {
         // ACT

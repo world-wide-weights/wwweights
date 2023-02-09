@@ -6,11 +6,10 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
 import { ImageUserLookupEntity } from '../entities/image-user-lookup.entity';
-import { UserService } from './user.service';
 
 @Injectable()
 export class ImageUserLookupService {
-  private readonly logger = new Logger(UserService.name);
+  private readonly logger = new Logger(ImageUserLookupService.name);
 
   constructor(
     @InjectRepository(ImageUserLookupEntity)

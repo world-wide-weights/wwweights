@@ -22,8 +22,7 @@ describe('UploadController (e2e)', () => {
 
   const fakeGuard = new FakeAuthGuardFactory();
 
-  beforeEach(async () => {
-    httpMock.reset();
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
@@ -40,12 +39,16 @@ describe('UploadController (e2e)', () => {
     uploadService = app.get<UploadService>(UploadService);
     app.useLogger(new EmptyLogger());
     await app.init();
+  });
+
+  beforeEach(async () => {
     fakeGuard.setAuthResponse(true);
+    httpMock.reset();
     await emptyDir(pathBuilder(undefined, 'disk'));
     await emptyDir(pathBuilder(undefined, 'cache'));
   });
 
-  afterEach(async () => {
+  afterAll(async () => {
     await emptyDir(pathBuilder(undefined, 'disk'));
     await emptyDir(pathBuilder(undefined, 'cache'));
     await app.close();
