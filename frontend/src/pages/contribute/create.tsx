@@ -26,7 +26,7 @@ import { NextPageCustomProps } from "../_app"
 type CreateItemForm = {
     name: string
     weight: number | string
-    unit: "g" | "kg" | "T" // TODO (Zoe-Bot): define units
+    unit: "g" | "kg" | "T"
     additionalValue?: number | string
     isCa: boolean[]
     valueType: "exact" | "range"
