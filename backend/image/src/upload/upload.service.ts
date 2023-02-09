@@ -70,6 +70,7 @@ export class UploadService {
         });
       }
       // Copy rather than move to allow for "moving" accross devices (i.e. docker volumes)
+      this.logger.debug('Promoting image from cache to disk');
       await fsProm.copyFile(cachedFilePath, fileTargetPath);
     } catch (error) {
       this.logger.error(error);
@@ -99,6 +100,7 @@ export class UploadService {
       throw new InternalServerErrorException();
     }
 
+    this.logger.log('Sucesfully uploaded Image with hash: ', hash);
     return { path: `${hash}.${image.mimetype.split('/')[1]}` };
   }
 
@@ -122,6 +124,7 @@ export class UploadService {
     wDimension: number,
     hDimension: number,
   ) {
+    this.logger.debug(`Cropping image ${sourcePath}`);
     if (!fs.existsSync(sourcePath)) {
       throw new InternalServerErrorException(
         'Image could not be found within cache',

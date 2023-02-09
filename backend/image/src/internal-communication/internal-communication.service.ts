@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import {
   Injectable,
   InternalServerErrorException,
-  Logger
+  Logger,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AxiosError } from 'axios';
@@ -18,7 +18,7 @@ export class InternalCommunicationService {
   constructor(
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,
-  ) { }
+  ) {}
 
   /**
    * @description Send information to backend that an image has been uploaded by an user
@@ -29,6 +29,7 @@ export class InternalCommunicationService {
       { imageHash },
       { Authorization: userJwt },
     );
+    this.logger.log('Notifed Auth backend about new image upload by user');
   }
 
   /**
@@ -39,21 +40,30 @@ export class InternalCommunicationService {
     data: never | { imageHash: string },
     headers: Record<string, string>,
   ) {
-    await firstValueFrom(this.httpService.post(
-      `${this.configService.get<string>('AUTH_BACKEND_BASE_URL')}${endpoint}`,
-      data,
-      {
-        headers: {
-          ...headers,
-          'x-api-key': this.configService.get<string>('AUTH_API_KEY')
-        }
-      },
-    ).pipe(
-      catchError((error: AxiosError) => {
-        this.logger.error(`Request to auth backend failed! Error: ${error}`);
-        throw new InternalServerErrorException(
-          'Auth Backend could not be notified!',
-        );
-      })))
+    await firstValueFrom(
+      this.httpService
+        .post(
+          `${this.configService.get<string>(
+            'AUTH_BACKEND_BASE_URL',
+          )}${endpoint}`,
+          data,
+          {
+            headers: {
+              ...headers,
+              'x-api-key': this.configService.get<string>('AUTH_API_KEY'),
+            },
+          },
+        )
+        .pipe(
+          catchError((error: AxiosError) => {
+            this.logger.error(
+              `Request to auth backend failed! Error: ${error}`,
+            );
+            throw new InternalServerErrorException(
+              'Auth Backend could not be notified!',
+            );
+          }),
+        ),
+    );
   }
 }
