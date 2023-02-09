@@ -11,7 +11,7 @@ import { getBestHumanReadableUnit } from "./unitHumanReadable"
 export const roundNumber = (number: number): string => {
     let roundedNumber = Math.round(number * 1000) / 1000
     return roundedNumber.toString()
-  }
+}
 
 /**
  * Gets number and formats it to a number with seperation points.
@@ -44,7 +44,6 @@ export const renderUnitIntoString = (weight: Weight): string => {
 
     //Add weight value to String, if large number it will add Seperation Points.
     if (bestHumanReadableUnit.value % 1 !== 0) {
-        console.log(bestHumanReadableUnit.value)
         renderedText += addPointsToNumber(bestHumanReadableUnit.value, true)
     } else {
         renderedText += addPointsToNumber(bestHumanReadableUnit.value, false)
