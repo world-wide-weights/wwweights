@@ -8,12 +8,15 @@ import {
 } from './helpers/MongoMemoryHelpers';
 
 import { Test, TestingModule } from '@nestjs/testing';
+import { Item } from '../src/items/models/item.model';
 import { TagsModule } from '../src/tags/tags.module';
+import { items, itemsTagCount } from './mocks/items';
 import { tags } from './mocks/tags';
 
 describe('QueryController (e2e)', () => {
   let app: INestApplication;
   let tagModel: Model<Tag>;
+  let itemModel: Model<Item>;
   let server: any; // Has to be any because of supertest not having a type for it either
   jest.setTimeout(10000);
 
@@ -32,6 +35,7 @@ describe('QueryController (e2e)', () => {
     );
 
     tagModel = moduleFixture.get('TagModel');
+    itemModel = moduleFixture.get('ItemModel');
 
     app.setGlobalPrefix('queries/v1');
     await app.init();
@@ -40,7 +44,9 @@ describe('QueryController (e2e)', () => {
 
   beforeEach(async () => {
     await tagModel.deleteMany();
+    await itemModel.deleteMany();
 
+    await itemModel.insertMany(items);
     await tagModel.insertMany(tags);
   });
 
@@ -87,24 +93,79 @@ describe('QueryController (e2e)', () => {
       });
     });
 
-    // describe('tags/related', () => {
-    //   const subPath = 'tags/related';
+    describe('tags/related', () => {
+      const subPath = 'tags/related';
 
-    //   it('should return the related items', async () => {
-    //     const result = await request(server)
-    //       .get(queriesPath + subPath)
-    //       .query({ slug: relatedItems[0].slug })
-    //       .expect(HttpStatus.NOT_IMPLEMENTED);
+      it("should find list of tags when querying 'android'", async () => {
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({ query: 'android' })
+          .expect(HttpStatus.OK);
 
-    //     const otherItemNames = relatedItems
-    //       .filter((item) => item.slug !== relatedItems[0].slug)
-    //       .map((item) => item.name);
+        expect(result.body.data).toHaveLength(16);
+        for (const tag of result.body.data) {
+          expect(tag).toHaveProperty('relevance');
+          expect(tag.relevance).toBeLessThan(100);
+          expect(tag).toHaveProperty('name');
+          expect(tag).toHaveProperty('count');
+        }
+      });
 
-    //     expect(result.body.data).toHaveLength(2);
-    //     for (const item of result.body.data) {
-    //       expect(otherItemNames).toContain(item.name);
-    //     }
-    //   });
-    // });
+      it('should find most relevance tag "smartphone" when querying "android"', async () => {
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({ query: 'android' })
+          .expect(HttpStatus.OK);
+        expect(result.body.data[0].name).toEqual('smartphone');
+      });
+
+      it('should return base results if query is empty', async () => {
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({})
+          .expect(HttpStatus.OK);
+
+        expect(result.body.data).toHaveLength(16);
+        expect(result.body.total).toBe(itemsTagCount());
+        expect(result.body.limit).toBe(16);
+        expect(result.body.page).toBe(1);
+        for (const tag of result.body.data) {
+          expect(tag.relevance).toBeLessThan(100);
+        }
+      });
+
+      it('should not contain data if db is empty', async () => {
+        await itemModel.deleteMany();
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({})
+          .expect(HttpStatus.OK);
+
+        expect(result.body.total).toBe(0);
+        expect(result.body.data).toHaveLength(0);
+      });
+
+      it('should not return android tag if querytag contains android', async () => {
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({ query: 'android', tags: ['android'] })
+          .expect(HttpStatus.OK);
+
+        for (const tag of result.body.data) {
+          expect(tag.name).not.toBe('android');
+        }
+      });
+
+      it('should return decending relevance', async () => {
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({ query: 'android', tags: ['android'] })
+          .expect(HttpStatus.OK);
+
+        expect(result.body.data[0].relevance).toBeGreaterThan(
+          result.body.data.at(-1).relevance,
+        );
+      });
+    });
   });
 });

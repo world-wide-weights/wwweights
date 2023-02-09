@@ -8,6 +8,7 @@ import * as yup from "yup"
 import { Button } from "../../components/Button/Button"
 import { TextInput } from "../../components/Form/TextInput/TextInput"
 import { AccountLayout } from "../../components/Layout/AccountLayout"
+import { Seo } from "../../components/Seo/Seo"
 import { authRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { NextPageCustomProps } from "../_app"
@@ -27,6 +28,7 @@ const Register: NextPageCustomProps = () => {
     const callbackUrl = useMemo(() => typeof router.query.callbackUrl == "string" ? router.query.callbackUrl : router.query.callbackUrl?.[0] ?? null, [router])
 
     // Local State
+    const [isPasswordEyeOpen, setIsPasswordEyeOpen] = useState<boolean>(false)
     const [error, setError] = useState("")
 
     // Formik Form Initial Values
@@ -81,13 +83,17 @@ const Register: NextPageCustomProps = () => {
     }
 
     return <>
+        <Seo
+            title="Register an account"
+            description="Register an account on World Wide Weights to start contributing items. It is free and easy. Just fill out the form and you are ready to go."
+        />
         {/* Register Form */}
         <Formik initialValues={initialFormValues} validationSchema={validationSchema} onSubmit={onFormSubmit}>
             {({ dirty, isValid }) => (
                 <Form className="mb-5 lg:mb-10">
                     <TextInput name="email" labelText="E-Mail" placeholder="E-Mail" />
                     <TextInput name="username" labelText="Username" placeholder="Username" />
-                    <TextInput name="password" labelText="Password" placeholder="Password" />
+                    <TextInput type={isPasswordEyeOpen ? "text" : "password"} name="password" labelText="Password" placeholder="Password" icon={isPasswordEyeOpen ? "visibility" : "visibility_off"} iconOnClick={() => setIsPasswordEyeOpen(!isPasswordEyeOpen)} />
 
                     <Button datacy="register-button" type="submit" disabled={!(dirty && isValid)} className="md:mt-8">Register</Button>
                 </Form>

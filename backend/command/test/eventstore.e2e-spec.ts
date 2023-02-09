@@ -5,6 +5,7 @@ import { EventStore } from '../src/eventstore/eventstore';
 import { Client } from './mocks/eventstore-connection';
 import { ConfigModule } from '@nestjs/config';
 import { ALLOWED_EVENT_ENTITIES } from '../src/eventstore/enums/allowedEntities.enum';
+import { timeout } from './helpers/timeout';
 
 describe('EventstoreModule', () => {
   // Basically disable the constructor to skip Eventstoredb connection
@@ -25,6 +26,7 @@ describe('EventstoreModule', () => {
   }
 
   beforeEach(async () => {
+    process.env.SKIP_READ_DB_REBUILD = 'false';
     await replaceApp();
   });
   afterEach(async () => {
@@ -37,9 +39,12 @@ describe('EventstoreModule', () => {
       client.forcedResult = [];
       //ACT
       await eventStore['init']();
+      // delay as init takes a little bit of time
+      await timeout(100)
       // ASSERT
       expect(eventStore.isReady).toEqual(true);
     });
+
     it('Should not be ready if necessary event has not been ready', async () => {
       await app.close();
       // ARRANGE
@@ -60,6 +65,53 @@ describe('EventstoreModule', () => {
       await eventStore['init']();
       // ASSERT
       expect(eventStore.isReady).toEqual(false);
+    });
+
+    it('Should be ready instantly "SKIP_READ_DB_REBUILD" is is true', async () => {
+      // ARRANGE
+      await app.close();
+      process.env.SKIP_READ_DB_REBUILD = 'true';
+      const eventList = {
+        event: {
+          streamId: `${ALLOWED_EVENT_ENTITIES.ITEM}-`,
+          id: 'abc',
+          data: { eventType: 1, type: 'ItemCreatedEvent' },
+        },
+      } as any;
+      client.forcedResult = [
+        [eventList],
+        [{ event: { ...eventList.event, id: 'def' } }],
+      ];
+      await replaceApp();
+      //ACT
+      await eventStore['init']()
+      // ASSERT
+      expect(eventStore.isReady).toEqual(true);
+      // Should subscribe to all from the end => all previous are expected already be applied to read db 
+      expect(client.params[0].fromPosition).toEqual('end');
+    });
+    it('Should default "SKIP_READ_DB_REBUILD" to false', async () => {
+      // ARRANGE
+      await app.close();
+      process.env.SKIP_READ_DB_REBUILD = undefined;
+      const eventList = {
+        event: {
+          streamId: `${ALLOWED_EVENT_ENTITIES.ITEM}-`,
+          id: 'abc',
+          data: { eventType: 1, type: 'ItemCreatedEvent' },
+        },
+      } as any;
+      client.forcedResult = [
+        [eventList],
+        [{ event: { ...eventList.event, id: 'def' } }],
+      ];
+      await replaceApp();
+      // ACT
+      await eventStore['init']()
+      // ASSERT
+      expect(eventStore.isReady).toEqual(false);
+      // Should subscribe to all from the beginning => needs all events for replay
+      expect(client.params[0].fromPosition).toEqual('start');
     });
   });
   describe('Protection during setup', () => {

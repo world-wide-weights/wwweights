@@ -1,18 +1,17 @@
 import { useSession } from "next-auth/react"
 import Image from "next/image"
+import { Card } from "../../components/Card/Card"
 import { Headline } from "../../components/Headline/Headline"
 import { ItemPreviewList } from "../../components/Item/ItemPreviewList"
 import { Seo } from "../../components/Seo/Seo"
-import { StatsCard } from "../../components/Statistics/StatsCard"
 import { NextPageCustomProps } from "../_app"
 
 const Profile: NextPageCustomProps = () => {
     const { data: session } = useSession()
-
+    const seoTitle = `My Profile ${session?.user.username}`
     return <>
-        {/* Meta Tags */}
         <Seo
-            title={`My Profile ${session?.user.username}`}
+            title={seoTitle}
             description="Your profile page. Here you can see your contributions and statistics."
         />
 
@@ -29,9 +28,9 @@ const Profile: NextPageCustomProps = () => {
                     </div>
                     <div className="flex flex-col gap-3 flex-grow">
                         {/* TODO (Zoe-Bot): Implement correct stats */}
-                        <StatsCard icon="volunteer_activism" value="300" descriptionTop="Contribution" />
-                        <StatsCard icon="visibility" value="300.000.000" descriptionTop="Views" />
-                        <StatsCard icon="chat" value="200" descriptionTop="Feedback" />
+                        <Card icon="volunteer_activism" value="300" descriptionTop="Contribution" />
+                        <Card icon="visibility" value="300.000.000" descriptionTop="Views" />
+                        <Card icon="chat" value="200" descriptionTop="Feedback" />
                     </div>
                 </div>
                 <div className="lg:w-3/4">

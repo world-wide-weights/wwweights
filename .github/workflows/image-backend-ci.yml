@@ -5,6 +5,9 @@ on:
     paths:
       - "backend/image/**"
       - ".github/workflows/image-backend-ci.yml"
+    branches:
+      - "stable"
+      - "main"
   pull_request:
     branches: [main]
     paths:

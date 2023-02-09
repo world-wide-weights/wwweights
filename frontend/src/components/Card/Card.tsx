@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Icon } from "../Icon/Icon"
 
-type StatsProps = {
+type CardProps = {
     /** Icon displays in front of value and descriptions */
     icon: string
     /** Description above value */
@@ -17,9 +17,9 @@ type StatsProps = {
 }
 
 /**
- * Displays Stats with an big icon, values and descriptions
+ * Displays Card with an big icon left, values and descriptions
  */
-export const StatsCard: React.FC<StatsProps> = ({ icon, descriptionTop, value, descriptionBottom, to, classNameWrapper = "" }) => {
+export const Card: React.FC<CardProps> = ({ icon, descriptionTop, value, descriptionBottom, to, classNameWrapper = "" }) => {
     const CustomTag = to ? Link : "div"
 
     // TODO: Div should not have href tag

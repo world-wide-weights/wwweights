@@ -1,3 +1,4 @@
+import { getSortedItemsAndHeaviest } from "../../services/utils/weight"
 import { Item } from "../../types/item"
 import { Headline } from "../Headline/Headline"
 import { ItemPreviewList } from "../Item/ItemPreviewList"
@@ -13,13 +14,12 @@ type RelatedItemsProps = {
  * Display list of related items with one item highlighted.
  */
 export const RelatedItems: React.FC<RelatedItemsProps> = ({ relatedItems, item }) => {
-    const relatedItemsWithItemSorted = [...relatedItems, item].sort((a, b) => a.weight.value - b.weight.value)
-    const heaviestWeight = relatedItemsWithItemSorted[relatedItemsWithItemSorted.length - 1].weight
+    const { items, heaviestWeight } = getSortedItemsAndHeaviest([...relatedItems, item], "desc")
 
     return <>
         <Headline level={4}>Related Items</Headline>
         <ul className="mb-5 md:mb-10">
-            {relatedItemsWithItemSorted.map(relatedItem => {
+            {items.map(relatedItem => {
                 const currentItem = relatedItem.name === item.name
                 const difference = relatedItem.weight.value - item.weight.value
 

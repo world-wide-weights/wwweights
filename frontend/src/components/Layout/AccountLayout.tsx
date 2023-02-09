@@ -4,7 +4,6 @@ import logo from "../../../public/logo.png"
 import { routes } from "../../services/routes/routes"
 import { Button } from "../Button/Button"
 import { Headline } from "../Headline/Headline"
-import { Seo } from "../Seo/Seo"
 
 type AccountLayoutProps = {
     /** Page content. Is parameter in getLayout. */
@@ -25,10 +24,6 @@ type AccountLayoutProps = {
  */
 export const AccountLayout: React.FC<AccountLayoutProps> = ({ page, headline, description, descriptionImage, siteTitle }) => {
     return <>
-        <Seo
-            title={siteTitle}
-            description={description}
-        />
         <div className="lg:flex h-screen">
             {/* Left Side Content: Form */}
             <div className="flex flex-col lg:grid lg:grid-rows-5 lg:w-1/2 h-screen">
@@ -48,8 +43,9 @@ export const AccountLayout: React.FC<AccountLayoutProps> = ({ page, headline, de
                 {/* Footer */}
                 <footer className="container row-start-5 mt-auto">
                     <ul className="flex gap-3 py-4">
-                        <li><Button to={routes.legal.terms} kind="tertiary">Terms of Service</Button></li>
-                        <li><Button to={routes.legal.privacy} kind="tertiary">Privacy Policy</Button></li>
+                        <li><Button to={routes.misc.contact} kind="tertiary">Contact</Button></li>
+                        <li><Button to={routes.misc.privacy} kind="tertiary">Privacy Policy</Button></li>
+                        <li><Button to={routes.misc.terms} kind="tertiary">Terms and Conditions</Button></li>
                     </ul>
                 </footer>
             </div>

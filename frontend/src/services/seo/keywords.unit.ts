@@ -1,7 +1,6 @@
 import { generateKeywordString } from "./keywords"
 
 describe("generateKeywordString", () => {
-
     it("generates a string of keywords separated by commas", () => {
         const keywords = ["dog", "cat", "bird"]
         const result = generateKeywordString(keywords)

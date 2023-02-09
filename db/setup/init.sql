@@ -1,4 +1,7 @@
 -- Aggregate migrations after milestones
+-- ADD migration_state table
+CREATE TABLE IF NOT EXISTS migration_state(version integer);
+
 -- UP migration file for migration 1670610831-init 
 
 CREATE TABLE users(

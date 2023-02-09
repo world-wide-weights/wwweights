@@ -4,12 +4,15 @@ on:
   push:
     paths:
       - "backend/query/**"
-      - ".github/workflows/**.yml"
+      - ".github/workflows/query-backend-ci.yml"
+    branches:
+      - "stable"
+      - "main"
   pull_request:
     branches: [main]
     paths:
       - "backend/query/**"
-      - ".github/workflows/**.yml"
+      - ".github/workflows/query-backend-ci.yml"
 
 jobs:
   setup:

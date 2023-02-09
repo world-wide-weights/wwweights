@@ -1,4 +1,4 @@
-import { calculateMedianWeight, calculateWeightFit, generateWeightProgressBarPercentage, generateWeightString } from "./weight"
+import { calculateMedianWeight, calculateWeightFit, generateWeightProgressBarPercentage, generateWeightString, getSortedItemsAndHeaviest } from "./weight"
 
 describe("Generate Weight String", () => {
     it("should create string with weight value", () => {
@@ -35,6 +35,12 @@ describe("Generate Weight Process Bar Percentage", () => {
     it("should get correct percentage with weight additionalValue and heaviestWeight has additionalValue", () => {
         expect(generateWeightProgressBarPercentage({ value: 100, additionalValue: 200, isCa: true }, { value: 200, additionalValue: 300, isCa: true })).to.deep.equal({ percentage: 33.33, percentageAdditional: 66.67 })
         expect(generateWeightProgressBarPercentage({ value: 100, additionalValue: 200, isCa: false }, { value: 200, additionalValue: 300, isCa: false })).to.deep.equal({ percentage: 33.33, percentageAdditional: 66.67 })
+    })
+
+    // Bug: https://github.com/world-wide-weights/wwweights/issues/329
+    it("should use additionaValue in heaviestWeight", () => {
+        expect(generateWeightProgressBarPercentage({ value: 200, isCa: false }, { value: 200, additionalValue: 400, isCa: false })).to.deep.equal({ percentage: 50 })
+        expect(generateWeightProgressBarPercentage({ value: 200, additionalValue: 300, isCa: false }, { value: 200, additionalValue: 400, isCa: false })).to.deep.equal({ percentage: 50, percentageAdditional: 3 / 4 * 100 })
     })
 
     describe("Weight same as Heaviest", () => {
@@ -112,5 +118,88 @@ describe("Calculate the number of weights that fit in a container and round", ()
     it("should handle weights that are larger than the container", () => {
         expect(calculateWeightFit(100, 200)).to.equal(1)
         expect(calculateWeightFit(100, 250)).to.equal(0)
+    })
+})
+
+describe("Get SortedItems and Get HeaviestWeight", () => {
+    const items = [{
+        name: "test",
+        slug: "test",
+        weight: { value: 10 },
+        tags: [],
+        user: "test",
+        createdAt: 123,
+    }, {
+        name: "test",
+        slug: "test",
+        weight: { value: 20 },
+        tags: [],
+        user: "test",
+        createdAt: 123,
+    }, {
+        name: "test",
+        slug: "test",
+        weight: { value: 5 },
+        tags: [],
+        user: "test",
+        createdAt: 123,
+    }]
+
+    it("should sort items in ascending order and return the heaviest weight", () => {
+        const result = getSortedItemsAndHeaviest(items, "asc")
+        expect(result).to.deep.equal({
+            items: [{
+                name: "test",
+                slug: "test",
+                weight: { value: 5 },
+                tags: [],
+                user: "test",
+                createdAt: 123,
+            }, {
+                name: "test",
+                slug: "test",
+                weight: { value: 10 },
+                tags: [],
+                user: "test",
+                createdAt: 123,
+            }, {
+                name: "test",
+                slug: "test",
+                weight: { value: 20 },
+                tags: [],
+                user: "test",
+                createdAt: 123,
+            }],
+            heaviestWeight: { value: 20 }
+        })
+    })
+
+    it("should sort items in descending order and return the heaviest weight", () => {
+        const result = getSortedItemsAndHeaviest(items, "desc")
+        expect(result).to.deep.equal({
+            items: [{
+                name: "test",
+                slug: "test",
+                weight: { value: 20 },
+                tags: [],
+                user: "test",
+                createdAt: 123,
+            }, {
+                name: "test",
+                slug: "test",
+                weight: { value: 10 },
+                tags: [],
+                user: "test",
+                createdAt: 123,
+            }, {
+                name: "test",
+                slug: "test",
+                weight: { value: 5 },
+                tags: [],
+                user: "test",
+                createdAt: 123,
+            }],
+            heaviestWeight: { value: 20 }
+        })
     })
 })

@@ -5,11 +5,14 @@ on:
     paths:
       - "frontend/**"
       - ".github/workflows/frontend-ci.yml"
+    branches:
+      - "stable"
+      - "main"
   pull_request:
     branches: [main]
     paths:
       - "frontend/**"
-      - ".github/workflows/**.yml"
+      - ".github/workflows/frontend-ci.yml"
 
 env:
   NEXT_PUBLIC_CLIENT_BASE_URL: http://localhost:3002
@@ -170,3 +173,15 @@ jobs:
       
       - name: push
         run: docker push ghcr.io/world-wide-weights/frontend:${{ steps.extract_branch.outputs.branch }}
+
+  redeploy:
+    if: github.ref == 'refs/heads/stable'
+    needs: docker-push
+    runs-on:  ubuntu-latest
+    env:
+      deploy_secret: ${{ secrets.DEPLOY_SECRET }}
+      webhook: ${{ secrets.FRONTEND_REDEPLOY_WEBHOOK }}
+    steps:
+      - name: trigger redeploy
+        run: |
+          curl -X GET -H "x-deploy-secret: $deploy_secret" $webhook
