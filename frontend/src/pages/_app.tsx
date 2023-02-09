@@ -1,5 +1,4 @@
 /** Import font support */
-import localFont from "@next/font/local"
 /** Imports all material symbols globally which we use as our icon pack */
 import "material-symbols/rounded.css"
 import { NextPage } from "next"
@@ -13,28 +12,6 @@ import { Layout } from "../components/Layout/Layout"
 import "../styles/global.css"
 
 const SHOULD_DISPLAY_ADS = process.env.NODE_ENV !== "development"
-
-// Font
-const metropolis = localFont({
-  src: [
-    {
-      path: "../assets/font/metropolis/Metropolis-Regular.woff2",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../assets/font/metropolis/Metropolis-Medium.woff2",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "../assets/font/metropolis/Metropolis-Bold.woff2",
-      weight: "700",
-      style: "normal",
-    },
-  ],
-  variable: "--font-metropolis"
-})
 
 /**
  * When using this page type have the option to add custom props.
@@ -83,7 +60,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsCustom
     />}
 
     <SessionProvider session={session}>
-      <div className={`${metropolis.variable} font-sans`}>
+      <div className={"font-sans"}>
         {setLayout(auth)}
       </div>
     </SessionProvider>

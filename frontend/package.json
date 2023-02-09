@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-do-expressions": "^7.18.6",
+    "@bahmutov/cypress-code-coverage": "^1.3.2",
     "@cypress/code-coverage": "^3.10.0",
     "@svgr/webpack": "^6.5.1",
     "@types/node": "^18.11.9",
