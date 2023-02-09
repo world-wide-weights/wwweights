@@ -6,14 +6,16 @@ const textSearchParams = {
 };
 
 export const getSort = (sort: ItemSortEnum, textSearch: boolean) => {
-  if (sort === ItemSortEnum.LIGHTEST && textSearch)
-    return { 'weight.value': 1, ...textSearchParams };
-  if (sort === ItemSortEnum.LIGHTEST) return { 'weight.value': 1 };
-  if (sort === ItemSortEnum.HEAVIEST && textSearch)
-    return { 'weight.value': -1, ...textSearchParams };
-  if (sort === ItemSortEnum.HEAVIEST) return { 'weight.value': -1 };
+  if (sort === ItemSortEnum.RELEVANCE && !textSearch) return { createdAt: -1 };
   if (sort === ItemSortEnum.RELEVANCE && textSearch) {
     return textSearchParams;
   }
-  return { createdAt: -1 };
+
+  let sortBase = {};
+
+  if (sort === ItemSortEnum.LIGHTEST) sortBase['weight.value'] = 1;
+  if (sort === ItemSortEnum.HEAVIEST) sortBase['weight.value'] = -1;
+  if (textSearch) sortBase = { ...sortBase, ...textSearchParams };
+
+  return sortBase;
 };
