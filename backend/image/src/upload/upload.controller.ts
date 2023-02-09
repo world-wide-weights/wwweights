@@ -7,10 +7,11 @@ import {
   Post,
   UploadedFile,
   UseGuards,
-  UseInterceptors,
+  UseInterceptors
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../shared/guards/jwt.guard';
+import { ImageUploadResponse } from './responses/upload-image.response';
 import { UploadService } from './upload.service';
 import { FileSizeValidator } from './validators/file-size.validator';
 import { FileTypeValidator } from './validators/file-type.validator';
@@ -18,7 +19,7 @@ import { FileTypeValidator } from './validators/file-type.validator';
 @Controller('upload')
 @UseInterceptors(ClassSerializerInterceptor)
 export class UploadController {
-  constructor(private readonly uploadService: UploadService) {}
+  constructor(private readonly uploadService: UploadService) { }
 
   @Post('image')
   @UseGuards(JwtAuthGuard)
@@ -37,7 +38,7 @@ export class UploadController {
       }),
     )
     image: Express.Multer.File,
-  ) {
-    await this.uplooadService.handleImageUpload(jwt, image);
+  ): Promise<ImageUploadResponse> {
+    return await this.uploadService.handleImageUpload(jwt, image);
   }
 }

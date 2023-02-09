@@ -3,7 +3,7 @@ import {
   HttpException,
   Injectable,
   InternalServerErrorException,
-  Logger,
+  Logger
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createHash } from 'crypto';
@@ -14,8 +14,9 @@ import * as sharp from 'sharp';
 import { InternalCommunicationService } from '../internal-communication/internal-communication.service';
 import {
   pathBuilder,
-  validateOrCreateDirectory,
+  validateOrCreateDirectory
 } from '../shared/helpers/file-path.helpers';
+import { ImageUploadResponse } from './responses/upload-image.response';
 
 // Code assumes that either UNIX or Windows paths are valid. Any other OS or path format is not supported
 
@@ -42,7 +43,7 @@ export class UploadService {
   /**
    * @description Handle uploaded image including duplicate check, hashing and saving it
    */
-  async handleImageUpload(userJWT: string, image: Express.Multer.File) {
+  async handleImageUpload(userJWT: string, image: Express.Multer.File): Promise<ImageUploadResponse> {
     const cachedFilePath = path.join(this.cachePath, image.filename);
 
     // Crop the image before hashing => otherwise hashing would be useless
@@ -94,7 +95,7 @@ export class UploadService {
       }
     }
 
-    return hash;
+    return { path: hash };
   }
 
   /**

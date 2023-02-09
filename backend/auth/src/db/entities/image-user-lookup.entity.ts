@@ -1,10 +1,10 @@
-import { Column, Entity } from 'typeorm';
+import { Entity, PrimaryColumn } from 'typeorm';
 
-@Entity('users', { schema: 'public' })
+@Entity('user_image_lookup', { schema: 'public' })
 export class ImageUserLookupEntity {
-  @Column({ type: 'integer', name: 'fk_user_id' })
+  @PrimaryColumn({ type: 'integer', name: 'fk_user_id' })
   fkUserId: number;
 
-  @Column({ type: 'text', name: 'image_hash' })
+  @PrimaryColumn({ type: 'text', name: 'image_hash' })
   imageHash: string;
 }

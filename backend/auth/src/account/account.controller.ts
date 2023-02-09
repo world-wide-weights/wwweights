@@ -6,7 +6,7 @@ import { AddImageDto } from './dtos/add-image.dto';
 
 @Controller('account')
 export class AccountController {
-  constructor(private readonly accountService: AccountService) {}
+  constructor(private readonly accountService: AccountService) { }
 
   @Post('add-image')
   @UseGuards(JwtGuard)

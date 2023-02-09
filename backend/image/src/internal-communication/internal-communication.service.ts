@@ -2,9 +2,11 @@ import { HttpService } from '@nestjs/axios';
 import {
   Injectable,
   InternalServerErrorException,
-  Logger,
+  Logger
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { AxiosError } from 'axios';
+import { catchError, firstValueFrom } from 'rxjs';
 
 /**
  * @description Service that is responsible for all communication to other services within the wwweights infrastructure
@@ -16,7 +18,7 @@ export class InternalCommunicationService {
   constructor(
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
   /**
    * @description Send information to backend that an image has been uploaded by an user
@@ -37,19 +39,18 @@ export class InternalCommunicationService {
     data: never | { imageHash: string },
     headers: Record<string, string>,
   ) {
-    try {
-      await this.httpService.post(
-        `${this.configService.get<string>('AUTH_BACKEND_BASE_URL')}${endpoint}`,
-        data,
-        {
-          headers: headers,
-        },
-      );
-    } catch (error) {
-      this.logger.error(`Request to auth backend failed! Error: ${error}`);
-      throw new InternalServerErrorException(
-        'Auth Backend could not be notified!',
-      );
-    }
+    await firstValueFrom(this.httpService.post(
+      `${this.configService.get<string>('AUTH_BACKEND_BASE_URL')}${endpoint}`,
+      data,
+      {
+        headers: headers,
+      },
+    ).pipe(
+      catchError((error: AxiosError) => {
+        this.logger.error(`Request to auth backend failed! Error: ${error}`);
+        throw new InternalServerErrorException(
+          'Auth Backend could not be notified!',
+        );
+      })))
   }
 }
