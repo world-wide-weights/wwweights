@@ -117,7 +117,7 @@ const Create: NextPageCustomProps = () => {
             weight: {
                 value: valueInG,
                 isCa: isCa[0],
-                ...(additionalValue && (valueType === "additional") ? { additionalValue } : {}) // Only add additionalValue when defined
+                ...(additionalValue && (valueType === "additional") ? { additionalValue } : {}) // Only add additionalValue when defined and value type is additional
             },
             ...(image !== "" ? { image } : {}), // Only add image when defined
             ...(source !== "" ? { source } : {}), // Only add source when defined
