@@ -168,8 +168,8 @@ const Create: NextPageCustomProps = () => {
                                     {/* Weight */}
                                     <Label name="" labelText="Weight" labelRequired></Label>
                                     <div className="grid grid-cols-2 gap-3 mb-2">
-                                        <CustomSelectionButton active={values.valueType === "exact"} onClick={() => setFieldValue("valueType", "exact")} headline="Exact Value" description="150 kg" />
-                                        <CustomSelectionButton active={values.valueType === "additional"} onClick={() => setFieldValue("valueType", "additional")} headline="Range Value" description="150 - 200 kg" />
+                                        <CustomSelectionButton datacy="create-select-button-exact" active={values.valueType === "exact"} onClick={() => setFieldValue("valueType", "exact")} headline="Exact Value" description="150 kg" />
+                                        <CustomSelectionButton datacy="create-select-button-additional" active={values.valueType === "additional"} onClick={() => setFieldValue("valueType", "additional")} headline="Range Value" description="150 - 200 kg" />
                                     </div>
                                     <div className={`grid ${values.valueType === "exact" ? "grid-cols-1 md:grid-cols-2" : "grid-cols-[1fr_16px_1fr] md:grid-cols-[1fr_8px_1fr_128px]"} md:gap-3`}>
                                         {/** Exact Value **/}
