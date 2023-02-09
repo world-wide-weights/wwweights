@@ -1,12 +1,11 @@
 import {
   Injectable,
   InternalServerErrorException,
-  Logger,
+  Logger
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
 import { ImageUserLookupEntity } from '../entities/image-user-lookup.entity';
-import { UserEntity } from '../entities/users.entity';
 import { UserService } from './user.service';
 
 @Injectable()
@@ -14,9 +13,9 @@ export class ImageUserLookupService {
   private readonly logger = new Logger(UserService.name);
 
   constructor(
-    @InjectRepository(UserEntity)
+    @InjectRepository(ImageUserLookupEntity)
     private readonly imageUserLookupEntity: Repository<ImageUserLookupEntity>,
-  ) {}
+  ) { }
 
   async addHashToUser(userId: number, imageHash: string) {
     const newEntry: ImageUserLookupEntity = {
@@ -35,6 +34,7 @@ export class ImageUserLookupService {
           return;
         }
       }
+      this.logger.error(error)
       throw new InternalServerErrorException('Could not persist information.');
     }
   }
