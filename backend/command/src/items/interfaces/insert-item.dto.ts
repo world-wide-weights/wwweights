@@ -91,11 +91,11 @@ export class InsertItemDto {
   })
   source?: string;
 
-  @IsString()
+  @IsNumber()
   @ApiProperty({
-    type: String,
+    type: Number,
     description: 'User ID',
-    example: '5f9e9b9e7c9d440000a1c1c7',
+    example: 123,
   })
-  user: string;
+  user: number;
 }
