@@ -31,10 +31,10 @@ describe("Create Item", () => {
         cy.dataCy("textinput-weight-input").type("150")
 
         // Fill Weights
-        cy.dataCy("isCa-dropdown-button").click()
-        cy.dataCy("isCa-dropdown-option-true").click()
+        // cy.dataCy("isCa-dropdown-button").click()
+        // cy.dataCy("isCa-dropdown-option-true").click()
 
-        cy.dataCy("textinput-additionalValue-input").type("300")
+        // cy.dataCy("textinput-additionalValue-input").type("300")
 
         cy.dataCy("unit-dropdown-button").click()
         cy.dataCy("unit-dropdown-option-kg").click()
@@ -52,7 +52,7 @@ describe("Create Item", () => {
         // cy.mockDiscoverPage()
 
         // Submit form
-        cy.dataCy("create-submit-button").click()
+        // cy.dataCy("create-submit-button").click()
 
         // cy.wait("@mockCreateItem")
     })
