@@ -1,3 +1,4 @@
+import axios from "axios"
 import { Form, Formik, FormikProps } from "formik"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/router"
@@ -61,9 +62,9 @@ const Create: NextPageCustomProps = () => {
     // Local state
     const [isOpenDetails, setIsOpenDetails] = useState<boolean>(false)
     const [isExactValue, setIsExactValue] = useState<boolean>(true)
+    const [error, setError] = useState<string>()
 
     const { data: session } = useSession()
-
     const router = useRouter()
 
     // Formik Form Initial Values
@@ -119,11 +120,18 @@ const Create: NextPageCustomProps = () => {
             user: session?.user?.username ?? ""
         }
 
-        // Create item with api
-        commandRequest.post("/items/insert", item)
+        try {
+            // Create item with api
+            const response = await commandRequest.post("/items/insert", item)
 
-        // Redirect to discover
-        router.push(routes.weights.list())
+            if (response.status === 200) {
+                // Redirect to discover
+                router.push(routes.weights.list())
+            }
+        } catch (error) {
+            axios.isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Netzwerk-Zeitüberschreitung")
+            return
+        }
     }
 
     return <>
@@ -143,7 +151,7 @@ const Create: NextPageCustomProps = () => {
 
             {/* Content */}
             <Formik initialValues={initialFormValues} validationSchema={validationSchema} onSubmit={onFormSubmit}>
-                {({ dirty, isValid }: FormikProps<CreateItemForm>) => (
+                {({ dirty, isValid, errors }: FormikProps<CreateItemForm>) => (
                     <Form>
                         <div className="container">
                             {/*** General Information ***/}
@@ -175,11 +183,13 @@ const Create: NextPageCustomProps = () => {
                                             <Dropdown name="unit" options={unitTypeDropdownOptions} hasMargin light />
                                         </div>
                                     </div>
-                                    <FormError field="weight" />
+                                    <div className="mt-[-10px]">
+                                        <FormError field="weight" />
+                                    </div>
                                 </div>
 
                                 {/* Is circa */}
-                                <div className="flex items-center">
+                                <div className={`${errors.weight ? "mt-2" : ""} flex items-center`}>
                                     <CheckboxList name="isCa" options={[{ value: true, label: "is circa" }]} />
                                     <Tooltip wrapperClassname="cursor-help" position="right" content={<>
                                         <p>When checked it is a circa value and will</p>
@@ -236,6 +246,11 @@ const Create: NextPageCustomProps = () => {
                     </Form>
                 )}
             </Formik>
+
+            {/* TODO (Zoe-Bot): Add correct error handling */}
+            <div className="container">
+                {error && <p className="text-red-500">{error}</p>}
+            </div>
         </main >
     </>
 }
