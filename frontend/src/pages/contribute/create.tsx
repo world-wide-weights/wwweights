@@ -6,6 +6,7 @@ import { Button } from "../../components/Button/Button"
 import { IconButton } from "../../components/Button/IconButton"
 import { FormError } from "../../components/Errors/FormError"
 import { CheckboxList } from "../../components/Form/CheckboxList/CheckboxList"
+import { CustomSelectionButton } from "../../components/Form/CustomSelectionButton/CustomSelectionButton"
 import { Dropdown } from "../../components/Form/Dropdown/Dropdown"
 import { Label } from "../../components/Form/Label"
 import { TextInput } from "../../components/Form/TextInput/TextInput"
@@ -57,6 +58,7 @@ const unitTypeDropdownOptions = [
 const Create: NextPageCustomProps = () => {
     // Local state
     const [isOpenDetails, setIsOpenDetails] = useState<boolean>(false)
+    const [isExactValue, setIsExactValue] = useState<boolean>(true)
 
     const router = useRouter()
 
@@ -92,8 +94,6 @@ const Create: NextPageCustomProps = () => {
         // Prepare weight in g
         const weightNumber = parseInt(weight as string)
         const valueInG = getWeightInG(weightNumber, unit)
-
-        console.log(isCa)
 
         // Prepare additionalValue in g
         if (additionalValue !== "") {
@@ -144,36 +144,31 @@ const Create: NextPageCustomProps = () => {
 
             {/* Content */}
             <Formik initialValues={initialFormValues} validationSchema={validationSchema} onSubmit={onFormSubmit}>
-                {({ dirty, isValid, errors, touched }: FormikProps<CreateItemForm>) => (
+                {({ dirty, isValid }: FormikProps<CreateItemForm>) => (
                     <Form>
                         {/*** General Information ***/}
                         <div className="bg-white rounded-lg p-6 mb-4">
                             <div className="lg:w-3/4 2xl:w-1/2">
                                 {/* Name */}
-                                <TextInput name="name" labelText="Name" labelRequired placeholder="elephant" />
+                                <TextInput name="name" labelText="Name" labelRequired placeholder="Apple" />
 
                                 {/* Weight */}
                                 <Label name="" labelText="Weight" labelRequired></Label>
-                                <div className="grid grid-cols-2 gap-3">
-                                    <div className="flex items-center flex-col bg-gray-100 pt-3 pb-5 px-3">
-                                        <Icon className="ml-auto">check</Icon>
-                                        <p className="font-medium">Exact Value</p>
-                                        <p>150 kg</p>
-                                    </div>
-                                    <div className="text-center bg-gray-100">
-                                        <p className="font-medium">Exact Value</p>
-                                        <p>150 kg</p>
-                                    </div>
+                                <div className="grid grid-cols-2 gap-3 mb-2">
+                                    <CustomSelectionButton active={isExactValue} onClick={() => setIsExactValue(true)} headline="Exact Value" description="150 kg" />
+                                    <CustomSelectionButton active={!isExactValue} onClick={() => setIsExactValue(false)} headline="Range Value" description="150 - 200 kg" />
                                 </div>
-                                <div className="md:flex items-end justify-between gap-3">
-                                    <div className="w-1/3">
+                                <div className={`grid ${isExactValue ? "grid-cols-1 md:grid-cols-2" : "grid-cols-[1fr_16px_1fr] md:grid-cols-[1fr_8px_1fr_128px]"} md:gap-3`}>
+                                    <div className="min-w-0">
                                         <TextInput name="weight" type="number" noError min={1} placeholder="150" />
                                     </div>
-                                    <div className="flex justify-center md:items-center md:h-[72px]"><span>-</span></div>
-                                    <div className="w-1/3">
-                                        <TextInput type="number" min={0} name="additionalValue" placeholder="300" />
-                                    </div>
-                                    <div className="w-1/3">
+                                    {!isExactValue && <>
+                                        <div className="flex justify-center items-center mb-2 md:mb-3"><Icon className="text-base text-gray-700">remove</Icon></div>
+                                        <div className="min-w-0">
+                                            <TextInput type="number" min={0} name="additionalValue" placeholder="300" />
+                                        </div>
+                                    </>}
+                                    <div className={`col-start-1 col-end-4 md:row-start-1 ${isExactValue ? "md:col-start-2 md:w-32" : "md:col-start-4 md:col-end-6"}`}>
                                         <Dropdown name="unit" options={unitTypeDropdownOptions} hasMargin light />
                                     </div>
                                 </div>
@@ -181,7 +176,7 @@ const Create: NextPageCustomProps = () => {
                             </div>
                             <div className="flex items-center">
                                 <CheckboxList name="isCa" options={[{ value: true, label: "is circa" }]} />
-                                <Tooltip position="right" content={<>
+                                <Tooltip wrapperClassname="cursor-help" position="right" content={<>
                                     <p>When checked it is a circa value and will</p>
                                     <p> be displayed for example as ca. 300 g.</p>
                                 </>}>
