@@ -1,4 +1,4 @@
-import { SortType } from "src/components/Sort/Sort"
+import { SortType } from "../../components/Sort/Sort"
 import { RoutePagination } from "../routes/routes"
 import { range } from "../utils/range"
 

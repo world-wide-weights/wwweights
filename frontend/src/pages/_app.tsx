@@ -1,5 +1,6 @@
 /** Import font support */
 /** Imports all material symbols globally which we use as our icon pack */
+import localFont from "@next/font/local"
 import "material-symbols/rounded.css"
 import { NextPage } from "next"
 import { Session } from "next-auth"
@@ -14,6 +15,28 @@ import "../styles/global.css"
 // Hide ads and analytics in development
 const SHOULD_DISPLAY_ADS = process.env.NODE_ENV !== "development"
 const SHOULD_LOAD_GA = process.env.NODE_ENV !== "development"
+
+// Font
+const metropolis = localFont({
+  src: [
+    {
+      path: "../assets/font/metropolis/Metropolis-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../assets/font/metropolis/Metropolis-Medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../assets/font/metropolis/Metropolis-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-metropolis"
+})
 
 /**
  * When using this page type have the option to add custom props.
