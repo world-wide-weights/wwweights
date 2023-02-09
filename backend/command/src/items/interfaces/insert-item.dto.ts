@@ -3,6 +3,7 @@ import { Type } from 'class-transformer';
 import {
   IsArray,
   IsBoolean,
+  IsInt,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -91,7 +92,7 @@ export class InsertItemDto {
   })
   source?: string;
 
- @IsInt()
+  @IsInt()
   @ApiProperty({
     type: Number,
     description: 'User ID',

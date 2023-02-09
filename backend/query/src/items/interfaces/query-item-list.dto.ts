@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
 import { QueryTagsAndPage } from '../../shared/interfaces/queryTagsAndPage';
 import { ItemSortEnum } from './item-sort-enum';
 
