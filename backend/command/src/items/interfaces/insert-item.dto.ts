@@ -3,7 +3,6 @@ import { Type } from 'class-transformer';
 import {
   IsArray,
   IsBoolean,
-  IsInt,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -91,7 +90,4 @@ export class InsertItemDto {
     example: 'https://example.com',
   })
   source?: string;
-
-  @IsInt()
-  user: number;
 }
