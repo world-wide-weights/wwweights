@@ -3,14 +3,16 @@ import { ConfigModule } from '@nestjs/config';
 import { EventBus } from '@nestjs/cqrs';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
-import { ItemCronJobHandler } from '../src/items/cron/items.cron';
 import * as request from 'supertest';
 import { EventStore } from '../src/eventstore/eventstore';
 import { EventStoreModule } from '../src/eventstore/eventstore.module';
+import { ItemCronJobHandler } from '../src/items/cron/items.cron';
 import { ItemsModule } from '../src/items/items.module';
 import { Item } from '../src/models/item.model';
 import { ItemsByTag } from '../src/models/items-by-tag.model';
 import { Tag } from '../src/models/tag.model';
+import { JwtAuthGuard } from '../src/shared/guards/jwt.guard';
+import { JwtStrategy } from '../src/shared/strategies/jwt.strategy';
 import {
   initializeMockModule,
   teardownMockDataSource,
@@ -18,13 +20,14 @@ import {
 import { timeout } from './helpers/timeout';
 import { MockEventStore } from './mocks/eventstore';
 import {
-  differentNames,
+  differentNames as itemsWithDifferentNames,
   insertItem,
   insertItem2,
   singleItem,
   singleItemTags,
 } from './mocks/items';
-import { lchown } from 'fs';
+import { FakeAuthGuardFactory } from './mocks/jwt-guard.mock';
+import { verifiedRequestUser } from './mocks/users';
 
 describe('ItemsController (e2e)', () => {
   let app: INestApplication;
@@ -34,7 +37,7 @@ describe('ItemsController (e2e)', () => {
   const mockEventStore: MockEventStore = new MockEventStore();
   let itemCronJobHandler: ItemCronJobHandler;
   let server: any; // Has to be any because of supertest not having a type for it either
-  jest.setTimeout(10000);
+  const fakeGuard = new FakeAuthGuardFactory();
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -47,6 +50,10 @@ describe('ItemsController (e2e)', () => {
     })
       .overrideProvider(EventStore)
       .useValue(mockEventStore)
+      .overrideProvider(JwtStrategy)
+      .useValue(null)
+      .overrideGuard(JwtAuthGuard)
+      .useValue(fakeGuard.getGuard())
       .compile();
 
     app = moduleFixture.createNestApplication();
@@ -72,6 +79,8 @@ describe('ItemsController (e2e)', () => {
   });
 
   beforeEach(async () => {
+    fakeGuard.setAuthResponse(true);
+    fakeGuard.setUser(verifiedRequestUser);
     mockEventStore.reset();
     await itemModel.deleteMany();
     await tagModel.deleteMany();
@@ -89,6 +98,15 @@ describe('ItemsController (e2e)', () => {
 
   describe('Commands (POSTS) /commands/v1', () => {
     const commandsPath = '/commands/v1/';
+
+    it('items/insert => insert one Item should fail with auth false', async () => {
+      fakeGuard.setAuthResponse(false);
+      await request(server)
+        .post(commandsPath + 'items/insert')
+        .send(insertItem)
+        .expect(HttpStatus.FORBIDDEN);
+    });
+
     it('items/insert => insert one Item', async () => {
       await request(server)
         .post(commandsPath + 'items/insert')
@@ -108,9 +126,10 @@ describe('ItemsController (e2e)', () => {
 
       const item = await itemModel.findOne({});
 
-      // Check if Item got correct tags count correct
+      // Check if Item got correct tags count
       expect(item.name).toEqual(insertItem.name);
       expect(item.slug).toBeDefined();
+      expect(item.user).toEqual(1);
 
       const tag1 = await tagModel.findOne({ name: 'tag1' });
       const tag2 = await tagModel.findOne({ name: 'tag2' });
@@ -190,8 +209,7 @@ describe('ItemsController (e2e)', () => {
     });
 
     it('items/insert => insert Items in quick succession', async () => {
-      // forEach because we do not want to await in the loop as it would be with for ... of
-      differentNames.forEach(async (name) => {
+      itemsWithDifferentNames.forEach(async (name) => {
         await request(server)
           .post(commandsPath + 'items/insert')
           .send({ ...insertItem2, name })
@@ -201,8 +219,8 @@ describe('ItemsController (e2e)', () => {
       const items = await itemModel.find({});
       const tag = await tagModel.findOne({ name: 'tag1' });
 
-      expect(items.length).toEqual(differentNames.length);
-      expect(tag.count).toEqual(differentNames.length);
+      expect(items.length).toEqual(itemsWithDifferentNames.length);
+      expect(tag.count).toEqual(itemsWithDifferentNames.length);
     });
   });
 
@@ -245,6 +263,7 @@ describe('ItemsController (e2e)', () => {
       expect(secondItem.tags[0].count).toEqual(2);
     });
   });
+
   describe('correctAllItemsByTagCounts (CRON)', () => {
     it('Should update ItemsByTag', async () => {
       const item1 = {
