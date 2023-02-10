@@ -30,6 +30,18 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name }) => {
             return
         }
 
+        // File size bigger than 5MB
+        if (file.size > 5e+6) {
+            console.error("File size is too big.")
+            return
+        }
+
+        // File type not image (svg, png, jpeg, jpg)
+        if (file.type !== "image/svg" && file.type !== "image/png" && file.type !== "image/jpeg" && file.type !== "image/jpg") {
+            console.error("File type is not supported.")
+            return
+        }
+
         const reader = new FileReader()
         reader.readAsDataURL(file)
         reader.onloadend = () => {
@@ -85,7 +97,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name }) => {
             {/* Upload Drag and Dropbox */}
             {!image && <>
                 {/* File upload */}
-                <input className="hidden" id="input-file-upload" ref={inputRef} type="file" onChange={(event) => handleChange(event, props)} />
+                <input className="hidden" id="input-file-upload" ref={inputRef} type="file" accept=".svg,.png,.jpg,.jpeg" onChange={(event) => handleChange(event, props)} />
 
                 {/* File upload content */}
                 <label className="flex items-center text-gray-500 h-full" htmlFor="input-file-upload">
@@ -94,7 +106,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name }) => {
                         <span className="font-medium text-gray-700 mr-1">Drag your Image or</span>
                         {/* Browse button */}
                         <button type="button" onClick={() => inputRef.current?.click()} className="inline font-medium text-blue-500 hover:text-blue-700">Browse</button>
-                        <p className="text-gray-500 text-sm">SVG, PNG or JPG (max file size: 20MB)</p>
+                        <p className="text-gray-500 text-sm">SVG, PNG, JPG or JPEG (max file size: 5MB)</p>
                     </div>
                 </label>
 
@@ -104,7 +116,10 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name }) => {
 
             {/* Image Preview */}
             {image && <div className="relative sm:w-max">
-                <IconButton className="absolute top-0 right-0 bg-white mr-1 mt-1" icon="delete" onClick={() => setImage(null)}></IconButton>
+                <IconButton className="absolute top-0 right-0 bg-white mr-1 mt-1" icon="delete" onClick={() => {
+                    setImage(null)
+                    props.form.setFieldValue(props.field.name, null)
+                }}></IconButton>
                 <Image className="w-full sm:w-auto object-cover h-56" src={image as string} width={200} height={200} alt="uploaded" />
             </div>}
         </div>
