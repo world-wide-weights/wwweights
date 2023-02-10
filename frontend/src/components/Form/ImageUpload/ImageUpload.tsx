@@ -81,7 +81,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name }) => {
     }
 
     return <Field name={name}>{(props: FieldProps<any>) => <>
-        <div className={`relative transition duration-200 w-full h-56 sm:h-36 ${dragActive ? "border-2 border-blue-500 border-dashed" : `${image ? "" : "border-2 border-gray-300 border-dashed"}`}`} onDragEnter={handleDrag}>
+        <div className={`relative transition duration-200 w-full h-56 ${dragActive ? "border-2 border-blue-500 border-dashed" : `${image ? "" : "border-2 border-gray-300 border-dashed"}`}`} onDragEnter={handleDrag}>
             {/* Upload Drag and Dropbox */}
             {!image && <>
                 {/* File upload */}
@@ -105,7 +105,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name }) => {
             {/* Image Preview */}
             {image && <div className="relative sm:w-max">
                 <IconButton className="absolute top-0 right-0 bg-white mr-1 mt-1" icon="delete" onClick={() => setImage(null)}></IconButton>
-                <Image className="w-full sm:w-auto object-cover h-56 sm:h-36" src={image as string} width={200} height={200} alt="uploaded" />
+                <Image className="w-full sm:w-auto object-cover h-56" src={image as string} width={200} height={200} alt="uploaded" />
             </div>}
         </div>
     </>}
