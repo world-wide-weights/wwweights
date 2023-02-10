@@ -379,11 +379,11 @@ describe('AuthController (e2e)', () => {
   describe('Test of the entire flow', () => {
     it('should allow for the user to create an account, login with credentials and then login with refresh token', async () => {
       // ACT 1
-      const signupRes = await request(app.getHttpServer())
+      const registerRes = await request(app.getHttpServer())
         .post('/auth/register')
         .send(SAMPLE_USER);
       // ASSERT 1
-      expect(signupRes.statusCode).toEqual(HttpStatus.CREATED);
+      expect(registerRes.statusCode).toEqual(HttpStatus.CREATED);
       // ACT 2
       const loginRes = await request(app.getHttpServer())
         .post('/auth/login')
