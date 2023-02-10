@@ -86,7 +86,7 @@ export const ImageUpload: React.FC = () => {
                 {dragActive && <div className="absolute w-full h-full inset-0" onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}></div>}
             </>}
             {image && <div className="relative w-max">
-                <IconButton className="absolute top-0 right-0 bg-white mr-2 mt-2" icon="delete" onClick={() => setImage(null)}></IconButton>
+                <IconButton className="absolute top-0 right-0 bg-white mr-1 mt-1" icon="delete" onClick={() => setImage(null)}></IconButton>
                 <Image className="w-auto h-36" src={image as string} width={200} height={200} alt="uploaded" />
             </div>}
         </div>
