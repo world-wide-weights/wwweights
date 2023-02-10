@@ -1,19 +1,49 @@
+import { AggregateRoot } from '@nestjs/cqrs';
+import { OmitType, PartialType } from '@nestjs/swagger';
 import { prop } from '@typegoose/typegoose';
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
+import { IsArray, IsInt, IsOptional, IsString } from 'class-validator';
 import { Item } from './item.model';
 
-export class Suggestion {
+class SuggestionTag {
+  @prop()
+  @IsArray()
+  @IsOptional()
+  @IsString({each: true})
+  add?: string[]
+
+  @prop()
+  @IsArray()
+  @IsOptional()
+  @IsString({each: true})
+  remove?: string[]
+}
+
+class SuggestionItem extends PartialType(OmitType(Item, ['slug', 'tags', 'createdAt'])){
+  @prop()
+  @IsOptional()
+  @Type(() => SuggestionTag)
+ tags?: SuggestionTag
+}
+
+export class EditSuggestion extends AggregateRoot {
   @Expose()
   @prop({ required: true })
-  user: string;
-
-  // TODO: Add relevant Account data
-
-  @Expose()
-  @prop({ required: true })
-  previousItem: Item;
+  @IsInt()
+  user: number;
 
   @Expose()
   @prop({ required: true })
-  updatedItem: Item;
+  @IsString()
+  itemSlug: string;
+
+  @Expose()
+  @prop({ required: true })
+  @Type(() => SuggestionItem)
+  updatedItemValues: SuggestionItem 
+
+  constructor(partial: Partial<EditSuggestion>) {
+    super()
+    Object.assign(this, partial);
+  }
 }
