@@ -1,30 +1,52 @@
 import { AggregateRoot } from '@nestjs/cqrs';
-import { OmitType, PartialType } from '@nestjs/swagger';
 import { prop } from '@typegoose/typegoose';
 import { Expose, Type } from 'class-transformer';
 import { IsArray, IsInt, IsOptional, IsString } from 'class-validator';
 import { SUGGESTION_STATUS } from '../shared/enums/suggestion-status.enum';
-import { Item } from './item.model';
 
 export class SuggestionTag {
-  @prop({type: [String]})
+  @prop({ type: [String] })
   @IsArray()
   @IsOptional()
-  @IsString({each: true})
-  push?: string[] 
+  @IsString({ each: true })
+  push?: string[];
 
-  @prop({type: [String]})
+  @prop({ type: [String] })
   @IsArray()
   @IsOptional()
-  @IsString({each: true})
-  pull?: string[]
+  @IsString({ each: true })
+  pull?: string[];
 }
 
-export class SuggestionItem extends PartialType(OmitType(Item, ['slug', 'tags', 'createdAt'])){
-  @prop({type: () => SuggestionTag})
+class SuggestionWeight{
+  @prop()
+  value?: number;
+
+  @prop()
+  isCa?: boolean;
+
+  @prop()
+  additionalValue?: number;
+}
+
+// We cannot use picktype here as item extends aggregateroot
+export class SuggestionItem {
+  @prop()
+  name?: string;
+
+  @prop({type: () => SuggestionWeight, _id: false })
+  weight?: SuggestionWeight;
+
+  @prop()
+  image?: string; // Link to static store or base-64 Encoded?
+
+  @prop()
+  source?: string;
+
+  @prop({ type: () => SuggestionTag, _id: false })
   @IsOptional()
   @Type(() => SuggestionTag)
- tags?: SuggestionTag
+  tags?: SuggestionTag;
 }
 
 export class EditSuggestion extends AggregateRoot {
@@ -39,24 +61,24 @@ export class EditSuggestion extends AggregateRoot {
   itemSlug: string;
 
   @Expose()
-  @prop({ required: true, type: () => SuggestionItem })
+  @prop({ required: true, type: () => SuggestionItem, _id: false })
   @Type(() => SuggestionItem)
-  updatedItemValues: SuggestionItem 
+  updatedItemValues: SuggestionItem;
 
   @Expose()
-  @prop({required: true, default: 0})
-  approvalCount: number
+  @prop({ required: true, default: 0 })
+  approvalCount: number;
 
   @Expose()
-  @prop({required: true, default: SUGGESTION_STATUS.PENDING })
-  status: SUGGESTION_STATUS
+  @prop({ required: true, default: SUGGESTION_STATUS.PENDING })
+  status: SUGGESTION_STATUS;
 
   @Expose()
-  @prop({required: true})
-  uuid: string
+  @prop({ required: true })
+  uuid: string;
 
   constructor(partial: Partial<EditSuggestion>) {
-    super()
+    super();
     Object.assign(this, partial);
   }
 }

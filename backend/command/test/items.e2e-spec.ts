@@ -2,6 +2,7 @@ import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { EventBus } from '@nestjs/cqrs';
 import { Test, TestingModule } from '@nestjs/testing';
+import { urlencoded } from 'express';
 import { Model } from 'mongoose';
 import * as request from 'supertest';
 import { ALLOWED_EVENT_ENTITIES } from '../src/eventstore/enums/allowedEntities.enum';
@@ -234,7 +235,7 @@ describe('ItemsController (e2e)', () => {
       // Create eventstore stream
       mockEventStore.existingStreams = [`${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`]
       //ACT
-      const res = await request(server).post(commandsPath +`${item.slug}/suggest/edit`).send({image: 'test'})
+      const res = await request(server).post(commandsPath +`items/${encodeURI(item.slug)}/suggest/edit`).send({image: 'test'})
       // ASSERT
       expect(res.status).toEqual(HttpStatus.OK)
       // Has suggestion gone through eventstore?
@@ -242,8 +243,10 @@ describe('ItemsController (e2e)', () => {
       // Does suggestion exist in mongoDb
       const suggestions = await editSuggestionModel.find()
       expect(suggestions.length).toEqual(1)
+      console.log(suggestions[0])
       expect(suggestions[0].updatedItemValues.image).toEqual('test')
     })
+
     it('items/:slug/suggest/edit => Should add correct user to suggestion', async () => {
       // ARRANGE
       const item = new itemModel(singleItem)
@@ -251,7 +254,7 @@ describe('ItemsController (e2e)', () => {
       // Create eventstore stream
       mockEventStore.existingStreams = [`${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`]
       //ACT
-      const res = await request(server).post(commandsPath +`${item.slug}/suggest/edit`).send({image: 'test'})
+      const res = await request(server).post(commandsPath +`items/${item.slug}/suggest/edit`).send({image: 'test'})
       // ASSERT
       expect(res.status).toEqual(HttpStatus.OK)
       // Does suggestion exist in mongoDb

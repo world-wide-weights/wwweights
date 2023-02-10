@@ -26,17 +26,17 @@ export class SuggestItemEditHandler
     const newSuggestion = new EditSuggestion({
       user: userId,
       itemSlug: itemSlug,
-      updatedItemValues: suggestItemEditData,
+      updatedItemValues: suggestItemEditData, 
       // TODO: Relying on the chance of this being a duplicate for an item being 0 is ok, but not great
-      uuid: randomUUID()
+      uuid: randomUUID(),
     });
 
     if (
-      await this.eventStore.doesStreamExist(
+      !(await this.eventStore.doesStreamExist(
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${newSuggestion.itemSlug}`,
-      )
+      ))
     ) {
-      throw new NotFoundException('No item with this slug exists')
+      throw new NotFoundException('No item with this slug exists');
     }
     const eventSuggestion = this.publisher.mergeObjectContext(newSuggestion);
     await this.eventStore.addEvent(
@@ -44,6 +44,8 @@ export class SuggestItemEditHandler
       ItemEditSuggestedEvent.name,
       eventSuggestion,
     );
-    this.logger.log(`Event created on stream: ${ALLOWED_EVENT_ENTITIES.EDIT_SUGGESTION}-${eventSuggestion.itemSlug}`);
+    this.logger.log(
+      `Event created on stream: ${ALLOWED_EVENT_ENTITIES.EDIT_SUGGESTION}-${eventSuggestion.itemSlug}`,
+    );
   }
 }
