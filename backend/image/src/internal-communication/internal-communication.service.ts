@@ -1,8 +1,8 @@
 import { HttpService } from '@nestjs/axios';
 import {
   Injectable,
-  InternalServerErrorException,
   Logger,
+  ServiceUnavailableException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AxiosError } from 'axios';
@@ -59,8 +59,8 @@ export class InternalCommunicationService {
             this.logger.error(
               `Request to auth backend failed! Error: ${error}`,
             );
-            throw new InternalServerErrorException(
-              'Auth Backend could not be notified!',
+            throw new ServiceUnavailableException(
+              'Auth Backend could not be notified at the time',
             );
           }),
         ),
