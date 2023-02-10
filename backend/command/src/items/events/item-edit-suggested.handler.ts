@@ -1,7 +1,7 @@
 import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { InjectModel } from '@m8a/nestjs-typegoose';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { EditSuggestion } from 'src/models/suggestion.model';
+import { EditSuggestion } from 'src/models/edit-suggestion.model';
 import { ItemEditSuggestedEvent } from './item-edit-suggested.event';
 import { ReturnModelType } from '@typegoose/typegoose';
 

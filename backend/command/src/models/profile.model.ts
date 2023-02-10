@@ -1,7 +1,7 @@
 import { prop } from '@typegoose/typegoose';
 import { Expose } from 'class-transformer';
 import { Item } from './item.model';
-import { EditSuggestion } from './suggestion.model';
+import { EditSuggestion } from './edit-suggestion.model';
 
 export class Profile {
   @Expose()

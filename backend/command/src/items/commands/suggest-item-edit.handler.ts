@@ -3,7 +3,7 @@ import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { NotFoundError } from 'rxjs';
 import { ALLOWED_EVENT_ENTITIES } from 'src/eventstore/enums/allowedEntities.enum';
 import { EventStore } from 'src/eventstore/eventstore';
-import { EditSuggestion } from 'src/models/suggestion.model';
+import { EditSuggestion } from 'src/models/edit-suggestion.model';
 import { ItemEditSuggestedEvent } from '../events/item-edit-suggested.event';
 import { SuggestItemEditCommand } from './suggest-item-edit.command';
 

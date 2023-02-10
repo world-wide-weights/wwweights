@@ -42,6 +42,10 @@ export class EditSuggestion extends AggregateRoot {
   @Type(() => SuggestionItem)
   updatedItemValues: SuggestionItem 
 
+  @Expose()
+  @prop({required: true, default: 0})
+  approvalCount: number
+
   constructor(partial: Partial<EditSuggestion>) {
     super()
     Object.assign(this, partial);
