@@ -25,7 +25,7 @@ import {
 import { UserEntity } from '../db/entities/users.entity';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dtos/login.dto';
-import { SignUpDTO } from './dtos/signup.dto';
+import { RegisterDTO } from './dtos/register.dto';
 import { RefreshTokenGuard } from './guards/refresh-token.guard';
 import { RequestWithRefreshPayload } from './interfaces/request-with-refresh-payload.interface';
 import { AuthStatisticsResponse } from './responses/auth-statistics.response';
@@ -39,9 +39,9 @@ import { TokenResponse } from './responses/token.response';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('signup')
-  @ApiBody({ type: SignUpDTO })
-  @ApiOperation({ description: 'Signup new users' })
+  @Post('register')
+  @ApiBody({ type: RegisterDTO })
+  @ApiOperation({ description: 'Register new users' })
   @ApiConflictResponse({
     status: HttpStatus.CONFLICT,
     description: 'User properties already in use',
@@ -55,8 +55,8 @@ export class AuthController {
     description: 'User has been created',
     type: UserEntity,
   })
-  async signup(@Body() signUpData: SignUpDTO): Promise<UserEntity> {
-    return await this.authService.signup(signUpData);
+  async register(@Body() registerData: RegisterDTO): Promise<UserEntity> {
+    return await this.authService.register(registerData);
   }
 
   @Post('login')

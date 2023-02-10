@@ -7,6 +7,7 @@ import { ItemsByTag } from '../models/items-by-tag.model';
 import { Profile } from '../models/profile.model';
 import { Suggestion } from '../models/suggestion.model';
 import { Tag } from '../models/tag.model';
+import { SharedModule } from '../shared/shared.module';
 import { CommandHandlers } from './commands';
 import { ItemCronJobHandler } from './cron/items.cron';
 import { EventHandlers } from './events';
@@ -15,6 +16,7 @@ import { Sagas } from './sagas';
 @Module({
   imports: [
     CqrsModule,
+    SharedModule,
     TypegooseModule.forFeature([Item, ItemsByTag, Tag, Suggestion, Profile]),
     EventStoreModule,
   ],

@@ -15,7 +15,7 @@ import { ROLES } from '../shared/enums/roles.enum';
 import { STATUS } from '../shared/enums/status.enum';
 import { LoginDTO } from './dtos/login.dto';
 import { RefreshJWTPayload } from './dtos/refresh-jwt-payload.dto';
-import { SignUpDTO } from './dtos/signup.dto';
+import { RegisterDTO } from './dtos/register.dto';
 import { TokenResponse } from './responses/token.response';
 
 import { createPublicKey } from 'crypto';
@@ -32,7 +32,7 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  async signup(body: SignUpDTO): Promise<UserEntity> {
+  async register(body: RegisterDTO): Promise<UserEntity> {
     // hash password
     const hash = await bhash(body.password, 10);
     const newUser = await this.userService.insertUser({
