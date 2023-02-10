@@ -2,7 +2,7 @@ import { ConfigService } from '@nestjs/config';
 import { createHash } from 'crypto';
 import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync } from 'fs';
 import { join } from 'path';
-import sharp from 'sharp';
+import * as sharp from 'sharp';
 import { UploadService } from './upload.service';
 
 describe('UploadService', () => {

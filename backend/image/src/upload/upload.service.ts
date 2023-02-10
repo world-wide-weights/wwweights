@@ -10,7 +10,7 @@ import { createHash } from 'crypto';
 import { existsSync, rmSync, lstatSync } from 'fs';
 import { copyFile, rm, readFile, writeFile } from 'fs/promises';
 import {join} from 'path';
-import sharp from 'sharp';
+import * as sharp from 'sharp';
 import { InternalCommunicationService } from '../internal-communication/internal-communication.service';
 import {
   pathBuilder,

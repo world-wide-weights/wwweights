@@ -212,7 +212,7 @@ describe('UploadController (e2e)', () => {
             join(process.cwd(), 'test', 'helpers', 'test-oversized.png'),
           );
         // ASSERT
-        expect(res.statusCode).toEqual(HttpStatus.INTERNAL_SERVER_ERROR);
+        expect(res.statusCode).toEqual(HttpStatus.SERVICE_UNAVAILABLE);
         // Image for failed upload should not be persisted
         expect(readdirSync(pathBuilder(undefined, 'disk')).length).toEqual(
           0,
