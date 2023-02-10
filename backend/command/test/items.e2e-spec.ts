@@ -20,6 +20,7 @@ import {
 import { timeout } from './helpers/timeout';
 import { MockEventStore } from './mocks/eventstore';
 import {
+  differentNames as itemsWithDifferentNames,
   insertItem,
   insertItem2,
   singleItem,
@@ -207,21 +208,20 @@ describe('ItemsController (e2e)', () => {
       expect(items.length).toEqual(1);
     });
 
-    // it('items/insert => insert Items in quick succession', async () => {
-    //   // forEach because we do not want to await in the loop as it would be with for ... of
-    //   differentNames.forEach(async (name) => {
-    //     await request(server)
-    //       .post(commandsPath + 'items/insert')
-    //       .send({ ...insertItem2, name })
-    //       .expect(HttpStatus.OK);
-    //   });
-    //   await timeout(800);
-    //   const items = await itemModel.find({});
-    //   const tag = await tagModel.findOne({ name: 'tag1' });
+    it('items/insert => insert Items in quick succession', async () => {
+      itemsWithDifferentNames.forEach(async (name) => {
+        await request(server)
+          .post(commandsPath + 'items/insert')
+          .send({ ...insertItem2, name })
+          .expect(HttpStatus.OK);
+      });
+      await timeout(800);
+      const items = await itemModel.find({});
+      const tag = await tagModel.findOne({ name: 'tag1' });
 
-    //   expect(items.length).toEqual(differentNames.length);
-    //   expect(tag.count).toEqual(differentNames.length);
-    // });
+      expect(items.length).toEqual(itemsWithDifferentNames.length);
+      expect(tag.count).toEqual(itemsWithDifferentNames.length);
+    });
   });
 
   describe('correctAllItemTagCounts (CRON)', () => {
