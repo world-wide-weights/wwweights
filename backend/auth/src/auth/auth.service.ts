@@ -3,6 +3,7 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  ServiceUnavailableException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -20,9 +21,11 @@ import { TokenResponse } from './responses/token.response';
 
 import { createPublicKey } from 'crypto';
 import { RsaJWK, RsaJWKBase } from './responses/jwks.response';
+import { AuthStatisticsResponse } from './responses/auth-statistics.response';
 
 @Injectable()
 export class AuthService {
+  
   private readonly logger = new Logger(AuthService.name);
   constructor(
     private readonly userService: UserService,
@@ -113,5 +116,21 @@ export class AuthService {
       use: 'sig',
       kid: this.configService.get<string>('JWT_AUTH_KID'),
     };
+  }
+
+  /**
+   * @description Get auth statistics
+   */
+  async getAuthStatistics(): Promise<AuthStatisticsResponse> {
+    let totalUsersCount = 0
+    try{
+      totalUsersCount = await this.userService.getUserCount()
+    } catch(error){
+        this.logger.warn(`Could not receive total user count due to an error ${error}`)
+        throw new InternalServerErrorException()
+    }
+    return {
+      totalUsers: totalUsersCount
+    }
   }
 }
