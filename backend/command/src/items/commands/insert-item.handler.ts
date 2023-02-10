@@ -22,11 +22,11 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
   ) {}
 
   // No returns, just Exceptions in CQRS
-  async execute({ insertItemDto, user }: InsertItemCommand) {
+  async execute({ insertItemDto, userId }: InsertItemCommand) {
     try {
       const newItem = new Item({
         ...insertItemDto,
-        user: user.id,
+        user: userId,
         slug: getSlug(insertItemDto.name),
         tags: insertItemDto.tags?.map(
           (tag) => new Tag({ name: getSlug(tag, ' ') }),

@@ -52,6 +52,6 @@ export class ItemsController {
     @Req() { user }: JwtWithUserDto,
     @Body() insertItemDto: InsertItemDto,
   ) {
-    await this.commandBus.execute(new InsertItemCommand(insertItemDto, user));
+    await this.commandBus.execute(new InsertItemCommand(insertItemDto, user.id));
   }
 }
