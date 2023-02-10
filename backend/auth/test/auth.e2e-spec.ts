@@ -59,12 +59,12 @@ describe('AuthController (e2e)', () => {
     await app.close();
   });
 
-  describe('/auth/signup (POST)', () => {
+  describe('/auth/register (POST)', () => {
     describe('Positive Tests', () => {
       it('Should accept valid DTO ', () => {
         // ACT & ASSERT
         return request(app.getHttpServer())
-          .post('/auth/signup')
+          .post('/auth/register')
           .send(SAMPLE_USER)
           .expect(HttpStatus.CREATED);
       });
@@ -72,7 +72,7 @@ describe('AuthController (e2e)', () => {
       it('Should write to DB ', async () => {
         // ACT
         const res = await request(app.getHttpServer())
-          .post('/auth/signup')
+          .post('/auth/register')
           .send(SAMPLE_USER);
 
         // ASSERT
@@ -91,7 +91,7 @@ describe('AuthController (e2e)', () => {
       it('Should fail for incomplete payload', async () => {
         // ACT
         const res = await request(app.getHttpServer())
-          .post('/auth/signup')
+          .post('/auth/register')
           .send({});
         // ASSERT
         expect(res.statusCode).toEqual(HttpStatus.BAD_REQUEST);
@@ -100,7 +100,7 @@ describe('AuthController (e2e)', () => {
       it('Should fail for invalid email address input', async () => {
         // ACT
         const res = await request(app.getHttpServer())
-          .post('/auth/signup')
+          .post('/auth/register')
           .send({
             ...SAMPLE_USER,
             email: 'notValidInput',
@@ -112,7 +112,7 @@ describe('AuthController (e2e)', () => {
       it('Should fail for password without sufficient length', async () => {
         // ACT
         const res = await request(app.getHttpServer())
-          .post('/auth/signup')
+          .post('/auth/register')
           .send({
             ...SAMPLE_USER,
             password: 'short',
@@ -126,7 +126,7 @@ describe('AuthController (e2e)', () => {
         await createUser(dataSource, { email: SAMPLE_USER.email });
         // ACT
         const res = await request(app.getHttpServer())
-          .post('/auth/signup')
+          .post('/auth/register')
           .send(SAMPLE_USER);
 
         // ASSERT
@@ -138,7 +138,7 @@ describe('AuthController (e2e)', () => {
         await createUser(dataSource, { username: SAMPLE_USER.username });
         // ACT
         const res = await request(app.getHttpServer())
-          .post('/auth/signup')
+          .post('/auth/register')
           .send(SAMPLE_USER);
 
         // ASSERT
@@ -379,11 +379,11 @@ describe('AuthController (e2e)', () => {
   describe('Test of the entire flow', () => {
     it('should allow for the user to create an account, login with credentials and then login with refresh token', async () => {
       // ACT 1
-      const signupRes = await request(app.getHttpServer())
-        .post('/auth/signup')
+      const registerRes = await request(app.getHttpServer())
+        .post('/auth/register')
         .send(SAMPLE_USER);
       // ASSERT 1
-      expect(signupRes.statusCode).toEqual(HttpStatus.CREATED);
+      expect(registerRes.statusCode).toEqual(HttpStatus.CREATED);
       // ACT 2
       const loginRes = await request(app.getHttpServer())
         .post('/auth/login')
