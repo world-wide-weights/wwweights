@@ -23,6 +23,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name }) => {
     /**
      * Handles the image.
      * @param files The files that were uploaded.
+     * @param formikProps helper
      */
     const handleImage = (files: FileList, formikProps: FieldProps<any>) => {
         const file = files[0]
@@ -53,6 +54,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name }) => {
     /**
      * Handles the drag event to set drag state correct.
      * @param event The drag event.
+     * @param formikProps helper
      */
     const handleDrag = function (event: React.DragEvent<HTMLDivElement>) {
         event.preventDefault()
@@ -68,6 +70,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name }) => {
     /**
      * Handles image when got inserted by drag an drop.
      * @param event The drop event.
+     * @param formikProps helper
      */
     const handleDrop = function (event: React.DragEvent<HTMLDivElement>, formikProps: FieldProps<any>) {
         event.preventDefault()
@@ -82,6 +85,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name }) => {
     /**
      * Handles image when inserted via browse button.
      * @param event The change event.
+     * @param formikProps helper
      */
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>, formikProps: FieldProps<any>) => {
         event.preventDefault()
@@ -90,6 +94,15 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name }) => {
         if (event.target.files && event.target.files[0]) {
             handleImage(event.target.files, formikProps)
         }
+    }
+
+    /**
+     * Clear image from state and formik.
+     * @param formikProps helper
+     */
+    const resetImage = (formikProps: FieldProps<any>) => {
+        setImage(null)
+        formikProps.form.setFieldValue(formikProps.field.name, null)
     }
 
     return <Field name={name}>{(props: FieldProps<any>) => <>
@@ -116,10 +129,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name }) => {
 
             {/* Image Preview */}
             {image && <div className="relative sm:w-max">
-                <IconButton className="absolute top-0 right-0 bg-white mr-1 mt-1" icon="delete" onClick={() => {
-                    setImage(null)
-                    props.form.setFieldValue(props.field.name, null)
-                }}></IconButton>
+                <IconButton className="absolute top-0 right-0 bg-white mr-1 mt-1" icon="delete" onClick={() => resetImage(props)}></IconButton>
                 <Image className="w-full sm:w-auto object-cover h-56" src={image as string} width={200} height={200} alt="uploaded" />
             </div>}
         </div>
