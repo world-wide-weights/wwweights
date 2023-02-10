@@ -53,9 +53,7 @@ const Login: NextPageCustomProps = () => {
                 callbackUrl: callbackUrl ?? routes.home,
             })
 
-            return true
-
-            if (response === undefined || response.ok !== true) {
+            if (response === undefined || response?.ok !== true) {
                 setError("Something went wrong. Try again or come later.")
                 console.log({
                     id: "login submit",

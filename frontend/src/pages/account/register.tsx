@@ -52,7 +52,7 @@ const Register: NextPageCustomProps = () => {
     const onFormSubmit = async ({ username, email, password }: RegisterDto) => {
         // Register in our backend
         try {
-            await authRequest.post<User>("/signup", {
+            await authRequest.post<User>("/auth/register", {
                 username,
                 email,
                 password
