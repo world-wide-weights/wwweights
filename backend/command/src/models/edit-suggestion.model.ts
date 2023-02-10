@@ -3,6 +3,7 @@ import { OmitType, PartialType } from '@nestjs/swagger';
 import { prop } from '@typegoose/typegoose';
 import { Expose, Type } from 'class-transformer';
 import { IsArray, IsInt, IsOptional, IsString } from 'class-validator';
+import { SUGGESTION_STATUS } from 'src/shared/enums/suggestion-status.enum';
 import { Item } from './item.model';
 
 class SuggestionTag {
@@ -45,6 +46,10 @@ export class EditSuggestion extends AggregateRoot {
   @Expose()
   @prop({required: true, default: 0})
   approvalCount: number
+
+  @Expose()
+  @prop({required: true, default: SUGGESTION_STATUS.PENDING })
+  status: SUGGESTION_STATUS
 
   constructor(partial: Partial<EditSuggestion>) {
     super()
