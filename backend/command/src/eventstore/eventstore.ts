@@ -19,7 +19,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { EventBus } from '@nestjs/cqrs';
 import { readFileSync } from 'fs';
-import { ItemEditSuggestedEvent } from 'src/items/events/item-edit-suggested.event';
+import { ItemEditSuggestedEvent } from '../items/events/item-edit-suggested.event';
 import { ItemInsertedEvent } from '../items/events/item-inserted.event';
 import { ALLOWED_EVENT_ENTITIES } from './enums/allowedEntities.enum';
 

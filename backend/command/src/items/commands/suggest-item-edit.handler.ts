@@ -1,9 +1,9 @@
 import { Logger, NotFoundException } from '@nestjs/common';
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
-import { NotFoundError } from 'rxjs';
-import { ALLOWED_EVENT_ENTITIES } from 'src/eventstore/enums/allowedEntities.enum';
-import { EventStore } from 'src/eventstore/eventstore';
-import { EditSuggestion } from 'src/models/edit-suggestion.model';
+import { randomUUID } from 'crypto';
+import { ALLOWED_EVENT_ENTITIES } from '../../eventstore/enums/allowedEntities.enum';
+import { EventStore } from '../../eventstore/eventstore';
+import { EditSuggestion } from '../../models/edit-suggestion.model';
 import { ItemEditSuggestedEvent } from '../events/item-edit-suggested.event';
 import { SuggestItemEditCommand } from './suggest-item-edit.command';
 
@@ -27,6 +27,8 @@ export class SuggestItemEditHandler
       user: userId,
       itemSlug: itemSlug,
       updatedItemValues: suggestItemEditData,
+      // TODO: Relying on the chance of this being a duplicate for an item being 0 is ok, but not great
+      uuid: randomUUID()
     });
 
     if (

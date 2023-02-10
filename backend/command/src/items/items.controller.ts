@@ -62,6 +62,7 @@ export class ItemsController {
 
   @Post(':slug/suggest/edit')
   @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
   async suggestEdit(
     @Body() editSuggestionDto: SuggestItemEditDTO,
     @Param('slug') itemSlug: string,

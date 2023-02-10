@@ -4,10 +4,12 @@ import { EventBus } from '@nestjs/cqrs';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
 import * as request from 'supertest';
+import { ALLOWED_EVENT_ENTITIES } from '../src/eventstore/enums/allowedEntities.enum';
 import { EventStore } from '../src/eventstore/eventstore';
 import { EventStoreModule } from '../src/eventstore/eventstore.module';
 import { ItemCronJobHandler } from '../src/items/cron/items.cron';
 import { ItemsModule } from '../src/items/items.module';
+import { EditSuggestion } from '../src/models/edit-suggestion.model';
 import { Item } from '../src/models/item.model';
 import { ItemsByTag } from '../src/models/items-by-tag.model';
 import { Tag } from '../src/models/tag.model';
@@ -34,6 +36,7 @@ describe('ItemsController (e2e)', () => {
   let itemModel: Model<Item>;
   let tagModel: Model<Tag>;
   let itemsByTagModel: Model<ItemsByTag>;
+  let editSuggestionModel: Model<EditSuggestion>
   const mockEventStore: MockEventStore = new MockEventStore();
   let itemCronJobHandler: ItemCronJobHandler;
   let server: any; // Has to be any because of supertest not having a type for it either
@@ -68,6 +71,7 @@ describe('ItemsController (e2e)', () => {
     itemModel = moduleFixture.get('ItemModel');
     tagModel = moduleFixture.get('TagModel');
     itemsByTagModel = moduleFixture.get('ItemsByTagModel');
+    editSuggestionModel = moduleFixture.get('EditSuggestionModel')
 
     app.setGlobalPrefix('commands/v1');
     await app.init();
@@ -222,6 +226,38 @@ describe('ItemsController (e2e)', () => {
       expect(items.length).toEqual(itemsWithDifferentNames.length);
       expect(tag.count).toEqual(itemsWithDifferentNames.length);
     });
+
+    it('items/:slug/suggest/edit => Should create a suggestion', async () => {
+      // ARRANGE
+      const item = new itemModel(singleItem)
+      await item.save()
+      // Create eventstore stream
+      mockEventStore.existingStreams = [`${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`]
+      //ACT
+      const res = await request(server).post(commandsPath +`${item.slug}/suggest/edit`).send({image: 'test'})
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.OK)
+      // Has suggestion gone through eventstore?
+      expect(mockEventStore.existingStreams.length).toEqual(2)
+      // Does suggestion exist in mongoDb
+      const suggestions = await editSuggestionModel.find()
+      expect(suggestions.length).toEqual(1)
+      expect(suggestions[0].updatedItemValues.image).toEqual('test')
+    })
+    it('items/:slug/suggest/edit => Should add correct user to suggestion', async () => {
+      // ARRANGE
+      const item = new itemModel(singleItem)
+      await item.save()
+      // Create eventstore stream
+      mockEventStore.existingStreams = [`${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`]
+      //ACT
+      const res = await request(server).post(commandsPath +`${item.slug}/suggest/edit`).send({image: 'test'})
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.OK)
+      // Does suggestion exist in mongoDb
+      const suggestion = await editSuggestionModel.findOne({itemSlug: item.slug})
+      expect(suggestion.user).toEqual(verifiedRequestUser.id)
+    })
   });
 
   describe('correctAllItemTagCounts (CRON)', () => {

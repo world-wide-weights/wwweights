@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ICommand, ofType, Saga } from '@nestjs/cqrs';
+import { ofType, Saga } from '@nestjs/cqrs';
 import { map, Observable } from 'rxjs';
-import { EditSuggestion } from 'src/models/edit-suggestion.model';
+import { EditSuggestion } from '../../models/edit-suggestion.model';
 import { ItemEditSuggestedEvent } from '../events/item-edit-suggested.event';
 
 @Injectable()

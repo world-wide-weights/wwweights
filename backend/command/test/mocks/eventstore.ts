@@ -8,7 +8,7 @@ export const logStringify = (obj: any) => {
 @Injectable()
 export class MockEventStore {
   private readonly logger = new Logger(MockEventStore.name);
-  private existingStreams: string[] = [];
+  existingStreams: string[] = [];
   private latestId = 0;
   eventBus: EventBus;
 
