@@ -1,5 +1,5 @@
 import { Form, Formik } from "formik"
-import { signIn, SignInResponse } from "next-auth/react"
+import { signIn } from "next-auth/react"
 import { useRouter } from "next/router"
 import { useMemo, useState } from "react"
 import * as yup from "yup"
@@ -47,17 +47,26 @@ const Login: NextPageCustomProps = () => {
         try {
             // Sign in with next auth
             const response = await signIn("credentials", {
-                redirect: false,
+                redirect: true,
                 email: values.email,
                 password: values.password,
-            }) as SignInResponse
+                callbackUrl: callbackUrl ?? routes.home,
+            })
 
-            // When everything was ok go to url we was before login or home
-            if (response.ok) {
-                router.push(callbackUrl ?? routes.home)
-            } else if (response.error) {
-                setError(response.error)
+            return true
+
+            if (response === undefined || response.ok !== true) {
+                setError("Something went wrong. Try again or come later.")
+                console.log({
+                    id: "login submit",
+                    data: {
+                        response
+                    }
+                })
+                return
             }
+
+            router.push(callbackUrl ?? routes.home)
         } catch (error) {
             setError("Something went wrong. Try again or come later.")
         }
@@ -77,6 +86,10 @@ const Login: NextPageCustomProps = () => {
                     <Button kind="tertiary" className="mb-5">Forgot Password?</Button>
 
                     <Button datacy="login-button" disabled={!(dirty && isValid)} type="submit">Login</Button>
+                    <Button onClick={() => onFormSubmit({
+                        email: "text@wwweigths.com",
+                        password: "12345678",
+                    })}>Login with TestUser</Button>
                 </Form>
             )}
         </Formik>
