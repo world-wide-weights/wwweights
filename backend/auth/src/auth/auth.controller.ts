@@ -39,7 +39,7 @@ import { TokenResponse } from './responses/token.response';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('signup')
+  @Post('register')
   @ApiBody({ type: SignUpDTO })
   @ApiOperation({ description: 'Signup new users' })
   @ApiConflictResponse({
