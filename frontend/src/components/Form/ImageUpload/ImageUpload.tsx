@@ -1,5 +1,7 @@
 import Image from "next/image"
 import { useRef, useState } from "react"
+import { IconButton } from "../../Button/IconButton"
+import { Icon } from "../../Icon/Icon"
 
 /**
  * A drag and drop image upload component.
@@ -69,17 +71,24 @@ export const ImageUpload: React.FC = () => {
         }
     }
 
-    return (
-        <div className="relative h-60 bg-blue-500" onDragEnter={handleDrag}>
-            <input className="hidden" id="input-file-upload" ref={inputRef} type="file" onChange={handleChange} />
-            <label className={`flex items-center justify-center h-full ${dragActive ? "text-white" : ""}`} htmlFor="input-file-upload">
-                <div>
-                    <p>Drag and drop your file here or</p>
-                    <button onClick={() => inputRef.current?.click()} className="upload-button">Upload a file</button>
-                </div>
-            </label>
-            {dragActive && <div className="absolute w-full h-full inset-0" onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}></div>}
-            {image && <Image src={image as string} alt="uploaded" />}
+    return <>
+        <div className={`relative transition duration-200 ${dragActive ? "border-2 border-blue-500 border-dashed" : `${image ? "" : "border-2 border-gray-300 border-dashed"}`} h-36`} onDragEnter={handleDrag}>
+            {!image && <>
+                <input className="hidden" id="input-file-upload" ref={inputRef} type="file" onChange={handleChange} />
+                <label className="flex items-center text-gray-500 h-full" htmlFor="input-file-upload">
+                    <Icon className={`text-5xl ${dragActive ? "text-blue-500" : ""} mx-5`}>image</Icon>
+                    <div>
+                        <span className="font-medium text-gray-700 mr-1">Drag your Image or</span>
+                        <button onClick={() => inputRef.current?.click()} className="inline font-medium text-blue-500 hover:text-blue-700">Browse</button>
+                        <p className="text-gray-500 text-sm">SVG, PNG or JPG (max file size: 20MB)</p>
+                    </div>
+                </label>
+                {dragActive && <div className="absolute w-full h-full inset-0" onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}></div>}
+            </>}
+            {image && <div className="relative w-max">
+                <IconButton className="absolute top-0 right-0 bg-white mr-2 mt-2" icon="delete" onClick={() => setImage(null)}></IconButton>
+                <Image className="w-auto h-36" src={image as string} width={200} height={200} alt="uploaded" />
+            </div>}
         </div>
-    )
+    </>
 }
