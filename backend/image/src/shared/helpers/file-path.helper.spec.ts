@@ -1,5 +1,5 @@
-import * as path from 'path';
-import * as fs from 'fs';
+import { join } from 'path';
+import { existsSync, rmdirSync } from 'fs';
 import {
   pathBuilder,
   getOSAbsolutePathIndicator,
@@ -23,7 +23,7 @@ describe('file-path.helper.ts', () => {
         // ACT
         const res = pathBuilder(relativePath, 'If/I/See/This/It/Failed');
         // ASSERT
-        expect(res).toEqual(path.join(process.cwd(), `testing`));
+        expect(res).toEqual(join(process.cwd(), `testing`));
       });
       it('Should convert complex relative path to absolute path', () => {
         // ARRANGE
@@ -31,7 +31,7 @@ describe('file-path.helper.ts', () => {
         // ACT
         const res = pathBuilder(relativePath, 'If/I/See/This/It/Failed');
         // ASSERT
-        expect(res).toEqual(path.join(process.cwd(), `testing`));
+        expect(res).toEqual(join(process.cwd(), `testing`));
       });
       it('Should use fallback folder in cwd if no path was passed', () => {
         // ARRANGE
@@ -39,7 +39,7 @@ describe('file-path.helper.ts', () => {
         // ACT
         const res = pathBuilder(null, fallback);
         // ASSERT
-        expect(res).toEqual(path.join(process.cwd(), fallback));
+        expect(res).toEqual(join(process.cwd(), fallback));
       });
     });
   });
@@ -96,32 +96,32 @@ describe('file-path.helper.ts', () => {
   });
   describe('validateOrCreateDirectory', () => {
     afterEach(() => {
-      if (fs.existsSync(path.join(process.cwd(), 'validationTesting'))) {
-        fs.rmdirSync(path.join(process.cwd(), 'validationTesting'));
+      if (existsSync(join(process.cwd(), 'validationTesting'))) {
+        rmdirSync(join(process.cwd(), 'validationTesting'));
       }
     });
     describe('Positive Tests', () => {
       it('Should pass without effect for existing directory', () => {
         // ARRANGE
-        const existingPath = path.join(process.cwd(), 'src');
+        const existingPath = join(process.cwd(), 'src');
         // ACT & ASSERT
         expect(() =>
           validateOrCreateDirectory(existingPath),
         ).not.toThrowError();
-        expect(fs.existsSync(existingPath)).toEqual(true);
+        expect(existsSync(existingPath)).toEqual(true);
       });
       it('Should create directory if not exists', () => {
         // ARRANGE
-        const newPath = path.join(process.cwd(), 'validationTesting');
+        const newPath = join(process.cwd(), 'validationTesting');
         // ACT & ASSERT
         expect(() => validateOrCreateDirectory(newPath)).not.toThrowError();
-        expect(fs.existsSync(newPath)).toEqual(true);
+        expect(existsSync(newPath)).toEqual(true);
       });
     });
     describe('Negative Tests', () => {
       it('Should fail for path to file', () => {
         // ARRANGE
-        const existingFilePath = path.join(process.cwd(), 'src', 'main.ts');
+        const existingFilePath = join(process.cwd(), 'src', 'main.ts');
         // ACT & ASSERT
         expect(() => validateOrCreateDirectory(existingFilePath)).toThrowError(
           `${existingFilePath} does not point to directory and therefore is not allowed in this context`,

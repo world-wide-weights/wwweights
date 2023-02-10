@@ -2,8 +2,8 @@ import { HttpService } from '@nestjs/axios';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import * as fs from 'fs';
-import * as path from 'path';
+import { copyFileSync, existsSync, readdirSync } from 'fs';
+import { join } from 'path';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { JwtAuthGuard } from '../src/shared/guards/jwt.guard';
@@ -63,11 +63,11 @@ describe('UploadController (e2e)', () => {
           .set('Authorization', 'Bearer Mock')
           .attach(
             'image',
-            path.join(process.cwd(), 'test', 'helpers', 'test.jpg'),
+            join(process.cwd(), 'test', 'helpers', 'test.jpg'),
           );
         // ASSERT
         expect(res.statusCode).toEqual(HttpStatus.CREATED);
-        expect(fs.readdirSync(pathBuilder(undefined, 'disk')).length).toEqual(
+        expect(readdirSync(pathBuilder(undefined, 'disk')).length).toEqual(
           1,
         );
       });
@@ -78,11 +78,11 @@ describe('UploadController (e2e)', () => {
           .set('Authorization', 'Bearer Mock')
           .attach(
             'image',
-            path.join(process.cwd(), 'test', 'helpers', 'test.png'),
+            join(process.cwd(), 'test', 'helpers', 'test.png'),
           );
         // ASSERT
         expect(res.statusCode).toEqual(HttpStatus.CREATED);
-        expect(fs.readdirSync(pathBuilder(undefined, 'disk')).length).toEqual(
+        expect(readdirSync(pathBuilder(undefined, 'disk')).length).toEqual(
           1,
         );
       });
@@ -93,11 +93,11 @@ describe('UploadController (e2e)', () => {
           .set('Authorization', 'Bearer Mock')
           .attach(
             'image',
-            path.join(process.cwd(), 'test', 'helpers', 'test-oversized.png'),
+            join(process.cwd(), 'test', 'helpers', 'test-oversized.png'),
           );
         // ASSERT
         expect(res.statusCode).toEqual(HttpStatus.CREATED);
-        expect(fs.readdirSync(pathBuilder(undefined, 'disk')).length).toEqual(
+        expect(readdirSync(pathBuilder(undefined, 'disk')).length).toEqual(
           1,
         );
       });
@@ -108,11 +108,11 @@ describe('UploadController (e2e)', () => {
           .set('Authorization', 'Bearer Mock')
           .attach(
             'image',
-            path.join(process.cwd(), 'test', 'helpers', 'test-oversized.png'),
+            join(process.cwd(), 'test', 'helpers', 'test-oversized.png'),
           );
         // ASSERT
         expect(res.statusCode).toEqual(HttpStatus.CREATED);
-        expect(fs.readdirSync(pathBuilder(undefined, 'disk')).length).toEqual(
+        expect(readdirSync(pathBuilder(undefined, 'disk')).length).toEqual(
           1,
         );
         expect(httpMock.params.length).not.toEqual(0);
@@ -123,11 +123,11 @@ describe('UploadController (e2e)', () => {
           .post('/upload/image')
           .attach(
             'image',
-            path.join(process.cwd(), 'test', 'helpers', 'test-oversized.png'),
+            join(process.cwd(), 'test', 'helpers', 'test-oversized.png'),
           );
         // ASSERT
         expect(res.statusCode).toEqual(HttpStatus.CREATED);
-        expect(fs.readdirSync(pathBuilder(undefined, 'cache')).length).toEqual(
+        expect(readdirSync(pathBuilder(undefined, 'cache')).length).toEqual(
           0,
         );
       });
@@ -138,13 +138,13 @@ describe('UploadController (e2e)', () => {
           .set('Authorization', 'Bearer Mock')
           .attach(
             'image',
-            path.join(process.cwd(), 'test', 'helpers', 'test.png'),
+            join(process.cwd(), 'test', 'helpers', 'test.png'),
           );
         // ASSERT
         expect(res.statusCode).toEqual(HttpStatus.CREATED);
         const imagePath = res.body.path;
         expect(
-          fs.existsSync(path.join(pathBuilder(undefined, 'disk'), imagePath)),
+          existsSync(join(pathBuilder(undefined, 'disk'), imagePath)),
         ).toEqual(true);
       });
       // File size limitation not tested for obvious reasons
@@ -170,7 +170,7 @@ describe('UploadController (e2e)', () => {
           .set('Authorization', 'Bearer Mock')
           .attach(
             'image',
-            path.join(process.cwd(), 'test', 'helpers', 'test.jpg'),
+            join(process.cwd(), 'test', 'helpers', 'test.jpg'),
           );
         // ASSERT
         expect(res.statusCode).toEqual(HttpStatus.FORBIDDEN);
@@ -179,11 +179,11 @@ describe('UploadController (e2e)', () => {
         // ASSERT
         // Copy file to disk folder
         const fileHash = await uploadService.hashFile(
-          path.join(process.cwd(), 'test', 'helpers', 'test.png'),
+          join(process.cwd(), 'test', 'helpers', 'test.png'),
         );
-        fs.copyFileSync(
-          path.join(process.cwd(), 'test', 'helpers', 'test.png'),
-          path.join(pathBuilder(undefined, 'disk'), `${fileHash}.png`),
+        copyFileSync(
+          join(process.cwd(), 'test', 'helpers', 'test.png'),
+          join(pathBuilder(undefined, 'disk'), `${fileHash}.png`),
         );
         // ACT
         const res = await request(app.getHttpServer())
@@ -191,12 +191,12 @@ describe('UploadController (e2e)', () => {
           .set('Authorization', 'Bearer Mock')
           .attach(
             'image',
-            path.join(process.cwd(), 'test', 'helpers', 'test.png'),
+            join(process.cwd(), 'test', 'helpers', 'test.png'),
           );
         // ASSERT
         expect(res.statusCode).toEqual(HttpStatus.CONFLICT);
         expect(res.body.path).toEqual(`${fileHash}.png`);
-        expect(fs.readdirSync(pathBuilder(undefined, 'disk')).length).toEqual(
+        expect(readdirSync(pathBuilder(undefined, 'disk')).length).toEqual(
           1,
         );
       });
@@ -209,12 +209,12 @@ describe('UploadController (e2e)', () => {
           .set('Authorization', 'Bearer Mock')
           .attach(
             'image',
-            path.join(process.cwd(), 'test', 'helpers', 'test-oversized.png'),
+            join(process.cwd(), 'test', 'helpers', 'test-oversized.png'),
           );
         // ASSERT
         expect(res.statusCode).toEqual(HttpStatus.INTERNAL_SERVER_ERROR);
         // Image for failed upload should not be persisted
-        expect(fs.readdirSync(pathBuilder(undefined, 'disk')).length).toEqual(
+        expect(readdirSync(pathBuilder(undefined, 'disk')).length).toEqual(
           0,
         );
       });
