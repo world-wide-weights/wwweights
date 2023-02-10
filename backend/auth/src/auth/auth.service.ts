@@ -3,6 +3,7 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  ServiceUnavailableException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -15,14 +16,16 @@ import { ROLES } from '../shared/enums/roles.enum';
 import { STATUS } from '../shared/enums/status.enum';
 import { LoginDTO } from './dtos/login.dto';
 import { RefreshJWTPayload } from './dtos/refresh-jwt-payload.dto';
-import { SignUpDTO } from './dtos/signup.dto';
+import { RegisterDTO } from './dtos/register.dto';
 import { TokenResponse } from './responses/token.response';
 
 import { createPublicKey } from 'crypto';
 import { RsaJWK, RsaJWKBase } from './responses/jwks.response';
+import { AuthStatisticsResponse } from './responses/auth-statistics.response';
 
 @Injectable()
 export class AuthService {
+  
   private readonly logger = new Logger(AuthService.name);
   constructor(
     private readonly userService: UserService,
@@ -30,7 +33,7 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  async signup(body: SignUpDTO): Promise<UserEntity> {
+  async register(body: RegisterDTO): Promise<UserEntity> {
     // hash password
     const hash = await bcrypt.hash(body.password, 10);
     const newUser = await this.userService.insertUser({
@@ -113,5 +116,21 @@ export class AuthService {
       use: 'sig',
       kid: this.configService.get<string>('JWT_AUTH_KID'),
     };
+  }
+
+  /**
+   * @description Get auth statistics
+   */
+  async getAuthStatistics(): Promise<AuthStatisticsResponse> {
+    let totalUsersCount = 0
+    try{
+      totalUsersCount = await this.userService.getUserCount()
+    } catch(error){
+        this.logger.warn(`Could not receive total user count due to an error ${error}`)
+        throw new InternalServerErrorException()
+    }
+    return {
+      totalUsers: totalUsersCount
+    }
   }
 }
