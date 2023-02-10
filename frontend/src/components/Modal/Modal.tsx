@@ -19,7 +19,7 @@ type ModalProps = {
  */
 export const Modal: React.FC<ModalProps> = ({ modalHeading, open, onDissmis, children, dataCy }) => {
     return <>
-        {open && <div datacy={dataCy} className="fixed z-10 inset-0" role="dialog" aria-label="Modal" aria-modal="true">
+        {open && <div datacy={dataCy} className="fixed z-10 inset-0" role="dialog" aria-modal="true">
             <div className="flex items-center justify-center min-h-screen px-4 text-center">
 
                 {/* Background overlay */}
