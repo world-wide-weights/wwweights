@@ -20,7 +20,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 
 # Add sharp for optimization 
 # See https://nextjs.org/docs/messages/install-sharp
-RUN npm i sharp -g
+RUN npm i --no-save express 
 
 RUN npm run build
 

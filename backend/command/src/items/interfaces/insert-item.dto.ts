@@ -6,23 +6,45 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
+  IsPositive,
   IsString,
   ValidateNested,
 } from 'class-validator';
+import { IsBiggerThan } from '../../shared/validators/is-bigger-than';
 
 class Weight {
   @IsNumber()
-  @ApiProperty({ default: '1.234e100' })
+  @IsPositive()
+  @ApiProperty({
+    exclusiveMinimum: true,
+    minimum: 0,
+    description: 'Value of weight in gram.',
+    example: 150,
+  })
   value: number;
 
   @IsBoolean()
   @IsOptional()
-  @ApiPropertyOptional({ default: false })
+  @ApiPropertyOptional({
+    default: false,
+    description: 'Set whether the weight is an approximate weight.',
+    example: true,
+  })
   isCa?: boolean;
 
   @IsNumber()
+  @IsPositive()
   @IsOptional()
-  @ApiPropertyOptional()
+  @IsBiggerThan('value', {
+    message: 'additionalValue has to be bigger than value',
+  })
+  @ApiPropertyOptional({
+    exclusiveMinimum: true,
+    minimum: 0,
+    description:
+      'Additional value of weight in gramm. Has to be bigger than value. Use this if you have a range weight.',
+    example: 250,
+  })
   additionalValue?: number;
 }
 
@@ -30,31 +52,42 @@ export class InsertItemDto {
   // TODO: Slug here or on event write
   @IsString()
   @IsNotEmpty()
-  @ApiProperty()
+  @ApiProperty({ description: 'Name of the item.', example: 'Apple' })
   name: string;
 
   @ValidateNested()
-  @ApiProperty()
   @Type(() => Weight)
+  @ApiProperty({
+    type: Weight,
+    description: 'Weight of the item.',
+    example: { value: 150, isCa: false, additionalValue: 250 },
+  })
   weight: Weight;
 
   @IsArray()
   @IsOptional()
-  @ApiPropertyOptional({ type: [String] })
-  @Type(() => String)
+  @IsString({ each: true })
+  @ApiPropertyOptional({
+    type: [String],
+    description: 'Tags of the item.',
+    example: ['fruit', 'red'],
+  })
   tags?: string[];
 
   @IsString()
   @IsOptional()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Image URL or path for imageStore',
+    example: 'https://example.com/image.png',
+  })
   image?: string;
 
   @IsString()
   @IsOptional()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description:
+      'Source of weight for item. Can be an URL or any other format of string.',
+    example: 'https://example.com',
+  })
   source?: string;
-
-  @IsString()
-  @ApiProperty()
-  user: string;
 }

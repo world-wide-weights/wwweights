@@ -1,8 +1,9 @@
 import { InjectModel } from '@m8a/nestjs-typegoose';
-import { Logger, UnprocessableEntityException } from '@nestjs/common';
+import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
-import { DataWithCount } from '../../items/interfaces/counted-items';
+import { DataWithCount } from '../../shared/interfaces/data-with-count';
+import { PaginatedResponse } from '../../shared/interfaces/paginated-result';
 import { TagSortEnum } from '../interfaces/tag-sort-enum';
 import { Tag } from '../models/tag.model';
 import { TagListQuery } from './tag-list.query';
@@ -16,7 +17,7 @@ export class TagListHandler implements IQueryHandler<TagListQuery> {
     private readonly tagModel: ReturnModelType<typeof Tag>,
   ) {}
 
-  async execute({ dto }: TagListQuery) {
+  async execute({ dto }: TagListQuery): Promise<PaginatedResponse<Tag>> {
     try {
       const sort: { name: number } | { count: -1 } =
         dto.sort === TagSortEnum.DESC
@@ -56,7 +57,7 @@ export class TagListHandler implements IQueryHandler<TagListQuery> {
       };
     } catch (error) {
       this.logger.error(error);
-      throw new UnprocessableEntityException('Tag list could not be retrieved');
+      throw new InternalServerErrorException('Tag list could not be retrieved');
     }
   }
 }

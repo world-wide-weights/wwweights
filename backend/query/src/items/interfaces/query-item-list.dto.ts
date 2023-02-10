@@ -1,34 +1,45 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { IsArray, IsEnum, IsOptional, IsString, Length } from 'class-validator';
-import { Page } from '../../shared/page';
+import { IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
+import { QueryTagsAndPage } from '../../shared/interfaces/queryTagsAndPage';
 import { ItemSortEnum } from './item-sort-enum';
 
-export class QueryItemListDto extends Page {
+export class QueryItemListDto extends QueryTagsAndPage {
   @IsOptional()
   @IsEnum(ItemSortEnum)
   @ApiPropertyOptional({
     enum: ItemSortEnum,
     default: ItemSortEnum.RELEVANCE,
+    description: 'Sort by relevance | heaviest | lieghtest',
+    example: ItemSortEnum.RELEVANCE,
   })
   sort = ItemSortEnum.RELEVANCE; // Maybe: also newest | oldest
 
   @IsString()
   @IsOptional()
-  @Length(0, 100)
-  @ApiPropertyOptional({ minLength: 0, maxLength: 100 })
-  query: string;
-
-  @IsString({ each: true })
-  @IsArray()
-  @IsOptional()
-  @ApiPropertyOptional()
-  @Type(() => String)
-  @Transform(({ value }) => [value].flat())
-  tags: string[];
-
-  @IsString()
-  @IsOptional()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    type: String,
+    description: 'The item slug to search for',
+    example: 'item-name',
+  })
   slug: string;
+
+  @IsOptional()
+  @Type(() => String)
+  @ApiPropertyOptional({
+    type: String,
+    description: 'Searching for items with or without images',
+    example: '1',
+  })
+  @Transform(({ value }) => (value === '1' ? true : false))
+  hasimage?: boolean;
+
+  @IsInt()
+  @IsOptional()
+  @ApiPropertyOptional({
+    type: Number,
+    description: 'Searching for items by a specific user',
+    example: 1,
+  })
+  userid?: number;
 }
