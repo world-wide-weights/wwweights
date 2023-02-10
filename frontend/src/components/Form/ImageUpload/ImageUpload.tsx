@@ -80,32 +80,34 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name }) => {
         }
     }
 
-    return <Field name={name}>{(props: FieldProps<any>) => <div className={`relative transition duration-200 ${dragActive ? "border-2 border-blue-500 border-dashed" : `${image ? "" : "border-2 border-gray-300 border-dashed"}`} h-36`} onDragEnter={handleDrag}>
-        {/* Upload Drag and Dropbox */}
-        {!image && <>
-            {/* File upload */}
-            <input className="hidden" id="input-file-upload" ref={inputRef} type="file" onChange={(event) => handleChange(event, props)} />
+    return <Field name={name}>{(props: FieldProps<any>) => <>
+        <div className={`relative transition duration-200 w-full h-56 sm:h-36 ${dragActive ? "border-2 border-blue-500 border-dashed" : `${image ? "" : "border-2 border-gray-300 border-dashed"}`}`} onDragEnter={handleDrag}>
+            {/* Upload Drag and Dropbox */}
+            {!image && <>
+                {/* File upload */}
+                <input className="hidden" id="input-file-upload" ref={inputRef} type="file" onChange={(event) => handleChange(event, props)} />
 
-            {/* File upload content */}
-            <label className="flex items-center text-gray-500 h-full" htmlFor="input-file-upload">
-                <Icon className={`text-5xl ${dragActive ? "text-blue-500" : ""} mx-5`}>image</Icon>
-                <div>
-                    <span className="font-medium text-gray-700 mr-1">Drag your Image or</span>
-                    {/* Browse button */}
-                    <button type="button" onClick={() => inputRef.current?.click()} className="inline font-medium text-blue-500 hover:text-blue-700">Browse</button>
-                    <p className="text-gray-500 text-sm">SVG, PNG or JPG (max file size: 20MB)</p>
-                </div>
-            </label>
+                {/* File upload content */}
+                <label className="flex items-center text-gray-500 h-full" htmlFor="input-file-upload">
+                    <Icon className={`text-5xl ${dragActive ? "text-blue-500" : ""} mx-5`}>image</Icon>
+                    <div>
+                        <span className="font-medium text-gray-700 mr-1">Drag your Image or</span>
+                        {/* Browse button */}
+                        <button type="button" onClick={() => inputRef.current?.click()} className="inline font-medium text-blue-500 hover:text-blue-700">Browse</button>
+                        <p className="text-gray-500 text-sm">SVG, PNG or JPG (max file size: 20MB)</p>
+                    </div>
+                </label>
 
-            {/* Drag Box */}
-            {dragActive && <div className="absolute inset-0 w-full h-full" onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={(event) => handleDrop(event, props)}></div>}
-        </>}
+                {/* Drag Box */}
+                {dragActive && <div className="absolute inset-0 w-full h-full" onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={(event) => handleDrop(event, props)}></div>}
+            </>}
 
-        {/* Image Preview */}
-        {image && <div className="relative w-max">
-            <IconButton className="absolute top-0 right-0 bg-white mr-1 mt-1" icon="delete" onClick={() => setImage(null)}></IconButton>
-            <Image className="w-auto h-36" src={image as string} width={200} height={200} alt="uploaded" />
-        </div>}
-    </div>}
+            {/* Image Preview */}
+            {image && <div className="relative sm:w-max">
+                <IconButton className="absolute top-0 right-0 bg-white mr-1 mt-1" icon="delete" onClick={() => setImage(null)}></IconButton>
+                <Image className="w-full sm:w-auto object-cover h-56 sm:h-36" src={image as string} width={200} height={200} alt="uploaded" />
+            </div>}
+        </div>
+    </>}
     </Field>
 }
