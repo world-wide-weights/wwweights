@@ -110,10 +110,10 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name }) => {
             {/* Upload Drag and Dropbox */}
             {!image && <>
                 {/* File upload */}
-                <input className="hidden" id="input-file-upload" ref={inputRef} type="file" accept=".svg,.png,.jpg,.jpeg" onChange={(event) => handleChange(event, props)} />
+                <input datacy="imageupload-file-input" className="hidden" id="input-file-upload" ref={inputRef} type="file" accept=".svg,.png,.jpg,.jpeg" onChange={(event) => handleChange(event, props)} />
 
                 {/* File upload content */}
-                <label className="flex items-center text-gray-500 h-full" htmlFor="input-file-upload">
+                <label datacy="imageupload-content" className="flex items-center text-gray-500 h-full" htmlFor="input-file-upload">
                     <Icon className={`text-5xl ${dragActive ? "text-blue-500" : ""} mx-5`}>image</Icon>
                     <div>
                         <span className="font-medium text-gray-700 mr-1">Drag your Image or</span>
@@ -129,8 +129,8 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name }) => {
 
             {/* Image Preview */}
             {image && <div className="relative sm:w-max">
-                <IconButton className="absolute top-0 right-0 bg-white mr-1 mt-1" icon="delete" onClick={() => resetImage(props)}></IconButton>
-                <Image className="w-full sm:w-auto object-cover h-56" src={image as string} width={200} height={200} alt="uploaded" />
+                <IconButton datacy="imageupload-reset-image" className="absolute top-0 right-0 bg-white mr-1 mt-1" icon="delete" onClick={() => resetImage(props)}></IconButton>
+                <Image datacy="imageupload-image" className="w-full sm:w-auto object-cover h-56" src={image as string} width={200} height={200} alt="uploaded" />
             </div>}
         </div>
     </>}
