@@ -9,7 +9,7 @@ import { DataSource } from 'typeorm';
 import { AppModule } from '../src/app.module';
 import { RefreshJWTPayload } from '../src/auth/dtos/refresh-jwt-payload.dto';
 import { RsaJWK } from '../src/auth/responses/jwks.response';
-import { UserService } from '../src/db/ user.service';
+import { UserService } from '../src/db/services/user.service';
 import { JWTPayload } from '../src/shared/dtos/jwt-payload.dto';
 import { STATUS } from '../src/shared/enums/status.enum';
 import {
@@ -59,12 +59,12 @@ describe('AuthController (e2e)', () => {
     await app.close();
   });
 
-  describe('/auth/signup (POST)', () => {
+  describe('/auth/register (POST)', () => {
     describe('Positive Tests', () => {
       it('Should accept valid DTO ', () => {
         // ACT & ASSERT
         return request(app.getHttpServer())
-          .post('/auth/signup')
+          .post('/auth/register')
           .send(SAMPLE_USER)
           .expect(HttpStatus.CREATED);
       });
@@ -72,7 +72,7 @@ describe('AuthController (e2e)', () => {
       it('Should write to DB ', async () => {
         // ACT
         const res = await request(app.getHttpServer())
-          .post('/auth/signup')
+          .post('/auth/register')
           .send(SAMPLE_USER);
 
         // ASSERT
@@ -91,7 +91,7 @@ describe('AuthController (e2e)', () => {
       it('Should fail for incomplete payload', async () => {
         // ACT
         const res = await request(app.getHttpServer())
-          .post('/auth/signup')
+          .post('/auth/register')
           .send({});
         // ASSERT
         expect(res.statusCode).toEqual(HttpStatus.BAD_REQUEST);
@@ -100,7 +100,7 @@ describe('AuthController (e2e)', () => {
       it('Should fail for invalid email address input', async () => {
         // ACT
         const res = await request(app.getHttpServer())
-          .post('/auth/signup')
+          .post('/auth/register')
           .send({
             ...SAMPLE_USER,
             email: 'notValidInput',
@@ -112,7 +112,7 @@ describe('AuthController (e2e)', () => {
       it('Should fail for password without sufficient length', async () => {
         // ACT
         const res = await request(app.getHttpServer())
-          .post('/auth/signup')
+          .post('/auth/register')
           .send({
             ...SAMPLE_USER,
             password: 'short',
@@ -126,7 +126,7 @@ describe('AuthController (e2e)', () => {
         await createUser(dataSource, { email: SAMPLE_USER.email });
         // ACT
         const res = await request(app.getHttpServer())
-          .post('/auth/signup')
+          .post('/auth/register')
           .send(SAMPLE_USER);
 
         // ASSERT
@@ -138,7 +138,7 @@ describe('AuthController (e2e)', () => {
         await createUser(dataSource, { username: SAMPLE_USER.username });
         // ACT
         const res = await request(app.getHttpServer())
-          .post('/auth/signup')
+          .post('/auth/register')
           .send(SAMPLE_USER);
 
         // ASSERT
@@ -354,15 +354,36 @@ describe('AuthController (e2e)', () => {
       });
     });
   });
+  describe('/auth/statistics (GET)', () => {
+    describe('Positive Tests', () => {
+    it('Should return the correct user amount', async() => {
+      // ARRANGE
+      await createUser(dataSource, SAMPLE_USER) 
+      await createUser(dataSource, {...SAMPLE_USER, email: 'new.new@new.new', username: 'also very brand new'})
+      // ACT
+      const res = await request(app.getHttpServer()).get('/auth/statistics')
+      // ASSERT
+      expect(res.statusCode).toEqual(HttpStatus.OK)
+      expect(res.body.totalUsers).toEqual(2)
+    })
+    it('Should return correct value with empty user table', async () => {
+       // ACT
+       const res = await request(app.getHttpServer()).get('/auth/statistics')
+       // ASSERT
+       expect(res.statusCode).toEqual(HttpStatus.OK)
+       expect(res.body.totalUsers).toEqual(0)
+    })
+  })
+  })
 
   describe('Test of the entire flow', () => {
     it('should allow for the user to create an account, login with credentials and then login with refresh token', async () => {
       // ACT 1
-      const signupRes = await request(app.getHttpServer())
-        .post('/auth/signup')
+      const registerRes = await request(app.getHttpServer())
+        .post('/auth/register')
         .send(SAMPLE_USER);
       // ASSERT 1
-      expect(signupRes.statusCode).toEqual(HttpStatus.CREATED);
+      expect(registerRes.statusCode).toEqual(HttpStatus.CREATED);
       // ACT 2
       const loginRes = await request(app.getHttpServer())
         .post('/auth/login')

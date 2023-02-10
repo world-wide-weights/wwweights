@@ -1,8 +1,8 @@
 import { ConflictException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
-import { STATUS } from '../shared/enums/status.enum';
-import { UserEntity } from './entities/users.entity';
+import { STATUS } from '../../shared/enums/status.enum';
+import { UserEntity } from '../entities/users.entity';
 
 @Injectable()
 export class UserService {
@@ -91,5 +91,12 @@ export class UserService {
    */
   async getCurrentDbTime(): Promise<{ now: string }> {
     return (await this.userEntity.query('SELECT NOW()::timestamptz'))[0];
+  }
+  
+  /**
+   * @description Get the total amount of registered users in DB
+   */
+  async getUserCount(): Promise<number> {
+    return await this.userEntity.count();
   }
 }

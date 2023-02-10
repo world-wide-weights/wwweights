@@ -11,11 +11,12 @@ import * as fs from 'fs';
 import * as fsProm from 'fs/promises';
 import * as path from 'path';
 import * as sharp from 'sharp';
-import { RequestWithUser } from '../shared/interfaces/request-with-user.interface';
+import { InternalCommunicationService } from '../internal-communication/internal-communication.service';
 import {
   pathBuilder,
   validateOrCreateDirectory,
 } from '../shared/helpers/file-path.helpers';
+import { ImageUploadResponse } from './responses/upload-image.response';
 
 // Code assumes that either UNIX or Windows paths are valid. Any other OS or path format is not supported
 
@@ -24,7 +25,10 @@ export class UploadService {
   private storePath: string;
   private cachePath: string;
   private readonly logger = new Logger(UploadService.name);
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly internalCommunicationService: InternalCommunicationService,
+  ) {
     this.storePath = pathBuilder(
       this.configService.get<string>('IMAGE_STORE_BASE_PATH'),
       'disk',
@@ -39,7 +43,10 @@ export class UploadService {
   /**
    * @description Handle uploaded image including duplicate check, hashing and saving it
    */
-  async handleImageUpload(user: RequestWithUser, image: Express.Multer.File) {
+  async handleImageUpload(
+    userJWT: string,
+    image: Express.Multer.File,
+  ): Promise<ImageUploadResponse> {
     const cachedFilePath = path.join(this.cachePath, image.filename);
 
     // Crop the image before hashing => otherwise hashing would be useless
@@ -63,6 +70,7 @@ export class UploadService {
         });
       }
       // Copy rather than move to allow for "moving" accross devices (i.e. docker volumes)
+      this.logger.debug('Promoting image from cache to disk');
       await fsProm.copyFile(cachedFilePath, fileTargetPath);
     } catch (error) {
       this.logger.error(error);
@@ -74,7 +82,25 @@ export class UploadService {
       // Cleanup cache
       await fsProm.rm(cachedFilePath, { force: true });
     }
-    // TODO: Notify Auth backend about user event
+
+    try {
+      await this.internalCommunicationService.notifyAuthAboutNewImage(
+        userJWT,
+        `${hash}.${image.mimetype.split('/')[1]}`,
+      );
+    } catch (error) {
+      this.logger.warn(
+        `An upload failed because the communication to the  auth backend failed. This could indicate a crashed auth service. ${error}`,
+      );
+      // A file without an owner is not allowed => cleanup
+      fs.rmSync(fileTargetPath);
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException();
+    }
+
+    this.logger.log('Sucesfully uploaded Image with hash: ', hash);
     return { path: `${hash}.${image.mimetype.split('/')[1]}` };
   }
 
@@ -98,6 +124,7 @@ export class UploadService {
     wDimension: number,
     hDimension: number,
   ) {
+    this.logger.debug(`Cropping image ${sourcePath}`);
     if (!fs.existsSync(sourcePath)) {
       throw new InternalServerErrorException(
         'Image could not be found within cache',

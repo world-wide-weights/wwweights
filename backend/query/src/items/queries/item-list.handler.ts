@@ -2,10 +2,10 @@ import { InjectModel } from '@m8a/nestjs-typegoose';
 import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
-import { DataWithCount } from '../../shared/data-with-count';
-import { getFilter } from '../../shared/get-filter';
-import { getSort } from '../../shared/get-sort';
-import { PaginatedResponse } from '../../shared/paginated-result';
+import { getFilter } from '../../shared/functions/get-filter';
+import { getSort } from '../../shared/functions/get-sort';
+import { DataWithCount } from '../../shared/interfaces/data-with-count';
+import { PaginatedResponse } from '../../shared/interfaces/paginated-result';
 import { Item } from '../models/item.model';
 import { ItemListQuery } from './item-list.query';
 
@@ -22,7 +22,13 @@ export class ItemListHandler implements IQueryHandler<ItemListQuery> {
     try {
       // We currently also run textSearch on tags, optimizing via itemsByTags is a TODO
       const sort = getSort(dto.sort, (dto.query || dto.tags) && !dto.slug);
-      const filter = getFilter(dto.query, dto.tags, dto.slug);
+      const filter = getFilter(
+        dto.query,
+        dto.tags,
+        dto.slug,
+        dto.hasimage,
+        dto.userid,
+      );
 
       // TODO: Query through itemsByTags if tags are listed
       const itemListWithCount = await this.itemModel.aggregate<

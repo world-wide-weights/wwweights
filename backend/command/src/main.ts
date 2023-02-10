@@ -15,11 +15,18 @@ async function bootstrap() {
   app.setGlobalPrefix('commands/v1');
 
   // Swagger
-  if (process.env.NODE_ENV === 'dev') {
+  if (process.env.NODE_ENV === 'development') {
     const config = new DocumentBuilder()
       .setTitle('World Wide Weights - Command API')
       .setDescription('The wwweights Api overview')
       .setVersion('0.1')
+      .addBearerAuth(
+        {
+          description: `JWT retrieved from and verified against auth service`,
+          scheme: 'Bearer',
+          type: 'http',
+        }
+      )
       .build();
     const document = SwaggerModule.createDocument(app, config, {
       ignoreGlobalPrefix: false,

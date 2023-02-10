@@ -1,23 +1,30 @@
 import {
   Body,
-  ClassSerializerInterceptor,
   Controller,
   HttpCode,
   HttpStatus,
   Logger,
   Post,
-  SerializeOptions,
-  UseInterceptors,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiBody,
+  ApiConflictResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
+import { JwtAuthGuard } from '../shared/guards/jwt.guard';
 import { InsertItemCommand } from './commands/insert-item.command';
 import { InsertItemDto } from './interfaces/insert-item.dto';
+import { JwtWithUserDto } from './interfaces/request-with-user.dto';
 
 @Controller()
 @ApiTags()
-@UseInterceptors(ClassSerializerInterceptor)
-@SerializeOptions({ strategy: 'excludeAll' })
 export class ItemsController {
   private readonly logger = new Logger(ItemsController.name);
 
@@ -26,9 +33,25 @@ export class ItemsController {
   @Post('items/insert')
   @ApiBody({ type: InsertItemDto })
   @ApiOperation({ summary: 'Insert an item' })
-  @ApiOkResponse({ description: 'The item has been received.' })
+  @ApiOkResponse({
+    status: HttpStatus.OK,
+    description: 'Item inserted successfully',
+  })
+  @ApiConflictResponse({
+    status: HttpStatus.CONFLICT,
+    description: 'Slug already taken',
+  })
+  @ApiBadRequestResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Invalid request. Data validation failed.',
+  })
+  @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)
-  async insertItem(@Body() insertItemDto: InsertItemDto) {
-    await this.commandBus.execute(new InsertItemCommand(insertItemDto));
+  @UseGuards(JwtAuthGuard)
+  async insertItem(
+    @Req() { user }: JwtWithUserDto,
+    @Body() insertItemDto: InsertItemDto,
+  ) {
+    await this.commandBus.execute(new InsertItemCommand(insertItemDto, user.id));
   }
 }

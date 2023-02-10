@@ -9,7 +9,7 @@ import { ALLOWED_EVENT_ENTITIES } from '../../eventstore/enums/allowedEntities.e
 import { EventStore } from '../../eventstore/eventstore';
 import { Item } from '../../models/item.model';
 import { Tag } from '../../models/tag.model';
-import { getSlug } from '../../shared/get-slug';
+import { getSlug } from '../../shared/functions/get-slug';
 import { ItemInsertedEvent } from '../events/item-inserted.event';
 import { InsertItemCommand } from './insert-item.command';
 
@@ -22,11 +22,12 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
   ) {}
 
   // No returns, just Exceptions in CQRS
-  async execute({ insertItemDto }: InsertItemCommand) {
+  async execute({ insertItemDto, userId }: InsertItemCommand) {
     try {
       const newItem = new Item({
         ...insertItemDto,
-        slug: getSlug(insertItemDto.name, '-'),
+        user: userId,
+        slug: getSlug(insertItemDto.name),
         tags: insertItemDto.tags?.map(
           (tag) => new Tag({ name: getSlug(tag, ' ') }),
         ),

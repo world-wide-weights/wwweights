@@ -6,17 +6,20 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
+  IsPositive,
   IsString,
   ValidateNested,
 } from 'class-validator';
+import { IsBiggerThan } from '../../shared/validators/is-bigger-than';
 
 class Weight {
   @IsNumber()
+  @IsPositive()
   @ApiProperty({
-    default: 1.234e10,
-    type: String,
-    example: 1.234e10,
-    description: 'Weight in grams',
+    exclusiveMinimum: true,
+    minimum: 0,
+    description: 'Value of weight in gram.',
+    example: 150,
   })
   value: number;
 
@@ -24,18 +27,23 @@ class Weight {
   @IsOptional()
   @ApiPropertyOptional({
     default: false,
-    type: Boolean,
+    description: 'Set whether the weight is an approximate weight.',
     example: true,
-    description: 'Is the weight not exact, then it is ca. xxx',
   })
   isCa?: boolean;
 
   @IsNumber()
+  @IsPositive()
   @IsOptional()
+  @IsBiggerThan('value', {
+    message: 'additionalValue has to be bigger than value',
+  })
   @ApiPropertyOptional({
-    type: Number,
-    example: 5.678e10,
-    description: 'Additional weight in grams',
+    exclusiveMinimum: true,
+    minimum: 0,
+    description:
+      'Additional value of weight in gramm. Has to be bigger than value. Use this if you have a range weight.',
+    example: 250,
   })
   additionalValue?: number;
 }
@@ -44,55 +52,42 @@ export class InsertItemDto {
   // TODO: Slug here or on event write
   @IsString()
   @IsNotEmpty()
-  @ApiProperty({
-    type: String,
-    example: 'my-item',
-    description: 'Unique item name',
-  })
+  @ApiProperty({ description: 'Name of the item.', example: 'Apple' })
   name: string;
 
   @ValidateNested()
+  @Type(() => Weight)
   @ApiProperty({
     type: Weight,
-    description: 'Weight object',
-    example: { value: 1.234e10, isCa: false, additionalValue: 5.678e10 },
+    description: 'Weight of the item.',
+    example: { value: 150, isCa: false, additionalValue: 250 },
   })
-  @Type(() => Weight)
   weight: Weight;
 
   @IsArray()
   @IsOptional()
+  @IsString({ each: true })
   @ApiPropertyOptional({
     type: [String],
-    description: 'Tags',
-    example: ['tag1', 'tag2'],
+    description: 'Tags of the item.',
+    example: ['fruit', 'red'],
   })
-  @Type(() => String)
   tags?: string[];
 
   @IsString()
   @IsOptional()
   @ApiPropertyOptional({
-    type: String,
     description: 'Image URL or path for imageStore',
-    example: 'https://link.de/image.png',
+    example: 'https://example.com/image.png',
   })
   image?: string;
 
   @IsString()
   @IsOptional()
   @ApiPropertyOptional({
-    type: String,
-    description: 'Source URL',
-    example: 'https://link.de',
+    description:
+      'Source of weight for item. Can be an URL or any other format of string.',
+    example: 'https://example.com',
   })
   source?: string;
-
-  @IsString()
-  @ApiProperty({
-    type: String,
-    description: 'User ID',
-    example: '5f9e9b9e7c9d440000a1c1c7',
-  })
-  user: string;
 }

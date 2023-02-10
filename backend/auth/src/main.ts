@@ -7,7 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   // Swagger
-  if (process.env.NODE_ENV === 'dev') {
+  if (process.env.NODE_ENV === 'development') {
     const config = new DocumentBuilder()
       .setTitle('World Wide Weights - Auth API')
       .setDescription('The wwweights Api overview')
@@ -28,6 +28,12 @@ async function bootstrap() {
         },
         'refresh_token',
       )
+      .addApiKey({
+        description: 'Api key for internal communication',
+        name: 'x-api-key',
+        type: 'apiKey',
+        in: 'header'
+      }, 'api_key')
       .build();
     const document = SwaggerModule.createDocument(app, config, {
       ignoreGlobalPrefix: false,

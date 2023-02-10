@@ -1,3 +1,3 @@
-import { QueryTagsAndPage } from '../../shared/queryTagsAndPage';
+import { QueryTagsAndPage } from '../../shared/interfaces/queryTagsAndPage';
 
 export class QueryTagRelatedDto extends QueryTagsAndPage {}
