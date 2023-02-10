@@ -23,10 +23,10 @@ docker compose up -d
 
 Frontend: [Website](http://localhost:3000)
 
-Auth-Backend: [API](http://localhost:3001) [Swagger (in progress)](http://localhost:3001/swagger)
+Auth-Backend: [API](http://localhost:3001) [Swagger](http://localhost:3001/swagger)
 
 Command-Backend: [API](http://localhost:3002) [Swagger](http://localhost:3002/swagger)
 
-Image-Backend: [API](http://localhost:3003) [Swagger (in progress)](http://localhost:3003/swagger)
+Image-Backend: [API](http://localhost:3003) [Swagger](http://localhost:3003/swagger)
 
 Query-Backend: [API](http://localhost:3004) [Swagger](http://localhost:3004/swagger)
