@@ -1,54 +1,59 @@
-[
-    {
-        "name": "Casio",
-        "slug": "casio"
-    },
-    {
-        "name": "2003 Apr",
-        "slug": "2003-apr"
-    },
-    {
-        "name": "Windows (mobile-class)",
-        "slug": "windows-(mobile-class)"
-    },
-    {
-        "name": "PDA",
-        "slug": "pda"
-    },
-    {
-        "name": "2000 Sep",
-        "slug": "2000-sep"
-    },
-    {
-        "name": "2001 Jan",
-        "slug": "2001-jan"
-    },
-    {
-        "name": "2000 Dec",
-        "slug": "2000-dec"
-    },
-    {
-        "name": "Hewlett-Packard",
-        "slug": "hewlett-packard"
-    },
-    {
-        "name": "2004 Jul",
-        "slug": "2004-jul"
-    },
-    {
-        "name": "Smartphone",
-        "slug": "smartphone"
-    },
-    {
-        "name": "Toshiba",
-        "slug": "toshiba"
-    },
-    {
-        "name": "2004 Sep 14",
-        "slug": "2004-sep-14"
-    },
-    {
-        "name": "Orange",
-        "slug": "orange"
-    }
-]
+{
+    "total": 60,
+    "page": 1,
+    "limit": 16,
+    "data": [
+        {
+            "name": "Casio",
+            "slug": "casio"
+        },
+        {
+            "name": "2003 Apr",
+            "slug": "2003-apr"
+        },
+        {
+            "name": "Windows (mobile-class)",
+            "slug": "windows-(mobile-class)"
+        },
+        {
+            "name": "PDA",
+            "slug": "pda"
+        },
+        {
+            "name": "2000 Sep",
+            "slug": "2000-sep"
+        },
+        {
+            "name": "2001 Jan",
+            "slug": "2001-jan"
+        },
+        {
+            "name": "2000 Dec",
+            "slug": "2000-dec"
+        },
+        {
+            "name": "Hewlett-Packard",
+            "slug": "hewlett-packard"
+        },
+        {
+            "name": "2004 Jul",
+            "slug": "2004-jul"
+        },
+        {
+            "name": "Smartphone",
+            "slug": "smartphone"
+        },
+        {
+            "name": "Toshiba",
+            "slug": "toshiba"
+        },
+        {
+            "name": "2004 Sep 14",
+            "slug": "2004-sep-14"
+        },
+        {
+            "name": "Orange",
+            "slug": "orange"
+        }
+    ]
+}

@@ -1,8 +1,9 @@
 import { Form, Formik, useFormikContext } from "formik"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-import { mockRequest } from "../../services/axios/axios"
+import { queryRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
+import { PaginatedResponse } from "../../types/item"
 import { Tag } from "../../types/tag"
 import { Chip } from "../Chip/Chip"
 import { Headline } from "../Headline/Headline"
@@ -70,9 +71,8 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "
             setIsLoadingRelatedTags(true)
 
             try {
-                // TODO (Zoe-Bot): Update mock to be real api
-                const response = await mockRequest.get<Tag[]>("/api/query/v1/tags/related")
-                const relatedTags = response.data
+                const response = await queryRequest.get<PaginatedResponse<Tag>>("/tags/related")
+                const relatedTags = response.data.data
 
                 setRelatedTags(relatedTags)
             } catch (error) {
@@ -96,11 +96,10 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "
                             </div>
                         </div>
                         {/* TODO (Zoe-bot): Loading Component and scrollable tags */}
-                        {/* TODO (Zoe-bot): Only develop Remove query !== "" condition when normal backend api is set */}
-                        {query !== "" && (isLoadingRelatedTags ? <p>Loading...</p> : <div datacy="search-header-tag-wrapper" className="whitespace-nowrap overflow-x-scroll md:whitespace-normal md:overflow-hidden">
+                        {isLoadingRelatedTags ? <p>Loading...</p> : <div datacy="search-header-tag-wrapper" className="whitespace-nowrap overflow-x-scroll md:whitespace-normal md:overflow-hidden">
                             {/* Only show tags not current searched (should not be the value in query field) */}
                             {relatedTags.map((relatedTag, index) => relatedTag.name !== query && <Chip datacy={`search-header-chip-${index}`} key={relatedTag.name} to={routes.weights.list({ sort, query: relatedTag.name })}>{relatedTag.name}</Chip>)}
-                        </div>)}
+                        </div>}
                         <AutoUpdateQueryField />
                     </Form>
                 </Formik>
