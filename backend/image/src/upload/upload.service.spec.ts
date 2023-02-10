@@ -1,16 +1,16 @@
 import { ConfigService } from '@nestjs/config';
-import { UploadService } from './upload.service';
-import * as path from 'path';
 import { createHash } from 'crypto';
 import * as fs from 'fs';
+import * as path from 'path';
 import * as sharp from 'sharp';
+import { UploadService } from './upload.service';
 
 describe('UploadService', () => {
   let uploadService: UploadService;
   // Supress warning logs because env is not setup properly
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   beforeEach(() => {
-    uploadService = new UploadService(new ConfigService());
+    uploadService = new UploadService(new ConfigService(), null);
   });
   describe('hashFile', () => {
     describe('Positive Tests', () => {

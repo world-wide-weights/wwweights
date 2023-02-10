@@ -1,8 +1,12 @@
 import { InjectModel } from '@m8a/nestjs-typegoose';
-import { Logger, UnprocessableEntityException } from '@nestjs/common';
+import {
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
-import { getFilter } from '../../shared/get-filter';
+import { getFilter } from '../../shared/functions/get-filter';
 import { ItemStatistics } from '../interfaces/item-statistics';
 import { Item } from '../models/item.model';
 import { ItemStatisticsQuery } from './item-statistics.query';
@@ -29,7 +33,7 @@ export class ItemStatisticsHandler
           $group: {
             _id: null,
             averageWeight: { $avg: '$weight.value' },
-            items: { $push: '$$ROOT' }, // We have to pushb an array and can't just se it
+            items: { $push: '$$ROOT' }, // We have to push an array and can't just set it
           },
         },
         { $set: { heaviest: { $first: '$items' } } },
@@ -37,16 +41,20 @@ export class ItemStatisticsHandler
         { $project: { heaviest: 1, lightest: 1, averageWeight: 1 } },
       ]);
 
-      if (!statistics[0].averageWeight) {
+      if (!statistics[0]?.averageWeight) {
         this.logger.log('No items found');
-        throw new UnprocessableEntityException('No items found');
+        // Just to jump into the catch
+        throw new NotFoundException('No items found');
       }
       return statistics[0];
     } catch (error) {
       this.logger.error(error);
-      throw new UnprocessableEntityException(
-        'Item statistics could not be retrieved',
-      );
+      if (error instanceof NotFoundException) throw error;
+      else {
+        throw new InternalServerErrorException(
+          'Item statistics could not be retrieved',
+        );
+      }
     }
   }
 }

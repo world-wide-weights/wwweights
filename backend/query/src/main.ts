@@ -15,7 +15,7 @@ async function bootstrap() {
   app.setGlobalPrefix('queries/v1');
 
   // Swagger
-  if (process.env.NODE_ENV === 'dev') {
+  if (process.env.NODE_ENV === 'development') {
     const config = new DocumentBuilder()
       .setTitle('World Wide Weights - Query API')
       .setDescription('The wwweights Api overview')
