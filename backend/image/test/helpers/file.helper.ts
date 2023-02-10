@@ -1,16 +1,16 @@
-import * as fsProm from 'fs/promises';
-import * as path from 'path';
+import { copyFile, readdir, rm } from 'fs/promises';
+import { join } from 'path';
 
 export async function emptyDir(dirPath) {
-  const contents = await fsProm.readdir(dirPath);
+  const contents = await readdir(dirPath);
   for (const content of contents) {
-    await fsProm.rm(path.join(dirPath, content), { recursive: true });
+    await rm(join(dirPath, content), { recursive: true });
   }
 }
 
 export async function copyTestFile(target: string, fileName: string) {
-  await fsProm.copyFile(
-    path.join(process.cwd(), 'test', 'helpers', fileName),
-    path.join(target, fileName),
+  await copyFile(
+    join(process.cwd(), 'test', 'helpers', fileName),
+    join(target, fileName),
   );
 }
