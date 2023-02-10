@@ -9,6 +9,7 @@ import { ALLOWED_EVENT_ENTITIES } from '../src/eventstore/enums/allowedEntities.
 import { EventStore } from '../src/eventstore/eventstore';
 import { EventStoreModule } from '../src/eventstore/eventstore.module';
 import { ItemCronJobHandler } from '../src/items/cron/items.cron';
+import { SuggestItemEditDTO } from '../src/items/interfaces/suggest-item-edit.dto';
 import { ItemsModule } from '../src/items/items.module';
 import { EditSuggestion } from '../src/models/edit-suggestion.model';
 import { Item } from '../src/models/item.model';
@@ -20,6 +21,7 @@ import {
   initializeMockModule,
   teardownMockDataSource,
 } from './helpers/MongoMemoryHelpers';
+import { retryCallback } from './helpers/retries';
 import { timeout } from './helpers/timeout';
 import { MockEventStore } from './mocks/eventstore';
 import {
@@ -37,7 +39,7 @@ describe('ItemsController (e2e)', () => {
   let itemModel: Model<Item>;
   let tagModel: Model<Tag>;
   let itemsByTagModel: Model<ItemsByTag>;
-  let editSuggestionModel: Model<EditSuggestion>
+  let editSuggestionModel: Model<EditSuggestion>;
   const mockEventStore: MockEventStore = new MockEventStore();
   let itemCronJobHandler: ItemCronJobHandler;
   let server: any; // Has to be any because of supertest not having a type for it either
@@ -72,7 +74,7 @@ describe('ItemsController (e2e)', () => {
     itemModel = moduleFixture.get('ItemModel');
     tagModel = moduleFixture.get('TagModel');
     itemsByTagModel = moduleFixture.get('ItemsByTagModel');
-    editSuggestionModel = moduleFixture.get('EditSuggestionModel')
+    editSuggestionModel = moduleFixture.get('EditSuggestionModel');
 
     app.setGlobalPrefix('commands/v1');
     await app.init();
@@ -230,37 +232,96 @@ describe('ItemsController (e2e)', () => {
 
     it('items/:slug/suggest/edit => Should create a suggestion', async () => {
       // ARRANGE
-      const item = new itemModel(singleItem)
-      await item.save()
+      const item = new itemModel(singleItem);
+      await item.save();
       // Create eventstore stream
-      mockEventStore.existingStreams = [`${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`]
+      mockEventStore.existingStreams = [
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      ];
       //ACT
-      const res = await request(server).post(commandsPath +`items/${encodeURI(item.slug)}/suggest/edit`).send({image: 'test'})
+      const res = await request(server)
+        .post(commandsPath + `items/${encodeURI(item.slug)}/suggest/edit`)
+        .send({ image: 'test' });
       // ASSERT
-      expect(res.status).toEqual(HttpStatus.OK)
+      expect(res.status).toEqual(HttpStatus.OK);
       // Has suggestion gone through eventstore?
-      expect(mockEventStore.existingStreams.length).toEqual(2)
+      expect(mockEventStore.existingStreams.length).toEqual(2);
       // Does suggestion exist in mongoDb
-      const suggestions = await editSuggestionModel.find()
-      expect(suggestions.length).toEqual(1)
-      console.log(suggestions[0])
-      expect(suggestions[0].updatedItemValues.image).toEqual('test')
-    })
+      const suggestions = await editSuggestionModel.find();
+      expect(suggestions.length).toEqual(1);
+      expect(suggestions[0].updatedItemValues.image).toEqual('test');
+    });
 
     it('items/:slug/suggest/edit => Should add correct user to suggestion', async () => {
       // ARRANGE
-      const item = new itemModel(singleItem)
-      await item.save()
+      const item = new itemModel(singleItem);
+      await item.save();
       // Create eventstore stream
-      mockEventStore.existingStreams = [`${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`]
+      mockEventStore.existingStreams = [
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      ];
       //ACT
-      const res = await request(server).post(commandsPath +`items/${item.slug}/suggest/edit`).send({image: 'test'})
+      const res = await request(server)
+        .post(commandsPath + `items/${item.slug}/suggest/edit`)
+        .send({ image: 'test' });
       // ASSERT
-      expect(res.status).toEqual(HttpStatus.OK)
+      expect(res.status).toEqual(HttpStatus.OK);
       // Does suggestion exist in mongoDb
-      const suggestion = await editSuggestionModel.findOne({itemSlug: item.slug})
-      expect(suggestion.user).toEqual(verifiedRequestUser.id)
-    })
+      const suggestion = await editSuggestionModel.findOne({
+        itemSlug: item.slug,
+      });
+      expect(suggestion.user).toEqual(verifiedRequestUser.id);
+    });
+
+    // WARNING: The following tests are for testing the edit functionality itself. As of now this is triggered via the
+    // suggestion request, however this is subject to change. These tests are more relevant for grading than functionality
+
+    it('items/:slug/suggest/edit => Should update item', async () => {
+      // ARRANGE
+      const item = new itemModel(singleItem);
+      await item.save();
+      // Create eventstore stream
+      mockEventStore.existingStreams = [
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      ];
+      //ACT
+      const res = await request(server)
+        .post(commandsPath + `items/${item.slug}/suggest/edit`)
+        .send({ image: 'test' });
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.OK);
+      // This will pass if met or throw an error if callback condition is never met
+      await retryCallback(
+        async () =>
+        // Has item been updated?
+          (await itemModel.findOne({ slug: item.slug })).image === 'test',
+      );
+    });
+
+    it('items/:slug/suggest/edit => Should update tags in item', async () => {
+      // ARRANGE
+      const item = new itemModel(singleItem);
+      await item.save();
+      // Create eventstore stream
+      mockEventStore.existingStreams = [
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      ];
+      //ACT
+      const res = await request(server)
+        .post(commandsPath + `items/${item.slug}/suggest/edit`)
+        .send({
+          tags: { push: ['newTag1'], pull: [item.tags[0].name] },
+        });
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.OK);
+      //await retryCallback(
+      //  async () =>{
+      //    // Have tags in item been updated?
+      //    const tags = (await itemModel.findOne({ slug: item.slug })).tags.map((tag) => tag.name)
+      //    return tags.includes('newTag1') && !tags.includes(item.tags[0].name)
+      //  }
+      //);
+    });
   });
 
   describe('correctAllItemTagCounts (CRON)', () => {

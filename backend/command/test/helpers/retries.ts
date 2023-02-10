@@ -38,3 +38,14 @@
 //   if (count < requirement.count) return false;
 //   return true;
 // };
+
+export const retryCallback = async (cb: () => Promise<boolean>) => {
+    const startTime = performance.now()
+    while(performance.now() - startTime < 1000) {
+        const currRes = await cb()
+        if(currRes){
+            return true
+        }
+    }
+    throw new Error('Callback condition never met. Timeout!')
+}

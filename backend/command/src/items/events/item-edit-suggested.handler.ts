@@ -2,7 +2,11 @@ import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { InjectModel } from '@m8a/nestjs-typegoose';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { ItemEditSuggestedEvent } from './item-edit-suggested.event';
-import { EditSuggestion, SuggestionItem, SuggestionTag } from '../../models/edit-suggestion.model';
+import {
+  EditSuggestion,
+  SuggestionItem,
+  SuggestionTag,
+} from '../../models/edit-suggestion.model';
 import { Item } from '../../models/item.model';
 import { ItemsByTag } from '../../models/items-by-tag.model';
 import { Tag } from '../../models/tag.model';
@@ -116,7 +120,7 @@ export class ItemEditSuggestedHandler
   // Db calls: 1 update()
   async updateItemWithoutTags(slug: string, itemData: SuggestionItem) {
     try {
-      await this.itemModel.updateOne({ slug: slug }, itemData);
+      await this.itemModel.findOneAndUpdate({ slug: slug }, itemData, {new: true});
     } catch (error) {
       this.logger.error(
         `Could not update item ${slug} due to an error ${error}`,
@@ -161,7 +165,7 @@ export class ItemEditSuggestedHandler
         {
           $lookup: {
             from: 'tags',
-            let: { itemTags: '$tags' },
+            let: { itemTags: '$tags.name' },
             pipeline: [
               {
                 $match: {
