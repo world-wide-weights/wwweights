@@ -3,6 +3,7 @@ import {
   Controller,
   HttpCode,
   HttpStatus,
+  InternalServerErrorException,
   Logger,
   Post,
   Req,
@@ -14,10 +15,12 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiConflictResponse,
+  ApiInternalServerErrorResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { ENVGuard } from '../shared/guards/env.guard';
 import { JwtAuthGuard } from '../shared/guards/jwt.guard';
 import { InsertItemCommand } from './commands/insert-item.command';
 import { InsertItemDto } from './interfaces/insert-item.dto';
@@ -52,6 +55,33 @@ export class ItemsController {
     @Req() { user }: JwtWithUserDto,
     @Body() insertItemDto: InsertItemDto,
   ) {
-    await this.commandBus.execute(new InsertItemCommand(insertItemDto, user.id));
+    await this.commandBus.execute(
+      new InsertItemCommand(insertItemDto, user.id),
+    );
+  }
+
+  @Post('items/bulk-insert')
+  @UseGuards(ENVGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiBody({ type: InsertItemCommand, isArray: true })
+  @ApiOperation({ description: 'Used for bulkinsert of items. Only available in development' })
+  @ApiOkResponse({ description: 'Items inserted' })
+  @ApiInternalServerErrorResponse({ description: 'Something went wrong' })
+  async bulkInsert(@Body() bulkItemInsertDTO: InsertItemDto[]) {
+    let count = 0;
+    try {
+      for (const itemInsertDTO of bulkItemInsertDTO) {
+        // Use userid 0 for admin inserts
+        await this.commandBus.execute(new InsertItemCommand(itemInsertDTO, 0));
+        count++;
+      }
+    } catch (error) {
+      this.logger.error(
+        `Failed bulk insert at ${count}/${bulkItemInsertDTO.length} items due to an error: ${error}`,
+      );
+      // Pass unsanitized as this is only available in dev environments
+      throw new InternalServerErrorException(error);
+    }
+    this.logger.log(`Bulk insert was success for ${count} items`);
   }
 }
