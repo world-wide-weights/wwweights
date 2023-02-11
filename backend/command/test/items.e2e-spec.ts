@@ -230,7 +230,7 @@ describe('ItemsController (e2e)', () => {
         .send(insertItem)
         .expect(HttpStatus.OK);
 
-      await timeout(100);
+      await timeout();
 
       const profile = await profileModel.findOne({});
       expect(profile.count.itemsCreated).toEqual(1);
