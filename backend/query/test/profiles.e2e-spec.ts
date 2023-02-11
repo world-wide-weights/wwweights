@@ -55,7 +55,7 @@ describe('QueryController (e2e)', () => {
     describe('profiles/:userId/statistics', () => {
       const subPath = (userid) => `profiles/${userid}/statistics`;
 
-      it('should return the statistics of one player)', async () => {
+      it('should return the statistics of one profile)', async () => {
         const result = await request(server)
           .get(queriesPath + subPath(profiles[0].userId))
           .expect(HttpStatus.OK);
