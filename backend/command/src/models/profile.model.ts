@@ -1,6 +1,4 @@
 import { prop } from '@typegoose/typegoose';
-import { Expose } from 'class-transformer';
-import { Item } from './item.model';
 import { EditSuggestion } from './edit-suggestion.model';
 
 
@@ -45,7 +43,6 @@ export class Profile {
   @prop({ type: () => ProfileCounts, _id: false })
   count: ProfileCounts;
 
-  @Expose()
   @prop({ array: true, type: () => [EditSuggestion] })
   suggestions: EditSuggestion[];
   // Since we currently don't look for items and suggestions created, we omit this.
