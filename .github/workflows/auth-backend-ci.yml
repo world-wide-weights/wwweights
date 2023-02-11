@@ -85,7 +85,7 @@ jobs:
           context: ./backend/auth
           tags: auth-backend:pipeline_internal
           outputs: type=docker,dest=/tmp/auth-backend-image.tar
-          labels: 
+          labels: |
             org.opencontainers.image.source: https://github.com/world-wide-weights/wwweights
             org.opencontainers.image.description: 'wwweights auth backend for user handling'
 
@@ -147,9 +147,9 @@ jobs:
           tags: auth-backend:main-arm
           platform: linux/arm64
           push: true
-          labels: 
-            org.opencontainers.image.source: https://github.com/world-wide-weights/wwweights
-            org.opencontainers.image.description: 'wwweights auth backend for user handling (ARM version)'
+          labels: |
+            - org.opencontainers.image.source: https://github.com/world-wide-weights/wwweights
+            - org.opencontainers.image.description: 'wwweights auth backend for user handling (ARM version)'
 
   redeploy:
     if: github.ref == 'refs/heads/stable'
