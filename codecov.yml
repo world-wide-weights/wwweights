@@ -6,5 +6,34 @@ github_checks:
 coverage:
   status:
     project:
-      default:
+      default: off
+      auth-backend:
         informational: true
+        flags: 
+          - auth-backend 
+      command-backend:
+        informational: true
+        flags: 
+          - command-backend
+      image-backend:
+        informational: true
+        flags: 
+          - image-backend
+      query-backend:
+        informational: true
+        flags: 
+          - query-backend
+
+flags:
+  auth-backend:
+    paths:
+      - backend/auth
+  command-backend:
+    paths:
+      - backend/command
+  image-backend:
+    paths:
+      - backend/image
+  query-backend:
+    paths:
+      - backend/query
