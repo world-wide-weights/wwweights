@@ -38,28 +38,21 @@ export class ItemEditSuggestedHandler
       }ms`,
     );
 
-    // Extract tags from item if they exist
-    let tags: SuggestionTag;
-    if (editSuggestion.updatedItemValues.tags) {
-      // Spread to copy by value, not as reference
-      tags = { ...editSuggestion.updatedItemValues.tags };
-      // Remove tags from initial => Values are not updated when updating item
-      delete editSuggestion.updatedItemValues.tags;
-    }
     const updateItemStartTime = performance.now();
 
-    await this.updateItemWithoutTags(
+    await this.updateItem(
       editSuggestion.itemSlug,
       editSuggestion.updatedItemValues,
     );
 
     this.logger.debug(
-      `${ItemEditSuggestedHandler.name} Item update (no tags) took: ${
+      `${ItemEditSuggestedHandler.name} Item update took: ${
         performance.now() - updateItemStartTime
       }ms`,
     );
+
     // No tags in suggestion => we are done here
-    if (!tags) {
+    if (!editSuggestion.updatedItemValues.tags) {
       this.logger.debug(
         `Total duration of ${ItemEditSuggestedHandler.name} was ${
           performance.now() - insertSuggestionStartTime
@@ -68,19 +61,13 @@ export class ItemEditSuggestedHandler
       return;
     }
 
+    const tags = editSuggestion.updatedItemValues.tags;
+
     const updateTagsStartTime = performance.now();
     await this.updateTags(tags);
     this.logger.debug(
       `Updating tags by themselves took ${
         performance.now() - updateTagsStartTime
-      } ms`,
-    );
-
-    const updateItemTagsStartTime = performance.now();
-    await this.updateItemTags(editSuggestion.itemSlug, tags);
-    this.logger.debug(
-      `Updating tags for item took ${
-        performance.now() - updateItemTagsStartTime
       } ms`,
     );
 
@@ -118,12 +105,41 @@ export class ItemEditSuggestedHandler
     }
   }
 
-  // Db calls: 1 update()
-  async updateItemWithoutTags(slug: string, itemData: SuggestionItem) {
-    try {
-      await this.itemModel.findOneAndUpdate({ slug: slug }, itemData, {
-        new: true,
+  // Db calls: 1 bulkwrite()
+  async updateItem(slug: string, itemData: SuggestionItem) {
+    const { tags: tagsValues, ...itemValues } = itemData;
+    const tagsToPush =
+      tagsValues?.push?.map((tag) => ({ name: tag, count: 1 })) || [];
+    const tagActions = [];
+    // If no tags pushed => Skip action
+    if (tagsToPush.length > 0) {
+      tagActions.push({
+        $push: { tags: { $each: tagsToPush } },
       });
+    }
+    // If no tags pulled => Skip action
+    if (tagsValues.pull?.length > 0) {
+      tagActions.push({
+        $pull: { tags: { name: { $in: tagsValues?.pull } } },
+      });
+    }
+    try {
+      this.itemModel.bulkWrite(
+        [
+          {
+            updateOne: {
+              filter: { slug },
+              update: [
+                {
+                  $set: itemValues,
+                },
+                ...tagActions,
+              ],
+            },
+          },
+        ],
+        { ordered: true },
+      );
     } catch (error) {
       this.logger.error(
         `Could not update item ${slug} due to an error ${error}`,
@@ -132,7 +148,7 @@ export class ItemEditSuggestedHandler
     }
   }
 
-  // Db calls: 1 Bulk write
+  // Db calls: 1 bulkwrite()
   async updateTags(tagUpdate: SuggestionTag) {
     const positiveUpdateQuery = tagUpdate.push.map((tagName) => ({
       updateOne: {
@@ -157,48 +173,6 @@ export class ItemEditSuggestedHandler
         )} due to an error ${error}`,
       );
       throw new InternalServerErrorException('Could not update tags');
-    }
-  }
-
-  // Db calls: 1 aggregate
-  async updateItemTags(itemSlug: string, tags: SuggestionTag) {
-    try {
-      await this.itemModel.aggregate([
-        { $match: { slug: itemSlug } },
-        {
-          $lookup: {
-            from: 'tags',
-            let: {
-              tagNames: {
-                $map: { input: '$tags', as: 'tag', in: '$$tag.name' },
-              },
-            },
-            pipeline: [
-              {
-                $match: {
-                  $and: [
-                    {
-                      $or: [
-                        { name: { $in: ['$$itemTags'] } },
-                        { name: { $in: tags.push } },
-                      ],
-                    },
-                    { name: { $nin: tags.pull } },
-                  ],
-                },
-              },
-              { $project: { _id: 0, __v: 0 } },
-            ],
-            as: 'tags',
-          },
-        },
-        { $merge: { into: 'items' } },
-      ]);
-    } catch (error) {
-      this.logger.error(
-        `Could not update tags for Item ${itemSlug} due to an error. ${error}`,
-      );
-      throw new InternalServerErrorException('Could not update tags for Item');
     }
   }
 
