@@ -11,13 +11,16 @@ import { ItemsModule } from '../src/items/items.module';
 import { Item } from '../src/models/item.model';
 import { ItemsByTag } from '../src/models/items-by-tag.model';
 import { Tag } from '../src/models/tag.model';
+import { ENVGuard } from '../src/shared/guards/env.guard';
 import { JwtAuthGuard } from '../src/shared/guards/jwt.guard';
 import { JwtStrategy } from '../src/shared/strategies/jwt.strategy';
 import {
   initializeMockModule,
   teardownMockDataSource,
 } from './helpers/MongoMemoryHelpers';
+import { retryCallback } from './helpers/retries';
 import { timeout } from './helpers/timeout';
+import { FakeEnvGuardFactory } from './mocks/env-guard.mock';
 import { MockEventStore } from './mocks/eventstore';
 import {
   differentNames as itemsWithDifferentNames,
@@ -25,6 +28,7 @@ import {
   insertItem2,
   singleItem,
   singleItemTags,
+  testData,
 } from './mocks/items';
 import { FakeAuthGuardFactory } from './mocks/jwt-guard.mock';
 import { verifiedRequestUser } from './mocks/users';
@@ -37,7 +41,8 @@ describe('ItemsController (e2e)', () => {
   const mockEventStore: MockEventStore = new MockEventStore();
   let itemCronJobHandler: ItemCronJobHandler;
   let server: any; // Has to be any because of supertest not having a type for it either
-  const fakeGuard = new FakeAuthGuardFactory();
+  const fakeJWTGuard = new FakeAuthGuardFactory();
+  const fakeEnvGuard = new FakeEnvGuardFactory();
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -53,7 +58,9 @@ describe('ItemsController (e2e)', () => {
       .overrideProvider(JwtStrategy)
       .useValue(null)
       .overrideGuard(JwtAuthGuard)
-      .useValue(fakeGuard.getGuard())
+      .useValue(fakeJWTGuard.getGuard())
+      .overrideGuard(ENVGuard)
+      .useValue(fakeEnvGuard.getGuard())
       .compile();
 
     app = moduleFixture.createNestApplication();
@@ -79,8 +86,9 @@ describe('ItemsController (e2e)', () => {
   });
 
   beforeEach(async () => {
-    fakeGuard.setAuthResponse(true);
-    fakeGuard.setUser(verifiedRequestUser);
+    fakeJWTGuard.setAuthResponse(true);
+    fakeJWTGuard.setUser(verifiedRequestUser);
+    fakeEnvGuard.isDev = false;
     mockEventStore.reset();
     await itemModel.deleteMany();
     await tagModel.deleteMany();
@@ -100,7 +108,7 @@ describe('ItemsController (e2e)', () => {
     const commandsPath = '/commands/v1/';
 
     it('items/insert => insert one Item should fail with auth false', async () => {
-      fakeGuard.setAuthResponse(false);
+      fakeJWTGuard.setAuthResponse(false);
       await request(server)
         .post(commandsPath + 'items/insert')
         .send(insertItem)
@@ -221,6 +229,34 @@ describe('ItemsController (e2e)', () => {
 
       expect(items.length).toEqual(itemsWithDifferentNames.length);
       expect(tag.count).toEqual(itemsWithDifferentNames.length);
+    });
+
+    describe('Dev commands (POSTS) /commands/v1', () => {
+
+      it('items/bulk-insert => Should be hidden if env guard fails' , async () => {
+        // ACT
+        const res = await request(server)
+          .post(commandsPath + 'items/bulk-insert')
+          .send(testData.slice(0, 5));
+        // ASSERT
+        expect(res.status).toEqual(HttpStatus.NOT_FOUND);
+      });
+
+      it('items/bulk-insert => Should insert multiple items' , async () => {
+        // ARRANGE
+        fakeEnvGuard.isDev = true;
+        // ACT
+        const res = await request(server)
+          .post(commandsPath + 'items/bulk-insert')
+          .send(testData.slice(0, 5));
+        // ASSERT
+        expect(res.status).toEqual(HttpStatus.OK);
+        await retryCallback(
+          async () => (await itemModel.find({})).length !== 0,
+        );
+        const items = await itemModel.find({});
+        expect(items.length).toEqual(5);
+      });
     });
   });
 
