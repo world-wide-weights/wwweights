@@ -4,6 +4,7 @@ import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { Item } from '../../models/item.model';
 import { ItemsByTag } from '../../models/items-by-tag.model';
+import { Profile } from '../../models/profile.model';
 import { Tag } from '../../models/tag.model';
 import { ItemInsertedEvent } from './item-inserted.event';
 
@@ -17,6 +18,8 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
     private readonly tagModel: ReturnModelType<typeof Tag>,
     @InjectModel(ItemsByTag)
     private readonly itemsByTagModel: ReturnModelType<typeof ItemsByTag>,
+    @InjectModel(Profile)
+    private readonly profileModel: ReturnModelType<typeof Profile>,
   ) {}
   async handle({ item }: ItemInsertedEvent) {
     /*
@@ -49,6 +52,9 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
           performance.now() - insertItemStartTime
         }ms`,
       );
+
+      // This is not a SAGA since it is unreasonable to save this in an eventstore
+      this.increamentProfileCounts(item);
 
       const updateTagsStartTime = performance.now();
       await this.upsertItemIntoItemsByTag(item);
@@ -163,6 +169,31 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       throw new InternalServerErrorException(
         "Couldn't insert item to ItemsByTag",
       );
+    }
+  }
+
+  async increamentProfileCounts(item: Item) {
+    const incrementer = {
+      $inc: {
+        'count.itemsCreated': 1,
+        'count.tagsUsedOnCreation': item.tags.length,
+        'count.sourceUsedOnCreation': item.source ? 1 : 0,
+        'count.imageAddedOnCreation': item.image ? 1 : 0,
+        'count.additionalValueOnCreation': item.weight.additionalValue ? 1 : 0,
+      },
+    };
+
+    try {
+      await this.profileModel.findOneAndUpdate(
+        { userId: item.userId },
+        incrementer,
+        {
+          upsert: true,
+        },
+      );
+    } catch (error) {
+      this.logger.error(`Incremented Profile Counts: ${error}`);
+      throw new InternalServerErrorException("Couldn't increment profile");
     }
   }
 }

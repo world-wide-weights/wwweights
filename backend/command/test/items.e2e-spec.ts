@@ -129,7 +129,7 @@ describe('ItemsController (e2e)', () => {
       // Check if Item got correct tags count
       expect(item.name).toEqual(insertItem.name);
       expect(item.slug).toBeDefined();
-      expect(item.user).toEqual(1);
+      expect(item.userId).toEqual(1);
 
       const tag1 = await tagModel.findOne({ name: 'tag1' });
       const tag2 = await tagModel.findOne({ name: 'tag2' });

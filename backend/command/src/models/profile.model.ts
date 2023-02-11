@@ -1,20 +1,47 @@
 import { prop } from '@typegoose/typegoose';
 import { Expose } from 'class-transformer';
-import { Item } from './item.model';
-import { Suggestion } from './suggestion.model';
 
+export class ProfileCounts {
+  @Expose()
+  @prop()
+  itemsCreated: number;
+  @Expose()
+  @prop()
+  itemsUpdated: number;
+  @Expose()
+  @prop()
+  tagsUsedOnCreation: number;
+  @Expose()
+  @prop()
+  tagsUsedOnUpdate: number;
+  @Expose()
+  @prop()
+  sourceUsedOnCreation: number;
+  @Expose()
+  @prop()
+  sourceUsedOnUpdate: number;
+  @Expose()
+  @prop()
+  imageAddedOnCreation: number;
+  @Expose()
+  @prop()
+  imageAddedOnUpdate: number;
+  @Expose()
+  @prop()
+  additionalValueOnCreation: number;
+  @Expose()
+  @prop()
+  additionalValueOnUpdate: number;
+  @Expose()
+  @prop()
+  itemsDeleted: number;
+}
 export class Profile {
   @Expose()
   @prop({ required: true, unique: true })
-  username: string;
-
-  // TODO: Add rest
+  userId: number;
 
   @Expose()
-  @prop({ array: true, type: () => [Item] })
-  items: Item[];
-
-  @Expose()
-  @prop({ array: true, type: () => [Suggestion] })
-  suggestions: Suggestion[];
+  @prop({ type: () => ProfileCounts, _id: false })
+  count: ProfileCounts;
 }
