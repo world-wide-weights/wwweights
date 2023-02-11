@@ -5,6 +5,7 @@ github_checks:
   annotations: false
 coverage:
   status:
+    patch: off
     project:
       default: off
       auth-backend:
