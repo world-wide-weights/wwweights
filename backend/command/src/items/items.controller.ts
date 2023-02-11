@@ -15,6 +15,7 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiConflictResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
@@ -63,6 +64,21 @@ export class ItemsController {
   @Post(':slug/suggest/edit')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
+  @ApiBody({type: SuggestItemEditDTO})
+  @ApiOperation({description: 'Suggest an item edit'})
+  @ApiOkResponse({
+    status: HttpStatus.OK,
+    description: 'Suggestion was successully submitted',
+  })
+  @ApiNotFoundResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'No slug with that item',
+  })
+  @ApiBadRequestResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Invalid request. Data validation failed.',
+  })
+  @ApiBearerAuth()
   async suggestEdit(
     @Body() editSuggestionDto: SuggestItemEditDTO,
     @Param('slug') itemSlug: string,
