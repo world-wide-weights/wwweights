@@ -53,7 +53,7 @@ export class EditSuggestion extends AggregateRoot {
   @Expose()
   @prop({ required: true })
   @IsInt()
-  user: number;
+  userId: number;
 
   @Expose()
   @prop({ required: true })

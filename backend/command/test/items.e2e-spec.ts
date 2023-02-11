@@ -271,7 +271,7 @@ describe('ItemsController (e2e)', () => {
       const suggestion = await editSuggestionModel.findOne({
         itemSlug: item.slug,
       });
-      expect(suggestion.user).toEqual(verifiedRequestUser.id);
+      expect(suggestion.userId).toEqual(verifiedRequestUser.id);
     });
 
     // WARNING: The following tests are for testing the edit functionality itself. As of now this is triggered via the
@@ -322,6 +322,9 @@ describe('ItemsController (e2e)', () => {
         );
         return tags.includes('newTag1') && !tags.includes(item.tags[0].name);
       });
+      const updatedItem = await itemModel.findOne({ slug: item.slug });
+      // Count does not matter in this case
+      expect(updatedItem.tags.map((t) => t.name)).toContain('newTag1');
     });
 
     it('items/:slug/suggest/edit => Should update tags in Tags', async () => {

@@ -11,6 +11,7 @@ import { Item } from '../../models/item.model';
 import { ItemsByTag } from '../../models/items-by-tag.model';
 import { Tag } from '../../models/tag.model';
 import { ReturnModelType } from '@typegoose/typegoose';
+import { AnyBulkWriteOperation, UpdateFilter } from 'mongodb';
 
 @EventsHandler(ItemEditSuggestedEvent)
 export class ItemEditSuggestedHandler
@@ -105,41 +106,30 @@ export class ItemEditSuggestedHandler
     }
   }
 
-  // Db calls: 1 bulkwrite()
+  // Db calls: Min: 1 findOneAndUpdate Top: 2 findOneAndUpdate()
   async updateItem(slug: string, itemData: SuggestionItem) {
     const { tags: tagsValues, ...itemValues } = itemData;
+    const tagNamesToPull = tagsValues?.pull || [];
     const tagsToPush =
       tagsValues?.push?.map((tag) => ({ name: tag, count: 1 })) || [];
-    const tagActions = [];
-    // If no tags pushed => Skip action
-    if (tagsToPush.length > 0) {
-      tagActions.push({
-        $push: { tags: { $each: tagsToPush } },
-      });
-    }
-    // If no tags pulled => Skip action
-    if (tagsValues.pull?.length > 0) {
-      tagActions.push({
-        $pull: { tags: { name: { $in: tagsValues?.pull } } },
-      });
-    }
+
+
     try {
-      this.itemModel.bulkWrite(
-        [
-          {
-            updateOne: {
-              filter: { slug },
-              update: [
-                {
-                  $set: itemValues,
-                },
-                ...tagActions,
-              ],
-            },
-          },
-        ],
-        { ordered: true },
+      await this.itemModel.findOneAndUpdate(
+        { slug },
+        {
+          ...itemValues,
+          $pull: { tags: { name: { $in: tagNamesToPull } } },
+        },
       );
+      if (tagsToPush.length > 0) {
+       await this.itemModel.findOneAndUpdate(
+          { slug },
+          {
+            $addToSet: { tags: tagsToPush },
+          },
+        );
+      }
     } catch (error) {
       this.logger.error(
         `Could not update item ${slug} due to an error ${error}`,
@@ -150,20 +140,22 @@ export class ItemEditSuggestedHandler
 
   // Db calls: 1 bulkwrite()
   async updateTags(tagUpdate: SuggestionTag) {
-    const positiveUpdateQuery = tagUpdate.push.map((tagName) => ({
-      updateOne: {
-        filter: { name: tagName },
-        update: { $inc: { count: 1 } },
-        upsert: true,
-      },
-    }));
-    const negativeUpdateQuery = tagUpdate.pull.map((tagName) => ({
-      updateOne: {
-        filter: { name: tagName },
-        update: { $inc: { count: -1 } },
-        upsert: false,
-      },
-    }));
+    const positiveUpdateQuery: AnyBulkWriteOperation<Tag>[] =
+      tagUpdate.push.map((tagName) => ({
+        updateOne: {
+          filter: { name: tagName },
+          update: { $inc: { count: 1 } },
+          upsert: true,
+        },
+      }));
+    const negativeUpdateQuery: AnyBulkWriteOperation<Tag>[] =
+      tagUpdate.pull.map((tagName) => ({
+        updateOne: {
+          filter: { name: tagName },
+          update: { $inc: { count: -1 } },
+        },
+      }));
+
     try {
       this.tagModel.bulkWrite(positiveUpdateQuery.concat(negativeUpdateQuery));
     } catch (error) {
@@ -181,6 +173,7 @@ export class ItemEditSuggestedHandler
     if (tags?.length === 0) {
       this.logger.debug('No positive ItemsByTags update necessary');
     }
+
     // Insert new Tags
     try {
       const newTags = tags.map(

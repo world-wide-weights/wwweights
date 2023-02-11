@@ -28,7 +28,7 @@ import { JwtWithUserDto } from './interfaces/request-with-user.dto';
 import { SuggestItemEditDTO } from './interfaces/suggest-item-edit.dto';
 
 @Controller('items')
-@ApiTags()
+@ApiTags('items')
 export class ItemsController {
   private readonly logger = new Logger(ItemsController.name);
 
