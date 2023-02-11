@@ -91,14 +91,14 @@ describe('ItemsController (e2e)', () => {
     await itemModel.deleteMany();
     await tagModel.deleteMany();
     await itemsByTagModel.deleteMany();
-    await editSuggestionModel.deleteMany()
+    await editSuggestionModel.deleteMany();
   });
 
   afterAll(async () => {
     await itemModel.deleteMany();
     await tagModel.deleteMany();
     await itemsByTagModel.deleteMany();
-    await editSuggestionModel.deleteMany()
+    await editSuggestionModel.deleteMany();
     await teardownMockDataSource();
     server.close();
     await app.close();
@@ -375,14 +375,19 @@ describe('ItemsController (e2e)', () => {
       expect(res.status).toEqual(HttpStatus.OK);
       await retryCallback(async () => {
         // Has new tag been created?
-        return (await itemsByTagModel.findOne({tagName: item.tags[0].name})).items.length  === 0;
+        return (
+          (await itemsByTagModel.findOne({ tagName: item.tags[0].name })).items
+            .length === 0
+        );
       });
       const newTag = await itemsByTagModel.findOne({ tagName: 'newTag1' });
-      const oldTag = await itemsByTagModel.findOne({ tagName: item.tags[0].name });
+      const oldTag = await itemsByTagModel.findOne({
+        tagName: item.tags[0].name,
+      });
       // Has tag been created?
       expect(newTag).toBeDefined();
-      expect(newTag.items[0].slug).toEqual(item.slug)
-      expect(oldTag.items.length).toEqual(0)
+      expect(newTag.items[0].slug).toEqual(item.slug);
+      expect(oldTag.items.length).toEqual(0);
     });
   });
 
@@ -474,6 +479,46 @@ describe('ItemsController (e2e)', () => {
       expect(firstTag.items.length).toEqual(2);
       expect(firstTag.items[0].tags[0].count).toEqual(2);
       expect(firstTag.items[1].tags[0].count).toEqual(2);
+    });
+  });
+  describe('deleteUnusedTags (CRON)', () => {
+    it('Should delete unused Tags from Tags', async () => {
+      // ARRANGE
+      await tagModel.insertMany([
+        ...singleItemTags,
+        { name: 'tobedeleted', count: 0 },
+      ]);
+      // ACT
+      await itemCronJobHandler.deleteUnusedTags();
+      // ASSERT
+      const newTagList = await tagModel.find({});
+      expect(newTagList.length).toEqual(2);
+      expect(
+        newTagList.find((e) => e.name === 'tobedeleted' && e.count === 0),
+      ).toBeUndefined();
+    });
+    it('Should delete unused Tags from ItemsByTag', async () => {
+      // ARRANGE
+      await tagModel.insertMany([
+        ...singleItemTags,
+        { name: 'tobedeleted', count: 0 },
+      ]);
+      await itemsByTagModel.insertMany([{
+       tagName: 'tobedeleted', items: [] 
+      }, {
+       tagName: singleItemTags[0].name,
+       items: [singleItem]
+      }, {
+        tagName: singleItemTags[1].name,
+        items: [singleItem]
+      }])
+      // ACT
+      await itemCronJobHandler.deleteUnusedTags();
+      // ASSERT
+      // Should now only contain 
+      const updatedItemsByTags = await itemsByTagModel.find({})
+      expect(updatedItemsByTags.length).toEqual(2)
+      expect(updatedItemsByTags.find((e) => e.tagName === 'tobedeleted' )).toBeUndefined()
     });
   });
 });
