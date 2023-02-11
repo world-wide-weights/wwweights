@@ -38,9 +38,9 @@ export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name, chips = [], 
   return (
     <Field type={type} name={name}>{(props: FieldProps<any>) => (
       <>
-        <div className={`flex bg-gray-100 rounded-lg ${isInputSelected ? "outline outline-2 outline-blue-500" : ""}`}>
+        <div datacy="chip-text-input" className={`flex bg-gray-100 rounded-lg ${isInputSelected ? "outline outline-2 outline-blue-500" : ""}`}>
           <div className="flex flex-wrap pr-4 border-solid pl-4">
-            <ul className="flex flex-wrap mt-2">
+            <ul datacy="tags-list" className="flex flex-wrap mt-2">
               {tags.map((tag, index) => (
                 <li key={index} className=" w-auto h-8 flex items-center content-center text-blue-600 pl-2 pr-2 text-sm list-none rounded-full mr-2 mb-2 bg-blue-500 bg-opacity-20">
                   <span className="mt-0.5">{tag}</span>
