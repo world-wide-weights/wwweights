@@ -106,7 +106,7 @@ export class ItemEditSuggestedHandler
     }
   }
 
-  // Db calls: Min: 1 findOneAndUpdate Top: 2 findOneAndUpdate()
+  // Db calls: Min: 1 findOneAndUpdate Max: 2 findOneAndUpdate()
   async updateItem(slug: string, itemData: SuggestionItem) {
     const { tags: tagsValues, ...itemValues } = itemData;
     const tagNamesToPull = tagsValues?.pull || [];
