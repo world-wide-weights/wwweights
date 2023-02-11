@@ -26,7 +26,7 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
     try {
       const newItem = new Item({
         ...insertItemDto,
-        user: userId,
+        userId: userId,
         slug: getSlug(insertItemDto.name),
         tags: insertItemDto.tags?.map(
           (tag) => new Tag({ name: getSlug(tag, ' ') }),

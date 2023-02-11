@@ -13,6 +13,7 @@ import { ItemsModule } from '../src/items/items.module';
 import { EditSuggestion } from '../src/models/edit-suggestion.model';
 import { Item } from '../src/models/item.model';
 import { ItemsByTag } from '../src/models/items-by-tag.model';
+import { Profile } from '../src/models/profile.model';
 import { Tag } from '../src/models/tag.model';
 import { JwtAuthGuard } from '../src/shared/guards/jwt.guard';
 import { JwtStrategy } from '../src/shared/strategies/jwt.strategy';
@@ -39,6 +40,7 @@ describe('ItemsController (e2e)', () => {
   let tagModel: Model<Tag>;
   let itemsByTagModel: Model<ItemsByTag>;
   let editSuggestionModel: Model<EditSuggestion>;
+  let profileModel: Model<Profile>;
   const mockEventStore: MockEventStore = new MockEventStore();
   let itemCronJobHandler: ItemCronJobHandler;
   let server: any; // Has to be any because of supertest not having a type for it either
@@ -74,6 +76,7 @@ describe('ItemsController (e2e)', () => {
     tagModel = moduleFixture.get('TagModel');
     itemsByTagModel = moduleFixture.get('ItemsByTagModel');
     editSuggestionModel = moduleFixture.get('EditSuggestionModel');
+    profileModel = moduleFixture.get('ProfileModel');
 
     app.setGlobalPrefix('commands/v1');
     await app.init();
@@ -99,6 +102,7 @@ describe('ItemsController (e2e)', () => {
     await tagModel.deleteMany();
     await itemsByTagModel.deleteMany();
     await editSuggestionModel.deleteMany();
+    await profileModel.deleteMany();
     await teardownMockDataSource();
     server.close();
     await app.close();
@@ -137,7 +141,7 @@ describe('ItemsController (e2e)', () => {
       // Check if Item got correct tags count
       expect(item.name).toEqual(insertItem.name);
       expect(item.slug).toBeDefined();
-      expect(item.user).toEqual(1);
+      expect(item.userId).toEqual(1);
 
       const tag1 = await tagModel.findOne({ name: 'tag1' });
       const tag2 = await tagModel.findOne({ name: 'tag2' });
@@ -391,6 +395,21 @@ describe('ItemsController (e2e)', () => {
       expect(newTag).toBeDefined();
       expect(newTag.items[0].slug).toEqual(item.slug);
       expect(oldTag.items.length).toEqual(0);
+
+    it('items/insert => increment profile counts', async () => {
+      await request(server)
+        .post(commandsPath + 'items/insert')
+        .send(insertItem)
+        .expect(HttpStatus.OK);
+
+      await timeout();
+
+      const profile = await profileModel.findOne({});
+      expect(profile.count.itemsCreated).toEqual(1);
+      expect(profile.count.additionalValueOnCreation).toEqual(0);
+      expect(profile.count.tagsUsedOnCreation).toEqual(2);
+      expect(profile.count.sourceUsedOnCreation).toEqual(0);
+      expect(profile.count.imageAddedOnCreation).toEqual(0);
     });
   });
 
