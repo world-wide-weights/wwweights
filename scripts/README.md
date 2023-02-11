@@ -28,14 +28,14 @@ All parameters are optional:
 
 This script can also be used to insert data into production.
 
-**Note from @coffemakingtoaster :** Please don`t do this on your own...Either let devops do that or do it with someone from devops
+**Note from @coffemakingtoaster :** Please dont do this on your own...Either let devops do that or do it with someone from devops
 
 1. Set server into dev-maintenance
 
 ```sh
 ssh <username>@<server> sh /home/wwweights/dev-maintenance.sh
 ```
-2. Create ssh tunnel
+2. Create ssh tunnel. When prod server is in maintenance the reverse proxy does not allow for http connetions from anywhere but localhost.
 
 ```sh
 ssh -L 3002:3002 <username>@<server> 

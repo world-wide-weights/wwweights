@@ -1,1 +1,6 @@
 .env
+
+# Only include pre-provided images
+images/**/*
+!images/test.png
+!images/test.jpg

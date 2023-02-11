@@ -84,7 +84,7 @@ services:
       - IMAGE_STORE_INCOMING_CACHE_PATH=${IMG_IMAGE_STORE_INCOMING_CACHE_PATH:-./cache}
       - AUTH_API_KEY=${IMG_AUTH_API_KEY:-img}
     volumes:
-      - image_backend_volume:${IMG_IMAGE_STORE_BASE_PATH}
+      - ./images:${IMG_IMAGE_STORE_BASE_PATH}
     links:
       - auth-backend:auth
 
@@ -165,4 +165,3 @@ volumes:
   mongodb_data_volume:
   postgres_data_volume:
   eventstore_data_volume:
-  image_backend_volume:
