@@ -85,6 +85,9 @@ jobs:
           context: ./backend/auth
           tags: auth-backend:pipeline_internal
           outputs: type=docker,dest=/tmp/auth-backend-image.tar
+          labels: 
+            org.opencontainers.image.source: https://github.com/world-wide-weights/wwweights
+            org.opencontainers.image.description: 'wwweights auth backend for user handling'
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
@@ -122,7 +125,32 @@ jobs:
 
       - name: push
         run: docker push ghcr.io/world-wide-weights/auth-backend:${{ steps.extract_branch.outputs.branch }}
-  
+
+  docker-arm:
+    # Only run for main as feature and deployment branches dont need ARM
+    # ARM is mainly for Apple silicon devs 
+    #if: github.ref == 'refs/heads/main'
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to Packages Container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: ./backend/auth
+          tags: auth-backend:main-arm
+          platform: linux/arm64
+          push: true
+          labels: 
+            org.opencontainers.image.source: https://github.com/world-wide-weights/wwweights
+            org.opencontainers.image.description: 'wwweights auth backend for user handling (ARM version)'
+
   redeploy:
     if: github.ref == 'refs/heads/stable'
     needs: docker-push
