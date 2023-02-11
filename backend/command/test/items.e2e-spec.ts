@@ -503,22 +503,51 @@ describe('ItemsController (e2e)', () => {
         ...singleItemTags,
         { name: 'tobedeleted', count: 0 },
       ]);
-      await itemsByTagModel.insertMany([{
-       tagName: 'tobedeleted', items: [] 
-      }, {
-       tagName: singleItemTags[0].name,
-       items: [singleItem]
-      }, {
-        tagName: singleItemTags[1].name,
-        items: [singleItem]
-      }])
+      await itemsByTagModel.insertMany([
+        {
+          tagName: 'tobedeleted',
+          items: [],
+        },
+        {
+          tagName: singleItemTags[0].name,
+          items: [singleItem],
+        },
+        {
+          tagName: singleItemTags[1].name,
+          items: [singleItem],
+        },
+      ]);
       // ACT
       await itemCronJobHandler.deleteUnusedTags();
       // ASSERT
-      // Should now only contain 
-      const updatedItemsByTags = await itemsByTagModel.find({})
-      expect(updatedItemsByTags.length).toEqual(2)
-      expect(updatedItemsByTags.find((e) => e.tagName === 'tobedeleted' )).toBeUndefined()
+      // Should now only contain
+      const updatedItemsByTags = await itemsByTagModel.find({});
+      expect(updatedItemsByTags.length).toEqual(2);
+      expect(
+        updatedItemsByTags.find((e) => e.tagName === 'tobedeleted'),
+      ).toBeUndefined();
+    });
+
+    it('Should work even when no changes are needed', async () => {
+      // ARRANGE
+      await tagModel.insertMany(singleItemTags);
+      await itemsByTagModel.insertMany([
+        {
+          tagName: singleItemTags[0].name,
+          items: [singleItem],
+        },
+        {
+          tagName: singleItemTags[1].name,
+          items: [singleItem],
+        },
+      ]);
+      // ACT
+      await itemCronJobHandler.deleteUnusedTags();
+      // ASSERT
+      const tags = await tagModel.find({});
+      expect(tags.length).toEqual(singleItemTags.length);
+      const itemsByTags = await itemsByTagModel.find({});
+      expect(itemsByTags.length).toEqual(2);
     });
   });
 });
