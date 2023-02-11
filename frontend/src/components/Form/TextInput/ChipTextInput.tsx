@@ -1,4 +1,5 @@
 import React from "react";
+import { Icon } from "../../Icon/Icon";
 
 type ChipTextInputProps = {
   /** Array of chips in textfield */
@@ -30,11 +31,8 @@ export const ChipTextInput: React.FC<ChipTextInputProps> = (props) => {
           {chips.map((tag, index) => (
             <li key={index} className=" w-auto h-8 flex items-center content-center text-blue-600 pl-2 pr-2 text-sm list-none rounded-full mr-2 mb-2 bg-blue-500 bg-opacity-20">
               <span className="mt-0.5">{tag}</span>
-              <span
-                className=" block w-4 leading-4 text-center text-white text-sm ml-2 rounded-full cursor-pointer bg-blue-500"
-                onClick={() => removeTags(index)}
-              >
-                x
+              <span onClick={() => removeTags(index)}>
+              <Icon className="block w-4 leading-4 text-center text-white text-sm ml-2 rounded-full cursor-pointer bg-blue-500" >{"close"}</Icon>
               </span>
             </li>
           ))}
