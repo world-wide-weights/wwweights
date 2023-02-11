@@ -39,7 +39,7 @@ export class ItemEditSuggestedHandler
     );
 
     // Extract tags from item if they exist
-    let tags;
+    let tags: SuggestionTag;
     if (editSuggestion.updatedItemValues.tags) {
       // Spread to copy by value, not as reference
       tags = { ...editSuggestion.updatedItemValues.tags };
@@ -85,8 +85,9 @@ export class ItemEditSuggestedHandler
     );
 
     const updateItemsByTagStartTime = performance.now();
-    await this.positiveUpdateItemsByTags(editSuggestion.itemSlug, tags.add);
-    await this.negativeUpdateItemsByTags(editSuggestion.itemSlug, tags.remove);
+
+    await this.positiveUpdateItemsByTags(editSuggestion.itemSlug, tags.push);
+    await this.negativeUpdateItemsByTags(editSuggestion.itemSlug, tags.pull);
 
     this.logger.debug(
       `Updating ItemsByTag took ${
@@ -120,7 +121,9 @@ export class ItemEditSuggestedHandler
   // Db calls: 1 update()
   async updateItemWithoutTags(slug: string, itemData: SuggestionItem) {
     try {
-      await this.itemModel.findOneAndUpdate({ slug: slug }, itemData, {new: true});
+      await this.itemModel.findOneAndUpdate({ slug: slug }, itemData, {
+        new: true,
+      });
     } catch (error) {
       this.logger.error(
         `Could not update item ${slug} due to an error ${error}`,
@@ -165,14 +168,18 @@ export class ItemEditSuggestedHandler
         {
           $lookup: {
             from: 'tags',
-            let: { itemTags: '$tags.name' },
+            let: {
+              tagNames: {
+                $map: { input: '$tags', as: 'tag', in: '$$tag.name' },
+              },
+            },
             pipeline: [
               {
                 $match: {
                   $and: [
                     {
                       $or: [
-                        { name: { $in: '$$itemTags' } },
+                        { name: { $in: ['$$itemTags'] } },
                         { name: { $in: tags.push } },
                       ],
                     },
@@ -197,7 +204,7 @@ export class ItemEditSuggestedHandler
 
   // DB Calls: 1 Insert, 1 Aggregate
   async positiveUpdateItemsByTags(itemSlug: string, tags: string[]) {
-    if (tags.length === 0) {
+    if (tags?.length === 0) {
       this.logger.debug('No positive ItemsByTags update necessary');
     }
     // Insert new Tags
@@ -243,7 +250,7 @@ export class ItemEditSuggestedHandler
 
   // Db calls: 1 updateMany
   async negativeUpdateItemsByTags(itemSlug: string, tags: string[]) {
-    if (tags.length === 0) {
+    if (tags?.length === 0) {
       this.logger.debug('No negative ItemsByTags update necessary');
     }
 
@@ -252,7 +259,7 @@ export class ItemEditSuggestedHandler
       await this.itemsByTagModel.updateMany(
         { tagName: { $in: tags } },
         {
-          items: { $pull: { slug: itemSlug } },
+          $pull: { items: { slug: itemSlug } },
         },
       );
     } catch (error) {

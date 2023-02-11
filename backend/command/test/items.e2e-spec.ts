@@ -9,7 +9,6 @@ import { ALLOWED_EVENT_ENTITIES } from '../src/eventstore/enums/allowedEntities.
 import { EventStore } from '../src/eventstore/eventstore';
 import { EventStoreModule } from '../src/eventstore/eventstore.module';
 import { ItemCronJobHandler } from '../src/items/cron/items.cron';
-import { SuggestItemEditDTO } from '../src/items/interfaces/suggest-item-edit.dto';
 import { ItemsModule } from '../src/items/items.module';
 import { EditSuggestion } from '../src/models/edit-suggestion.model';
 import { Item } from '../src/models/item.model';
@@ -92,12 +91,14 @@ describe('ItemsController (e2e)', () => {
     await itemModel.deleteMany();
     await tagModel.deleteMany();
     await itemsByTagModel.deleteMany();
+    await editSuggestionModel.deleteMany()
   });
 
   afterAll(async () => {
     await itemModel.deleteMany();
     await tagModel.deleteMany();
     await itemsByTagModel.deleteMany();
+    await editSuggestionModel.deleteMany()
     await teardownMockDataSource();
     server.close();
     await app.close();
@@ -293,7 +294,7 @@ describe('ItemsController (e2e)', () => {
       // This will pass if met or throw an error if callback condition is never met
       await retryCallback(
         async () =>
-        // Has item been updated?
+          // Has item been updated?
           (await itemModel.findOne({ slug: item.slug })).image === 'test',
       );
     });
@@ -314,13 +315,74 @@ describe('ItemsController (e2e)', () => {
         });
       // ASSERT
       expect(res.status).toEqual(HttpStatus.OK);
-      //await retryCallback(
-      //  async () =>{
-      //    // Have tags in item been updated?
-      //    const tags = (await itemModel.findOne({ slug: item.slug })).tags.map((tag) => tag.name)
-      //    return tags.includes('newTag1') && !tags.includes(item.tags[0].name)
-      //  }
-      //);
+      await retryCallback(async () => {
+        // Have tags in item been updated?
+        const tags = (await itemModel.findOne({ slug: item.slug })).tags.map(
+          (tag) => tag.name,
+        );
+        return tags.includes('newTag1') && !tags.includes(item.tags[0].name);
+      });
+    });
+
+    it('items/:slug/suggest/edit => Should update tags in Tags', async () => {
+      // ARRANGE
+      const item = new itemModel(singleItem);
+      await item.save();
+      await tagModel.insertMany(item.tags);
+      // Create eventstore stream
+      mockEventStore.existingStreams = [
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      ];
+      //ACT
+      const res = await request(server)
+        .post(commandsPath + `items/${item.slug}/suggest/edit`)
+        .send({
+          tags: { push: ['newTag1'], pull: [item.tags[0].name] },
+        });
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.OK);
+      await retryCallback(async () => {
+        // Has new tag been created?
+        return (await tagModel.find({})).length === item.tags.length + 1;
+      });
+      const newTag = await tagModel.findOne({ name: 'newTag1' });
+      const oldTag = await tagModel.findOne({ name: item.tags[0].name });
+      // Has tag been created?
+      expect(newTag).toBeDefined();
+      expect(oldTag.count).toEqual(item.tags[0].count - 1);
+    });
+
+    it('items/:slug/suggest/edit => Should update tags ItemsByTag', async () => {
+      // ARRANGE
+      const item = new itemModel(singleItem);
+      await item.save();
+      await tagModel.insertMany(item.tags);
+      await itemsByTagModel.insertMany([
+        { tagName: singleItem.tags[0].name, items: [item] },
+        { tagName: singleItem.tags[1].name, items: [item] },
+      ]);
+      // Create eventstore stream
+      mockEventStore.existingStreams = [
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      ];
+      //ACT
+      const res = await request(server)
+        .post(commandsPath + `items/${item.slug}/suggest/edit`)
+        .send({
+          tags: { push: ['newTag1'], pull: [item.tags[0].name] },
+        });
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.OK);
+      await retryCallback(async () => {
+        // Has new tag been created?
+        return (await itemsByTagModel.findOne({tagName: item.tags[0].name})).items.length  === 0;
+      });
+      const newTag = await itemsByTagModel.findOne({ tagName: 'newTag1' });
+      const oldTag = await itemsByTagModel.findOne({ tagName: item.tags[0].name });
+      // Has tag been created?
+      expect(newTag).toBeDefined();
+      expect(newTag.items[0].slug).toEqual(item.slug)
+      expect(oldTag.items.length).toEqual(0)
     });
   });
 
@@ -391,7 +453,10 @@ describe('ItemsController (e2e)', () => {
         {
           tagName: singleItem.tags[0].name,
           items: [
-            { ...item1, tags: [{ ...item1.tags[0], count: 1 }, item1.tags[1]] },
+            {
+              ...item1,
+              tags: [{ ...item1.tags[0], count: 1 }, item1.tags[1]],
+            },
             { ...item2, tags: [{ ...item2.tags[0], count: 0 }] },
           ],
         },
