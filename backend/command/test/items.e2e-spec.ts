@@ -95,6 +95,7 @@ describe('ItemsController (e2e)', () => {
     await tagModel.deleteMany();
     await itemsByTagModel.deleteMany();
     await editSuggestionModel.deleteMany();
+    await profileModel.deleteMany()
   });
 
   afterAll(async () => {
@@ -395,7 +396,7 @@ describe('ItemsController (e2e)', () => {
       expect(newTag).toBeDefined();
       expect(newTag.items[0].slug).toEqual(item.slug);
       expect(oldTag.items.length).toEqual(0);
-
+    });
     it('items/insert => increment profile counts', async () => {
       await request(server)
         .post(commandsPath + 'items/insert')

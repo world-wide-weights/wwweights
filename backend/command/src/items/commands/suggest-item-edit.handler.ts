@@ -24,7 +24,7 @@ export class SuggestItemEditHandler
     userId,
   }: SuggestItemEditCommand) {
     const newSuggestion = new EditSuggestion({
-      userId
+      userId,
       itemSlug: itemSlug,
       updatedItemValues: suggestItemEditData, 
       // TODO: Relying on the chance of this being a duplicate for an item being 0 is ok, but not great
