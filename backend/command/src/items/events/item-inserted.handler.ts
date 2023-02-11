@@ -192,8 +192,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
         },
       );
     } catch (error) {
-      this.logger.error(`Incremented Profile Counts: ${error}`);
-      throw new InternalServerErrorException("Couldn't increment profile");
+      this.logger.error(`Incrementing Profile Counts Failed: ${error}`);
     }
   }
 }

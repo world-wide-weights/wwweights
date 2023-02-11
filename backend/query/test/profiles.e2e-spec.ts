@@ -55,7 +55,7 @@ describe('QueryController (e2e)', () => {
     describe('profiles/:userId/statistics', () => {
       const subPath = (userid) => `profiles/${userid}/statistics`;
 
-      it('should return the alphabetical first 5)', async () => {
+      it('should return the statistics of one player)', async () => {
         const result = await request(server)
           .get(queriesPath + subPath(profiles[0].userId))
           .expect(HttpStatus.OK);
@@ -67,6 +67,13 @@ describe('QueryController (e2e)', () => {
           imageAddedOnCreation: 1,
           additionalValueOnCreation: 0,
         });
+      });
+
+      it('should throw a not found if document does not exist )', async () => {
+        await profileModel.deleteMany();
+        await request(server)
+          .get(queriesPath + subPath(profiles[0].userId))
+          .expect(HttpStatus.NOT_FOUND);
       });
     });
   });

@@ -1,5 +1,9 @@
 import { InjectModel } from '@m8a/nestjs-typegoose';
-import { InternalServerErrorException, Logger } from '@nestjs/common';
+import {
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { Profile, ProfileCounts } from '../models/profile.model';
@@ -25,9 +29,17 @@ export class ProfileStatisticsHandler
         .lean();
       this.logger.log(`ProfileCounts retrieved for: ${dto.userId}`);
 
+      if (!profileCounts) {
+        throw new NotFoundException(
+          'Profile not found, either wrong userId or this user has not contributed anything yet',
+        );
+      }
+
       return profileCounts;
     } catch (error) {
       this.logger.error(error);
+      if (error instanceof NotFoundException) throw error;
+      /* istanbul ignore next */
       throw new InternalServerErrorException(
         'Profile statistics could not be retrieved',
       );
