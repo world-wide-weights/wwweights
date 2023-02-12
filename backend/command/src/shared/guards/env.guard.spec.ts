@@ -3,9 +3,11 @@ import { ENVGuard } from './env.guard';
 
 describe('ENV guard', () => {
   let guard: ENVGuard;
+  
   beforeAll(() => {
     guard = new ENVGuard();
   });
+  
   describe('Positive Tests', () => {
     it('Should pass when NODE_ENV is development', () => {
       // ARRANGE
