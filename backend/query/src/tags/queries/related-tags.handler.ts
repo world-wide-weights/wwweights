@@ -103,7 +103,7 @@ export class TagRelatedHandler implements IQueryHandler<TagRelatedQuery> {
         limit: dto.limit,
         data: relatedTagsWithCount[0].data,
       };
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       this.logger.error(error);
       throw new InternalServerErrorException(
         'Related Tags could not be retrieved',

@@ -12,7 +12,7 @@ export const singleItem: Partial<Item> = {
   ],
   image: null,
   source: 'no source available',
-  user: 1,
+  userId: 1,
 };
 
 export const singleItemTags: Partial<Tag>[] = [
@@ -46,7 +46,7 @@ export const testData = [
       '2016 Apr',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'P9 Premium Edition Dual SIM TD-LTE EVA-AL10',
@@ -60,7 +60,7 @@ export const testData = [
       '2016 Apr',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'P9 Plus Dual SIM TD-LTE VIE-L29',
@@ -74,7 +74,7 @@ export const testData = [
       '2016 Apr 16',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'P9 Premium Edition Dual SIM TD-LTE EVA-L29',
@@ -88,7 +88,7 @@ export const testData = [
       '2016 Apr 16',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'Eluga Arc Dual SIM TD-LTE',
@@ -102,7 +102,7 @@ export const testData = [
       '2016 Apr',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'SM-J700T Galaxy J7 4G LTE',
@@ -116,7 +116,7 @@ export const testData = [
       '2016 May 18',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'F7 Pro Dual SIM LTE',
@@ -130,7 +130,7 @@ export const testData = [
       '2016 Feb 28',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'F690L X Series X Cam 4G LTE',
@@ -144,7 +144,7 @@ export const testData = [
       '2016 Jun 29',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'P9 Plus TD-LTE VIE-L09',
@@ -158,7 +158,7 @@ export const testData = [
       '2016 Apr',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'SM-J710K Galaxy J7 6 LTE-A KR 16GB / Galaxy J7 2016',
@@ -172,7 +172,7 @@ export const testData = [
       '2016 Apr 29',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'M930',
@@ -186,7 +186,7 @@ export const testData = [
       '2008 May 18',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'Y6 LTE JP SCL-L02',
@@ -200,7 +200,7 @@ export const testData = [
       '2016 Apr 16',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'C Dual SIM LTE / Aqua Fish',
@@ -214,7 +214,7 @@ export const testData = [
       '2016 Jul',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'm3 note Dual SIM TD-LTE 16GB M681C / M681Q',
@@ -228,7 +228,7 @@ export const testData = [
       '2016 Apr 24',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'GR3 Dual SIM LTE TAG-L21 / Enjoy 5S',
@@ -242,7 +242,7 @@ export const testData = [
       '2016 Apr',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'H960AR V10 TD-LTE',
@@ -256,7 +256,7 @@ export const testData = [
       '2015 Dec',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'D693AR G3 Stylus',
@@ -270,7 +270,7 @@ export const testData = [
       '2014 Oct',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'X150 L Bello II',
@@ -284,7 +284,7 @@ export const testData = [
       '2015 Jun',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'H540F G Stylus Dual SIM',
@@ -298,7 +298,7 @@ export const testData = [
       '2015 Jul 4',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'G5 LS992 TD-LTE US',
@@ -312,7 +312,7 @@ export const testData = [
       '2016 Apr',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'P9 Standard Edition TD-LTE EVA-L09',
@@ -326,7 +326,7 @@ export const testData = [
       '2016 Apr 16',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'P4300',
@@ -340,7 +340,7 @@ export const testData = [
       '2006 Jan',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'Digno 501KC LTE',
@@ -354,7 +354,7 @@ export const testData = [
       '2015 Dec',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'K430TV K Series K10 TV Dual SIM LTE',
@@ -368,7 +368,7 @@ export const testData = [
       '2016 Feb 14',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'G5 US992 LTE-A',
@@ -382,7 +382,7 @@ export const testData = [
       '2016 Apr',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'A53 Dual SIM TD-LTE A53c',
@@ -396,7 +396,7 @@ export const testData = [
       '2016 Mar',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'R9 Dual SIM TD-LTE 64GB R9tm',
@@ -410,7 +410,7 @@ export const testData = [
       '2016 Apr 2',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'R9 Plus Dual SIM TD-LTE 64GB R9 Plustm',
@@ -424,7 +424,7 @@ export const testData = [
       '2016 Apr 12',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'BA510C Yuanhang 4 TD-LTE Dual SIM',
@@ -438,7 +438,7 @@ export const testData = [
       '2016 Apr',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'P9 Standard Edition Dual SIM TD-LTE EVA-DL00',
@@ -452,7 +452,7 @@ export const testData = [
       '2016 May',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'LIFE S5004 MD99722 LTE Dual SIM',
@@ -466,7 +466,7 @@ export const testData = [
       '2016 Mar',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'VPA Compact S',
@@ -480,7 +480,7 @@ export const testData = [
       '2006 Jun',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: '10 LTE-A NA 32GB',
@@ -494,7 +494,7 @@ export const testData = [
       '2016 Apr 29',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: '10 Lifestyle TD-LTE M10u',
@@ -508,7 +508,7 @@ export const testData = [
       '2016 May',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'One Touch Pop 4S LTE 5095L 32GB',
@@ -522,7 +522,7 @@ export const testData = [
       '2016 Mar',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: '10 TD-LTE JP 32GB',
@@ -536,7 +536,7 @@ export const testData = [
       '2016 May',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: '5367 Dual SIM TD-LTE',
@@ -550,7 +550,7 @@ export const testData = [
       '2016 Apr',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'Quattro L51 HD TD-LTE Dual SIM',
@@ -564,7 +564,7 @@ export const testData = [
       '2016 Apr',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'GR5 Dual SIM LTE KII-L23',
@@ -578,7 +578,7 @@ export const testData = [
       '2016 Mar',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'Hydro REACH C6743 TD-LTE US',
@@ -592,7 +592,7 @@ export const testData = [
       '2016 May',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'C6 / P6',
@@ -606,7 +606,7 @@ export const testData = [
       '2007 Dec',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'SM-W708 Galaxy TabPro S LTE-A 256GB',
@@ -620,7 +620,7 @@ export const testData = [
       '2016 Apr',
       'Tablet',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'SM-T377W Galaxy Tab E 8.0 4G LTE',
@@ -634,7 +634,7 @@ export const testData = [
       '2016 Jun 6',
       'Tablet',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'm3 M688Q Dual SIM TD-LTE 16GB',
@@ -642,7 +642,7 @@ export const testData = [
       value: 132,
     },
     tags: ['Meizu', 'Android', 'Alibaba YunOS 3.1.6', '2016 May', 'Smartphone'],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'K332 K Series K7 Dual SIM TD-LTE',
@@ -656,7 +656,7 @@ export const testData = [
       '2016 Apr 18',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'P9 Standard Edition Dual SIM TD-LTE EVA-TL00',
@@ -670,7 +670,7 @@ export const testData = [
       '2016 May',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'ZenFone Max Dual SIM Global LTE ZC550KL 16GB',
@@ -684,7 +684,7 @@ export const testData = [
       '2016 Jan 14',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'P9 Lite Dual SIM LTE VNS-L23',
@@ -698,7 +698,7 @@ export const testData = [
       '2016 May',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'Quattro L52 VR TD-LTE Dual SIM',
@@ -712,7 +712,7 @@ export const testData = [
       '2016 Apr',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'ivvi i3 i3-01 Dual SIM LTE 64GB',
@@ -726,7 +726,7 @@ export const testData = [
       '2016 Apr 29',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'P4351',
@@ -740,7 +740,7 @@ export const testData = [
       '2007 Jun',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'GN3001 Elife S5 TD-LTE',
@@ -754,7 +754,7 @@ export const testData = [
       '2016 May 16',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'Y5II CUN-L23 Dual SIM LTE LATAM',
@@ -768,7 +768,7 @@ export const testData = [
       '2016 May',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'GR5 LTE KII-L05',
@@ -782,7 +782,7 @@ export const testData = [
       '2016 May',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'K540 K Series Stylo 2 4G LTE',
@@ -796,7 +796,7 @@ export const testData = [
       '2016 Apr 21',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'G5 H830 LTE-A US',
@@ -810,7 +810,7 @@ export const testData = [
       '2016 Mar 19',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'AS330 K Series K7 LTE',
@@ -824,7 +824,7 @@ export const testData = [
       '2016 Apr',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'Z818L Allstar Stratos LTE / Z818G',
@@ -838,7 +838,7 @@ export const testData = [
       '2015 Nov 3',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'RS987 V10 LRA LTE-A',
@@ -852,7 +852,7 @@ export const testData = [
       '2016 Jan',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'SM-G389F Galaxy Xcover 3 Value Edition',
@@ -866,7 +866,7 @@ export const testData = [
       '2016 Apr 16',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'A9100',
@@ -880,7 +880,7 @@ export const testData = [
       '2006 Mar',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'G5 RS988 LTE-A',
@@ -894,7 +894,7 @@ export const testData = [
       '2016 Apr',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'Y3II 4G LTE LUA-L01 / Y3 II Eco',
@@ -908,7 +908,7 @@ export const testData = [
       '2016 May',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'F720K Stylus 2 4G LTE',
@@ -922,7 +922,7 @@ export const testData = [
       '2016 Mar 11',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'G9 Dual SIM TD-LTE VNS-DL00 / G9 Youth Edition',
@@ -936,7 +936,7 @@ export const testData = [
       '2016 May',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'A37 Dual SIM TD-LTE CN A37m',
@@ -950,7 +950,7 @@ export const testData = [
       '2016 May 17',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'HS-F30 TD-LTE',
@@ -964,7 +964,7 @@ export const testData = [
       '2016 May',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'Z2 Pro Ultimate Edition TD-LTE Dual SIM 128GB',
@@ -978,7 +978,7 @@ export const testData = [
       '2016 May 29',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'GN9011L Elife S8 Dual SIM TD-LTE 64GB',
@@ -992,7 +992,7 @@ export const testData = [
       '2016 Apr',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'S411',
@@ -1006,7 +1006,7 @@ export const testData = [
       '2006 Aug',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'Honor V8 Premium Edition Dual SIM TD-LTE 64GB KNT-AL20',
@@ -1020,7 +1020,7 @@ export const testData = [
       '2016 May 17',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'AS995 G Flex2 ACG LTE-A',
@@ -1034,7 +1034,7 @@ export const testData = [
       '2015 Apr',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'MS631 G Stylo LTE',
@@ -1048,7 +1048,7 @@ export const testData = [
       '2015 Jun',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'G3 AS990 ACG LTE-A',
@@ -1062,7 +1062,7 @@ export const testData = [
       '2014 Sep',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'L21G Destiny HSPA',
@@ -1076,7 +1076,7 @@ export const testData = [
       '2015 Sep',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
   {
     name: 'L22C Power CDMA',
@@ -1090,6 +1090,6 @@ export const testData = [
       '2015 Sep',
       'Smartphone',
     ],
-    user: 'mc',
+    userId: 'mc',
   },
 ];

@@ -61,7 +61,7 @@ export class ItemListHandler implements IQueryHandler<ItemListQuery> {
         limit: dto.limit,
         data: itemListWithCount[0].data,
       };
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       this.logger.error(error);
       throw new InternalServerErrorException(
         'Item list could not be retrieved',

@@ -2,6 +2,7 @@ import { TypegooseModule } from '@m8a/nestjs-typegoose';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ItemsModule } from './items/items.module';
+import { ProfilesModule } from './profiles/profiles.module';
 import { SharedModule } from './shared/shared.module';
 import { TagsModule } from './tags/tags.module';
 
@@ -30,6 +31,7 @@ import { TagsModule } from './tags/tags.module';
     TagsModule,
     ItemsModule,
     SharedModule,
+    ProfilesModule,
   ],
 })
 export class AppModule {}
