@@ -1,7 +1,8 @@
 import { SessionData, Tokens } from "../../types/auth"
 import { authRequest } from "../axios/axios"
 import { parseJwt } from "../utils/jwt"
-import { deleteSession } from "./storage"
+
+const LOCAL_STORAGE_KEY = "session"
 
 export const createSession = (tokens: Tokens) => {
     const { access_token, refresh_token } = tokens
@@ -17,9 +18,20 @@ export const createSession = (tokens: Tokens) => {
     return sessionData
 }
 
-export const endSession = () => {
-    deleteSession()
-    // TODO: Update UI
+export const saveSession = (sessionData: SessionData): void => {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(sessionData))
+}
+
+export const getSession = (): SessionData | null => {
+    const sessionData = localStorage.getItem(LOCAL_STORAGE_KEY)
+    if (sessionData) {
+        return JSON.parse(sessionData)
+    }
+    return null
+}
+
+export const endSession = (): void => {
+    localStorage.removeItem(LOCAL_STORAGE_KEY)
 }
 
 // Test this snippet

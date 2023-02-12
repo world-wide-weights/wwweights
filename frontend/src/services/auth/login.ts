@@ -1,8 +1,7 @@
 import { isAxiosError } from "axios"
 import { ApiAuthException, Tokens } from "../../types/auth"
 import { authRequest } from "../axios/axios"
-import { createSession } from "./session"
-import { saveSession } from "./storage"
+import { createSession, saveSession } from "./session"
 
 export const login = async ({ email, password }: { email: string, password: string }) => {
     try {
