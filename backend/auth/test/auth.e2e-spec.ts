@@ -142,7 +142,7 @@ describe('AuthController (e2e)', () => {
 
       it('should fail for duplicate email', async () => {
         // ARRANGE
-        await createUser(dataSource, { email: SAMPLE_USER.email });
+        await createUser(dataSource, { email: SAMPLE_USER.email, ...SAMPLE_USER });
         // ACT
         const res = await request(app.getHttpServer())
           .post('/auth/register')
@@ -154,7 +154,7 @@ describe('AuthController (e2e)', () => {
 
       it('should fail for duplicate username', async () => {
         // ARRANGE
-        await createUser(dataSource, { username: SAMPLE_USER.username });
+        await createUser(dataSource, { username: SAMPLE_USER.username, ...SAMPLE_USER });
         // ACT
         const res = await request(app.getHttpServer())
           .post('/auth/register')

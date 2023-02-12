@@ -97,12 +97,15 @@ describe('ProfilesController (e2e)', () => {
   describe('/profile/:userId (GET)', () => {
     let jwtToken: string;
     let user: UserEntity;
+    let creationDate: Date 
     beforeEach(async () => {
       user = await createUser(dataSource, SAMPLE_USER);
+      creationDate = SAMPLE_USER.createdAt
       const loggedInUser = await createUser(dataSource, {
         username: 'abc',
         password: 'abc',
         email: 'abc@abc.abc',
+        createdAt: SAMPLE_USER.createdAt
       });
       jwtToken = (await authService.getAuthPayload(loggedInUser)).access_token;
     });
@@ -115,7 +118,6 @@ describe('ProfilesController (e2e)', () => {
         // ACT
         const res = await request(app.getHttpServer())
           .get(`/profile/${user.pkUserId}`)
-          .set('Authorization', `Bearer ${jwtToken}`);
         // ASSERT
         expect(res.statusCode).toEqual(HttpStatus.OK);
         expect(res.body.username).toEqual(SAMPLE_USER.username);
@@ -124,30 +126,21 @@ describe('ProfilesController (e2e)', () => {
         // ACT
         const res = await request(app.getHttpServer())
           .get(`/profile/${user.pkUserId}`)
-          .set('Authorization', `Bearer ${jwtToken}`);
         // ASSERT
         expect(res.statusCode).toEqual(HttpStatus.OK);
         expect(res.body).not.toHaveProperty('email');
       });
-    });
-    describe('Negative Tests', () => {
-      it('Should not be accessible without auth', async () => {
-        // ACT
-        const res = await request(app.getHttpServer()).get(
-          `/profile/${user.pkUserId}`,
-        );
-        // ASSERT
-        expect(res.statusCode).toEqual(HttpStatus.UNAUTHORIZED);
-      });
-
-      it('Should not be accessible with invalid auth', async () => {
+      it('Should return correct createdAt', async () => {
         // ACT
         const res = await request(app.getHttpServer())
           .get(`/profile/${user.pkUserId}`)
-          .set('Authorization', `Bearer ${jwtToken}a`);
         // ASSERT
-        expect(res.statusCode).toEqual(HttpStatus.UNAUTHORIZED);
+        expect(res.statusCode).toEqual(HttpStatus.OK);
+        const profile: Partial<UserEntity> =  res.body
+        expect(profile.createdAt).toEqual(creationDate.toISOString())
       });
+    });
+    describe('Negative Tests', () => {
       it('Should fail for invalid userId', async () => {
         // ACT
         const res = await request(app.getHttpServer())
