@@ -10,7 +10,7 @@ declare module "next-auth" {
      */
     interface Session {
         user: UserInfo
-        error?: string
+        error: string | null
         accessToken: string
         expires: Date
     }

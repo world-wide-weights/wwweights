@@ -45,12 +45,11 @@ const Login: NextPageCustomProps = () => {
      */
     const onFormSubmit = async (values: LoginDto) => {
         try {
-            // Sign in with next auth
+            // Login with next auth
             const response = await signIn("credentials", {
-                redirect: true,
+                redirect: false,
                 email: values.email,
-                password: values.password,
-                callbackUrl: callbackUrl ?? routes.home,
+                password: values.password
             })
 
             if (response === undefined || response?.ok !== true) {
@@ -85,7 +84,7 @@ const Login: NextPageCustomProps = () => {
 
                     <Button datacy="login-button" disabled={!(dirty && isValid)} type="submit">Login</Button>
                     <Button onClick={() => onFormSubmit({
-                        email: "text@wwweigths.com",
+                        email: "test@gmail.com",
                         password: "12345678",
                     })}>Login with TestUser</Button>
                 </Form>
