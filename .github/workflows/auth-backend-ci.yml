@@ -69,7 +69,7 @@ jobs:
           files: .coverage/coverage-final.json
           flags: auth-backend
 
-  docker-build:
+  docker-build-and-push:
     runs-on: ubuntu-latest
     needs: tests
     steps:
@@ -101,13 +101,14 @@ jobs:
           context: ./backend/auth
           tags: ghcr.io/world-wide-weights/auth-backend:${{ steps.extract_branch.outputs.branch }}
           platforms: linux/amd64,linux/arm64
+          push: true
           labels: |
             org.opencontainers.image.source: https://github.com/world-wide-weights/wwweights
             org.opencontainers.image.description: 'wwweights auth backend for user handling'
 
   redeploy:
     if: github.ref == 'refs/heads/stable'
-    needs: docker-push
+    needs: docker-build-and-push
     runs-on:  ubuntu-latest
     env:
       deploy_secret: ${{ secrets.DEPLOY_SECRET }}
