@@ -1,4 +1,4 @@
-import { signIn, signOut, useSession } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
@@ -35,11 +35,11 @@ export const Navbar: React.FC = () => {
         text: "My Profile",
     }, {
         shouldDisplay: Boolean(!session),
-        onClick: () => signIn(),
+        to: routes.account.login + "?callbackUrl=" + router.asPath,
         text: "Login",
     }, {
         shouldDisplay: Boolean(!session),
-        to: routes.account.register + "?callbackUrl=" + router.pathname,
+        to: routes.account.register + "?callbackUrl=" + router.asPath,
         text: "Register",
     }, {
         shouldDisplay: Boolean(session),
