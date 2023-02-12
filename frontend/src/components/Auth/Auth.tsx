@@ -46,6 +46,7 @@ export const Auth: React.FC<AuthProps> = ({ children, routeType }) => {
             }
         }
         checkSession()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [routeType, router, hasSession])
 
     const getSession = async (): Promise<SessionData | null> => {

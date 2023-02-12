@@ -14,20 +14,15 @@ describe("Register", () => {
             cy.dataCy("textinput-username-input").type("Hello")
             cy.dataCy("textinput-password-input").type("12345678")
 
-            // Mock register //TODO (Zoe-Bot): update when renamed
-            cy.intercept("POST", `${apiBaseUrl}/auth/register`, {
-                fixture: "authentication/register.json"
-            }).as("mockRegister")
-
-            // Mock login and session
-            cy.mockCredentials()
-            cy.mockSession()
+            // Mocks
+            cy.mockRegister()
+            cy.mockLogin()
 
             // Register button
             cy.dataCy("register-button").click()
 
             cy.wait("@mockRegister")
-            cy.wait("@mockCredentials")
+            cy.wait("@mockLogin")
 
             // Mock home
             cy.mockItemsList()

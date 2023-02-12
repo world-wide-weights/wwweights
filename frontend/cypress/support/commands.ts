@@ -6,9 +6,9 @@ import paginatedSingleItem from "../fixtures/items/single.json"
 import statistics from "../fixtures/items/statistics.json"
 
 const apiBaseUrlMock = Cypress.env("PUBLIC_API_BASE_URL_MOCK")
+const apiBaseUrlAuth = Cypress.env("PUBLIC_API_BASE_URL_AUTH")
 const apiBaseUrlQuery = Cypress.env("PUBLIC_API_BASE_URL_QUERY")
 const apiBaseUrlCommand = Cypress.env("PUBLIC_API_BASE_URL_COMMAND")
-const clientBaseUrl = Cypress.env("CLIENT_BASE_URL")
 
 Cypress.Commands.add("dataCy", (dataCy, customSelector = "") => {
     cy.get(`[datacy=${dataCy}]${customSelector}`)
@@ -90,22 +90,20 @@ Cypress.Commands.add("mockSingleWeight", () => {
     cy.mockGetRelatedTags()
 })
 
-Cypress.Commands.add("mockSession", () => {
-    cy.intercept("GET", `${clientBaseUrl}/api/auth/session`, {
-        fixture: "/authentication/session.json"
-    }).as("mockSession")
+Cypress.Commands.add("mockLogin", () => {
+    cy.intercept("POST", `${apiBaseUrlAuth}/auth/login`, {
+        fixture: "authentication/login.json"
+    }).as("mockLogin")
 })
 
-Cypress.Commands.add("mockCredentials", () => {
-    cy.intercept("POST", `${clientBaseUrl}/api/auth/callback/credentials?`, {
-        url: `${clientBaseUrl}/account/login`
-    }).as("mockCredentials")
+Cypress.Commands.add("mockRegister", () => {
+    cy.intercept("POST", `${apiBaseUrlAuth}/auth/register`, {
+        fixture: "authentication/register.json"
+    }).as("mockRegister")
 })
 
 Cypress.Commands.add("mockCreateItem", () => {
-    cy.intercept("POST", `${apiBaseUrlCommand}/items`, {
-        url: `${clientBaseUrl}/account/login`
-    }).as("mockCreateItem")
+    cy.intercept("POST", `${apiBaseUrlCommand}/items`).as("mockCreateItem")
 })
 
 export { }

@@ -13,13 +13,12 @@ describe("Login", () => {
 
     describe("Login Flow - Email and Password", () => {
         it("should login successfull login user and redirect to home page", () => {
-            // Mock login requests.
-            cy.mockCredentials()
-            cy.mockSession()
+            // Mock login
+            cy.mockLogin()
 
             // Login
             cy.dataCy("login-button").click()
-            cy.wait("@mockCredentials")
+            cy.wait("@mockLogin")
 
             // Mock home
             cy.mockItemsList()

@@ -21,10 +21,6 @@ describe("Routes protected/guest", () => {
         it("should show page when logged in", () => {
             cy.visitLocalPage(routes.account.profile())
 
-            // "Login"
-            cy.mockSession()
-            cy.wait("@mockSession")
-
             cy.url().should("include", routes.account.profile())
         })
     })
@@ -33,10 +29,6 @@ describe("Routes protected/guest", () => {
         it("should redirect to / when logged in and visit login (guest route)", () => {
             // Guest route
             cy.visitLocalPage(routes.account.login)
-
-            // "Login"
-            cy.mockSession()
-            cy.wait("@mockSession")
 
             // Mock home
             cy.mockItemsList()
