@@ -17,12 +17,14 @@ type SearchHeaderProps = {
     sort?: SortType
     /** When true display "How much weigh?" headline. */
     hasHeadline?: boolean
+    /** When false don't display related tags. */
+    hasRelatedTags?: boolean
 }
 
 /**
  * Header with search and search suggestions
  */
-export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "relevance", hasHeadline = true }) => {
+export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "relevance", hasHeadline = true, hasRelatedTags = true }) => {
     const router = useRouter()
 
     // Local States
@@ -67,6 +69,10 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "
      * Fetch related tags
      */
     useEffect(() => {
+        // Don't fetch when query is empty or related tags are disabled
+        if (query === "" || !hasRelatedTags)
+            return
+
         const getRelatedTags = async () => {
             setIsLoadingRelatedTags(true)
 
@@ -82,7 +88,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "
             }
         }
         getRelatedTags()
-    }, [])
+    }, [query, hasRelatedTags])
 
     return <header className="bg-white pt-2 md:pt-5 pb-3 md:pb-10">
         <div className="container">
@@ -95,8 +101,8 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "
                                 <Search />
                             </div>
                         </div>
-                        {/* TODO (Zoe-bot): Loading Component and scrollable tags */}
-                        {query !== "" && (isLoadingRelatedTags ? <p>Loading...</p> : <div datacy="search-header-tag-wrapper" className="whitespace-nowrap overflow-x-scroll md:whitespace-normal md:overflow-hidden">
+                        {/* TODO (Zoe-bot): Loading Component */}
+                        {query !== "" && hasRelatedTags && (isLoadingRelatedTags ? <p>Loading...</p> : <div datacy="search-header-tag-wrapper" className="whitespace-nowrap overflow-x-scroll md:whitespace-normal md:overflow-hidden">
                             {/* Only show tags not current searched (should not be the value in query field) */}
                             {relatedTags.map((relatedTag, index) => relatedTag.name !== query && <Chip datacy={`search-header-chip-${index}`} key={relatedTag.name} to={routes.weights.list({ sort, query: relatedTag.name })}>{relatedTag.name}</Chip>)}
                         </div>)}
