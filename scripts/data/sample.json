@@ -1,4 +1,4 @@
 [
-    {"name":"Testitem 1","weight":{"value":544},"tags":["Test"],"image":"http://localhost:3003/serve/test.png"},
-    {"name":"Testitem 2","weight":{"value":123},"tags":["Test", "Also Test"],"image":"http://localhost:3003/serve/test.jpg"}
+    {"name":"Testitem 1","weight":{"value":544},"tags":["Test"],"image":"http://img:3003/serve/test.png"},
+    {"name":"Testitem 2","weight":{"value":123},"tags":["Test", "Also Test"],"image":"http://img:3003/serve/test.jpg"}
 ]
