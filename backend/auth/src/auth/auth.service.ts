@@ -3,12 +3,11 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
-  ServiceUnavailableException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
+import {hash as bhash, compare}  from 'bcrypt';
 import { UserEntity } from '../db/entities/users.entity';
 import { UserService } from '../db/services/user.service';
 import { JWTPayload } from '../shared/dtos/jwt-payload.dto';
@@ -35,7 +34,7 @@ export class AuthService {
 
   async register(body: RegisterDTO): Promise<UserEntity> {
     // hash password
-    const hash = await bcrypt.hash(body.password, 10);
+    const hash = await bhash(body.password, 10);
     const newUser = await this.userService.insertUser({
       ...body,
       password: hash,
@@ -63,7 +62,7 @@ export class AuthService {
     if (
       !user ||
       user.status === STATUS.BANNED ||
-      !(await bcrypt.compare(body.password, user.password))
+      !(await compare(body.password, user.password))
     ) {
       this.logger.warn(`Attempted but invalid login for user ${body.email}`);
       throw new UnauthorizedException();

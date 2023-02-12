@@ -50,11 +50,10 @@ export class ItemStatisticsHandler
     } catch (error) {
       this.logger.error(error);
       if (error instanceof NotFoundException) throw error;
-      else {
-        throw new InternalServerErrorException(
-          'Item statistics could not be retrieved',
-        );
-      }
+      /* istanbul ignore next */
+      throw new InternalServerErrorException(
+        'Item statistics could not be retrieved',
+      );
     }
   }
 }

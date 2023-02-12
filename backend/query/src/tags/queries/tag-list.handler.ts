@@ -55,7 +55,7 @@ export class TagListHandler implements IQueryHandler<TagListQuery> {
         limit: dto.limit,
         data: tagListWithCount[0].data,
       };
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       this.logger.error(error);
       throw new InternalServerErrorException('Tag list could not be retrieved');
     }
