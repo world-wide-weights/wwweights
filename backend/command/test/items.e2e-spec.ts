@@ -10,6 +10,7 @@ import { ItemCronJobHandler } from '../src/items/cron/items.cron';
 import { ItemsModule } from '../src/items/items.module';
 import { Item } from '../src/models/item.model';
 import { ItemsByTag } from '../src/models/items-by-tag.model';
+import { Profile } from '../src/models/profile.model';
 import { Tag } from '../src/models/tag.model';
 import { JwtAuthGuard } from '../src/shared/guards/jwt.guard';
 import { JwtStrategy } from '../src/shared/strategies/jwt.strategy';
@@ -34,6 +35,7 @@ describe('ItemsController (e2e)', () => {
   let itemModel: Model<Item>;
   let tagModel: Model<Tag>;
   let itemsByTagModel: Model<ItemsByTag>;
+  let profileModel: Model<Profile>;
   const mockEventStore: MockEventStore = new MockEventStore();
   let itemCronJobHandler: ItemCronJobHandler;
   let server: any; // Has to be any because of supertest not having a type for it either
@@ -68,6 +70,7 @@ describe('ItemsController (e2e)', () => {
     itemModel = moduleFixture.get('ItemModel');
     tagModel = moduleFixture.get('TagModel');
     itemsByTagModel = moduleFixture.get('ItemsByTagModel');
+    profileModel = moduleFixture.get('ProfileModel');
 
     app.setGlobalPrefix('commands/v1');
     await app.init();
@@ -85,12 +88,10 @@ describe('ItemsController (e2e)', () => {
     await itemModel.deleteMany();
     await tagModel.deleteMany();
     await itemsByTagModel.deleteMany();
+    await profileModel.deleteMany();
   });
 
   afterAll(async () => {
-    await itemModel.deleteMany();
-    await tagModel.deleteMany();
-    await itemsByTagModel.deleteMany();
     await teardownMockDataSource();
     server.close();
     await app.close();
@@ -129,7 +130,7 @@ describe('ItemsController (e2e)', () => {
       // Check if Item got correct tags count
       expect(item.name).toEqual(insertItem.name);
       expect(item.slug).toBeDefined();
-      expect(item.user).toEqual(1);
+      expect(item.userId).toEqual(1);
 
       const tag1 = await tagModel.findOne({ name: 'tag1' });
       const tag2 = await tagModel.findOne({ name: 'tag2' });
@@ -221,6 +222,22 @@ describe('ItemsController (e2e)', () => {
 
       expect(items.length).toEqual(itemsWithDifferentNames.length);
       expect(tag.count).toEqual(itemsWithDifferentNames.length);
+    });
+
+    it('items/insert => increment profile counts', async () => {
+      await request(server)
+        .post(commandsPath + 'items/insert')
+        .send(insertItem)
+        .expect(HttpStatus.OK);
+
+      await timeout();
+
+      const profile = await profileModel.findOne({});
+      expect(profile.count.itemsCreated).toEqual(1);
+      expect(profile.count.additionalValueOnCreation).toEqual(0);
+      expect(profile.count.tagsUsedOnCreation).toEqual(2);
+      expect(profile.count.sourceUsedOnCreation).toEqual(0);
+      expect(profile.count.imageAddedOnCreation).toEqual(0);
     });
   });
 
