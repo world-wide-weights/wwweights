@@ -1,10 +1,10 @@
 import Image from "next/image"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
+import { AuthContext } from "../../components/Auth/Auth"
 import { Card } from "../../components/Card/Card"
 import { Headline } from "../../components/Headline/Headline"
 import { ItemPreviewList } from "../../components/Item/ItemPreviewList"
 import { Seo } from "../../components/Seo/Seo"
-import { getSession } from "../../services/auth/session"
 import { authRequest } from "../../services/axios/axios"
 import { SessionData } from "../../types/auth"
 import { NextPageCustomProps } from "../_app"
@@ -12,6 +12,9 @@ import { NextPageCustomProps } from "../_app"
 const Profile: NextPageCustomProps = () => {
     const [session, setSession] = useState<SessionData>()
     const [profile, setProfile] = useState<any>()
+    const {
+        getSession
+    } = useContext(AuthContext)
     useEffect(() => {
         const fetchProfile = async () => {
             const sessionData = await getSession()

@@ -1,7 +1,8 @@
 import { useRouter } from "next/router"
 import { createContext, useEffect, useState } from "react"
-import { endSession, getSession } from "../../services/auth/session"
+import { endSession, getSessionData } from "../../services/auth/session"
 import { routes } from "../../services/routes/routes"
+import { SessionData } from "../../types/auth"
 
 type AuthProps = {
     /** The page content shown when user logged in. */
@@ -13,6 +14,7 @@ type AuthProps = {
 export const AuthContext = createContext({
     hasSession: false,
     logout: () => { },
+    getSession: () => new Promise<SessionData | null>(() => { }),
     isLoading: true
 })
 
@@ -46,12 +48,22 @@ export const Auth: React.FC<AuthProps> = ({ children, routeType }) => {
         checkSession()
     }, [routeType, router, hasSession])
 
+    const getSession = async (): Promise<SessionData | null> => {
+        const session = getSessionData()
+
+        if (session === null) {
+            logout()
+            return null
+        }
+
+        return session
+    }
 
     const logout = () => {
         endSession()
         setHasSession(false)
     }
-    return <AuthContext.Provider value={{ hasSession, logout, isLoading }}>
+    return <AuthContext.Provider value={{ hasSession, logout, isLoading, getSession }}>
         {(
             routeType === "public" ||
             (routeType === "protected" && hasSession) ||
