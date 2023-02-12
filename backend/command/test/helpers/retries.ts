@@ -39,7 +39,6 @@
 //   return true;
 // };
 
-
 export const retryCallback = async (cb: () => Promise<boolean>, maxDuration = 1000) => {
     const startTime = performance.now()
     while(performance.now() - startTime < maxDuration) {
@@ -50,3 +49,4 @@ export const retryCallback = async (cb: () => Promise<boolean>, maxDuration = 10
     }
     throw new Error('Callback condition never met. Timeout!')
 }
+

@@ -5,7 +5,7 @@ import { EventStoreModule } from '../eventstore/eventstore.module';
 import { Item } from '../models/item.model';
 import { ItemsByTag } from '../models/items-by-tag.model';
 import { Profile } from '../models/profile.model';
-import { Suggestion } from '../models/suggestion.model';
+import { EditSuggestion } from '../models/edit-suggestion.model';
 import { Tag } from '../models/tag.model';
 import { SharedModule } from '../shared/shared.module';
 import { CommandHandlers } from './commands';
@@ -18,7 +18,7 @@ import { ItemsService } from './services/item.service';
   imports: [
     CqrsModule,
     SharedModule,
-    TypegooseModule.forFeature([Item, ItemsByTag, Tag, Suggestion, Profile]),
+    TypegooseModule.forFeature([Item, ItemsByTag, Tag, EditSuggestion, Profile]),
     EventStoreModule,
   ],
   controllers: [ItemsController],
