@@ -1,28 +1,52 @@
-import { useSession } from "next-auth/react"
 import Image from "next/image"
+import { useEffect, useState } from "react"
 import { Card } from "../../components/Card/Card"
 import { Headline } from "../../components/Headline/Headline"
 import { ItemPreviewList } from "../../components/Item/ItemPreviewList"
 import { Seo } from "../../components/Seo/Seo"
+import { getSession } from "../../services/auth/session"
+import { authRequest } from "../../services/axios/axios"
+import { SessionData } from "../../types/auth"
 import { NextPageCustomProps } from "../_app"
 
 const Profile: NextPageCustomProps = () => {
-    const { data: session } = useSession()
-    const seoTitle = `My Profile ${session?.user.username}`
+    const [session, setSession] = useState<SessionData>()
+    const [profile, setProfile] = useState<any>()
+    useEffect(() => {
+        const fetchProfile = async () => {
+            const sessionData = await getSession()
+            if (!sessionData) return
+            setSession(sessionData)
+
+            const response = await authRequest.get("/profile/me", {
+                headers: {
+                    "Authorization": `Bearer ${sessionData.accessToken}`
+                }
+            })
+            const data = response.data
+            setProfile(data)
+        }
+        fetchProfile()
+    }, [])
+
+
+    const seoTitle = "My Profile"
     return <>
         <Seo
+
             title={seoTitle}
             description="Your profile page. Here you can see your contributions and statistics."
         />
 
         <main className="container mt-5">
             <Headline level={1}>Profile</Headline>
-
+            <p>{JSON.stringify(session)}</p>
+            <p>{JSON.stringify(profile)}</p>
             <div className="lg:flex gap-4">
                 <div className="sm:flex lg:flex-col gap-3 2xl:w-1/4 mb-4 lg:mb-0">
                     <div className="flex flex-col justify-center md:justify-start sm:w-1/2 md:w-auto items-center bg-white rounded-lg py-6 px-4 mb-3 sm:mb-0">
                         <Image src="https://picsum.photos/120" alt="profile picture" width={120} height={120} className="rounded-full mb-2" />
-                        <Headline level={3} hasMargin={false}>{session?.user.username}</Headline>
+                        <Headline level={3} hasMargin={false}>{session?.decodedAccessToken.username}</Headline>
                         {/* TODO (Zoe-Bot): Update date */}
                         <p>Member since 19.12.2022</p>
                     </div>

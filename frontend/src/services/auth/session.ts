@@ -22,10 +22,25 @@ export const saveSession = (sessionData: SessionData): void => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(sessionData))
 }
 
-export const getSession = (): SessionData | null => {
+export const getSession = async (): Promise<SessionData | null> => {
     const sessionData = localStorage.getItem(LOCAL_STORAGE_KEY)
+
     if (sessionData) {
-        return JSON.parse(sessionData)
+        const parsedSessionData: SessionData = JSON.parse(sessionData)
+        if (Date.now() > parsedSessionData.decodedAccessToken.exp * 1000) {
+            console.log("Session expired, refreshing token")
+            const tokens = await refreshToken(parsedSessionData.refreshToken)
+            if (tokens === null) {
+                endSession()
+                console.error("Session expired and refresh token failed")
+                return null
+            }
+            const newSession = createSession(tokens)
+            saveSession(newSession)
+            console.log("Session refreshed")
+            return newSession
+        }
+        return parsedSessionData
     }
     return null
 }

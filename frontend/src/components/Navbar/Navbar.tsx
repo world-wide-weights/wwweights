@@ -24,30 +24,33 @@ export const Navbar: React.FC = () => {
     const [navLinks, setNavLinks] = useState<NavLink[]>([])
 
     useEffect(() => {
-        const sessionData = getSession()
-        const hasSession = Boolean(sessionData)
+        const createNavLinks = async () => {
+            const sessionData = await getSession()
+            const hasSession = Boolean(sessionData)
 
-        setNavLinks([{
-            shouldDisplay: true,
-            to: routes.weights.list(),
-            text: "Discover",
-        }, {
-            shouldDisplay: Boolean(hasSession),
-            to: routes.account.profile(),
-            text: "My Profile",
-        }, {
-            shouldDisplay: Boolean(!hasSession),
-            to: routes.account.login + "?callbackUrl=" + router.asPath,
-            text: "Login",
-        }, {
-            shouldDisplay: Boolean(!hasSession),
-            to: routes.account.register + "?callbackUrl=" + router.asPath,
-            text: "Register",
-        }, {
-            shouldDisplay: Boolean(hasSession),
-            onClick: () => endSession(),
-            text: "Logout"
-        }])
+            setNavLinks([{
+                shouldDisplay: true,
+                to: routes.weights.list(),
+                text: "Discover",
+            }, {
+                shouldDisplay: Boolean(hasSession),
+                to: routes.account.profile(),
+                text: "My Profile",
+            }, {
+                shouldDisplay: Boolean(!hasSession),
+                to: routes.account.login + "?callbackUrl=" + router.asPath,
+                text: "Login",
+            }, {
+                shouldDisplay: Boolean(!hasSession),
+                to: routes.account.register + "?callbackUrl=" + router.asPath,
+                text: "Register",
+            }, {
+                shouldDisplay: Boolean(hasSession),
+                onClick: () => endSession(),
+                text: "Logout"
+            }])
+        }
+        createNavLinks()
     }, [])
 
     const [isNavMobileOpen, setIsNavMobileOpen] = useState<boolean>(false)

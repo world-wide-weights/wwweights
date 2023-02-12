@@ -20,19 +20,22 @@ export const Auth: React.FC<AuthProps> = ({ children, routeType }) => {
     const router = useRouter()
 
     useEffect(() => {
-        const sessionData = getSession()
-        const hasSession = Boolean(sessionData)
-        setHasSession(hasSession)
+        const checkSession = async () => {
+            const sessionData = await getSession()
+            const hasSession = Boolean(sessionData)
+            setHasSession(hasSession)
 
-        // When no user redirect to login, isRouterChanging prevents push new route when router already pushing
-        if (!hasSession && routeType === "protected") {
-            router.push(routes.account.login + "?callbackUrl=" + router.asPath)
-        }
+            // When no user redirect to login, isRouterChanging prevents push new route when router already pushing
+            if (!hasSession && routeType === "protected") {
+                router.push(routes.account.login + "?callbackUrl=" + router.asPath)
+            }
 
-        // When user and route type guest redirect to home, isRouterChanging prevents push new route when router already pushing
-        if (hasSession && routeType === "guest") {
-            router.push(routes.home)
+            // When user and route type guest redirect to home, isRouterChanging prevents push new route when router already pushing
+            if (hasSession && routeType === "guest") {
+                router.push(routes.home)
+            }
         }
+        checkSession()
     }, [routeType, router])
 
     // Render page when user or route type guest
