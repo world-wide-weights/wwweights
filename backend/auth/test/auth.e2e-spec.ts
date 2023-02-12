@@ -86,7 +86,26 @@ describe('AuthController (e2e)', () => {
           true,
         );
       });
+
+      it('Should return valid access token', async () => {
+        // ACT
+        const res = await request(app.getHttpServer())
+          .post('/auth/register')
+          .send(SAMPLE_USER);
+        // ASSERT
+        const tokePayload = jwtService.verify(res.body.access_token, {
+          publicKey: configService.get<string>('JWT_PUBLIC_KEY'),
+          algorithms: ['RS256'],
+        });
+        expect(tokePayload).toEqual(
+          expect.objectContaining({
+            email: SAMPLE_USER.email,
+            username: SAMPLE_USER.username,
+          }),
+        );
+      });
     });
+
     describe('Negative Tests', () => {
       it('Should fail for incomplete payload', async () => {
         // ACT
@@ -356,25 +375,29 @@ describe('AuthController (e2e)', () => {
   });
   describe('/auth/statistics (GET)', () => {
     describe('Positive Tests', () => {
-    it('Should return the correct user amount', async() => {
-      // ARRANGE
-      await createUser(dataSource, SAMPLE_USER) 
-      await createUser(dataSource, {...SAMPLE_USER, email: 'new.new@new.new', username: 'also very brand new'})
-      // ACT
-      const res = await request(app.getHttpServer()).get('/auth/statistics')
-      // ASSERT
-      expect(res.statusCode).toEqual(HttpStatus.OK)
-      expect(res.body.totalUsers).toEqual(2)
-    })
-    it('Should return correct value with empty user table', async () => {
-       // ACT
-       const res = await request(app.getHttpServer()).get('/auth/statistics')
-       // ASSERT
-       expect(res.statusCode).toEqual(HttpStatus.OK)
-       expect(res.body.totalUsers).toEqual(0)
-    })
-  })
-  })
+      it('Should return the correct user amount', async () => {
+        // ARRANGE
+        await createUser(dataSource, SAMPLE_USER);
+        await createUser(dataSource, {
+          ...SAMPLE_USER,
+          email: 'new.new@new.new',
+          username: 'also very brand new',
+        });
+        // ACT
+        const res = await request(app.getHttpServer()).get('/auth/statistics');
+        // ASSERT
+        expect(res.statusCode).toEqual(HttpStatus.OK);
+        expect(res.body.totalUsers).toEqual(2);
+      });
+      it('Should return correct value with empty user table', async () => {
+        // ACT
+        const res = await request(app.getHttpServer()).get('/auth/statistics');
+        // ASSERT
+        expect(res.statusCode).toEqual(HttpStatus.OK);
+        expect(res.body.totalUsers).toEqual(0);
+      });
+    });
+  });
 
   describe('Test of the entire flow', () => {
     it('should allow for the user to create an account, login with credentials and then login with refresh token', async () => {
