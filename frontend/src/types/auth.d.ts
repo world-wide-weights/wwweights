@@ -9,3 +9,17 @@ export type ApiAuthException = {
     statusCode: HttpStatusCode,
     message: string
 }
+
+export type SessionData = {
+    accessToken: string
+    decodedAccessToken: {
+        username: string
+        id: number
+        email: string
+        status: string
+        role: string
+        iat: number
+        exp: number
+    }
+    refreshToken: string
+}

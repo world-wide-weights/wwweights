@@ -1,6 +1,8 @@
 import { isAxiosError } from "axios"
 import { ApiAuthException, Tokens } from "../../types/auth"
 import { authRequest } from "../axios/axios"
+import { createSession } from "./session"
+import { saveSession } from "./storage"
 
 export const login = async ({ email, password }: { email: string, password: string }) => {
     try {
@@ -10,7 +12,10 @@ export const login = async ({ email, password }: { email: string, password: stri
         })
         const tokens = response.data
 
-        return tokens
+        const session = createSession(tokens)
+        saveSession(session)
+
+        return session
     } catch (error) {
         if (isAxiosError<ApiAuthException>(error) && error.response) {
             return error.response.data
