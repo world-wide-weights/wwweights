@@ -16,7 +16,7 @@ type AuthProps = {
  * Checks if a user is logged in or not, handle guest routes and handle login redirect or render page.
  */
 export const Auth: React.FC<AuthProps> = ({ children, routeType }) => {
-    const [hasSession, setHasSession] = useState<boolean>(false)
+    const [hasSession, setHasSession] = useState<boolean>(true)
     const router = useRouter()
 
     useEffect(() => {
