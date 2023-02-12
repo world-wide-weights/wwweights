@@ -1,10 +1,9 @@
-import { useSession } from "next-auth/react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import logo from "../../../public/logo.png"
-import { endSession } from "../../services/auth/session"
+import { endSession, getSession } from "../../services/auth/session"
 import { routes } from "../../services/routes/routes"
 import { Button } from "../Button/Button"
 import { IconButton } from "../Button/IconButton"
@@ -22,31 +21,37 @@ type NavLink = {
  * Navbar component, should only be used once at the top 
  */
 export const Navbar: React.FC = () => {
-    const { data: session } = useSession()
+    const [navLinks, setNavLinks] = useState<NavLink[]>([])
+
+    useEffect(() => {
+        const sessionData = getSession()
+        const hasSession = Boolean(sessionData)
+
+        setNavLinks([{
+            shouldDisplay: true,
+            to: routes.weights.list(),
+            text: "Discover",
+        }, {
+            shouldDisplay: Boolean(hasSession),
+            to: routes.account.profile(),
+            text: "My Profile",
+        }, {
+            shouldDisplay: Boolean(!hasSession),
+            to: routes.account.login + "?callbackUrl=" + router.asPath,
+            text: "Login",
+        }, {
+            shouldDisplay: Boolean(!hasSession),
+            to: routes.account.register + "?callbackUrl=" + router.asPath,
+            text: "Register",
+        }, {
+            shouldDisplay: Boolean(hasSession),
+            onClick: () => endSession(),
+            text: "Logout"
+        }])
+    }, [])
+
     const [isNavMobileOpen, setIsNavMobileOpen] = useState<boolean>(false)
     const router = useRouter()
-
-    const navLinks: NavLink[] = [{
-        shouldDisplay: true,
-        to: routes.weights.list(),
-        text: "Discover",
-    }, {
-        shouldDisplay: Boolean(session),
-        to: routes.account.profile(),
-        text: "My Profile",
-    }, {
-        shouldDisplay: Boolean(!session),
-        to: routes.account.login + "?callbackUrl=" + router.asPath,
-        text: "Login",
-    }, {
-        shouldDisplay: Boolean(!session),
-        to: routes.account.register + "?callbackUrl=" + router.asPath,
-        text: "Register",
-    }, {
-        shouldDisplay: Boolean(session),
-        onClick: () => endSession(),
-        text: "Logout"
-    }]
 
     return <div className="bg-white py-3">
         <nav className="container md:flex justify-between">
