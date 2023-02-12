@@ -93,7 +93,7 @@ export const authOptions: NextAuthOptions = {
             // Add access token, refresh token and user to session
             session.accessToken = token.accessToken
             session.user = user
-            session.error = token.error
+            session.error = token.error ?? null
 
             // Send properties to the client
             return session
