@@ -47,14 +47,8 @@ export class ProfileController {
   }
 
   @Get(':userId')
-  @UseGuards(JwtGuard)
   @ApiOperation({ description: 'Get profile of user by id' })
   @ApiParam({ name: 'userId', type: Number })
-  @ApiBearerAuth('access_token')
-  @ApiUnauthorizedResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Invalid access token',
-  })
   @ApiOkResponse({
     status: HttpStatus.OK,
     description: 'Profile return',

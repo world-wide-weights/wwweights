@@ -54,4 +54,14 @@ export class UserEntity {
     description: 'Last login for the user. Only exposed to self',
   })
   lastLogin: Date | null;
+
+  @Expose()
+  @Column({
+    type: 'timestamp with time zone',
+    name: 'created_at'
+  })
+  @ApiPropertyOptional({
+    description: 'Creation date of user',
+  })
+  createdAt: Date;
 }

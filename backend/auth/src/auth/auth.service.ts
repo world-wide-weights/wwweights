@@ -32,7 +32,7 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  async register(body: RegisterDTO): Promise<UserEntity> {
+  async register(body: RegisterDTO): Promise<TokenResponse> {
     // hash password
     const hash = await bhash(body.password, 10);
     const newUser = await this.userService.insertUser({
@@ -41,11 +41,10 @@ export class AuthService {
     });
     if (!newUser) {
       // All conflict related exceptions are thrown within the userService
+      // This is only a safeguard that should never be reached (in theory)
       throw new InternalServerErrorException();
     }
-    // Coming soon in future PR
-    // this.accountService.sendVerifyMail(newUser);
-    return newUser;
+    return await this.getAuthPayload(newUser)
   }
 
   async login(body: LoginDTO): Promise<TokenResponse> {

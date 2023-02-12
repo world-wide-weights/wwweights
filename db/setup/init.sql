@@ -32,3 +32,9 @@ CREATE TABLE user_image_lookup(
 ALTER TABLE user_image_lookup ADD PRIMARY KEY (fk_user_id, image_hash);
 
 INSERT INTO migration_state(version) VALUES (1674411468);
+
+
+ALTER TABLE users ADD COLUMN created_at timestamptz DEFAULT NOW()::timestamptz;
+
+INSERT INTO migration_state(version) VALUES (1676217913);
+
