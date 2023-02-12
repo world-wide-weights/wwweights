@@ -95,7 +95,7 @@ describe('ItemsController (e2e)', () => {
     await tagModel.deleteMany();
     await itemsByTagModel.deleteMany();
     await editSuggestionModel.deleteMany();
-    await profileModel.deleteMany()
+    await profileModel.deleteMany();
   });
 
   afterAll(async () => {
@@ -304,6 +304,61 @@ describe('ItemsController (e2e)', () => {
       );
     });
 
+    it('items/:slug/suggest/edit => Should be able to set property to null', async () => {
+      // ARRANGE
+      const item = new itemModel(singleItem);
+      await item.save();
+      // Create eventstore stream
+      mockEventStore.existingStreams = [
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      ];
+      //ACT
+      const res = await request(server)
+        .post(commandsPath + `items/${item.slug}/suggest/edit`)
+        .send({ source: null });
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.OK);
+      // This will pass if met or throw an error if callback condition is never met
+      await retryCallback(
+        async () =>
+          // Has item been updated?
+          (await itemModel.findOne({ slug: item.slug })).source === null,
+      );
+    });
+
+    it('items/:slug/suggest/edit => Should be able to update weight (nested Object)', async () => {
+      // ARRANGE
+      const item = new itemModel({
+        ...singleItem,
+        weight: { value: 1123675e30, isCa: true },
+      });
+      await item.save();
+      // Create eventstore stream
+      mockEventStore.existingStreams = [
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      ];
+      //ACT
+      const updateWeigt = {
+        value: 2222222e30,
+        isCa: null,
+      };
+      const res = await request(server)
+        .post(commandsPath + `items/${item.slug}/suggest/edit`)
+        .send({ weight: updateWeigt });
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.OK);
+      // This will pass if met or throw an error if callback condition is never met
+      await retryCallback(
+        async () =>
+          // Has item been updated?
+          (await itemModel.findOne({ slug: item.slug })).weight.value ===
+          updateWeigt.value,
+      );
+      const updatedItem = await itemModel.findOne({ slug: item.slug });
+      // Weight check is redundant with callback
+      expect(updatedItem.weight.isCa).toBeNull();
+    });
+
     it('items/:slug/suggest/edit => Should update tags in item', async () => {
       // ARRANGE
       const item = new itemModel(singleItem);
@@ -397,6 +452,7 @@ describe('ItemsController (e2e)', () => {
       expect(newTag.items[0].slug).toEqual(item.slug);
       expect(oldTag.items.length).toEqual(0);
     });
+
     it('items/insert => increment profile counts', async () => {
       await request(server)
         .post(commandsPath + 'items/insert')
