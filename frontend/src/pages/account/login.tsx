@@ -26,6 +26,7 @@ const Login: NextPageCustomProps = () => {
     // Local State
     const [isPasswordEyeOpen, setIsPasswordEyeOpen] = useState<boolean>(false)
     const [error, setError] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
 
     // Formik Form Initial Values
     const initialFormValues: LoginDto = {
@@ -44,17 +45,20 @@ const Login: NextPageCustomProps = () => {
      * @param values input from form
      */
     const onFormSubmit = async (values: LoginDto) => {
+        setIsLoading(true)
         const response = await login({
             email: values.email,
             password: values.password
         })
 
         if (response === null) {
+            setIsLoading(false)
             setError("Something went wrong. Try again or come later.")
             return
         }
 
         if ("statusCode" in response) {
+            setIsLoading(false)
             setError(`${response.statusCode}: ${response.message}`)
             return
         }
@@ -75,8 +79,8 @@ const Login: NextPageCustomProps = () => {
                     <TextInput type={isPasswordEyeOpen ? "text" : "password"} name="password" labelText="Password" placeholder="Password" icon={isPasswordEyeOpen ? "visibility" : "visibility_off"} iconOnClick={() => setIsPasswordEyeOpen(!isPasswordEyeOpen)} />
                     <Button kind="tertiary" className="mb-5">Forgot Password?</Button>
 
-                    <Button datacy="login-button" disabled={!(dirty && isValid)} type="submit">Login</Button>
-                    <Button onClick={() => onFormSubmit({
+                    <Button datacy="login-button" loading={isLoading} icon="login" disabled={!(dirty && isValid)} type="submit">Login</Button>
+                    <Button loading={isLoading} icon="api" className="mt-4" onClick={() => onFormSubmit({
                         email: "test@gmail.com",
                         password: "12345678",
                     })}>Login with TestUser</Button>
