@@ -1,14 +1,20 @@
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
-import { getSession } from "../../services/auth/session"
+import { createContext, useEffect, useState } from "react"
+import { endSession, getSession } from "../../services/auth/session"
 import { routes } from "../../services/routes/routes"
 
 type AuthProps = {
     /** The page content shown when user logged in. */
     children: React.ReactNode
     /** When route is protected need to be logged in. When its guest you need to be logged out. */
-    routeType: "protected" | "guest"
+    routeType: "protected" | "guest" | "public"
 }
+
+export const AuthContext = createContext({
+    hasSession: false,
+    logout: () => { },
+    isLoading: true
+})
 
 /**
  * Auth wrapper. Using this wrapper already in _app.tsx. So you don't need to manually wrap this around page.
@@ -17,35 +23,38 @@ type AuthProps = {
  */
 export const Auth: React.FC<AuthProps> = ({ children, routeType }) => {
     const [hasSession, setHasSession] = useState<boolean>(true)
+    const [isLoading, setIsLoading] = useState<boolean>(true)
     const router = useRouter()
 
     useEffect(() => {
         const checkSession = async () => {
             const sessionData = await getSession()
-            const hasSession = Boolean(sessionData)
-            setHasSession(hasSession)
+            const hasSessionData = Boolean(sessionData)
+            setHasSession(hasSessionData)
+            setIsLoading(false)
 
             // When no user redirect to login, isRouterChanging prevents push new route when router already pushing
-            if (!hasSession && routeType === "protected") {
+            if (!hasSessionData && routeType === "protected") {
                 router.push(routes.account.login + "?callbackUrl=" + router.asPath)
             }
 
             // When user and route type guest redirect to home, isRouterChanging prevents push new route when router already pushing
-            if (hasSession && routeType === "guest") {
+            if (hasSessionData && routeType === "guest") {
                 router.push(routes.home)
             }
         }
         checkSession()
-    }, [routeType, router])
+    }, [routeType, router, hasSession])
 
-    // Render page when user or route type guest
-    if (hasSession || routeType === "guest")
-        return <>
-            {children}
-        </>
 
-    // Session is being fetched, or no user.
-    // If no user, useEffect() will redirect.
-    // TODO (Zoe-Bot): Implement Loading State
-    return <div>Loading...</div>
+    const logout = () => {
+        endSession()
+        setHasSession(false)
+    }
+    return <AuthContext.Provider value={{ hasSession, logout, isLoading }}>
+        {(
+            routeType === "public" ||
+            (routeType === "protected" && hasSession) ||
+            (routeType === "guest" && !hasSession)) ? children : <div>Loading...</div>}
+    </AuthContext.Provider>
 }

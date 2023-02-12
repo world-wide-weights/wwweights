@@ -1,10 +1,10 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+import { useContext, useState } from "react"
 import logo from "../../../public/logo.png"
-import { endSession, getSession } from "../../services/auth/session"
 import { routes } from "../../services/routes/routes"
+import { AuthContext } from "../Auth/Auth"
 import { Button } from "../Button/Button"
 import { IconButton } from "../Button/IconButton"
 
@@ -21,40 +21,31 @@ type NavLink = {
  * Navbar component, should only be used once at the top 
  */
 export const Navbar: React.FC = () => {
-    const [navLinks, setNavLinks] = useState<NavLink[]>([])
-
-    useEffect(() => {
-        const createNavLinks = async () => {
-            const sessionData = await getSession()
-            const hasSession = Boolean(sessionData)
-
-            setNavLinks([{
-                shouldDisplay: true,
-                to: routes.weights.list(),
-                text: "Discover",
-            }, {
-                shouldDisplay: Boolean(hasSession),
-                to: routes.account.profile(),
-                text: "My Profile",
-            }, {
-                shouldDisplay: Boolean(!hasSession),
-                to: routes.account.login + "?callbackUrl=" + router.asPath,
-                text: "Login",
-            }, {
-                shouldDisplay: Boolean(!hasSession),
-                to: routes.account.register + "?callbackUrl=" + router.asPath,
-                text: "Register",
-            }, {
-                shouldDisplay: Boolean(hasSession),
-                onClick: () => endSession(),
-                text: "Logout"
-            }])
-        }
-        createNavLinks()
-    }, [])
-
+    const { hasSession, logout, isLoading } = useContext(AuthContext)
     const [isNavMobileOpen, setIsNavMobileOpen] = useState<boolean>(false)
     const router = useRouter()
+
+    const navLinks: NavLink[] = [{
+        shouldDisplay: true,
+        to: routes.weights.list(),
+        text: "Discover",
+    }, {
+        shouldDisplay: Boolean(hasSession),
+        to: routes.account.profile(),
+        text: "My Profile",
+    }, {
+        shouldDisplay: Boolean(!hasSession),
+        to: routes.account.login + "?callbackUrl=" + router.asPath,
+        text: "Login",
+    }, {
+        shouldDisplay: Boolean(!hasSession),
+        to: routes.account.register + "?callbackUrl=" + router.asPath,
+        text: "Register",
+    }, {
+        shouldDisplay: Boolean(hasSession),
+        onClick: () => logout(),
+        text: "Logout"
+    }]
 
     return <div className="bg-white py-3">
         <nav className="container md:flex justify-between">
@@ -68,7 +59,7 @@ export const Navbar: React.FC = () => {
             <ul className={`${isNavMobileOpen ? "block" : "hidden"} md:flex items-center gap-4 py-5 md:py-0`}>
                 {/* TODO (Zoe-Bot): Find better solution if active state is onclick */}
                 {/* When viewCondition is set then show based on it, when not then just show */}
-                {navLinks.map(navLink => (navLink.shouldDisplay) && <li key={navLink.text} className="mb-4 md:mb-0"><Button {...navLink} isColored={"to" in navLink && (navLink.to === router.pathname)} disabled={"to" in navLink && (navLink.to === router.pathname)} dimOpacityWhenDisabled={false} kind="tertiary">{navLink.text}</Button></li>)}
+                {!isLoading && navLinks.map(navLink => (navLink.shouldDisplay) && <li key={navLink.text} className="mb-4 md:mb-0"><Button {...navLink} isColored={"to" in navLink && (navLink.to === router.pathname)} disabled={"to" in navLink && (navLink.to === router.pathname)} dimOpacityWhenDisabled={false} kind="tertiary">{navLink.text}</Button></li>)}
                 {/* TODO (Zoe-Bot): Here is a dropdown in the future */}
                 {/* <li className="hidden md:inline"><IconButton onClick={() => ""} icon="more_horiz" /></li> */}
                 {/* TODO (Zoe-Bot): Add correct link when contribute exist */}

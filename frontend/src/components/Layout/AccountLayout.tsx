@@ -6,7 +6,7 @@ import { Button } from "../Button/Button"
 import { Headline } from "../Headline/Headline"
 
 type AccountLayoutProps = {
-    /** Page content. Is parameter in getLayout. */
+    /** Page content. Is parameter in layout. */
     page: React.ReactElement
     /** Title in head. */
     siteTitle: string

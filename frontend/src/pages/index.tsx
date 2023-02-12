@@ -1,6 +1,5 @@
 import { Form, Formik } from "formik"
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
-import { getServerSession } from "next-auth"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { Button } from "../components/Button/Button"
@@ -14,7 +13,6 @@ import { queryRequest } from "../services/axios/axios"
 import { routes } from "../services/routes/routes"
 import { getStructuredDataWebsite } from "../services/seo/structuredData/website"
 import { Item, PaginatedResponse } from "../types/item"
-import { authOptions } from "./api/auth/[...nextauth]"
 
 type HomeProps = {
 	items: Item[]
@@ -122,15 +120,11 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 }
 
 export const getServerSideProps: GetServerSideProps<HomeProps> = async (context) => {
-	const [response, session] = await Promise.all([
-		queryRequest.get<PaginatedResponse<Item>>("/items/list?page=1&limit=20&query=iphone 2020"),
-		getServerSession(context.req, context.res, authOptions)
+	const [response] = await Promise.all([
+		queryRequest.get<PaginatedResponse<Item>>("/items/list?page=1&limit=20&query=iphone 2020")
 	])
 	const items = response.data.data
-	console.log({
-		id: "getServerSideProps session",
-		data: session
-	})
+
 	return {
 		props: {
 			items
@@ -138,7 +132,7 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async (context)
 	}
 }
 
-Home.getLayout = (page: React.ReactElement) => {
+Home.layout = (page: React.ReactElement) => {
 	return <>{page}</>
 }
 

@@ -100,7 +100,7 @@ const Login: NextPageCustomProps = () => {
 }
 
 // Sets custom account layout
-Login.getLayout = (page: React.ReactElement) => {
+Login.layout = (page: React.ReactElement) => {
     return <AccountLayout page={page} siteTitle="Login" headline="Welcome back" description="Sign in to your account below." descriptionImage="Login to share your stuff." />
 }
 

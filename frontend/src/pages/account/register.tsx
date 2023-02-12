@@ -136,7 +136,7 @@ const Register: NextPageCustomProps = () => {
 }
 
 // Sets custom account layout
-Register.getLayout = (page: React.ReactElement) => {
+Register.layout = (page: React.ReactElement) => {
     return <AccountLayout page={page} siteTitle="Register" headline="Create your account" description="Start for free." descriptionImage="Register to share your stuff." />
 }
 

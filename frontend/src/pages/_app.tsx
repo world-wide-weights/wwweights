@@ -3,13 +3,11 @@ import localFont from "@next/font/local"
 /** Imports all material symbols globally which we use as our icon pack */
 import "material-symbols/rounded.css"
 import { NextPage } from "next"
-import type { Session } from "next-auth"
-import { SessionProvider } from "next-auth/react"
 import type { AppProps } from "next/app"
 import Script from "next/script"
 import React from "react"
 import { Auth } from "../components/Auth/Auth"
-import { Layout } from "../components/Layout/Layout"
+import { Layout as DefaultLayout } from "../components/Layout/Layout"
 import "../styles/global.css"
 
 // Hide ads and analytics in development
@@ -40,20 +38,20 @@ const metropolis = localFont({
 
 /**
  * When using this page type have the option to add custom props.
- * Page.getLayout --> Adds custom layout for this page.
+ * Page.layout --> Adds custom layout for this page.
  * Page.auth = {
  *    routeType: protected --> To see this page you need to be logged in
  *    routeType: guest --> To see this page you need to be a guest (not logged in)
  * } 
  */
 export type NextPageCustomProps<P = {}, IP = P> = NextPage<P, IP> & {
-  getLayout?: (page: React.ReactElement) => React.ReactNode
+  layout?: (page: React.ReactElement) => React.ReactNode
   auth?: {
     routeType: "protected" | "guest"
   }
 }
 
-type AppPropsCustom = AppProps<{ session: Session }> & {
+type AppPropsCustom = AppProps & {
   Component: NextPageCustomProps
 }
 
@@ -62,20 +60,13 @@ type AppPropsCustom = AppProps<{ session: Session }> & {
  * Wrapps all pages.
  */
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsCustom) => {
-  // When getLayout function is defined use custom layout
-  const setLayout = Component.getLayout ?? ((page: React.ReactElement) => {
-    return <Layout>
+  // When layout function is defined use custom layout
+  const layout = Component.layout ?? ((page: React.ReactElement) =>
+    <DefaultLayout>
       {page}
-    </Layout>
-  })
-
-  // When auth is defined wrap auth around page
-  const auth = Component.auth ?
-    <Auth routeType={Component.auth.routeType}>
-      <Component {...pageProps} />
-    </Auth> :
-    <Component {...pageProps} />
-  return <>
+    </DefaultLayout>
+  )
+  return <Auth routeType={Component?.auth?.routeType ?? "public"}>
     {/** Google AdSense */}
     {SHOULD_DISPLAY_ADS && <Script
       async
@@ -98,12 +89,10 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsCustom
       </Script>
     </>}
 
-    <SessionProvider session={session}>
-      <div className={`${metropolis.variable} font-sans`}>
-        {setLayout(auth)}
-      </div>
-    </SessionProvider>
-  </>
+    <div className={`${metropolis.variable} font-sans`}>
+      {layout(<Component {...pageProps} />)}
+    </div>
+  </Auth>
 }
 
 export default App
