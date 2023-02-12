@@ -1,6 +1,6 @@
 // Code stolen from cypress docs
 // https://docs.cypress.io/api/commands/mount#Creating-a-New-cy-mount-Command
-import { mount } from "cypress/react";
+import { mount } from "cypress/react"
 
 declare global {
   namespace Cypress {
@@ -8,7 +8,7 @@ declare global {
       /**
        * Mount for component tests, mounts a component.
        */
-      mount: typeof mount;
+      mount: typeof mount
       /**
        * Helper for easier selecting tags with datacy.
        * @param dataCy the dataCy attribute name of the tag we want to select 
