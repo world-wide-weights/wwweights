@@ -104,7 +104,7 @@ jobs:
           push: true
           labels: |
             org.opencontainers.image.source: https://github.com/world-wide-weights/wwweights
-            org.opencontainers.image.description: 'wwweights auth backend for user handling'
+            org.opencontainers.image.description: wwweights auth backend for user handling
 
   redeploy:
     if: github.ref == 'refs/heads/stable'
