@@ -63,7 +63,7 @@ export class ItemsController {
   @Post('items/bulk-insert')
   @UseGuards(ENVGuard)
   @HttpCode(HttpStatus.OK)
-  @ApiBody({ type: InsertItemCommand, isArray: true })
+  @ApiBody({ type: InsertItemDto, isArray: true })
   @ApiOperation({ description: 'Used for bulkinsert of items. Only available in development' })
   @ApiOkResponse({ description: 'Items inserted' })
   @ApiInternalServerErrorResponse({ description: 'Something went wrong' })
