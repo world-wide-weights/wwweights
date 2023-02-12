@@ -11,7 +11,7 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - "backend/**"
+      - "backend/command/**"
       - ".github/workflows/command-backend-ci.yml"
 
 jobs:
