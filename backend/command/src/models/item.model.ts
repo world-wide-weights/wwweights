@@ -46,7 +46,7 @@ export class Item extends AggregateRoot {
   source?: string;
 
   @prop()
-  user: number;
+  userId: number;
 
   @prop()
   createdAt?: number;
