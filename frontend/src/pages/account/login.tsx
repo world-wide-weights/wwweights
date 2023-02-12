@@ -1,5 +1,4 @@
 import { Form, Formik } from "formik"
-import { signIn } from "next-auth/react"
 import { useRouter } from "next/router"
 import { useMemo, useState } from "react"
 import * as yup from "yup"
@@ -7,6 +6,7 @@ import { Button } from "../../components/Button/Button"
 import { TextInput } from "../../components/Form/TextInput/TextInput"
 import { AccountLayout } from "../../components/Layout/AccountLayout"
 import { Seo } from "../../components/Seo/Seo"
+import { login } from "../../services/auth/login"
 import { routes } from "../../services/routes/routes"
 import { NextPageCustomProps } from "../_app"
 
@@ -44,29 +44,22 @@ const Login: NextPageCustomProps = () => {
      * @param values input from form
      */
     const onFormSubmit = async (values: LoginDto) => {
-        try {
-            // Login with next auth
-            const response = await signIn("credentials", {
-                redirect: false,
-                email: values.email,
-                password: values.password
-            })
+        const response = await login({
+            email: values.email,
+            password: values.password
+        })
 
-            if (response === undefined || response?.ok !== true) {
-                setError("Something went wrong. Try again or come later.")
-                console.log({
-                    id: "login submit",
-                    data: {
-                        response
-                    }
-                })
-                return
-            }
-
-            router.push(callbackUrl ?? routes.home)
-        } catch (error) {
+        if (response === null) {
             setError("Something went wrong. Try again or come later.")
+            return
         }
+
+        if ("statusCode" in response) {
+            setError(`${response.statusCode}: ${response.message}`)
+            return
+        }
+
+        router.push(callbackUrl ?? routes.home)
     }
 
     return <>
