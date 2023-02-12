@@ -58,13 +58,10 @@ function Profile({ contributions, statistics }: InferGetServerSidePropsType<type
                     {/* TODO (Zoe-Bot): Implement correct contributions */}
                     {/* TODO (Zoe-Bot): Implement EmptyState */}
                     <ul className="mb-5">
-                        <ItemListContribute name="Smartphone difjisdjfitrzrtzrzsjfidfdsfsdfsdfsdfsdfdfsdfsd" slug="smartphone" weight={{ value: 10, additionalValue: 20, isCa: true }} image="https://via.placeholder.com/96.png" />
-                        <ItemListContribute name="Smartphonsdfdsfsdfe" slug="smartphone" weight={{ value: 95, isCa: true }} />
-                        <ItemListContribute name="Smartphonsdfsdfsfd  sdfjsoidfe dsfjsdoifjöä" slug="smartphone" weight={{ value: 1000, additionalValue: 100000 }} image="https://via.placeholder.com/96.png" />
-                        <ItemListContribute name="fdsdf" slug="smartphone" weight={{ value: 95, additionalValue: 145, isCa: true }} image="https://via.placeholder.com/96.png" />
-                        <ItemListContribute name="Smartphone" slug="smartphone" weight={{ value: 4382949328 }} image="https://via.placeholder.com/96.png" />
+                        {contributions.data.length === 0 ? <p>No contributions yet</p> : contributions.data.map((contribution) => (
+                            <ItemListContribute {...contribution} key={contribution.slug} />
+                        ))}
                     </ul>
-
                     {/* TODO (Zoe-Bot): Implement correct pagination */}
                     {/* <Pagination totalItems={10} currentPage={1} baseRoute={routes.account.profile} itemsPerPage={5} /> */}
                 </div>
@@ -75,22 +72,30 @@ function Profile({ contributions, statistics }: InferGetServerSidePropsType<type
 
 export const getServerSideProps: GetServerSideProps<ProfilePageProps> = async () => {
     try {
+        // Fetch contributions and statistics
         // TODO (Zoe-Bot): Implement update user id
-        const [contributionsResponse] = await Promise.all([
-            queryRequest.get<PaginatedResponse<Item>>("/queries/v1/profiles/1/statistics"),
+        const [contributionsResponse, statisticsResponse] = await Promise.all([
+            queryRequest.get<PaginatedResponse<Item>>("/items/list?userid=1"),
+            queryRequest.get<StatisticsResponse>("/profiles/1/statistics"),
         ])
 
+        // Prepare contributions and statistics
         const contributions = contributionsResponse.data
+        const itemsCreated = statisticsResponse.data.count.itemsCreated ?? 0
+        const itemsUpdated = statisticsResponse.data.count.itemsUpdated ?? 0
+        const itemsDeleted = statisticsResponse.data.count.itemsDeleted ?? 0
+        const totalContributions = itemsCreated + itemsUpdated + itemsDeleted
+        const statistics = {
+            totalContributions,
+            itemsCreated,
+            itemsUpdated,
+            itemsDeleted,
+        }
 
         return {
             props: {
                 contributions,
-                statistics: {
-                    totalContributions: 0,
-                    itemsCreated: 0,
-                    itemsUpdated: 0,
-                    itemsDeleted: 0
-                }
+                statistics
             }
         }
     } catch (error) {
