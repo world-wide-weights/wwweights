@@ -1,9 +1,10 @@
-import { signOut, useSession } from "next-auth/react"
+import { useSession } from "next-auth/react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import logo from "../../../public/logo.png"
+import { endSession } from "../../services/auth/session"
 import { routes } from "../../services/routes/routes"
 import { Button } from "../Button/Button"
 import { IconButton } from "../Button/IconButton"
@@ -43,7 +44,7 @@ export const Navbar: React.FC = () => {
         text: "Register",
     }, {
         shouldDisplay: Boolean(session),
-        onClick: () => signOut(),
+        onClick: () => endSession(),
         text: "Logout"
     }]
 

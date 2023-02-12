@@ -1,6 +1,7 @@
 import { SessionData, Tokens } from "../../types/auth"
 import { authRequest } from "../axios/axios"
 import { parseJwt } from "../utils/jwt"
+import { deleteSession } from "./storage"
 
 export const createSession = (tokens: Tokens) => {
     const { access_token, refresh_token } = tokens
@@ -14,6 +15,11 @@ export const createSession = (tokens: Tokens) => {
     }
 
     return sessionData
+}
+
+export const endSession = () => {
+    deleteSession()
+    // TODO: Update UI
 }
 
 // Test this snippet
