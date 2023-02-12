@@ -99,11 +99,6 @@ describe('ItemsController (e2e)', () => {
   });
 
   afterAll(async () => {
-    await itemModel.deleteMany();
-    await tagModel.deleteMany();
-    await itemsByTagModel.deleteMany();
-    await editSuggestionModel.deleteMany();
-    await profileModel.deleteMany();
     await teardownMockDataSource();
     server.close();
     await app.close();
@@ -325,8 +320,46 @@ describe('ItemsController (e2e)', () => {
           (await itemModel.findOne({ slug: item.slug })).source === null,
       );
     });
-
     it('items/:slug/suggest/edit => Should be able to update weight (nested Object)', async () => {
+      // ARRANGE
+      const item = new itemModel({
+        ...singleItem,
+        weight: {
+          value: 1123675e30,
+          isCa: false,
+          additionalValue: 3333333e30,
+        },
+      });
+      await item.save();
+      // Create eventstore stream
+      mockEventStore.existingStreams = [
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      ];
+      //ACT
+      const updateWeight = {
+        value: 2222222e30,
+      };
+      const res = await request(server)
+        .post(commandsPath + `items/${item.slug}/suggest/edit`)
+        .send({ weight: updateWeight });
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.OK);
+      // This will pass if met or throw an error if callback condition is never met
+      await retryCallback(
+        async () =>
+          // Has item been updated?
+          (await itemModel.findOne({ slug: item.slug })).weight.value ===
+          updateWeight.value,
+      );
+      const updatedItem = await itemModel.findOne({ slug: item.slug });
+      expect(updatedItem.weight).toEqual({
+        value: updateWeight.value,
+        isCa: item.weight.isCa,
+        additionalValue: item.weight.additionalValue,
+      });
+    });
+
+    it('items/:slug/suggest/edit => Should be able to remove fields in weight (nested Object)', async () => {
       // ARRANGE
       const item = new itemModel({
         ...singleItem,
@@ -338,13 +371,13 @@ describe('ItemsController (e2e)', () => {
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
       ];
       //ACT
-      const updateWeigt = {
+      const updateWeight = {
         value: 2222222e30,
         isCa: null,
       };
       const res = await request(server)
         .post(commandsPath + `items/${item.slug}/suggest/edit`)
-        .send({ weight: updateWeigt });
+        .send({ weight: updateWeight });
       // ASSERT
       expect(res.status).toEqual(HttpStatus.OK);
       // This will pass if met or throw an error if callback condition is never met
@@ -352,7 +385,7 @@ describe('ItemsController (e2e)', () => {
         async () =>
           // Has item been updated?
           (await itemModel.findOne({ slug: item.slug })).weight.value ===
-          updateWeigt.value,
+          updateWeight.value,
       );
       const updatedItem = await itemModel.findOne({ slug: item.slug });
       // Weight check is redundant with callback

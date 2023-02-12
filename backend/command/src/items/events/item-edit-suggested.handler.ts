@@ -108,11 +108,18 @@ export class ItemEditSuggestedHandler
 
   // Db calls: Min: 1 findOneAndUpdate Max: 2 findOneAndUpdate()
   async updateItem(slug: string, itemData: SuggestionItem) {
-    const { tags: tagsValues, ...itemValues } = itemData;
+    const { tags: tagsValues, weight, ...itemValues } = itemData;
     const tagNamesToPull = tagsValues?.pull || [];
     const tagsToPush =
       tagsValues?.push?.map((tag) => ({ name: tag, count: 1 })) || [];
-
+    const weightSet = {};
+    if (weight !== undefined) {
+      // Generate object for nested update
+      // Format as described in: https://www.mongodb.com/docs/manual/reference/operator/update/set/#set-fields-in-embedded-documents
+      Object.keys(weight).forEach((key) => {
+        weightSet[`weight.${key}`] = weight[key];
+      });
+    }
 
     try {
       await this.itemModel.findOneAndUpdate(
@@ -120,10 +127,11 @@ export class ItemEditSuggestedHandler
         {
           ...itemValues,
           $pull: { tags: { name: { $in: tagNamesToPull } } },
+          $set: weightSet,
         },
       );
       if (tagsToPush.length > 0) {
-       await this.itemModel.findOneAndUpdate(
+        await this.itemModel.findOneAndUpdate(
           { slug },
           {
             $addToSet: { tags: tagsToPush },
@@ -131,6 +139,7 @@ export class ItemEditSuggestedHandler
         );
       }
     } catch (error) {
+      console.log(error)
       this.logger.error(
         `Could not update item ${slug} due to an error ${error}`,
       );
