@@ -22,7 +22,7 @@ describe("Login", () => {
             cy.wait("@mockCredentials")
 
             // Mock home
-            cy.mockItemsList()
+            cy.mockHome()
 
             // Check for redirect
             cy.url().should("eq", clientBaseUrl + routes.home)

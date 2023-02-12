@@ -16,7 +16,7 @@ describe("Register", () => {
 
             // Mock register
             cy.intercept("POST", `${apiBaseUrl}/register`, {
-                fixture: "authentication/register.json"
+                fixture: "auth/register.json"
             }).as("mockRegister")
 
             // Mock login and session
@@ -30,7 +30,7 @@ describe("Register", () => {
             cy.wait("@mockCredentials")
 
             // Mock home
-            cy.mockItemsList()
+            cy.mockHome()
 
             // Check redirect
             cy.url().should("include", routes.home)

@@ -1,11 +1,13 @@
 /// <reference types="cypress" />
 
+import statisticsAuth from "../fixtures/auth/statistics.json"
 import paginatedItems from "../fixtures/items/list.json"
 import paginatedRelatedItems from "../fixtures/items/related.json"
 import paginatedSingleItem from "../fixtures/items/single.json"
-import statistics from "../fixtures/items/statistics.json"
+import statisticsItems from "../fixtures/items/statistics.json"
 
 const apiBaseUrlMock = Cypress.env("PUBLIC_API_BASE_URL_MOCK")
+const apiBaseUrlAuth = Cypress.env("PUBLIC_API_BASE_URL_AUTH")
 const apiBaseUrlQuery = Cypress.env("PUBLIC_API_BASE_URL_QUERY")
 const apiBaseUrlCommand = Cypress.env("PUBLIC_API_BASE_URL_COMMAND")
 const clientBaseUrl = Cypress.env("CLIENT_BASE_URL")
@@ -59,7 +61,7 @@ Cypress.Commands.add("mockDiscoverPage", (itemCount?: number) => {
         method: "get",
         path: "/items/statistics",
         statusCode: 200,
-        body: statistics,
+        body: statisticsItems,
     })
 
     cy.mockGetRelatedTags()
@@ -92,7 +94,7 @@ Cypress.Commands.add("mockSingleWeight", () => {
 
 Cypress.Commands.add("mockSession", () => {
     cy.intercept("GET", `${clientBaseUrl}/api/auth/session`, {
-        fixture: "/authentication/session.json"
+        fixture: "/auth/session.json"
     }).as("mockSession")
 })
 
@@ -106,6 +108,18 @@ Cypress.Commands.add("mockCreateItem", () => {
     cy.intercept("POST", `${apiBaseUrlCommand}/items`, {
         url: `${clientBaseUrl}/account/login`
     }).as("mockCreateItem")
+})
+
+Cypress.Commands.add("mockHome", () => {
+    cy.mockItemsList()
+
+    cy.task("nock", {
+        hostname: apiBaseUrlAuth,
+        method: "get",
+        path: "/auth/statistics",
+        statusCode: 200,
+        body: statisticsAuth
+    })
 })
 
 export { }
