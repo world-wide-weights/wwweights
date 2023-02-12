@@ -351,7 +351,7 @@ describe('ItemsController (e2e)', () => {
           (await itemModel.findOne({ slug: item.slug })).weight.value ===
           updateWeight.value,
       );
-      const updatedItem = await itemModel.findOne({ slug: item.slug });
+      const updatedItem = await itemModel.findOne({ slug: item.slug }).lean();
       expect(updatedItem.weight).toEqual({
         value: updateWeight.value,
         isCa: item.weight.isCa,
