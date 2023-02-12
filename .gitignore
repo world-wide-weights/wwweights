@@ -4,3 +4,4 @@
 images/**/*
 !images/test.png
 !images/test.jpg
+coverage
