@@ -25,7 +25,7 @@ function splitIntoChunks(data, chunkSize) {
 }
 
 async function sendData(port, data) {
-	console.log(`http://localhost:${port}/commands/v1/items/bulk-insert`)
+  console.log(`http://localhost:${port}/commands/v1/items/bulk-insert`)
   const res = await fetch(`http://localhost:${port}/commands/v1/items/bulk-insert`, {
     method: "POST",
     headers: {
