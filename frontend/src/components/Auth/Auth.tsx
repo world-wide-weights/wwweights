@@ -1,7 +1,6 @@
-import { signIn, useSession } from "next-auth/react"
 import { useRouter } from "next/router"
-import { useEffect } from "react"
-import { useIsRouterChanging } from "../../hooks/useIsRouterChanging"
+import { useEffect, useState } from "react"
+import { getSession } from "../../services/auth/session"
 import { routes } from "../../services/routes/routes"
 
 type AuthProps = {
@@ -17,29 +16,27 @@ type AuthProps = {
  * Checks if a user is logged in or not, handle guest routes and handle login redirect or render page.
  */
 export const Auth: React.FC<AuthProps> = ({ children, routeType }) => {
-    const { data: session, status } = useSession()
-    const isRouterChanging = useIsRouterChanging()
-
+    const [hasSession, setHasSession] = useState<boolean>(false)
     const router = useRouter()
-    const isUser = !!session?.user
 
     useEffect(() => {
-        if (status === "loading")
-            return
+        const sessionData = getSession()
+        const hasSession = Boolean(sessionData)
+        setHasSession(hasSession)
 
         // When no user redirect to login, isRouterChanging prevents push new route when router already pushing
-        if (!isUser && routeType === "protected" && !isRouterChanging) {
-            signIn()
+        if (!hasSession && routeType === "protected") {
+            router.push(routes.account.login + "?callbackUrl=" + router.asPath)
         }
 
         // When user and route type guest redirect to home, isRouterChanging prevents push new route when router already pushing
-        if (isUser && routeType === "guest" && !isRouterChanging) {
+        if (hasSession && routeType === "guest") {
             router.push(routes.home)
         }
-    }, [isUser, status, routeType, router, isRouterChanging])
+    }, [routeType, router])
 
     // Render page when user or route type guest
-    if (isUser || routeType === "guest")
+    if (hasSession || routeType === "guest")
         return <>
             {children}
         </>
