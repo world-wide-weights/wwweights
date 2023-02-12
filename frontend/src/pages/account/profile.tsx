@@ -2,10 +2,13 @@ import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import { useSession } from "next-auth/react"
 import Image from "next/image"
 import { Card } from "../../components/Card/Card"
+import { ContributionsEmptyState } from "../../components/EmptyState/ContributionsEmptyState"
 import { Headline } from "../../components/Headline/Headline"
 import { ItemListContribute } from "../../components/Item/ItemListContribute"
+import { Pagination } from "../../components/Pagination/Pagination"
 import { Seo } from "../../components/Seo/Seo"
 import { queryRequest } from "../../services/axios/axios"
+import { routes } from "../../services/routes/routes"
 import { Item, PaginatedResponse } from "../../types/item"
 
 type ProfilePageProps = {
@@ -54,16 +57,14 @@ function Profile({ contributions, statistics }: InferGetServerSidePropsType<type
 
                 {/* Contributions */}
                 <div className="lg:w-3/4">
-                    <Headline level={4}>Contributions</Headline>
-                    {/* TODO (Zoe-Bot): Implement correct contributions */}
-                    {/* TODO (Zoe-Bot): Implement EmptyState */}
-                    <ul className="mb-5">
-                        {contributions.data.length === 0 ? <p>No contributions yet</p> : contributions.data.map((contribution) => (
-                            <ItemListContribute {...contribution} key={contribution.slug} />
-                        ))}
-                    </ul>
-                    {/* TODO (Zoe-Bot): Implement correct pagination */}
-                    {/* <Pagination totalItems={10} currentPage={1} baseRoute={routes.account.profile} itemsPerPage={5} /> */}
+                    {contributions.data.length === 0 ? <ContributionsEmptyState /> :
+                        <>
+                            <Headline level={4}>Contributions</Headline>
+                            <ul className="mb-5">
+                                {contributions.data.map((contribution) => <ItemListContribute {...contribution} key={contribution.slug} />)}
+                            </ul>
+                            <Pagination totalItems={contributions.total} currentPage={contributions.page} baseRoute={routes.account.profile} itemsPerPage={contributions.limit} />
+                        </>}
                 </div>
             </div>
         </main>
