@@ -9,7 +9,7 @@ import { Navbar } from "../components/Navbar/Navbar"
 import { Search } from "../components/Search/Search"
 import { Seo } from "../components/Seo/Seo"
 import { Stat } from "../components/Statistics/Stat"
-import { queryRequest } from "../services/axios/axios"
+import { authRequest, queryRequest } from "../services/axios/axios"
 import { routes } from "../services/routes/routes"
 import { getStructuredDataWebsite } from "../services/seo/structuredData/website"
 import { Item, PaginatedResponse } from "../types/item"
@@ -120,12 +120,29 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 }
 
 export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
-	const response = await queryRequest.get<PaginatedResponse<Item>>("/items/list?page=1&limit=20&query=iphone 2020")
-	const items = response.data.data
+	try {
+		const [itemsResponse, statisticsUser] = await Promise.all([
+			queryRequest.get<PaginatedResponse<Item>>("/items/list?page=1&limit=20&query=iphone 2020"),
+			authRequest.get<{ totalUsers: number }>("/auth/statistics")
+		])
 
-	return {
-		props: {
-			items
+		const items = itemsResponse.data.data
+		const statistics = {
+			totalUsers: statisticsUser.data.totalUsers
+		}
+
+		return {
+			props: {
+				items
+			}
+		}
+	} catch (error) {
+		// axios.isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Netzwerk-Zeitüberschreitung")
+		console.error(error)
+		return {
+			props: {
+				items: []
+			}
 		}
 	}
 }
