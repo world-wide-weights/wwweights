@@ -1,6 +1,6 @@
 import { Form, Formik } from "formik"
 import { useRouter } from "next/router"
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import * as yup from "yup"
 import { Button } from "../../components/Button/Button"
 import { TextInput } from "../../components/Form/TextInput/TextInput"
@@ -20,8 +20,6 @@ export type LoginDto = {
  */
 const Login: NextPageCustomProps = () => {
     const router = useRouter()
-    // Redirect to page where you clicked login
-    const callbackUrl = useMemo(() => typeof router.query.callbackUrl == "string" ? router.query.callbackUrl : router.query.callbackUrl?.[0] ?? null, [router])
 
     // Local State
     const [isPasswordEyeOpen, setIsPasswordEyeOpen] = useState<boolean>(false)
@@ -63,7 +61,9 @@ const Login: NextPageCustomProps = () => {
             return
         }
 
-        router.push(callbackUrl ?? routes.home)
+        // Login successful -> redirect to callbackUrl
+        const callbackUrl = router.asPath.split("?callbackUrl=")[1] ?? routes.home
+        router.push(callbackUrl)
     }
 
     return <>
