@@ -105,9 +105,9 @@ describe('ItemsController (e2e)', () => {
     await app.close();
   });
 
-  describe('Commands (POSTS) /commands/v1', () => {
-    const commandsPath = '/commands/v1/';
+  const commandsPath = '/commands/v1/';
 
+  describe('Commands (POSTS) /commands/v1', () => {
     it('items/insert => insert one Item should fail with auth false', async () => {
       fakeJWTGuard.setAuthResponse(false);
       await request(server)
@@ -231,7 +231,7 @@ describe('ItemsController (e2e)', () => {
       expect(items.length).toEqual(itemsWithDifferentNames.length);
       expect(tag.count).toEqual(itemsWithDifferentNames.length);
     });
-        it('items/insert => increment profile counts', async () => {
+    it('items/insert => increment profile counts', async () => {
       await request(server)
         .post(commandsPath + 'items/insert')
         .send(insertItem)
@@ -246,34 +246,31 @@ describe('ItemsController (e2e)', () => {
       expect(profile.count.sourceUsedOnCreation).toEqual(0);
       expect(profile.count.imageAddedOnCreation).toEqual(0);
     });
+  });
+
+  describe('Dev commands (POSTS) /commands/v1', () => {
+    it('items/bulk-insert => Should be hidden if env guard fails', async () => {
+      // ACT
+      const res = await request(server)
+        .post(commandsPath + 'items/bulk-insert')
+        .send(testData.slice(0, 5));
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.NOT_FOUND);
     });
 
-    describe('Dev commands (POSTS) /commands/v1', () => {
-
-      it('items/bulk-insert => Should be hidden if env guard fails' , async () => {
-        // ACT
-        const res = await request(server)
-          .post(commandsPath + 'items/bulk-insert')
-          .send(testData.slice(0, 5));
-        // ASSERT
-        expect(res.status).toEqual(HttpStatus.NOT_FOUND);
-      });
-
-      it('items/bulk-insert => Should insert multiple items' , async () => {
-        // ARRANGE
-        fakeEnvGuard.isDev = true;
-        // ACT
-        const res = await request(server)
-          .post(commandsPath + 'items/bulk-insert')
-          .send(testData.slice(0, 5));
-        // ASSERT
-        expect(res.status).toEqual(HttpStatus.OK);
-        await retryCallback(
-          async () => (await itemModel.find({})).length !== 0,
-        );
-        const items = await itemModel.find({});
-        expect(items.length).toEqual(5);
-      });
+    it('items/bulk-insert => Should insert multiple items', async () => {
+      // ARRANGE
+      fakeEnvGuard.isDev = true;
+      // ACT
+      const res = await request(server)
+        .post(commandsPath + 'items/bulk-insert')
+        .send(testData.slice(0, 5));
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.OK);
+      await retryCallback(async () => (await itemModel.find({})).length !== 0);
+      const items = await itemModel.find({});
+      expect(items.length).toEqual(5);
+    });
   });
 
   describe('correctAllItemTagCounts (CRON)', () => {

@@ -3,7 +3,6 @@ import {
   Controller,
   HttpCode,
   HttpStatus,
-  InternalServerErrorException,
   Logger,
   Post,
   Req,
@@ -25,13 +24,14 @@ import { JwtAuthGuard } from '../shared/guards/jwt.guard';
 import { InsertItemCommand } from './commands/insert-item.command';
 import { InsertItemDto } from './interfaces/insert-item.dto';
 import { JwtWithUserDto } from './interfaces/request-with-user.dto';
+import { ItemsService } from './services/item.service';
 
 @Controller()
 @ApiTags()
 export class ItemsController {
   private readonly logger = new Logger(ItemsController.name);
 
-  constructor(private commandBus: CommandBus) {}
+  constructor(private commandBus: CommandBus, private itemsService: ItemsService) {}
 
   @Post('items/insert')
   @ApiBody({ type: InsertItemDto })
@@ -68,20 +68,7 @@ export class ItemsController {
   @ApiOkResponse({ description: 'Items inserted' })
   @ApiInternalServerErrorResponse({ description: 'Something went wrong' })
   async bulkInsert(@Body() bulkItemInsertDTO: InsertItemDto[]) {
-    let count = 0;
-    try {
-      for (const itemInsertDTO of bulkItemInsertDTO) {
-        // Use userid 0 for admin inserts
-        await this.commandBus.execute(new InsertItemCommand(itemInsertDTO, 0));
-        count++;
-      }
-    } catch (error) {
-      this.logger.error(
-        `Failed bulk insert at ${count}/${bulkItemInsertDTO.length} items due to an error: ${error}`,
-      );
-      // Pass unsanitized as this is only available in dev environments
-      throw new InternalServerErrorException(error);
-    }
-    this.logger.log(`Bulk insert was success for ${count} items`);
+    await this.itemsService.handleBulkInsert(bulkItemInsertDTO)
   }
+
 }

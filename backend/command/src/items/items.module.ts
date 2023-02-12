@@ -13,6 +13,7 @@ import { ItemCronJobHandler } from './cron/items.cron';
 import { EventHandlers } from './events';
 import { ItemsController } from './items.controller';
 import { Sagas } from './sagas';
+import { ItemsService } from './services/item.service';
 @Module({
   imports: [
     CqrsModule,
@@ -26,6 +27,7 @@ import { Sagas } from './sagas';
     ...EventHandlers,
     ...Sagas,
     ItemCronJobHandler,
+    ItemsService
   ],
 })
 export class ItemsModule {}
