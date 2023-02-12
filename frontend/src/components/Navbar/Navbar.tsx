@@ -50,9 +50,6 @@ export const Navbar: React.FC = () => {
                 {/* TODO (Zoe-Bot): Find better solution if active state is onclick */}
                 {/* When viewCondition is set then show based on it, when not then just show */}
                 {navLinks.map(navLink => (navLink.viewCondition === undefined ? true : navLink.viewCondition) && <li key={navLink.text} className="mb-4 md:mb-0"><Button {...navLink} disabled={navLink.to === router.pathname} dimOpacityWhenDisabled={false} isColored={navLink.to === router.pathname} kind="tertiary">{navLink.text}</Button></li>)}
-                {/* TODO (Zoe-Bot): Here is a dropdown in the future */}
-                {/* <li className="hidden md:inline"><IconButton onClick={() => ""} icon="more_horiz" /></li> */}
-                {/* TODO (Zoe-Bot): Add correct link when contribute exist */}
                 <li><Button to={routes.contribute.create}>Contribute</Button></li>
             </ul>
         </nav>
