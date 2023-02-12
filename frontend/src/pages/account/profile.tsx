@@ -1,15 +1,27 @@
+import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import { useSession } from "next-auth/react"
 import Image from "next/image"
 import { Card } from "../../components/Card/Card"
 import { Headline } from "../../components/Headline/Headline"
 import { ItemListContribute } from "../../components/Item/ItemListContribute"
 import { Seo } from "../../components/Seo/Seo"
-import { NextPageCustomProps } from "../_app"
+import { queryRequest } from "../../services/axios/axios"
+import { Item, PaginatedResponse } from "../../types/item"
+
+type ProfilePageProps = {
+    contributions: PaginatedResponse<Item>
+    statistics: {
+        totalContributions: number
+        itemsCreated: number
+        itemsUpdated: number
+        itemsDeleted: number
+    }
+}
 
 /**
  * Profile page
  */
-const Profile: NextPageCustomProps = () => {
+function Profile({ contributions, statistics }: InferGetServerSidePropsType<typeof getServerSideProps>) {
     const { data: session } = useSession()
     const seoTitle = `My Profile ${session?.user.username}`
 
@@ -59,6 +71,48 @@ const Profile: NextPageCustomProps = () => {
             </div>
         </main>
     </>
+}
+
+export const getServerSideProps: GetServerSideProps<ProfilePageProps> = async () => {
+    try {
+        // TODO (Zoe-Bot): Implement update user id
+        const [contributionsResponse] = await Promise.all([
+            queryRequest.get<PaginatedResponse<Item>>("/queries/v1/profiles/1/statistics"),
+        ])
+
+        const contributions = contributionsResponse.data
+
+        return {
+            props: {
+                contributions,
+                statistics: {
+                    totalContributions: 0,
+                    itemsCreated: 0,
+                    itemsUpdated: 0,
+                    itemsDeleted: 0
+                }
+            }
+        }
+    } catch (error) {
+        // axios.isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Netzwerk-Zeitüberschreitung")
+        console.error(error)
+        return {
+            props: {
+                contributions: {
+                    total: 0,
+                    page: 1,
+                    limit: 0,
+                    data: [],
+                },
+                statistics: {
+                    totalContributions: 0,
+                    itemsCreated: 0,
+                    itemsUpdated: 0,
+                    itemsDeleted: 0
+                }
+            }
+        }
+    }
 }
 
 // Sets route need to be logged in
