@@ -64,7 +64,7 @@ export class ItemsController {
     );
   }
 
-  @Post('items/bulk-insert')
+  @Post('bulk-insert')
   @UseGuards(ENVGuard)
   @HttpCode(HttpStatus.OK)
   @ApiBody({ type: InsertItemDto, isArray: true })
