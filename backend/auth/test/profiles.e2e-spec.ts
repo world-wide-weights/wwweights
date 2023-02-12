@@ -140,6 +140,7 @@ describe('ProfilesController (e2e)', () => {
         expect(profile.createdAt).toEqual(creationDate.toISOString())
       });
     });
+    
     describe('Negative Tests', () => {
       it('Should fail for invalid userId', async () => {
         // ACT
