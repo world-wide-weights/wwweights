@@ -4,7 +4,7 @@ import { Form, Formik, FormikProps } from "formik"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/router"
 import { useState } from "react"
-import * as yup from "yup"
+import { array, mixed, number, object, ref, SchemaOf, string } from "yup"
 import { Button } from "../../components/Button/Button"
 import { IconButton } from "../../components/Button/IconButton"
 import { FormError } from "../../components/Errors/FormError"
@@ -40,8 +40,7 @@ type CreateItemDto = {
     weight: Weight
     source?: string
     image?: string
-    tags: string[]
-    user: string
+    tags?: string[]
 }
 
 const unitTypeDropdownOptions = [
@@ -82,19 +81,19 @@ const Create: NextPageCustomProps = () => {
     }
 
     // Formik Form Validation
-    const validationSchema: yup.SchemaOf<CreateItemForm> = yup.object().shape({
-        name: yup.string().required("Name is required."),
-        weight: yup.number().required("Weight is required."),
-        unit: yup.mixed().oneOf(["g", "kg", "t"]),
-        valueType: yup.mixed().oneOf(["exact", "range"]),
-        additionalValue: yup.number().when("valueType", {
+    const validationSchema: SchemaOf<CreateItemForm> = object().shape({
+        name: string().required("Name is required."),
+        weight: number().required("Weight is required."),
+        unit: mixed().oneOf(["g", "kg", "t"]),
+        valueType: mixed().oneOf(["exact", "range"]),
+        additionalValue: number().when("valueType", {
             is: "range",
-            then: yup.number().required("Additional value is required.").moreThan(yup.ref("weight"), "Additional value must be greater than weight.")
+            then: number().required("Additional value is required.").moreThan(ref("weight"), "Additional value must be greater than weight.")
         }),
-        isCa: yup.array(),
-        source: yup.string(),
-        image: yup.string(),
-        tags: yup.string(),
+        isCa: array(),
+        source: string(),
+        image: string(),
+        tags: string(),
     })
 
     /**
@@ -119,12 +118,12 @@ const Create: NextPageCustomProps = () => {
             },
             ...(image !== "" ? { image } : {}), // Only add image when defined
             ...(source !== "" ? { source } : {}), // Only add source when defined
-            tags: tags ? tags.split(",") : [],
-            user: session?.user?.username ?? ""
+            tags: tags ? tags.split(",") : [] // TODO: Replace with array tags
         }
 
         try {
             // Create item with api
+            // TODO: Add auth here
             const response = await commandRequest.post("/items/insert", item)
 
             if (response.status === 200) {
@@ -147,9 +146,7 @@ const Create: NextPageCustomProps = () => {
         <main className="mt-5">
             <div className="container">
                 {/* Headline */}
-                <Tooltip position="right" content="Hello">
-                    <Headline>Create new item</Headline>
-                </Tooltip>
+                <Headline>Create new item</Headline>
             </div>
 
             {/* Content */}
