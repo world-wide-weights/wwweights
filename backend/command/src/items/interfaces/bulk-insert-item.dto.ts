@@ -6,7 +6,7 @@ export class BulkInsertItemDTO extends InsertItemDto {
   @IsInt()
   @IsOptional()
   @ApiPropertyOptional({
-    description: 'Userid for the creating user.',
+    description: 'User Id for the creating user.',
     default: 0,
   })
   userId = 0;
