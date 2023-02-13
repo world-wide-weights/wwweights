@@ -1,8 +1,7 @@
-import { routes } from "../../../src/services/routes/routes"
 
 describe("Register", () => {
     beforeEach(() => {
-        cy.visitLocalPage(routes.account.register)
+        cy.visitLocalPage("/account/register")
     })
 
     describe("Register Flow - Email and Password", () => {
@@ -24,7 +23,7 @@ describe("Register", () => {
             cy.mockItemsList()
 
             // Check redirect
-            cy.url().should("include", routes.home)
+            cy.url().should("include", "/")
         })
     })
 

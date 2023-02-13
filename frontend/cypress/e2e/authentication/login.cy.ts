@@ -1,10 +1,8 @@
-import { routes } from "../../../src/services/routes/routes"
-
 const clientBaseUrl = Cypress.env("CLIENT_BASE_URL")
 
 describe("Login", () => {
     beforeEach(() => {
-        cy.visitLocalPage(routes.account.login)
+        cy.visitLocalPage("/account/login")
 
         // Type credentials
         cy.dataCy("textinput-email-input").type("hello@gmail.com")
@@ -24,7 +22,7 @@ describe("Login", () => {
             cy.mockItemsList()
 
             // Check for redirect
-            cy.url().should("eq", clientBaseUrl + routes.home)
+            cy.url().should("eq", clientBaseUrl + "/")
         })
     })
 
