@@ -17,7 +17,7 @@ type SearchHeaderProps = {
     sort?: SortType
     /** When true display "How much weigh?" headline. */
     hasHeadline?: boolean
-    /** When false don't display related tags. */
+    /** When true display related tags. */
     hasRelatedTags?: boolean
 }
 
