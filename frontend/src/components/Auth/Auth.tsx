@@ -63,12 +63,12 @@ export const Auth: React.FC<AuthProps> = ({ children, routeType }) => {
             setHasSession(hasSessionData)
             setIsLoading(false)
 
-            // When no user redirect to login, isRouterChanging prevents push new route when router already pushing
+            // When no session redirect to login
             if (!hasSessionData && routeType === "protected") {
                 router.push(routes.account.login + "?callbackUrl=" + router.asPath)
             }
 
-            // When user and route type guest redirect to home, isRouterChanging prevents push new route when router already pushing
+            // When has session and route type guest redirect to home
             if (hasSessionData && routeType === "guest") {
                 router.push(routes.home)
             }
