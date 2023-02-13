@@ -44,7 +44,7 @@ describe('getFilter', () => {
   });
   it('should return user with userid given', () => {
     expect(getFilter(null, null, null, undefined, 1)).toEqual({
-      $and: [{ user: 1 }],
+      $and: [{ userId: 1 }],
     });
   });
   it('should return everything if all besides slug is given', () => {
@@ -53,7 +53,7 @@ describe('getFilter', () => {
         { 'tags.name': { $all: ['tag1', 'tag2'] } },
         { $text: { $search: 'query' } },
         { image: { $exists: true } },
-        { user: 1 },
+        { userId: 1 },
       ],
     });
   });
