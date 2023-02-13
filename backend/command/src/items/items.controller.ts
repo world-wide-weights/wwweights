@@ -27,29 +27,29 @@ import { InsertItemCommand } from './commands/insert-item.command';
 import { SuggestItemEditCommand } from './commands/suggest-item-edit.command';
 import { InsertItemDto } from './interfaces/insert-item.dto';
 import { JwtWithUserDto } from './interfaces/request-with-user.dto';
-import { ItemsService } from './services/item.service';
 import { SuggestItemEditDTO } from './interfaces/suggest-item-edit.dto';
+import { ItemsService } from './services/item.service';
 
 @Controller('items')
 @ApiTags('items')
 export class ItemsController {
   private readonly logger = new Logger(ItemsController.name);
 
-  constructor(private commandBus: CommandBus, private itemsService: ItemsService) {}
+  constructor(
+    private commandBus: CommandBus,
+    private itemsService: ItemsService,
+  ) {}
 
   @Post('insert')
   @ApiBody({ type: InsertItemDto })
   @ApiOperation({ summary: 'Insert an item' })
   @ApiOkResponse({
-    status: HttpStatus.OK,
     description: 'Item inserted successfully',
   })
   @ApiConflictResponse({
-    status: HttpStatus.CONFLICT,
     description: 'Slug already taken',
   })
   @ApiBadRequestResponse({
-    status: HttpStatus.BAD_REQUEST,
     description: 'Invalid request. Data validation failed.',
   })
   @ApiBearerAuth()
@@ -68,28 +68,31 @@ export class ItemsController {
   @UseGuards(ENVGuard)
   @HttpCode(HttpStatus.OK)
   @ApiBody({ type: InsertItemDto, isArray: true })
-  @ApiOperation({ summary: 'Insert multiple items in bulk', description: 'Used for bulkinsert of items. Only available in development' })
+  @ApiOperation({
+    summary: 'Insert multiple items in bulk',
+    description: 'Used for bulkinsert of items. Only available in development',
+  })
   @ApiOkResponse({ description: 'Items inserted' })
   @ApiInternalServerErrorResponse({ description: 'Something went wrong' })
   async bulkInsert(@Body() bulkItemInsertDTO: InsertItemDto[]) {
-    await this.itemsService.handleBulkInsert(bulkItemInsertDTO)
+    await this.itemsService.handleBulkInsert(bulkItemInsertDTO);
   }
 
   @Post(':slug/suggest/edit')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @ApiBody({type: SuggestItemEditDTO})
-  @ApiOperation({description: 'Suggest an item edit'})
+  @ApiBody({ type: SuggestItemEditDTO })
+  @ApiOperation({
+    summary: 'Suggest an item edit ',
+    description: 'Used for submitting a suggestion for item value changes',
+  })
   @ApiOkResponse({
-    status: HttpStatus.OK,
     description: 'Suggestion was successully submitted',
   })
   @ApiNotFoundResponse({
-    status: HttpStatus.NOT_FOUND,
     description: 'No slug with that item',
   })
   @ApiBadRequestResponse({
-    status: HttpStatus.BAD_REQUEST,
     description: 'Invalid request. Data validation failed.',
   })
   @ApiBearerAuth()
