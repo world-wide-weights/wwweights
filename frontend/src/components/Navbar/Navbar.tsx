@@ -59,7 +59,7 @@ export const Navbar: React.FC = () => {
             <ul className={`${isNavMobileOpen ? "block" : "hidden"} md:flex items-center gap-4 py-5 md:py-0`}>
                 {/* TODO (Zoe-Bot): Find better solution if active state is onclick */}
                 {/* When viewCondition is set then show based on it, when not then just show */}
-                {navLinks.map(navLink => (navLink.shouldDisplay) && <li key={navLink.text} className="mb-4 md:mb-0"><Button {...navLink} isColored={"to" in navLink && (navLink.to === router.pathname)} disabled={"to" in navLink && (navLink.to === router.pathname)} dimOpacityWhenDisabled={false} kind="tertiary">{navLink.text}</Button></li>)}
+                {!isLoading && navLinks.map(navLink => (navLink.shouldDisplay) && <li key={navLink.text} className="mb-4 md:mb-0"><Button {...navLink} isColored={"to" in navLink && (navLink.to === router.pathname)} disabled={"to" in navLink && (navLink.to === router.pathname)} dimOpacityWhenDisabled={false} kind="tertiary">{navLink.text}</Button></li>)}
                 {/* TODO (Zoe-Bot): Here is a dropdown in the future */}
                 {/* <li className="hidden md:inline"><IconButton onClick={() => ""} icon="more_horiz" /></li> */}
                 {/* TODO (Zoe-Bot): Add correct link when contribute exist */}
