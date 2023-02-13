@@ -29,11 +29,7 @@ export class ProfileStatisticsHandler
         .lean();
       this.logger.log(`ProfileCounts retrieved for: ${dto.userId}`);
 
-      if (!profileCounts) {
-        return {};
-      }
-
-      return profileCounts;
+      return profileCounts || {};
     } catch (error) {
       this.logger.error(error);
       if (error instanceof NotFoundException) throw error;
