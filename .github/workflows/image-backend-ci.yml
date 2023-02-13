@@ -98,7 +98,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: ./backend/auth
+          context: ./backend/image
           tags: ghcr.io/world-wide-weights/image-backend:${{ steps.extract_branch.outputs.branch }}
           platforms: linux/amd64,linux/arm64
           push: true
