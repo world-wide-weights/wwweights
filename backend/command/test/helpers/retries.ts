@@ -39,14 +39,16 @@
 //   return true;
 // };
 
-export const retryCallback = async (cb: () => Promise<boolean>, maxDuration = 1000) => {
-    const startTime = performance.now()
-    while(performance.now() - startTime < maxDuration) {
-        const currRes = await cb()
-        if(currRes){
-            return true
-        }
+export const retryCallback = async (
+  cb: () => Promise<boolean>,
+  maxDuration = 1000,
+) => {
+  const startTime = performance.now();
+  while (performance.now() - startTime < maxDuration) {
+    const currRes = await cb();
+    if (currRes) {
+      return true;
     }
-    throw new Error('Callback condition never met. Timeout!')
-}
-
+  }
+  throw new Error('Callback condition never met. Timeout!');
+};
