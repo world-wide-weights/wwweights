@@ -13,7 +13,8 @@ const Profile: NextPageCustomProps = () => {
     const [session, setSession] = useState<SessionData>()
     const [profile, setProfile] = useState<any>()
     const {
-        getSession
+        getSession,
+        isLoading
     } = useContext(AuthContext)
     useEffect(() => {
         const fetchProfile = async () => {
@@ -30,18 +31,21 @@ const Profile: NextPageCustomProps = () => {
             setProfile(data)
         }
         fetchProfile()
-    }, [])
+    }, [getSession])
 
 
     const seoTitle = "My Profile"
     return <>
         <Seo
-
             title={seoTitle}
             description="Your profile page. Here you can see your contributions and statistics."
         />
 
-        <main className="container mt-5">
+        {isLoading && <main className="container mt-5">
+            <p>Loading...</p>
+        </main>}
+
+        {!isLoading && <main className="container mt-5">
             <Headline level={1}>Profile</Headline>
             <p>{JSON.stringify(session)}</p>
             <p>{JSON.stringify(profile)}</p>
@@ -75,7 +79,7 @@ const Profile: NextPageCustomProps = () => {
                     {/* <Pagination totalItems={10} currentPage={1} baseRoute={routes.account.profile} itemsPerPage={5} /> */}
                 </div>
             </div>
-        </main>
+        </main>}
     </>
 }
 
