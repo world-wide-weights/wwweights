@@ -19,12 +19,7 @@ export class UserService {
   async findOneByEmail(email: string): Promise<UserEntity> {
     return await this.userEntity.findOneBy({ email: email });
   }
-  /**
-   * @description Fetch one user based on username
-   */
-  async findOneByUserName(username: string): Promise<UserEntity> {
-    return await this.userEntity.findOneBy({ username: username });
-  }
+
   /**
    * @description Fetch one user based on id
    */
@@ -49,8 +44,11 @@ export class UserService {
   async insertUser(userData: Partial<UserEntity>): Promise<UserEntity> {
     try {
       const user = this.userEntity.create(userData);
-      await this.userEntity.save(user);
-      return user;
+      // This is a non ideal way of inserting the date, especially since postgres already has a default value
+      // However pg-mem has imperfections in the SQL parser that force us to set the createdAt date on the server rather than in the db directly
+      // This problem is related to https://github.com/oguimbal/pg-mem/issues/239
+      const insertedUser = await this.userEntity.save({...user, createdAt: await (await this.getCurrentDbTime()).now});
+      return insertedUser;
     } catch (error) {
       this.logger.error(error);
       // Necessary due to incomplete typeorm type
@@ -70,13 +68,6 @@ export class UserService {
       }
       throw error;
     }
-  }
-
-  /**
-   * @description Update password for user, requires password to be hashed
-   */
-  async updatePassword(id: number, hash: string): Promise<void> {
-    await this.userEntity.update({ pkUserId: id }, { password: hash });
   }
 
   /**
