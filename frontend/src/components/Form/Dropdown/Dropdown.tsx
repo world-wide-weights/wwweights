@@ -36,7 +36,7 @@ export const Dropdown: React.FC<DropdownProps> = ({ name, placeholder, labelText
             {labelText && <Label name={name} labelText={labelText} labelRequired={labelRequired} />}
 
             {/* Input */}
-            <button datacy={`${name}-dropdown-button`} className={`relative flex items-center justify-between rounded-lg mr-5 sm:mb-0 py-[9px] px-5 w-full border ${light ? "bg-gray-100 border-gray-100" : "bg-gray-200 border-gray-200"} ${!props.field.value ? "text-gray-500" : "text-gray-800"}`} type="button" onClick={() => setIsOpen(!isOpen)}>
+            <button datacy={`${name}-dropdown-button`} className={`relative flex items-center justify-between rounded-lg mr-5 sm:mb-0 py-2 px-5 my-1 w-full border-2 ${light ? "bg-gray-100 border-gray-100" : "bg-gray-200 border-gray-200"} ${!props.field.value ? "text-gray-500" : "text-gray-800"}`} type="button" onClick={() => setIsOpen(!isOpen)}>
                 {props.field.value !== "" ? <span className="truncate">{options.find(option => option.value === props.field.value)?.label}</span> : <span>{placeholder}</span>}
                 <Icon className={`transform-gpu transition-transform duration-200 ease-linear ml-6 ${isOpen ? "-rotate-180" : "rotate-0"}`}>expand_more</Icon>
             </button>

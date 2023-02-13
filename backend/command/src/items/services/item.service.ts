@@ -21,7 +21,7 @@ export class ItemsService {
     try {
       for (const itemInsertDTO of bulkItemInsertDTO) {
         const { userId, ...itemData } = itemInsertDTO;
-        // Use userid 0 for admin inserts
+        // Use userId 0 for admin inserts
         await this.commandBus.execute(
           new InsertItemCommand(itemData, userId || 0),
         );
