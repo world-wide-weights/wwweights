@@ -65,9 +65,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "
         return null
     }
 
-    /**
-     * Fetch related tags
-     */
+    // Fetch related tags when query is not empty and related tags are enabled
     useEffect(() => {
         // Don't fetch when query is empty or related tags are disabled
         if (query === "" || !hasRelatedTags)
