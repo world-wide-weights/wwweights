@@ -1,7 +1,6 @@
 import axios from "axios"
 import BigNumber from "bignumber.js"
 import { Form, Formik, FormikProps } from "formik"
-import { useSession } from "next-auth/react"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { array, mixed, number, object, ref, SchemaOf, string } from "yup"
@@ -64,7 +63,6 @@ const Create: NextPageCustomProps = () => {
     const [isOpenDetails, setIsOpenDetails] = useState<boolean>(false)
     const [error, setError] = useState<string>()
 
-    const { data: session } = useSession()
     const router = useRouter()
 
     // Formik Form Initial Values
