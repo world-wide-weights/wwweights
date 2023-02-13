@@ -146,9 +146,7 @@ const Create: NextPageCustomProps = () => {
         <main className="mt-5">
             <div className="container">
                 {/* Headline */}
-                <Tooltip position="right" content="Hello">
-                    <Headline>Create new item</Headline>
-                </Tooltip>
+                <Headline>Create new item</Headline>
             </div>
 
             {/* Content */}
