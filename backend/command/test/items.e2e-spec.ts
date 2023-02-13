@@ -21,7 +21,6 @@ import {
   teardownMockDataSource,
 } from './helpers/MongoMemoryHelpers';
 import { retryCallback } from './helpers/retries';
-import { timeout } from './helpers/timeout';
 import { FakeEnvGuardFactory } from './mocks/env-guard.mock';
 import { MockEventStore } from './mocks/eventstore';
 import {
@@ -123,8 +122,7 @@ describe('ItemsController (e2e)', () => {
         .send(insertItem)
         .expect(HttpStatus.OK);
 
-      // Give it some extra time to make sure the tag updates have been completed
-      await timeout(500);
+      await retryCallback(async () => (await itemModel.count()) === 1);
 
       const item = await itemModel.findOne({});
 
@@ -146,14 +144,15 @@ describe('ItemsController (e2e)', () => {
         .post(commandsPath + 'items/insert')
         .send(insertItem)
         .expect(HttpStatus.OK);
-      await timeout(100);
+      await retryCallback(async () => (await itemModel.count()) === 1);
       await request(server)
         .post(commandsPath + 'items/insert')
         .send(insertItem2)
         .expect(HttpStatus.OK);
 
-      // Also give it some extra time to make sure the tag updates have been completed
-      await timeout(1000);
+      await retryCallback(
+        async () => (await tagModel.findOne({ name: 'tag1' })).count === 2,
+      );
 
       const item1 = await itemModel.findOne({ name: insertItem.name });
       const item2 = await itemModel.findOne({ name: insertItem2.name });
@@ -192,7 +191,10 @@ describe('ItemsController (e2e)', () => {
           .send({ ...insertItem2, name })
           .expect(HttpStatus.OK);
       });
-      await timeout(800);
+      await retryCallback(
+        async () =>
+          (await itemModel.count()) === itemsWithDifferentNames.length,
+      );
       const items = await itemModel.find({});
       const tag = await tagModel.findOne({ name: 'tag1' });
 
@@ -214,9 +216,7 @@ describe('ItemsController (e2e)', () => {
         .send({ image: 'test' });
 
       await retryCallback(
-        async () =>
-          // Has item been updated?
-          (await editSuggestionModel.count()) === 1,
+        async () => (await editSuggestionModel.count()) === 1,
       );
 
       // ASSERT
@@ -431,7 +431,7 @@ describe('ItemsController (e2e)', () => {
         .send(insertItem)
         .expect(HttpStatus.OK);
 
-      await timeout();
+      await retryCallback(async () => (await profileModel.count()) === 1);
 
       const profile = await profileModel.findOne({});
       expect(profile.count.itemsCreated).toEqual(1);

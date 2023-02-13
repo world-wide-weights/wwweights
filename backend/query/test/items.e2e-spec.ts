@@ -2,6 +2,7 @@ import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
 import * as request from 'supertest';
+import { setTimeout } from 'timers/promises';
 import { ItemSortEnum } from '../src/items/interfaces/item-sort-enum';
 import { ItemsModule } from '../src/items/items.module';
 import { Item } from '../src/items/models/item.model';
@@ -9,7 +10,6 @@ import {
   initializeMockModule,
   teardownMockDataSource,
 } from './helpers/MongoMemoryHelpers';
-import { timeout } from './helpers/timeout';
 import {
   items,
   itemsWithDates,
@@ -42,7 +42,8 @@ describe('QueryController (e2e)', () => {
     app.setGlobalPrefix('queries/v1');
     await app.init();
     server = app.getHttpServer();
-    await timeout();
+    // This is to make sure the db setup is completed aswell
+    await setTimeout(100);
   });
 
   beforeEach(async () => {

@@ -18,7 +18,6 @@ describe('QueryController (e2e)', () => {
   let tagModel: Model<Tag>;
   let itemModel: Model<Item>;
   let server: any; // Has to be any because of supertest not having a type for it either
-  jest.setTimeout(10000);
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
