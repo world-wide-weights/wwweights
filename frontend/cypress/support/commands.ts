@@ -29,7 +29,7 @@ Cypress.Commands.add("checkCurrentActivePage", (activePageNumber) => {
 })
 
 Cypress.Commands.add("mockGetRelatedTags", () => {
-    cy.intercept("GET", `${API_BASE_URL_MOCK}/tags/related`, {
+    cy.intercept("GET", `${API_BASE_URL_QUERY}/tags/related`, {
         fixture: "tags/related.json"
     }).as("mockGetRelatedTags")
 })
