@@ -16,6 +16,7 @@ export const login = async ({ email, password }: { email: string, password: stri
         })
         const tokens = response.data
 
+        // Create session and save it to local storage from tokens
         const session = createSession(tokens)
         saveSession(session)
 

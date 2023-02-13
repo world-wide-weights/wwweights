@@ -12,8 +12,10 @@ const LOCAL_STORAGE_KEY = "session"
 export const createSession = (tokens: Tokens): SessionData => {
     const { access_token, refresh_token } = tokens
 
+    // Decode access token
     const decodedAccessToken = parseJwt(access_token)
 
+    // Create session object
     const sessionData: SessionData = {
         accessToken: access_token,
         refreshToken: refresh_token,
@@ -32,28 +34,40 @@ export const saveSession = (sessionData: SessionData): void => {
 }
 
 /** 
- * Get session data from local storage.
+ * Get session data from local storage and update the access token if it has expired.
  * @returns session data or null if no session data is found
  */
 export const getSessionData = async (): Promise<SessionData | null> => {
+    // Get session from local storage
     const sessionData = localStorage.getItem(LOCAL_STORAGE_KEY)
 
     if (sessionData) {
         const parsedSessionData: SessionData = JSON.parse(sessionData)
+
+        // Update token if expired
         if (Date.now() > parsedSessionData.decodedAccessToken.exp * 1000) {
             console.log("Session expired, refreshing token")
             const tokens = await refreshToken(parsedSessionData.refreshToken)
+
+            // Refresh token failed
             if (tokens === null) {
                 console.error("Session expired and refresh token failed")
                 return null
             }
+
+            // Update session when refresh token succeeded
             const newSession = createSession(tokens)
             saveSession(newSession)
             console.log("Session refreshed")
+
             return newSession
         }
+
+        // Token is still valid
         return parsedSessionData
     }
+
+    // No session data found
     return null
 }
 
@@ -76,6 +90,7 @@ export const refreshToken = async (refreshToken: string): Promise<Tokens | null>
                 Authorization: "Bearer " + refreshToken
             }
         })
+
         const tokens = response.data
         return tokens
     } catch (error) {
