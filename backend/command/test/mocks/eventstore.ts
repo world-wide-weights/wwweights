@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { EventBus } from '@nestjs/cqrs';
+import { ItemEditSuggestedEvent } from '../../src/items/events/item-edit-suggested.event';
 import { ItemInsertedEvent } from '../../src/items/events/item-inserted.event';
 
 export const logStringify = (obj: any) => {
@@ -8,12 +9,16 @@ export const logStringify = (obj: any) => {
 @Injectable()
 export class MockEventStore {
   private readonly logger = new Logger(MockEventStore.name);
-  private existingStreams: string[] = [];
+  existingStreams: string[] = [];
   private latestId = 0;
   eventBus: EventBus;
 
-  private readonly eventMap = new Map([
+  private readonly eventMap = new Map<
+    string,
+    typeof ItemEditSuggestedEvent | typeof ItemInsertedEvent
+  >([
     [ItemInsertedEvent.name, ItemInsertedEvent],
+    [ItemEditSuggestedEvent.name, ItemEditSuggestedEvent],
   ]);
 
   public addEvent(streamId, eventType: any, event: any) {
