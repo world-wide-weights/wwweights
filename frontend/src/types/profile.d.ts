@@ -1,5 +1,5 @@
 type StatisticsResponse = {
-    count: {
+    count?: {
         itemsCreated?: number
         itemsUpdated?: number
         tagsUsedOnCreation?: number

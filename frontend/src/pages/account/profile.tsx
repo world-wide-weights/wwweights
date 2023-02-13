@@ -56,9 +56,9 @@ const Profile: NextPageCustomProps = () => {
                 ])
 
                 // Prepare statistics
-                const itemsCreated = statisticsResponse.data.count.itemsCreated ?? 0
-                const itemsUpdated = statisticsResponse.data.count.itemsUpdated ?? 0
-                const itemsDeleted = statisticsResponse.data.count.itemsDeleted ?? 0
+                const itemsCreated = statisticsResponse.data.count?.itemsCreated ?? 0
+                const itemsUpdated = statisticsResponse.data.count?.itemsUpdated ?? 0
+                const itemsDeleted = statisticsResponse.data.count?.itemsDeleted ?? 0
                 const totalContributions = itemsCreated + itemsUpdated + itemsDeleted
                 const statistics = {
                     totalContributions,
