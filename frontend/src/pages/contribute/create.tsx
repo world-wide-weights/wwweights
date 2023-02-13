@@ -205,7 +205,7 @@ const Create: NextPageCustomProps = () => {
                                     <CheckboxList name="isCa" options={[{ value: true, label: "is circa" }]} />
                                     <Tooltip wrapperClassname="cursor-help" position="right" content={<>
                                         <p>When checked it is a circa value and will</p>
-                                        <p> be displayed for example as ca. 300 g.</p>
+                                        <p>be displayed for example as ca. 300 g.</p>
                                     </>}>
                                         <Icon className="text-xl text-gray-600 ml-2">info</Icon>
                                     </Tooltip>
