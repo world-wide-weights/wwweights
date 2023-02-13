@@ -53,7 +53,7 @@ describe('QueryController (e2e)', () => {
     const queriesPath = '/queries/v1/';
 
     describe('profiles/:userId/statistics', () => {
-      const subPath = (userid) => `profiles/${userid}/statistics`;
+      const subPath = (userId) => `profiles/${userId}/statistics`;
 
       it('should return the statistics of one profile)', async () => {
         // ACT
