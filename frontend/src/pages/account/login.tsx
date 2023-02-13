@@ -1,7 +1,7 @@
 import { Form, Formik } from "formik"
 import { useRouter } from "next/router"
 import { useState } from "react"
-import * as yup from "yup"
+import { object, SchemaOf, string } from "yup"
 import { Button } from "../../components/Button/Button"
 import { TextInput } from "../../components/Form/TextInput/TextInput"
 import { AccountLayout } from "../../components/Layout/AccountLayout"
@@ -33,9 +33,9 @@ const Login: NextPageCustomProps = () => {
     }
 
     // Formik Form Validation
-    const validationSchema: yup.SchemaOf<LoginDto> = yup.object().shape({
-        email: yup.string().required("E-Mail is required."),
-        password: yup.string().required("Password is required.")
+    const validationSchema: SchemaOf<LoginDto> = object().shape({
+        email: string().email("Please enter a valid E-Mail.").required("E-Mail is required."),
+        password: string().required("Password is required.")
     })
 
     /**
@@ -77,9 +77,8 @@ const Login: NextPageCustomProps = () => {
                 <Form className="mb-5 lg:mb-10">
                     <TextInput name="email" labelText="E-Mail" placeholder="E-Mail" />
                     <TextInput type={isPasswordEyeOpen ? "text" : "password"} name="password" labelText="Password" placeholder="Password" icon={isPasswordEyeOpen ? "visibility" : "visibility_off"} iconOnClick={() => setIsPasswordEyeOpen(!isPasswordEyeOpen)} />
-                    <Button kind="tertiary" className="mb-5">Forgot Password?</Button>
 
-                    <Button datacy="login-button" loading={isLoading} icon="login" disabled={!(dirty && isValid)} type="submit">Login</Button>
+                    <Button className="mt-5" datacy="login-button" loading={isLoading} icon="login" disabled={!(dirty && isValid)} type="submit">Login</Button>
                 </Form>
             )}
         </Formik>
