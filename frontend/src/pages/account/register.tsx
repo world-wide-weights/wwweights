@@ -96,11 +96,6 @@ const Register: NextPageCustomProps = () => {
                     <TextInput type={isPasswordEyeOpen ? "text" : "password"} name="password" labelText="Password" placeholder="Password" icon={isPasswordEyeOpen ? "visibility" : "visibility_off"} iconOnClick={() => setIsPasswordEyeOpen(!isPasswordEyeOpen)} />
 
                     <Button loading={isLoading} datacy="register-button" type="submit" icon="login" disabled={!(dirty && isValid)} className="md:mt-8">Register</Button>
-                    <Button loading={isLoading} icon="api" className="mt-4" onClick={() => onFormSubmit({
-                        email: "test@gmail.com",
-                        password: "12345678",
-                        username: "TestUser"
-                    })}>Register with TestUser</Button>
                 </Form>
             )}
         </Formik>

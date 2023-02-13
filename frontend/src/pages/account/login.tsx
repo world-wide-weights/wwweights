@@ -80,10 +80,6 @@ const Login: NextPageCustomProps = () => {
                     <Button kind="tertiary" className="mb-5">Forgot Password?</Button>
 
                     <Button datacy="login-button" loading={isLoading} icon="login" disabled={!(dirty && isValid)} type="submit">Login</Button>
-                    <Button loading={isLoading} icon="api" className="mt-4" onClick={() => onFormSubmit({
-                        email: "test@gmail.com",
-                        password: "12345678",
-                    })}>Login with TestUser</Button>
                 </Form>
             )}
         </Formik>
