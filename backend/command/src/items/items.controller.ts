@@ -25,6 +25,7 @@ import { ENVGuard } from '../shared/guards/env.guard';
 import { JwtAuthGuard } from '../shared/guards/jwt.guard';
 import { InsertItemCommand } from './commands/insert-item.command';
 import { SuggestItemEditCommand } from './commands/suggest-item-edit.command';
+import { BulkInsertItemDTO } from './interfaces/bulk-insert-item.dto';
 import { InsertItemDto } from './interfaces/insert-item.dto';
 import { JwtWithUserDto } from './interfaces/request-with-user.dto';
 import { SuggestItemEditDTO } from './interfaces/suggest-item-edit.dto';
@@ -67,14 +68,14 @@ export class ItemsController {
   @Post('bulk-insert')
   @UseGuards(ENVGuard)
   @HttpCode(HttpStatus.OK)
-  @ApiBody({ type: InsertItemDto, isArray: true })
+  @ApiBody({ type: BulkInsertItemDTO, isArray: true })
   @ApiOperation({
     summary: 'Insert multiple items in bulk',
     description: 'Used for bulkinsert of items. Only available in development',
   })
   @ApiOkResponse({ description: 'Items inserted' })
   @ApiInternalServerErrorResponse({ description: 'Something went wrong' })
-  async bulkInsert(@Body() bulkItemInsertDTO: InsertItemDto[]) {
+  async bulkInsert(@Body() bulkItemInsertDTO: BulkInsertItemDTO[]) {
     await this.itemsService.handleBulkInsert(bulkItemInsertDTO);
   }
 

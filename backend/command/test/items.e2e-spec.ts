@@ -2,7 +2,6 @@ import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { EventBus } from '@nestjs/cqrs';
 import { Test, TestingModule } from '@nestjs/testing';
-import { urlencoded } from 'express';
 import { Model } from 'mongoose';
 import * as request from 'supertest';
 import { ALLOWED_EVENT_ENTITIES } from '../src/eventstore/enums/allowedEntities.enum';
@@ -533,6 +532,41 @@ describe('ItemsController (e2e)', () => {
       const items = await itemModel.find({});
       expect(items.length).toEqual(5);
     });
+
+    it('items/bulk-insert => Should allow to set userId', async () => {
+      // ARRANGE
+      fakeEnvGuard.isDev = true;
+      const userId = 12;
+      const insertItems = testData
+        .slice(0, 5)
+        .map((e) => ({ ...e, userId: userId }));
+      // ACT
+      const res = await request(server)
+        .post(commandsPath + 'items/bulk-insert')
+        .send(insertItems);
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.OK);
+      await retryCallback(async () => (await itemModel.find({})).length !== 0);
+      const items = await itemModel.find({});
+      for (const item of items) {
+        expect(item.userId).toEqual(userId);
+      }
+    });
+    it('items/bulk-insert => Should default to userId of 0', async () => {
+      // ARRANGE
+      fakeEnvGuard.isDev = true;
+      // ACT
+      const res = await request(server)
+        .post(commandsPath + 'items/bulk-insert')
+        .send(testData.slice(0, 5));
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.OK);
+      await retryCallback(async () => (await itemModel.find({})).length !== 0);
+      const items = await itemModel.find({});
+      for (const item of items) {
+        expect(item.userId).toEqual(0);
+      }
+    });
   });
 
   describe('correctAllItemTagCounts (CRON)', () => {
@@ -625,7 +659,7 @@ describe('ItemsController (e2e)', () => {
       expect(firstTag.items[1].tags[0].count).toEqual(2);
     });
   });
-  
+
   describe('deleteUnusedTags (CRON)', () => {
     it('Should delete unused Tags from Tags', async () => {
       // ARRANGE
