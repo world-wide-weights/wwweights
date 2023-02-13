@@ -212,6 +212,7 @@ describe('ItemsController (e2e)', () => {
       const res = await request(server)
         .post(commandsPath + `items/${encodeURI(item.slug)}/suggest/edit`)
         .send({ image: 'test' });
+      timeout();
       // ASSERT
       expect(res.status).toEqual(HttpStatus.OK);
       // Has suggestion gone through eventstore?
@@ -289,6 +290,7 @@ describe('ItemsController (e2e)', () => {
           (await itemModel.findOne({ slug: item.slug })).source === null,
       );
     });
+
     it('items/:slug/suggest/edit => Should be able to update weight (nested Object)', async () => {
       // ARRANGE
       const item = new itemModel({
@@ -477,6 +479,7 @@ describe('ItemsController (e2e)', () => {
         expect(item.userId).toEqual(userId);
       }
     });
+
     it('items/bulk-insert => Should default to userId of 0', async () => {
       // ARRANGE
       fakeEnvGuard.isDev = true;
