@@ -40,8 +40,7 @@ type CreateItemDto = {
     weight: Weight
     source?: string
     image?: string
-    tags: string[]
-    user: string
+    tags?: string[]
 }
 
 const unitTypeDropdownOptions = [
@@ -119,12 +118,12 @@ const Create: NextPageCustomProps = () => {
             },
             ...(image !== "" ? { image } : {}), // Only add image when defined
             ...(source !== "" ? { source } : {}), // Only add source when defined
-            tags: tags ? tags.split(",") : [],
-            user: session?.user?.username ?? ""
+            tags: tags ? tags.split(",") : []
         }
 
         try {
             // Create item with api
+            // TODO: Add auth here
             const response = await commandRequest.post("/items/insert", item)
 
             if (response.status === 200) {
