@@ -84,7 +84,7 @@ const Create: NextPageCustomProps = () => {
     const validationSchema: SchemaOf<CreateItemForm> = object().shape({
         name: string().required("Name is required."),
         weight: number().required("Weight is required."),
-        unit: mixed().oneOf(["g", "kg", "t"]),
+        unit: mixed().oneOf(unitTypeDropdownOptions.map(option => option.value)),
         valueType: mixed().oneOf(["exact", "range"]),
         additionalValue: number().when("valueType", {
             is: "range",
