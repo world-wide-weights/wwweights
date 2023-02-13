@@ -11,10 +11,21 @@ type AuthProps = {
     routeType: "protected" | "guest" | "public"
 }
 
+type AuthContext = {
+    /** Check if user has session. */
+    hasSession: boolean
+    /** Check if auth context is loading. */
+    isLoading: boolean
+    /** Logout user and remove session data from localstorage. */
+    logout: () => void
+    /** Get session data from localstorage and logout when refresh token fails. */
+    getSession: () => Promise<SessionData | null>
+}
+
 /**
  * Creates global context for auth. This context is wrapped around all pages.
  */
-export const AuthContext = createContext({
+export const AuthContext = createContext<AuthContext>({
     hasSession: false,
     logout: () => { },
     getSession: () => new Promise<SessionData | null>(() => { }),
