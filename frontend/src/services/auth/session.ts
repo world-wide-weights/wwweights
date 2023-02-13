@@ -4,7 +4,12 @@ import { parseJwt } from "../utils/jwt"
 
 const LOCAL_STORAGE_KEY = "session"
 
-export const createSession = (tokens: Tokens) => {
+/**
+ * Create a session object from the tokens.
+ * @param tokens access and refresh tokens
+ * @returns session object
+ */
+export const createSession = (tokens: Tokens): SessionData => {
     const { access_token, refresh_token } = tokens
 
     const decodedAccessToken = parseJwt(access_token)
@@ -18,10 +23,18 @@ export const createSession = (tokens: Tokens) => {
     return sessionData
 }
 
+/**
+ * Save session data in local storage.
+ * @param sessionData session data to save in local storage
+ */
 export const saveSession = (sessionData: SessionData): void => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(sessionData))
 }
 
+/** 
+ * Get session data from local storage.
+ * @returns session data or null if no session data is found
+ */
 export const getSessionData = async (): Promise<SessionData | null> => {
     const sessionData = localStorage.getItem(LOCAL_STORAGE_KEY)
 
@@ -44,12 +57,19 @@ export const getSessionData = async (): Promise<SessionData | null> => {
     return null
 }
 
+/**
+ * Remove session data from local storage.
+ */
 export const endSession = (): void => {
     localStorage.removeItem(LOCAL_STORAGE_KEY)
 }
 
-// Test this snippet
-export const refreshToken = async (refreshToken: string) => {
+/**
+ * Refresh the access token using the refresh token.
+ * @param refreshToken refresh token
+ * @returns new access and refresh tokens
+ */
+export const refreshToken = async (refreshToken: string): Promise<Tokens | null> => {
     try {
         const response = await authRequest.post<Tokens>("/auth/refresh", {}, {
             headers: {

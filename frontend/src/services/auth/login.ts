@@ -1,9 +1,14 @@
 import { isAxiosError } from "axios"
-import { ApiAuthException, Tokens } from "../../types/auth"
+import { ApiAuthException, SessionData, Tokens } from "../../types/auth"
 import { authRequest } from "../axios/axios"
 import { createSession, saveSession } from "./session"
 
-export const login = async ({ email, password }: { email: string, password: string }) => {
+/**
+ * Login a user and return the tokens.
+ * @param credentials credentials from user 
+ * @returns 
+ */
+export const login = async ({ email, password }: { email: string, password: string }): Promise<SessionData | ApiAuthException | null> => {
     try {
         const response = await authRequest.post<Tokens>("/auth/login", {
             email,
