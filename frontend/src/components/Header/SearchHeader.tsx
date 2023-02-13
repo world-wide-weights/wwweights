@@ -75,7 +75,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "
             setIsLoadingRelatedTags(true)
 
             try {
-                const response = await queryRequest.get<PaginatedResponse<Tag>>("/tags/related")
+                const response = await queryRequest.get<PaginatedResponse<Tag>>(`/tags/related?query=${query}`)
                 const relatedTags = response.data.data
 
                 setRelatedTags(relatedTags)
