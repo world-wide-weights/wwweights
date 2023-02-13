@@ -17,8 +17,8 @@ import { Tooltip } from "../../components/Tooltip/Tooltip"
 import { useLocalStorage } from "../../hooks/useLocalStorage"
 import { queryRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
-import { renderUnitIntoString, renderWeightAsNumberIntoString } from "../../services/unit/unitRenderer"
 import { generatePageString } from "../../services/seo/pageString"
+import { renderUnitIntoString, renderWeightAsNumberIntoString } from "../../services/unit/unitRenderer"
 import { Item, PaginatedResponse } from "../../types/item"
 
 const DEFAULT_ITEMS_PER_PAGE = 16
@@ -135,7 +135,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
 
                             {/* Statistics Content */}
                             <div className={`${statisticsExpanded ? "lg:flex-col" : "lg:items-start"} lg:flex`}>
-                                <div className="flex mb-5 lg:mb-10">
+                                <div className="flex mb-5 lg:mb-10 w-full">
                                     <button onClick={() => setStatisticsExpanded(!statisticsExpanded)} className={`hidden ${statisticsExpanded ? "" : "lg:block"} bg-white self-stretch rounded-lg px-1 mr-2`}>
                                         <Icon>chevron_left</Icon>
                                     </button>
