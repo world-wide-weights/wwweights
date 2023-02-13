@@ -22,7 +22,7 @@ export class ProfileStatisticsHandler
 
   async execute({
     dto,
-  }: ProfileStatisticsQuery): Promise<{ count: ProfileCounts }> {
+  }: ProfileStatisticsQuery): Promise<{ count: ProfileCounts } | {}> {
     try {
       const profileCounts = await this.profileModel
         .findOne({ userId: dto.userId }, { _id: 0, count: 1 })
@@ -30,9 +30,7 @@ export class ProfileStatisticsHandler
       this.logger.log(`ProfileCounts retrieved for: ${dto.userId}`);
 
       if (!profileCounts) {
-        throw new NotFoundException(
-          'Profile not found, either wrong userId or this user has not contributed anything yet',
-        );
+        return {};
       }
 
       return profileCounts;

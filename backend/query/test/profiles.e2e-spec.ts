@@ -56,10 +56,13 @@ describe('QueryController (e2e)', () => {
       const subPath = (userid) => `profiles/${userid}/statistics`;
 
       it('should return the statistics of one profile)', async () => {
-        const result = await request(server)
-          .get(queriesPath + subPath(profiles[0].userId))
-          .expect(HttpStatus.OK);
+        // ACT
+        const result = await request(server).get(
+          queriesPath + subPath(profiles[0].userId),
+        );
 
+        // ASSERT
+        expect(result.statusCode).toEqual(HttpStatus.OK);
         expect(result.body.count).toEqual({
           itemsCreated: 1,
           tagsUsedOnCreation: 2,
@@ -70,10 +73,15 @@ describe('QueryController (e2e)', () => {
       });
 
       it('should throw a not found if document does not exist )', async () => {
+        // ARRANGE
         await profileModel.deleteMany();
-        await request(server)
-          .get(queriesPath + subPath(profiles[0].userId))
-          .expect(HttpStatus.NOT_FOUND);
+        // ACT
+        const result = await request(server).get(
+          queriesPath + subPath(profiles[0].userId),
+        );
+        // ASSERT
+        expect(result.statusCode).toEqual(HttpStatus.OK);
+        expect(result.body).toEqual({});
       });
     });
   });
