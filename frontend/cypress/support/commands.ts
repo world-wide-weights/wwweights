@@ -5,8 +5,8 @@ import paginatedItems from "../fixtures/items/list.json"
 import paginatedRelatedItems from "../fixtures/items/related.json"
 import paginatedSingleItem from "../fixtures/items/single.json"
 import statistics from "../fixtures/items/statistics.json"
+import paginatedTagsList from "../fixtures/tags/list.json"
 
-const API_BASE_URL_MOCK = Cypress.env("PUBLIC_API_BASE_URL_MOCK")
 const API_BASE_URL_AUTH = Cypress.env("PUBLIC_API_BASE_URL_AUTH")
 const API_BASE_URL_QUERY = Cypress.env("PUBLIC_API_BASE_URL_QUERY")
 const API_BASE_URL_COMMAND = Cypress.env("PUBLIC_API_BASE_URL_COMMAND")
@@ -30,9 +30,19 @@ Cypress.Commands.add("checkCurrentActivePage", (activePageNumber) => {
 })
 
 Cypress.Commands.add("mockGetRelatedTags", () => {
-    cy.intercept("GET", `${API_BASE_URL_MOCK}/api/query/v1/tags/related`, {
+    cy.intercept("GET", `${API_BASE_URL_QUERY}/tags/related`, {
         fixture: "tags/related.json"
     }).as("mockGetRelatedTags")
+})
+
+Cypress.Commands.add("mockGetTagsList", () => {
+    cy.task("nock", {
+        hostname: API_BASE_URL_QUERY,
+        method: "get",
+        path: "/tags/list",
+        statusCode: 200,
+        body: paginatedTagsList,
+    })
 })
 
 Cypress.Commands.add("mockItemsList", (itemCount?: number) => {

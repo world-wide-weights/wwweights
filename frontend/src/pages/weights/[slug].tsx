@@ -12,8 +12,8 @@ import { Tab } from "../../components/Tabs/Tab"
 import { Tabs } from "../../components/Tabs/Tabs"
 import { queryRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
-import { calculateMedianWeight } from "../../services/utils/weight"
 import { renderUnitIntoString } from "../../services/unit/unitRenderer"
+import { calculateMedianWeight } from "../../services/utils/weight"
 import { Item, PaginatedResponse } from "../../types/item"
 import Custom404 from "../404"
 
@@ -114,6 +114,7 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
 export const getStaticProps: GetStaticProps<WeightsSingleProps> = async (context) => {
     const slug = context.params ? context.params.slug : "1"
 
+    // TODO (Zoe-Bot): Correct error handling
     // Fetch item and related items
     const [itemResponse, relatedItemsResponse] = await Promise.all([
         queryRequest.get<PaginatedResponse<Item>>(`/items/list?slug=${slug}`),
