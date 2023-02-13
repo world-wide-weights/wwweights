@@ -1,7 +1,8 @@
 import { AggregateRoot } from '@nestjs/cqrs';
 import { index, prop } from '@typegoose/typegoose';
+import { IsString } from 'class-validator';
 
-class Weight {
+export class Weight {
   @prop({ required: true })
   // This is always in grams and scientific notation example: 1.234e10
   value: number;
@@ -46,7 +47,7 @@ export class Item extends AggregateRoot {
   source?: string;
 
   @prop()
-  user: number;
+  userId: number;
 
   @prop()
   createdAt?: number;
