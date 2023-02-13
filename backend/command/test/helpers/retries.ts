@@ -40,13 +40,13 @@
 // };
 
 export const retryCallback = async (
-  cb: () => Promise<boolean>,
+  callback: () => Promise<boolean>,
   maxDuration = 1000,
 ) => {
   const startTime = performance.now();
   while (performance.now() - startTime < maxDuration) {
-    const currRes = await cb();
-    if (currRes) {
+    const currentResult = await callback();
+    if (currentResult) {
       return true;
     }
   }
