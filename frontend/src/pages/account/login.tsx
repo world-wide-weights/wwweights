@@ -97,7 +97,12 @@ const Login: NextPageCustomProps = () => {
 
 // Sets custom account layout
 Login.layout = (page: React.ReactElement) => {
-    return <AccountLayout page={page} siteTitle="Login" headline="Welcome back" description="Sign in to your account below." descriptionImage="Login to share your stuff." />
+    return <AccountLayout
+        page={page}
+        headline="Welcome back"
+        description="Sign in to your account below."
+        sloganHeadline={<><span className="text-blue-300">Weigh</span> something and wanna share it with people?</>}
+        sloganDescription="Login to share your stuff." />
 }
 
 // Sets guest route (user need to be logged out)

@@ -113,7 +113,12 @@ const Register: NextPageCustomProps = () => {
 
 // Sets custom account layout
 Register.layout = (page: React.ReactElement) => {
-    return <AccountLayout page={page} siteTitle="Register" headline="Create your account" description="Start for free." descriptionImage="Register to share your stuff." />
+    return <AccountLayout
+        page={page}
+        headline="Create your account"
+        description="Start for free."
+        sloganHeadline={<><span className="text-blue-300">Weigh</span> something and wanna share it with people?</>}
+        sloganDescription="Register to share your stuff." />
 }
 
 // Sets guest route (user need to be logged out)

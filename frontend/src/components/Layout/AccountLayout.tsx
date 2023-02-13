@@ -8,21 +8,21 @@ import { Headline } from "../Headline/Headline"
 type AccountLayoutProps = {
     /** Page content. Is parameter in layout. */
     page: React.ReactElement
-    /** Title in head. */
-    siteTitle: string
     /** Headline text. */
     headline: string
     /** Short description shown below headline. */
     description: string
-    /** Short description in image below headline. */
-    descriptionImage: string
+    /** Headline text in slogan container. */
+    sloganHeadline: React.ReactNode
+    /** Short description in slogan container. */
+    sloganDescription: React.ReactNode
 }
 
 /**
  * Layout Wrapper for Register and Login Pages (Account).
  * Adds image right, centers the content horizontal, adds header information and add footer at bottom of the page.
  */
-export const AccountLayout: React.FC<AccountLayoutProps> = ({ page, headline, description, descriptionImage, siteTitle }) => {
+export const AccountLayout: React.FC<AccountLayoutProps> = ({ page, headline, description, sloganHeadline, sloganDescription }) => {
     return <>
         <div className="lg:flex h-screen">
             {/* Left Side Content: Form */}
@@ -50,11 +50,11 @@ export const AccountLayout: React.FC<AccountLayoutProps> = ({ page, headline, de
                 </footer>
             </div>
 
-            {/* Right Side Content: Image */}
+            {/* Right Side Content: Slogan */}
             <div className={"hidden lg:flex items-center justify-center bg-background-half-page bg-no-repeat bg-cover bg-center w-1/2"}>
                 <div className="text-white font-bold w-1/2">
-                    <h5 className="text-5xl leading-snug mb-5"><span className="text-blue-300">Weigh</span> something and wanna share it with people?</h5>
-                    <h6 className="text-2xl">{descriptionImage}</h6>
+                    <h5 className="text-5xl leading-snug mb-5">{sloganHeadline}</h5>
+                    <h6 className="text-2xl">{sloganDescription}</h6>
                 </div>
             </div>
         </div>
