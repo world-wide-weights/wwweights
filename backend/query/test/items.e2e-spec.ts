@@ -1,15 +1,15 @@
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
 import * as request from 'supertest';
+import { ItemSortEnum } from '../src/items/interfaces/item-sort-enum';
 import { ItemsModule } from '../src/items/items.module';
 import { Item } from '../src/items/models/item.model';
 import {
   initializeMockModule,
   teardownMockDataSource,
 } from './helpers/MongoMemoryHelpers';
-
-import { Test, TestingModule } from '@nestjs/testing';
-import { ItemSortEnum } from '../src/items/interfaces/item-sort-enum';
+import { timeout } from './helpers/timeout';
 import {
   items,
   itemsWithDates,
@@ -22,7 +22,6 @@ describe('QueryController (e2e)', () => {
   let app: INestApplication;
   let itemModel: Model<Item>;
   let server: any; // Has to be any because of supertest not having a type for it either
-  jest.setTimeout(10000);
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -43,6 +42,7 @@ describe('QueryController (e2e)', () => {
     app.setGlobalPrefix('queries/v1');
     await app.init();
     server = app.getHttpServer();
+    await timeout();
   });
 
   beforeEach(async () => {
