@@ -16,7 +16,7 @@ describe('ENV guard', () => {
       // This does not need an execution context
       const res = guard.canActivate();
       // ASSERT
-      expect(res).toEqual(true);
+      expect(res).toBe(true);
     });
   });
 

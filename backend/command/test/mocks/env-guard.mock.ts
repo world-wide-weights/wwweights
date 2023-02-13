@@ -1,12 +1,11 @@
-import { ExecutionContext, NotFoundException } from '@nestjs/common';
-import { NotFoundError } from 'rxjs';
+import { NotFoundException } from '@nestjs/common';
 
 export class FakeEnvGuardFactory {
   public isDev = false;
 
   getGuard() {
     return {
-      canActivate: (context: ExecutionContext) => {
+      canActivate: () => {
         if (!this.isDev) {
           throw new NotFoundException();
         }
