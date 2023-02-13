@@ -2,7 +2,6 @@ import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { EventBus } from '@nestjs/cqrs';
 import { Test, TestingModule } from '@nestjs/testing';
-import { urlencoded } from 'express';
 import { Model } from 'mongoose';
 import * as request from 'supertest';
 import { ALLOWED_EVENT_ENTITIES } from '../src/eventstore/enums/allowedEntities.enum';
@@ -15,6 +14,7 @@ import { Item } from '../src/models/item.model';
 import { ItemsByTag } from '../src/models/items-by-tag.model';
 import { Profile } from '../src/models/profile.model';
 import { Tag } from '../src/models/tag.model';
+import { ENVGuard } from '../src/shared/guards/env.guard';
 import { JwtAuthGuard } from '../src/shared/guards/jwt.guard';
 import { JwtStrategy } from '../src/shared/strategies/jwt.strategy';
 import {
@@ -23,6 +23,7 @@ import {
 } from './helpers/MongoMemoryHelpers';
 import { retryCallback } from './helpers/retries';
 import { timeout } from './helpers/timeout';
+import { FakeEnvGuardFactory } from './mocks/env-guard.mock';
 import { MockEventStore } from './mocks/eventstore';
 import {
   differentNames as itemsWithDifferentNames,
@@ -30,6 +31,7 @@ import {
   insertItem2,
   singleItem,
   singleItemTags,
+  testData,
 } from './mocks/items';
 import { FakeAuthGuardFactory } from './mocks/jwt-guard.mock';
 import { verifiedRequestUser } from './mocks/users';
@@ -44,7 +46,8 @@ describe('ItemsController (e2e)', () => {
   const mockEventStore: MockEventStore = new MockEventStore();
   let itemCronJobHandler: ItemCronJobHandler;
   let server: any; // Has to be any because of supertest not having a type for it either
-  const fakeGuard = new FakeAuthGuardFactory();
+  const fakeJWTGuard = new FakeAuthGuardFactory();
+  const fakeEnvGuard = new FakeEnvGuardFactory();
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -60,7 +63,9 @@ describe('ItemsController (e2e)', () => {
       .overrideProvider(JwtStrategy)
       .useValue(null)
       .overrideGuard(JwtAuthGuard)
-      .useValue(fakeGuard.getGuard())
+      .useValue(fakeJWTGuard.getGuard())
+      .overrideGuard(ENVGuard)
+      .useValue(fakeEnvGuard.getGuard())
       .compile();
 
     app = moduleFixture.createNestApplication();
@@ -88,8 +93,9 @@ describe('ItemsController (e2e)', () => {
   });
 
   beforeEach(async () => {
-    fakeGuard.setAuthResponse(true);
-    fakeGuard.setUser(verifiedRequestUser);
+    fakeJWTGuard.setAuthResponse(true);
+    fakeJWTGuard.setUser(verifiedRequestUser);
+    fakeEnvGuard.isDev = false;
     mockEventStore.reset();
     await itemModel.deleteMany();
     await tagModel.deleteMany();
@@ -104,11 +110,11 @@ describe('ItemsController (e2e)', () => {
     await app.close();
   });
 
-  describe('Commands (POSTS) /commands/v1', () => {
-    const commandsPath = '/commands/v1/';
+  const commandsPath = '/commands/v1/';
 
+  describe('Commands (POSTS) /commands/v1', () => {
     it('items/insert => insert one Item should fail with auth false', async () => {
-      fakeGuard.setAuthResponse(false);
+      fakeJWTGuard.setAuthResponse(false);
       await request(server)
         .post(commandsPath + 'items/insert')
         .send(insertItem)
@@ -503,6 +509,66 @@ describe('ItemsController (e2e)', () => {
     });
   });
 
+  describe('Dev commands (POSTS) /commands/v1', () => {
+    it('items/bulk-insert => Should be hidden if env guard fails', async () => {
+      // ACT
+      const res = await request(server)
+        .post(commandsPath + 'items/bulk-insert')
+        .send(testData.slice(0, 5));
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.NOT_FOUND);
+    });
+
+    it('items/bulk-insert => Should insert multiple items', async () => {
+      // ARRANGE
+      fakeEnvGuard.isDev = true;
+      // ACT
+      const res = await request(server)
+        .post(commandsPath + 'items/bulk-insert')
+        .send(testData.slice(0, 5));
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.OK);
+      await retryCallback(async () => (await itemModel.find({})).length !== 0);
+      const items = await itemModel.find({});
+      expect(items.length).toEqual(5);
+    });
+
+    it('items/bulk-insert => Should allow to set userId', async () => {
+      // ARRANGE
+      fakeEnvGuard.isDev = true;
+      const userId = 12;
+      const insertItems = testData
+        .slice(0, 5)
+        .map((e) => ({ ...e, userId: userId }));
+      // ACT
+      const res = await request(server)
+        .post(commandsPath + 'items/bulk-insert')
+        .send(insertItems);
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.OK);
+      await retryCallback(async () => (await itemModel.find({})).length !== 0);
+      const items = await itemModel.find({});
+      for (const item of items) {
+        expect(item.userId).toEqual(userId);
+      }
+    });
+    it('items/bulk-insert => Should default to userId of 0', async () => {
+      // ARRANGE
+      fakeEnvGuard.isDev = true;
+      // ACT
+      const res = await request(server)
+        .post(commandsPath + 'items/bulk-insert')
+        .send(testData.slice(0, 5));
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.OK);
+      await retryCallback(async () => (await itemModel.find({})).length !== 0);
+      const items = await itemModel.find({});
+      for (const item of items) {
+        expect(item.userId).toEqual(0);
+      }
+    });
+  });
+
   describe('correctAllItemTagCounts (CRON)', () => {
     it('Should update item counts', async () => {
       // ARRANGE
@@ -593,7 +659,7 @@ describe('ItemsController (e2e)', () => {
       expect(firstTag.items[1].tags[0].count).toEqual(2);
     });
   });
-  
+
   describe('deleteUnusedTags (CRON)', () => {
     it('Should delete unused Tags from Tags', async () => {
       // ARRANGE
