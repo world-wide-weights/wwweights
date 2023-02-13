@@ -23,3 +23,13 @@ export type SessionData = {
     }
     refreshToken: string
 }
+
+export type Profile = {
+    pkUserId: number
+    username: string
+    email: string
+    status: "unverified" | "verified" | "BANNED"
+    role: "admin" | "user" | "moderator"
+    lastLogin: Date | null
+    createdAt: Date
+}
