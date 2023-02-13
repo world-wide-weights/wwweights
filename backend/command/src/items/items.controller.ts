@@ -68,7 +68,7 @@ export class ItemsController {
   @UseGuards(ENVGuard)
   @HttpCode(HttpStatus.OK)
   @ApiBody({ type: InsertItemDto, isArray: true })
-  @ApiOperation({ description: 'Used for bulkinsert of items. Only available in development' })
+  @ApiOperation({ summary: 'Insert multiple items in bulk', description: 'Used for bulkinsert of items. Only available in development' })
   @ApiOkResponse({ description: 'Items inserted' })
   @ApiInternalServerErrorResponse({ description: 'Something went wrong' })
   async bulkInsert(@Body() bulkItemInsertDTO: InsertItemDto[]) {
