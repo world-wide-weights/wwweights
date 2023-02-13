@@ -212,7 +212,7 @@ describe('ItemsController (e2e)', () => {
       const res = await request(server)
         .post(commandsPath + `items/${encodeURI(item.slug)}/suggest/edit`)
         .send({ image: 'test' });
-      timeout();
+      await timeout();
       // ASSERT
       expect(res.status).toEqual(HttpStatus.OK);
       // Has suggestion gone through eventstore?
