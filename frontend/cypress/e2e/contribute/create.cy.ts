@@ -1,8 +1,7 @@
-import { routes } from "../../../src/services/routes/routes"
 
 describe("Create Item", () => {
     beforeEach(() => {
-        cy.login(routes.contribute.create)
+        cy.login("/contribute/create")
     })
 
     it("should create item when fill all required fields", () => {
