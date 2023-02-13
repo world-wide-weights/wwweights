@@ -33,7 +33,7 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
         title: "Overview",
         slug: "",
         content: <>
-            <RelatedItems item={item} relatedItems={relatedItems} />
+            {relatedItems.length !== 0 && <RelatedItems item={item} relatedItems={relatedItems} />}
             <CompareContainer weight={compareWeight} itemName={item.name} />
         </>
     }, {

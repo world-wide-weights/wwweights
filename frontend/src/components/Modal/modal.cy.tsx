@@ -10,7 +10,7 @@ describe("Modal", () => {
 
     describe("Open", () => {
         beforeEach(() => {
-            cy.mount(<Modal open={true} modalHeading={data.modalHeading} onDissmis={cy.spy().as("onDissmis")}>
+            cy.mount(<Modal isOpen={true} modalHeading={data.modalHeading} onDissmis={cy.spy().as("onDissmis")}>
                 <p datacy="modal-content-p">{data.content}</p>
             </Modal>)
         })
@@ -36,7 +36,7 @@ describe("Modal", () => {
 
     describe("Close", () => {
         it("should not be visible when open false", () => {
-            cy.mount(<Modal open={false} modalHeading={data.modalHeading} onDissmis={() => ""}>
+            cy.mount(<Modal isOpen={false} modalHeading={data.modalHeading} onDissmis={() => ""}>
             </Modal>)
 
             cy.dataCy("modal-content").should("not.exist")

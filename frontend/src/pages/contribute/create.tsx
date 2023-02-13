@@ -2,8 +2,9 @@ import axios from "axios"
 import BigNumber from "bignumber.js"
 import { Form, Formik, FormikProps } from "formik"
 import { useRouter } from "next/router"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { array, mixed, number, object, ref, SchemaOf, string } from "yup"
+import { AuthContext } from "../../components/Auth/Auth"
 import { Button } from "../../components/Button/Button"
 import { IconButton } from "../../components/Button/IconButton"
 import { FormError } from "../../components/Errors/FormError"
@@ -21,6 +22,19 @@ import { routes } from "../../services/routes/routes"
 import { convertAnyWeightIntoGram } from "../../services/unit/unitConverter"
 import { Weight } from "../../types/item"
 import { NextPageCustomProps } from "../_app"
+
+const unitTypeDropdownOptions = [
+    {
+        value: "g",
+        label: "g",
+    }, {
+        value: "kg",
+        label: "kg",
+    }, {
+        value: "T",
+        label: "T",
+    },
+]
 
 type CreateItemForm = {
     name: string
@@ -42,19 +56,6 @@ type CreateItemDto = {
     tags?: string[]
 }
 
-const unitTypeDropdownOptions = [
-    {
-        value: "g",
-        label: "g",
-    }, {
-        value: "kg",
-        label: "kg",
-    }, {
-        value: "T",
-        label: "T",
-    },
-]
-
 /**
  * Create new items on this page.
  */
@@ -64,6 +65,7 @@ const Create: NextPageCustomProps = () => {
     const [error, setError] = useState<string>()
 
     const router = useRouter()
+    const { getSession } = useContext(AuthContext)
 
     // Formik Form Initial Values
     const initialFormValues: CreateItemForm = {
@@ -72,6 +74,7 @@ const Create: NextPageCustomProps = () => {
         unit: "g",
         valueType: "exact",
         additionalValue: "",
+        /** This is an array since checkbox component can only handle arrays */
         isCa: [false],
         source: "",
         image: "",
@@ -82,7 +85,7 @@ const Create: NextPageCustomProps = () => {
     const validationSchema: SchemaOf<CreateItemForm> = object().shape({
         name: string().required("Name is required."),
         weight: number().required("Weight is required."),
-        unit: mixed().oneOf(["g", "kg", "t"]),
+        unit: mixed().oneOf(unitTypeDropdownOptions.map(option => option.value)),
         valueType: mixed().oneOf(["exact", "range"]),
         additionalValue: number().when("valueType", {
             is: "range",
@@ -120,13 +123,21 @@ const Create: NextPageCustomProps = () => {
         }
 
         try {
+            const session = await getSession()
+
+            if (session === null)
+                throw Error("Failed to get session.")
+
             // Create item with api
-            // TODO: Add auth here
-            const response = await commandRequest.post("/items/insert", item)
+            const response = await commandRequest.post("/items/insert", item, {
+                headers: {
+                    Authorization: `Bearer ${session.accessToken}`
+                }
+            })
 
             if (response.status === 200) {
                 // Redirect to discover
-                router.push(routes.weights.list())
+                await router.push(routes.weights.list())
             }
         } catch (error) {
             axios.isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Netzwerk-Zeitüberschreitung")
@@ -149,7 +160,7 @@ const Create: NextPageCustomProps = () => {
 
             {/* Content */}
             <Formik initialValues={initialFormValues} validationSchema={validationSchema} onSubmit={onFormSubmit}>
-                {({ dirty, isValid, errors, values, setFieldValue }: FormikProps<CreateItemForm>) => (
+                {({ dirty, isValid, errors, values, setFieldValue, isSubmitting }: FormikProps<CreateItemForm>) => (
                     <Form>
                         <div className="container">
                             {/*** General Information ***/}
@@ -194,7 +205,7 @@ const Create: NextPageCustomProps = () => {
                                     <CheckboxList name="isCa" options={[{ value: true, label: "is circa" }]} />
                                     <Tooltip wrapperClassname="cursor-help" position="right" content={<>
                                         <p>When checked it is a circa value and will</p>
-                                        <p> be displayed for example as ca. 300 g.</p>
+                                        <p>be displayed for example as ca. 300 g.</p>
                                     </>}>
                                         <Icon className="text-xl text-gray-600 ml-2">info</Icon>
                                     </Tooltip>
@@ -240,7 +251,7 @@ const Create: NextPageCustomProps = () => {
                                 <p className="hidden sm:block mb-2 lg:mb-0">We will give you Feedback about the Status in the profile.</p>
                                 <div className="flex gap-3 items-center">
                                     <Button to={routes.weights.list()} isColored kind="secondary">Cancel</Button>
-                                    <Button datacy="create-submit-button" disabled={!(dirty && isValid)} type="submit" isColored>Create</Button>
+                                    <Button datacy="create-submit-button" disabled={!(dirty && isValid)} type="submit" icon="add" loading={isSubmitting} isColored>Create</Button>
                                 </div>
                             </div>
                         </div>

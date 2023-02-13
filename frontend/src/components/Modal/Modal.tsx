@@ -2,11 +2,11 @@ import { IconButton } from "../Button/IconButton"
 import { Headline } from "../Headline/Headline"
 
 type ModalProps = {
-    /** Is in the header of the modal, the title. */
+    /** Heading of the Modal. */
     modalHeading: string
-    /** Close/Open State of Modal. */
-    open: boolean
-    /** Setter for State of Modal. */
+    /** State of Modal. */
+    isOpen: boolean
+    /** Callback for closing the Modal. */
     onDissmis: (value: any) => void
     /** Content of the Modal. */
     children: React.ReactNode
@@ -17,9 +17,9 @@ type ModalProps = {
 /**
  * Modal, lays over other content.
  */
-export const Modal: React.FC<ModalProps> = ({ modalHeading, open, onDissmis, children, dataCy }) => {
+export const Modal: React.FC<ModalProps> = ({ modalHeading, isOpen, onDissmis, children, dataCy }) => {
     return <>
-        {open && <div datacy={dataCy} className="fixed z-10 inset-0" role="dialog" aria-modal="true">
+        {isOpen && <div datacy={dataCy} className="fixed z-10 inset-0" role="dialog" aria-modal="true">
             <div className="flex items-center justify-center min-h-screen px-4 text-center">
 
                 {/* Background overlay */}
