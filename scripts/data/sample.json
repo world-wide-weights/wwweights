@@ -1,0 +1,131 @@
+[
+  {
+    "name": "Apple iPhone 13 mini",
+    "weight": { "value": 141 },
+    "tags": ["Apple", "iOS 15", "Apple A15 Bionic (5 nm)", "2021"],
+    "image": "http://img:3003/serve/test.jpg"
+  },
+  {
+    "name": "Apple iPad mini (2021)",
+    "weight": { "value": 293 },
+    "tags": ["Apple", "iPadOS 15", "Apple A15 Bionic (5 nm)", "2021"],
+    "image": "http://img:3003/serve/test.jpg"
+  },
+  {
+    "name": "Apple iPhone XS",
+    "weight": { "value": 177 },
+    "tags": ["Apple", "iOS 12", "Apple A12 Bionic (7 nm)", "2018"],
+    "image": "http://img:3003/serve/test.jpg"
+  },
+  {
+    "name": "Apple iPad Air",
+    "weight": { "value": 469 },
+    "tags": ["Apple", "iOS 7", "Apple A7 (28 nm)", "2013"],
+    "image": "http://img:3003/serve/test.png"
+  },
+  {
+    "name": "Samsung Galaxy A14 5G",
+    "weight": { "value": 202 },
+    "tags": [
+      "Samsung",
+      "Android 13",
+      "Exynos 1330 - SM-A146BMediatek MT6833 Dimensity 700 (7 nm) - SM-A146P",
+      "2023"
+    ],
+    "image": "http://img:3003/serve/test.png"
+  },
+  {
+    "name": "Samsung Galaxy F04",
+    "weight": { "value": 188 },
+    "tags": [
+      "Samsung",
+      "Android 12",
+      "Mediatek MT6765 Helio P35 (12nm)",
+      "2023"
+    ],
+    "image": "http://img:3003/serve/test.png"
+  },
+  {
+    "name": "Samsung Galaxy A04e",
+    "weight": { "value": 188 },
+    "tags": [
+      "Samsung",
+      "Android 12",
+      "Mediatek MT6765 Helio P35 (12nm)",
+      "2022"
+    ],
+    "image": "http://img:3003/serve/test.jpg"
+  },
+  {
+    "name": "Samsung Galaxy Z Flip4",
+    "weight": { "value": 187 },
+    "tags": [
+      "Samsung",
+      "Android 12",
+      "Qualcomm SM8475 Snapdragon 8+ Gen 1 (4 nm)",
+      "2022"
+    ],
+    "image": "http://img:3003/serve/test.jpg"
+  },
+  {
+    "name": "Asus ROG Phone 6 Diablo Immortal Edition",
+    "weight": { "value": 239 },
+    "tags": [
+      "Asus",
+      "Android 12",
+      "Qualcomm SM8475 Snapdragon 8+ Gen 1 (4 nm)",
+      "2022"
+    ],
+    "image": "http://img:3003/serve/test.png"
+  },
+  {
+    "name": "Asus ROG Phone 6 Batman Edition",
+    "weight": { "value": 239 },
+    "tags": [
+      "Asus",
+      "Android 12",
+      "Qualcomm SM8475 Snapdragon 8+ Gen 1 (4 nm) - USAMediatek Dimensity 9000+ (4 nm) - International",
+      "2022"
+    ],
+    "image": "http://img:3003/serve/test.jpg"
+  },
+  {
+    "name": "Acer Allegro",
+    "weight": { "value": 126 },
+    "tags": [
+      "Acer",
+      "Microsoft Windows Phone 7.5 Mango",
+      "Qualcomm MSM8255 Snapdragon S2",
+      "2011"
+    ],
+    "image": "http://img:3003/serve/test.jpg"
+  },
+  {
+    "name": "Nokia 2110",
+    "weight": { "value": 236 },
+    "tags": ["Nokia", "1995"],
+    "image": "http://img:3003/serve/test.jpg"
+  },
+  {
+    "name": "Lenovo Golden Warrior Note 8",
+    "weight": { "value": 170 },
+    "tags": [
+      "Lenovo",
+      "Android 4.4.2 (KitKat)",
+      "Mediatek MT6752 (28 nm)",
+      "2014"
+    ],
+    "image": "http://img:3003/serve/test.png"
+  },
+  {
+    "name": "Oppo Find X Lamborghini",
+    "weight": { "value": 186 },
+    "tags": [
+      "Oppo",
+      "Android 8.1 (Oreo)",
+      "Qualcomm SDM845 Snapdragon 845 (10 nm)",
+      "2018"
+    ],
+    "image": "http://img:3003/serve/test.png"
+  }
+]
