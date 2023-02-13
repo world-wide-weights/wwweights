@@ -51,13 +51,13 @@ export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage,
                 page.content === Ellipsis ?
                     <li datacy="pagination-dots" key={index} className="hidden sm:list-item text-gray-500">&#8230;</li> :
                     <li className="hidden sm:list-item" key={index}>
-                        <Button datacy={`pagination-button-page-${page.content}`} to={page.link} className={`flex justify-center items-center rounded-full w-9 h-9 ${page.content === currentPage ? "bg-blue-500 text-white hover:text-white focus:text-white" : "hover:bg-gray-200"}`} kind="tertiary">
+                        <Button datacy={`pagination-button-page-${page.content}`} to={page.link} className={`flex justify-center items-center rounded-full min-w-[36px] w-9 h-9 ${page.content === currentPage ? "bg-blue-500 text-white hover:text-white focus:text-white" : "hover:bg-gray-200"}`} kind="tertiary">
                             {page.content.toString()}
                         </Button>
                     </li>
             )}
 
-            {/*  Right navigation arrow */}
+            {/* Right navigation arrow */}
             <li>
                 <Button datacy="pagination-button-next" to={paginationService.next ?? " "} disabled={!paginationService.next} icon="arrow_forward_ios" iconSlot="end" className={`${!paginationService.next ? "hidden" : "flex"} sm:hidden md:flex ml-5`} kind="tertiary">Next</Button>
                 <Tooltip wrapperClassname="hidden sm:flex md:hidden" content="Next page">

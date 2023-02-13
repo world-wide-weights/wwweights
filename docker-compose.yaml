@@ -11,8 +11,6 @@ services:
       - NEXT_PUBLIC_API_BASE_URL_COMMAND=${NEXT_PUBLIC_API_BASE_URL_COMMAND:-http://cmd:3002/commands/v1}
       - NEXT_PUBLIC_API_BASE_URL_AUTH=${NEXT_PUBLIC_API_BASE_URL_AUTH:-http://auth:3001}
       - NEXT_PUBLIC_API_BASE_URL_IMAGE=${NEXT_PUBLIC_API_BASE_URL_IMAGE:-http://img:3003}
-      - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:3000}
-      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:-secret}
     links:
       - command-backend:cmd
       - query-backend:query
@@ -156,7 +154,7 @@ services:
       - POSTGRES_DB=${DB_PG_DB}
     healthcheck:
       # TODO: This can be replaced by a more accurate healthcheck based on PID 1
-      test: ["CMD-SHELL", "pg_isready"]
+      test: [ "CMD-SHELL", "pg_isready" ]
       interval: 60s
       timeout: 5s
       retries: 3

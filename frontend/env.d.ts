@@ -5,8 +5,5 @@ namespace NodeJS {
         NEXT_PUBLIC_API_BASE_URL_COMMAND: string
         NEXT_PUBLIC_API_BASE_URL_AUTH: string
         NEXT_PUBLIC_API_BASE_URL_IMAGE: string
-
-        NEXTAUTH_URL: string
-        NEXTAUTH_SECRET: string
     }
 }
