@@ -36,9 +36,9 @@ export default function TagsList({ tags, currentPage, totalItems, limit }: Infer
             <Headline level={3}>All tags</Headline>
 
             {/* tags */}
-            <div className="flex flex-wrap pb-3">
-                {tags.map((tag) => <Tooltip key={tag.name} content={`Tags is used ${tag.count} ${tag.count === 1 ? "once" : "times"}.`}>
-                    <Chip to={routes.tags.single(tag.name)}>{tag.name}</Chip>
+            <div datacy="tags-list-container" className="flex flex-wrap pb-3">
+                {tags.map((tag) => <Tooltip key={tag.name} content={`${tag.count === 1 ? "Tag is used once" : `Tag is used ${tag.count} times`}.`}>
+                    <Chip to={routes.tags.single(tag.name)}>{tag.name} ({tag.count})</Chip>
                 </Tooltip>)}
             </div>
 
