@@ -5,7 +5,6 @@ import paginatedRelatedItems from "../fixtures/items/related.json"
 import paginatedSingleItem from "../fixtures/items/single.json"
 import statistics from "../fixtures/items/statistics.json"
 
-const apiBaseUrlMock = Cypress.env("PUBLIC_API_BASE_URL_MOCK")
 const apiBaseUrlQuery = Cypress.env("PUBLIC_API_BASE_URL_QUERY")
 const apiBaseUrlCommand = Cypress.env("PUBLIC_API_BASE_URL_COMMAND")
 const clientBaseUrl = Cypress.env("CLIENT_BASE_URL")
