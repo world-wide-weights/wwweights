@@ -31,14 +31,14 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name }) => {
             return
         }
 
-        // File size bigger than 5MB
-        if (file.size > 5e+6) {
+        // File size bigger than 1MB
+        if (file.size > 1e+6) {
             console.error("File size is too big.")
             return
         }
 
-        // File type not image (svg, png, jpeg, jpg)
-        if (file.type !== "image/svg" && file.type !== "image/png" && file.type !== "image/jpeg" && file.type !== "image/jpg") {
+        // File type not image (png, jpeg, jpg)
+        if (file.type !== "image/png" && file.type !== "image/jpeg" && file.type !== "image/jpg") {
             console.error("File type is not supported.")
             return
         }

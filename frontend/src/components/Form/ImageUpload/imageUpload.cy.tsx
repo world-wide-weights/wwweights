@@ -10,9 +10,7 @@ const initialValues = {
 const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return <Formik initialValues={initialValues} onSubmit={(values) => console.log(values)} >
         <Form>
-            <div className="w-80">
-                {children}
-            </div>
+            {children}
         </Form>
     </Formik>
 }
