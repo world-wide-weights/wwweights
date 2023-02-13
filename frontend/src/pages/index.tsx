@@ -163,7 +163,7 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
 	}
 }
 
-Home.getLayout = (page: React.ReactElement) => {
+Home.layout = (page: React.ReactElement) => {
 	return <>{page}</>
 }
 
