@@ -20,7 +20,7 @@ export const getFilter = (
   if (query) multiFilterBase.$and.push(textSearch);
   if (hasImage !== undefined)
     multiFilterBase.$and.push({ image: { $exists: hasImage } });
-  if (userId) multiFilterBase.$and.push({ userId: userId });
+  if (userId) multiFilterBase.$and.push({ userId });
 
   return multiFilterBase;
 };
