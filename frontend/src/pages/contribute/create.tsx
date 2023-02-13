@@ -118,7 +118,7 @@ const Create: NextPageCustomProps = () => {
             },
             ...(image !== "" ? { image } : {}), // Only add image when defined
             ...(source !== "" ? { source } : {}), // Only add source when defined
-            tags: tags ? tags.split(",") : []
+            tags: tags ? tags.split(",") : [] // TODO: Replace with array tags
         }
 
         try {
