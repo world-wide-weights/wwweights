@@ -6,7 +6,6 @@ import { Button } from "../../components/Button/Button"
 import { TextInput } from "../../components/Form/TextInput/TextInput"
 import { AccountLayout } from "../../components/Layout/AccountLayout"
 import { Seo } from "../../components/Seo/Seo"
-import { login } from "../../services/auth/login"
 import { register } from "../../services/auth/register"
 import { routes } from "../../services/routes/routes"
 import { NextPageCustomProps } from "../_app"
@@ -48,6 +47,7 @@ const Register: NextPageCustomProps = () => {
      */
     const onFormSubmit = async ({ username, email, password }: RegisterDto) => {
         setIsLoading(true)
+
         // Register in our backend
         const registerResponse = await register({
             username,
@@ -56,6 +56,7 @@ const Register: NextPageCustomProps = () => {
         })
 
         if (registerResponse === null) {
+            setIsLoading(false)
             setError("Something went wrong. Try again or come later.")
             return
         }
@@ -76,27 +77,7 @@ const Register: NextPageCustomProps = () => {
             return
         }
 
-        // Register successfull
-        console.log(registerResponse)
-
-        const loginResponse = await login({
-            email,
-            password
-        })
-
-        if (loginResponse === null) {
-            setIsLoading(false)
-            setError("Account created. But something went wrong while logging in. Try again or come later.")
-            return
-        }
-
-        if ("statusCode" in loginResponse) {
-            setIsLoading(false)
-            setError(`Account created. But something went wrong while logging in. ${loginResponse.statusCode}: ${loginResponse.message}`)
-            return
-        }
-
-        // Login successful -> redirect to callbackUrl
+        // Register successful -> redirect to callbackUrl
         const callbackUrl = router.asPath.split("?callbackUrl=")[1] ?? routes.home
         router.push(callbackUrl)
     }

@@ -5,30 +5,26 @@ import { Card } from "../../components/Card/Card"
 import { Headline } from "../../components/Headline/Headline"
 import { ItemPreviewList } from "../../components/Item/ItemPreviewList"
 import { Seo } from "../../components/Seo/Seo"
-import { authRequest } from "../../services/axios/axios"
 import { SessionData } from "../../types/auth"
 import { NextPageCustomProps } from "../_app"
 
 const Profile: NextPageCustomProps = () => {
     const [session, setSession] = useState<SessionData>()
-    const [profile, setProfile] = useState<any>()
-    const {
-        getSession,
-        isLoading
-    } = useContext(AuthContext)
+    const { getSession, isLoading } = useContext(AuthContext)
+
     useEffect(() => {
         const fetchProfile = async () => {
             const sessionData = await getSession()
             if (!sessionData) return
             setSession(sessionData)
 
-            const response = await authRequest.get("/profile/me", {
-                headers: {
-                    "Authorization": `Bearer ${sessionData.accessToken}`
-                }
-            })
-            const data = response.data
-            setProfile(data)
+            // const response = await authRequest.get("/profile/me", {
+            //     headers: {
+            //         "Authorization": `Bearer ${sessionData.accessToken}`
+            //     }
+            // })
+            // const data = response.data
+            // setProfile(data)
         }
         fetchProfile()
     }, [getSession])
@@ -47,8 +43,6 @@ const Profile: NextPageCustomProps = () => {
 
         {!isLoading && <main className="container mt-5">
             <Headline level={1}>Profile</Headline>
-            <p>{JSON.stringify(session)}</p>
-            <p>{JSON.stringify(profile)}</p>
             <div className="lg:flex gap-4">
                 <div className="sm:flex lg:flex-col gap-3 2xl:w-1/4 mb-4 lg:mb-0">
                     <div className="flex flex-col justify-center md:justify-start sm:w-1/2 md:w-auto items-center bg-white rounded-lg py-6 px-4 mb-3 sm:mb-0">

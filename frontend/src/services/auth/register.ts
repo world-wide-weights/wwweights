@@ -1,13 +1,14 @@
 import { isAxiosError } from "axios"
-import { ApiAuthException, Tokens } from "../../types/auth"
+import { ApiAuthException, SessionData } from "../../types/auth"
 import { authRequest } from "../axios/axios"
+import { createSession, saveSession } from "./session"
 
 /**
  * Register a new user and return the tokens.
  * @param credentials credentials from user
  * @returns tokens, error or null if request failed.
  */
-export const register = async ({ username, email, password }: { username: string, email: string, password: string }): Promise<Tokens | ApiAuthException & { error: string } | null> => {
+export const register = async ({ username, email, password }: { username: string, email: string, password: string }): Promise<SessionData | ApiAuthException & { error: string } | null> => {
     try {
         const response = await authRequest.post<any>("/auth/register", {
             username,
@@ -16,7 +17,11 @@ export const register = async ({ username, email, password }: { username: string
         })
         const tokens = response.data
 
-        return tokens
+        // Create session and save it to local storage from tokens
+        const session = createSession(tokens)
+        saveSession(session)
+
+        return session
     } catch (error) {
         if (isAxiosError<ApiAuthException & { error: string }>(error) && error.response) {
             return error.response.data
