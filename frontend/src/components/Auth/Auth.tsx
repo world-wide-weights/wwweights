@@ -11,6 +11,9 @@ type AuthProps = {
     routeType: "protected" | "guest" | "public"
 }
 
+/**
+ * Creates global context for auth. This context is wrapped around all pages.
+ */
 export const AuthContext = createContext({
     hasSession: false,
     logout: () => { },
@@ -28,11 +31,17 @@ export const Auth: React.FC<AuthProps> = ({ children, routeType }) => {
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const router = useRouter()
 
+    /**
+     * Logout user and remove session data from localstorage.
+     */
     const logout = useCallback(() => {
         endSession()
         setHasSession(false)
     }, [])
 
+    /**
+     * Get session data from localstorage and logout when session is expired.
+     */
     const getSession = useCallback(async (): Promise<SessionData | null> => {
         const session = getSessionData()
 
@@ -44,6 +53,9 @@ export const Auth: React.FC<AuthProps> = ({ children, routeType }) => {
         return session
     }, [logout])
 
+    /**
+     * Handle redirects and updates the auth context.
+     */
     useEffect(() => {
         const checkSession = async () => {
             const sessionData = await getSession()
