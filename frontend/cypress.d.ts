@@ -44,15 +44,6 @@ declare global {
        */
       mockDiscoverPage(itemCount?: number): Chainable<void>
       /**
-       * Mocks user session
-       */
-      mockSession(): Chainable<void>
-      /**
-       * Mock login.
-       * Can't mock login direct because of next auth.
-       */
-      mockCredentials(): Chainable<void>
-      /**
        * Mock create item request.
        */
       mockCreateItem(): Chainable<void>
@@ -65,6 +56,19 @@ declare global {
        * @param itemCount count of items getting back with body
        */
       mockItemsList(itemCount?: number): Chainable<void>
+      /**
+       * Mocks login request.
+       */
+      mockLogin(): Chainable<void>
+      /**
+       * Mocks register request.
+       */
+      mockRegister(): Chainable<void>
+      /**
+       * Login to the app (Sets sessiondata to localstorage).
+       * @param route the route we want to go after login
+       */
+      login(route: string): Chainable<void>
     }
   }
 }

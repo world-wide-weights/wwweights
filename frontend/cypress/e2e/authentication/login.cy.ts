@@ -1,10 +1,8 @@
-import { routes } from "../../../src/services/routes/routes"
-
 const clientBaseUrl = Cypress.env("CLIENT_BASE_URL")
 
 describe("Login", () => {
     beforeEach(() => {
-        cy.visitLocalPage(routes.account.login)
+        cy.visitLocalPage("/account/login")
 
         // Type credentials
         cy.dataCy("textinput-email-input").type("hello@gmail.com")
@@ -13,19 +11,18 @@ describe("Login", () => {
 
     describe("Login Flow - Email and Password", () => {
         it("should login successfull login user and redirect to home page", () => {
-            // Mock login requests.
-            cy.mockCredentials()
-            cy.mockSession()
+            // Mock login
+            cy.mockLogin()
 
             // Login
             cy.dataCy("login-button").click()
-            cy.wait("@mockCredentials")
+            cy.wait("@mockLogin")
 
             // Mock home
             cy.mockItemsList()
 
             // Check for redirect
-            cy.url().should("eq", clientBaseUrl + routes.home)
+            cy.url().should("eq", clientBaseUrl + "/")
         })
     })
 
