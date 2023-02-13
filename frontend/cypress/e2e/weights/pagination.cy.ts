@@ -11,23 +11,19 @@ describe("Pagination /weights", () => {
 
         it("should display pagination", () => {
             cy.visitLocalPage(routes.weights.list())
-            cy.wait("@mockGetRelatedTags")
             cy.dataCy("pagination").should("be.visible")
         })
 
         it("should show page 1 when query is page=1 or nothing", () => {
             cy.visitLocalPage(routes.weights.list())
-            cy.wait("@mockGetRelatedTags")
             cy.checkCurrentActivePage(1)
 
             cy.visitLocalPage(routes.weights.list({ page: 1 }))
-            cy.wait("@mockGetRelatedTags")
             cy.checkCurrentActivePage(1)
         })
 
         it("should show page 2 when query is page=2", () => {
             cy.visitLocalPage(routes.weights.list({ page: 2 }))
-            cy.wait("@mockGetRelatedTags")
             cy.checkCurrentActivePage(2)
         })
 
@@ -52,7 +48,6 @@ describe("Pagination /weights", () => {
         describe("Buttons", () => {
             beforeEach(() => {
                 cy.visitLocalPage(routes.weights.list({ page: currentPage }))
-                cy.wait("@mockGetRelatedTags")
             })
 
             it("should show next page when click next button", () => {
@@ -72,7 +67,6 @@ describe("Pagination /weights", () => {
             cy.mockDiscoverPage(5)
 
             cy.visitLocalPage(routes.weights.list({ itemsPerPage: limit }))
-            cy.wait("@mockGetRelatedTags")
         })
 
         it("should show limited count of items when set limit", () => {

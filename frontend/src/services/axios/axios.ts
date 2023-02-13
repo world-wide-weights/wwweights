@@ -3,11 +3,6 @@ import axios from "axios"
 // Common config
 axios.defaults.headers.post["Content-Type"] = "application/json"
 
-// Mock API
-export const mockRequest = axios.create(({
-    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL_MOCK
-}))
-
 // Query API
 export const queryRequest = axios.create(({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL_QUERY

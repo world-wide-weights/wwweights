@@ -35,6 +35,10 @@ declare global {
        */
       mockGetRelatedTags(): Chainable<void>
       /**
+       * Interceptor for tags list request.
+       */
+      mockGetTagsList(): Chainable<void>
+      /**
        * Mocks all requests server side and client side
        * - clear and activate nock
        * - mock get items 

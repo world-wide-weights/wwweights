@@ -8,7 +8,6 @@ describe("Sort /weights", () => {
         cy.mockDiscoverPage()
 
         cy.visitLocalPage(routes.weights.list())
-        cy.wait("@mockGetRelatedTags")
     })
 
     it("should initial sort by relevance", () => {
