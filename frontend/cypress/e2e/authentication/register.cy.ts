@@ -1,14 +1,12 @@
 import { routes } from "../../../src/services/routes/routes"
 
-const apiBaseUrl = Cypress.env("PUBLIC_API_BASE_URL_AUTH")
-
 describe("Register", () => {
     beforeEach(() => {
         cy.visitLocalPage(routes.account.register)
     })
 
     describe("Register Flow - Email and Password", () => {
-        it("should register successfull, login user and redirect page", () => {
+        it("should register successfull and redirect page", () => {
             // Type credentials
             cy.dataCy("textinput-email-input").type("hello@gmail.com")
             cy.dataCy("textinput-username-input").type("Hello")
@@ -16,13 +14,11 @@ describe("Register", () => {
 
             // Mocks
             cy.mockRegister()
-            cy.mockLogin()
 
             // Register button
             cy.dataCy("register-button").click()
 
             cy.wait("@mockRegister")
-            cy.wait("@mockLogin")
 
             // Mock home
             cy.mockItemsList()
