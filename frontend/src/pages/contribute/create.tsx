@@ -23,6 +23,19 @@ import { convertAnyWeightIntoGram } from "../../services/unit/unitConverter"
 import { Weight } from "../../types/item"
 import { NextPageCustomProps } from "../_app"
 
+const unitTypeDropdownOptions = [
+    {
+        value: "g",
+        label: "g",
+    }, {
+        value: "kg",
+        label: "kg",
+    }, {
+        value: "T",
+        label: "T",
+    },
+]
+
 type CreateItemForm = {
     name: string
     weight: number | string
@@ -43,19 +56,6 @@ type CreateItemDto = {
     tags?: string[]
 }
 
-const unitTypeDropdownOptions = [
-    {
-        value: "g",
-        label: "g",
-    }, {
-        value: "kg",
-        label: "kg",
-    }, {
-        value: "T",
-        label: "T",
-    },
-]
-
 /**
  * Create new items on this page.
  */
@@ -74,6 +74,7 @@ const Create: NextPageCustomProps = () => {
         unit: "g",
         valueType: "exact",
         additionalValue: "",
+        /** This is an array since checkbox component can only handle arrays */
         isCa: [false],
         source: "",
         image: "",
@@ -136,7 +137,7 @@ const Create: NextPageCustomProps = () => {
 
             if (response.status === 200) {
                 // Redirect to discover
-                router.push(routes.weights.list())
+                await router.push(routes.weights.list())
             }
         } catch (error) {
             axios.isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Netzwerk-Zeitüberschreitung")
@@ -159,7 +160,7 @@ const Create: NextPageCustomProps = () => {
 
             {/* Content */}
             <Formik initialValues={initialFormValues} validationSchema={validationSchema} onSubmit={onFormSubmit}>
-                {({ dirty, isValid, errors, values, setFieldValue }: FormikProps<CreateItemForm>) => (
+                {({ dirty, isValid, errors, values, setFieldValue, isSubmitting }: FormikProps<CreateItemForm>) => (
                     <Form>
                         <div className="container">
                             {/*** General Information ***/}
@@ -250,7 +251,7 @@ const Create: NextPageCustomProps = () => {
                                 <p className="hidden sm:block mb-2 lg:mb-0">We will give you Feedback about the Status in the profile.</p>
                                 <div className="flex gap-3 items-center">
                                     <Button to={routes.weights.list()} isColored kind="secondary">Cancel</Button>
-                                    <Button datacy="create-submit-button" disabled={!(dirty && isValid)} type="submit" isColored>Create</Button>
+                                    <Button datacy="create-submit-button" disabled={!(dirty && isValid)} type="submit" icon="add" loading={isSubmitting} isColored>Create</Button>
                                 </div>
                             </div>
                         </div>
