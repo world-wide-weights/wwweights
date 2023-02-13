@@ -2,8 +2,9 @@ import axios from "axios"
 import BigNumber from "bignumber.js"
 import { Form, Formik, FormikProps } from "formik"
 import { useRouter } from "next/router"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { array, mixed, number, object, ref, SchemaOf, string } from "yup"
+import { AuthContext } from "../../components/Auth/Auth"
 import { Button } from "../../components/Button/Button"
 import { IconButton } from "../../components/Button/IconButton"
 import { FormError } from "../../components/Errors/FormError"
@@ -64,6 +65,7 @@ const Create: NextPageCustomProps = () => {
     const [error, setError] = useState<string>()
 
     const router = useRouter()
+    const { getSession } = useContext(AuthContext)
 
     // Formik Form Initial Values
     const initialFormValues: CreateItemForm = {
@@ -120,9 +122,17 @@ const Create: NextPageCustomProps = () => {
         }
 
         try {
+            const session = await getSession()
+
+            if (session === null)
+                throw Error("Failed to get session.")
+
             // Create item with api
-            // TODO: Add auth here
-            const response = await commandRequest.post("/items/insert", item)
+            const response = await commandRequest.post("/items/insert", item, {
+                headers: {
+                    Authorization: `Bearer ${session.accessToken}`
+                }
+            })
 
             if (response.status === 200) {
                 // Redirect to discover
