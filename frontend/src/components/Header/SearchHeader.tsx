@@ -112,5 +112,5 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "
                 </Formik>
             </div>
         </div>
-    </header >
+    </header>
 }
