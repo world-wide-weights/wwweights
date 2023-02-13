@@ -15,10 +15,10 @@ type HeadlineProps = {
 
 /** Defines the classes for each size level */
 export const textSizes: { [K in Required<HeadlineProps>["level"]]: string } = {
-    1: "text-xl md:text-2xl",
+    1: "text-xl",
     2: "text-xl",
-    3: "text-xl",
-    4: "text-lg md:text-xl",
+    3: "text-lg",
+    4: "text-base md:text-lg",
     5: "text-base md:text-lg",
     6: ""
 }

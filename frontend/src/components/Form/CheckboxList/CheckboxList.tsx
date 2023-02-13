@@ -21,13 +21,13 @@ export const CheckboxList: React.FC<CheckboxProps> = ({ name, labelText, helperT
         <>
             <h5 className="block text-darkgrey font-semibold">{labelText}</h5>
             {options.map((option) => (
-                <label data-cy={`${name}-option-${option.value}`} key={`${option.value}`} className="flex items-center my-1 cursor-pointer">
+                <label datacy={`${name}-option-${option.value}`} key={`${option.value}`} className="flex items-center my-1 cursor-pointer">
                     <Field type="checkbox" className="cursor-pointer mr-2" name={name} value={`${option.value}`} />
                     {option.icon && <Icon className="text-lightgrey mr-1">{option.icon}</Icon>}
                     <span className="text-darkgrey">{option.label}</span>
                 </label>
             ))}
-            {helperText && <small data-cy={`${name}-helpertext`} className="text-lightgrey text-sm mb-4">{helperText}</small>}
+            {helperText && <small datacy={`${name}-helpertext`} className="text-lightgrey text-sm mb-4">{helperText}</small>}
         </>
     )
 }

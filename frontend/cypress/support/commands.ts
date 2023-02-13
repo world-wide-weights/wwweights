@@ -30,7 +30,7 @@ Cypress.Commands.add("checkCurrentActivePage", (activePageNumber) => {
 })
 
 Cypress.Commands.add("mockGetRelatedTags", () => {
-    cy.intercept("GET", `${API_BASE_URL_QUERY}/tags/related`, {
+    cy.intercept("GET", `${API_BASE_URL_QUERY}/tags/related*`, {
         fixture: "tags/related.json"
     }).as("mockGetRelatedTags")
 })
@@ -123,7 +123,9 @@ Cypress.Commands.add("mockRegister", () => {
 })
 
 Cypress.Commands.add("mockCreateItem", () => {
-    cy.intercept("POST", `${API_BASE_URL_COMMAND}/items`).as("mockCreateItem")
+    cy.intercept("POST", `${API_BASE_URL_COMMAND}/items/insert`, {
+        statusCode: 204,
+    }).as("mockCreateItem")
 })
 
 Cypress.Commands.add("login", (route) => {
