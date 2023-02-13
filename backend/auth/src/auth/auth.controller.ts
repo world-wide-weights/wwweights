@@ -22,7 +22,6 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { UserEntity } from '../db/entities/users.entity';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dtos/login.dto';
 import { RegisterDTO } from './dtos/register.dto';
@@ -53,10 +52,10 @@ export class AuthController {
   @ApiCreatedResponse({
     status: HttpStatus.CREATED,
     description: 'User has been created',
-    type: UserEntity,
+    type: TokenResponse,
   })
-  async register(@Body() registerData: RegisterDTO): Promise<UserEntity> {
-    return await this.authService.register(registerData);
+  async register(@Body() registerData: RegisterDTO): Promise<TokenResponse> {
+    return new TokenResponse(await this.authService.register(registerData));
   }
 
   @Post('login')

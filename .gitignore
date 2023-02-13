@@ -1,1 +1,7 @@
 .env
+
+# Only include pre-provided images
+backend/docker-images/**/*
+!backend/docker-images/test.png
+!backend/docker-images/test.jpg
+coverage

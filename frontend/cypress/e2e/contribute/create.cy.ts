@@ -1,12 +1,7 @@
-import { routes } from "../../../src/services/routes/routes"
 
 describe("Create Item", () => {
     beforeEach(() => {
-        cy.mockSession()
-
-        cy.visitLocalPage(routes.contribute.create)
-
-        cy.wait("@mockSession")
+        cy.login("/contribute/create")
     })
 
     describe("Create Process", () => {

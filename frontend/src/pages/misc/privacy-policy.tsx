@@ -73,7 +73,7 @@ const PrivacyPolicy: NextPageCustomProps = () => {
     </>
 }
 
-PrivacyPolicy.getLayout = (page) => {
+PrivacyPolicy.layout = (page) => {
     return <PageLayout title="Privacy Policy">
         {page}
     </PageLayout>

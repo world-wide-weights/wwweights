@@ -120,8 +120,8 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 }
 
 export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
-	const response = await queryRequest.get<PaginatedResponse<Item>>("/items/list?page=1&limit=20&query=iphone 2020")
-	const items = response.data.data
+	const itemsResponse = await queryRequest.get<PaginatedResponse<Item>>("/items/list?page=1&limit=20&query=iphone 2020")
+	const items = itemsResponse.data.data
 
 	return {
 		props: {
@@ -130,7 +130,7 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
 	}
 }
 
-Home.getLayout = (page: React.ReactElement) => {
+Home.layout = (page: React.ReactElement) => {
 	return <>{page}</>
 }
 

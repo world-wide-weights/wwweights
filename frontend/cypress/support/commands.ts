@@ -1,14 +1,16 @@
 /// <reference types="cypress" />
 
+import sessiondata from "../fixtures/auth/sessiondata.json"
 import paginatedItems from "../fixtures/items/list.json"
 import paginatedRelatedItems from "../fixtures/items/related.json"
 import paginatedSingleItem from "../fixtures/items/single.json"
 import statistics from "../fixtures/items/statistics.json"
 
-const apiBaseUrlMock = Cypress.env("PUBLIC_API_BASE_URL_MOCK")
-const apiBaseUrlQuery = Cypress.env("PUBLIC_API_BASE_URL_QUERY")
-const apiBaseUrlCommand = Cypress.env("PUBLIC_API_BASE_URL_COMMAND")
-const clientBaseUrl = Cypress.env("CLIENT_BASE_URL")
+const API_BASE_URL_MOCK = Cypress.env("PUBLIC_API_BASE_URL_MOCK")
+const API_BASE_URL_AUTH = Cypress.env("PUBLIC_API_BASE_URL_AUTH")
+const API_BASE_URL_QUERY = Cypress.env("PUBLIC_API_BASE_URL_QUERY")
+const API_BASE_URL_COMMAND = Cypress.env("PUBLIC_API_BASE_URL_COMMAND")
+const LOCAL_STORAGE_KEY = "session"
 
 Cypress.Commands.add("dataCy", (dataCy, customSelector = "") => {
     cy.get(`[datacy=${dataCy}]${customSelector}`)
@@ -28,7 +30,7 @@ Cypress.Commands.add("checkCurrentActivePage", (activePageNumber) => {
 })
 
 Cypress.Commands.add("mockGetRelatedTags", () => {
-    cy.intercept("GET", `${apiBaseUrlMock}/api/query/v1/tags/related`, {
+    cy.intercept("GET", `${API_BASE_URL_MOCK}/api/query/v1/tags/related`, {
         fixture: "tags/related.json"
     }).as("mockGetRelatedTags")
 })
@@ -42,7 +44,7 @@ Cypress.Commands.add("mockItemsList", (itemCount?: number) => {
     cy.task("clearNock")
     cy.task("activateNock")
     cy.task("nock", {
-        hostname: apiBaseUrlQuery,
+        hostname: API_BASE_URL_QUERY,
         method: "get",
         path: "/items/list",
         statusCode: 200,
@@ -55,7 +57,7 @@ Cypress.Commands.add("mockDiscoverPage", (itemCount?: number) => {
 
     // Mock Statistics
     cy.task("nock", {
-        hostname: apiBaseUrlQuery,
+        hostname: API_BASE_URL_QUERY,
         method: "get",
         path: "/items/statistics",
         statusCode: 200,
@@ -71,7 +73,7 @@ Cypress.Commands.add("mockSingleWeight", () => {
     // Mock items single
     cy.task("activateNock")
     cy.task("nock", {
-        hostname: apiBaseUrlQuery,
+        hostname: API_BASE_URL_QUERY,
         method: "get",
         path: "/items/list",
         statusCode: 200,
@@ -80,7 +82,7 @@ Cypress.Commands.add("mockSingleWeight", () => {
 
     // Mock items related
     cy.task("nock", {
-        hostname: apiBaseUrlQuery,
+        hostname: API_BASE_URL_QUERY,
         method: "get",
         path: "/items/related",
         statusCode: 200,
@@ -90,22 +92,40 @@ Cypress.Commands.add("mockSingleWeight", () => {
     cy.mockGetRelatedTags()
 })
 
-Cypress.Commands.add("mockSession", () => {
-    cy.intercept("GET", `${clientBaseUrl}/api/auth/session`, {
-        fixture: "/authentication/session.json"
-    }).as("mockSession")
+Cypress.Commands.add("mockLogin", () => {
+    cy.intercept("POST", `${API_BASE_URL_AUTH}/auth/login`, {
+        fixture: "auth/tokens.json"
+    }).as("mockLogin")
+
+    cy.intercept("POST", `${API_BASE_URL_AUTH}/auth/refresh`, {
+        fixture: "auth/tokens.json"
+    }).as("mockRefresh")
 })
 
-Cypress.Commands.add("mockCredentials", () => {
-    cy.intercept("POST", `${clientBaseUrl}/api/auth/callback/credentials?`, {
-        url: `${clientBaseUrl}/account/login`
-    }).as("mockCredentials")
+Cypress.Commands.add("mockRegister", () => {
+    cy.intercept("POST", `${API_BASE_URL_AUTH}/auth/register`, {
+        fixture: "auth/tokens.json"
+    }).as("mockRegister")
+
+    cy.intercept("POST", `${API_BASE_URL_AUTH}/auth/refresh`, {
+        fixture: "auth/tokens.json"
+    }).as("mockRefresh")
 })
 
 Cypress.Commands.add("mockCreateItem", () => {
-    cy.intercept("POST", `${apiBaseUrlCommand}/items/insert`, {
+    cy.intercept("POST", `${API_BASE_URL_COMMAND}/items/insert`, {
         statusCode: 204,
     }).as("mockCreateItem")
+})
+
+Cypress.Commands.add("login", (route) => {
+    cy.mockLogin()
+
+    cy.visitLocalPage(route, {
+        onBeforeLoad: (window) => {
+            window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(sessiondata))
+        }
+    })
 })
 
 export { }

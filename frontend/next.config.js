@@ -7,21 +7,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'via.placeholder.com'
-      },
-      {
-        protocol: 'https',
-        hostname: 'picsum.photos'
-      },
-      /** TODO: This is only for the mobile content. We have to remove this when mobile images are on our server. */
-      {
-        protocol: 'https',
-        hostname: 'fdn2.gsmarena.com'
-      },
-      /** TODO: This is only for the mobile content. We have to remove this when mobile images are on our server. */
-      {
-        protocol: 'https',
-        hostname: 'fdn.gsmarena.com'
+        hostname: '**'
       }
     ]
   }
