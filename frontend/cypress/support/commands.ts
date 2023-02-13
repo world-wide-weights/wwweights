@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import sessiondata from "../fixtures/authentication/sessiondata.json"
+import sessiondata from "../fixtures/auth/sessiondata.json"
 import paginatedItems from "../fixtures/items/list.json"
 import paginatedRelatedItems from "../fixtures/items/related.json"
 import paginatedSingleItem from "../fixtures/items/single.json"
@@ -94,21 +94,21 @@ Cypress.Commands.add("mockSingleWeight", () => {
 
 Cypress.Commands.add("mockLogin", () => {
     cy.intercept("POST", `${API_BASE_URL_AUTH}/auth/login`, {
-        fixture: "authentication/tokens.json"
+        fixture: "auth/tokens.json"
     }).as("mockLogin")
 
     cy.intercept("POST", `${API_BASE_URL_AUTH}/auth/refresh`, {
-        fixture: "authentication/tokens.json"
+        fixture: "auth/tokens.json"
     }).as("mockRefresh")
 })
 
 Cypress.Commands.add("mockRegister", () => {
     cy.intercept("POST", `${API_BASE_URL_AUTH}/auth/register`, {
-        fixture: "authentication/tokens.json"
+        fixture: "auth/tokens.json"
     }).as("mockRegister")
 
     cy.intercept("POST", `${API_BASE_URL_AUTH}/auth/refresh`, {
-        fixture: "authentication/tokens.json"
+        fixture: "auth/tokens.json"
     }).as("mockRefresh")
 })
 
