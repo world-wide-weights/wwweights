@@ -144,8 +144,8 @@ export const getServerSideProps: GetServerSideProps<ProfilePageProps> = async ()
 }
 
 // Sets route need to be logged in
-Profile.auth = {
-    routeType: "protected"
-}
+// Profile.auth = {
+//     routeType: "protected"
+// }
 
 export default Profile
