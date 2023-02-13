@@ -43,7 +43,7 @@ export const Auth: React.FC<AuthProps> = ({ children, routeType }) => {
      * Get session data from localstorage and logout when session is expired.
      */
     const getSession = useCallback(async (): Promise<SessionData | null> => {
-        const session = getSessionData()
+        const session = await getSessionData()
 
         if (session === null) {
             logout()
