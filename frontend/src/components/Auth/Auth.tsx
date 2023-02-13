@@ -1,5 +1,5 @@
 import { useRouter } from "next/router"
-import { createContext, useEffect, useState } from "react"
+import { createContext, useCallback, useEffect, useState } from "react"
 import { endSession, getSessionData } from "../../services/auth/session"
 import { routes } from "../../services/routes/routes"
 import { SessionData } from "../../types/auth"
@@ -24,9 +24,25 @@ export const AuthContext = createContext({
  * Checks if a user is logged in or not, handle guest routes and handle login redirect or render page.
  */
 export const Auth: React.FC<AuthProps> = ({ children, routeType }) => {
-    const [hasSession, setHasSession] = useState<boolean>(true)
+    const [hasSession, setHasSession] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const router = useRouter()
+
+    const logout = useCallback(() => {
+        endSession()
+        setHasSession(false)
+    }, [])
+
+    const getSession = useCallback(async (): Promise<SessionData | null> => {
+        const session = getSessionData()
+
+        if (session === null) {
+            logout()
+            return null
+        }
+
+        return session
+    }, [logout])
 
     useEffect(() => {
         const checkSession = async () => {
@@ -46,28 +62,9 @@ export const Auth: React.FC<AuthProps> = ({ children, routeType }) => {
             }
         }
         checkSession()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [routeType, router, hasSession])
-
-    const getSession = async (): Promise<SessionData | null> => {
-        const session = getSessionData()
-
-        if (session === null) {
-            logout()
-            return null
-        }
-
-        return session
-    }
-
-    const logout = () => {
-        endSession()
-        setHasSession(false)
-    }
+    }, [routeType, router, hasSession, getSession])
 
     return <AuthContext.Provider value={{ hasSession, logout, isLoading, getSession }}>
-        {(routeType === "public" ||
-            (routeType === "protected" && hasSession) ||
-            (routeType === "guest" && !hasSession)) ? children : <div>Loading...</div>}
+        {children}
     </AuthContext.Provider>
 }
