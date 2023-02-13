@@ -12,7 +12,7 @@ describe("Routes protected/guest", () => {
             cy.url().should("include", "/account/login")
         })
 
-        it.only("should show page when logged in", () => {
+        it("should show page when logged in", () => {
             // Login and visit profile
             cy.login("/account/profile")
 
