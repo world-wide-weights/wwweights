@@ -34,19 +34,19 @@ export const Navbar: React.FC = () => {
         to: routes.weights.list(),
         text: "Discover",
     }, {
-        shouldDisplay: Boolean(hasSession),
+        shouldDisplay: hasSession,
         to: routes.account.profile(),
         text: "My Profile",
     }, {
-        shouldDisplay: Boolean(!hasSession),
+        shouldDisplay: !hasSession,
         to: routes.account.login + "?callbackUrl=" + router.asPath,
         text: "Login",
     }, {
-        shouldDisplay: Boolean(!hasSession),
+        shouldDisplay: !hasSession,
         to: routes.account.register + "?callbackUrl=" + router.asPath,
         text: "Register",
     }, {
-        shouldDisplay: Boolean(hasSession),
+        shouldDisplay: hasSession,
         onClick: () => logout(),
         text: "Logout"
     }]
