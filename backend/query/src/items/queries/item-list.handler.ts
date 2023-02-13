@@ -20,7 +20,7 @@ export class ItemListHandler implements IQueryHandler<ItemListQuery> {
 
   async execute({ dto }: ItemListQuery): Promise<PaginatedResponse<Item>> {
     try {
-      // We currently also run textSearch on tags, optimizing via itemsByTags is a TODO
+      // We currently also run textSearch on tags
       const sort = getSort(dto.sort, (dto.query || dto.tags) && !dto.slug);
       const filter = getFilter(
         dto.query,
@@ -30,7 +30,6 @@ export class ItemListHandler implements IQueryHandler<ItemListQuery> {
         dto.userid,
       );
 
-      // TODO: Query through itemsByTags if tags are listed
       const itemListWithCount = await this.itemModel.aggregate<
         DataWithCount<Item>
       >([
