@@ -86,7 +86,6 @@ export default defineConfig({
   },
   env: {
     CLIENT_BASE_URL: "http://localhost:3010",
-    PUBLIC_API_BASE_URL_MOCK: "http://localhost:3008",
     PUBLIC_API_BASE_URL_QUERY: "http://localhost:3004/queries/v1",
     PUBLIC_API_BASE_URL_COMMAND: "http://localhost:3002/commands/v1",
     PUBLIC_API_BASE_URL_AUTH: "http://localhost:3001",

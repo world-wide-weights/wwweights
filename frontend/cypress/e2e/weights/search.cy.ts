@@ -8,7 +8,6 @@ describe("Search /weights", () => {
             cy.mockDiscoverPage()
 
             cy.visitLocalPage(routes.weights.list())
-            cy.wait("@mockGetRelatedTags")
         })
 
         // This test seems to be flaky: https://github.com/cypress-io/cypress/issues/3817
@@ -27,7 +26,6 @@ describe("Search /weights", () => {
 
         it("should search items when query in url", () => {
             cy.visitLocalPage(routes.weights.list({ query: paginatedItems.data[0].name }))
-            cy.wait("@mockGetRelatedTags")
 
             cy.dataCy("search").should("have.value", paginatedItems.data[0].name)
         })
@@ -38,15 +36,15 @@ describe("Search /weights", () => {
             cy.mockDiscoverPage()
 
             cy.visitLocalPage(routes.weights.list())
-            cy.wait("@mockGetRelatedTags")
         })
 
-        // TODO (Zoe-Bot): Update tests when related tags are implemented
         describe("Displayed tags", () => {
             beforeEach(() => {
                 // Search item
-                cy.dataCy("search").type(relatedTags[1].name)
+                cy.dataCy("search").type(relatedTags.data[1].name)
                 cy.dataCy("text-input-icon-query").click()
+
+                cy.wait("@mockGetRelatedTags")
             })
 
             it("should display tags when search", () => {
@@ -57,7 +55,7 @@ describe("Search /weights", () => {
                 // Click first tag
                 cy.dataCy("search-header-tag-wrapper", " a").first().click()
 
-                cy.dataCy("search").should("have.value", relatedTags[1].name)
+                cy.dataCy("search").should("have.value", relatedTags.data[1].name)
             })
 
             it("should not display tag in list when search for tag", () => {
