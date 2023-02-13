@@ -1,7 +1,7 @@
 .env
 
 # Only include pre-provided images
-images/**/*
-!images/test.png
-!images/test.jpg
+backend/docker-images/**/*
+!backend/docker-images/test.png
+!backend/docker-images/test.jpg
 coverage

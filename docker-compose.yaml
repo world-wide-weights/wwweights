@@ -84,7 +84,7 @@ services:
       - IMAGE_STORE_INCOMING_CACHE_PATH=${IMG_IMAGE_STORE_INCOMING_CACHE_PATH:-./cache}
       - AUTH_API_KEY=${IMG_AUTH_API_KEY:-img}
     volumes:
-      - ./images:${IMG_IMAGE_STORE_BASE_PATH}
+      - .backend/docker-images:${IMG_IMAGE_STORE_BASE_PATH}
     links:
       - auth-backend:auth
 
