@@ -64,9 +64,9 @@ export const Auth: React.FC<AuthProps> = ({ children, routeType }) => {
         endSession()
         setHasSession(false)
     }
+
     return <AuthContext.Provider value={{ hasSession, logout, isLoading, getSession }}>
-        {(
-            routeType === "public" ||
+        {(routeType === "public" ||
             (routeType === "protected" && hasSession) ||
             (routeType === "guest" && !hasSession)) ? children : <div>Loading...</div>}
     </AuthContext.Provider>

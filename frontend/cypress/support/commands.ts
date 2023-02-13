@@ -1,14 +1,16 @@
 /// <reference types="cypress" />
 
+import sessiondata from "../fixtures/authentication/sessiondata.json"
 import paginatedItems from "../fixtures/items/list.json"
 import paginatedRelatedItems from "../fixtures/items/related.json"
 import paginatedSingleItem from "../fixtures/items/single.json"
 import statistics from "../fixtures/items/statistics.json"
 
-const apiBaseUrlMock = Cypress.env("PUBLIC_API_BASE_URL_MOCK")
-const apiBaseUrlAuth = Cypress.env("PUBLIC_API_BASE_URL_AUTH")
-const apiBaseUrlQuery = Cypress.env("PUBLIC_API_BASE_URL_QUERY")
-const apiBaseUrlCommand = Cypress.env("PUBLIC_API_BASE_URL_COMMAND")
+const API_BASE_URL_MOCK = Cypress.env("PUBLIC_API_BASE_URL_MOCK")
+const API_BASE_URL_AUTH = Cypress.env("PUBLIC_API_BASE_URL_AUTH")
+const API_BASE_URL_QUERY = Cypress.env("PUBLIC_API_BASE_URL_QUERY")
+const API_BASE_URL_COMMAND = Cypress.env("PUBLIC_API_BASE_URL_COMMAND")
+const LOCAL_STORAGE_KEY = "session"
 
 Cypress.Commands.add("dataCy", (dataCy, customSelector = "") => {
     cy.get(`[datacy=${dataCy}]${customSelector}`)
@@ -28,7 +30,7 @@ Cypress.Commands.add("checkCurrentActivePage", (activePageNumber) => {
 })
 
 Cypress.Commands.add("mockGetRelatedTags", () => {
-    cy.intercept("GET", `${apiBaseUrlMock}/api/query/v1/tags/related`, {
+    cy.intercept("GET", `${API_BASE_URL_MOCK}/api/query/v1/tags/related`, {
         fixture: "tags/related.json"
     }).as("mockGetRelatedTags")
 })
@@ -42,7 +44,7 @@ Cypress.Commands.add("mockItemsList", (itemCount?: number) => {
     cy.task("clearNock")
     cy.task("activateNock")
     cy.task("nock", {
-        hostname: apiBaseUrlQuery,
+        hostname: API_BASE_URL_QUERY,
         method: "get",
         path: "/items/list",
         statusCode: 200,
@@ -55,7 +57,7 @@ Cypress.Commands.add("mockDiscoverPage", (itemCount?: number) => {
 
     // Mock Statistics
     cy.task("nock", {
-        hostname: apiBaseUrlQuery,
+        hostname: API_BASE_URL_QUERY,
         method: "get",
         path: "/items/statistics",
         statusCode: 200,
@@ -71,7 +73,7 @@ Cypress.Commands.add("mockSingleWeight", () => {
     // Mock items single
     cy.task("activateNock")
     cy.task("nock", {
-        hostname: apiBaseUrlQuery,
+        hostname: API_BASE_URL_QUERY,
         method: "get",
         path: "/items/list",
         statusCode: 200,
@@ -80,7 +82,7 @@ Cypress.Commands.add("mockSingleWeight", () => {
 
     // Mock items related
     cy.task("nock", {
-        hostname: apiBaseUrlQuery,
+        hostname: API_BASE_URL_QUERY,
         method: "get",
         path: "/items/related",
         statusCode: 200,
@@ -91,19 +93,37 @@ Cypress.Commands.add("mockSingleWeight", () => {
 })
 
 Cypress.Commands.add("mockLogin", () => {
-    cy.intercept("POST", `${apiBaseUrlAuth}/auth/login`, {
-        fixture: "authentication/login.json"
+    cy.intercept("POST", `${API_BASE_URL_AUTH}/auth/login`, {
+        fixture: "authentication/tokens.json"
     }).as("mockLogin")
+
+    cy.intercept("POST", `${API_BASE_URL_AUTH}/auth/refresh`, {
+        fixture: "authentication/tokens.json"
+    }).as("mockRefresh")
 })
 
 Cypress.Commands.add("mockRegister", () => {
-    cy.intercept("POST", `${apiBaseUrlAuth}/auth/register`, {
-        fixture: "authentication/register.json"
+    cy.intercept("POST", `${API_BASE_URL_AUTH}/auth/register`, {
+        fixture: "authentication/tokens.json"
     }).as("mockRegister")
+
+    cy.intercept("POST", `${API_BASE_URL_AUTH}/auth/refresh`, {
+        fixture: "authentication/tokens.json"
+    }).as("mockRefresh")
 })
 
 Cypress.Commands.add("mockCreateItem", () => {
-    cy.intercept("POST", `${apiBaseUrlCommand}/items`).as("mockCreateItem")
+    cy.intercept("POST", `${API_BASE_URL_COMMAND}/items`).as("mockCreateItem")
+})
+
+Cypress.Commands.add("login", (route) => {
+    cy.mockLogin()
+
+    cy.visitLocalPage(route, {
+        onBeforeLoad: (win) => {
+            win.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(sessiondata))
+        }
+    })
 })
 
 export { }

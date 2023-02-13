@@ -3,38 +3,33 @@ import { routes } from "../../../src/services/routes/routes"
 const clientBaseUrl = Cypress.env("CLIENT_BASE_URL")
 
 describe("Routes protected/guest", () => {
-    it("should not redirect when nothing is set (on /)", () => {
-        cy.mockItemsList()
-
-        cy.visitLocalPage(routes.home)
-
-        cy.url().should("eq", clientBaseUrl + routes.home)
-    })
-
     describe("Protected Route", () => {
         it("should redirect to login when not logged in", () => {
             cy.visitLocalPage(routes.account.profile())
 
+            cy.contains("Welcome back").should("be.visible")
             cy.url().should("include", routes.account.login)
         })
 
         it("should show page when logged in", () => {
-            cy.visitLocalPage(routes.account.profile())
+            cy.login(routes.account.profile())
 
             cy.url().should("include", routes.account.profile())
+            cy.contains("Profile").should("be.visible")
         })
     })
 
     describe("Guest Route", () => {
         it("should redirect to / when logged in and visit login (guest route)", () => {
-            // Guest route
-            cy.visitLocalPage(routes.account.login)
+            // Login and visit login page
+            cy.login(routes.account.login)
 
             // Mock home
             cy.mockItemsList()
 
             // Redirected to /
             cy.url().should("eq", clientBaseUrl + routes.home)
+            cy.contains("How much weighs?").should("be.visible")
         })
 
         it("should show page (login guest route) when not logged in", () => {
@@ -43,6 +38,33 @@ describe("Routes protected/guest", () => {
 
             // Stays on login
             cy.url().should("include", routes.account.login)
+        })
+
+        it("should not show profile when guest", () => {
+            cy.visitLocalPage(routes.account.profile())
+
+            cy.contains("Profile", { timeout: 0 }).should("not.exist")
+        })
+    })
+
+    describe("Public Route", () => {
+        it("should show page when logged in", () => {
+            cy.mockItemsList()
+
+            // Login and visit home page
+            cy.login(routes.home)
+
+            cy.url().should("eq", clientBaseUrl + routes.home)
+            cy.contains("How much weighs?").should("be.visible")
+        })
+
+        it("should show page when guest", () => {
+            cy.mockItemsList()
+
+            cy.visitLocalPage(routes.home)
+
+            cy.url().should("eq", clientBaseUrl + routes.home)
+            cy.contains("How much weighs?").should("be.visible")
         })
     })
 })

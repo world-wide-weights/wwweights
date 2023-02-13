@@ -64,6 +64,11 @@ declare global {
        * Mocks register request.
        */
       mockRegister(): Chainable<void>
+      /**
+       * Login to the app (Sets sessiondata to localstorage).
+       * @param route the route we want to go after login
+       */
+      login(route: string): Chainable<void>
     }
   }
 }
