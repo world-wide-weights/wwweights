@@ -55,8 +55,6 @@ const Profile: NextPageCustomProps = () => {
                     })
                 ])
 
-                console.log(contributions)
-
                 // Prepare statistics
                 const itemsCreated = statisticsResponse.data.count.itemsCreated ?? 0
                 const itemsUpdated = statisticsResponse.data.count.itemsUpdated ?? 0
@@ -110,10 +108,10 @@ const Profile: NextPageCustomProps = () => {
 
                     {/* Statistics */}
                     <div className="flex flex-col gap-3 flex-grow">
-                        {/* TODO (Zoe-Bot): Implement correct stats */}
-                        <Card icon="volunteer_activism" value="300" descriptionTop="Contribution" />
-                        <Card icon="visibility" value="300.000.000" descriptionTop="Views" />
-                        <Card icon="chat" value="200" descriptionTop="Feedback" />
+                        <Card icon="volunteer_activism" value={statistics.totalContributions.toLocaleString("en-US")} descriptionTop="Contributions" />
+                        <Card icon="weight" value={statistics.itemsCreated.toLocaleString("en-US")} descriptionTop="Items created" />
+                        <Card icon="edit" value={statistics.itemsUpdated.toLocaleString("en-US")} descriptionTop="Items updated" />
+                        <Card icon="close" value={statistics.itemsDeleted.toLocaleString("en-US")} descriptionTop="Items deleted" />
                     </div>
                 </div>
 
