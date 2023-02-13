@@ -21,13 +21,13 @@ type NavLink = {
  * Navbar component, should only be used once at the top 
  */
 export const Navbar: React.FC = () => {
+    const router = useRouter()
+
     // Local States
     const [isNavMobileOpen, setIsNavMobileOpen] = useState<boolean>(false)
 
     // Global states
     const { hasSession, logout, isLoading } = useContext(AuthContext)
-
-    const router = useRouter()
 
     const navLinks: NavLink[] = [{
         shouldDisplay: true,

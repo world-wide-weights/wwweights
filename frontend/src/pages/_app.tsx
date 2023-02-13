@@ -42,12 +42,13 @@ const metropolis = localFont({
  * Page.auth = {
  *    routeType: protected --> To see this page you need to be logged in
  *    routeType: guest --> To see this page you need to be a guest (not logged in)
+ *    routeType: public --> This page is public and can be seen by everyone
  * } 
  */
 export type NextPageCustomProps<P = {}, IP = P> = NextPage<P, IP> & {
   layout?: (page: React.ReactElement) => React.ReactNode
   auth?: {
-    routeType: "protected" | "guest"
+    routeType: "protected" | "guest" | "public"
   }
 }
 
@@ -59,14 +60,11 @@ type AppPropsCustom = AppProps & {
  * Starting point of the app. 
  * Wrapps all pages.
  */
-const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsCustom) => {
+const App = ({ Component, pageProps }: AppPropsCustom) => {
   // When layout function is defined use custom layout
-  const layout = Component.layout ?? ((page: React.ReactElement) =>
-    <DefaultLayout>
-      {page}
-    </DefaultLayout>
-  )
-  return <Auth routeType={Component?.auth?.routeType ?? "public"}>
+  const layout = Component.layout ?? ((page: React.ReactElement) => <DefaultLayout>{page}</DefaultLayout>)
+
+  return <>
     {/** Google AdSense */}
     {SHOULD_DISPLAY_ADS && <Script
       async
@@ -89,10 +87,12 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsCustom
       </Script>
     </>}
 
-    <div className={`${metropolis.variable} font-sans`}>
-      {layout(<Component {...pageProps} />)}
-    </div>
-  </Auth>
+    <Auth routeType={Component?.auth?.routeType ?? "public"}> {/** Auth wrapper */}
+      <div className={`${metropolis.variable} font-sans`}> {/** Global font */}
+        {layout(<Component {...pageProps} />)} {/** Page content with default or custom layout. */}
+      </div>
+    </Auth>
+  </>
 }
 
 export default App

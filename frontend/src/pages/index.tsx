@@ -119,11 +119,9 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 	)
 }
 
-export const getServerSideProps: GetServerSideProps<HomeProps> = async (context) => {
-	const [response] = await Promise.all([
-		queryRequest.get<PaginatedResponse<Item>>("/items/list?page=1&limit=20&query=iphone 2020")
-	])
-	const items = response.data.data
+export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
+	const itemsResponse = await queryRequest.get<PaginatedResponse<Item>>("/items/list?page=1&limit=20&query=iphone 2020")
+	const items = itemsResponse.data.data
 
 	return {
 		props: {

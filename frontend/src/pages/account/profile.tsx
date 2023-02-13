@@ -9,7 +9,10 @@ import { SessionData } from "../../types/auth"
 import { NextPageCustomProps } from "../_app"
 
 const Profile: NextPageCustomProps = () => {
+    // Local States
     const [session, setSession] = useState<SessionData>()
+
+    // Global States
     const { getSession, isLoading } = useContext(AuthContext)
 
     useEffect(() => {
@@ -29,11 +32,9 @@ const Profile: NextPageCustomProps = () => {
         fetchProfile()
     }, [getSession])
 
-
-    const seoTitle = "My Profile"
     return <>
         <Seo
-            title={seoTitle}
+            title="My Profile"
             description="Your profile page. Here you can see your contributions and statistics."
         />
 

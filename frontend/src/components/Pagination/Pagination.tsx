@@ -57,7 +57,7 @@ export const Pagination: React.FC<PaginationProps> = ({ totalItems, currentPage,
                     </li>
             )}
 
-            {/*  Right navigation arrow */}
+            {/* Right navigation arrow */}
             <li>
                 <Button datacy="pagination-button-next" to={paginationService.next ?? " "} disabled={!paginationService.next} icon="arrow_forward_ios" iconSlot="end" className={`${!paginationService.next ? "hidden" : "flex"} sm:hidden md:flex ml-5`} kind="tertiary">Next</Button>
                 <Tooltip wrapperClassname="hidden sm:flex md:hidden" content="Next page">
