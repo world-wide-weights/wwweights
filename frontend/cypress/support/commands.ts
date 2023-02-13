@@ -120,8 +120,8 @@ Cypress.Commands.add("login", (route) => {
     cy.mockLogin()
 
     cy.visitLocalPage(route, {
-        onBeforeLoad: (win) => {
-            win.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(sessiondata))
+        onBeforeLoad: (window) => {
+            window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(sessiondata))
         }
     })
 })
