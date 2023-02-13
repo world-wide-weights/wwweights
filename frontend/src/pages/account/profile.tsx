@@ -1,4 +1,4 @@
-import { GetServerSideProps, InferGetServerSidePropsType } from "next"
+import { isAxiosError } from "axios"
 import Image from "next/image"
 import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../../components/Auth/Auth"
@@ -12,39 +12,80 @@ import { authRequest, queryRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { Profile } from "../../types/auth"
 import { Item, PaginatedResponse } from "../../types/item"
+import Custom500 from "../500"
+import { NextPageCustomProps } from "../_app"
 
-type ProfilePageProps = {
-    contributions: PaginatedResponse<Item>
-    statistics: {
-        totalContributions: number
-        itemsCreated: number
-        itemsUpdated: number
-        itemsDeleted: number
-    }
+type Statistics = {
+    totalContributions: number
+    itemsCreated: number
+    itemsUpdated: number
+    itemsDeleted: number
 }
 
-function Profile({ contributions, statistics }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+/**
+ * Profile page, shows user profile statistics and contributions.
+ */
+const Profile: NextPageCustomProps = () => {
     // Local States
     const [profile, setProfile] = useState<Profile | undefined>()
+    const [contributions, setContributions] = useState<PaginatedResponse<Item>>({ data: [], total: 0, page: 1, limit: 10 })
+    const [statistics, setStatistics] = useState<Statistics>({ totalContributions: 0, itemsCreated: 0, itemsUpdated: 0, itemsDeleted: 0 })
+    const [isLoading, setIsLoading] = useState<boolean>(true)
+    const [error, setError] = useState<string | undefined>(undefined)
 
     // Global States
-    const { getSession, isLoading } = useContext(AuthContext)
+    const { getSession } = useContext(AuthContext)
 
     useEffect(() => {
+        setIsLoading(true)
+
         const fetchProfile = async () => {
             const sessionData = await getSession()
             if (!sessionData) return
-            const response = await authRequest.get<Profile>("/profile/me", {
-                headers: {
-                    "Authorization": `Bearer ${sessionData.accessToken}`
+
+            try {
+                // Fetch contributions, statistics and profile
+                const [contributionsResponse, statisticsResponse, profileResponse] = await Promise.all([
+                    queryRequest.get<PaginatedResponse<Item>>(`/items/list?userid=${sessionData.decodedAccessToken.id}`),
+                    queryRequest.get<StatisticsResponse>(`/profiles/${sessionData.decodedAccessToken.id}/statistics`),
+                    authRequest.get<Profile>("/profile/me", {
+                        headers: {
+                            "Authorization": `Bearer ${sessionData.accessToken}`
+                        }
+                    })
+                ])
+
+                console.log(contributions)
+
+                // Prepare statistics
+                const itemsCreated = statisticsResponse.data.count.itemsCreated ?? 0
+                const itemsUpdated = statisticsResponse.data.count.itemsUpdated ?? 0
+                const itemsDeleted = statisticsResponse.data.count.itemsDeleted ?? 0
+                const totalContributions = itemsCreated + itemsUpdated + itemsDeleted
+                const statistics = {
+                    totalContributions,
+                    itemsCreated,
+                    itemsUpdated,
+                    itemsDeleted
                 }
-            })
-            setProfile(response.data)
+
+                setProfile(profileResponse.data)
+                setContributions(contributionsResponse.data)
+                setStatistics(statistics)
+            } catch (error) {
+                isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Netzwerk-Zeitüberschreitung")
+                console.error(error)
+            } finally {
+                setIsLoading(false)
+            }
         }
         fetchProfile()
     }, [getSession])
 
     const isLoadingProfile = !profile || isLoading
+
+    if (error)
+        return <Custom500 />
 
     return <>
         <Seo
@@ -64,8 +105,7 @@ function Profile({ contributions, statistics }: InferGetServerSidePropsType<type
                     <div className="flex flex-col justify-center md:justify-start sm:w-1/2 md:w-auto items-center bg-white rounded-lg py-6 px-4 mb-3 sm:mb-0">
                         <Image src="https://picsum.photos/120" alt="profile picture" width={120} height={120} className="rounded-full mb-2" />
                         <Headline level={3} hasMargin={false}>{profile.username}</Headline>
-                        {/* TODO (Zoe-Bot): Update date */}
-                        <p>Member since 19.12.2022</p>
+                        <p><>Member since {new Date(profile.createdAt).toLocaleDateString("en-US")}</></p>
                     </div>
 
                     {/* Statistics */}
@@ -93,59 +133,9 @@ function Profile({ contributions, statistics }: InferGetServerSidePropsType<type
     </>
 }
 
-export const getServerSideProps: GetServerSideProps<ProfilePageProps> = async () => {
-    try {
-        // Fetch contributions and statistics
-        // TODO (Zoe-Bot): Implement update user id
-        const [contributionsResponse, statisticsResponse] = await Promise.all([
-            queryRequest.get<PaginatedResponse<Item>>("/items/list?userid=1"),
-            queryRequest.get<StatisticsResponse>("/profiles/1/statistics"),
-        ])
-
-        // Prepare contributions and statistics
-        const contributions = contributionsResponse.data
-        const itemsCreated = statisticsResponse.data.count.itemsCreated ?? 0
-        const itemsUpdated = statisticsResponse.data.count.itemsUpdated ?? 0
-        const itemsDeleted = statisticsResponse.data.count.itemsDeleted ?? 0
-        const totalContributions = itemsCreated + itemsUpdated + itemsDeleted
-        const statistics = {
-            totalContributions,
-            itemsCreated,
-            itemsUpdated,
-            itemsDeleted,
-        }
-
-        return {
-            props: {
-                contributions,
-                statistics
-            }
-        }
-    } catch (error) {
-        // axios.isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Netzwerk-Zeitüberschreitung")
-        console.error(error)
-        return {
-            props: {
-                contributions: {
-                    total: 0,
-                    page: 1,
-                    limit: 0,
-                    data: [],
-                },
-                statistics: {
-                    totalContributions: 0,
-                    itemsCreated: 0,
-                    itemsUpdated: 0,
-                    itemsDeleted: 0
-                }
-            }
-        }
-    }
-}
-
 // Sets route need to be logged in
-// Profile.auth = {
-//     routeType: "protected"
-// }
+Profile.auth = {
+    routeType: "protected"
+}
 
 export default Profile
