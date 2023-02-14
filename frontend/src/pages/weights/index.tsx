@@ -26,6 +26,7 @@ const DEFAULT_ITEMS_PER_PAGE = 16
 const ITEMS_PER_PAGE_MAXIMUM = 100
 const FIRST_PAGE = 1
 const KEY_VIEW_TYPE = "discover_view_type"
+const KEY_STATISTICS_EXPANDED = "discover_statistics_expanded"
 
 type Statistics = {
     heaviest: Item
@@ -56,8 +57,8 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
     const initialRender = useRef<boolean>(true)
 
     // Local state
-    const [statisticsExpanded, setStatisticsExpanded] = useState<boolean>(false)
-    const [viewType, setViewType, loading] = useLocalStorage(KEY_VIEW_TYPE, "grid", initialRender)
+    const [statisticsExpanded, setStatisticsExpanded] = useState(false)
+    const [viewType, setViewType, loadingViewType] = useLocalStorage(KEY_VIEW_TYPE, "grid", initialRender)
 
     return <>
         {/* Meta Tags */}
@@ -107,7 +108,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                                 </div>
                             </div>
 
-                            {loading ? <p>Loading...</p> : <>
+                            {loadingViewType ? <p>Loading...</p> : <>
                                 {/* Weights Box View */}
                                 {viewType === "grid" && <div className={`grid ${statisticsExpanded ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" : "grid-cols-1 md:grid-cols-2 2xl:grid-cols-3"} gap-2 md:gap-5 mb-5 md:mb-8`}>
                                     {items.map((item) => <ItemPreviewGrid datacy="weights-grid-item" key={item.slug} name={item.name} slug={item.slug} weight={item.weight} imageUrl={getImageUrl(item.image)} />)}
@@ -131,7 +132,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                                 <Headline level={3} hasMargin={false} className={`${statisticsExpanded ? "" : "lg:hidden"} `}>Statistics</Headline>
 
                                 {/* Show Statistics Button */}
-                                <Button onClick={() => setStatisticsExpanded(!statisticsExpanded)} className="hidden lg:flex" kind="tertiary">{statisticsExpanded ? "Show less" : "Show more"}</Button>
+                                <Button onClick={() => setStatisticsExpanded(!statisticsExpanded)} className="hidden lg:flex" kind="tertiary">{statisticsExpanded ? "Vertical View" : "Horizontal View"}</Button>
                             </div>
 
                             {/* Statistics Content */}
