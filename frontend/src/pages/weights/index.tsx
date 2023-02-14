@@ -26,7 +26,6 @@ const DEFAULT_ITEMS_PER_PAGE = 16
 const ITEMS_PER_PAGE_MAXIMUM = 100
 const FIRST_PAGE = 1
 const KEY_VIEW_TYPE = "discover_view_type"
-const KEY_STATISTICS_EXPANDED = "discover_statistics_expanded"
 
 type Statistics = {
     heaviest: Item
