@@ -165,7 +165,7 @@ Cypress.Commands.add("mockProfilePage", (options) => {
 
     // Mock statistics
     cy.intercept("GET", `${API_BASE_URL_QUERY}/profiles/*/statistics`, {
-        body: options?.hasStatistics ? profileStatistics : {}
+        body: options?.hasStatistics ?? true ? profileStatistics : {}
     }).as("mockProfileStatistics")
 
     // Mock profile
