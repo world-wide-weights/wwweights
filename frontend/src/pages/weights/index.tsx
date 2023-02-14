@@ -75,7 +75,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
         <SearchHeader query={query} sort={sort} />
 
         {/* Content */}
-        <main className="container mt-5">
+        <main className="container mt-5 mb-5 md:mb-20">
             {(items.length === 0 || statistics === undefined) ?
                 // Empty State
                 <SearchEmptyState query={query} />

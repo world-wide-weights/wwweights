@@ -119,7 +119,7 @@ const Profile: NextPageCustomProps = () => {
             description="Your profile page. Here you can see your contributions and statistics."
         />
 
-        <main className="container mt-5">
+        <main className="container mt-5 mb-5 md:mb-20">
             <Headline level={1}>Profile</Headline>
             <div className="lg:flex gap-4">
                 <div className="sm:flex lg:flex-col gap-3 2xl:w-1/4 mb-6 lg:mb-0">
