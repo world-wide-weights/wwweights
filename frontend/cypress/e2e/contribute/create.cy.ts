@@ -20,7 +20,7 @@ describe("Create Item", () => {
             cy.wait("@mockCreateItem")
         })
 
-        it("should create item when fill all fields", () => {
+        it.only("should create item when fill all fields", () => {
             // Fill required
             cy.dataCy("textinput-name-input").type("apple")
             cy.dataCy("textinput-weight-input").type("150")
@@ -44,12 +44,16 @@ describe("Create Item", () => {
             // Fill details
             cy.dataCy("textinput-source-input").type("https://wikipedia.de")
             cy.dataCy("textinput-tags-input").type("fruit")
-            cy.dataCy("textinput-image-input").type("https://picsum.photos/120")
+            cy.dataCy("imageupload-imageFile-file-input").selectFile({
+                contents: Cypress.Buffer.from("file contents"),
+                fileName: "file.png",
+                lastModified: Date.now(),
+            }, { force: true })
 
             // Mock create and weights page
+            cy.mockUploadImage()
             cy.mockCreateItem()
             cy.mockDiscoverPage()
-
             // Submit form
             cy.dataCy("create-submit-button").click()
 

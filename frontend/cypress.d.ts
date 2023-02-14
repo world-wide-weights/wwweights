@@ -56,6 +56,10 @@ declare global {
        */
       mockCreateItem(): Chainable<void>
       /**
+       * Mocks upload image request.
+       */
+      mockUploadImage(): Chainable<void>
+      /**
        * Mock requests for single weight page.
        */
       mockSingleWeight(): Chainable<void>
