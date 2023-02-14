@@ -26,6 +26,10 @@ declare global {
        */
       check404(): Chainable<void>
       /**
+       * Checks if we are on a 500 page.
+       */
+      check500(): Chainable<void>
+      /**
        * In Pagination checks if the activePageNumber is active.
        * @param activePageNumber the page we want to check active status
        */
@@ -73,6 +77,11 @@ declare global {
        * @param route the route we want to go after login
        */
       login(route: string): Chainable<void>
+      /**
+       * Mock profile page with contributions, statistics and profile data.
+       * @param contribtionsCount count of contributions getting back with body.
+       */
+      mockProfilePage(contribtionsCount?: number): Chainable<void>
     }
   }
 }

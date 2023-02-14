@@ -1,0 +1,53 @@
+{
+    "total": 2,
+    "page": 1,
+    "limit": 16,
+    "data": [
+        {
+            "name": "Test",
+            "slug": "test",
+            "weight": {
+                "value": 150,
+                "isCa": false,
+                "additionalValue": 250
+            },
+            "tags": [
+                {
+                    "name": "fruit",
+                    "count": 2
+                },
+                {
+                    "name": "red",
+                    "count": 2
+                }
+            ],
+            "image": "https://example.com/image.png",
+            "source": "https://example.com",
+            "userId": 1,
+            "createdAt": 1676302822896
+        },
+        {
+            "name": "Apple",
+            "slug": "apple",
+            "weight": {
+                "value": 150,
+                "isCa": false,
+                "additionalValue": 250
+            },
+            "tags": [
+                {
+                    "name": "fruit",
+                    "count": 2
+                },
+                {
+                    "name": "red",
+                    "count": 2
+                }
+            ],
+            "image": "https://example.com/image.png",
+            "source": "https://example.com",
+            "userId": 1,
+            "createdAt": 1676302816532
+        }
+    ]
+}

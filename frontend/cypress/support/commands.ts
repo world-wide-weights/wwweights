@@ -5,6 +5,7 @@ import paginatedItems from "../fixtures/items/list.json"
 import paginatedRelatedItems from "../fixtures/items/related.json"
 import paginatedSingleItem from "../fixtures/items/single.json"
 import statistics from "../fixtures/items/statistics.json"
+import paginatedContributions from "../fixtures/profile/contributions.json"
 import paginatedTagsList from "../fixtures/tags/list.json"
 
 const API_BASE_URL_AUTH = Cypress.env("PUBLIC_API_BASE_URL_AUTH")
@@ -22,6 +23,10 @@ Cypress.Commands.add("visitLocalPage", (path = "", options) => {
 
 Cypress.Commands.add("check404", () => {
     cy.contains("404 - Page not found").should("be.visible")
+})
+
+Cypress.Commands.add("check500", () => {
+    cy.contains("500 - Error on Server Side").should("be.visible")
 })
 
 Cypress.Commands.add("checkCurrentActivePage", (activePageNumber) => {
@@ -47,7 +52,9 @@ Cypress.Commands.add("mockGetTagsList", () => {
 
 Cypress.Commands.add("mockItemsList", (itemCount?: number) => {
     const body = itemCount || itemCount === 0 ? {
-        ...paginatedItems,
+        total: 0,
+        page: 1,
+        limit: 16,
         data: paginatedItems.data.slice(0, itemCount)
     } : paginatedItems
 
@@ -136,6 +143,30 @@ Cypress.Commands.add("login", (route) => {
             window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(sessiondata))
         }
     })
+})
+
+Cypress.Commands.add("mockProfilePage", (contribtionsCount) => {
+    const body = contribtionsCount || contribtionsCount === 0 ? {
+        total: 0,
+        page: 1,
+        limit: 16,
+        data: paginatedContributions.data.slice(0, contribtionsCount)
+    } : paginatedContributions
+
+    // Mock Contributions
+    cy.intercept("GET", `${API_BASE_URL_QUERY}/items/list*`, {
+        body
+    }).as("mockContributions")
+
+    // Mock statistics
+    cy.intercept("GET", `${API_BASE_URL_QUERY}/profiles/*/statistics`, {
+        fixture: "profile/statistics.json"
+    }).as("mockStatistics")
+
+    // Mock profile
+    cy.intercept("GET", `${API_BASE_URL_AUTH}/profile/me`, {
+        fixture: "profile/me.json"
+    }).as("mockProfile")
 })
 
 export { }
