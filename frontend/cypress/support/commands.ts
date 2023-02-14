@@ -134,10 +134,11 @@ Cypress.Commands.add("mockCreateItem", () => {
     }).as("mockCreateItem")
 })
 
-Cypress.Commands.add("login", (route) => {
+Cypress.Commands.add("login", (route, visitOptions) => {
     cy.mockLogin()
 
     cy.visitLocalPage(route, {
+        ...visitOptions,
         onBeforeLoad: (window) => {
             window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(sessiondata))
         }

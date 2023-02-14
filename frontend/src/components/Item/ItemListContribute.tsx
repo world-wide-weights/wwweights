@@ -20,7 +20,7 @@ type ItemListContributeProps = {
 export const ItemListContribute: React.FC<ItemListContributeProps> = ({ name, slug, weight, image }) => {
     const weightString = renderUnitIntoString(weight)
 
-    return <li className="bg-white rounded-lg py-4 px-2 md:py-2 mb-2">
+    return <li datacy="item-list-contribute" className="bg-white rounded-lg py-4 px-2 md:py-2 mb-2">
         <div className="flex justify-between">
             {/* Item name, weight and image */}
             <Link className="flex justify-between md:justify-start items-center w-full md:h-12 mx-2 md:mx-4" href={routes.weights.single(slug)}>

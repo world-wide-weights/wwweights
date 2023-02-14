@@ -75,8 +75,9 @@ declare global {
       /**
        * Login to the app (Sets sessiondata to localstorage).
        * @param route the route we want to go after login
+       * @param visitOptions the options we have when visiting page for example failOnStatusCode: false
        */
-      login(route: string): Chainable<void>
+      login(route: string, visitOptions?: Partial<Cypress.VisitOptions>): Chainable<void>
       /**
        * Mock profile page with contributions, statistics and profile data.
        * @param contribtionsCount count of contributions getting back with body.
