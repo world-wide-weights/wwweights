@@ -19,6 +19,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { EventBus } from '@nestjs/cqrs';
 import { readFileSync } from 'fs';
+import { ItemDeleteSuggestedEvent } from '../items/events/item-delete-suggested.event';
 import { ItemEditSuggestedEvent } from '../items/events/item-edit-suggested.event';
 import { ItemInsertedEvent } from '../items/events/item-inserted.event';
 import { ALLOWED_EVENT_ENTITIES } from './enums/allowedEntities.enum';
@@ -30,9 +31,15 @@ import { ALLOWED_EVENT_ENTITIES } from './enums/allowedEntities.enum';
 export class EventStore {
   private readonly logger = new Logger(EventStore.name);
   private client: EventStoreDBClient;
-  private readonly eventMap = new Map<string, (typeof ItemEditSuggestedEvent | typeof ItemInsertedEvent)>([
+  private readonly eventMap = new Map<
+    string,
+    | typeof ItemEditSuggestedEvent
+    | typeof ItemInsertedEvent
+    | typeof ItemDeleteSuggestedEvent
+  >([
     [ItemInsertedEvent.name, ItemInsertedEvent],
-    [ItemEditSuggestedEvent.name, ItemEditSuggestedEvent]
+    [ItemEditSuggestedEvent.name, ItemEditSuggestedEvent],
+    [ItemDeleteSuggestedEvent.name, ItemDeleteSuggestedEvent],
   ]);
   isReady = false;
 
