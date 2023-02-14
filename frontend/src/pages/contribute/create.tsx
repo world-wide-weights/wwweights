@@ -11,15 +11,17 @@ import { FormError } from "../../components/Errors/FormError"
 import { CheckboxList } from "../../components/Form/CheckboxList/CheckboxList"
 import { CustomSelectionButton } from "../../components/Form/CustomSelectionButton/CustomSelectionButton"
 import { Dropdown } from "../../components/Form/Dropdown/Dropdown"
+import { ImageUpload } from "../../components/Form/ImageUpload/ImageUpload"
 import { Label } from "../../components/Form/Label"
 import { TextInput } from "../../components/Form/TextInput/TextInput"
 import { Headline } from "../../components/Headline/Headline"
 import { Icon } from "../../components/Icon/Icon"
 import { Seo } from "../../components/Seo/Seo"
 import { Tooltip } from "../../components/Tooltip/Tooltip"
-import { commandRequest } from "../../services/axios/axios"
+import { commandRequest, imageRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { convertAnyWeightIntoGram } from "../../services/unit/unitConverter"
+import { ImageUploadResponse } from "../../types/image"
 import { Weight } from "../../types/item"
 import { NextPageCustomProps } from "../_app"
 
@@ -44,7 +46,7 @@ type CreateItemForm = {
     isCa: boolean[]
     valueType: "exact" | "range"
     source?: string
-    image?: string
+    imageFile?: File
     tags?: string
 }
 
@@ -77,7 +79,7 @@ const Create: NextPageCustomProps = () => {
         /** This is an array since checkbox component can only handle arrays */
         isCa: [false],
         source: "",
-        image: "",
+        imageFile: undefined,
         tags: ""
     }
 
@@ -93,7 +95,7 @@ const Create: NextPageCustomProps = () => {
         }),
         isCa: array(),
         source: string(),
-        image: string(),
+        imageFile: mixed().notRequired(),
         tags: string(),
     })
 
@@ -101,12 +103,17 @@ const Create: NextPageCustomProps = () => {
      * Handle submit create item.
      * @param values input from form
      */
-    const onFormSubmit = async ({ name, weight, unit, additionalValue, valueType, isCa, source, image, tags }: CreateItemForm) => {
+    const onFormSubmit = async ({ name, weight, unit, additionalValue, valueType, isCa, source, tags, imageFile }: CreateItemForm) => {
+
         // Convert weight in g
         weight = convertAnyWeightIntoGram(new BigNumber(weight), unit).toNumber()
 
         // Convert additionalValue in g
         additionalValue = additionalValue ? convertAnyWeightIntoGram(new BigNumber(additionalValue), unit).toNumber() : undefined
+
+        console.log({
+            message: "Weights converted to g."
+        })
 
         // Prepare item data
         const item: CreateItemDto = {
@@ -117,10 +124,13 @@ const Create: NextPageCustomProps = () => {
                 // Only add additionalValue when defined and value type is additional
                 ...(additionalValue && (valueType === "range") ? { additionalValue } : {})
             },
-            ...(image !== "" ? { image } : {}), // Only add image when defined
             ...(source !== "" ? { source } : {}), // Only add source when defined
             tags: tags ? tags.split(",") : [] // TODO: Replace with array tags
         }
+
+        console.log({
+            message: "Item data prepared.",
+        })
 
         try {
             const session = await getSession()
@@ -128,11 +138,49 @@ const Create: NextPageCustomProps = () => {
             if (session === null)
                 throw Error("Failed to get session.")
 
+            console.log({
+                message: "Session retrieved.",
+            })
+            if (imageFile) {
+                console.log({
+                    message: "Image file found. Trying to upload image.",
+                })
+                // Create form and append image
+                const formData = new FormData()
+                formData.append("image", imageFile)
+
+                const imageResponse = await imageRequest.post<ImageUploadResponse>("/upload/image", formData, {
+                    headers: {
+                        Authorization: `Bearer ${session.accessToken}`,
+                        "Content-Type": "multipart/form-data"
+                    },
+                    validateStatus(status) {
+                        // Accept 409 Conflict as valid status
+                        return (status >= 200 && status < 300) || status === 409
+                    },
+                })
+
+                // Append image path to item
+                item.image = imageResponse.data.path
+                console.log({
+                    message: "Image uploaded.",
+                })
+            }
+
+            console.log({
+                message: "Trying to create item.",
+            })
+
+
             // Create item with api
             const response = await commandRequest.post("/items/insert", item, {
                 headers: {
                     Authorization: `Bearer ${session.accessToken}`
                 }
+            })
+
+            console.log({
+                message: "Item created. Redirecting to discover.",
             })
 
             if (response.status === 200) {
@@ -236,6 +284,8 @@ const Create: NextPageCustomProps = () => {
                                     {/* TODO (Zoe-bot): Add image upload */}
                                     {/* Image */}
                                     <TextInput name="image" labelText="Image Url" placeholder="Image of item" />
+
+                                    <ImageUpload name="imageFile" />
                                 </div>}
                             </div>
                         </div>
