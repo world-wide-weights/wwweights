@@ -14,7 +14,6 @@ import { authRequest, queryRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { Profile } from "../../types/auth"
 import { Item, PaginatedResponse } from "../../types/item"
-import Custom404 from "../404"
 import Custom500 from "../500"
 import { NextPageCustomProps } from "../_app"
 
@@ -30,7 +29,7 @@ type Statistics = {
  */
 const Profile: NextPageCustomProps = () => {
     // Router
-    const router = useRouter()
+    const { query, isReady } = useRouter()
 
     // Local States
     const [profile, setProfile] = useState<Profile | undefined>()
@@ -40,14 +39,15 @@ const Profile: NextPageCustomProps = () => {
     const [error, setError] = useState<string | undefined>(undefined)
 
     // Local variables
-    const isLoadingProfile = !profile || isLoading
+    const isLoadingProfile = !profile || isLoading || !isReady
 
     // Global States
     const { getSession } = useContext(AuthContext)
 
     // Fetch profile data
     useEffect(() => {
-        setIsLoading(true)
+        // Wait till the router has finished loading
+        if (!isReady) return
 
         const fetchProfile = async () => {
             const sessionData = await getSession()
@@ -55,8 +55,17 @@ const Profile: NextPageCustomProps = () => {
 
             try {
                 // Get page and limit
-                const page = router.query.page ? Number(router.query.page) : 1
-                const limit = router.query.limit ? Number(router.query.limit) : 6
+                const page = query.page ? (() => {
+                    const pageNumber = Number(query.page)
+                    if (pageNumber < 1) return 1
+                    return pageNumber
+                })() : 1
+                const limit = query.limit ? (() => {
+                    const limitNumber = Number(query.limit)
+                    if (limitNumber < 1) return 1
+                    if (limitNumber > 64) return 64
+                    return limitNumber
+                })() : 6
 
                 // Fetch contributions, statistics and profile
                 const [contributionsResponse, statisticsResponse, profileResponse] = await Promise.all([
@@ -92,10 +101,7 @@ const Profile: NextPageCustomProps = () => {
             }
         }
         fetchProfile()
-    }, [getSession, router.query.page, router.query.limit])
-
-    if (Number(router.query.page) < 1 || Number(router.query.limit) < 1)
-        return <Custom404 />
+    }, [query.page, query.limit, getSession, isReady])
 
     if (error)
         return <Custom500 />
@@ -133,11 +139,11 @@ const Profile: NextPageCustomProps = () => {
                 <div className="lg:w-3/4">
                     {contributions.data.length === 0 ? <ContributionsEmptyState /> :
                         <>
-                            <Headline level={4}>Contributions</Headline>
+                            <Headline level={4}>Contributions <small className="font-normal">{contributions.total}</small></Headline>
                             <ul datacy="profile-contributions-wrapper" className="mb-5">
                                 {contributions.data.map((contribution) => <ItemListContribute {...contribution} key={contribution.slug} />)}
                             </ul>
-                            <Pagination totalItems={contributions.total} currentPage={router.query.page ? Number(router.query.page) : 1} baseRoute={routes.account.profile} itemsPerPage={contributions.limit} />
+                            <Pagination totalItems={contributions.total} currentPage={query.page ? Number(query.page) : 1} baseRoute={routes.account.profile} itemsPerPage={contributions.limit} />
                         </>}
                 </div>
             </div>
