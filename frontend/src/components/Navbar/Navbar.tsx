@@ -8,7 +8,7 @@ import { AuthContext } from "../Auth/Auth"
 import { Button } from "../Button/Button"
 import { IconButton } from "../Button/IconButton"
 
-type NavLink = {
+export type NavLink = {
     shouldDisplay: boolean
     text: string
 } & ({
