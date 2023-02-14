@@ -9,11 +9,11 @@ import twitter from "../../assets/img/logos_icons/twitter.svg"
 import { queryRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { PaginatedResponse } from "../../types/item"
+import { NavLink } from "../../types/nav"
 import { Tag } from "../../types/tag"
 import { AuthContext } from "../Auth/Auth"
 import { Button } from "../Button/Button"
 import { Headline } from "../Headline/Headline"
-import { NavLink } from "../Navbar/Navbar"
 
 /**
  * Footer
@@ -23,7 +23,6 @@ export const Footer: React.FC = () => {
 
 	// Local States
 	const [tags, setTags] = useState<Tag[]>([])
-	const [isLoadingTags, setIsLoadingTags] = useState<boolean>(true)
 
 	// Global states
 	const { hasSession, logout, isLoading } = useContext(AuthContext)
@@ -31,11 +30,11 @@ export const Footer: React.FC = () => {
 	const aboutLinks: NavLink[] = [{
 		shouldDisplay: true,
 		to: routes.weights.list(),
-		text: "Discover",
+		text: "Discover items",
 	}, {
 		shouldDisplay: true,
 		to: routes.contribute.create,
-		text: "Create",
+		text: "Create item",
 	}, {
 		shouldDisplay: hasSession,
 		to: routes.account.profile(),
@@ -55,17 +54,14 @@ export const Footer: React.FC = () => {
 	}]
 
 	useEffect(() => {
-		setIsLoadingTags(true)
 		const fetchTags = async () => {
 			try {
-				const responseTags = await queryRequest.get<PaginatedResponse<Tag>>("/tags/list?page=1&limit=5")
+				const responseTags = await queryRequest.get<PaginatedResponse<Tag>>("/tags/list?page=1&limit=5&sort=most-used")
 				const tags = responseTags.data.data
 				setTags(tags)
 			} catch (error) {
 				console.error(error)
 				return
-			} finally {
-				setIsLoadingTags(false)
 			}
 		}
 		fetchTags()
@@ -119,8 +115,8 @@ export const Footer: React.FC = () => {
 				<div className="mb-4">
 					<Headline className="text-gray-900" level={4} hasMargin={false}>Misc</Headline>
 					<ul className="text-sm md:text-base ">
-						<li><Button to={routes.misc.index} kind="tertiary">Misc</Button></li>
-						<li><Button to={routes.misc.contact} kind="tertiary">Contact</Button></li>
+						<li><Button to={routes.misc.index} kind="tertiary">Help Center</Button></li>
+						<li><Button to={routes.misc.contact} kind="tertiary">Contact Us</Button></li>
 						<li><Button to={routes.misc.privacy} kind="tertiary">Privacy Policy</Button></li>
 						<li><Button to={routes.misc.terms} kind="tertiary">Terms and Conditions</Button></li>
 					</ul>

@@ -4,18 +4,11 @@ import { useRouter } from "next/router"
 import { useContext, useState } from "react"
 import logo from "../../../public/logo.png"
 import { routes } from "../../services/routes/routes"
+import { NavLink } from "../../types/nav"
 import { AuthContext } from "../Auth/Auth"
 import { Button } from "../Button/Button"
 import { IconButton } from "../Button/IconButton"
 
-export type NavLink = {
-    shouldDisplay: boolean
-    text: string
-} & ({
-    to: string
-} | {
-    onClick: () => void
-})
 
 /** 
  * Navbar component, should only be used once at the top 
