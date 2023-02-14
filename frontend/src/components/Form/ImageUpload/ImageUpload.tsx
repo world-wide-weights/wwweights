@@ -57,6 +57,10 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name }) => {
      * @param formikProps helper
      */
     const handleDrag = function (event: React.DragEvent<HTMLDivElement>) {
+        // If image is already set, do nothing.
+        if (image)
+            return
+
         event.preventDefault()
         event.stopPropagation()
 
@@ -113,7 +117,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name }) => {
                 <input datacy="imageupload-file-input" className="hidden" id="input-file-upload" ref={inputRef} type="file" accept=".svg,.png,.jpg,.jpeg" onChange={(event) => handleChange(event, props)} />
 
                 {/* File upload content */}
-                <label datacy="imageupload-content" className="flex items-center text-gray-500 h-full" htmlFor="input-file-upload">
+                <label datacy="imageupload-content" className="flex items-center text-gray-500 h-full cursor-pointer" htmlFor="input-file-upload">
                     <Icon className={`text-5xl ${dragActive ? "text-blue-500" : ""} mx-5`}>image</Icon>
                     <div>
                         <span className="font-medium text-gray-700 mr-1">Drag your Image or</span>
