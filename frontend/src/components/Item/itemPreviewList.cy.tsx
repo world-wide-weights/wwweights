@@ -27,6 +27,14 @@ describe("ItemPreviewList", () => {
         it("should not display weight difference", () => {
             cy.dataCy("div-difference").should("not.exist")
         })
+
+        it("should display progressbar", () => {
+            cy.dataCy("progressbar-progress").should("be.visible")
+        })
+
+        it("should display right percentage of progressbar", () => {
+            cy.dataCy("progressbar-progress").should("have.attr", "style", "width: 100%;")
+        })
     })
 
     describe("should display item preview list correct with weight difference", () => {
@@ -59,6 +67,12 @@ describe("ItemPreviewList", () => {
             cy.dataCy("div-difference").should("have.class", "text-gray-500")
             cy.dataCy("arrow-icon").should("have.text", "remove")
         })
+
+        it("should display right percentage of progressbar", () => {
+            cy.mount(<ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} heaviestWeight={{ value: 200, isCa: false }} imageUrl="https://via.placeholder.com/96.png" difference={50} />)
+
+            cy.dataCy("progressbar-progress").should("have.attr", "style", "width: 50%;")
+        })
     })
 
     describe("should display selected item correct", () => {
@@ -81,6 +95,14 @@ describe("ItemPreviewList", () => {
 
             cy.dataCy("item-preview-list").invoke("attr", "href").should("eq", "#")
             cy.dataCy("item-preview-list").should("have.class", "cursor-default")
+        })
+    })
+
+    describe("Bug Fix #307 - Wrong percentage when additional weight is smaller than value", () => {
+        it("should get display progressbar from value when it's bigger than additionalValue", () => {
+            cy.mount(<ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 500, isCa: false }} heaviestWeight={{ value: 1000, isCa: false, additionalValue: 0 }} datacy="item-preview-list" disableLink />)
+
+            cy.dataCy("progressbar-progress").should("have.attr", "style", "width: 50%;")
         })
     })
 })
