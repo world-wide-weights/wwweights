@@ -61,7 +61,7 @@ describe('QueryController (e2e)', () => {
     describe('tags/list', () => {
       const subPath = 'tags/list';
 
-      it('should return the alphabetical first 5)', async () => {
+      it('should return the alphabetical first 5', async () => {
         const result = await request(server)
           .get(queriesPath + subPath)
           .query({ limit: 5 })
@@ -71,7 +71,7 @@ describe('QueryController (e2e)', () => {
         expect(result.body.data[4].name).toEqual(tags[4].name);
       });
 
-      it('should return the alphabetical last 5)', async () => {
+      it('should return the alphabetical last 5', async () => {
         const result = await request(server)
           .get(queriesPath + subPath)
           .query({ limit: 5, sort: 'desc' })
@@ -81,7 +81,7 @@ describe('QueryController (e2e)', () => {
         expect(result.body.data[0].name).toEqual(tags[4].name);
       });
 
-      it('should return the 5 most used)', async () => {
+      it('should return the 5 most used', async () => {
         const result = await request(server)
           .get(queriesPath + subPath)
           .query({ limit: 5, sort: 'most-used' })
