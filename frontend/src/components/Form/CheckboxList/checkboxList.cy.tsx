@@ -57,26 +57,26 @@ describe("CheckboxList", () => {
 
         it("should display all options", () => {
             data.options.forEach((option) => {
-                cy.get(`[data-cy="${data.name}-option-${option.value}"]`).should("contain", option.label)
+                cy.dataCy(`${data.name}-option-${option.value}`).should("contain", option.label)
             })
         })
 
         it("should check box when click on it", () => {
-            cy.get(`[data-cy="${data.name}-option-${data.options[0].value}"] input`).check().should("be.checked")
-            cy.get(`[data-cy="${data.name}-option-${data.options[1].value}"] input`).should("not.be.checked")
+            cy.dataCy(`${data.name}-option-${data.options[0].value}`, " input").check().should("be.checked")
+            cy.dataCy(`${data.name}-option-${data.options[1].value}`, " input").should("not.be.checked")
         })
 
         it("should uncheck box when click on it after it is checked", () => {
-            cy.get(`[data-cy="${data.name}-option-${data.options[0].value}"] input`).check().should("be.checked")
-            cy.get(`[data-cy="${data.name}-option-${data.options[0].value}"] input`).click().should("not.be.checked")
+            cy.dataCy(`${data.name}-option-${data.options[0].value}`, " input").check().should("be.checked")
+            cy.dataCy(`${data.name}-option-${data.options[0].value}`, " input").click().should("not.be.checked")
         })
 
         it("should display icon before label when defined", () => {
-            cy.get(`[data-cy="${data.name}-option-${data.options[1].value}"] i`).should("be.visible")
+            cy.dataCy(`${data.name}-option-${data.options[1].value}`, " i").should("be.visible")
         })
 
         it("should not display icon before label when not defined", () => {
-            cy.get(`[data-cy="${data.name}-option-${data.options[0].value}"] i`).should("not.exist")
+            cy.dataCy(`${data.name}-option-${data.options[0].value}`, " i").should("not.exist")
         })
     })
 
@@ -87,7 +87,7 @@ describe("CheckboxList", () => {
                 <Button kind="primary" type="submit" className="mt-2">Hello</Button>
             </Wrapper>)
 
-            cy.get(`[data-cy="${data.name}-helpertext"]`).should("contain", data.helperText)
+            cy.dataCy(`${data.name}-helpertext`).should("contain", data.helperText)
         })
 
         it("should not show helper text", () => {
@@ -96,7 +96,7 @@ describe("CheckboxList", () => {
                 <Button kind="primary" type="submit" className="mt-2">Hello</Button>
             </Wrapper>)
 
-            cy.get(`[data-cy="${data.name}-helpertext"]`).should("not.exist")
+            cy.dataCy(`${data.name}-helpertext`).should("not.exist")
         })
     })
 })
