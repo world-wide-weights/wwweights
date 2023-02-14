@@ -5,6 +5,7 @@ import "material-symbols/rounded.css"
 import { NextPage } from "next"
 import type { AppProps } from "next/app"
 import Script from "next/script"
+import NextNProgress from "nextjs-progressbar"
 import React from "react"
 import { Auth } from "../components/Auth/Auth"
 import { Layout as DefaultLayout } from "../components/Layout/Layout"
@@ -65,6 +66,8 @@ const App = ({ Component, pageProps }: AppPropsCustom) => {
   const layout = Component.layout ?? ((page: React.ReactElement) => <DefaultLayout>{page}</DefaultLayout>)
 
   return <>
+    <NextNProgress color="#0967D2" height={4} />
+
     {/** Google AdSense */}
     {SHOULD_DISPLAY_ADS && <Script
       async
