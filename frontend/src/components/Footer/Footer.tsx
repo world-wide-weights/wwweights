@@ -76,7 +76,7 @@ export const Footer: React.FC = () => {
 			<div className="flex flex-col lg:flex-row justify-between mb-4 lg:mb-0">
 				<div className="md:w-2/3 lg:w-1/3 mb-4">
 					{/* Logo */}
-					<Link datacy="navbar-home-link" className="flex items-center mb-2" href={routes.home}>
+					<Link className="flex items-center mb-2" href={routes.home}>
 						<Image src={logo} alt="Logo" className="min-w-[25px] w-[25px] mr-2" />
 						<h6 className="font-bold text-lg text-blue-500">World Wide Weights</h6>
 					</Link>
