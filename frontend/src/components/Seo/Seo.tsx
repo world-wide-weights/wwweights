@@ -26,11 +26,11 @@ type BaseSeoProps = {
     twitterImage?: string
 }
 
-
 export const siteTitle = "World Wide Weights"
 export const baseTitleSuffix = ` | ${siteTitle}`
 export const baseKeywords = ["weights database", "World Wide Weights", "wwweights"]
 export const domain = process.env.NEXT_PUBLIC_CLIENT_BASE_URL ?? "https://wwweights.com"
+
 /**
  * Sets metadata into the `<head>` for search engines and social media.
  * @param {BaseSeoProps} Properties for the Seo component
