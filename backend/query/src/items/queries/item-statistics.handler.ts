@@ -32,11 +32,39 @@ export class ItemStatisticsHandler
         {
           $group: {
             _id: null,
-            averageWeight: { $avg: '$weight.value' },
-            items: { $push: '$$ROOT' }, // We have to push an array and can't just set it
+            min: { $min: '$weight.value' },
+            averageWeight: {
+              $avg: { $avg: ['$weight.value', '$weight.additionalValue'] },
+            },
+            max: {
+              $max: { $max: ['$weight.additionalValue', '$weight.value'] },
+            },
+            items: { $push: '$$ROOT' },
           },
         },
-        { $set: { heaviest: { $first: '$items' } } },
+        {
+          $set: {
+            heaviest: {
+              $first: {
+                $filter: {
+                  input: '$items',
+                  as: 'item',
+                  cond: {
+                    $eq: [
+                      {
+                        $max: [
+                          '$$item.weight.value',
+                          '$$item.weight.additionalValue',
+                        ],
+                      },
+                      '$max',
+                    ],
+                  },
+                },
+              },
+            },
+          },
+        },
         { $set: { lightest: { $last: '$items' } } },
         { $project: { heaviest: 1, lightest: 1, averageWeight: 1 } },
       ]);
@@ -57,3 +85,6 @@ export class ItemStatisticsHandler
     }
   }
 }
+
+const test = 1;
+const test2 = test || 2;
