@@ -42,7 +42,7 @@ const Profile: NextPageCustomProps = () => {
             <p>Loading...</p>
         </main>}
 
-        {!isLoadingProfile && <main className="container mt-5">
+        {!isLoadingProfile && <main className="container mt-5 mb-5 md:mb-20">
             <Headline level={1}>Profile</Headline>
             <div className="lg:flex gap-4">
                 <div className="sm:flex lg:flex-col gap-3 2xl:w-1/4 mb-4 lg:mb-0">

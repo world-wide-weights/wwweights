@@ -152,7 +152,7 @@ const Create: NextPageCustomProps = () => {
             description="Contribute to the World Wide Weights database and create a new item."
         />
 
-        <main className="mt-5">
+        <main className="mt-5 mb-5 md:mb-20">
             <div className="container">
                 {/* Headline */}
                 <Headline>Create new item</Headline>
