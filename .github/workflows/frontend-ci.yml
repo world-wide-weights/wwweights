@@ -16,7 +16,6 @@ on:
 
 env:
   NEXT_PUBLIC_CLIENT_BASE_URL: http://localhost:3002
-  NEXT_PUBLIC_API_BASE_URL_MOCK: http://localhost:3008
   NEXT_PUBLIC_API_BASE_URL_QUERY: http://localhost:3004/queries/v1
   NEXT_PUBLIC_API_BASE_URL_COMMAND: http://localhost:3002/commands/v1
   NEXT_PUBLIC_API_BASE_URL_AUTH: http://localhost:3001
@@ -120,63 +119,46 @@ jobs:
             frontend/cypress/screenshots/*
             frontend/cypress/videos/*
 
-  docker-build:
+  docker-build-and-push:
     runs-on: ubuntu-latest
-    needs: [component-tests, e2e-tests] 
+    needs: [e2e-tests, component-tests]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-
-      - name: Build and push
-        uses: docker/build-push-action@v3
-        with:
-          context: ./frontend
-          tags: frontend:pipeline_internal
-          outputs: type=docker,dest=/tmp/frontend-image.tar
-       
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: frontend-image
-          path: /tmp/frontend-image.tar
-
-  docker-push:
-    runs-on: ubuntu-latest
-    needs: docker-build
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: frontend-image 
-          path: /tmp
       
-      - name: Load Docker image
-        run: docker load --input /tmp/frontend-image.tar
-     
-        # Extract branch name and replace / with _ as slashes are invalid as image tags
+      # Arm support
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      # Extract branch name and replace / with _ as slashes are invalid as image tags
       - name: Extract branch name
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/} | tr '/' '_')"
         id: extract_branch
-  
-      - name: tag docker image
-        run: docker tag frontend:pipeline_internal ghcr.io/world-wide-weights/frontend:${{ steps.extract_branch.outputs.branch }}
 
-      - name: Login to Packages Container registry
-        uses: docker/login-action@v1 
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
         with:
-          registry: ghcr.io 
-          username: ${{ github.actor }}
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: push
-        run: docker push ghcr.io/world-wide-weights/frontend:${{ steps.extract_branch.outputs.branch }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: ./frontend
+          tags: ghcr.io/world-wide-weights/frontend:${{ steps.extract_branch.outputs.branch }}
+          platforms: linux/amd64,linux/arm64
+          push: true
+          labels: |
+            org.opencontainers.image.source: https://github.com/world-wide-weights/wwweights
+            org.opencontainers.image.description: wwweights frontend 
 
   redeploy:
     if: github.ref == 'refs/heads/stable'
-    needs: docker-push
+    needs: docker-build-and-push
     runs-on:  ubuntu-latest
     env:
       deploy_secret: ${{ secrets.DEPLOY_SECRET }}

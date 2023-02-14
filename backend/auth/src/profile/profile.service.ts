@@ -5,8 +5,8 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { UserService } from '../db/ user.service';
 import { UserEntity } from '../db/entities/users.entity';
+import { UserService } from '../db/services/user.service';
 
 @Injectable()
 export class ProfileService {

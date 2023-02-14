@@ -1,22 +1,27 @@
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
 import * as request from 'supertest';
+import { setTimeout } from 'timers/promises';
+import { ItemSortEnum } from '../src/items/interfaces/item-sort-enum';
 import { ItemsModule } from '../src/items/items.module';
 import { Item } from '../src/items/models/item.model';
 import {
   initializeMockModule,
   teardownMockDataSource,
 } from './helpers/MongoMemoryHelpers';
-
-import { Test, TestingModule } from '@nestjs/testing';
-import { ItemSortEnum } from '../src/items/interfaces/item-sort-enum';
-import { items, itemsWithDates, relatedItems } from './mocks/items';
+import {
+  items,
+  itemsWithDates,
+  itemsWithDifferentUsers,
+  itemsWithImages,
+  relatedItems,
+} from './mocks/items';
 
 describe('QueryController (e2e)', () => {
   let app: INestApplication;
   let itemModel: Model<Item>;
   let server: any; // Has to be any because of supertest not having a type for it either
-  jest.setTimeout(10000);
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -37,6 +42,8 @@ describe('QueryController (e2e)', () => {
     app.setGlobalPrefix('queries/v1');
     await app.init();
     server = app.getHttpServer();
+    // This is to make sure the db setup is completed aswell
+    await setTimeout(100);
   });
 
   beforeEach(async () => {
@@ -170,6 +177,60 @@ describe('QueryController (e2e)', () => {
         expect(result.body.data).toHaveLength(16);
         expect(result.body.data[0].name).toEqual('item 29');
         expect(result.body.data[15].name).toEqual('item 14');
+      });
+
+      it('should return the items by a specific user', async () => {
+        await itemModel.deleteMany();
+        await itemModel.insertMany(itemsWithDifferentUsers);
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({ userid: 1 })
+          .expect(HttpStatus.OK);
+        expect(result.body.data).toHaveLength(
+          itemsWithDifferentUsers.length / 2,
+        );
+      });
+
+      it('should return only items with images', async () => {
+        await itemModel.insertMany(itemsWithImages);
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({ hasimage: '1' })
+          .expect(HttpStatus.OK);
+
+        expect(result.body.data).toHaveLength(itemsWithImages.length);
+        for (const item of result.body.data) {
+          expect(item.image).toBeDefined();
+        }
+      });
+
+      it('should return only items without images', async () => {
+        await itemModel.deleteMany();
+        await itemModel.insertMany(itemsWithImages);
+        await itemModel.insertMany(itemsWithDates); // 20 with no images
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({ hasimage: '0', limit: 21 })
+          .expect(HttpStatus.OK);
+
+        expect(result.body.data).toHaveLength(itemsWithDates.length);
+        for (const item of result.body.data) {
+          expect(item.images).toBeUndefined();
+        }
+      });
+
+      it('should return the items with AND without images', async () => {
+        await itemModel.deleteMany();
+        await itemModel.insertMany(itemsWithImages);
+        await itemModel.insertMany(itemsWithDates); // 20 with no images
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({ limit: 60 })
+          .expect(HttpStatus.OK);
+
+        expect(result.body.data).toHaveLength(
+          itemsWithDates.length + itemsWithImages.length,
+        );
       });
     });
 

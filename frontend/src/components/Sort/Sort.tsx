@@ -78,7 +78,9 @@ export const Sort: React.FC<SortProps> = ({ sort, query }) => {
 
     return <Formik initialValues={initialSortValues} onSubmit={submitForm}>
         <>
-            <Dropdown name="sort" options={sortDropdownOptions} />
+            <div className="w-48">
+                <Dropdown name="sort" options={sortDropdownOptions} />
+            </div>
             <SortDropdownChangeListener />
         </>
     </Formik>
