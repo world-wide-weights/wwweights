@@ -24,6 +24,10 @@ type Statistics = {
     itemsDeleted: number
 }
 
+const DEFAULT_PAGE = 1
+const DEFAULT_LIMIT = 6
+const MAX_LIMIT = 64
+
 /**
  * Profile page, shows user profile statistics and contributions.
  */
@@ -59,13 +63,13 @@ const Profile: NextPageCustomProps = () => {
                     const pageNumber = Number(query.page)
                     if (pageNumber < 1) return 1
                     return pageNumber
-                })() : 1
+                })() : DEFAULT_PAGE
                 const limit = query.limit ? (() => {
                     const limitNumber = Number(query.limit)
                     if (limitNumber < 1) return 1
-                    if (limitNumber > 64) return 64
+                    if (limitNumber > MAX_LIMIT) return MAX_LIMIT
                     return limitNumber
-                })() : 6
+                })() : DEFAULT_LIMIT
 
                 // Fetch contributions, statistics and profile
                 const [contributionsResponse, statisticsResponse, profileResponse] = await Promise.all([
