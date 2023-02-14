@@ -1,17 +1,16 @@
-import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { InjectModel } from '@m8a/nestjs-typegoose';
+import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { ItemEditSuggestedEvent } from './item-edit-suggested.event';
+import { ReturnModelType } from '@typegoose/typegoose';
+import { AnyBulkWriteOperation } from 'mongodb';
 import {
   EditSuggestion,
   SuggestionItem,
   SuggestionTag,
 } from '../../models/edit-suggestion.model';
 import { Item } from '../../models/item.model';
-import { ItemsByTag } from '../../models/items-by-tag.model';
 import { Tag } from '../../models/tag.model';
-import { ReturnModelType } from '@typegoose/typegoose';
-import { AnyBulkWriteOperation, UpdateFilter } from 'mongodb';
+import { ItemEditSuggestedEvent } from './item-edit-suggested.event';
 
 @EventsHandler(ItemEditSuggestedEvent)
 export class ItemEditSuggestedHandler
@@ -25,8 +24,6 @@ export class ItemEditSuggestedHandler
     private readonly itemModel: ReturnModelType<typeof Item>,
     @InjectModel(Tag)
     private readonly tagModel: ReturnModelType<typeof Tag>,
-    @InjectModel(ItemsByTag)
-    private readonly itemsByTagModel: ReturnModelType<typeof ItemsByTag>,
   ) {}
   async handle({ editSuggestion }: ItemEditSuggestedEvent) {
     // Performance
@@ -69,17 +66,6 @@ export class ItemEditSuggestedHandler
     this.logger.debug(
       `Updating tags by themselves took ${
         performance.now() - updateTagsStartTime
-      } ms`,
-    );
-
-    const updateItemsByTagStartTime = performance.now();
-
-    await this.positiveUpdateItemsByTags(editSuggestion.itemSlug, tags.push);
-    await this.negativeUpdateItemsByTags(editSuggestion.itemSlug, tags.pull);
-
-    this.logger.debug(
-      `Updating ItemsByTag took ${
-        performance.now() - updateItemsByTagStartTime
       } ms`,
     );
 
@@ -139,7 +125,7 @@ export class ItemEditSuggestedHandler
         );
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       this.logger.error(
         `Could not update item ${slug} due to an error ${error}`,
       );
@@ -174,75 +160,6 @@ export class ItemEditSuggestedHandler
         )} due to an error ${error}`,
       );
       throw new InternalServerErrorException('Could not update tags');
-    }
-  }
-
-  // DB Calls: 1 Insert, 1 Aggregate
-  async positiveUpdateItemsByTags(itemSlug: string, tags: string[]) {
-    if (tags?.length === 0) {
-      this.logger.debug('No positive ItemsByTags update necessary');
-    }
-
-    // Insert new Tags
-    try {
-      const newTags = tags.map(
-        (tag) => new this.itemsByTagModel({ tagName: tag }),
-      );
-      await this.itemsByTagModel.insertMany(newTags, { ordered: false });
-      this.logger.log(
-        `ItemsByTag created for tags: ${newTags.map((tag) => tag.tagName)}`,
-      );
-    } catch (error) {
-      this.logger.log(`Acceptable Create ItemsByTags BulkWriteError: ${error}`);
-      throw new InternalServerErrorException();
-    }
-
-    // Update all documents for newly added tags
-    try {
-      // Add item to pre existing tags
-      await this.itemsByTagModel.aggregate([
-        { $match: { tagName: { $in: tags } } },
-        {
-          $lookup: {
-            from: 'items',
-            pipeline: [
-              { $match: { slug: itemSlug } },
-              { $project: { _id: 0, __v: 0 } },
-            ],
-            as: 'newItem',
-          },
-        },
-        { $set: { items: { $concatArrays: ['$items', '$newItem'] } } },
-        { $unset: ['newItem'] },
-        { $merge: { into: 'itemsbytags' } },
-      ]);
-    } catch (error) {
-      this.logger.error(
-        `Could not (positively) update ItemsByTags due to an errror ${error}`,
-      );
-      throw new InternalServerErrorException('Could not ItemsByTags');
-    }
-  }
-
-  // Db calls: 1 updateMany
-  async negativeUpdateItemsByTags(itemSlug: string, tags: string[]) {
-    if (tags?.length === 0) {
-      this.logger.debug('No negative ItemsByTags update necessary');
-    }
-
-    // Cleanup removed tag documents
-    try {
-      await this.itemsByTagModel.updateMany(
-        { tagName: { $in: tags } },
-        {
-          $pull: { items: { slug: itemSlug } },
-        },
-      );
-    } catch (error) {
-      this.logger.error(
-        `Could not (negatively) update ItemsByTags due to an errror ${error}`,
-      );
-      throw new InternalServerErrorException('Could not ItemsByTags');
     }
   }
 }

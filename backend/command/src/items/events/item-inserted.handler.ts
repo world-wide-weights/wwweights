@@ -3,7 +3,6 @@ import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { Item } from '../../models/item.model';
-import { ItemsByTag } from '../../models/items-by-tag.model';
 import { Profile } from '../../models/profile.model';
 import { Tag } from '../../models/tag.model';
 import { ItemInsertedEvent } from './item-inserted.event';
@@ -16,8 +15,6 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
     private readonly itemModel: ReturnModelType<typeof Item>,
     @InjectModel(Tag)
     private readonly tagModel: ReturnModelType<typeof Tag>,
-    @InjectModel(ItemsByTag)
-    private readonly itemsByTagModel: ReturnModelType<typeof ItemsByTag>,
     @InjectModel(Profile)
     private readonly profileModel: ReturnModelType<typeof Profile>,
   ) {}
@@ -56,16 +53,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       // This is not a SAGA since it is unreasonable to save this in an eventstore
       this.increamentProfileCounts(item);
 
-      const updateTagsStartTime = performance.now();
-      await this.upsertItemIntoItemsByTag(item);
-
       // Further updates and recovery from inconsistency is handled via cronjobs rather than for every projector run
-
-      this.logger.debug(
-        `ItemInsertedHandler Updates took: ${
-          performance.now() - updateTagsStartTime
-        }ms`,
-      );
     } catch (error) {
       this.logger.error(`ItemInsertedHandler TopLevel caught error: ${error}`);
     }
@@ -99,7 +87,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       await this.tagModel.bulkWrite(tagsArray);
       this.logger.log(`Tags incremented or created: ${tagsArray}`);
     } catch (error) {
-      this.logger.log(`Acceptable Create ItemsByTags BulkWriteError: ${error}`);
+      this.logger.log(`Acceptable Create Tags BulkWriteError: ${error}`);
     }
   }
 
@@ -124,51 +112,6 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       ]);
     } catch (error) {
       this.logger.error(error);
-    }
-  }
-
-  // DB Calls: 1 insertMany, 1 aggregate
-  async upsertItemIntoItemsByTag(item: Item) {
-    try {
-      // await this.itemsByTagModel.bulkWrite(tagsArray);
-      const newTags = item.tags.map(
-        (tag) => new this.itemsByTagModel({ tagName: tag.name }),
-      );
-      await this.itemsByTagModel.insertMany(newTags, { ordered: false });
-      this.logger.log(
-        `ItemsByTag created for tags: ${newTags.map((tag) => tag.tagName)}`,
-      );
-    } catch (error) {
-      this.logger.log(`Acceptable Create ItemsByTags BulkWriteError: ${error}`);
-    }
-
-    try {
-      // $lookup is not available on updateMany yet, so we have to use an aggregate
-      const tagNames = item.tags.map((tag) => tag.name);
-      await this.itemsByTagModel.aggregate([
-        {
-          $match: { tagName: { $in: tagNames } },
-        },
-        {
-          $lookup: {
-            from: 'items',
-            pipeline: [
-              { $match: { slug: item.slug } },
-              { $project: { _id: 0, __v: 0 } },
-            ],
-            as: 'newItem',
-          },
-        },
-        { $set: { items: { $concatArrays: ['$items', '$newItem'] } } },
-        { $unset: ['newItem'] },
-        { $merge: { into: 'itemsbytags' } },
-      ]);
-    } catch (error) {
-      this.logger.error(`Insert item to ItemsByTag: ${error}`);
-      // TODO: Theoretically we should spawn a saga here to fix things, but this error is ultimately unlikely
-      throw new InternalServerErrorException(
-        "Couldn't insert item to ItemsByTag",
-      );
     }
   }
 
