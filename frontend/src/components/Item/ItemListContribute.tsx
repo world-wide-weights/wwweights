@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { routes } from "../../services/routes/routes"
 import { renderUnitIntoString } from "../../services/unit/unitRenderer"
+import { getImageUrl } from "../../services/utils/getImageUrl"
 import { Weight } from "../../types/item"
 import { IconButton } from "../Button/IconButton"
 import { Tooltip } from "../Tooltip/Tooltip"
@@ -20,6 +21,8 @@ type ItemListContributeProps = {
 export const ItemListContribute: React.FC<ItemListContributeProps> = ({ name, slug, weight, image }) => {
     const weightString = renderUnitIntoString(weight)
 
+    const imageUrl = getImageUrl(image)
+
     return <li datacy="item-list-contribute" className="bg-white rounded-lg py-4 px-2 md:py-2 mb-2">
         <div className="flex justify-between">
             {/* Item name, weight and image */}
@@ -30,7 +33,7 @@ export const ItemListContribute: React.FC<ItemListContributeProps> = ({ name, sl
                     </Tooltip>
                     <h5 className="text-gray-600 font-medium md:w-32 mr-5">{weightString}</h5>
                 </div>
-                {image && <Image className="object-cover rounded-lg w-12 h-12" alt={`Image of ${name}`} src={image} width={96} height={96} />}
+                {imageUrl && <Image className="object-cover rounded-lg w-12 h-12" alt={`Image of ${name}`} src={imageUrl} width={96} height={96} />}
             </Link>
 
             {/* Actions */}
