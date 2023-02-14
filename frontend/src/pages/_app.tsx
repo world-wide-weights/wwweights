@@ -66,7 +66,7 @@ const App = ({ Component, pageProps }: AppPropsCustom) => {
   const layout = Component.layout ?? ((page: React.ReactElement) => <DefaultLayout>{page}</DefaultLayout>)
 
   return <>
-    <NextNProgress color="#0967D2" height={4} />
+    <NextNProgress color="#0967D2" height={5} />
 
     {/** Google AdSense */}
     {SHOULD_DISPLAY_ADS && <Script
