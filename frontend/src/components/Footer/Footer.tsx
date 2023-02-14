@@ -71,7 +71,7 @@ export const Footer: React.FC = () => {
 		fetchTags()
 	}, [])
 
-	return <footer className="bg-white mt-10">
+	return <footer className="bg-white mt-5">
 		<div className="container pt-10">
 			<div className="flex flex-col lg:flex-row justify-between mb-4 lg:mb-0">
 				<div className="md:w-2/3 lg:w-1/3 mb-4">
