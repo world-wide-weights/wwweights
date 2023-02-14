@@ -14,12 +14,7 @@ on:
       - "frontend/**"
       - ".github/workflows/frontend-ci.yml"
 
-env:
-  NEXT_PUBLIC_CLIENT_BASE_URL: http://localhost:3002
-  NEXT_PUBLIC_API_BASE_URL_QUERY: http://localhost:3004/queries/v1
-  NEXT_PUBLIC_API_BASE_URL_COMMAND: http://localhost:3002/commands/v1
-  NEXT_PUBLIC_API_BASE_URL_AUTH: http://localhost:3001
-  NEXT_PUBLIC_API_BASE_URL_IMAGE: http://localhost:3003
+
 
 jobs:
   setup:
@@ -49,6 +44,12 @@ jobs:
       run:
         shell: bash
         working-directory: frontend
+    env:
+      NEXT_PUBLIC_CLIENT_BASE_URL: http://localhost:3002
+      NEXT_PUBLIC_API_BASE_URL_QUERY: http://localhost:3004/queries/v1
+      NEXT_PUBLIC_API_BASE_URL_COMMAND: http://localhost:3002/commands/v1
+      NEXT_PUBLIC_API_BASE_URL_AUTH: http://localhost:3001
+      NEXT_PUBLIC_API_BASE_URL_IMAGE: http://localhost:3003
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -86,6 +87,12 @@ jobs:
       run:
         shell: bash
         working-directory: frontend
+    env:
+      NEXT_PUBLIC_CLIENT_BASE_URL: http://localhost:3002
+      NEXT_PUBLIC_API_BASE_URL_QUERY: http://localhost:3004/queries/v1
+      NEXT_PUBLIC_API_BASE_URL_COMMAND: http://localhost:3002/commands/v1
+      NEXT_PUBLIC_API_BASE_URL_AUTH: http://localhost:3001
+      NEXT_PUBLIC_API_BASE_URL_IMAGE: http://localhost:3003
     steps:
       - name: Checkout
         uses: actions/checkout@v3
