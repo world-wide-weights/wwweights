@@ -87,7 +87,7 @@ declare global {
        * @param contribtionsCount count of contributions getting back with body.
        * @param hasStatistics if we want to mock statistics having data or not.
        */
-      mockProfilePage(contribtionsCount?: number, hasStatistics?: boolean): Chainable<void>
+      mockProfilePage(options?: { contribtionsCount?: number, hasStatistics?: boolean }): Chainable<void>
     }
   }
 }

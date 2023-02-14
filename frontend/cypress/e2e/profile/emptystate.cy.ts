@@ -1,6 +1,9 @@
 describe("Empty State Profile", () => {
     beforeEach(() => {
-        cy.mockProfilePage(0, false)
+        cy.mockProfilePage({
+            contribtionsCount: 0,
+            hasStatistics: false
+        })
 
         cy.login("/account/profile")
 

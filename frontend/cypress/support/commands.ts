@@ -152,10 +152,10 @@ Cypress.Commands.add("login", (route, visitOptions) => {
     })
 })
 
-Cypress.Commands.add("mockProfilePage", (contribtionsCount, hasStatistics = true) => {
-    const body = contribtionsCount || contribtionsCount === 0 ? {
+Cypress.Commands.add("mockProfilePage", (options) => {
+    const body = options?.contribtionsCount || options?.contribtionsCount === 0 ? {
         ...paginatedContributions,
-        data: paginatedContributions.data.slice(0, contribtionsCount)
+        data: paginatedContributions.data.slice(0, options?.contribtionsCount)
     } : paginatedContributions
 
     // Mock Contributions
@@ -165,7 +165,7 @@ Cypress.Commands.add("mockProfilePage", (contribtionsCount, hasStatistics = true
 
     // Mock statistics
     cy.intercept("GET", `${API_BASE_URL_QUERY}/profiles/*/statistics`, {
-        body: hasStatistics ? profileStatistics : {}
+        body: options?.hasStatistics ? profileStatistics : {}
     }).as("mockProfileStatistics")
 
     // Mock profile

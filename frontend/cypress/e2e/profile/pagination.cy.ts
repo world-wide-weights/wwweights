@@ -3,7 +3,9 @@ const currentPage = 2
 
 describe("Pagination Profile", () => {
     beforeEach(() => {
-        cy.mockProfilePage(limit)
+        cy.mockProfilePage({
+            contribtionsCount: limit
+        })
     })
 
     describe("Base tests", () => {
