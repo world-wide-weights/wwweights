@@ -2,7 +2,6 @@ import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
 import * as request from 'supertest';
-import { setTimeout } from 'timers/promises';
 import { AppModule } from '../src/app.module';
 import { EditSuggestion } from '../src/models/edit-suggestion.model';
 import { Item } from '../src/models/item.model';
@@ -17,7 +16,6 @@ describe('QueryController (e2e)', () => {
   let app: INestApplication;
   let itemModel: Model<Item>;
   let editSuggestionModel: Model<EditSuggestion>;
-
   let server: any; // Has to be any because of supertest not having a type for it either
 
   beforeAll(async () => {
@@ -37,21 +35,20 @@ describe('QueryController (e2e)', () => {
     itemModel = moduleFixture.get('ItemModel');
     editSuggestionModel = moduleFixture.get('EditSuggestionModel');
 
+    app.setGlobalPrefix('queries/v1');
     await app.init();
     server = app.getHttpServer();
-    // This is to make sure the db setup is completed aswell
-    await setTimeout(100);
   });
 
   beforeEach(async () => {
     await itemModel.deleteMany();
     await editSuggestionModel.deleteMany();
+
     await itemModel.insertMany(items);
     await editSuggestionModel.insertMany(suggestions);
   });
 
   afterAll(async () => {
-    await itemModel.deleteMany();
     await teardownMockDataSource();
     server.close();
     await app.close();
@@ -59,17 +56,20 @@ describe('QueryController (e2e)', () => {
 
   describe('App /', () => {
     const queriesPath = '/queries/v1/';
-    const subPath = 'statistics';
 
-    it('should return a GlobalStatistics object', async () => {
-      const result = await request(server)
-        .get(queriesPath + subPath)
-        .expect(HttpStatus.OK);
+    describe('statistics', () => {
+      const subPath = 'statistics';
 
-      expect(result.body.data.totalItems).toBe(items.length);
-      expect(result.body.data.totalContributions).toBe(
-        items.length + suggestions.length,
-      );
+      it('should return a GlobalStatistics object', async () => {
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .expect(HttpStatus.OK);
+
+        expect(result.body.totalItems).toBe(items.length);
+        expect(result.body.totalContributions).toBe(
+          items.length + suggestions.length,
+        );
+      });
     });
   });
 });
