@@ -51,7 +51,19 @@ export const routes = {
     account: {
         login: "/account/login",
         register: "/account/register",
-        profile: () => "/account/profile"
+        profile: (options?: PaginationBaseOptions) => {
+            if (!options)
+                return "/account/profile"
+
+            const hasCustomLimit = options.itemsPerPage !== options.defaultItemsPerPage
+
+            const queryString = new URLSearchParams({
+                ...(options.page && options.page > 1 && { page: options.page.toString() }),
+                ...(options.itemsPerPage && hasCustomLimit && { limit: options.itemsPerPage.toString() }),
+            }).toString()
+
+            return `/account/profile${queryString !== "" ? `?${queryString}` : ""}`
+        }
     },
     contribute: {
         create: "/contribute/create"
