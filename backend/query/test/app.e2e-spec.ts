@@ -1,14 +1,10 @@
 import { TypegooseModule } from '@m8a/nestjs-typegoose';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
 import { AppController } from '../src/app.controller';
-import { ItemsModule } from '../src/items/items.module';
 import { EditSuggestion } from '../src/models/edit-suggestion.model';
 import { Item } from '../src/models/item.model';
-import { SharedModule } from '../src/shared/shared.module';
-import { TagsModule } from '../src/tags/tags.module';
 import {
   initializeMockModule,
   teardownMockDataSource,
@@ -27,14 +23,8 @@ describe('QueryController (e2e)', () => {
       // Importing everything here because it was the most straightforward way found to prevent the openHandlesIssue
       imports: [
         initializeMockModule(),
-        ConfigModule.forRoot({
-          envFilePath: '.env',
-          isGlobal: true,
-        }),
+
         TypegooseModule.forFeature([EditSuggestion, Item]),
-        TagsModule,
-        ItemsModule,
-        SharedModule,
       ],
       controllers: [AppController],
     }).compile();
