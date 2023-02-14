@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
-import { Profile, ProfileCounts } from '../models/profile.model';
+import { Profile, ProfileCounts } from '../../models/profile.model';
 import { ProfileStatisticsQuery } from './profile-statistics.query';
 
 @QueryHandler(ProfileStatisticsQuery)

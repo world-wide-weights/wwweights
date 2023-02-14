@@ -5,7 +5,7 @@ import * as request from 'supertest';
 import { setTimeout } from 'timers/promises';
 import { ItemSortEnum } from '../src/items/interfaces/item-sort-enum';
 import { ItemsModule } from '../src/items/items.module';
-import { Item } from '../src/items/models/item.model';
+import { Item } from '../src/models/item.model';
 import {
   initializeMockModule,
   teardownMockDataSource,
