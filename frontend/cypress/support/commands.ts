@@ -53,9 +53,7 @@ Cypress.Commands.add("mockGetTagsList", () => {
 
 Cypress.Commands.add("mockItemsList", (itemCount?: number) => {
     const body = itemCount || itemCount === 0 ? {
-        total: 0,
-        page: 1,
-        limit: 16,
+        ...paginatedItems,
         data: paginatedItems.data.slice(0, itemCount)
     } : paginatedItems
 
@@ -148,9 +146,7 @@ Cypress.Commands.add("login", (route) => {
 
 Cypress.Commands.add("mockProfilePage", (contribtionsCount, hasStatistics = true) => {
     const body = contribtionsCount || contribtionsCount === 0 ? {
-        total: 0,
-        page: 1,
-        limit: 16,
+        ...paginatedContributions,
         data: paginatedContributions.data.slice(0, contribtionsCount)
     } : paginatedContributions
 
