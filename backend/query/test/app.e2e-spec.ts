@@ -1,7 +1,8 @@
 import { TypegooseModule } from '@m8a/nestjs-typegoose';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
+import * as request from 'supertest';
 import { AppController } from '../src/app.controller';
 import { EditSuggestion } from '../src/models/edit-suggestion.model';
 import { Item } from '../src/models/item.model';
@@ -65,15 +66,14 @@ describe('QueryController (e2e)', () => {
       const subPath = 'statistics';
 
       it('should return a GlobalStatistics object', async () => {
-        expect(true).toBe(true);
-        // const result = await request(server)
-        //   .get(queriesPath + subPath)
-        //   .expect(HttpStatus.OK);
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .expect(HttpStatus.OK);
 
-        // expect(result.body.totalItems).toBe(items.length);
-        // expect(result.body.totalContributions).toBe(
-        //   items.length + suggestions.length,
-        // );
+        expect(result.body.totalItems).toBe(items.length);
+        expect(result.body.totalContributions).toBe(
+          items.length + suggestions.length,
+        );
       });
     });
   });
