@@ -81,7 +81,7 @@ export const Footer: React.FC = () => {
 						<h6 className="font-bold text-lg text-blue-500">World Wide Weights</h6>
 					</Link>
 
-					<p className="text-gray-700 text-sm md:text-base mb-2">World Wide Weights is a page where you can find the weights of various items. Whether you are curious about how heavy an elephant is or want to know the average weight of a watermelon, World Wide Weights has got you covered.</p>
+					<p className="text-gray-700 text-sm md:text-base mb-2">World largest database of weights! World Wide Weights is a community project to create a global database of weights.</p>
 
 					{/* Social Links */}
 					<div className="flex items-center gap-3 mb-4">
