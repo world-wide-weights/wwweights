@@ -48,6 +48,9 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
     const weightString = renderUnitIntoString(item.weight)
     const sourceName = item.source ? new URL(item.source).hostname.replace("www.", "") : null
 
+    // Convert image url 
+    item.image = getImageUrl(item.image)
+
     // Throw error when tab does not exist.
     if (currentTabIndex === -1 && currentTab)
         return <Custom404 />
@@ -91,8 +94,8 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
                     {/* Weights Image */}
                     {item.image && <div className="row-start-1 lg:row-end-3 lg:flex lg:justify-end">
                         {/* No better way yet: https://github.com/vercel/next.js/discussions/21379 Let's take a look at this when we got problems with it */}
-                        <Image src={getImageUrl(item.image)} priority className="sm:hidden rounded-xl" alt={item.name} width={120} height={120} />
-                        <Image src={getImageUrl(item.image)} priority className="hidden sm:block rounded-xl" alt={item.name} width={230} height={230} />
+                        <Image src={item.image} priority className="sm:hidden rounded-xl" alt={item.name} width={120} height={120} />
+                        <Image src={item.image} priority className="hidden sm:block rounded-xl" alt={item.name} width={230} height={230} />
                     </div>}
                 </div>
                 <hr className="mb-4 md:mb-8" />
