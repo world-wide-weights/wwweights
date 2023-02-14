@@ -114,7 +114,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name }) => {
             {/* Upload Drag and Dropbox */}
             {!image && <>
                 {/* File upload */}
-                <input datacy="imageupload-file-input" className="hidden" id="input-file-upload" ref={inputRef} type="file" accept=".svg,.png,.jpg,.jpeg" onChange={(event) => handleChange(event, props)} />
+                <input datacy="imageupload-file-input" className="hidden" id="input-file-upload" ref={inputRef} type="file" accept=".png,.jpg,.jpeg" onChange={(event) => handleChange(event, props)} />
 
                 {/* File upload content */}
                 <label datacy="imageupload-content" className="flex items-center text-gray-500 h-full cursor-pointer" htmlFor="input-file-upload">
@@ -123,7 +123,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name }) => {
                         <span className="font-medium text-gray-700 mr-1">Drag your Image or</span>
                         {/* Browse button */}
                         <button type="button" onClick={() => inputRef.current?.click()} className="inline font-medium text-blue-500 hover:text-blue-700">Browse</button>
-                        <p className="text-gray-500 text-sm">SVG, PNG, JPG or JPEG (max file size: 5MB)</p>
+                        <p className="text-gray-500 text-sm">PNG, JPG or JPEG (max file size: 1MB)</p>
                     </div>
                 </label>
 
