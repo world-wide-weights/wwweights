@@ -1,16 +1,18 @@
 import React from "react"
 
 type HeadlineProps = {
-    /** Content of Headline */
+    /** Content of Headline. */
     children: React.ReactNode
     /** Specifies if its an h1, h2, h3,... */
     level?: 1 | 2 | 3 | 4 | 5 | 6
     /** Customize size. Is also set with level. */
     size?: string
-    /** If true adds margin */
+    /** If true adds margin. */
     hasMargin?: boolean
-    /** Custom classname */
+    /** Custom classname. */
     className?: string
+    /** For testing. */
+    datacy?: string
 }
 
 /** Defines the classes for each size level */
@@ -26,10 +28,10 @@ export const textSizes: { [K in Required<HeadlineProps>["level"]]: string } = {
 /**
  * Custom Headline Component, to easy handle headlines with different level and adjustive styles
  */
-export const Headline: React.FC<HeadlineProps> = ({ level = 1, children, size, hasMargin = true, className = "" }) => {
+export const Headline: React.FC<HeadlineProps> = ({ level = 1, children, size, hasMargin = true, datacy, className = "" }) => {
     const CustomTag = `h${level}` as keyof JSX.IntrinsicElements
 
     return (
-        <CustomTag className={`${size ?? textSizes[level]} font-bold ${hasMargin ? "mb-2 md:mb-4" : ""} ${className}`}>{children}</CustomTag>
+        <CustomTag datacy={datacy} className={`${size ?? textSizes[level]} font-bold ${hasMargin ? "mb-2 md:mb-4" : ""} ${className}`}>{children}</CustomTag>
     )
 }
