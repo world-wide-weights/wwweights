@@ -3,6 +3,7 @@ import { Expose } from 'class-transformer';
 
 export class GlobalStatistics {
   @Expose()
+  @ApiProperty({ description: 'Total items, ignoring deleted Items' })
   totalItems: number;
   @Expose()
   @ApiProperty({

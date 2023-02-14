@@ -50,7 +50,6 @@ describe('QueryController (e2e)', () => {
   });
 
   afterAll(async () => {
-    await tagModel.deleteMany();
     await teardownMockDataSource();
     server.close();
     await app.close();
