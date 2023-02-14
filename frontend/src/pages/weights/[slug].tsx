@@ -13,6 +13,7 @@ import { Tabs } from "../../components/Tabs/Tabs"
 import { queryRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { renderUnitIntoString } from "../../services/unit/unitRenderer"
+import { getImageUrl } from "../../services/utils/getImageUrl"
 import { calculateMedianWeight } from "../../services/utils/weight"
 import { Item, PaginatedResponse } from "../../types/item"
 import Custom404 from "../404"
@@ -90,8 +91,8 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
                     {/* Weights Image */}
                     {item.image && <div className="row-start-1 lg:row-end-3 lg:flex lg:justify-end">
                         {/* No better way yet: https://github.com/vercel/next.js/discussions/21379 Let's take a look at this when we got problems with it */}
-                        <Image src={item.image} priority className="sm:hidden rounded-xl" alt={item.name} width={120} height={120} />
-                        <Image src={item.image} priority className="hidden sm:block rounded-xl" alt={item.name} width={230} height={230} />
+                        <Image src={getImageUrl(item.image)} priority className="sm:hidden rounded-xl" alt={item.name} width={120} height={120} />
+                        <Image src={getImageUrl(item.image)} priority className="hidden sm:block rounded-xl" alt={item.name} width={230} height={230} />
                     </div>}
                 </div>
                 <hr className="mb-4 md:mb-8" />
