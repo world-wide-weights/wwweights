@@ -26,20 +26,19 @@ describe("Pagination Profile", () => {
         })
 
         describe("Errors", () => {
-            it("should show 404 when current page is 0 or less", () => {
-                cy.login("/account/profile?page=0", { failOnStatusCode: false })
-                cy.check404()
-
-                cy.login("/account/profile?page=-1", { failOnStatusCode: false })
-                cy.check404()
+            it("should show first page when current page is 0 or less", () => {
+                cy.login("/account/profile?page=0")
+                cy.contains("Contribution").should("be.visible")
+                cy.login("/account/profile?page=-1")
+                cy.contains("Contribution").should("be.visible")
             })
 
-            it("should show 404 when limit is 0 or less", () => {
-                cy.login("/account/profile?page=1&limit=0", { failOnStatusCode: false })
-                cy.check404()
+            it("should show first page when limit is 0 or less", () => {
+                cy.login("/account/profile?page=1&limit=0")
+                cy.contains("Contribution").should("be.visible")
 
-                cy.login("/account/profile?page=1&limit=-1", { failOnStatusCode: false })
-                cy.check404()
+                cy.login("/account/profile?page=1&limit=-1")
+                cy.contains("Contribution").should("be.visible")
             })
         })
 
