@@ -7,7 +7,7 @@ import {
 } from './helpers/MongoMemoryHelpers';
 
 import { Test, TestingModule } from '@nestjs/testing';
-import { Profile } from '../src/profiles/models/profile.model';
+import { Profile } from '../src/models/profile.model';
 import { ProfilesModule } from '../src/profiles/profiles.module';
 import { profiles } from './mocks/profiles';
 

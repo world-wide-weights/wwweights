@@ -1,14 +1,14 @@
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { Model } from 'mongoose';
 import * as request from 'supertest';
-import { Tag } from '../src/tags/models/tag.model';
+import { Tag } from '../src/models/tag.model';
 import {
   initializeMockModule,
   teardownMockDataSource,
 } from './helpers/MongoMemoryHelpers';
 
 import { Test, TestingModule } from '@nestjs/testing';
-import { Item } from '../src/items/models/item.model';
+import { Item } from '../src/models/item.model';
 import { TagsModule } from '../src/tags/tags.module';
 import { getItemsTagCount, items } from './mocks/items';
 import { tags } from './mocks/tags';
