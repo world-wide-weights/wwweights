@@ -7,15 +7,17 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createHash } from 'crypto';
-import * as fs from 'fs';
-import * as fsProm from 'fs/promises';
-import * as path from 'path';
+import { existsSync, rmSync, lstatSync } from 'fs';
+import { copyFile, rm, readFile, writeFile } from 'fs/promises';
+import {join} from 'path';
 import * as sharp from 'sharp';
-import { RequestWithUser } from '../shared/interfaces/request-with-user.interface';
+import { InternalCommunicationService } from '../internal-communication/internal-communication.service';
 import {
   pathBuilder,
   validateOrCreateDirectory,
 } from '../shared/helpers/file-path.helpers';
+import { ImageUploadConflictError } from './responses/upload-image-conflict.error';
+import { ImageUploadResponse } from './responses/upload-image.response';
 
 // Code assumes that either UNIX or Windows paths are valid. Any other OS or path format is not supported
 
@@ -24,7 +26,10 @@ export class UploadService {
   private storePath: string;
   private cachePath: string;
   private readonly logger = new Logger(UploadService.name);
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly internalCommunicationService: InternalCommunicationService,
+  ) {
     this.storePath = pathBuilder(
       this.configService.get<string>('IMAGE_STORE_BASE_PATH'),
       'disk',
@@ -39,8 +44,11 @@ export class UploadService {
   /**
    * @description Handle uploaded image including duplicate check, hashing and saving it
    */
-  async handleImageUpload(user: RequestWithUser, image: Express.Multer.File) {
-    const cachedFilePath = path.join(this.cachePath, image.filename);
+  async handleImageUpload(
+    userJWT: string,
+    image: Express.Multer.File,
+  ): Promise<ImageUploadResponse> {
+    const cachedFilePath = join(this.cachePath, image.filename);
 
     // Crop the image before hashing => otherwise hashing would be useless
     await this.cropImage(cachedFilePath, 512, 512);
@@ -48,22 +56,23 @@ export class UploadService {
     // TODO: Remove all geographic data etc. from image file
 
     const hash = await this.hashFile(cachedFilePath);
-    const fileTargetPath = path.join(
+    const fileTargetPath = join(
       this.storePath,
       `${hash}.${image.mimetype.split('/')[1]}`,
     );
 
     try {
-      if (fs.existsSync(fileTargetPath)) {
+      if (existsSync(fileTargetPath)) {
         // Image is duplicate => return error along with the hash => no duplicate files
         throw new ConflictException({
           message:
             'This file already seems to be uploaded (indicated by m5hash of file)',
           path: `${hash}.${image.mimetype.split('/')[1]}`,
-        });
+        } as ImageUploadConflictError);
       }
       // Copy rather than move to allow for "moving" accross devices (i.e. docker volumes)
-      await fsProm.copyFile(cachedFilePath, fileTargetPath);
+      this.logger.debug('Promoting image from cache to disk');
+      await copyFile(cachedFilePath, fileTargetPath);
     } catch (error) {
       this.logger.error(error);
       if (error instanceof HttpException) {
@@ -72,9 +81,27 @@ export class UploadService {
       throw new InternalServerErrorException();
     } finally {
       // Cleanup cache
-      await fsProm.rm(cachedFilePath, { force: true });
+      await rm(cachedFilePath, { force: true });
     }
-    // TODO: Notify Auth backend about user event
+
+    try {
+      await this.internalCommunicationService.notifyAuthAboutNewImage(
+        userJWT,
+        `${hash}.${image.mimetype.split('/')[1]}`,
+      );
+    } catch (error) {
+      this.logger.warn(
+        `An upload failed because the communication to the  auth backend failed. This could indicate a crashed auth service. ${error}`,
+      );
+      // A file without an owner is not allowed => cleanup
+      rmSync(fileTargetPath);
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException();
+    }
+
+    this.logger.log('Sucesfully uploaded Image with hash: ', hash);
     return { path: `${hash}.${image.mimetype.split('/')[1]}` };
   }
 
@@ -82,10 +109,10 @@ export class UploadService {
    * @description Get Hash for file at given path
    */
   async hashFile(filePath: string): Promise<string> {
-    if (!fs.existsSync(filePath) || fs.lstatSync(filePath).isDirectory()) {
+    if (!existsSync(filePath) || lstatSync(filePath).isDirectory()) {
       throw new Error('Filepath does not lead to file');
     }
-    const fileBuffer = await fsProm.readFile(filePath);
+    const fileBuffer = await readFile(filePath);
     const hashSum = createHash('sha256').update(fileBuffer);
     return hashSum.digest('hex');
   }
@@ -98,12 +125,13 @@ export class UploadService {
     wDimension: number,
     hDimension: number,
   ) {
-    if (!fs.existsSync(sourcePath)) {
+    this.logger.debug(`Cropping image ${sourcePath}`);
+    if (!existsSync(sourcePath)) {
       throw new InternalServerErrorException(
         'Image could not be found within cache',
       );
     }
-    if (fs.lstatSync(sourcePath).isDirectory()) {
+    if (lstatSync(sourcePath).isDirectory()) {
       throw new InternalServerErrorException('Cannot crop directory');
     }
     const image = sharp(sourcePath);
@@ -124,7 +152,7 @@ export class UploadService {
           top: hOffset,
         })
         .toBuffer();
-      await fsProm.writeFile(sourcePath, buffer);
+      await writeFile(sourcePath, buffer);
     } catch (error) {
       this.logger.error(error);
       throw new InternalServerErrorException('Image cropping failed');

@@ -22,12 +22,12 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { UserEntity } from '../db/entities/users.entity';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dtos/login.dto';
-import { SignUpDTO } from './dtos/signup.dto';
+import { RegisterDTO } from './dtos/register.dto';
 import { RefreshTokenGuard } from './guards/refresh-token.guard';
 import { RequestWithRefreshPayload } from './interfaces/request-with-refresh-payload.interface';
+import { AuthStatisticsResponse } from './responses/auth-statistics.response';
 import { JWKSResponse } from './responses/jwks.response';
 import { TokenResponse } from './responses/token.response';
 
@@ -38,9 +38,9 @@ import { TokenResponse } from './responses/token.response';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('signup')
-  @ApiBody({ type: SignUpDTO })
-  @ApiOperation({ description: 'Signup new users' })
+  @Post('register')
+  @ApiBody({ type: RegisterDTO })
+  @ApiOperation({ description: 'Register new users' })
   @ApiConflictResponse({
     status: HttpStatus.CONFLICT,
     description: 'User properties already in use',
@@ -52,10 +52,10 @@ export class AuthController {
   @ApiCreatedResponse({
     status: HttpStatus.CREATED,
     description: 'User has been created',
-    type: UserEntity,
+    type: TokenResponse,
   })
-  async signup(@Body() signUpData: SignUpDTO): Promise<UserEntity> {
-    return await this.authService.signup(signUpData);
+  async register(@Body() registerData: RegisterDTO): Promise<TokenResponse> {
+    return new TokenResponse(await this.authService.register(registerData));
   }
 
   @Post('login')
@@ -104,5 +104,17 @@ export class AuthController {
   @ApiOkResponse({ type: JWKSResponse })
   getJWKSInfo() {
     return new JWKSResponse({ keys: [this.authService.getJWKSPayload()] });
+  }
+
+  @Get('statistics')
+  @ApiOperation({ description: 'Get auth statistics' })
+  @ApiOkResponse({
+    description: 'Returned statistics',
+    type: AuthStatisticsResponse,
+  })
+  async getAuthStatistics(): Promise<AuthStatisticsResponse> {
+    return new AuthStatisticsResponse(
+      await this.authService.getAuthStatistics(),
+    );
   }
 }

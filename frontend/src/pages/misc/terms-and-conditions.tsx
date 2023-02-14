@@ -105,7 +105,7 @@ const TermsAndConditions: NextPageCustomProps = () => {
     </>
 }
 
-TermsAndConditions.getLayout = (page) => {
+TermsAndConditions.layout = (page) => {
     return <PageLayout title="Terms and Conditions">
         {page}
     </PageLayout>

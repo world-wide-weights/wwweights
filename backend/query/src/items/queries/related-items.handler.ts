@@ -32,7 +32,7 @@ export class ItemRelatedHandler implements IQueryHandler<ItemRelatedQuery> {
         .select('name tags.name')
         .lean()
         .exec();
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       this.logger.error(error);
       throw new InternalServerErrorException(
         'Searching for an item by slug caused an error',
@@ -83,7 +83,7 @@ export class ItemRelatedHandler implements IQueryHandler<ItemRelatedQuery> {
         limit: dto.limit,
         data: relatedItemsWithCount[0].data,
       };
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       this.logger.error(error);
       throw new InternalServerErrorException(
         'Related Items could not be retrieved',

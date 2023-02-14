@@ -1,3 +1,4 @@
+import { getImageUrl } from "../../services/utils/getImageUrl"
 import { getSortedItemsAndHeaviest } from "../../services/utils/weight"
 import { Item } from "../../types/item"
 import { Headline } from "../Headline/Headline"
@@ -23,7 +24,7 @@ export const RelatedItems: React.FC<RelatedItemsProps> = ({ relatedItems, item }
                 const currentItem = relatedItem.name === item.name
                 const difference = relatedItem.weight.value - item.weight.value
 
-                return <ItemPreviewList datacy={`related-items-item${currentItem ? "-" + "current" : ""}`} key={relatedItem.slug} selectedItem={currentItem} disableLink={currentItem} difference={difference} {...relatedItem} heaviestWeight={heaviestWeight} imageUrl={relatedItem.image} />
+                return <ItemPreviewList datacy={`related-items-item${currentItem ? "-" + "current" : ""}`} key={relatedItem.slug} selectedItem={currentItem} disableLink={currentItem} difference={difference} {...relatedItem} heaviestWeight={heaviestWeight} imageUrl={getImageUrl(relatedItem.image)} />
             })}
         </ul>
     </>
