@@ -266,7 +266,7 @@ const Create: NextPageCustomProps = () => {
                                 <div onClick={() => setIsOpenDetails(!isOpenDetails)} datacy="create-open-details-button" className="flex items-center justify-between cursor-pointer">
                                     <div className="text-left">
                                         <Headline level={3} hasMargin={false}>Add more details</Headline>
-                                        <p>Add Image, tags and a source to help verify this item.</p>
+                                        <p>Add Tags, Image and a source to help verify this item.</p>
                                     </div>
                                     <Tooltip wrapperClassname="ml-3" content="Expand Details">
                                         <IconButton icon="expand_more" iconClassName="text-3xl md:text-5xl" className={`transform-gpu transition-transform duration-200 ease-linear min-w-[40px] md:w-12 h-10 md:h-12 ${isOpenDetails ? "-rotate-180" : "rotate-0"}`} />
@@ -274,18 +274,16 @@ const Create: NextPageCustomProps = () => {
                                 </div>
 
                                 {isOpenDetails && <div className="mt-4">
-                                    {/* Source */}
-                                    <TextInput name="source" labelText="Source" placeholder="Link to source" />
-
                                     {/* TODO (Zoe-bot): Add tags design */}
                                     {/* Source */}
                                     <TextInput name="tags" labelText="Tags" helperText="Tags seperated with commas." placeholder="Tags of item" />
 
-                                    {/* TODO (Zoe-bot): Add image upload */}
+                                    <Label name="imageFile" labelText={"Image"} />
                                     {/* Image */}
-                                    <TextInput name="image" labelText="Image Url" placeholder="Image of item" />
-
                                     <ImageUpload name="imageFile" />
+
+                                    {/* Source */}
+                                    <TextInput name="source" labelText="Source of weight" placeholder="Link to source" />
                                 </div>}
                             </div>
                         </div>
