@@ -6,6 +6,7 @@ import { Card } from "../../components/Card/Card"
 import { ContributionsEmptyState } from "../../components/EmptyState/ContributionsEmptyState"
 import { Headline } from "../../components/Headline/Headline"
 import { ItemListContribute } from "../../components/Item/ItemListContribute"
+import { SkeletonLoadingProfile } from "../../components/Loading/SkeletonLoadingProfile"
 import { Pagination } from "../../components/Pagination/Pagination"
 import { Seo } from "../../components/Seo/Seo"
 import { authRequest, queryRequest } from "../../services/axios/axios"
@@ -36,6 +37,10 @@ const Profile: NextPageCustomProps = () => {
     // Global States
     const { getSession } = useContext(AuthContext)
 
+    // Local variables
+    const isLoadingProfile = !profile || isLoading
+
+    // Fetch profile data
     useEffect(() => {
         setIsLoading(true)
 
@@ -80,10 +85,11 @@ const Profile: NextPageCustomProps = () => {
         fetchProfile()
     }, [getSession])
 
-    const isLoadingProfile = !profile || isLoading
-
     if (error)
         return <Custom500 />
+
+    if (isLoadingProfile)
+        return <SkeletonLoadingProfile />
 
     return <>
         <Seo
@@ -91,11 +97,7 @@ const Profile: NextPageCustomProps = () => {
             description="Your profile page. Here you can see your contributions and statistics."
         />
 
-        {isLoadingProfile && <main className="container mt-5">
-            <p>Loading...</p>
-        </main>}
-
-        {!isLoadingProfile && <main className="container mt-5">
+        <main className="container mt-5">
             <Headline level={1}>Profile</Headline>
             <div className="lg:flex gap-4">
                 <div className="sm:flex lg:flex-col gap-3 2xl:w-1/4 mb-6 lg:mb-0">
@@ -127,7 +129,7 @@ const Profile: NextPageCustomProps = () => {
                         </>}
                 </div>
             </div>
-        </main>}
+        </main>
     </>
 }
 
