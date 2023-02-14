@@ -2,7 +2,7 @@
  * Skeleton Loading for Profile page.
  */
 export const SkeletonLoadingProfile: React.FC = () => {
-    return <main className="container mt-5">
+    return <main datacy="skeleton-loading" className="container mt-5">
         <div className="bg-slate-200 animate-pulse h-6 w-32 mb-2"></div>
         <div className="lg:flex gap-4">
             <div className="sm:flex lg:flex-col gap-3 2xl:w-1/4 mb-6 lg:mb-0">

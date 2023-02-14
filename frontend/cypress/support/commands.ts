@@ -4,8 +4,9 @@ import sessiondata from "../fixtures/auth/sessiondata.json"
 import paginatedItems from "../fixtures/items/list.json"
 import paginatedRelatedItems from "../fixtures/items/related.json"
 import paginatedSingleItem from "../fixtures/items/single.json"
-import statistics from "../fixtures/items/statistics.json"
+import itemStatistics from "../fixtures/items/statistics.json"
 import paginatedContributions from "../fixtures/profile/contributions.json"
+import profileStatistics from "../fixtures/profile/statistics.json"
 import paginatedTagsList from "../fixtures/tags/list.json"
 
 const API_BASE_URL_AUTH = Cypress.env("PUBLIC_API_BASE_URL_AUTH")
@@ -78,7 +79,7 @@ Cypress.Commands.add("mockDiscoverPage", (itemCount?: number) => {
         method: "get",
         path: "/items/statistics",
         statusCode: 200,
-        body: statistics,
+        body: itemStatistics,
     })
 
     cy.mockGetRelatedTags()
@@ -145,7 +146,7 @@ Cypress.Commands.add("login", (route) => {
     })
 })
 
-Cypress.Commands.add("mockProfilePage", (contribtionsCount) => {
+Cypress.Commands.add("mockProfilePage", (contribtionsCount, hasStatistics = true) => {
     const body = contribtionsCount || contribtionsCount === 0 ? {
         total: 0,
         page: 1,
@@ -160,8 +161,8 @@ Cypress.Commands.add("mockProfilePage", (contribtionsCount) => {
 
     // Mock statistics
     cy.intercept("GET", `${API_BASE_URL_QUERY}/profiles/*/statistics`, {
-        fixture: "profile/statistics.json"
-    }).as("mockStatistics")
+        body: hasStatistics ? profileStatistics : {}
+    }).as("mockProfileStatistics")
 
     // Mock profile
     cy.intercept("GET", `${API_BASE_URL_AUTH}/profile/me`, {

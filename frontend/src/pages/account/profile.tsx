@@ -104,12 +104,12 @@ const Profile: NextPageCustomProps = () => {
                     {/* Meta infos */}
                     <div className="flex flex-col justify-center md:justify-start sm:w-1/2 md:w-auto items-center bg-white rounded-lg py-6 px-4 mb-3 sm:mb-0">
                         <Image src="https://picsum.photos/120" alt="profile picture" width={120} height={120} className="rounded-full mb-2" />
-                        <Headline level={3} hasMargin={false}>{profile.username}</Headline>
-                        <p><>Member since {new Date(profile.createdAt).toLocaleDateString("en-US")}</></p>
+                        <Headline datacy="profile-username" level={3} hasMargin={false}>{profile.username}</Headline>
+                        <p datacy="profile-registered-since"><>Member since {new Date(profile.createdAt).toLocaleDateString("en-US")}</></p>
                     </div>
 
                     {/* Statistics */}
-                    <div className="flex flex-col gap-3 flex-grow">
+                    <div datacy="profile-statistics-wrapper" className="flex flex-col gap-3 flex-grow">
                         <Card icon="volunteer_activism" value={statistics.totalContributions.toLocaleString("en-US")} descriptionTop="Contributions" />
                         <Card icon="weight" value={statistics.itemsCreated.toLocaleString("en-US")} descriptionTop="Items created" />
                         <Card icon="edit" value={statistics.itemsUpdated.toLocaleString("en-US")} descriptionTop="Items updated" />
@@ -122,7 +122,7 @@ const Profile: NextPageCustomProps = () => {
                     {contributions.data.length === 0 ? <ContributionsEmptyState /> :
                         <>
                             <Headline level={4}>Contributions</Headline>
-                            <ul className="mb-5">
+                            <ul datacy="profile-contributions-wrapper" className="mb-5">
                                 {contributions.data.map((contribution) => <ItemListContribute {...contribution} key={contribution.slug} />)}
                             </ul>
                             <Pagination totalItems={contributions.total} currentPage={contributions.page} baseRoute={routes.account.profile} itemsPerPage={contributions.limit} />
