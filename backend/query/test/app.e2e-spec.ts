@@ -23,7 +23,6 @@ describe('QueryController (e2e)', () => {
       // Importing everything here because it was the most straightforward way found to prevent the openHandlesIssue
       imports: [
         initializeMockModule(),
-
         TypegooseModule.forFeature([EditSuggestion, Item]),
       ],
       controllers: [AppController],
