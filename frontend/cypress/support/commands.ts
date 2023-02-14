@@ -10,6 +10,7 @@ import paginatedTagsList from "../fixtures/tags/list.json"
 const API_BASE_URL_AUTH = Cypress.env("PUBLIC_API_BASE_URL_AUTH")
 const API_BASE_URL_QUERY = Cypress.env("PUBLIC_API_BASE_URL_QUERY")
 const API_BASE_URL_COMMAND = Cypress.env("PUBLIC_API_BASE_URL_COMMAND")
+const PUBLIC_API_BASE_URL_IMAGE = Cypress.env("PUBLIC_API_BASE_URL_IMAGE")
 const LOCAL_STORAGE_KEY = "session"
 
 Cypress.Commands.add("dataCy", (dataCy, customSelector = "") => {
@@ -126,6 +127,12 @@ Cypress.Commands.add("mockCreateItem", () => {
     cy.intercept("POST", `${API_BASE_URL_COMMAND}/items/insert`, {
         statusCode: 204,
     }).as("mockCreateItem")
+})
+
+Cypress.Commands.add("mockUploadImage", () => {
+    cy.intercept("POST", `${PUBLIC_API_BASE_URL_IMAGE}/upload/image`, {
+        statusCode: 204,
+    }).as("mockUploadImage")
 })
 
 Cypress.Commands.add("login", (route) => {
