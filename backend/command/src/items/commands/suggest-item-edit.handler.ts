@@ -1,5 +1,9 @@
-import { Logger, NotFoundException } from '@nestjs/common';
-import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
+import {
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { randomUUID } from 'crypto';
 import { ALLOWED_EVENT_ENTITIES } from '../../eventstore/enums/allowedEntities.enum';
 import { EventStore } from '../../eventstore/eventstore';
@@ -13,10 +17,7 @@ export class SuggestItemEditHandler
   implements ICommandHandler<SuggestItemEditCommand>
 {
   private readonly logger = new Logger(SuggestItemEditHandler.name);
-  constructor(
-    private readonly publisher: EventPublisher,
-    private readonly eventStore: EventStore,
-  ) {}
+  constructor(private readonly eventStore: EventStore) {}
 
   // No returns, just Exceptions in CQRS
   async execute({
@@ -41,14 +42,35 @@ export class SuggestItemEditHandler
     ) {
       throw new NotFoundException('No item with this slug exists');
     }
-    const eventSuggestion = this.publisher.mergeObjectContext(newSuggestion);
+
+    let iterations = 0;
+    while (true) {
+      // This should NEVER occur! However this prevents an infinite loop
+      if (iterations === 9) {
+        throw new InternalServerErrorException('Something went wrong');
+      }
+      // If eventslug-uuid combination does not exist => continue
+      // This ensures uniqueness
+      if (
+        !this.eventStore.doesStreamExist(
+          `${ALLOWED_EVENT_ENTITIES.EDIT_SUGGESTION}-${newSuggestion.itemSlug}-${newSuggestion.uuid}`,
+        )
+      ) {
+        break;
+      }
+      newSuggestion.uuid = randomUUID();
+      iterations++;
+    }
+
+    const streamName = `${ALLOWED_EVENT_ENTITIES.EDIT_SUGGESTION}-${newSuggestion.itemSlug}-${newSuggestion.uuid}`;
+
     await this.eventStore.addEvent(
-      `${ALLOWED_EVENT_ENTITIES.ITEM}-${eventSuggestion.itemSlug}`,
+      streamName,
       ItemEditSuggestedEvent.name,
-      eventSuggestion,
+      newSuggestion,
     );
     this.logger.log(
-      `Event created on stream: ${ALLOWED_EVENT_ENTITIES.EDIT_SUGGESTION}-${eventSuggestion.itemSlug}`,
+      `${ALLOWED_EVENT_ENTITIES.EDIT_SUGGESTION} created on stream: ${streamName}`,
     );
   }
 }

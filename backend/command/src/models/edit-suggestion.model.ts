@@ -1,4 +1,3 @@
-import { AggregateRoot } from '@nestjs/cqrs';
 import { prop } from '@typegoose/typegoose';
 import { IsArray, IsOptional, IsString } from 'class-validator';
 import { SUGGESTION_STATUS } from '../shared/enums/suggestion-status.enum';
@@ -46,7 +45,7 @@ export class SuggestionItem {
   tags?: SuggestionTag;
 }
 
-export class EditSuggestion extends AggregateRoot {
+export class EditSuggestion {
   @prop({ required: true })
   userId: number;
 
@@ -66,7 +65,6 @@ export class EditSuggestion extends AggregateRoot {
   uuid: string;
 
   constructor(partial: Partial<EditSuggestion>) {
-    super();
     Object.assign(this, partial);
   }
 }

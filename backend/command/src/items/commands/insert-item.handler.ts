@@ -42,13 +42,12 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
         throw new ConflictException('Slug already taken');
       }
 
-      const eventItem = this.publisher.mergeObjectContext(newItem);
       await this.eventStore.addEvent(
-        `${ALLOWED_EVENT_ENTITIES.ITEM}-${eventItem.slug}`,
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${newItem.slug}`,
         ItemInsertedEvent.name,
-        eventItem,
+        newItem,
       );
-      this.logger.log(`Event created on stream: item-${eventItem.slug}`);
+      this.logger.log(`Event created on stream: item-${newItem.slug}`);
     } catch (error) {
       // If thrown error is already a valid HttpException => Throw that one instead
       if (error instanceof HttpException) {

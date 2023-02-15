@@ -207,7 +207,6 @@ export class EventStore {
     });
     try {
       for await (const event of result) {
-        console.log((event?.event?.data as any)?.eventType);
         // If last event in stream deleted item => item does not exist anymore
         // NOTE: This will change once suggestion threshholds have been implemented
         return (
@@ -215,11 +214,11 @@ export class EventStore {
           ItemDeleteSuggestedEvent.name
         );
       }
-    } catch (e) {
-      if (e instanceof StreamNotFoundError) {
+    } catch (error) {
+      if (error instanceof StreamNotFoundError) {
         return false;
       }
-      throw e;
+      throw error;
     }
     return true;
   }

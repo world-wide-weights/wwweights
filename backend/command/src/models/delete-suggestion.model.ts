@@ -1,8 +1,7 @@
-import { AggregateRoot } from '@nestjs/cqrs';
 import { prop } from '@typegoose/typegoose';
 import { SUGGESTION_STATUS } from '../shared/enums/suggestion-status.enum';
 
-export class DeleteSuggestion extends AggregateRoot {
+export class DeleteSuggestion {
   @prop({ required: true })
   userId: number;
 
@@ -15,11 +14,13 @@ export class DeleteSuggestion extends AggregateRoot {
   @prop({ required: true, default: SUGGESTION_STATUS.PENDING })
   status: SUGGESTION_STATUS;
 
+  @prop({ required: true, default: 0 })
+  approvalCount: number;
+
   @prop({ required: true })
   uuid: string;
 
   constructor(partial: Partial<DeleteSuggestion>) {
-    super();
     Object.assign(this, partial);
   }
 }
