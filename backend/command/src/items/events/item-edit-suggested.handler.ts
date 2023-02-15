@@ -125,7 +125,6 @@ export class ItemEditSuggestedHandler
         );
       }
     } catch (error) {
-      console.log(error);
       this.logger.error(
         `Could not update item ${slug} due to an error ${error}`,
       );

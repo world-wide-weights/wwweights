@@ -1,3 +1,4 @@
+import { DeleteItemHandler } from './delete-item.handler';
 import { InsertItemHandler } from './insert-item.handler';
 import { SuggestItemDeleteHandler } from './suggest-item-delete.handler';
 import { SuggestItemEditHandler } from './suggest-item-edit.handler';
@@ -7,4 +8,5 @@ export const CommandHandlers = [
   InsertItemHandler,
   SuggestItemEditHandler,
   SuggestItemDeleteHandler,
+  DeleteItemHandler,
 ];

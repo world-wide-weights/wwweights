@@ -54,14 +54,20 @@ export class SuggestItemDeleteHandler
       // If eventslug-uuid combination does not exist => continue
       // This ensures uniqueness
       if (
-        !this.eventStore.doesStreamExist(
+        !(await this.eventStore.doesStreamExist(
           `${ALLOWED_EVENT_ENTITIES.DELETE_SUGGESTION}-${newSuggestion.itemSlug}-${newSuggestion.uuid}`,
-        )
+        ))
       ) {
+        console.log('stream does not exist');
+
         break;
       }
+      console.log(
+        `${ALLOWED_EVENT_ENTITIES.DELETE_SUGGESTION}-${newSuggestion.itemSlug}-${newSuggestion.uuid}`,
+      );
       newSuggestion.uuid = randomUUID();
       iterations++;
+      console.log(newSuggestion.uuid);
     }
 
     await this.eventStore.addEvent(

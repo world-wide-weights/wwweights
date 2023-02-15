@@ -1,1 +1,3 @@
-export const Sagas = [];
+import { SuggestionsSaga } from './suggestions.saga';
+
+export const Sagas = [SuggestionsSaga];

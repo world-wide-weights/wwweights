@@ -20,6 +20,7 @@ import { ConfigService } from '@nestjs/config';
 import { EventBus } from '@nestjs/cqrs';
 import { readFileSync } from 'fs';
 import { ItemDeleteSuggestedEvent } from '../items/events/item-delete-suggested.event';
+import { ItemDeletedEvent } from '../items/events/item-deleted.event';
 import { ItemEditSuggestedEvent } from '../items/events/item-edit-suggested.event';
 import { ItemInsertedEvent } from '../items/events/item-inserted.event';
 import { ALLOWED_EVENT_ENTITIES } from './enums/allowedEntities.enum';
@@ -36,10 +37,12 @@ export class EventStore {
     | typeof ItemEditSuggestedEvent
     | typeof ItemInsertedEvent
     | typeof ItemDeleteSuggestedEvent
+    | typeof ItemDeletedEvent
   >([
     [ItemInsertedEvent.name, ItemInsertedEvent],
     [ItemEditSuggestedEvent.name, ItemEditSuggestedEvent],
     [ItemDeleteSuggestedEvent.name, ItemDeleteSuggestedEvent],
+    [ItemDeletedEvent.name, ItemDeletedEvent],
   ]);
   isReady = false;
 
@@ -209,10 +212,7 @@ export class EventStore {
       for await (const event of result) {
         // If last event in stream deleted item => item does not exist anymore
         // NOTE: This will change once suggestion threshholds have been implemented
-        return (
-          (event?.event?.data as any)?.eventType !==
-          ItemDeleteSuggestedEvent.name
-        );
+        return (event?.event?.data as any)?.eventType !== ItemDeletedEvent.name;
       }
     } catch (error) {
       if (error instanceof StreamNotFoundError) {
