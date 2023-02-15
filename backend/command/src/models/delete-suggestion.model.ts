@@ -1,21 +1,20 @@
 import { AggregateRoot } from '@nestjs/cqrs';
 import { prop } from '@typegoose/typegoose';
-import { Expose } from 'class-transformer';
+import { SUGGESTION_STATUS } from '../shared/enums/suggestion-status.enum';
 
 export class DeleteSuggestion extends AggregateRoot {
-  @Expose()
   @prop({ required: true })
   userId: number;
 
-  @Expose()
   @prop({ required: true })
   itemSlug: string;
 
-  @Expose()
   @prop()
   reason?: string;
 
-  @Expose()
+  @prop({ required: true, default: SUGGESTION_STATUS.PENDING })
+  status: SUGGESTION_STATUS;
+
   @prop({ required: true })
   uuid: string;
 
