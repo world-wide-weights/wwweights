@@ -20,14 +20,14 @@ export class SuggestItemEditHandler
 
   // No returns, just Exceptions in CQRS
   async execute({
-    suggestItemEditDto: suggestItemEditData,
+    suggestItemEditDto,
     itemSlug,
     userId,
   }: SuggestItemEditCommand) {
     const newSuggestion = new EditSuggestion({
       userId,
       itemSlug: itemSlug,
-      updatedItemValues: suggestItemEditData,
+      updatedItemValues: suggestItemEditDto,
       // Approved is default until votes for suggestions are implemented in frontend
       status: SUGGESTION_STATUS.APPROVED,
       // TODO: Relying on the chance of this being a duplicate for an item being 0 is ok, but not great

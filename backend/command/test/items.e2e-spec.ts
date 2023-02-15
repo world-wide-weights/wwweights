@@ -145,16 +145,18 @@ describe('ItemsController (e2e)', () => {
     it('items/insert => insert two Items', async () => {
       await request(server)
         .post(commandsPath + 'items/insert')
-        .send(insertItem)
-        .expect(HttpStatus.OK);
-      await retryCallback(async () => (await itemModel.count()) === 1);
-      await request(server)
-        .post(commandsPath + 'items/insert')
         .send(insertItem2)
         .expect(HttpStatus.OK);
 
+      await retryCallback(async () => (await itemModel.count()) === 1);
+
+      await request(server)
+        .post(commandsPath + 'items/insert')
+        .send(insertItem)
+        .expect(HttpStatus.OK);
+
       await retryCallback(
-        async () => (await tagModel.findOne({ name: 'tag1' })).count === 2,
+        async () => (await tagModel.findOne({ name: 'tag2' })) !== undefined,
       );
 
       const item1 = await itemModel.findOne({ name: insertItem.name });
@@ -196,8 +198,9 @@ describe('ItemsController (e2e)', () => {
       });
       await retryCallback(
         async () =>
-          (await itemModel.findOne({ slug: itemsWithDifferentNames[-1] })) !==
-          undefined,
+          (
+            await tagModel.findOne({ slug: itemsWithDifferentNames[-1] })
+          )?.count === itemsWithDifferentNames.length,
       );
       const items = await itemModel.find({});
       const tag = await tagModel.findOne({ name: 'tag1' });
@@ -500,19 +503,21 @@ describe('ItemsController (e2e)', () => {
     it('items/bulk-insert => Should insert multiple items', async () => {
       // ARRANGE
       fakeEnvGuard.isDev = true;
+      const data = testData.slice(0, 5);
       // ACT
       const res = await request(server)
         .post(commandsPath + 'items/bulk-insert')
-        .send(testData.slice(0, 5));
+        .send(data);
       // ASSERT
       expect(res.status).toEqual(HttpStatus.OK);
-      await retryCallback(async () => (await itemModel.find({})).length !== 0);
+      await retryCallback(async () => (await itemModel.find({}))?.length === 5);
       const items = await itemModel.find({});
       expect(items.length).toEqual(5);
     });
 
     it('items/bulk-insert => Should allow to set userId', async () => {
       // ARRANGE
+      await itemModel.deleteMany();
       fakeEnvGuard.isDev = true;
       const userId = 12;
       const insertItems = testData
@@ -524,7 +529,7 @@ describe('ItemsController (e2e)', () => {
         .send(insertItems);
       // ASSERT
       expect(res.status).toEqual(HttpStatus.OK);
-      await retryCallback(async () => (await itemModel.find({})).length !== 0);
+      await retryCallback(async () => (await itemModel.find({})).length === 5);
       const items = await itemModel.find({});
       for (const item of items) {
         expect(item.userId).toEqual(userId);
@@ -533,11 +538,13 @@ describe('ItemsController (e2e)', () => {
 
     it('items/bulk-insert => Should default to userId of 0', async () => {
       // ARRANGE
+      await itemModel.deleteMany();
       fakeEnvGuard.isDev = true;
+      const data = testData.slice(0, 5);
       // ACT
       const res = await request(server)
         .post(commandsPath + 'items/bulk-insert')
-        .send(testData.slice(0, 5));
+        .send(data);
       // ASSERT
       expect(res.status).toEqual(HttpStatus.OK);
       await retryCallback(async () => (await itemModel.find({})).length !== 0);
