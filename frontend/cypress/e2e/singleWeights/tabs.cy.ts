@@ -7,8 +7,6 @@ describe("Single Weight Tabs", () => {
             cy.mockSingleWeight()
             cy.visitLocalPage(routes.weights.single(paginatedSingleItem.data[0].slug))
 
-            cy.wait("@mockGetRelatedTags")
-
             cy.contains("Related Items").should("be.visible")
             cy.contains("Compare Items").should("be.visible")
         })
@@ -17,8 +15,6 @@ describe("Single Weight Tabs", () => {
         it.skip("should display compare when url with tab compare query", () => {
             cy.mockSingleWeight()
             cy.visitLocalPage(routes.weights.single(paginatedSingleItem.data[0].slug, { tab: "compare" }))
-
-            cy.wait("@mockGetRelatedTags")
 
             cy.contains("Pencils").should("be.visible")
         })

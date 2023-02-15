@@ -21,7 +21,7 @@ export class ItemsService {
     try {
       for (const itemInsertDTO of bulkItemInsertDTO) {
         const { userId, ...itemData } = itemInsertDTO;
-        // Use userid 0 for admin inserts
+        // Use userId 0 for admin inserts
         await this.commandBus.execute(
           new InsertItemCommand(itemData, userId || 0),
         );
@@ -37,7 +37,6 @@ export class ItemsService {
     this.logger.log(`Bulk insert was success for ${count} items`);
     // Dont await as these are meant to be running in the background
     this.itemCronJobHandler.correctAllItemTagCounts();
-    this.itemCronJobHandler.correctAllItemsByTagCounts();
     this.logger.log(`Post bulk insert cronjobs have been triggered`);
   }
 }

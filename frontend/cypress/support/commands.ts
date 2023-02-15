@@ -5,12 +5,15 @@ import statisticsAuth from "../fixtures/auth/statistics.json"
 import paginatedItems from "../fixtures/items/list.json"
 import paginatedRelatedItems from "../fixtures/items/related.json"
 import paginatedSingleItem from "../fixtures/items/single.json"
-import statisticsItems from "../fixtures/items/statistics.json"
+import itemStatistics from "../fixtures/items/statistics.json"
+import paginatedContributions from "../fixtures/profile/contributions.json"
+import profileStatistics from "../fixtures/profile/statistics.json"
+import paginatedTagsList from "../fixtures/tags/list.json"
 
-const API_BASE_URL_MOCK = Cypress.env("PUBLIC_API_BASE_URL_MOCK")
 const API_BASE_URL_AUTH = Cypress.env("PUBLIC_API_BASE_URL_AUTH")
 const API_BASE_URL_QUERY = Cypress.env("PUBLIC_API_BASE_URL_QUERY")
 const API_BASE_URL_COMMAND = Cypress.env("PUBLIC_API_BASE_URL_COMMAND")
+const PUBLIC_API_BASE_URL_IMAGE = Cypress.env("PUBLIC_API_BASE_URL_IMAGE")
 const LOCAL_STORAGE_KEY = "session"
 
 Cypress.Commands.add("dataCy", (dataCy, customSelector = "") => {
@@ -25,15 +28,29 @@ Cypress.Commands.add("check404", () => {
     cy.contains("404 - Page not found").should("be.visible")
 })
 
+Cypress.Commands.add("check500", () => {
+    cy.contains("500 - Error on Server Side").should("be.visible")
+})
+
 Cypress.Commands.add("checkCurrentActivePage", (activePageNumber) => {
     cy.dataCy(`pagination-button-page-${activePageNumber}`).should("have.class", "bg-blue-500")
     cy.dataCy(`pagination-button-page-${activePageNumber}`).should("have.class", "text-white")
 })
 
 Cypress.Commands.add("mockGetRelatedTags", () => {
-    cy.intercept("GET", `${API_BASE_URL_MOCK}/api/query/v1/tags/related`, {
+    cy.intercept("GET", `${API_BASE_URL_QUERY}/tags/related*`, {
         fixture: "tags/related.json"
     }).as("mockGetRelatedTags")
+})
+
+Cypress.Commands.add("mockGetTagsList", () => {
+    cy.task("nock", {
+        hostname: API_BASE_URL_QUERY,
+        method: "get",
+        path: "/tags/list",
+        statusCode: 200,
+        body: paginatedTagsList,
+    })
 })
 
 Cypress.Commands.add("mockItemsList", (itemCount?: number) => {
@@ -62,7 +79,7 @@ Cypress.Commands.add("mockDiscoverPage", (itemCount?: number) => {
         method: "get",
         path: "/items/statistics",
         statusCode: 200,
-        body: statisticsItems,
+        body: itemStatistics,
     })
 
     cy.mockGetRelatedTags()
@@ -114,13 +131,22 @@ Cypress.Commands.add("mockRegister", () => {
 })
 
 Cypress.Commands.add("mockCreateItem", () => {
-    cy.intercept("POST", `${API_BASE_URL_COMMAND}/items`).as("mockCreateItem")
+    cy.intercept("POST", `${API_BASE_URL_COMMAND}/items/insert`, {
+        statusCode: 204,
+    }).as("mockCreateItem")
 })
 
-Cypress.Commands.add("login", (route) => {
+Cypress.Commands.add("mockUploadImage", () => {
+    cy.intercept("POST", `${PUBLIC_API_BASE_URL_IMAGE}/upload/image`, {
+        statusCode: 204,
+    }).as("mockUploadImage")
+})
+
+Cypress.Commands.add("login", (route, visitOptions) => {
     cy.mockLogin()
 
     cy.visitLocalPage(route, {
+        ...visitOptions,
         onBeforeLoad: (window) => {
             window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(sessiondata))
         }
@@ -137,6 +163,28 @@ Cypress.Commands.add("mockHome", () => {
         statusCode: 200,
         body: statisticsAuth
     })
+})
+
+Cypress.Commands.add("mockProfilePage", (options) => {
+    const body = options?.contribtionsCount || options?.contribtionsCount === 0 ? {
+        ...paginatedContributions,
+        data: paginatedContributions.data.slice(0, options?.contribtionsCount)
+    } : paginatedContributions
+
+    // Mock Contributions
+    cy.intercept("GET", `${API_BASE_URL_QUERY}/items/list*`, {
+        body
+    }).as("mockContributions")
+
+    // Mock statistics
+    cy.intercept("GET", `${API_BASE_URL_QUERY}/profiles/*/statistics`, {
+        body: options?.hasStatistics ?? true ? profileStatistics : {}
+    }).as("mockProfileStatistics")
+
+    // Mock profile
+    cy.intercept("GET", `${API_BASE_URL_AUTH}/profile/me`, {
+        fixture: "profile/me.json"
+    }).as("mockProfile")
 })
 
 export { }

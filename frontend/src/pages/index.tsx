@@ -12,6 +12,7 @@ import { Stat } from "../components/Statistics/Stat"
 import { authRequest, queryRequest } from "../services/axios/axios"
 import { routes } from "../services/routes/routes"
 import { getStructuredDataWebsite } from "../services/seo/structuredData/website"
+import { getImageUrl } from "../services/utils/getImageUrl"
 import { Item, PaginatedResponse } from "../types/item"
 
 type HomeProps = {
@@ -89,7 +90,7 @@ function Home({ items, statistics }: InferGetServerSidePropsType<typeof getServe
 					<h2 className="text-2xl md:text-3xl text-blue-800 text-center font-bold mb-1">Explore {totalItems}+ weights</h2>
 					<p className="text-gray-600 text-center mb-4 md:mb-8">World Wide Weights is a website where you can discover the weights of all the items you can imagine. Explore the largest database of weights!</p>
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-2 md:gap-5 mb-5 md:mb-8 w-full">
-						{items.map((item) => <ItemPreviewGrid key={item.slug} {...item} imageUrl={item.image} />)}
+						{items.map((item) => <ItemPreviewGrid key={item.slug} {...item} imageUrl={getImageUrl(item.image)} />)}
 					</div>
 
 					<Button className="mb-2" to={routes.weights.list()} icon="weight">Show all weights</Button>
