@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { EventBus } from '@nestjs/cqrs';
+import { ItemDeleteSuggestedEvent } from '../../src/items/events/item-delete-suggested.event';
 import { ItemEditSuggestedEvent } from '../../src/items/events/item-edit-suggested.event';
 import { ItemInsertedEvent } from '../../src/items/events/item-inserted.event';
 
@@ -15,12 +16,14 @@ export class MockEventStore {
 
   private readonly eventMap = new Map<
     string,
-    typeof ItemEditSuggestedEvent | typeof ItemInsertedEvent
+    | typeof ItemEditSuggestedEvent
+    | typeof ItemInsertedEvent
+    | typeof ItemDeleteSuggestedEvent
   >([
     [ItemInsertedEvent.name, ItemInsertedEvent],
     [ItemEditSuggestedEvent.name, ItemEditSuggestedEvent],
+    [ItemDeleteSuggestedEvent.name, ItemDeleteSuggestedEvent],
   ]);
-
   public addEvent(streamId, eventType: any, event: any) {
     const eventEntry = { id: this.latestId++, eventType, event };
     this.eventBus.publish(new (this.eventMap.get(eventType))(event));

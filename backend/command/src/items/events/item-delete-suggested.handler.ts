@@ -44,7 +44,7 @@ export class ItemDeleteSuggestedHandler
       }ms`,
     );
 
-    if (!deletedItem.tags) {
+    if (!deletedItem?.tags) {
       this.logger.log(
         `${ItemDeleteSuggestedHandler.name} took ${
           performance.now() - insertSuggestionStartTime
@@ -71,7 +71,9 @@ export class ItemDeleteSuggestedHandler
       const suggestion = new this.deleteSuggestionModel(deleteSuggestion);
       await suggestion.save();
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error(
+        `Could not insert deletesuggestion ${deleteSuggestion.uuid} due to an error ${error}`,
+      );
       throw new InternalServerErrorException();
     }
   }
@@ -81,7 +83,9 @@ export class ItemDeleteSuggestedHandler
       const oldItem = await this.itemModel.findOneAndDelete({ slug });
       return oldItem;
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error(
+        `Could not delete item ${slug} due to an error ${error}`,
+      );
       throw new InternalServerErrorException();
     }
   }
@@ -95,8 +99,10 @@ export class ItemDeleteSuggestedHandler
         },
       );
     } catch (error) {
-      this.logger.error(error);
-      throw new InternalServerErrorException();
+      this.logger.error(
+        `Could not update Tags ${tagNames.join(',')} due to an error ${error}`,
+      );
+      throw new InternalServerErrorException('Could not update tags');
     }
   }
 }

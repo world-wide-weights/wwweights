@@ -202,11 +202,18 @@ export class EventStore {
   async doesStreamExist(streamId: string) {
     const result = this.client.readStream(streamId, {
       direction: SDRAWKCAB,
+      fromRevision: END,
       maxCount: 1,
     });
     try {
-      for await (const _ of result) {
-        return true;
+      for await (const event of result) {
+        console.log((event?.event?.data as any)?.eventType);
+        // If last event in stream deleted item => item does not exist anymore
+        // NOTE: This will change once suggestion threshholds have been implemented
+        return (
+          (event?.event?.data as any)?.eventType !==
+          ItemDeleteSuggestedEvent.name
+        );
       }
     } catch (e) {
       if (e instanceof StreamNotFoundError) {

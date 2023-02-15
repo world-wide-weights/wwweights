@@ -9,6 +9,7 @@ import { EventStore } from '../src/eventstore/eventstore';
 import { EventStoreModule } from '../src/eventstore/eventstore.module';
 import { ItemCronJobHandler } from '../src/items/cron/items.cron';
 import { ItemsModule } from '../src/items/items.module';
+import { DeleteSuggestion } from '../src/models/delete-suggestion.model';
 import { EditSuggestion } from '../src/models/edit-suggestion.model';
 import { Item } from '../src/models/item.model';
 import { Profile } from '../src/models/profile.model';
@@ -40,6 +41,7 @@ describe('ItemsController (e2e)', () => {
   let tagModel: Model<Tag>;
   let editSuggestionModel: Model<EditSuggestion>;
   let profileModel: Model<Profile>;
+  let deleteSuggestionModel: Model<DeleteSuggestion>;
   const mockEventStore: MockEventStore = new MockEventStore();
   let itemCronJobHandler: ItemCronJobHandler;
   let server: any; // Has to be any because of supertest not having a type for it either
@@ -78,6 +80,7 @@ describe('ItemsController (e2e)', () => {
     tagModel = moduleFixture.get('TagModel');
     editSuggestionModel = moduleFixture.get('EditSuggestionModel');
     profileModel = moduleFixture.get('ProfileModel');
+    deleteSuggestionModel = moduleFixture.get('DeleteSuggestionModel');
 
     app.setGlobalPrefix('commands/v1');
     await app.init();
@@ -122,7 +125,7 @@ describe('ItemsController (e2e)', () => {
         .send(insertItem)
         .expect(HttpStatus.OK);
 
-      await retryCallback(async () => (await itemModel.count()) === 1);
+      await retryCallback(async () => (await tagModel.count()) !== 0);
 
       const item = await itemModel.findOne({});
 
@@ -193,13 +196,30 @@ describe('ItemsController (e2e)', () => {
       });
       await retryCallback(
         async () =>
-          (await itemModel.count()) === itemsWithDifferentNames.length,
+          (await itemModel.findOne({ slug: itemsWithDifferentNames[-1] })) !==
+          undefined,
       );
       const items = await itemModel.find({});
       const tag = await tagModel.findOne({ name: 'tag1' });
 
       expect(items.length).toEqual(itemsWithDifferentNames.length);
       expect(tag.count).toEqual(itemsWithDifferentNames.length);
+    });
+
+    it('items/insert => increment profile counts', async () => {
+      await request(server)
+        .post(commandsPath + 'items/insert')
+        .send(insertItem)
+        .expect(HttpStatus.OK);
+
+      await retryCallback(async () => (await profileModel.count()) === 1);
+
+      const profile = await profileModel.findOne({});
+      expect(profile.count.itemsCreated).toEqual(1);
+      expect(profile.count.additionalValueOnCreation).toEqual(0);
+      expect(profile.count.tagsUsedOnCreation).toEqual(2);
+      expect(profile.count.sourceUsedOnCreation).toEqual(0);
+      expect(profile.count.imageAddedOnCreation).toEqual(0);
     });
 
     it('items/:slug/suggest/edit => Should create a suggestion', async () => {
@@ -425,20 +445,45 @@ describe('ItemsController (e2e)', () => {
       expect(oldTag.count).toEqual(item.tags[0].count - 1);
     });
 
-    it('items/insert => increment profile counts', async () => {
-      await request(server)
-        .post(commandsPath + 'items/insert')
-        .send(insertItem)
-        .expect(HttpStatus.OK);
+    it('items/:slug/suggest/delete => Should add delete suggestion', async () => {
+      // ARRANGE
+      const item = new itemModel(singleItem);
+      await item.save();
+      // Create eventstore stream
+      mockEventStore.existingStreams = [
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      ];
+      //ACT
+      const res = await request(server)
+        .post(commandsPath + `items/${item.slug}/suggest/delete`)
+        .send({ reason: 'test' });
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.OK);
+      const suggestions = await deleteSuggestionModel.find({});
+      expect(suggestions.length).toEqual(1);
+      expect(suggestions[0].reason).toEqual('test');
+    });
 
-      await retryCallback(async () => (await profileModel.count()) === 1);
-
-      const profile = await profileModel.findOne({});
-      expect(profile.count.itemsCreated).toEqual(1);
-      expect(profile.count.additionalValueOnCreation).toEqual(0);
-      expect(profile.count.tagsUsedOnCreation).toEqual(2);
-      expect(profile.count.sourceUsedOnCreation).toEqual(0);
-      expect(profile.count.imageAddedOnCreation).toEqual(0);
+    it('items/:slug/suggest/delete => Should delete item', async () => {
+      // ARRANGE
+      const item = new itemModel(singleItem);
+      await item.save();
+      // Create eventstore stream
+      mockEventStore.existingStreams = [
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      ];
+      //ACT
+      const res = await request(server)
+        .post(commandsPath + `items/${item.slug}/suggest/delete`)
+        .send({ reason: 'test' });
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.OK);
+      await retryCallback(
+        async () => !(await itemModel.findOne({ slug: item.slug })),
+      );
+      // Does suggestion exist in mongoDb
+      const items = await itemModel.find({});
+      expect(items.length).toEqual(0);
     });
   });
 

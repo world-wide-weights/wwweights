@@ -40,8 +40,9 @@ export class SuggestItemDeleteHandler
       throw new NotFoundException('No item with this slug exists');
     }
     const eventSuggestion = this.publisher.mergeObjectContext(newSuggestion);
+    console.log(`${ALLOWED_EVENT_ENTITIES.ITEM}-${eventSuggestion.itemSlug}`);
     await this.eventStore.addEvent(
-      `${ALLOWED_EVENT_ENTITIES.DELETE_SUGGESTION}-${eventSuggestion.itemSlug}`,
+      `${ALLOWED_EVENT_ENTITIES.ITEM}-${eventSuggestion.itemSlug}`,
       ItemDeleteSuggestedEvent.name,
       eventSuggestion,
     );

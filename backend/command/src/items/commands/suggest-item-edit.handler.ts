@@ -40,7 +40,7 @@ export class SuggestItemEditHandler
     }
     const eventSuggestion = this.publisher.mergeObjectContext(newSuggestion);
     await this.eventStore.addEvent(
-      `${ALLOWED_EVENT_ENTITIES.EDIT_SUGGESTION}-${eventSuggestion.itemSlug}`,
+      `${ALLOWED_EVENT_ENTITIES.ITEM}-${eventSuggestion.itemSlug}`,
       ItemEditSuggestedEvent.name,
       eventSuggestion,
     );
