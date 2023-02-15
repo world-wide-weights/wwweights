@@ -26,15 +26,15 @@ describe("ItemListContribute", () => {
     })
 
     describe("should display actions correct", () => {
-        it("should display edit action", () => {
+        beforeEach(() => {
             cy.mount(<ItemListContribute name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} image="https://via.placeholder.com/96.png" />)
+        })
 
+        it("should display edit action", () => {
             cy.dataCy("edit-action").should("be.visible")
         })  
 
         it("should display delete action", () => {
-            cy.mount(<ItemListContribute name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} image="https://via.placeholder.com/96.png" />)
-
             cy.dataCy("delete-action").should("be.visible")
         })
     })
