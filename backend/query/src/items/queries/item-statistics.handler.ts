@@ -86,4 +86,3 @@ export class ItemStatisticsHandler
   }
 }
 
-const test = 1;
