@@ -1,17 +1,26 @@
 import { isAxiosError } from "axios"
+import { Form, Formik } from "formik"
 import Image from "next/image"
 import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
+import { object, SchemaOf, string } from "yup"
 import { AuthContext } from "../../components/Auth/Auth"
+import { Button } from "../../components/Button/Button"
+import { IconButton } from "../../components/Button/IconButton"
 import { Card } from "../../components/Card/Card"
 import { ContributionsEmptyState } from "../../components/EmptyState/ContributionsEmptyState"
+import { Dropdown } from "../../components/Form/Dropdown/Dropdown"
 import { Headline } from "../../components/Headline/Headline"
 import { ItemListContribute } from "../../components/Item/ItemListContribute"
+import { ItemPreviewGrid } from "../../components/Item/ItemPreviewGrid"
 import { SkeletonLoadingProfile } from "../../components/Loading/SkeletonLoadingProfile"
+import { Modal } from "../../components/Modal/Modal"
 import { Pagination } from "../../components/Pagination/Pagination"
 import { Seo } from "../../components/Seo/Seo"
+import { Tooltip } from "../../components/Tooltip/Tooltip"
 import { authRequest, queryRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
+import { getImageUrl } from "../../services/utils/getImageUrl"
 import { Profile } from "../../types/auth"
 import { Item, PaginatedResponse } from "../../types/item"
 import Custom500 from "../500"
@@ -24,9 +33,29 @@ type Statistics = {
     itemsDeleted: number
 }
 
+type DeleteItemDTO = {
+    reason: string
+}
+
 const DEFAULT_PAGE = 1
 const DEFAULT_LIMIT = 6
 const MAX_LIMIT = 64
+
+const deleteReasonDropdownOptions = [
+    {
+        value: "wrong_information",
+        label: "Wrong information",
+    }, {
+        value: "duplicate",
+        label: "Duplicate",
+    }, {
+        value: "old_or_not_relevant",
+        label: "Old or not relevant",
+    }, {
+        value: "other",
+        label: "Other",
+    },
+]
 
 /**
  * Profile page, shows user profile statistics and contributions.
@@ -38,8 +67,10 @@ const Profile: NextPageCustomProps = () => {
     // Local States
     const [profile, setProfile] = useState<Profile | undefined>()
     const [contributions, setContributions] = useState<PaginatedResponse<Item>>({ data: [], total: 0, page: 1, limit: 10 })
+    const [selectedContribution, setSelectedContribution] = useState<Item | null>(null)
     const [statistics, setStatistics] = useState<Statistics>({ totalContributions: 0, itemsCreated: 0, itemsUpdated: 0, itemsDeleted: 0 })
     const [isLoading, setIsLoading] = useState<boolean>(true)
+    const [isDeleteModalOpen, setDeleteModalOpen] = useState(false)
     const [error, setError] = useState<string | undefined>(undefined)
 
     // Local variables
@@ -47,6 +78,16 @@ const Profile: NextPageCustomProps = () => {
 
     // Global States
     const { getSession } = useContext(AuthContext)
+
+    // Formik Form Initial Values
+    const initialDeleteFormValues: DeleteItemDTO = {
+        reason: "",
+    }
+
+    // Formik Form Validation
+    const validationSchemaDelete: SchemaOf<DeleteItemDTO> = object().shape({
+        reason: string().required("Reason is required."),
+    })
 
     // Fetch profile data
     useEffect(() => {
@@ -107,6 +148,41 @@ const Profile: NextPageCustomProps = () => {
         fetchProfile()
     }, [query.page, query.limit, getSession, isReady])
 
+    /**
+     * Handle Submit of the delete form.
+     * @param values Form values
+     */
+    const onSubmitDelete = async (values: DeleteItemDTO): Promise<void> => {
+        if (!selectedContribution) {
+            console.warn("There is no contribution selected.")
+            return
+        }
+
+        // Submit
+        console.log(values)
+
+        // Delete the contribution and close modal when succesfull
+        if (true)
+            closeDeleteModal()
+    }
+
+    /**
+     * Open the delete modal and set selected contribution.
+     * @param contribtuion 
+     */
+    const openDeleteModal = (contribtuion: Item) => {
+        setSelectedContribution(contribtuion)
+        setDeleteModalOpen(true)
+    }
+
+    /** 
+     * Close the delete modal and reset selected contribution.
+     */
+    const closeDeleteModal = () => {
+        setDeleteModalOpen(false)
+        setSelectedContribution(null)
+    }
+
     if (error)
         return <Custom500 />
 
@@ -145,12 +221,41 @@ const Profile: NextPageCustomProps = () => {
                         <>
                             <Headline level={4}>Contributions <small className="font-normal">{contributions.total}</small></Headline>
                             <ul datacy="profile-contributions-wrapper" className="mb-5">
-                                {contributions.data.map((contribution) => <ItemListContribute {...contribution} key={contribution.slug} />)}
+                                {contributions.data.map((contribution) => <ItemListContribute {...contribution} key={contribution.slug} actions={<>
+                                    <Tooltip content="Edit">
+                                        <IconButton icon="edit" />
+                                    </Tooltip>
+                                    <Tooltip content="Delete">
+                                        <IconButton icon="delete" onClick={() => openDeleteModal(contribution)} />
+                                    </Tooltip>
+                                </>} />)}
                             </ul>
                             <Pagination totalItems={contributions.total} currentPage={query.page ? Number(query.page) : 1} baseRoute={routes.account.profile} itemsPerPage={contributions.limit} />
                         </>}
                 </div>
             </div>
+
+            {/* Delete Modal */}
+            <Modal modalHeading="Are you sure you want to delete?" isOpen={isDeleteModalOpen} onDissmis={closeDeleteModal}>
+                {/* Item Preview */}
+                <div className="w-2/3 my-4">
+                    <ItemPreviewGrid bgColor="bg-gray-100" imageUrl={getImageUrl(selectedContribution?.image)} {...selectedContribution!} />
+                </div>
+                <p className="text-gray-700 mb-2">When you delete this item it will be deleted forever and and cannot be recovered.</p>
+                <Formik initialValues={initialDeleteFormValues} onSubmit={onSubmitDelete} validationSchema={validationSchemaDelete}>
+                    {({ dirty, isValid, isSubmitting }) => (
+                        <Form>
+                            {/* Delete Reasons */}
+                            <Dropdown name="reason" labelText="Reason" placeholder="Select a reason" options={deleteReasonDropdownOptions} hasMargin light />
+
+                            {/* Buttons */}
+                            <div className="flex md:justify-between flex-col md:flex-row">
+                                <Button kind="tertiary" type="button" onClick={closeDeleteModal} className="my-4 md:my-0">Abbrechen</Button>
+                                <Button kind="primary" type="submit" disabled={!(dirty && isValid)} loading={isSubmitting} icon="delete">Löschen</Button>
+                            </div>
+                        </Form>)}
+                </Formik>
+            </Modal>
         </main>
     </>
 }
