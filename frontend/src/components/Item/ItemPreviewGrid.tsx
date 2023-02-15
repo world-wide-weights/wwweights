@@ -1,8 +1,8 @@
 import Image from "next/image"
 import Link from "next/link"
 import { routes } from "../../services/routes/routes"
-import { ItemPreviewProps } from "./ItemPreviewList"
 import { renderUnitIntoString } from "../../services/unit/unitRenderer"
+import { ItemPreviewProps } from "./ItemPreviewList"
 
 /**
  * Excerpt component for Item
@@ -12,10 +12,10 @@ import { renderUnitIntoString } from "../../services/unit/unitRenderer"
  * <ItemPreviewGrid id="1" name="Smartphone" weight={{ value: 100, isCa: false }} imageUrl="https://via.placeholder.com/96.png" />
  * ```
  */
-export const ItemPreviewGrid: React.FC<ItemPreviewProps> = ({ slug, datacy, name, weight, imageUrl }) => {
+export const ItemPreviewGrid: React.FC<ItemPreviewProps> = ({ slug, datacy, name, weight, imageUrl, bgColor = "bg-white" }) => {
     const weightString = renderUnitIntoString(weight)
 
-    return <Link datacy={datacy} className="flex items-center justify-between rounded-lg bg-white pl-5 pr-2 md:pr-3 py-2 md:py-3" href={routes.weights.single(slug)}>
+    return <Link datacy={datacy} className={`flex items-center justify-between rounded-lg ${bgColor}  pl-5 pr-2 md:pr-3 py-2 md:py-3`} href={routes.weights.single(slug)}>
         <div className="pr-3">
             <div>
                 <h5 className="text-gray-600 text-sm font-medium break-all">{name}</h5>

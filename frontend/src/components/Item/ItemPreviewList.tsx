@@ -19,6 +19,8 @@ export type ItemPreviewProps = {
     imageUrl?: string
     /** For testing. */
     datacy?: string
+    /** Sets custom background color. */
+    bgColor?: string
     /** Shows difference to other item when positive it is green, when negative it is red. */
     difference?: number
     /** When true the item will be highlighted. */
@@ -35,12 +37,12 @@ export type ItemPreviewProps = {
  * <ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} heaviestWeight={{ value: 100, isCa: false }} imageUrl="https://via.placeholder.com/96.png" />
  * ```
  */
-export const ItemPreviewList: React.FC<ItemPreviewProps & { heaviestWeight: Weight }> = ({ slug, name, weight, heaviestWeight, difference, selectedItem, disableLink, imageUrl, datacy }) => {
+export const ItemPreviewList: React.FC<ItemPreviewProps & { heaviestWeight: Weight }> = ({ slug, name, weight, heaviestWeight, difference, selectedItem, disableLink, bgColor = "bg-white", imageUrl, datacy }) => {
     const weightString = renderUnitIntoString(weight)
     const percentageProgressbar = generateWeightProgressBarPercentage(weight, heaviestWeight)
     const hasDifference = (difference || difference === 0)
 
-    return <li className="bg-white rounded-lg py-4 px-2 md:px-0 md:py-2 mb-2">
+    return <li className={`${bgColor} rounded-lg py-4 px-2 md:px-0 md:py-2 mb-2`}>
         <Link onClick={disableLink ? (event) => event.preventDefault() : () => ""} datacy={datacy} className={`${disableLink ? "cursor-default" : ""} flex flex-col md:flex-row md:items-center md:h-12 mx-2 md:mx-4`} href={disableLink ? "#" : routes.weights.single(slug)}>
             <div className="flex justify-between items-center h-12 md:w-1/3">
                 <Tooltip position="left" content={name}>
