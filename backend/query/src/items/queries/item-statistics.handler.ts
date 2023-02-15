@@ -87,4 +87,3 @@ export class ItemStatisticsHandler
 }
 
 const test = 1;
-const test2 = test || 2;
