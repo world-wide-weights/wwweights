@@ -15,7 +15,7 @@ import { Seo } from "../../components/Seo/Seo"
 import { Sort, SortType } from "../../components/Sort/Sort"
 import { Tooltip } from "../../components/Tooltip/Tooltip"
 import { useLocalStorage } from "../../hooks/useLocalStorage"
-import { queryRequest } from "../../services/axios/axios"
+import { queryServerRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { generatePageString } from "../../services/seo/pageString"
 import { renderUnitIntoString, renderWeightAsNumberIntoString } from "../../services/unit/unitRenderer"
@@ -56,8 +56,8 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
     const initialRender = useRef<boolean>(true)
 
     // Local state
-    const [statisticsExpanded, setStatisticsExpanded] = useState<boolean>(false)
-    const [viewType, setViewType, loading] = useLocalStorage(KEY_VIEW_TYPE, "grid", initialRender)
+    const [statisticsExpanded, setStatisticsExpanded] = useState(false)
+    const [viewType, setViewType, loadingViewType] = useLocalStorage(KEY_VIEW_TYPE, "grid", initialRender)
 
     return <>
         {/* Meta Tags */}
@@ -107,7 +107,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                                 </div>
                             </div>
 
-                            {loading ? <p>Loading...</p> : <>
+                            {loadingViewType ? <p>Loading...</p> : <>
                                 {/* Weights Box View */}
                                 {viewType === "grid" && <div className={`grid ${statisticsExpanded ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" : "grid-cols-1 md:grid-cols-2 2xl:grid-cols-3"} gap-2 md:gap-5 mb-5 md:mb-8`}>
                                     {items.map((item) => <ItemPreviewGrid datacy="weights-grid-item" key={item.slug} name={item.name} slug={item.slug} weight={item.weight} imageUrl={getImageUrl(item.image)} />)}
@@ -131,7 +131,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                                 <Headline level={3} hasMargin={false} className={`${statisticsExpanded ? "" : "lg:hidden"} `}>Statistics</Headline>
 
                                 {/* Show Statistics Button */}
-                                <Button onClick={() => setStatisticsExpanded(!statisticsExpanded)} className="hidden lg:flex" kind="tertiary">{statisticsExpanded ? "Show less" : "Show more"}</Button>
+                                <Button onClick={() => setStatisticsExpanded(!statisticsExpanded)} className="hidden lg:flex" kind="tertiary">{statisticsExpanded ? "Vertical View" : "Horizontal View"}</Button>
                             </div>
 
                             {/* Statistics Content */}
@@ -171,8 +171,8 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
     try {
         // Fetch items and statistics
         const [itemsResponse, statisticResponse] = await Promise.all([
-            queryRequest.get<PaginatedResponse<Item>>(`/items/list?page=${currentPage}&limit=${limit}&sort=${sort}&query=${query}`),
-            queryRequest.get<Statistics>(`/items/statistics?query=${query}`),
+            queryServerRequest.get<PaginatedResponse<Item>>(`/items/list?page=${currentPage}&limit=${limit}&sort=${sort}&query=${query}`),
+            queryServerRequest.get<Statistics>(`/items/statistics?query=${query}`),
         ])
 
         // Items, statistics and total items

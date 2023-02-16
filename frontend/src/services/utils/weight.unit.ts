@@ -64,6 +64,12 @@ describe("Generate Weight Process Bar Percentage", () => {
             expect(generateWeightProgressBarPercentage({ value: 50, additionalValue: 100, isCa: false }, { value: 80, additionalValue: 100, isCa: false })).to.deep.equal({ percentage: 50, percentageAdditional: 100 })
         })
     })
+
+    describe("Bug Fix #307 - Wrong percentage when additional weight is smaller than value", () => {
+        it("should get percentage from value when it's bigger than additionalValue", () => {
+            expect(generateWeightProgressBarPercentage({ value: 500, isCa: true }, { value: 1000, isCa: true, additionalValue: 0 })).to.deep.equal({ percentage: 50 })
+        })
+    })
 })
 
 describe("Calculate Median Weight", () => {

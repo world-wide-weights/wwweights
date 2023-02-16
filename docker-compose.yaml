@@ -7,9 +7,10 @@ services:
       - 3000:3000
     environment:
       - NEXT_PUBLIC_CLIENT_BASE_URL=${NEXT_PUBLIC_CLIENT_BASE_URL:-http://localhost:3000}
-      - NEXT_PUBLIC_API_BASE_URL_QUERY=${NEXT_PUBLIC_API_BASE_URL_QUERY:-http://query:3004/queries/v1}
-      - NEXT_PUBLIC_API_BASE_URL_COMMAND=${NEXT_PUBLIC_API_BASE_URL_COMMAND:-http://cmd:3002/commands/v1}
-      - NEXT_PUBLIC_API_BASE_URL_AUTH=${NEXT_PUBLIC_API_BASE_URL_AUTH:-http://auth:3001}
+      - NEXT_PUBLIC_API_BASE_URL_QUERY_SERVER=${NEXT_PUBLIC_API_BASE_URL_QUERY_SERVER:-http://query:3004/queries/v1}
+      - NEXT_PUBLIC_API_BASE_URL_QUERY_CLIENT=${NEXT_PUBLIC_API_BASE_URL_QUERY_CLIENT:-http://localhost:3004/queries/v1}
+      - NEXT_PUBLIC_API_BASE_URL_COMMAND=${NEXT_PUBLIC_API_BASE_URL_COMMAND:-http://localhost:3002/commands/v1}
+      - NEXT_PUBLIC_API_BASE_URL_AUTH=${NEXT_PUBLIC_API_BASE_URL_AUTH:-http://localhost:3001}
       - NEXT_PUBLIC_API_BASE_URL_IMAGE=${NEXT_PUBLIC_API_BASE_URL_IMAGE:-http://img:3003}
     links:
       - command-backend:cmd
@@ -78,11 +79,11 @@ services:
       - NODE_ENV=${DOCKER_NODE_ENV:-development}
       - JWKS_AUTH_URL=${IMG_JWKS_AUTH_URL:-http://auth:3001/auth/.well-known/jwks.json}
       - AUTH_BACKEND_BASE_URL=${IMG_AUTH_BACKEND_BASE_URL:-http://auth:3001}
-      - IMAGE_STORE_BASE_PATH=${IMG_IMAGE_STORE_BASE_PATH:-./disk}
+      - IMAGE_STORE_BASE_PATH=${IMG_IMAGE_STORE_BASE_PATH:-/app/data}
       - IMAGE_STORE_INCOMING_CACHE_PATH=${IMG_IMAGE_STORE_INCOMING_CACHE_PATH:-./cache}
       - AUTH_API_KEY=${IMG_AUTH_API_KEY:-img}
     volumes:
-      - .backend/docker-images:${IMG_IMAGE_STORE_BASE_PATH}
+      - ./backend/docker-images:${IMG_IMAGE_STORE_BASE_PATH:-/app/data}
     links:
       - auth-backend:auth
 
@@ -106,9 +107,9 @@ services:
   mongodb:
     image: mongo:6.0.3
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${DB_MONGO_USER}
-      MONGO_INITDB_ROOT_PASSWORD: ${DB_MONGO_PW}
-      MONGO_INITDB_DATABASE: ${DB_MONGO_NAME}
+      MONGO_INITDB_ROOT_USERNAME: ${DB_MONGO_USER:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_MONGO_PW:-admin}
+      MONGO_INITDB_DATABASE: ${DB_MONGO_NAME:-wwweights}
     ports:
       - 27018:27017
     healthcheck:
@@ -149,12 +150,12 @@ services:
     ports:
       - 5433:5432
     environment:
-      - POSTGRES_USER=${DB_PG_USER}
-      - POSTGRES_PASSWORD=${DB_PG_PW}
-      - POSTGRES_DB=${DB_PG_DB}
+      - POSTGRES_USER=${DB_PG_USER:-admin}
+      - POSTGRES_PASSWORD=${DB_PG_PW:-admin}
+      - POSTGRES_DB=${DB_PG_DB:-auth}
     healthcheck:
       # TODO: This can be replaced by a more accurate healthcheck based on PID 1
-      test: [ "CMD-SHELL", "pg_isready" ]
+      test: ["CMD-SHELL", "pg_isready"]
       interval: 60s
       timeout: 5s
       retries: 3

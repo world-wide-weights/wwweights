@@ -9,7 +9,7 @@ import { Navbar } from "../components/Navbar/Navbar"
 import { Search } from "../components/Search/Search"
 import { Seo } from "../components/Seo/Seo"
 import { Stat } from "../components/Statistics/Stat"
-import { queryRequest } from "../services/axios/axios"
+import { queryServerRequest } from "../services/axios/axios"
 import { routes } from "../services/routes/routes"
 import { getStructuredDataWebsite } from "../services/seo/structuredData/website"
 import { getImageUrl } from "../services/utils/getImageUrl"
@@ -121,7 +121,7 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 }
 
 export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
-	const itemsResponse = await queryRequest.get<PaginatedResponse<Item>>("/items/list?page=1&limit=20&query=iphone 2020")
+	const itemsResponse = await queryServerRequest.get<PaginatedResponse<Item>>("/items/list?page=1&limit=20&query=iphone 2020")
 	const items = itemsResponse.data.data
 
 	return {
