@@ -22,7 +22,7 @@ export type Weight = {
     isCa?: boolean
 }
 
-export type CreateItemForm = {
+export type CreateEditItemForm = {
     name: string
     weight: number | string
     unit: "g" | "kg" | "T"
@@ -44,7 +44,7 @@ export type CreateItemDto = {
 
 export type UpdateItemDto = {
     name?: string
-    weight?: Weight
+    weight?: Omit<Weight, "value"> & { value?: number }
     source?: string
     image?: string
     tags?: string[]

@@ -4,11 +4,12 @@ import { Form, Formik, FormikProps } from "formik"
 import { useRouter } from "next/router"
 import { useContext, useState } from "react"
 import { array, mixed, number, object, ref, SchemaOf, string } from "yup"
-import { commandRequest, imageRequest } from "../../services/axios/axios"
+import { createNewItemApi } from "../../services/item/create"
+import { uploadImageApi } from "../../services/item/image"
+import { updateItemApi } from "../../services/item/update"
 import { routes } from "../../services/routes/routes"
 import { convertAnyWeightIntoGram } from "../../services/unit/unitConverter"
-import { ImageUploadResponse } from "../../types/image"
-import { CreateItemDto, CreateItemForm, Item } from "../../types/item"
+import { CreateEditItemForm, CreateItemDto, Item, UpdateItemDto } from "../../types/item"
 import { AuthContext } from "../Auth/Auth"
 import { Button } from "../Button/Button"
 import { IconButton } from "../Button/IconButton"
@@ -38,6 +39,7 @@ const unitTypeDropdownOptions = [
 ]
 
 type CreateEditProps = {
+    /** Item to edit. If undefined, a new item will be created. */
     item?: Item
 }
 
@@ -52,22 +54,23 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
     const router = useRouter()
     const { getSession } = useContext(AuthContext)
 
+    const isEditMode = item
+
     // Formik Form Initial Values
-    const initialFormValues: CreateItemForm = {
+    const initialFormValues: CreateEditItemForm = {
         name: item?.name ?? "",
         weight: item?.weight.value ?? "",
         unit: "g",
         valueType: item?.weight.additionalValue ? "range" : "exact",
         additionalValue: item?.weight.additionalValue ?? "",
-        /** This is an array since checkbox component can only handle arrays */
-        isCa: item?.weight.isCa ? [true] : [false],
+        isCa: item?.weight.isCa ? [false, true] : [], // This is an array since checkbox component can only handle arrays
         source: item?.source ?? "",
         imageFile: undefined, // The edit initial is at the image upload component
         tags: ""
     }
 
     // Formik Form Validation
-    const validationSchema: SchemaOf<CreateItemForm> = object().shape({
+    const validationSchema: SchemaOf<CreateEditItemForm> = object().shape({
         name: string().required("Name is required."),
         weight: number().required("Weight is required."),
         unit: mixed().oneOf(unitTypeDropdownOptions.map(option => option.value)),
@@ -86,86 +89,95 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
      * Handle submit create item.
      * @param values input from form
      */
-    const onFormSubmit = async ({ name, weight, unit, additionalValue, valueType, isCa, source, tags, imageFile }: CreateItemForm) => {
+    const onFormSubmit = async (values: CreateEditItemForm) => {
         // Convert weight in g
-        weight = convertAnyWeightIntoGram(new BigNumber(weight), unit).toNumber()
+        values.weight = convertAnyWeightIntoGram(new BigNumber(values.weight), values.unit).toNumber()
 
         // Convert additionalValue in g
-        additionalValue = additionalValue ? convertAnyWeightIntoGram(new BigNumber(additionalValue), unit).toNumber() : undefined
+        values.additionalValue = values.additionalValue ? convertAnyWeightIntoGram(new BigNumber(values.additionalValue), values.unit).toNumber() : undefined
 
-        console.log({
-            message: "Weights converted to g."
-        })
+        if (!isEditMode)
+            createItem(values)
 
-        // Prepare item data
-        const item: CreateItemDto = {
-            name,
+        if (isEditMode)
+            editItem(values)
+    }
+
+    const editItem = async (values: CreateEditItemForm) => {
+        if (!isEditMode)
+            return
+
+        // Prepare item data update
+        const editItem: UpdateItemDto = {
+            ...(values.name !== item?.name ? { name: values.name } : {}),
             weight: {
-                value: weight,
-                isCa: isCa[0],
-                // Only add additionalValue when defined and value type is additional
-                ...(additionalValue && (valueType === "range") ? { additionalValue } : {})
+                ...(values.weight !== item?.weight.value ? { value: Number(values.weight) } : {}),
+                ...(values.isCa[0] !== item?.weight.isCa ? { isCa: values.isCa[0] } : {}),
+                ...(values.additionalValue !== item?.weight.additionalValue && (values.valueType === "range") ? { additionalValue: Number(values.additionalValue) } : {})
             },
-            ...(source !== "" ? { source } : {}), // Only add source when defined
-            tags: tags ? tags.split(",") : [] // TODO: Replace with array tags
+            ...(!(values.source === item?.source || values.source === "") ? { source: values.source } : {}),
+            tags: [] // TODO: Replace with array tags
         }
 
-        console.log({
-            message: "Item data prepared.",
-        })
-
         try {
+            /** Get session */
             const session = await getSession()
-
             if (session === null)
                 throw Error("Failed to get session.")
 
-            console.log({
-                message: "Session retrieved.",
-            })
-            if (imageFile) {
-                console.log({
-                    message: "Image file found. Trying to upload image.",
-                })
-                // Create form and append image
-                const formData = new FormData()
-                formData.append("image", imageFile)
-
-                const imageResponse = await imageRequest.post<ImageUploadResponse>("/upload/image", formData, {
-                    headers: {
-                        Authorization: `Bearer ${session.accessToken}`,
-                        "Content-Type": "multipart/form-data"
-                    },
-                    validateStatus(status) {
-                        // Accept 409 Conflict as valid status
-                        return (status >= 200 && status < 300) || status === 409
-                    },
-                })
+            /** Image Upload */
+            if (values.imageFile) {
+                const imageUploadResponse = await uploadImageApi(values.imageFile, session)
 
                 // Append image path to item
-                item.image = imageResponse.data.path
-                console.log({
-                    message: "Image uploaded.",
-                })
+                editItem.image = imageUploadResponse.data.path
             }
 
-            console.log({
-                message: "Trying to create item.",
-            })
+            /** Update item with api */
+            const itemUpdateResponse = await updateItemApi(item?.slug, item, session)
 
+            if (itemUpdateResponse.status === 200) {
+                // Redirect to discover
+                await router.push(routes.weights.list())
+            }
+        } catch (error) {
+            axios.isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Netzwerk-Zeitüberschreitung")
+            return
+        }
+    }
 
-            // Create item with api
-            const response = await commandRequest.post("/items/insert", item, {
-                headers: {
-                    Authorization: `Bearer ${session.accessToken}`
-                }
-            })
+    const createItem = async (values: CreateEditItemForm) => {
+        // Prepare item data create
+        const createItem: CreateItemDto = {
+            name: values.name,
+            weight: {
+                value: Number(values.weight),
+                isCa: values.isCa[0],
+                // Only add additionalValue when defined and value type is additional
+                ...(values.additionalValue && (values.valueType === "range") ? { additionalValue: Number(values.additionalValue) } : {})
+            },
+            ...(values.source !== "" ? { source: values.source } : {}), // Only add source when defined
+            tags: [] // TODO: Replace with array tags
+        }
 
-            console.log({
-                message: "Item created. Redirecting to discover.",
-            })
+        try {
+            /** Get session */
+            const session = await getSession()
+            if (session === null)
+                throw Error("Failed to get session.")
 
-            if (response.status === 200) {
+            /** Image Upload */
+            if (values.imageFile) {
+                const imageUploadResponse = await uploadImageApi(values.imageFile, session)
+
+                // Append image path to item
+                createItem.image = imageUploadResponse.data.path
+            }
+
+            /** Create item with api */
+            const itemCreateResponse = await createNewItemApi(createItem, session)
+
+            if (itemCreateResponse.status === 200) {
                 // Redirect to discover
                 await router.push(routes.weights.list())
             }
@@ -178,19 +190,19 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
     return <>
         {/* Meta Tags */}
         <Seo
-            title="Create new item"
-            description="Contribute to the World Wide Weights database and create a new item."
+            title={`${isEditMode ? `Edit ${item.name}` : "Create new item"}`}
+            description={`${isEditMode ? "Improve contributions to the World Wide Weights database and update item." : "Contribute to the World Wide Weights database and create a new item."}`}
         />
 
         <main className="mt-5 mb-5 md:mb-20">
             <div className="container">
                 {/* Headline */}
-                <Headline>Create new item</Headline>
+                <Headline>{isEditMode ? `Edit ${item.name}` : "Create new item"}</Headline>
             </div>
 
             {/* Content */}
             <Formik initialValues={initialFormValues} validationSchema={validationSchema} onSubmit={onFormSubmit}>
-                {({ dirty, isValid, errors, values, setFieldValue, isSubmitting }: FormikProps<CreateItemForm>) => (
+                {({ dirty, isValid, errors, values, setFieldValue, isSubmitting }: FormikProps<CreateEditItemForm>) => (
                     <Form>
                         <div className="container">
                             {/*** General Information ***/}
@@ -210,6 +222,7 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
                                         <div className="min-w-0">
                                             <TextInput name="weight" type="number" noError min={1} placeholder="150" />
                                         </div>
+
                                         {/** Additional Value **/}
                                         {values.valueType === "range" && <>
                                             <div className="flex justify-center items-center mb-2 md:mb-3"><Icon className="text-base text-gray-700">remove</Icon></div>
@@ -217,11 +230,14 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
                                                 <TextInput type="number" min={0} noError name="additionalValue" placeholder="300" />
                                             </div>
                                         </>}
+
                                         {/** Unit **/}
                                         <div className={`col-start-1 col-end-4 md:row-start-1 ${values.valueType === "exact" ? "md:col-start-2 md:w-32" : "md:col-start-4 md:col-end-6"}`}>
                                             <Dropdown name="unit" options={unitTypeDropdownOptions} hasMargin light />
                                         </div>
                                     </div>
+
+                                    {/** Errors Weight **/}
                                     <div className="mt-[-10px]">
                                         <FormError field="weight" />
                                     </div>
@@ -260,8 +276,8 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
                                     {/* Source */}
                                     <TextInput name="tags" labelText="Tags" helperText="Tags seperated with commas." placeholder="Tags of item" />
 
-                                    <Label name="imageFile" labelText={"Image"} />
                                     {/* Image */}
+                                    <Label name="imageFile" labelText={"Image"} />
                                     <ImageUpload name="imageFile" filePath={item?.image} />
 
                                     {/* Source */}
@@ -281,7 +297,7 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
                                 <p className="hidden sm:block mb-2 lg:mb-0">We will give you Feedback about the Status in the profile.</p>
                                 <div className="flex gap-3 items-center">
                                     <Button to={routes.weights.list()} isColored kind="secondary">Cancel</Button>
-                                    <Button datacy="create-submit-button" disabled={!(dirty && isValid)} type="submit" icon="add" loading={isSubmitting} isColored>Create</Button>
+                                    <Button datacy="create-submit-button" disabled={!(dirty && isValid)} type="submit" icon={isEditMode ? "edit" : "add"} loading={isSubmitting} isColored>{isEditMode ? "Edit" : "Create"}</Button>
                                 </div>
                             </div>
                         </div>
@@ -296,4 +312,3 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
         </main >
     </>
 }
-
