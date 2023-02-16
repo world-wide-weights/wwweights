@@ -275,14 +275,11 @@ const Create: NextPageCustomProps = () => {
                                 </div>
 
                                 {isOpenDetails && <div className="mt-4">
-                                    {/* TODO (Zoe-bot): Add tags design */}
-                                    {/* Source */}
-                                    <TextInput name="tags" labelText="Tags" helperText="Tags seperated with commas." placeholder="Tags of item" />
-
+                                    {/* Tags */}
                                     <ChipTextInput name="tags" />
 
-                                    <Label name="imageFile" labelText={"Image"} />
                                     {/* Image */}
+                                    <Label name="imageFile" labelText={"Image"} />
                                     <ImageUpload name="imageFile" />
 
                                     {/* Source */}
