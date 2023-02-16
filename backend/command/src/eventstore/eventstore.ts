@@ -22,6 +22,7 @@ import { readFileSync } from 'fs';
 import { ItemDeleteSuggestedEvent } from '../items/events/item-delete-suggested.event';
 import { ItemDeletedEvent } from '../items/events/item-deleted.event';
 import { ItemEditSuggestedEvent } from '../items/events/item-edit-suggested.event';
+import { ItemEditedEvent } from '../items/events/item-edited.event';
 import { ItemInsertedEvent } from '../items/events/item-inserted.event';
 import { ALLOWED_EVENT_ENTITIES } from './enums/allowedEntities.enum';
 
@@ -38,11 +39,13 @@ export class EventStore {
     | typeof ItemInsertedEvent
     | typeof ItemDeleteSuggestedEvent
     | typeof ItemDeletedEvent
+    | typeof ItemEditedEvent
   >([
     [ItemInsertedEvent.name, ItemInsertedEvent],
     [ItemEditSuggestedEvent.name, ItemEditSuggestedEvent],
     [ItemDeleteSuggestedEvent.name, ItemDeleteSuggestedEvent],
     [ItemDeletedEvent.name, ItemDeletedEvent],
+    [ItemEditedEvent.name, ItemEditedEvent],
   ]);
   isReady = false;
 

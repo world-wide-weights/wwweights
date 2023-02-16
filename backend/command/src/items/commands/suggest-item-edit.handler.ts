@@ -52,9 +52,9 @@ export class SuggestItemEditHandler
       // If eventslug-uuid combination does not exist => continue
       // This ensures uniqueness
       if (
-        !this.eventStore.doesStreamExist(
+        !(await this.eventStore.doesStreamExist(
           `${ALLOWED_EVENT_ENTITIES.EDIT_SUGGESTION}-${newSuggestion.itemSlug}-${newSuggestion.uuid}`,
-        )
+        ))
       ) {
         break;
       }
