@@ -20,7 +20,7 @@ describe("Create Item", () => {
             cy.wait("@mockCreateItem")
         })
 
-        it.only("should create item when fill all fields", () => {
+        it("should create item when fill all fields", () => {
             // Fill required
             cy.dataCy("textinput-name-input").type("apple")
             cy.dataCy("textinput-weight-input").type("150")
