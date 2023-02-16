@@ -9,7 +9,7 @@ import { ItemListContribute } from "../../components/Item/ItemListContribute"
 import { SkeletonLoadingProfile } from "../../components/Loading/SkeletonLoadingProfile"
 import { Pagination } from "../../components/Pagination/Pagination"
 import { Seo } from "../../components/Seo/Seo"
-import { authRequest, queryRequest } from "../../services/axios/axios"
+import { authRequest, queryClientRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { Profile } from "../../types/auth"
 import { Item, PaginatedResponse } from "../../types/item"
@@ -72,8 +72,8 @@ const Profile: NextPageCustomProps = () => {
 
                 // Fetch contributions, statistics and profile
                 const [contributionsResponse, statisticsResponse, profileResponse] = await Promise.all([
-                    queryRequest.get<PaginatedResponse<Item>>(`/items/list?userid=${sessionData.decodedAccessToken.id}&page=${page}&limit=${limit}`),
-                    queryRequest.get<StatisticsResponse>(`/profiles/${sessionData.decodedAccessToken.id}/statistics`),
+                    queryClientRequest.get<PaginatedResponse<Item>>(`/items/list?userid=${sessionData.decodedAccessToken.id}&page=${page}&limit=${limit}`),
+                    queryClientRequest.get<StatisticsResponse>(`/profiles/${sessionData.decodedAccessToken.id}/statistics`),
                     authRequest.get<Profile>("/profile/me", {
                         headers: {
                             "Authorization": `Bearer ${sessionData.accessToken}`
