@@ -236,12 +236,11 @@ const Profile: NextPageCustomProps = () => {
             </div>
 
             {/* Delete Modal */}
-            <Modal modalHeading="Are you sure you want to delete?" isOpen={isDeleteModalOpen} onDissmis={closeDeleteModal}>
+            <Modal modalHeading="Do you really want to delete?" isOpen={isDeleteModalOpen} onDissmis={closeDeleteModal}>
                 {/* Item Preview */}
                 <div className="my-4">
                     <ItemPreviewGrid bgColor="bg-gray-100" imageUrl={getImageUrl(selectedContribution?.image)} {...selectedContribution!} />
                 </div>
-                <p className="text-gray-700 mb-2">When you delete this item it will be deleted forever and and cannot be recovered.</p>
                 <Formik initialValues={initialDeleteFormValues} onSubmit={onSubmitDelete} validationSchema={validationSchemaDelete}>
                     {({ dirty, isValid, isSubmitting }) => (
                         <Form>
@@ -250,8 +249,8 @@ const Profile: NextPageCustomProps = () => {
 
                             {/* Buttons */}
                             <div className="flex md:justify-between flex-col md:flex-row">
-                                <Button kind="tertiary" type="button" onClick={closeDeleteModal} className="my-4 md:my-0">Abbrechen</Button>
-                                <Button kind="primary" type="submit" disabled={!(dirty && isValid)} loading={isSubmitting} icon="delete">Löschen</Button>
+                                <Button kind="tertiary" type="button" onClick={closeDeleteModal} className="my-4 md:my-0">Oops, never mind</Button>
+                                <Button kind="primary" type="submit" disabled={!(dirty && isValid)} loading={isSubmitting} icon="delete">Delete forever</Button>
                             </div>
                         </Form>)}
                 </Formik>
