@@ -48,7 +48,7 @@ describe("Chip Text Input", () => {
 
     describe("Add chip and remove chip", () => {
         it("should add a chip when write commas", () => {
-            cy.dataCy("chiptextinput-text-input").type("tag3,tag4,")
+            cy.dataCy("chiptextinput-tags-text-input").type("tag3,tag4,")
             cy.dataCy("chiptextinput-chip-2").should("contain.text", "tag3")
             cy.dataCy("chiptextinput-chip-3").should("contain.text", "tag4")
         })
@@ -59,14 +59,14 @@ describe("Chip Text Input", () => {
         })
 
         it("should remove a chip when click backspace without filled input", () => {
-            cy.dataCy("chiptextinput-text-input").type("{backspace}")
+            cy.dataCy("chiptextinput-tags-text-input").type("{backspace}")
             cy.dataCy("chiptextinput-chip-1").should("not.exist")
         })
     })
 
     describe("Validation", () => {
         beforeEach(() => {
-            cy.dataCy("chiptextinput-text-input").type("a,")
+            cy.dataCy("chiptextinput-tags-text-input").type("a,")
         })
 
         it("should display chips red when validation fails", () => {

@@ -74,7 +74,7 @@ export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name, labelRequire
 				</Fragment>)}
 
 				{/* Input */}
-				<input datacy="chiptextinput-text-input" className="focus-visible:outline-none placeholder:text-gray-400 border-2 border-gray-100 bg-gray-100" onKeyDown={handleKeyDown} onKeyUp={addChip} />
+				<input datacy={`chiptextinput-${name}-text-input`} className="focus-visible:outline-none placeholder:text-gray-400 border-2 border-gray-100 bg-gray-100" onKeyDown={handleKeyDown} onKeyUp={addChip} />
 			</div>
 
 			{/* Helpertext */}

@@ -20,7 +20,7 @@ describe("Create Item", () => {
             cy.wait("@mockCreateItem")
         })
 
-        it.only("should create item when fill all fields", () => {
+        it("should create item when fill all fields", () => {
             // Fill required
             cy.dataCy("textinput-name-input").type("apple")
             cy.dataCy("textinput-weight-input").type("150")
@@ -43,7 +43,7 @@ describe("Create Item", () => {
 
             // Fill details
             cy.dataCy("textinput-source-input").type("https://wikipedia.de")
-            cy.dataCy("textinput-tags-input").type("fruit")
+            cy.dataCy("chiptextinput-tags-text-input").type("fruit,healthy,")
             cy.dataCy("imageupload-imageFile-file-input").selectFile({
                 contents: Cypress.Buffer.from("file contents"),
                 fileName: "file.png",
