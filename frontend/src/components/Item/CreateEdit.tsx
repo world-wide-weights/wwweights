@@ -62,7 +62,7 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
         /** This is an array since checkbox component can only handle arrays */
         isCa: item?.weight.isCa ? [true] : [false],
         source: item?.source ?? "",
-        imageFile: undefined,
+        imageFile: undefined, // The edit initial is at the image upload component
         tags: ""
     }
 
@@ -262,7 +262,7 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
 
                                     <Label name="imageFile" labelText={"Image"} />
                                     {/* Image */}
-                                    <ImageUpload name="imageFile" />
+                                    <ImageUpload name="imageFile" filePath={item?.image} />
 
                                     {/* Source */}
                                     <TextInput name="source" labelText="Source of weight" placeholder="Link to source" />

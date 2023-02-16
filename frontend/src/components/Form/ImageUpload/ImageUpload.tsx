@@ -1,24 +1,41 @@
 import { Field, FieldProps } from "formik"
 import Image from "next/image"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
+import { getImageUrl } from "../../../services/utils/getImageUrl"
 import { IconButton } from "../../Button/IconButton"
 import { Icon } from "../../Icon/Icon"
 
 type ImageUploadProps = {
     /** The name of the field. */
     name: string
+    /** Set file */
+    filePath?: string
 }
 
 /**
  * A drag and drop image upload component.
  */
-export const ImageUpload: React.FC<ImageUploadProps> = ({ name }) => {
+export const ImageUpload: React.FC<ImageUploadProps> = ({ name, filePath }) => {
     // Local States
     const [image, setImage] = useState<string | ArrayBuffer | null>(null)
     const [dragActive, setDragActive] = useState(false)
 
     // Refs
     const inputRef = useRef<HTMLInputElement>(null)
+
+    // Set initial image
+    useEffect(() => {
+        if (!filePath)
+            return
+
+        const initialImage = () => {
+            const image = filePath ? getImageUrl(filePath) : null
+
+            if (image)
+                setImage(image)
+        }
+        initialImage()
+    }, [filePath])
 
     /**
      * Handles the image.
