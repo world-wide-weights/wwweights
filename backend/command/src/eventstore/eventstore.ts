@@ -190,7 +190,7 @@ export class EventStore {
   }
 
   /**
-   * @description Take event along with its typing and publish it to the cqrs event buspublish it to the cqrs event bus
+   * @description Take event along with its typing and publish it to the cqrs event bus
    */
   private publishEventToBus(eventType: any, event: any) {
     if (!event) return;
@@ -198,8 +198,8 @@ export class EventStore {
       this.logger.error(`Invalid eventtype for eventbus ${eventType}`);
       return;
     }
-    this.logger.debug(`Publishing ${eventType} to event bus`);
     this.eventBus.publish(new (this.eventMap.get(eventType))(event));
+    this.logger.debug(`Published ${eventType} to event bus`);
   }
 
   /**
@@ -213,14 +213,14 @@ export class EventStore {
     });
     try {
       for await (const event of result) {
-        // If last event in stream deleted item => item does not exist anymore
-        // NOTE: This will change once suggestion threshholds have been implemented
+        // Is last event terminating? If yes, the stream is considered non existant
         return (event?.event?.data as any)?.eventType !== ItemDeletedEvent.name;
       }
     } catch (error) {
       if (error instanceof StreamNotFoundError) {
         return false;
       }
+      // This may be an Connection lost error etc. Anyway we throw it
       throw error;
     }
     return true;

@@ -31,7 +31,6 @@ export class SuggestItemEditHandler
       updatedItemValues: suggestItemEditDto,
       // Approved is default until votes for suggestions are implemented in frontend
       status: SUGGESTION_STATUS.APPROVED,
-      // TODO: Relying on the chance of this being a duplicate for an item being 0 is ok, but not great
       uuid: randomUUID(),
     });
 
