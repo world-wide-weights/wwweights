@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios"
 import { SessionData } from "../../types/auth"
-import { CreateItemDto } from "../../types/item"
+import { UpdateItemDto } from "../../types/item"
 import { commandRequest } from "../axios/axios"
 
 /**
@@ -10,7 +10,7 @@ import { commandRequest } from "../axios/axios"
  * @param session the current session
  * @returns response from api
  */
-export const updateItemApi = async (slug: string, updateItem: CreateItemDto, session: SessionData): Promise<AxiosResponse> => {
+export const updateItemApi = async (slug: string, updateItem: UpdateItemDto, session: SessionData): Promise<AxiosResponse> => {
     const response = await commandRequest.post(`items/${slug}/suggest/edit`, updateItem, {
         headers: {
             Authorization: `Bearer ${session.accessToken}`

@@ -134,7 +134,7 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
             }
 
             /** Update item with api */
-            const itemUpdateResponse = await updateItemApi(item?.slug, item, session)
+            const itemUpdateResponse = await updateItemApi(item?.slug, editItem, session)
 
             if (itemUpdateResponse.status === 200) {
                 // Redirect to discover
