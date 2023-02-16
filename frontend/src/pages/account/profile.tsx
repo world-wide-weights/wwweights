@@ -238,7 +238,7 @@ const Profile: NextPageCustomProps = () => {
             {/* Delete Modal */}
             <Modal modalHeading="Are you sure you want to delete?" isOpen={isDeleteModalOpen} onDissmis={closeDeleteModal}>
                 {/* Item Preview */}
-                <div className="w-2/3 my-4">
+                <div className="my-4">
                     <ItemPreviewGrid bgColor="bg-gray-100" imageUrl={getImageUrl(selectedContribution?.image)} {...selectedContribution!} />
                 </div>
                 <p className="text-gray-700 mb-2">When you delete this item it will be deleted forever and and cannot be recovered.</p>
@@ -246,7 +246,7 @@ const Profile: NextPageCustomProps = () => {
                     {({ dirty, isValid, isSubmitting }) => (
                         <Form>
                             {/* Delete Reasons */}
-                            <Dropdown name="reason" labelText="Reason" placeholder="Select a reason" options={deleteReasonDropdownOptions} hasMargin light />
+                            <Dropdown name="reason" labelText="Reason" labelRequired placeholder="Select a reason" options={deleteReasonDropdownOptions} hasMargin light />
 
                             {/* Buttons */}
                             <div className="flex md:justify-between flex-col md:flex-row">
