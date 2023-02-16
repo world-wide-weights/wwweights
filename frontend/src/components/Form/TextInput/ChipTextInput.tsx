@@ -33,15 +33,15 @@ export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name }) => {
 			const submitKeys = ["Enter", ","]
 			if (!submitKeys.includes(event.key))
 				return
-			const tagInput = (event.target as HTMLInputElement)
+			const chipInput = (event.target as HTMLInputElement)
 
-			const tagValue = tagInput.value.split(",")
-			tagValue.forEach((tag) => {
-				if (tag.trim() !== "") {
-					arrayHelpers.push(tag.trim())
+			const chipValue = chipInput.value.split(",")
+			chipValue.forEach((chip) => {
+				if (chip.trim() !== "") {
+					arrayHelpers.push(chip.trim())
 				}
 			})
-			tagInput.value = ""
+			chipInput.value = ""
 		}
 
 		/**
@@ -54,11 +54,11 @@ export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name }) => {
 		}
 
 		return <>
-			{values[name] && values[name].map((tag: string, index: number) => <Fragment key={index}>
+			{values[name] && values[name].map((chip: string, index: number) => <Fragment key={index}>
 				<Field name={`${name}.${index}`}>
 					{(props: any) => <>
 						<input className="hidden" />
-						<Chip key={index} iconEnd="close" onClick={() => removeChip(index)}>{tag}</Chip>
+						<Chip key={index} iconEnd="close" onClick={() => removeChip(index)}>{chip}</Chip>
 						<FormError field={`${name}.${index}`} />
 					</>}
 				</Field>
