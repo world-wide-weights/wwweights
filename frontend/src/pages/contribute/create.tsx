@@ -81,7 +81,7 @@ const Create: NextPageCustomProps = () => {
         isCa: [false],
         source: "",
         imageFile: undefined,
-        tags: ["test2", "test3"]
+        tags: []
     }
 
     // Formik Form Validation
@@ -97,7 +97,7 @@ const Create: NextPageCustomProps = () => {
         isCa: array().of(boolean()).notRequired(),
         source: string(),
         imageFile: mixed().notRequired(),
-        tags: array().of(string().min(5)).notRequired(),
+        tags: array().of(string().min(5).max(255)).notRequired(),
     })
 
     /**
