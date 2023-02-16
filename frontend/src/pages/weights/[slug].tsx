@@ -10,7 +10,7 @@ import { RelatedItems } from "../../components/RelatedItems/RelatedItems"
 import { Seo } from "../../components/Seo/Seo"
 import { Tab } from "../../components/Tabs/Tab"
 import { Tabs } from "../../components/Tabs/Tabs"
-import { queryRequest } from "../../services/axios/axios"
+import { queryServerRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { renderUnitIntoString } from "../../services/unit/unitRenderer"
 import { getImageUrl } from "../../services/utils/getImageUrl"
@@ -121,8 +121,8 @@ export const getStaticProps: GetStaticProps<WeightsSingleProps> = async (context
     // TODO (Zoe-Bot): Correct error handling
     // Fetch item and related items
     const [itemResponse, relatedItemsResponse] = await Promise.all([
-        queryRequest.get<PaginatedResponse<Item>>(`/items/list?slug=${slug}`),
-        queryRequest.get<PaginatedResponse<Item>>(`/items/related?slug=${slug}`),
+        queryServerRequest.get<PaginatedResponse<Item>>(`/items/list?slug=${slug}`),
+        queryServerRequest.get<PaginatedResponse<Item>>(`/items/related?slug=${slug}`),
     ])
 
     // Items and RelatedItems
