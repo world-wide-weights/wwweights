@@ -21,3 +21,31 @@ export type Weight = {
     additionalValue?: number
     isCa?: boolean
 }
+
+export type CreateItemForm = {
+    name: string
+    weight: number | string
+    unit: "g" | "kg" | "T"
+    additionalValue?: number | string
+    isCa: boolean[]
+    valueType: "exact" | "range"
+    source?: string
+    imageFile?: File
+    tags?: string
+}
+
+export type CreateItemDto = {
+    name: string
+    weight: Weight
+    source?: string
+    image?: string
+    tags?: string[]
+}
+
+export type UpdateItemDto = {
+    name?: string
+    weight?: Weight
+    source?: string
+    image?: string
+    tags?: string[]
+}
