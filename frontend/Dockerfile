@@ -52,7 +52,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Add entrypoint
-COPY  --chown=nextjs:nodejs ./entrypoint.sh .
+COPY  --chown=nextjs:nodejs ./docker-entrypoint.sh ./entrypoint.sh 
 RUN ["chmod", "+x", "/app/entrypoint.sh"]
 ENTRYPOINT ["/app/entrypoint.sh"]
 
