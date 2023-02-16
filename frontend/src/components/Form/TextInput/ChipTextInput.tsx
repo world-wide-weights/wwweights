@@ -55,7 +55,7 @@ export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name, labelRequire
 		 */
 		const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
 			if (event.key === "Backspace" && event.currentTarget.value === "")
-				arrayHelpers.pop()
+				arrayHelpers.remove(values[name].length - 1)
 		}
 
 		return <div>
