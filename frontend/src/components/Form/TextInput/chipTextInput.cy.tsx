@@ -1,6 +1,8 @@
 import { Form, Formik } from "formik"
-import { ChipTextInput } from "./ChipTextInput"
+import "material-symbols"
 import * as yup from "yup"
+import "../../../styles/global.css"
+import { ChipTextInput } from "./ChipTextInput"
 
 const initialValues = {
     title: ""
@@ -33,7 +35,7 @@ describe("Chip Text Input", () => {
     describe("Basic Props", () => {
         beforeEach(() => {
             cy.mount(<Wrapper>
-                <ChipTextInput name={"ChipTagInput"} chips={["Hallo, Hey"]} selectedChips={selectedChips}/>
+                <ChipTextInput name={"ChipTagInput"} chips={["Hallo, Hey"]} selectedChips={selectedChips} />
             </Wrapper>)
         })
 
