@@ -20,7 +20,6 @@ type ChipTextInputProps = {
  * Text input with chips
  */
 export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name, labelRequired, labelText, helperText }) => {
-	// Formik Context
 	const { values, errors } = useFormikContext<any>()
 
 	return <FieldArray name={name}>{(arrayHelpers) => {
