@@ -1,5 +1,4 @@
 import { isAxiosError } from "axios"
-import Image from "next/image"
 import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../../components/Auth/Auth"
@@ -125,7 +124,9 @@ const Profile: NextPageCustomProps = () => {
                 <div className="sm:flex lg:flex-col gap-3 2xl:w-1/4 mb-6 lg:mb-0">
                     {/* Meta infos */}
                     <div className="flex flex-col justify-center md:justify-start sm:w-1/2 md:w-auto items-center bg-white rounded-lg py-6 px-4 mb-3 sm:mb-0">
-                        <Image src="https://picsum.photos/120" alt="profile picture" width={120} height={120} className="rounded-full mb-2" />
+                        <div className="grid items-center justify-center bg-blue-200 h-28 w-28 rounded-full mb-2">
+                            <span className="text-6xl text-blue-700 font-bold mt-2">{profile.username[0].toUpperCase()}</span>
+                        </div>
                         <Headline datacy="profile-username" level={3} hasMargin={false}>{profile.username}</Headline>
                         <p datacy="profile-registered-since"><>Member since {new Date(profile.createdAt).toLocaleDateString("en-US")}</></p>
                     </div>
