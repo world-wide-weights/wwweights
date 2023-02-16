@@ -11,13 +11,15 @@ type ChipTextInputProps = {
 	labelText?: string
 	/** When set Required * will be seen. */
 	labelRequired?: boolean
+	/** Provides assistance on how to fill out a field. Helper text is optional. */
+	helperText?: string
 }
 
 /**
  * Chip Text Input, can only be used with Formik
  * Text input with chips
  */
-export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name, labelRequired, labelText }) => {
+export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name, labelRequired, labelText, helperText }) => {
 	// Formik Context
 	const { values, errors } = useFormikContext<any>()
 
@@ -35,7 +37,7 @@ export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name, labelRequire
 		 * @param event the keyboard event
 		 */
 		const addChip = (event: React.KeyboardEvent<HTMLInputElement>): void => {
-			const submitKeys = ["Enter", ","]
+			const submitKeys = [","]
 			if (!submitKeys.includes(event.key))
 				return
 			const chipInput = (event.target as HTMLInputElement)
@@ -75,6 +77,8 @@ export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name, labelRequire
 					{/* Input */}
 					<input className="focus-visible:outline-none placeholder:text-gray-400 border-2 border-gray-100 bg-gray-100" onKeyDown={handleKeyDown} onKeyUp={addChip} />
 				</div>
+
+				{!(errors[name]) && <p className="text-gray-600 text-sm mt-2">{helperText}</p>}
 
 				{/* Error Messages */}
 				{(errors[name] as string[])?.map((error: string, index: number) => error && <div key={index} className="flex items-center text-red-500">
