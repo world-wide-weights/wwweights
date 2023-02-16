@@ -26,16 +26,11 @@ const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     </Formik>
 }
 
-const selectedChips = (chips: string[]) => {
-    console.log(chips)
-}
-
-
 describe("Chip Text Input", () => {
     describe("Basic Props", () => {
         beforeEach(() => {
             cy.mount(<Wrapper>
-                <ChipTextInput name={"ChipTagInput"} chips={["Hallo, Hey"]} selectedChips={selectedChips} />
+                <ChipTextInput name={"ChipTagInput"} />
             </Wrapper>)
         })
 

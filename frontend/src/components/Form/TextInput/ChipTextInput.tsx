@@ -1,42 +1,80 @@
-import { Field, FieldProps } from "formik"
-import React from "react"
-import { Icon } from "../../Icon/Icon"
+import { Field, FieldArray, useFormikContext } from "formik"
+import React, { Fragment } from "react"
+import { Chip } from "../../Chip/Chip"
+import { FormError } from "../../Errors/FormError"
 
 type ChipTextInputProps = {
   /** Gives the input a unique name */
   name: string
-  /** Array of chips in textfield */
-  chips: string[],
-  /** Callback function to get selected chips */
-  selectedChips: (chips: string[]) => void;
-} & React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
+}
 
 /**
  * Chip Text Input, can only be used with Formik
  * Text input with chips
  */
-export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name, chips = [], type, selectedChips }) => {
-  // All chips which are active in the textfield
-  const [tags, setTags] = React.useState(chips)
+export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name }) => {
   // Returns true if the input is selected
   const [isInputSelected, setIsInputSelected] = React.useState(false)
   // Removes a chip from the textfield if the user clicks on the x Icon
-  const removeTags = (indexToRemove: number) => {
-    setTags([...tags.filter((_, index) => index !== indexToRemove)])
-  }
+  // const removeTags = (indexToRemove: number) => {
+  //   setTags([...tags.filter((_, index) => index !== indexToRemove)])
+  // }
   // Adds a chip to the textfield if the user presses enter
-  const addChips = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      const value = (event.target as HTMLInputElement).value
-      if (value !== "") {
-        setTags([...tags, value])
-        selectedChips([...tags, value]);
-        (event.target as HTMLInputElement).value = ""
+  // const addChips = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  //   if (event.key === "Enter") {
+  //     const value = (event.target as HTMLInputElement).value
+  //     if (value !== "") {
+  //       setTags([...tags, value])
+  //       selectedChips([...tags, value]);
+  //       (event.target as HTMLInputElement).value = ""
+  //     }
+  //   }
+  // }
+  const { values } = useFormikContext<any>()
+
+  return (<>
+    <FieldArray name={name}>{(arrayHelpers) => {
+
+      const removeTags = (indexToRemove: number) => {
+        arrayHelpers.remove(indexToRemove)
       }
-    }
-  }
-  return (
-    <Field type={type} name={name}>{(props: FieldProps<any>) => (
+
+      const addTag = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        const submitKeys = ["Enter", ","]
+        if (!submitKeys.includes(event.key))
+          return
+        const tagInput = (event.target as HTMLInputElement)
+
+        const tagValue = tagInput.value.split(",")
+        tagValue.forEach((tag) => {
+          if (tag.trim() !== "") {
+            arrayHelpers.push(tag.trim())
+          }
+        })
+        tagInput.value = ""
+      }
+
+      const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === "Backspace" && event.currentTarget.value === "")
+          arrayHelpers.pop()
+      }
+
+      return <>
+        {values[name] && values[name].map((tag: string, index: number) => <Fragment key={index}>
+          <Field name={`${name}.${index}`}>
+            {(props: any) => <>
+              <input className="hidden" />
+              <Chip key={index} onClick={() => removeTags(index)}>{tag}</Chip>
+              <FormError field={`${name}.${index}`} />
+            </>}
+          </Field>
+        </Fragment>)}
+        <input onKeyDown={onKeyDown} onKeyUp={addTag}></input>
+        <input></input>
+      </>
+    }}
+    </FieldArray>
+    {/* <>{(props: FieldProps<any>) => (
       <>
         <div datacy="chip-text-input" className={`flex bg-gray-100 rounded-lg ${isInputSelected ? "outline outline-2 outline-blue-500" : ""}`}>
           <div className="flex flex-wrap pr-4 border-solid pl-4">
@@ -62,7 +100,6 @@ export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name, chips = [], 
         </div>
       </>
 
-    )}</Field>
-
+    )}</> */}</>
   )
 }
