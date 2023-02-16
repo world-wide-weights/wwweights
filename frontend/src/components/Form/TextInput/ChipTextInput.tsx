@@ -61,7 +61,7 @@ export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name, labelRequire
 		return <div>
 			{labelText && <Label name={name} labelText={labelText} labelRequired={labelRequired} />}
 			<div className="mb-2 md:mb-4">
-				<div className="border-2 border-gray-100 bg-gray-100 rounded-lg px-2 pt-2 mb-2">
+				<div className="border-2 border-gray-100 bg-gray-100 rounded-lg p-2 mb-2">
 					{/* Chips */}
 					{values[name] && values[name].map((chip: string, index: number) => <Fragment key={index}>
 						<Field name={`${name}.${index}`}>
