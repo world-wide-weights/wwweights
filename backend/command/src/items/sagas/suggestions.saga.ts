@@ -28,10 +28,12 @@ export class SuggestionsSaga {
           );
           return;
         }
-        console.log('saga');
         const res = new DeleteItemCommand(
           event.deleteSuggestion.itemSlug,
           event.deleteSuggestion.uuid,
+        );
+        this.logger.debug(
+          `${SuggestionsSaga.name} published ${DeleteItemCommand.name} to commandBus`,
         );
         return res;
       }),
@@ -54,11 +56,13 @@ export class SuggestionsSaga {
           );
           return;
         }
-        console.log('other saga');
         const res = new EditItemCommand(
           event.editSuggestion.itemSlug,
           event.editSuggestion.uuid,
           event.editSuggestion.updatedItemValues,
+        );
+        this.logger.debug(
+          `${SuggestionsSaga.name} published ${EditItemCommand.name} to commandBus`,
         );
         return res;
       }),

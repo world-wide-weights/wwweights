@@ -13,7 +13,6 @@ export class DeleteItemHandler implements ICommandHandler<DeleteItemCommand> {
 
   // No returns, just Exceptions in CQRS
   async execute(deleteItemData: DeleteItemCommand) {
-    console.log('delete item');
     const newItemDelete: ItemDeletedEventDTO = deleteItemData;
 
     const streamName = `${ALLOWED_EVENT_ENTITIES.ITEM}-${newItemDelete.itemSlug}`;
