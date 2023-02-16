@@ -12,7 +12,7 @@ export type Item = {
     source?: string
     image?: string
     tags: Tag[]
-    user: string // TODO (Zoe-Bot): Update this to real user when api updated
+    userId: number
     createdAt: number
 }
 
