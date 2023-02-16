@@ -105,7 +105,6 @@ const Create: NextPageCustomProps = () => {
      * @param values input from form
      */
     const onFormSubmit = async ({ name, weight, unit, additionalValue, valueType, isCa, source, tags, imageFile }: CreateItemForm) => {
-
         // Convert weight in g
         weight = convertAnyWeightIntoGram(new BigNumber(weight), unit).toNumber()
 
@@ -122,11 +121,10 @@ const Create: NextPageCustomProps = () => {
             weight: {
                 value: weight,
                 isCa: isCa[0],
-                // Only add additionalValue when defined and value type is additional
-                ...(additionalValue && (valueType === "range") ? { additionalValue } : {})
+                ...(additionalValue && (valueType === "range") ? { additionalValue } : {}) // Only add additionalValue when defined and value type is additional
             },
             ...(source !== "" ? { source } : {}), // Only add source when defined
-            tags: tags // TODO: Replace with array tags
+            tags
         }
 
         console.log({
