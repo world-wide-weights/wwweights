@@ -6,7 +6,7 @@ import logo from "../../../public/logo.png"
 import discord from "../../assets/img/logos_icons/discord.svg"
 import github from "../../assets/img/logos_icons/github.svg"
 import twitter from "../../assets/img/logos_icons/twitter.svg"
-import { queryRequest } from "../../services/axios/axios"
+import { queryClientRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { PaginatedResponse } from "../../types/item"
 import { NavLink } from "../../types/nav"
@@ -56,7 +56,7 @@ export const Footer: React.FC = () => {
 	useEffect(() => {
 		const fetchTags = async () => {
 			try {
-				const responseTags = await queryRequest.get<PaginatedResponse<Tag>>("/tags/list?page=1&limit=5&sort=most-used")
+				const responseTags = await queryClientRequest.get<PaginatedResponse<Tag>>("/tags/list?page=1&limit=5&sort=most-used")
 				const tags = responseTags.data.data
 				setTags(tags)
 			} catch (error) {
