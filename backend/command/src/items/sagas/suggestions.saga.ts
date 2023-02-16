@@ -21,7 +21,7 @@ export class SuggestionsSaga {
       map((event) => {
         // Hint: This spawns the delete command as an immediate reaction to the suggestion event
         // This is not final behaviour but rather temporary until Frontend supports suggestion votes
-        // The final product would react to an suggestion vote event and check if the new votecount reached the necessary threshhold
+        // The final product would react to an suggestion approve event
         if (!this.eventstore.isReady) {
           this.logger.debug(
             `${ItemDeleteSuggestedEvent.name} ignored as eventstore is in replay`,
@@ -49,7 +49,7 @@ export class SuggestionsSaga {
       map((event) => {
         // Hint: This spawns the delete command as an immediate reaction to the suggestion event
         // This is not final behaviour but rather temporary until Frontend supports suggestion votes
-        // The final product would react to an suggestion vote event and check if the new votecount reached the necessary threshhold
+        // The final product would react to an suggestion approve event
         if (!this.eventstore.isReady) {
           this.logger.debug(
             `${ItemEditSuggestedEvent.name} ignored as eventstore is in replay`,
