@@ -67,7 +67,7 @@ export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name, labelRequire
 				{values[name] && values[name].map((chip: string, index: number) => <Fragment key={index}>
 					<Field name={`${name}.${index}`}>
 						{(props: FieldProps) => <>
-							<input className="hidden" />
+							<input aria-label="test" className="hidden" />
 							<Chip datacy={`chiptextinput-chip-${index}`} key={index} iconEnd="close" color={props.form.errors[name]?.[index as keyof typeof props.form.errors.name] ? "red" : undefined} onClick={() => removeChip(index)}>{chip}</Chip>
 						</>}
 					</Field>
