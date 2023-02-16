@@ -1,22 +1,22 @@
 import { ConfigService } from '@nestjs/config';
-import { UploadService } from './upload.service';
-import * as path from 'path';
 import { createHash } from 'crypto';
-import * as fs from 'fs';
+import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync } from 'fs';
+import { join } from 'path';
 import * as sharp from 'sharp';
+import { UploadService } from './upload.service';
 
 describe('UploadService', () => {
   let uploadService: UploadService;
   // Supress warning logs because env is not setup properly
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   beforeEach(() => {
-    uploadService = new UploadService(new ConfigService());
+    uploadService = new UploadService(new ConfigService(), null);
   });
   describe('hashFile', () => {
     describe('Positive Tests', () => {
       it('Should hash file correctly', async () => {
         // ARRANGE
-        const imagePath = path.join(
+        const imagePath = join(
           process.cwd(),
           'test',
           'helpers',
@@ -26,14 +26,14 @@ describe('UploadService', () => {
         const res = await uploadService.hashFile(imagePath);
         // ASSERT
         const correctHash = createHash('sha256')
-          .update(fs.readFileSync(imagePath))
+          .update(readFileSync(imagePath))
           .digest('hex');
         expect(res).toEqual(correctHash);
       });
 
       it('Should produce same result for same file', async () => {
         // ARRANGE
-        const imagePath = path.join(
+        const imagePath = join(
           process.cwd(),
           'test',
           'helpers',
@@ -46,13 +46,13 @@ describe('UploadService', () => {
       });
       it('Should produce different results for different files', async () => {
         // ARRANGE
-        const imagePath = path.join(
+        const imagePath = join(
           process.cwd(),
           'test',
           'helpers',
           'test.png',
         );
-        const imagePath2 = path.join(
+        const imagePath2 = join(
           process.cwd(),
           'test',
           'helpers',
@@ -67,7 +67,7 @@ describe('UploadService', () => {
     describe('Negative Tests', () => {
       it('Should fail for non existent file', async () => {
         // ARRANGE
-        const imagePath = path.join(
+        const imagePath = join(
           process.cwd(),
           'test',
           'helpers',
@@ -80,7 +80,7 @@ describe('UploadService', () => {
       });
       it('Should fail for when pointed at a directory', async () => {
         // ARRANGE
-        const imagePath = path.join(process.cwd(), 'test', 'helpers');
+        const imagePath = join(process.cwd(), 'test', 'helpers');
         // ACT
         await expect(uploadService.hashFile(imagePath)).rejects.toThrowError(
           'Filepath does not lead to file',
@@ -91,19 +91,19 @@ describe('UploadService', () => {
 
   describe('cropImage', () => {
     beforeEach(() => {
-      if (!fs.existsSync(path.join(process.cwd(), 'cropTest'))) {
-        fs.mkdirSync(path.join(process.cwd(), 'cropTest'));
+      if (!existsSync(join(process.cwd(), 'cropTest'))) {
+        mkdirSync(join(process.cwd(), 'cropTest'));
       }
     });
     afterEach(() => {
-      fs.rmSync(path.join(process.cwd(), 'cropTest'), { recursive: true });
+      rmSync(join(process.cwd(), 'cropTest'), { recursive: true });
     });
     describe('Positive Tests', () => {
       it('Should not crop small images (png)', async () => {
         // ARRANGE
-        const testFilePath = path.join(process.cwd(), 'cropTest', 'test.png');
-        fs.copyFileSync(
-          path.join(process.cwd(), 'test', 'helpers', 'test.png'),
+        const testFilePath = join(process.cwd(), 'cropTest', 'test.png');
+        copyFileSync(
+          join(process.cwd(), 'test', 'helpers', 'test.png'),
           testFilePath,
         );
         const initialMetadata = await sharp(testFilePath).metadata();
@@ -116,9 +116,9 @@ describe('UploadService', () => {
       });
       it('Should not crop small images (jpg)', async () => {
         // ARRANGE
-        const testFilePath = path.join(process.cwd(), 'cropTest', 'test.jpg');
-        fs.copyFileSync(
-          path.join(process.cwd(), 'test', 'helpers', 'test.jpg'),
+        const testFilePath = join(process.cwd(), 'cropTest', 'test.jpg');
+        copyFileSync(
+          join(process.cwd(), 'test', 'helpers', 'test.jpg'),
           testFilePath,
         );
         const initialMetadata = await sharp(testFilePath).metadata();
@@ -131,13 +131,13 @@ describe('UploadService', () => {
       });
       it('Should crop images > provided dimensions', async () => {
         // ARRANGE
-        const testFilePath = path.join(
+        const testFilePath = join(
           process.cwd(),
           'cropTest',
           'test-oversized.png',
         );
-        fs.copyFileSync(
-          path.join(process.cwd(), 'test', 'helpers', 'test-oversized.png'),
+        copyFileSync(
+          join(process.cwd(), 'test', 'helpers', 'test-oversized.png'),
           testFilePath,
         );
         // ACT
@@ -155,7 +155,7 @@ describe('UploadService', () => {
         // ACT & ASSERT
         await expect(
           uploadService['cropImage'](
-            path.join(process.cwd(), 'cropTest', '404.png'),
+            join(process.cwd(), 'cropTest', '404.png'),
             512,
             512,
           ),
@@ -165,7 +165,7 @@ describe('UploadService', () => {
         // ACT & ASSERT
         await expect(
           uploadService['cropImage'](
-            path.join(process.cwd(), 'cropTest'),
+            join(process.cwd(), 'cropTest'),
             512,
             512,
           ),

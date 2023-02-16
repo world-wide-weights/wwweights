@@ -17,8 +17,9 @@ import { Tooltip } from "../../components/Tooltip/Tooltip"
 import { useLocalStorage } from "../../hooks/useLocalStorage"
 import { queryRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
-import { renderUnitIntoString, renderWeightAsNumberIntoString } from "../../services/unit/unitRenderer"
 import { generatePageString } from "../../services/seo/pageString"
+import { renderUnitIntoString, renderWeightAsNumberIntoString } from "../../services/unit/unitRenderer"
+import { getImageUrl } from "../../services/utils/getImageUrl"
 import { Item, PaginatedResponse } from "../../types/item"
 
 const DEFAULT_ITEMS_PER_PAGE = 16
@@ -55,8 +56,8 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
     const initialRender = useRef<boolean>(true)
 
     // Local state
-    const [statisticsExpanded, setStatisticsExpanded] = useState<boolean>(false)
-    const [viewType, setViewType, loading] = useLocalStorage(KEY_VIEW_TYPE, "grid", initialRender)
+    const [statisticsExpanded, setStatisticsExpanded] = useState(false)
+    const [viewType, setViewType, loadingViewType] = useLocalStorage(KEY_VIEW_TYPE, "grid", initialRender)
 
     return <>
         {/* Meta Tags */}
@@ -74,7 +75,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
         <SearchHeader query={query} sort={sort} />
 
         {/* Content */}
-        <main className="container mt-5">
+        <main className="container mt-5 mb-5 md:mb-20">
             {(items.length === 0 || statistics === undefined) ?
                 // Empty State
                 <SearchEmptyState query={query} />
@@ -106,15 +107,15 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                                 </div>
                             </div>
 
-                            {loading ? <p>Loading...</p> : <>
+                            {loadingViewType ? <p>Loading...</p> : <>
                                 {/* Weights Box View */}
                                 {viewType === "grid" && <div className={`grid ${statisticsExpanded ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" : "grid-cols-1 md:grid-cols-2 2xl:grid-cols-3"} gap-2 md:gap-5 mb-5 md:mb-8`}>
-                                    {items.map((item) => <ItemPreviewGrid datacy="weights-grid-item" key={item.slug} name={item.name} slug={item.slug} weight={item.weight} imageUrl={item.image} />)}
+                                    {items.map((item) => <ItemPreviewGrid datacy="weights-grid-item" key={item.slug} name={item.name} slug={item.slug} weight={item.weight} imageUrl={getImageUrl(item.image)} />)}
                                 </div>}
 
                                 {/* Weights List View */}
                                 {viewType === "list" && <ul className={"grid md:gap-2 mb-5 md:mb-8"}>
-                                    {items.map((item) => <ItemPreviewList datacy="weights-list-item" key={item.slug} name={item.name} slug={item.slug} weight={item.weight} heaviestWeight={statistics.heaviest.weight} imageUrl={item.image} />)}
+                                    {items.map((item) => <ItemPreviewList datacy="weights-list-item" key={item.slug} name={item.name} slug={item.slug} weight={item.weight} heaviestWeight={statistics.heaviest.weight} imageUrl={getImageUrl(item.image)} />)}
                                 </ul>}
                             </>}
 
@@ -130,12 +131,12 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                                 <Headline level={3} hasMargin={false} className={`${statisticsExpanded ? "" : "lg:hidden"} `}>Statistics</Headline>
 
                                 {/* Show Statistics Button */}
-                                <Button onClick={() => setStatisticsExpanded(!statisticsExpanded)} className="hidden lg:flex" kind="tertiary">{statisticsExpanded ? "Show less" : "Show more"}</Button>
+                                <Button onClick={() => setStatisticsExpanded(!statisticsExpanded)} className="hidden lg:flex" kind="tertiary">{statisticsExpanded ? "Vertical View" : "Horizontal View"}</Button>
                             </div>
 
                             {/* Statistics Content */}
                             <div className={`${statisticsExpanded ? "lg:flex-col" : "lg:items-start"} lg:flex`}>
-                                <div className="flex mb-5 lg:mb-10">
+                                <div className="flex mb-5 lg:mb-10 w-full">
                                     <button onClick={() => setStatisticsExpanded(!statisticsExpanded)} className={`hidden ${statisticsExpanded ? "" : "lg:block"} bg-white self-stretch rounded-lg px-1 mr-2`}>
                                         <Icon>chevron_left</Icon>
                                     </button>

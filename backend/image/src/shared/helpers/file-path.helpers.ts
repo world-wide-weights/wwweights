@@ -1,5 +1,5 @@
-import * as fs from 'fs';
-import * as path from 'path';
+import { existsSync, lstatSync, mkdirSync } from 'fs';
+import { resolve } from 'path';
 
 /**
  * @description Take in path and make sure that it´s a global path and not undefined
@@ -9,13 +9,13 @@ export function pathBuilder(initialPath: string, localFallbackFolder: string) {
   const absolutePathIndicator = getOSAbsolutePathIndicator();
   // No path? Use local as fallback
   if (!initialPath) {
-    return path.resolve(localFallbackFolder);
+    return resolve(localFallbackFolder);
   }
   // Is absolute path
   if (initialPath.match(absolutePathIndicator)) {
     return initialPath;
   }
-  return path.resolve(initialPath);
+  return resolve(initialPath);
 }
 /**
  * @description Get Regex to detect absolute paths for the current OS
@@ -29,10 +29,10 @@ export function getOSAbsolutePathIndicator() {
  * @description Validate a given path to be a directory. If the directory does not yet exist => create it
  */
 export function validateOrCreateDirectory(path) {
-  if (!fs.existsSync(path)) {
-    fs.mkdirSync(path, { recursive: true });
+  if (!existsSync(path)) {
+    mkdirSync(path, { recursive: true });
   }
-  if (!fs.lstatSync(path).isDirectory()) {
+  if (!lstatSync(path).isDirectory()) {
     throw new Error(
       `${path} does not point to directory and therefore is not allowed in this context`,
     );

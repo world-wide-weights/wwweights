@@ -16,7 +16,8 @@ export const generateWeightString = (weight: Weight): string => {
  * @returns an object with the percentage calculated and an additional percentage to show range if exist
  */
 export const generateWeightProgressBarPercentage = (weight: Weight, heaviestWeight: Weight): { percentage: number, percentageAdditional?: number } => {
-    const heaviestValue = heaviestWeight.additionalValue ?? heaviestWeight.value
+    // Get the heaviest value from heaviestWeight, ensure that additionalValue is bigger than value
+    const heaviestValue = heaviestWeight.additionalValue !== undefined ? Math.max(heaviestWeight.value, heaviestWeight.additionalValue) : heaviestWeight.value
     const { value, additionalValue } = weight
     const percentage = parseFloat((value / heaviestValue * 100).toFixed(2))
     const percentageAdditional = additionalValue ? parseFloat((additionalValue / heaviestValue * 100).toFixed(2)) : undefined

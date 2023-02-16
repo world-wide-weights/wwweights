@@ -24,7 +24,7 @@ export class ItemStatisticsHandler
 
   async execute({ dto }: ItemStatisticsQuery): Promise<ItemStatistics> {
     try {
-      // We currently also run textSearch on tags, optimizing via itemsByTags is a TODO
+      // We currently also run textSearch on tags
       const filter = getFilter(dto.query, dto.tags);
       const statistics = await this.itemModel.aggregate<ItemStatistics>([
         { $match: filter },
@@ -50,11 +50,10 @@ export class ItemStatisticsHandler
     } catch (error) {
       this.logger.error(error);
       if (error instanceof NotFoundException) throw error;
-      else {
-        throw new InternalServerErrorException(
-          'Item statistics could not be retrieved',
-        );
-      }
+      /* istanbul ignore next */
+      throw new InternalServerErrorException(
+        'Item statistics could not be retrieved',
+      );
     }
   }
 }

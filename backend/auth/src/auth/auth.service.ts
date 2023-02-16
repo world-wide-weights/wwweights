@@ -7,22 +7,24 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
-import { UserService } from '../db/ user.service';
+import {hash as bhash, compare}  from 'bcrypt';
 import { UserEntity } from '../db/entities/users.entity';
+import { UserService } from '../db/services/user.service';
 import { JWTPayload } from '../shared/dtos/jwt-payload.dto';
 import { ROLES } from '../shared/enums/roles.enum';
 import { STATUS } from '../shared/enums/status.enum';
 import { LoginDTO } from './dtos/login.dto';
 import { RefreshJWTPayload } from './dtos/refresh-jwt-payload.dto';
-import { SignUpDTO } from './dtos/signup.dto';
+import { RegisterDTO } from './dtos/register.dto';
 import { TokenResponse } from './responses/token.response';
 
 import { createPublicKey } from 'crypto';
 import { RsaJWK, RsaJWKBase } from './responses/jwks.response';
+import { AuthStatisticsResponse } from './responses/auth-statistics.response';
 
 @Injectable()
 export class AuthService {
+  
   private readonly logger = new Logger(AuthService.name);
   constructor(
     private readonly userService: UserService,
@@ -30,20 +32,19 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  async signup(body: SignUpDTO): Promise<UserEntity> {
+  async register(body: RegisterDTO): Promise<TokenResponse> {
     // hash password
-    const hash = await bcrypt.hash(body.password, 10);
+    const hash = await bhash(body.password, 10);
     const newUser = await this.userService.insertUser({
       ...body,
       password: hash,
     });
     if (!newUser) {
       // All conflict related exceptions are thrown within the userService
+      // This is only a safeguard that should never be reached (in theory)
       throw new InternalServerErrorException();
     }
-    // Coming soon in future PR
-    // this.accountService.sendVerifyMail(newUser);
-    return newUser;
+    return await this.getAuthPayload(newUser)
   }
 
   async login(body: LoginDTO): Promise<TokenResponse> {
@@ -60,7 +61,7 @@ export class AuthService {
     if (
       !user ||
       user.status === STATUS.BANNED ||
-      !(await bcrypt.compare(body.password, user.password))
+      !(await compare(body.password, user.password))
     ) {
       this.logger.warn(`Attempted but invalid login for user ${body.email}`);
       throw new UnauthorizedException();
@@ -113,5 +114,21 @@ export class AuthService {
       use: 'sig',
       kid: this.configService.get<string>('JWT_AUTH_KID'),
     };
+  }
+
+  /**
+   * @description Get auth statistics
+   */
+  async getAuthStatistics(): Promise<AuthStatisticsResponse> {
+    let totalUsersCount = 0
+    try{
+      totalUsersCount = await this.userService.getUserCount()
+    } catch(error){
+        this.logger.warn(`Could not receive total user count due to an error ${error}`)
+        throw new InternalServerErrorException()
+    }
+    return {
+      totalUsers: totalUsersCount
+    }
   }
 }
