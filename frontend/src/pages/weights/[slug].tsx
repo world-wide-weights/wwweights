@@ -94,8 +94,8 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
                     {/* Weights Image */}
                     {imageUrl && <div className="row-start-1 lg:row-end-3 lg:flex lg:justify-end">
                         {/* No better way yet: https://github.com/vercel/next.js/discussions/21379 Let's take a look at this when we got problems with it */}
-                        <Image src={imageUrl} priority className="sm:hidden rounded-xl" alt={item.name} width={120} height={120} />
-                        <Image src={imageUrl} priority className="hidden sm:block rounded-xl" alt={item.name} width={230} height={230} />
+                        {/* <Image src={imageUrl} priority className="sm:hidden rounded-xl" alt={item.name} width={120} height={120} /> */}
+                        <Image src={imageUrl} priority className="rounded-xl" alt={item.name} width={230} height={230} />
                     </div>}
                 </div>
                 <hr className="mb-4 md:mb-8" />
