@@ -276,7 +276,7 @@ const Create: NextPageCustomProps = () => {
 
                                 {isOpenDetails && <div className="mt-4">
                                     {/* Tags */}
-                                    <ChipTextInput name="tags" />
+                                    <ChipTextInput name="tags" labelText="Tags" />
 
                                     {/* Image */}
                                     <Label name="imageFile" labelText={"Image"} />

@@ -1,20 +1,25 @@
-import { Field, FieldArray, useFormikContext } from "formik"
+import { Field, FieldArray, FieldProps, useFormikContext } from "formik"
 import React, { Fragment } from "react"
 import { Chip } from "../../Chip/Chip"
-import { FormError } from "../../Errors/FormError"
+import { Icon } from "../../Icon/Icon"
+import { Label } from "../Label"
 
 type ChipTextInputProps = {
-	/** Gives the input a unique name */
+	/** Gives the input a unique name. */
 	name: string
+	/** Inform users what the corresponding input fields mean. */
+	labelText?: string
+	/** When set Required * will be seen. */
+	labelRequired?: boolean
 }
 
 /**
  * Chip Text Input, can only be used with Formik
  * Text input with chips
  */
-export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name }) => {
+export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name, labelRequired, labelText }) => {
 	// Formik Context
-	const { values } = useFormikContext<any>()
+	const { values, errors } = useFormikContext<any>()
 
 	return <FieldArray name={name}>{(arrayHelpers) => {
 		/**
@@ -53,18 +58,31 @@ export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name }) => {
 				arrayHelpers.pop()
 		}
 
-		return <>
-			{values[name] && values[name].map((chip: string, index: number) => <Fragment key={index}>
-				<Field name={`${name}.${index}`}>
-					{(props: any) => <>
-						<input className="hidden" />
-						<Chip key={index} iconEnd="close" onClick={() => removeChip(index)}>{chip}</Chip>
-						<FormError field={`${name}.${index}`} />
-					</>}
-				</Field>
-			</Fragment>)}
-			<input onKeyDown={handleKeyDown} onKeyUp={addChip}></input>
-		</>
+		return <div>
+			{labelText && <Label name={name} labelText={labelText} labelRequired={labelRequired} />}
+			<div className="mb-2 md:mb-4">
+				<div className="border-2 border-gray-100 bg-gray-100 rounded-lg px-2 pt-2 mb-2">
+					{/* Chips */}
+					{values[name] && values[name].map((chip: string, index: number) => <Fragment key={index}>
+						<Field name={`${name}.${index}`}>
+							{(props: FieldProps) => <>
+								<input className="hidden" />
+								<Chip key={index} iconEnd="close" color={props.form.errors[name]?.[index as keyof typeof props.form.errors.name] ? "red" : undefined} onClick={() => removeChip(index)}>{chip}</Chip>
+							</>}
+						</Field>
+					</Fragment>)}
+
+					{/* Input */}
+					<input className="focus-visible:outline-none placeholder:text-gray-400 border-2 border-gray-100 bg-gray-100" onKeyDown={handleKeyDown} onKeyUp={addChip} />
+				</div>
+
+				{/* Error Messages */}
+				{(errors[name] as string[])?.map((error: string, index: number) => error && <div key={index} className="flex items-center text-red-500">
+					<Icon className="mr-2">error</Icon>
+					<span className="font-medium text-sm">{values.tags[index]}{error.slice(error.indexOf("]") + 1)}</span>
+				</div>)}
+			</div>
+		</div>
 	}}
 	</FieldArray>
 }
