@@ -279,8 +279,9 @@ describe('ItemsController (e2e)', () => {
       expect(suggestion.userId).toEqual(verifiedRequestUser.id);
     });
 
-    // WARNING: The following tests are for testing the edit functionality itself. As of now this is triggered via the
-    // suggestion request, however this is subject to change. These tests are more relevant for grading than functionality
+    // WARNING: The following tests are for testing the edit functionality itself. As of now this is triggered via
+    // a direct insert of the command. In the final product these are triggered via sagas
+    // However the current saga implementation is temporary and should therefore not(!) be tested/influence the tests
 
     it('EditItemCommand => Should update item', async () => {
       // ARRANGE
@@ -304,7 +305,7 @@ describe('ItemsController (e2e)', () => {
       );
     });
 
-    it('items/:slug/suggest/edit => Should be able to set property to null', async () => {
+    it('EditItemCommand => Should be able to set property to null', async () => {
       // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
@@ -316,7 +317,7 @@ describe('ItemsController (e2e)', () => {
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
       ];
       //ACT
-      commandBus.execute(command);
+      await commandBus.execute(command);
       // ASSERT
       // This will pass if met or throw an error if callback condition is never met
       await retryCallback(
@@ -326,7 +327,7 @@ describe('ItemsController (e2e)', () => {
       );
     });
 
-    it('items/:slug/suggest/edit => Should be able to update weight (nested Object)', async () => {
+    it('EditItemCommand => Should be able to update weight (nested Object)', async () => {
       // ARRANGE
       const item = new itemModel({
         ...singleItem,
@@ -347,7 +348,7 @@ describe('ItemsController (e2e)', () => {
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
       ];
       //ACT
-      commandBus.execute(command);
+      await commandBus.execute(command);
       // ASSERT
       // This will pass if met or throw an error if callback condition is never met
       await retryCallback(
@@ -364,7 +365,7 @@ describe('ItemsController (e2e)', () => {
       });
     });
 
-    it('items/:slug/suggest/edit => Should be able to remove fields in weight (nested Object)', async () => {
+    it('EditItemCommand => Should be able to remove fields in weight (nested Object)', async () => {
       // ARRANGE
       const item = new itemModel({
         ...singleItem,
@@ -383,7 +384,7 @@ describe('ItemsController (e2e)', () => {
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
       ];
       //ACT
-      commandBus.execute(command);
+      await commandBus.execute(command);
       // ASSERT
       // This will pass if met or throw an error if callback condition is never met
       await retryCallback(
@@ -397,7 +398,7 @@ describe('ItemsController (e2e)', () => {
       expect(updatedItem.weight.isCa).toBeNull();
     });
 
-    it('items/:slug/suggest/edit => Should update tags in item', async () => {
+    it('EditItemCommand => Should update tags in item', async () => {
       // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
@@ -409,7 +410,7 @@ describe('ItemsController (e2e)', () => {
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
       ];
       //ACT
-      commandBus.execute(command);
+      await commandBus.execute(command);
       // ASSERT
       await retryCallback(async () => {
         // Have tags in item been updated?
@@ -423,7 +424,7 @@ describe('ItemsController (e2e)', () => {
       expect(updatedItem.tags.map((t) => t.name)).toContain('newTag1');
     });
 
-    it('items/:slug/suggest/edit => Should update tags in Tags', async () => {
+    it('EditItemCommand => Should update tags in Tags', async () => {
       // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
@@ -436,7 +437,7 @@ describe('ItemsController (e2e)', () => {
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
       ];
       //ACT
-      commandBus.execute(command);
+      await commandBus.execute(command);
       // ASSERT
       await retryCallback(async () => {
         // Has new tag been created?
@@ -468,7 +469,11 @@ describe('ItemsController (e2e)', () => {
       expect(suggestions[0].reason).toEqual('test');
     });
 
-    it('items/:slug/suggest/delete => Should delete item', async () => {
+    // WARNING: The following tests are for testing the edit functionality itself. As of now this is triggered via
+    // a direct insert of the command. In the final product these are triggered via sagas
+    // However the current saga implementation is temporary and should therefore not(!) be tested/influence the tests
+
+    it('deleteItemCommand => Should delete item', async () => {
       // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
@@ -478,7 +483,7 @@ describe('ItemsController (e2e)', () => {
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
       ];
       //ACT
-      commandBus.execute(command);
+      await commandBus.execute(command);
       // ASSERT
       await retryCallback(
         async () => !(await itemModel.findOne({ slug: item.slug })),
