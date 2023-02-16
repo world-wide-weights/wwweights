@@ -28,6 +28,7 @@ export class SuggestionsSaga {
           );
           return;
         }
+        console.log('saga');
         const res = new DeleteItemCommand(
           event.deleteSuggestion.itemSlug,
           event.deleteSuggestion.uuid,
@@ -53,6 +54,7 @@ export class SuggestionsSaga {
           );
           return;
         }
+        console.log('other saga');
         const res = new EditItemCommand(
           event.editSuggestion.itemSlug,
           event.editSuggestion.uuid,

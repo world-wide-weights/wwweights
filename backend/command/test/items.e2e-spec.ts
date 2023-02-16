@@ -1,12 +1,15 @@
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { EventBus } from '@nestjs/cqrs';
+import { CommandBus, EventBus } from '@nestjs/cqrs';
 import { Test, TestingModule } from '@nestjs/testing';
+import { randomUUID } from 'crypto';
 import { Model } from 'mongoose';
 import * as request from 'supertest';
 import { ALLOWED_EVENT_ENTITIES } from '../src/eventstore/enums/allowedEntities.enum';
 import { EventStore } from '../src/eventstore/eventstore';
 import { EventStoreModule } from '../src/eventstore/eventstore.module';
+import { DeleteItemCommand } from '../src/items/commands/delete-item.command';
+import { EditItemCommand } from '../src/items/commands/edit-item.command';
 import { ItemCronJobHandler } from '../src/items/cron/items.cron';
 import { ItemsModule } from '../src/items/items.module';
 import { DeleteSuggestion } from '../src/models/delete-suggestion.model';
@@ -47,6 +50,7 @@ describe('ItemsController (e2e)', () => {
   let server: any; // Has to be any because of supertest not having a type for it either
   const fakeJWTGuard = new FakeAuthGuardFactory();
   const fakeEnvGuard = new FakeEnvGuardFactory();
+  let commandBus: CommandBus;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -89,6 +93,8 @@ describe('ItemsController (e2e)', () => {
     itemCronJobHandler = app.get<ItemCronJobHandler>(ItemCronJobHandler);
 
     mockEventStore.eventBus = app.get<EventBus>(EventBus);
+
+    commandBus = app.get<CommandBus>(CommandBus);
   });
 
   beforeEach(async () => {
@@ -276,20 +282,20 @@ describe('ItemsController (e2e)', () => {
     // WARNING: The following tests are for testing the edit functionality itself. As of now this is triggered via the
     // suggestion request, however this is subject to change. These tests are more relevant for grading than functionality
 
-    it('items/:slug/suggest/edit => Should update item', async () => {
+    it('EditItemCommand => Should update item', async () => {
       // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
+      const command = new EditItemCommand(item.slug, randomUUID(), {
+        image: 'test',
+      });
       // Create eventstore stream
       mockEventStore.existingStreams = [
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
       ];
       //ACT
-      const res = await request(server)
-        .post(commandsPath + `items/${item.slug}/suggest/edit`)
-        .send({ image: 'test' });
+      commandBus.execute(command);
       // ASSERT
-      expect(res.status).toEqual(HttpStatus.OK);
       // This will pass if met or throw an error if callback condition is never met
       await retryCallback(
         async () =>
@@ -302,16 +308,16 @@ describe('ItemsController (e2e)', () => {
       // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
+      const command = new EditItemCommand(item.slug, randomUUID(), {
+        source: null,
+      });
       // Create eventstore stream
       mockEventStore.existingStreams = [
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
       ];
       //ACT
-      const res = await request(server)
-        .post(commandsPath + `items/${item.slug}/suggest/edit`)
-        .send({ source: null });
+      commandBus.execute(command);
       // ASSERT
-      expect(res.status).toEqual(HttpStatus.OK);
       // This will pass if met or throw an error if callback condition is never met
       await retryCallback(
         async () =>
@@ -331,29 +337,28 @@ describe('ItemsController (e2e)', () => {
         },
       });
       await item.save();
+      const command = new EditItemCommand(item.slug, randomUUID(), {
+        weight: {
+          value: 2222222e30,
+        },
+      });
       // Create eventstore stream
       mockEventStore.existingStreams = [
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
       ];
       //ACT
-      const updateWeight = {
-        value: 2222222e30,
-      };
-      const res = await request(server)
-        .post(commandsPath + `items/${item.slug}/suggest/edit`)
-        .send({ weight: updateWeight });
+      commandBus.execute(command);
       // ASSERT
-      expect(res.status).toEqual(HttpStatus.OK);
       // This will pass if met or throw an error if callback condition is never met
       await retryCallback(
         async () =>
           // Has item been updated?
           (await itemModel.findOne({ slug: item.slug })).weight.value ===
-          updateWeight.value,
+          command.editValues.weight.value,
       );
       const updatedItem = await itemModel.findOne({ slug: item.slug }).lean();
       expect(updatedItem.weight).toEqual({
-        value: updateWeight.value,
+        value: command.editValues.weight.value,
         isCa: item.weight.isCa,
         additionalValue: item.weight.additionalValue,
       });
@@ -366,26 +371,26 @@ describe('ItemsController (e2e)', () => {
         weight: { value: 1123675e30, isCa: true },
       });
       await item.save();
+      const command = new EditItemCommand(item.slug, randomUUID(), {
+        weight: {
+          value: 2222222e30,
+          isCa: null,
+        },
+      });
+
       // Create eventstore stream
       mockEventStore.existingStreams = [
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
       ];
       //ACT
-      const updateWeight = {
-        value: 2222222e30,
-        isCa: null,
-      };
-      const res = await request(server)
-        .post(commandsPath + `items/${item.slug}/suggest/edit`)
-        .send({ weight: updateWeight });
+      commandBus.execute(command);
       // ASSERT
-      expect(res.status).toEqual(HttpStatus.OK);
       // This will pass if met or throw an error if callback condition is never met
       await retryCallback(
         async () =>
           // Has item been updated?
           (await itemModel.findOne({ slug: item.slug })).weight.value ===
-          updateWeight.value,
+          command.editValues.weight.value,
       );
       const updatedItem = await itemModel.findOne({ slug: item.slug });
       // Weight check is redundant with callback
@@ -396,18 +401,16 @@ describe('ItemsController (e2e)', () => {
       // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
+      const command = new EditItemCommand(item.slug, randomUUID(), {
+        tags: { push: ['newTag1'], pull: [item.tags[0].name] },
+      });
       // Create eventstore stream
       mockEventStore.existingStreams = [
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
       ];
       //ACT
-      const res = await request(server)
-        .post(commandsPath + `items/${item.slug}/suggest/edit`)
-        .send({
-          tags: { push: ['newTag1'], pull: [item.tags[0].name] },
-        });
+      commandBus.execute(command);
       // ASSERT
-      expect(res.status).toEqual(HttpStatus.OK);
       await retryCallback(async () => {
         // Have tags in item been updated?
         const tags = (await itemModel.findOne({ slug: item.slug })).tags.map(
@@ -425,18 +428,16 @@ describe('ItemsController (e2e)', () => {
       const item = new itemModel(singleItem);
       await item.save();
       await tagModel.insertMany(item.tags);
+      const command = new EditItemCommand(item.slug, randomUUID(), {
+        tags: { push: ['newTag1'], pull: [item.tags[0].name] },
+      });
       // Create eventstore stream
       mockEventStore.existingStreams = [
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
       ];
       //ACT
-      const res = await request(server)
-        .post(commandsPath + `items/${item.slug}/suggest/edit`)
-        .send({
-          tags: { push: ['newTag1'], pull: [item.tags[0].name] },
-        });
+      commandBus.execute(command);
       // ASSERT
-      expect(res.status).toEqual(HttpStatus.OK);
       await retryCallback(async () => {
         // Has new tag been created?
         return (await tagModel.find({})).length === item.tags.length + 1;
@@ -471,16 +472,14 @@ describe('ItemsController (e2e)', () => {
       // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
+      const command = new DeleteItemCommand(item.slug, randomUUID());
       // Create eventstore stream
       mockEventStore.existingStreams = [
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
       ];
       //ACT
-      const res = await request(server)
-        .post(commandsPath + `items/${item.slug}/suggest/delete`)
-        .send({ reason: 'test' });
+      commandBus.execute(command);
       // ASSERT
-      expect(res.status).toEqual(HttpStatus.OK);
       await retryCallback(
         async () => !(await itemModel.findOne({ slug: item.slug })),
       );

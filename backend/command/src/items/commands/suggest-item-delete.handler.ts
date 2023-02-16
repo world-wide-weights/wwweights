@@ -58,16 +58,10 @@ export class SuggestItemDeleteHandler
           `${ALLOWED_EVENT_ENTITIES.DELETE_SUGGESTION}-${newSuggestion.itemSlug}-${newSuggestion.uuid}`,
         ))
       ) {
-        console.log('stream does not exist');
-
         break;
       }
-      console.log(
-        `${ALLOWED_EVENT_ENTITIES.DELETE_SUGGESTION}-${newSuggestion.itemSlug}-${newSuggestion.uuid}`,
-      );
       newSuggestion.uuid = randomUUID();
       iterations++;
-      console.log(newSuggestion.uuid);
     }
 
     await this.eventStore.addEvent(

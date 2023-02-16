@@ -18,7 +18,7 @@ export class EditItemHandler implements ICommandHandler<EditItemCommand> {
       editValues,
       suggestionUuid,
     };
-
+    console.log('edit item');
     const streamName = `${ALLOWED_EVENT_ENTITIES.ITEM}-${newItemEdit.itemSlug}`;
 
     if (!(await this.eventStore.doesStreamExist(streamName))) {
