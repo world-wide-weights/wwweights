@@ -60,32 +60,31 @@ export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name, labelRequire
 				arrayHelpers.remove(values[name].length - 1)
 		}
 
-		return <div>
-			{labelText && <Label name={name} labelText={labelText} labelRequired={labelRequired} />}
-			<div className="mb-2 md:mb-4">
-				<div className="border-2 border-gray-100 bg-gray-100 rounded-lg p-2 mb-2">
-					{/* Chips */}
-					{values[name] && values[name].map((chip: string, index: number) => <Fragment key={index}>
-						<Field name={`${name}.${index}`}>
-							{(props: FieldProps) => <>
-								<input className="hidden" />
-								<Chip key={index} iconEnd="close" color={props.form.errors[name]?.[index as keyof typeof props.form.errors.name] ? "red" : undefined} onClick={() => removeChip(index)}>{chip}</Chip>
-							</>}
-						</Field>
-					</Fragment>)}
+		return <div datacy="chiptextinput-wrapper" className="mb-2 md:mb-4">
+			{labelText && <Label datacy="chiptextinput-label" name={name} labelText={labelText} labelRequired={labelRequired} />}
+			<div className="border-2 border-gray-100 bg-gray-100 rounded-lg p-2 mb-2">
+				{/* Chips */}
+				{values[name] && values[name].map((chip: string, index: number) => <Fragment key={index}>
+					<Field name={`${name}.${index}`}>
+						{(props: FieldProps) => <>
+							<input className="hidden" />
+							<Chip datacy={`chiptextinput-chip-${index}`} key={index} iconEnd="close" color={props.form.errors[name]?.[index as keyof typeof props.form.errors.name] ? "red" : undefined} onClick={() => removeChip(index)}>{chip}</Chip>
+						</>}
+					</Field>
+				</Fragment>)}
 
-					{/* Input */}
-					<input className="focus-visible:outline-none placeholder:text-gray-400 border-2 border-gray-100 bg-gray-100" onKeyDown={handleKeyDown} onKeyUp={addChip} />
-				</div>
-
-				{!(errors[name]) && <p className="text-gray-600 text-sm mt-2">{helperText}</p>}
-
-				{/* Error Messages */}
-				{(errors[name] as string[])?.map((error: string, index: number) => error && <div key={index} className="flex items-center text-red-500">
-					<Icon className="mr-2">error</Icon>
-					<span className="font-medium text-sm">{values.tags[index]}{error.slice(error.indexOf("]") + 1)}</span>
-				</div>)}
+				{/* Input */}
+				<input datacy="chiptextinput-text-input" className="focus-visible:outline-none placeholder:text-gray-400 border-2 border-gray-100 bg-gray-100" onKeyDown={handleKeyDown} onKeyUp={addChip} />
 			</div>
+
+			{/* Helpertext */}
+			{!(errors[name]) && <p datacy="chiptextinput-helpertext" className="text-gray-600 text-sm mt-2">{helperText}</p>}
+
+			{/* Error Messages */}
+			{(errors[name] as string[])?.map((error: string, index: number) => error && <div datacy="chiptextinput-error" key={index} className="flex items-center text-red-500">
+				<Icon className="mr-2">error</Icon>
+				<span className="font-medium text-sm">{values.tags[index]}{error.slice(error.indexOf("]") + 1)}</span>
+			</div>)}
 		</div>
 	}}
 	</FieldArray>
