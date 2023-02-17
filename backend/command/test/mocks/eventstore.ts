@@ -12,7 +12,7 @@ export const logStringify = (obj: any) => {
 @Injectable()
 export class MockEventStore {
   private readonly logger = new Logger(MockEventStore.name);
-  existingStreams: string[] = [];
+  existingStreams: Set<string> = new Set();
   private latestId = 0;
   eventBus: EventBus;
   public isReady = true;
@@ -34,19 +34,17 @@ export class MockEventStore {
   public addEvent(streamId, eventType: any, event: any) {
     const eventEntry = { id: this.latestId++, eventType, event };
     this.eventBus.publish(new (this.eventMap.get(eventType))(event));
-    if (!this.existingStreams.includes(streamId)) {
-      this.existingStreams.push(streamId);
-    }
+    this.existingStreams.add(streamId);
     return eventEntry.id;
   }
 
   public doesStreamExist(streamId: string) {
-    return this.existingStreams.findIndex((e) => e === streamId) > -1;
+    return this.existingStreams.has(streamId);
   }
 
   // Reset eventstore stream state
   reset() {
     this.latestId = 0;
-    this.existingStreams = [];
+    this.existingStreams.clear();
   }
 }

@@ -238,9 +238,9 @@ describe('ItemsController (e2e)', () => {
       const item = new itemModel(singleItem);
       await item.save();
       // Create eventstore stream
-      mockEventStore.existingStreams = [
+      mockEventStore.existingStreams.add(
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
-      ];
+      );
       //ACT
       const res = await request(server)
         .post(commandsPath + `items/${encodeURI(item.slug)}/suggest/edit`)
@@ -253,7 +253,7 @@ describe('ItemsController (e2e)', () => {
       // ASSERT
       expect(res.status).toEqual(HttpStatus.OK);
       // Has suggestion gone through eventstore?
-      expect(mockEventStore.existingStreams.length).toEqual(2);
+      expect(mockEventStore.existingStreams.size).toEqual(2);
       // Does suggestion exist in mongoDb
       const suggestions = await editSuggestionModel.find();
       expect(suggestions.length).toEqual(1);
@@ -265,9 +265,9 @@ describe('ItemsController (e2e)', () => {
       const item = new itemModel(singleItem);
       await item.save();
       // Create eventstore stream
-      mockEventStore.existingStreams = [
+      mockEventStore.existingStreams.add(
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
-      ];
+      );
       //ACT
       const res = await request(server)
         .post(commandsPath + `items/${item.slug}/suggest/edit`)
@@ -293,9 +293,9 @@ describe('ItemsController (e2e)', () => {
         image: 'test',
       });
       // Create eventstore stream
-      mockEventStore.existingStreams = [
+      mockEventStore.existingStreams.add(
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
-      ];
+      );
       //ACT
       commandBus.execute(command);
       // ASSERT
@@ -315,9 +315,9 @@ describe('ItemsController (e2e)', () => {
         source: null,
       });
       // Create eventstore stream
-      mockEventStore.existingStreams = [
+      mockEventStore.existingStreams.add(
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
-      ];
+      );
       //ACT
       await commandBus.execute(command);
       // ASSERT
@@ -346,9 +346,9 @@ describe('ItemsController (e2e)', () => {
         },
       });
       // Create eventstore stream
-      mockEventStore.existingStreams = [
+      mockEventStore.existingStreams.add(
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
-      ];
+      );
       //ACT
       await commandBus.execute(command);
       // ASSERT
@@ -382,9 +382,9 @@ describe('ItemsController (e2e)', () => {
       });
 
       // Create eventstore stream
-      mockEventStore.existingStreams = [
+      mockEventStore.existingStreams.add(
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
-      ];
+      );
       //ACT
       await commandBus.execute(command);
       // ASSERT
@@ -408,9 +408,9 @@ describe('ItemsController (e2e)', () => {
         tags: { push: ['newTag1'], pull: [item.tags[0].name] },
       });
       // Create eventstore stream
-      mockEventStore.existingStreams = [
+      mockEventStore.existingStreams.add(
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
-      ];
+      );
       //ACT
       await commandBus.execute(command);
       // ASSERT
@@ -435,9 +435,9 @@ describe('ItemsController (e2e)', () => {
         tags: { push: ['newTag1'], pull: [item.tags[0].name] },
       });
       // Create eventstore stream
-      mockEventStore.existingStreams = [
+      mockEventStore.existingStreams.add(
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
-      ];
+      );
       //ACT
       await commandBus.execute(command);
       // ASSERT
@@ -457,9 +457,9 @@ describe('ItemsController (e2e)', () => {
       const item = new itemModel(singleItem);
       await item.save();
       // Create eventstore stream
-      mockEventStore.existingStreams = [
+      mockEventStore.existingStreams.add(
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
-      ];
+      );
       //ACT
       const res = await request(server)
         .post(commandsPath + `items/${item.slug}/suggest/delete`)
@@ -481,9 +481,9 @@ describe('ItemsController (e2e)', () => {
       await item.save();
       const command = new DeleteItemCommand(item.slug, randomUUID());
       // Create eventstore stream
-      mockEventStore.existingStreams = [
+      mockEventStore.existingStreams.add(
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
-      ];
+      );
       //ACT
       await commandBus.execute(command);
       // ASSERT

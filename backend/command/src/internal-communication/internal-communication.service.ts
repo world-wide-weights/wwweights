@@ -31,7 +31,7 @@ export class InternalCommunicationService {
   /**
    * @description Send information to backend that an image has become obsolete
    */
-  async notifyImgImageObsoleteness(imageHash: string) {
+  async notifyImgAboutImageObsoleteness(imageHash: string) {
     await this.notifyImg('/internal/demote-image', { imageHash });
     this.logger.log('Notifed image backend about image obsoleteness');
   }
@@ -55,7 +55,9 @@ export class InternalCommunicationService {
         )
         .pipe(
           catchError((error: AxiosError) => {
-            this.logger.error(`Request to img backend failed! Error: ${error}`);
+            this.logger.error(
+              `Request to img backend for image ${data.imageHash} failed! Error: ${error}`,
+            );
             throw new ServiceUnavailableException(
               'Img Backend could not be notified at the time',
             );
