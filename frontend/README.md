@@ -1,3 +1,4 @@
+![Preview of version 1 of Frontend](https://user-images.githubusercontent.com/47084064/219779311-4a8b9e0d-4221-430c-acc7-09c9f36152a3.png)
 
 
 ### Start the frontend
