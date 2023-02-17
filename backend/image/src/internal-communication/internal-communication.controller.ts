@@ -34,7 +34,6 @@ export class InternalCommunicationController {
   @UseGuards(ApiKeyGuard)
   @HttpCode(HttpStatus.OK)
   async promoteImage(@Body() { imageHash }: PromoteImageDTO) {
-    console.log('daksdakd');
     await this.uploadService.promoteImage(imageHash);
   }
 }
