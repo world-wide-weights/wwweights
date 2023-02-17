@@ -1,6 +1,9 @@
 # wwweights
 
-[![codecov](https://codecov.io/gh/world-wide-weights/wwweights/branch/main/graph/badge.svg?token=ni0QZuPVH7)](https://codecov.io/gh/world-wide-weights/wwweights)
+![Codecov](https://img.shields.io/codecov/c/gh/world-wide-weights/wwweights?flag=auth-backend&label=auth-backend)
+![Codecov](https://img.shields.io/codecov/c/gh/world-wide-weights/wwweights?flag=command-backend&label=command-backend)
+![Codecov](https://img.shields.io/codecov/c/gh/world-wide-weights/wwweights?flag=image-backend&label=image-backend)
+![Codecov](https://img.shields.io/codecov/c/gh/world-wide-weights/wwweights?flag=query-backend&label=query-backend)
 
 ## Docker quickstart
 
