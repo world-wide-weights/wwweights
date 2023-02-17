@@ -1,3 +1,4 @@
+import { Item } from "../../types/item"
 import { calculateMedianWeight, calculateWeightFit, generateWeightProgressBarPercentage, generateWeightString, getSortedItemsAndHeaviest } from "./weight"
 
 describe("Generate Weight String", () => {
@@ -128,7 +129,7 @@ describe("Calculate the number of weights that fit in a container and round", ()
 })
 
 describe("Get SortedItems and Get HeaviestWeight", () => {
-    const items = [{
+    const items: Item[] = [{
         name: "test",
         slug: "test",
         weight: { value: 10 },
