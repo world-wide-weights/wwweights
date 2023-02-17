@@ -97,7 +97,7 @@ const Create: NextPageCustomProps = () => {
         isCa: array().of(boolean()).notRequired(),
         source: string(),
         imageFile: mixed().notRequired(),
-        tags: array().of(string().min(5).max(255)).notRequired(),
+        tags: array().of(string().min(2).max(255)).notRequired(),
     })
 
     /**
