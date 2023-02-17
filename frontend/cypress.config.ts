@@ -86,6 +86,7 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       return Object.assign({}, config, codeCoverageTask(on, config))
     },
+    specPattern: "**/*.{cy,unit}.{js,jsx,ts,tsx}",
     devServer: {
       framework: "next",
       bundler: "webpack",
@@ -110,7 +111,6 @@ export default defineConfig({
           ]
         },
       },
-      specPattern: "**/*.{cy,unit}.{js,jsx,ts,tsx}"
     }
   },
   env: {
