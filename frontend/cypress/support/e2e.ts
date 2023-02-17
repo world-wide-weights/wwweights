@@ -19,5 +19,6 @@ import "./commands"
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
-import "@bahmutov/cypress-code-coverage/support"
+import "@cypress/code-coverage/support"
+
 

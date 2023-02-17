@@ -76,7 +76,8 @@ export default defineConfig({
         id: "config",
         data: { config }
       })
-      return Object.assign({}, config, codeCoverageTask(on, config))
+      require("@cypress/code-coverage/task")(on, config)
+      return config
     },
   },
   viewportWidth: 1920,

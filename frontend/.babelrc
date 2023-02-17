@@ -3,7 +3,6 @@
         "next/babel"
     ],
     "plugins": [
-        "transform-class-properties",
         "istanbul"
     ]
 }
