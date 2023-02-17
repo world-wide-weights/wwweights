@@ -187,7 +187,7 @@ describe('ImagesService', () => {
       expect(apiCall).toHaveBeenCalled();
     });
 
-    it('Should pass http exceptions ', async () => {
+    it('Should pass http exceptions', async () => {
       // ARRANGE
       jest
         .spyOn(internalCommunicationService, 'notifyImgImageObsoleteness')
