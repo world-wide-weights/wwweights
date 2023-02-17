@@ -44,11 +44,9 @@ jobs:
       run:
         shell: bash
         working-directory: frontend
-
     steps:
       - name: Create babel config file
         run: |
-          ls
           mv .babelrc.example .babelrc
 
   e2e-tests:
