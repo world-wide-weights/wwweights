@@ -3,7 +3,7 @@ import { prepareEditItem } from "./edit"
 
 describe("Prepare edit item", () => {
     describe("Add fields", () => {
-        it("should add additional value (and other null fields) when valueType is range and additional value is set", () => {
+        it("should only add additional value when valueType is range and additional value is updated", () => {
             const oldItem: Item = {
                 name: "old name",
                 slug: "old-name",
@@ -30,12 +30,11 @@ describe("Prepare edit item", () => {
             expect(editItem).deep.equal({
                 weight: {
                     additionalValue: 300,
-                },
-                source: null
+                }
             })
         })
 
-        it("should add isCa (and other null fields) when isCa is set", () => {
+        it("should only add isCa when isCa is updated", () => {
             const oldItem: Item = {
                 name: "old name",
                 slug: "old-name",
@@ -60,14 +59,12 @@ describe("Prepare edit item", () => {
             const editItem = prepareEditItem(updateItem, oldItem)
             expect(editItem).deep.equal({
                 weight: {
-                    isCa: true,
-                    additionalValue: null,
-                },
-                source: null
+                    isCa: true
+                }
             })
         })
 
-        it("should add source (and other null fields) when source is set", () => {
+        it("should only add source when source is updated", () => {
             const oldItem: Item = {
                 name: "old name",
                 slug: "old-name",
@@ -91,16 +88,13 @@ describe("Prepare edit item", () => {
 
             const editItem = prepareEditItem(updateItem, oldItem)
             expect(editItem).deep.equal({
-                weight: {
-                    additionalValue: null,
-                },
                 source: "https://example.com"
             })
         })
     })
 
     describe("Update fields", () => {
-        it("should add only name (and other null fields) when update name", () => {
+        it("should only update name when name is updated", () => {
             const oldItem: Item = {
                 name: "old name",
                 slug: "old-name",
@@ -124,15 +118,11 @@ describe("Prepare edit item", () => {
 
             const editItem = prepareEditItem(updateItem, oldItem)
             expect(editItem).deep.equal({
-                name: "new name",
-                weight: {
-                    additionalValue: null,
-                },
-                source: null
+                name: "new name"
             })
         })
 
-        it("should add only weight value (and other null fields) when update weight", () => {
+        it("should only add weight value when weight is updated", () => {
             const oldItem: Item = {
                 name: "old name",
                 slug: "old-name",
@@ -157,14 +147,12 @@ describe("Prepare edit item", () => {
             const editItem = prepareEditItem(updateItem, oldItem)
             expect(editItem).deep.equal({
                 weight: {
-                    value: 300,
-                    additionalValue: null,
-                },
-                source: null
+                    value: 300
+                }
             })
         })
 
-        it("should add only weight isCa (and other null fields) when update isCa", () => {
+        it("should only add weight isCa when isCa is updated", () => {
             const oldItem: Item = {
                 name: "old name",
                 slug: "old-name",
@@ -189,10 +177,8 @@ describe("Prepare edit item", () => {
             const editItem = prepareEditItem(updateItem, oldItem)
             expect(editItem).deep.equal({
                 weight: {
-                    isCa: true,
-                    additionalValue: null,
-                },
-                source: null
+                    isCa: true
+                }
             })
         })
 
