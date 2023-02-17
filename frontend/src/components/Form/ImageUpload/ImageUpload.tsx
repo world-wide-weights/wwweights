@@ -8,7 +8,7 @@ import { Icon } from "../../Icon/Icon"
 type ImageUploadProps = {
     /** The name of the field. */
     name: string
-    /** Set file */
+    /** The path of the image. Use to set an image for an edit view. */
     filePath?: string
 }
 
@@ -28,13 +28,8 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name, filePath }) => {
         if (!filePath)
             return
 
-        const initialImage = () => {
-            const image = filePath ? getImageUrl(filePath) : null
-
-            if (image)
-                setImage(image)
-        }
-        initialImage()
+        const image = getImageUrl(filePath)! // It will always return an string, because filePath is set.
+        setImage(image)
     }, [filePath])
 
     /**
