@@ -73,6 +73,13 @@ jobs:
         timeout-minutes: 15
         with:
           working-directory: ./frontend
+      
+      - name: codecov upload
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: .nyc_output/out.json
+          flags: frontend
           
       - uses: actions/upload-artifact@v3
         if: always()
@@ -124,6 +131,13 @@ jobs:
           build: npm run build
           start: npm start
           command: npm run test-components:cli
+
+      - name: codecov upload
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: .nyc_output/out.json
+          flags: frontend
           
       - uses: actions/upload-artifact@v3
         if: always()
