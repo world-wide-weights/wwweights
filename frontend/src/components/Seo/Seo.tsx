@@ -26,10 +26,10 @@ type BaseSeoProps = {
     twitterImage?: string
 }
 
-
 export const siteTitle = "World Wide Weights"
 export const baseTitleSuffix = ` | ${siteTitle}`
 export const baseKeywords = ["weights database", "World Wide Weights", "wwweights"]
+export const domain = process.env.NEXT_PUBLIC_CLIENT_BASE_URL ?? "https://wwweights.com"
 
 /**
  * Sets metadata into the `<head>` for search engines and social media.
@@ -42,11 +42,11 @@ export const Seo: React.FC<BaseSeoProps> = ({
     description = "World largest database of weights! World Wide Weights is a community project to create a global database of weights.",
     keywords = [],
     canonicalLink = "",
-    ogImage = `${process.env.NEXT_PUBLIC_CLIENT_BASE_URL}/img/og_default.jpg`,
+    ogImage = `${domain}/img/og_default.jpg`,
     ogImageHeight = "630px",
     ogImageWidth = "1200px",
     ogImageDescription = `Preview Image of page "${title}"`,
-    twitterImage = `${process.env.NEXT_PUBLIC_CLIENT_BASE_URL}/img/twitter_default.jpg`
+    twitterImage = `${domain}/img/twitter_default.jpg`
 }) => {
     const finalTitle = `${title}${shouldDisplayTitleSuffix && baseTitleSuffix}`
     return <Head>
@@ -56,7 +56,7 @@ export const Seo: React.FC<BaseSeoProps> = ({
         <meta name="keywords" content={generateKeywordString([...keywords, ...baseKeywords])} key="metaKeywords" />
 
         {/** Open Graph */}
-        <meta property="og:url" content={`${process.env.NEXT_PUBLIC_CLIENT_BASE_URL}${canonicalLink}`} key="ogUrl" />
+        <meta property="og:url" content={`${domain}${canonicalLink}`} key="ogUrl" />
         <meta property="og:title" content={finalTitle} key="ogTitle" />
         <meta property="og:site_name " content={siteTitle} key="ogStiteName" />
         <meta property="og:description" content={description} key="ogDescription" />

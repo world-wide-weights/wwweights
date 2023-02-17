@@ -4,6 +4,9 @@ const clientBaseUrl = Cypress.env("CLIENT_BASE_URL")
 describe("Routes protected/guest", () => {
     describe("Protected Route", () => {
         it("should redirect to login when not logged in", () => {
+            // Mock profile
+            cy.mockProfilePage()
+
             // Visit profile
             cy.visitLocalPage("/account/profile")
 
@@ -13,6 +16,9 @@ describe("Routes protected/guest", () => {
         })
 
         it("should show page when logged in", () => {
+            // Mock profile
+            cy.mockProfilePage()
+
             // Login and visit profile
             cy.login("/account/profile")
 
@@ -44,6 +50,9 @@ describe("Routes protected/guest", () => {
         })
 
         it("should not show profile when guest", () => {
+            // Mock profile
+            cy.mockProfilePage()
+
             // Visit profile
             cy.visitLocalPage("/account/profile")
 
