@@ -12,6 +12,7 @@ import {
 } from './helpers/MongoMemoryHelpers';
 import {
   items,
+  itemsWithAdditonalWeight,
   itemsWithDates,
   itemsWithDifferentUsers,
   itemsWithImages,
@@ -285,8 +286,31 @@ describe('QueryController (e2e)', () => {
         await itemModel.deleteMany();
         await request(server)
           .get(queriesPath + subPath)
-          .query({ slug: relatedItems[0].slug })
+          .query({ query: relatedItems[0].tags[0].name })
           .expect(HttpStatus.NOT_FOUND);
+      });
+
+      it('should return the average as the middle between value and additionalValue', async () => {
+        await itemModel.deleteMany();
+        await itemModel.insertMany(itemsWithAdditonalWeight);
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({ query: relatedItems[0].tags[0].name })
+          .expect(HttpStatus.OK);
+
+        expect(result.body.heaviest.weight.additionalValue).toEqual(
+          itemsWithAdditonalWeight[0].weight.additionalValue,
+        );
+        expect(result.body.lightest.weight.value).toEqual(
+          itemsWithAdditonalWeight[0].weight.value,
+        );
+        expect(result.body.averageWeight).toEqual(
+          ((itemsWithAdditonalWeight[0].weight.additionalValue +
+            itemsWithAdditonalWeight[0].weight.value) /
+            2 +
+            itemsWithAdditonalWeight[1].weight.value) /
+            2,
+        );
       });
     });
   });

@@ -1,3 +1,3 @@
-import { ItemEditSuggestedSagas } from "./item-edit-suggested.saga";
+import { SuggestionsSaga } from './suggestions.saga';
 
-export const Sagas = [ItemEditSuggestedSagas];
+export const Sagas = [SuggestionsSaga];
