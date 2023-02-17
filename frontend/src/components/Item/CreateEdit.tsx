@@ -4,12 +4,12 @@ import { Form, Formik, FormikProps } from "formik"
 import { useRouter } from "next/router"
 import { useContext, useState } from "react"
 import { array, mixed, number, object, ref, SchemaOf, string } from "yup"
-import { createNewItemApi } from "../../services/item/create"
+import { createNewItemApi, prepareCreateItem } from "../../services/item/create"
+import { editItemApi, prepareEditItem } from "../../services/item/edit"
 import { uploadImageApi } from "../../services/item/image"
-import { updateItemApi } from "../../services/item/update"
 import { routes } from "../../services/routes/routes"
 import { convertAnyWeightIntoGram } from "../../services/unit/unitConverter"
-import { CreateEditItemForm, CreateItemDto, Item, UpdateItemDto } from "../../types/item"
+import { CreateEditItemForm, CreateItemDto, EditItemDto, Item } from "../../types/item"
 import { AuthContext } from "../Auth/Auth"
 import { Button } from "../Button/Button"
 import { IconButton } from "../Button/IconButton"
@@ -96,48 +96,17 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
         // Convert additionalValue in g
         values.additionalValue = values.additionalValue ? convertAnyWeightIntoGram(new BigNumber(values.additionalValue), values.unit).toNumber() : undefined
 
-        // Create item
-        if (!isEditMode)
-            createItem(values)
+        // Dtos
+        let createItem: CreateItemDto | null = null
+        let editItem: EditItemDto | null = null
 
-        // Edit item
+        // Prepare create item
+        if (!isEditMode)
+            createItem = prepareCreateItem(values)
+
+        // Prepare edit item
         if (isEditMode)
-            editItem(values)
-    }
-
-    const editItem = async (values: CreateEditItemForm) => {
-        if (!isEditMode)
-            return
-
-        // Prepare additionalValue
-        const additionalValue = values.valueType === "exact" ? null : Number(values.additionalValue)
-
-        // Build weights object
-        const weight = {
-            ...(values.weight !== item?.weight.value ? { value: Number(values.weight) } : {}),
-            ...((values.isCa[0] !== undefined) !== item?.weight.isCa ? { isCa: values.isCa[0] ? true : false } : {}),
-            ...((values.additionalValue !== item?.weight.additionalValue) || values.valueType === "exact" ? { additionalValue } : {})
-        }
-
-        // Calculates which tags to remove and which to add
-        const pull = item.tags.filter(tag => !values.tags?.includes(tag.name)).map(tag => tag.name)
-        const push = values.tags?.filter(tag => !item.tags.map(tag => tag.name).includes(tag)) ?? []
-
-        // Build tags object
-        const tags = {
-            ...(pull.length > 0 ? { pull } : {}),
-            ...(push.length > 0 ? { push } : {})
-        }
-
-        // Prepare item data update
-        const editItem: UpdateItemDto = {
-            ...(values.name !== item?.name ? { name: values.name } : {}),
-            ...((Object.keys(weight).length > 0) ? { weight } : {}),
-            ...(!(values.source === item?.source) ? { source: values.source } : {}),
-            ...(values.source === "" ? { source: null } : {}),
-            ...(values.imageFile === null ? { image: null } : {}),
-            ...((Object.keys(tags).length > 0) ? { tags } : {}),
-        }
+            editItem = prepareEditItem(values, item)
 
         try {
             /** Get session */
@@ -146,61 +115,32 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
                 throw Error("Failed to get session.")
 
             /** Image Upload */
-            if (values.imageFile) {
+            if (values.imageFile && createItem) {
                 const imageUploadResponse = await uploadImageApi(values.imageFile, session)
 
-                // Append image path to item
-                editItem.image = imageUploadResponse.data.path
+                // Append image path to item create
+                if (!isEditMode && createItem)
+                    createItem.image = imageUploadResponse.data.path
+
+                // Append image path to item edit
+                if (isEditMode && editItem)
+                    editItem.image = imageUploadResponse.data.path
             }
 
-            /** Update item with api */
-            const itemUpdateResponse = await updateItemApi(item?.slug, editItem, session)
-
-            if (itemUpdateResponse.status === 200) {
-                // Redirect to discover
-                await router.push(routes.weights.list())
-            }
-        } catch (error) {
-            axios.isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Netzwerk-Zeitüberschreitung")
-            return
-        }
-    }
-
-    const createItem = async (values: CreateEditItemForm) => {
-        // Prepare item data create
-        const createItem: CreateItemDto = {
-            name: values.name,
-            weight: {
-                value: Number(values.weight),
-                isCa: values.isCa[0] ? true : false,
-                // Only add additionalValue when defined and value type is additional
-                ...(values.additionalValue && (values.valueType === "range") ? { additionalValue: Number(values.additionalValue) } : {})
-            },
-            ...(values.source !== "" ? { source: values.source } : {}), // Only add source when defined
-            tags: values.tags
-        }
-
-        try {
-            /** Get session */
-            const session = await getSession()
-            if (session === null)
-                throw Error("Failed to get session.")
-
-            /** Image Upload */
-            if (values.imageFile) {
-                const imageUploadResponse = await uploadImageApi(values.imageFile, session)
-
-                // Append image path to item
-                createItem.image = imageUploadResponse.data.path
-            }
+            /** Item fetches */
+            let response = null
 
             /** Create item with api */
-            const itemCreateResponse = await createNewItemApi(createItem, session)
+            if (!isEditMode && createItem)
+                response = await createNewItemApi(createItem, session)
 
-            if (itemCreateResponse.status === 200) {
-                // Redirect to discover
+            /** Update item with api */
+            if (isEditMode && editItem)
+                response = await editItemApi(item?.slug, editItem, session)
+
+            /** Redirect to discover */
+            if (response?.status === 200)
                 await router.push(routes.weights.list())
-            }
         } catch (error) {
             axios.isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Netzwerk-Zeitüberschreitung")
             return

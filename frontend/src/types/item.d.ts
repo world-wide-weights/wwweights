@@ -44,7 +44,7 @@ export type CreateItemDto = {
     tags?: string[]
 }
 
-export type UpdateItemDto = {
+export type EditItemDto = {
     name?: string
     weight?: {
         value?: number,
