@@ -128,7 +128,7 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
             }
 
             /** Item fetches */
-            let response = null
+            let response
 
             /** Create item with api */
             if (!isEditMode && createItem)
