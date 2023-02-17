@@ -183,7 +183,7 @@ describe("Prepare edit item", () => {
             })
         })
 
-        it("should add only weight additionalValue (and other null fields) when update additionalValue", () => {
+        it("should add only weight additionalValue when update additionalValue", () => {
             const oldItem: Item = {
                 name: "old name",
                 slug: "old-name",
@@ -299,7 +299,7 @@ describe("Prepare edit item", () => {
     })
 
     describe("Remove fields", () => {
-        it("should only add additional value null (and other null fields) when update valueType to exact", () => {
+        it("should only add additional value null when update valueType to exact", () => {
             const oldItem: Item = {
                 name: "old name",
                 slug: "old-name",
@@ -331,7 +331,7 @@ describe("Prepare edit item", () => {
             })
         })
 
-        it("should only add additional value null (and other null fields) when update valueType to exact and additionalValue is null", () => {
+        it("should only add additional value null when update valueType to exact and additionalValue is null", () => {
             const oldItem: Item = {
                 name: "old name",
                 slug: "old-name",
@@ -395,7 +395,7 @@ describe("Prepare edit item", () => {
     })
 
     describe("Edit tags", () => {
-        it("should only add push and pull to tags (and other null fields) when update tags", () => {
+        it("should only add push and pull to tags when update tags", () => {
             const oldItem: Item = {
                 name: "old name",
                 slug: "old-name",
@@ -429,7 +429,7 @@ describe("Prepare edit item", () => {
             })
         })
 
-        it("should add only push to tags (and other null fields) when add tags", () => {
+        it("should add only push to tags when add tags", () => {
             const oldItem: Item = {
                 name: "old name",
                 slug: "old-name",
@@ -459,7 +459,7 @@ describe("Prepare edit item", () => {
             })
         })
 
-        it("should add only pull to tags (and other null fields) when remove tags", () => {
+        it("should add only pull to tags when remove tags", () => {
             const oldItem: Item = {
                 name: "old name",
                 slug: "old-name",
