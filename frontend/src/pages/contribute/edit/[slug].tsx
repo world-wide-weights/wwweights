@@ -1,4 +1,5 @@
-import { GetStaticPaths, GetStaticProps, InferGetServerSidePropsType } from "next"
+import { isAxiosError } from "axios"
+import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../../../components/Auth/Auth"
 import { CreateEdit } from "../../../components/Item/CreateEdit"
@@ -6,38 +7,69 @@ import { Seo } from "../../../components/Seo/Seo"
 import { queryServerRequest } from "../../../services/axios/axios"
 import { Item, PaginatedResponse } from "../../../types/item"
 import Custom404 from "../../404"
-
-type EditItemProps = {
-    /** Item to edit. */
-    item: Item
-}
+import Custom500 from "../../500"
 
 /**
  * Edit Item Page.
  */
-function EditItem({ item }: InferGetServerSidePropsType<typeof getStaticProps>) {
+const EditItem = () => {
+    // Router
+    const { query, isReady } = useRouter()
+
     // Local State
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
+    const [item, setItem] = useState<Item | undefined>()
+    const [isLoading, setIsLoading] = useState<boolean>(true)
+    const [error, setError] = useState<string | undefined>(undefined)
+
+    // Local variables
+    const isLoadingEdit = !item || isLoading || !isReady
 
     // Global State
     const { getSession } = useContext(AuthContext)
 
     // Check if item is owned by user
     useEffect(() => {
-        const getIsAuthenticated = async () => {
-            const session = await getSession()
+        const fetchItem = async () => {
+            try {
+                if (!isReady)
+                    return
 
-            if (session?.decodedAccessToken.id === item.userId) {
-                setIsAuthenticated(true)
+                // Fetch item
+                const itemResponse = await queryServerRequest.get<PaginatedResponse<Item>>(`/items/list?slug=${query.slug}`)
+                const item = itemResponse.data.data[0]
+                setItem(item)
+
+                if (!item)
+                    return
+
+                const session = await getSession()
+
+                if (session?.decodedAccessToken.id === item.userId) {
+                    setIsAuthenticated(true)
+                }
+            } catch (error) {
+                isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Netzwerk-Zeitüberschreitung")
+                console.error(error)
+            } finally {
+                setIsLoading(false)
             }
         }
-        getIsAuthenticated()
-    }, [getSession, item.userId])
+        fetchItem()
+    }, [getSession, item, isReady, query.slug])
 
-    // If not authenticated, render 404
-    if (!isAuthenticated) {
+    if (isLoadingEdit)
+        return <main className="container">
+            {/* TODO: Implement skeleton */}
+            <div>Loading...</div>
+        </main>
+
+    if (!isAuthenticated || !item) {
         return <Custom404 />
     }
+
+    if (error)
+        return <Custom500 />
 
     return <>
         {/* Meta Tags */}
@@ -49,41 +81,6 @@ function EditItem({ item }: InferGetServerSidePropsType<typeof getStaticProps>) 
         {/* Page Content */}
         <CreateEdit item={item} />
     </>
-}
-
-export const getStaticProps: GetStaticProps<EditItemProps> = async (context) => {
-    const slug = context.params ? context.params.slug : ""
-
-    try {
-        // Fetch item
-        const itemResponse = await queryServerRequest.get<PaginatedResponse<Item>>(`/items/list?slug=${slug}`)
-
-        // Item
-        const item = itemResponse.data.data[0]
-
-        // Validate Query
-        if (!item) {
-            return {
-                notFound: true // Renders 404 page
-            }
-        }
-
-        return {
-            props: {
-                item,
-            },
-            revalidate: 10
-        }
-    } catch (error) {
-        throw new Error("Something went wrong.")
-    }
-}
-
-export const getStaticPaths: GetStaticPaths = () => {
-    return {
-        paths: [],
-        fallback: "blocking"
-    }
 }
 
 // Sets route need to be logged in
