@@ -15,7 +15,7 @@ describe("Create Item", () => {
             cy.mockDiscoverPage()
 
             // Submit form
-            cy.dataCy("create-submit-button").click()
+            cy.dataCy("submit-button").click()
 
             cy.wait("@mockCreateItem")
         })
@@ -55,7 +55,7 @@ describe("Create Item", () => {
             cy.mockCreateItem()
             cy.mockDiscoverPage()
             // Submit form
-            cy.dataCy("create-submit-button").click()
+            cy.dataCy("submit-button").click()
 
             cy.wait("@mockCreateItem")
         })

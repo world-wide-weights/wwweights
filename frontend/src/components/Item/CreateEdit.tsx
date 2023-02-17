@@ -250,7 +250,7 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
                                 <p className="hidden sm:block mb-2 lg:mb-0">We will give you Feedback about the Status in the profile.</p>
                                 <div className="flex gap-3 items-center">
                                     <Button to={routes.weights.list()} isColored kind="secondary">Cancel</Button>
-                                    <Button datacy="create-submit-button" disabled={!(dirty && isValid)} type="submit" icon={isEditMode ? "edit" : "add"} loading={isSubmitting} isColored>{isEditMode ? "Edit" : "Create"}</Button>
+                                    <Button datacy="submit-button" disabled={!(dirty && isValid)} type="submit" icon={isEditMode ? "edit" : "add"} loading={isSubmitting} isColored>{isEditMode ? "Edit" : "Create"}</Button>
                                 </div>
                             </div>
                         </div>
