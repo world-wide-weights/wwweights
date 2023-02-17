@@ -17,7 +17,7 @@ import { Modal } from "../../components/Modal/Modal"
 import { Pagination } from "../../components/Pagination/Pagination"
 import { Seo } from "../../components/Seo/Seo"
 import { Tooltip } from "../../components/Tooltip/Tooltip"
-import { authRequest, queryClientRequest } from "../../services/axios/axios"
+import { authRequest, commandRequest, queryClientRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { getImageUrl } from "../../services/utils/getImageUrl"
 import { Profile } from "../../types/auth"
@@ -157,12 +157,26 @@ const Profile: NextPageCustomProps = () => {
             return
         }
 
-        // Submit
-        console.log(values)
+        try {
+            // Get session
+            const session = await getSession()
+            if (session === null)
+                throw Error("Failed to get session.")
 
-        // Delete the contribution and close modal when succesfull
-        if (true)
+            // Delete contribution request
+            await commandRequest.post(`/items/${selectedContribution.slug}/suggest/delete`, {
+                reason: values.reason
+            }, {
+                headers: {
+                    Authorization: `Bearer ${session.accessToken}`
+                }
+            })
+        } catch (error) {
+            // axios.isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Netzwerk-Zeitüberschreitung")
+            console.error(error)
+        } finally {
             closeDeleteModal()
+        }
     }
 
     /**
