@@ -11,7 +11,7 @@ import { Pagination } from "../../components/Pagination/Pagination"
 import { Seo } from "../../components/Seo/Seo"
 import { authRequest, queryClientRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
-import { Profile } from "../../types/auth"
+import { UserProfile } from "../../types/auth"
 import { Item } from "../../types/item"
 import { PaginatedResponse } from "../../types/paginated"
 import Custom500 from "../500"
@@ -36,7 +36,7 @@ const Profile: NextPageCustomProps = () => {
     const { query, isReady } = useRouter()
 
     // Local States
-    const [profile, setProfile] = useState<Profile | undefined>()
+    const [profile, setProfile] = useState<UserProfile | undefined>()
     const [contributions, setContributions] = useState<PaginatedResponse<Item>>({ data: [], total: 0, page: 1, limit: 10 })
     const [statistics, setStatistics] = useState<Statistics>({ totalContributions: 0, itemsCreated: 0, itemsUpdated: 0, itemsDeleted: 0 })
     const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -75,7 +75,7 @@ const Profile: NextPageCustomProps = () => {
                 const [contributionsResponse, statisticsResponse, profileResponse] = await Promise.all([
                     queryClientRequest.get<PaginatedResponse<Item>>(`/items/list?userid=${sessionData.decodedAccessToken.id}&page=${page}&limit=${limit}`),
                     queryClientRequest.get<StatisticsResponse>(`/profiles/${sessionData.decodedAccessToken.id}/statistics`),
-                    authRequest.get<Profile>("/profile/me", {
+                    authRequest.get<UserProfile>("/profile/me", {
                         headers: {
                             "Authorization": `Bearer ${sessionData.accessToken}`
                         }

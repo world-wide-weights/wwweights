@@ -13,7 +13,6 @@
     "mock-server": "json-server --watch ./src/mock/db.json -m ./node_modules/json-server-auth --port=3008 --routes ./src/mock/routes.json --id slug"
   },
   "dependencies": {
-    "@next/font": "^13.0.3",
     "axios": "^1.2.4",
     "bignumber.js": "^9.1.1",
     "formik": "^2.2.9",
@@ -25,11 +24,14 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@bahmutov/cypress-code-coverage": "^1.3.2",
+    "@cypress/code-coverage": "^3.10.0",
     "@svgr/webpack": "^6.5.1",
     "@types/node": "^18.11.9",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.9",
     "autoprefixer": "^10.4.13",
+    "babel-plugin-istanbul": "^6.1.1",
     "concurrently": "^7.6.0",
     "cypress": "^12.3.0",
     "eslint": "^8.27.0",
