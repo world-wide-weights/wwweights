@@ -75,8 +75,8 @@ const Login: NextPageCustomProps = () => {
         <Formik initialValues={initialFormValues} validationSchema={validationSchema} onSubmit={onFormSubmit}>
             {({ dirty, isValid }) => (
                 <Form className="mb-5 lg:mb-10">
-                    <TextInput name="email" labelText="E-Mail" placeholder="E-Mail" />
-                    <TextInput type={isPasswordEyeOpen ? "text" : "password"} name="password" labelText="Password" placeholder="Password" icon={isPasswordEyeOpen ? "visibility" : "visibility_off"} iconOnClick={() => setIsPasswordEyeOpen(!isPasswordEyeOpen)} />
+                    <TextInput autoComplete="username" type="email" name="email" labelText="E-Mail" placeholder="E-Mail" />
+                    <TextInput autoComplete="current-password" type={isPasswordEyeOpen ? "text" : "password"} name="password" labelText="Password" placeholder="Password" icon={isPasswordEyeOpen ? "visibility" : "visibility_off"} iconOnClick={() => setIsPasswordEyeOpen(!isPasswordEyeOpen)} />
 
                     <Button className="mt-5" datacy="login-button" loading={isLoading} icon="login" disabled={!(dirty && isValid)} type="submit">Login</Button>
                 </Form>
