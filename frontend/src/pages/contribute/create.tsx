@@ -3,7 +3,7 @@ import BigNumber from "bignumber.js"
 import { Form, Formik, FormikProps } from "formik"
 import { useRouter } from "next/router"
 import { useContext, useState } from "react"
-import { array, mixed, number, object, ref, SchemaOf, string } from "yup"
+import { array, boolean, mixed, number, object, ref, SchemaOf, string } from "yup"
 import { AuthContext } from "../../components/Auth/Auth"
 import { Button } from "../../components/Button/Button"
 import { IconButton } from "../../components/Button/IconButton"
@@ -13,6 +13,7 @@ import { CustomSelectionButton } from "../../components/Form/CustomSelectionButt
 import { Dropdown } from "../../components/Form/Dropdown/Dropdown"
 import { ImageUpload } from "../../components/Form/ImageUpload/ImageUpload"
 import { Label } from "../../components/Form/Label"
+import { ChipTextInput } from "../../components/Form/TextInput/ChipTextInput"
 import { TextInput } from "../../components/Form/TextInput/TextInput"
 import { Headline } from "../../components/Headline/Headline"
 import { Icon } from "../../components/Icon/Icon"
@@ -47,7 +48,7 @@ type CreateItemForm = {
     valueType: "exact" | "range"
     source?: string
     imageFile?: File
-    tags?: string
+    tags?: string[]
 }
 
 type CreateItemDto = {
@@ -80,7 +81,7 @@ const Create: NextPageCustomProps = () => {
         isCa: [false],
         source: "",
         imageFile: undefined,
-        tags: ""
+        tags: []
     }
 
     // Formik Form Validation
@@ -93,10 +94,10 @@ const Create: NextPageCustomProps = () => {
             is: "range",
             then: number().required("Additional value is required.").moreThan(ref("weight"), "Additional value must be greater than weight.")
         }),
-        isCa: array(),
+        isCa: array().of(boolean()).notRequired(),
         source: string(),
         imageFile: mixed().notRequired(),
-        tags: string(),
+        tags: array().of(string().min(2).max(255)).notRequired(),
     })
 
     /**
@@ -104,7 +105,6 @@ const Create: NextPageCustomProps = () => {
      * @param values input from form
      */
     const onFormSubmit = async ({ name, weight, unit, additionalValue, valueType, isCa, source, tags, imageFile }: CreateItemForm) => {
-
         // Convert weight in g
         weight = convertAnyWeightIntoGram(new BigNumber(weight), unit).toNumber()
 
@@ -121,11 +121,10 @@ const Create: NextPageCustomProps = () => {
             weight: {
                 value: weight,
                 isCa: isCa[0],
-                // Only add additionalValue when defined and value type is additional
-                ...(additionalValue && (valueType === "range") ? { additionalValue } : {})
+                ...(additionalValue && (valueType === "range") ? { additionalValue } : {}) // Only add additionalValue when defined and value type is additional
             },
             ...(source !== "" ? { source } : {}), // Only add source when defined
-            tags: tags ? tags.split(",") : [] // TODO: Replace with array tags
+            tags
         }
 
         console.log({
@@ -274,12 +273,11 @@ const Create: NextPageCustomProps = () => {
                                 </div>
 
                                 {isOpenDetails && <div className="mt-4">
-                                    {/* TODO (Zoe-bot): Add tags design */}
-                                    {/* Source */}
-                                    <TextInput name="tags" labelText="Tags" helperText="Tags seperated with commas." placeholder="Tags of item" />
+                                    {/* Tags */}
+                                    <ChipTextInput name="tags" labelText="Tags" helperText="Tags are seperated with commas." />
 
-                                    <Label name="imageFile" labelText={"Image"} />
                                     {/* Image */}
+                                    <Label name="imageFile" labelText={"Image"} />
                                     <ImageUpload name="imageFile" />
 
                                     {/* Source */}
