@@ -28,7 +28,7 @@ describe("Edit Item", () => {
             cy.dataCy("isCa-option-isCa", " input").should("be.checked")
 
             // Open details
-            cy.dataCy("create-open-details-button").click()
+            cy.dataCy("createedit-open-details-button").click()
 
             // Detail fields
             cy.dataCy("imageupload-imageFile-image").should("be.visible")
@@ -40,7 +40,7 @@ describe("Edit Item", () => {
             // General fields
             cy.dataCy("textinput-name-input").clear().type("apple")
             cy.dataCy("textinput-weight-input").clear().type("150")
-            cy.dataCy("create-select-button-exact").click()
+            cy.dataCy("createedit-select-button-exact").click()
 
             // Select unit
             cy.dataCy("unit-dropdown-button").click()
@@ -50,7 +50,7 @@ describe("Edit Item", () => {
             cy.dataCy("isCa-option-isCa").click()
 
             // Open details
-            cy.dataCy("create-open-details-button").click()
+            cy.dataCy("createedit-open-details-button").click()
 
             // Fill details
             cy.dataCy("textinput-source-input").clear().type("https://wikipedia.de")

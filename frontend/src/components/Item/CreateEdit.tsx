@@ -168,8 +168,8 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
                                     {/* Weight */}
                                     <Label name="" labelText="Weight" labelRequired></Label>
                                     <div className="grid grid-cols-2 gap-3 mb-2">
-                                        <CustomSelectionButton datacy="create-select-button-exact" active={values.valueType === "exact"} onClick={() => setFieldValue("valueType", "exact")} headline="Exact Value" description="150 kg" />
-                                        <CustomSelectionButton datacy="create-select-button-range" active={values.valueType === "range"} onClick={() => setFieldValue("valueType", "range")} headline="Range Value" description="150 - 200 kg" />
+                                        <CustomSelectionButton datacy="createedit-select-button-exact" active={values.valueType === "exact"} onClick={() => setFieldValue("valueType", "exact")} headline="Exact Value" description="150 kg" />
+                                        <CustomSelectionButton datacy="createedit-select-button-range" active={values.valueType === "range"} onClick={() => setFieldValue("valueType", "range")} headline="Range Value" description="150 - 200 kg" />
                                     </div>
                                     <div className={`grid ${values.valueType === "exact" ? "grid-cols-1 md:grid-cols-2" : "grid-cols-[1fr_16px_1fr] md:grid-cols-[1fr_8px_1fr_128px]"} md:gap-3`}>
                                         {/** Exact Value **/}
@@ -215,7 +215,7 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
                             {/*** Details ***/}
                             <div className="bg-white rounded-lg p-6 mb-4">
                                 {/* Details Header */}
-                                <div onClick={() => setIsOpenDetails(!isOpenDetails)} datacy="create-open-details-button" className="flex items-center justify-between cursor-pointer">
+                                <div onClick={() => setIsOpenDetails(!isOpenDetails)} datacy="createedit-open-details-button" className="flex items-center justify-between cursor-pointer">
                                     <div className="text-left">
                                         <Headline level={3} hasMargin={false}>Add more details</Headline>
                                         <p>Add tags, image and a source to help verify this item.</p>
