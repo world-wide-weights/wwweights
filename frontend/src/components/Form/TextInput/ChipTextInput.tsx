@@ -37,17 +37,28 @@ export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name, labelRequire
 		 * @param event the keyboard event
 		 */
 		const addChip = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+			// Only add chip when submit keys are pressed
 			const submitKeys = [","]
 			if (!submitKeys.includes(event.key))
 				return
-			const chipInput = (event.target as HTMLInputElement)
 
-			const chipValue = chipInput.value.split(",")
-			chipValue.forEach((chip) => {
-				if (chip.trim() !== "") {
-					arrayHelpers.push(chip.trim())
-				}
+			const chipInput = (event.target as HTMLInputElement)
+			// Get unique values from input
+			const chipValues = new Set(chipInput.value.split(","))
+
+			chipValues.forEach((chip) => {
+				const trimmedChip = chip.trim()
+
+				if (trimmedChip === "")
+					return
+
+				if (values[name].includes(trimmedChip))
+					return
+
+				arrayHelpers.push(trimmedChip)
 			})
+
+			// Reset input field
 			chipInput.value = ""
 		}
 
