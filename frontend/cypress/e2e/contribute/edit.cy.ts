@@ -62,7 +62,7 @@ describe("Edit Item", () => {
                 lastModified: Date.now(),
             }, { force: true })
 
-            // Mock create and weights page
+            // Mock update, upload and weights page
             cy.mockUploadImage()
             cy.mockEditItem()
             cy.mockDiscoverPage()
