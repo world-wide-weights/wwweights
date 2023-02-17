@@ -43,7 +43,6 @@ export class ItemDeletedHandler implements IEventHandler<ItemDeletedEvent> {
         }ms`,
       );
     }
-    console.log('at api call');
 
     await this.imageService.demoteImageInImageBackend(deletedItem?.image);
 

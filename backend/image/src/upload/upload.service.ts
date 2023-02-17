@@ -158,8 +158,8 @@ export class UploadService {
     try {
       const buffer = await image
         .extract({
-          width: Math.min(wDimension, metadata.width),
-          height: Math.min(hDimension, metadata.height),
+          width: Math.max(0, Math.min(wDimension, metadata.width)),
+          height: Math.max(0, Math.min(hDimension, metadata.height)),
           left: wOffset,
           top: hOffset,
         })

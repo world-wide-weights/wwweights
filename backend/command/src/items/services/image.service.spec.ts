@@ -78,7 +78,7 @@ describe('ImagesService', () => {
         .mockImplementation(async () => {});
       jest
         .spyOn(imagesService, 'getItemCountForImage')
-        .mockImplementation(async () => 1);
+        .mockImplementation(async () => 2);
       // ACT
       await imagesService.promoteImageInImageBackend('validValue');
       // ASSERT

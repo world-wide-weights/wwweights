@@ -24,8 +24,7 @@ export class InternalCommunicationService {
    * @description Send information to backend that an image is used by item
    */
   async notifyImgAboutItemCreation(imageHash: string) {
-    console.log({ imageHash });
-    await this.notifyImg('internal/promote-image', { imageHash });
+    await this.notifyImg('/internal/promote-image', { imageHash });
     this.logger.log('Notifed image backend about image usage');
   }
 
@@ -33,7 +32,7 @@ export class InternalCommunicationService {
    * @description Send information to backend that an image has become obsolete
    */
   async notifyImgImageObsoleteness(imageHash: string) {
-    await this.notifyImg('internal/demote-image', { imageHash });
+    await this.notifyImg('/internal/demote-image', { imageHash });
     this.logger.log('Notifed image backend about image obsoleteness');
   }
 
@@ -56,7 +55,6 @@ export class InternalCommunicationService {
         )
         .pipe(
           catchError((error: AxiosError) => {
-            console.log('error');
             this.logger.error(`Request to img backend failed! Error: ${error}`);
             throw new ServiceUnavailableException(
               'Img Backend could not be notified at the time',

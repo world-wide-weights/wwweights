@@ -32,7 +32,7 @@ export class ImagesService {
       return;
     }
 
-    if ((await this.getItemCountForImage(imageValue)) > 0) {
+    if ((await this.getItemCountForImage(imageValue)) > 1) {
       this.logger.debug(
         `Image ${imageValue} already used in other item. No promotion needed`,
       );
@@ -59,12 +59,10 @@ export class ImagesService {
 
   async demoteImageInImageBackend(imageValue: string) {
     if (!this.eventStore.isReady) {
-      console.log('skipped bc eventstore');
       this.logger.debug(`Skipping image demotion check in replay`);
       return;
     }
     if (!imageValue || IsUrl(imageValue)) {
-      console.log('image is url');
       // Image was external => No deletion needed
       return;
     }
@@ -72,16 +70,13 @@ export class ImagesService {
     // Check if image is obsolete
     if ((await this.getItemCountForImage(imageValue)) > 0) {
       this.logger.log(`Image ${imageValue} not obsolete`);
-      console.log('not obsolete');
       return;
     }
     try {
-      console.log('ready', imageValue);
       await this.internalCommunicationService.notifyImgImageObsoleteness(
         imageValue,
       );
     } catch (error) {
-      console.log(error);
       this.logger.error(
         `Could not notify image backend due to an error ${error}`,
       );
