@@ -40,12 +40,9 @@ jobs:
   generate-babel-config:
     runs-on: ubuntu-latest
     needs: setup
-    defaults:
-      run:
-        shell: bash
-        working-directory: frontend
     steps:
       - name: Create babel config file
+        working-directory: frontend
         run: ls
 
   e2e-tests:
