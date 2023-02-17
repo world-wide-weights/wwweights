@@ -12,7 +12,7 @@ import {
 } from 'class-validator';
 import { IsBiggerThan } from '../../shared/validators/is-bigger-than';
 
-class Weight {
+export class Weight {
   @IsNumber()
   @IsPositive()
   @ApiProperty({
