@@ -36,7 +36,7 @@ export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name, labelRequire
 		 * Adds a chip to the array
 		 * @param event the keyboard event
 		 */
-		const addChip = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+		const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>): void => {
 			// Only add chip when submit keys are pressed
 			const submitKeys = [","]
 			if (!submitKeys.includes(event.key))
@@ -95,7 +95,7 @@ export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name, labelRequire
 				</Fragment>)}
 
 				{/* Input */}
-				<input ref={inputRef} datacy={`chiptextinput-${name}-text-input`} className="focus-visible:outline-none placeholder:text-gray-400 border-2 border-gray-100 bg-gray-100 py-1" onKeyDown={handleKeyDown} onKeyUp={addChip} />
+				<input ref={inputRef} datacy={`chiptextinput-${name}-text-input`} className="focus-visible:outline-none placeholder:text-gray-400 border-2 border-gray-100 bg-gray-100 py-1" onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} />
 			</div>
 
 			{/* Helpertext */}
