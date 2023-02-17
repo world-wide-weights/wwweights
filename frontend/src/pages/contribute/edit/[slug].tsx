@@ -31,11 +31,12 @@ const EditItem = () => {
 
     // Check if item is owned by user
     useEffect(() => {
+        // Wait till the router has finished loading
+        if (!isReady)
+            return
+
         const fetchItem = async () => {
             try {
-                if (!isReady)
-                    return
-
                 // Fetch item
                 const itemResponse = await queryServerRequest.get<PaginatedResponse<Item>>(`/items/list?slug=${query.slug}`)
                 const item = itemResponse.data.data[0]
@@ -44,8 +45,8 @@ const EditItem = () => {
                 if (!item)
                     return
 
+                // Check if user is authenticated
                 const session = await getSession()
-
                 if (session?.decodedAccessToken.id === item.userId) {
                     setIsAuthenticated(true)
                 }
