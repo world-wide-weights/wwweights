@@ -44,6 +44,35 @@ describe("Routes", () => {
 
     // TODO: Add missing route tests
 
+    describe("contribute Routes", () => {
+        it("should return contribute page", () => {
+            expect(routes.contribute.create).to.equal("/contribute/create")
+        })
+
+        it("should return edit contribute page with slug", () => {
+            expect(routes.contribute.edit("slug")).to.equal("/contribute/create/slug")
+            expect(routes.contribute.edit("apple-iphone-12")).to.equal("/contribute/create/apple-iphone-12")
+        })
+    })
+
+    describe("misc Routes", () => {
+        it("should return about page", () => {
+            expect(routes.misc.index).to.equal("/misc")
+        })
+
+        it("should return contact page", () => {
+            expect(routes.misc.contact).to.equal("/misc/contact")
+        })
+
+        it("should return terms page", () => {
+            expect(routes.misc.terms).to.equal("/misc/terms-and-conditions")
+        })
+
+        it("should return privacy page", () => {
+            expect(routes.misc.privacy).to.equal("/misc/privacy-policy")
+        })
+    })
+
 })
 
 export { }

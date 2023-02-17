@@ -239,7 +239,7 @@ const Profile: NextPageCustomProps = () => {
                             <ul datacy="profile-contributions-wrapper" className="mb-5">
                                 {contributions.data.map((contribution) => <ItemListContribute {...contribution} key={contribution.slug} actions={<>
                                     <Tooltip content="Edit">
-                                        <IconButton icon="edit" />
+                                        <IconButton icon="edit" to={routes.contribute.edit(contribution.slug)} />
                                     </Tooltip>
                                     <Tooltip content="Delete">
                                         <IconButton datacy={`profile-delete-contribution-${contribution.slug}`} icon="delete" onClick={() => openDeleteModal(contribution)} />
