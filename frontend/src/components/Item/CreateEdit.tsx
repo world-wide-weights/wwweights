@@ -97,9 +97,11 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
         // Convert additionalValue in g
         values.additionalValue = values.additionalValue ? convertAnyWeightIntoGram(new BigNumber(values.additionalValue), values.unit).toNumber() : undefined
 
+        // Create item
         if (!isEditMode)
             createItem(values)
 
+        // Edit item
         if (isEditMode)
             editItem(values)
     }
@@ -132,7 +134,9 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
         const editItem: UpdateItemDto = {
             ...(values.name !== item?.name ? { name: values.name } : {}),
             ...((Object.keys(weight).length > 0) ? { weight } : {}),
-            ...(!(values.source === item?.source || values.source === "") ? { source: values.source } : {}),
+            ...(!(values.source === item?.source) ? { source: values.source } : {}),
+            ...(values.source === "" ? { source: null } : {}),
+            ...(values.imageFile === null ? { image: null } : {}),
             ...((Object.keys(tags).length > 0) ? { tags } : {}),
         }
 

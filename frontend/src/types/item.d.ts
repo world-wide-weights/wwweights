@@ -51,8 +51,8 @@ export type UpdateItemDto = {
         additionalValue?: number | null
         isCa?: boolean
     }
-    source?: string
-    image?: string
+    source?: string | null
+    image?: string | null
     tags?: {
         push?: string[]
         pull?: string[]
