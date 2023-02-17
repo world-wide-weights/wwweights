@@ -9,7 +9,7 @@ import { Navbar } from "../components/Navbar/Navbar"
 import { Search } from "../components/Search/Search"
 import { Seo } from "../components/Seo/Seo"
 import { Stat } from "../components/Statistics/Stat"
-import { authRequest, queryRequest } from "../services/axios/axios"
+import { queryServerRequest } from "../services/axios/axios"
 import { routes } from "../services/routes/routes"
 import { getStructuredDataWebsite } from "../services/seo/structuredData/website"
 import { getImageUrl } from "../services/utils/getImageUrl"
@@ -131,8 +131,8 @@ function Home({ items, statistics }: InferGetServerSidePropsType<typeof getServe
 export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
 	try {
 		const [itemsResponse, statisticsUser] = await Promise.all([
-			queryRequest.get<PaginatedResponse<Item>>("/items/list?page=1&limit=20&query=iphone 2020"),
-			authRequest.get<{ totalUsers: number }>("/auth/statistics")
+			queryServerRequest.get<PaginatedResponse<Item>>("/items/list?page=1&limit=20&query=iphone 2020"),
+			queryServerRequest.get<{ totalUsers: number }>("/auth/statistics")
 		])
 
 		const items = itemsResponse.data.data

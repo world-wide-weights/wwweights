@@ -91,9 +91,10 @@ const Register: NextPageCustomProps = () => {
         <Formik initialValues={initialFormValues} validationSchema={validationSchema} onSubmit={onFormSubmit}>
             {({ dirty, isValid }) => (
                 <Form className="mb-5 lg:mb-10">
-                    <TextInput name="email" labelText="E-Mail" placeholder="E-Mail" />
+                    {/** Yes, it's username for email. Read: https://web.dev/sign-in-form-best-practices/#autofill */}
+                    <TextInput autoComplete="username" type="email" name="email" labelText="E-Mail" placeholder="E-Mail" />
                     <TextInput name="username" labelText="Username" placeholder="Username" />
-                    <TextInput type={isPasswordEyeOpen ? "text" : "password"} name="password" labelText="Password" placeholder="Password" icon={isPasswordEyeOpen ? "visibility" : "visibility_off"} iconOnClick={() => setIsPasswordEyeOpen(!isPasswordEyeOpen)} />
+                    <TextInput autoComplete="new-password" type={isPasswordEyeOpen ? "text" : "password"} name="password" labelText="Password" placeholder="Password" icon={isPasswordEyeOpen ? "visibility" : "visibility_off"} iconOnClick={() => setIsPasswordEyeOpen(!isPasswordEyeOpen)} />
 
                     <Button loading={isLoading} datacy="register-button" type="submit" icon="login" disabled={!(dirty && isValid)} className="md:mt-8">Register</Button>
                 </Form>

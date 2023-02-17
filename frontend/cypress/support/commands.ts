@@ -11,7 +11,8 @@ import profileStatistics from "../fixtures/profile/statistics.json"
 import paginatedTagsList from "../fixtures/tags/list.json"
 
 const API_BASE_URL_AUTH = Cypress.env("PUBLIC_API_BASE_URL_AUTH")
-const API_BASE_URL_QUERY = Cypress.env("PUBLIC_API_BASE_URL_QUERY")
+const API_BASE_URL_QUERY_CLIENT = Cypress.env("PUBLIC_API_BASE_URL_QUERY_CLIENT")
+const API_BASE_URL_QUERY_SERVER = Cypress.env("PUBLIC_API_BASE_URL_QUERY_SERVER")
 const API_BASE_URL_COMMAND = Cypress.env("PUBLIC_API_BASE_URL_COMMAND")
 const PUBLIC_API_BASE_URL_IMAGE = Cypress.env("PUBLIC_API_BASE_URL_IMAGE")
 const LOCAL_STORAGE_KEY = "session"
@@ -38,14 +39,14 @@ Cypress.Commands.add("checkCurrentActivePage", (activePageNumber) => {
 })
 
 Cypress.Commands.add("mockGetRelatedTags", () => {
-    cy.intercept("GET", `${API_BASE_URL_QUERY}/tags/related*`, {
+    cy.intercept("GET", `${API_BASE_URL_QUERY_CLIENT}/tags/related*`, {
         fixture: "tags/related.json"
     }).as("mockGetRelatedTags")
 })
 
 Cypress.Commands.add("mockGetTagsList", () => {
     cy.task("nock", {
-        hostname: API_BASE_URL_QUERY,
+        hostname: API_BASE_URL_QUERY_SERVER,
         method: "get",
         path: "/tags/list",
         statusCode: 200,
@@ -62,7 +63,7 @@ Cypress.Commands.add("mockItemsList", (itemCount?: number) => {
     cy.task("clearNock")
     cy.task("activateNock")
     cy.task("nock", {
-        hostname: API_BASE_URL_QUERY,
+        hostname: API_BASE_URL_QUERY_SERVER,
         method: "get",
         path: "/items/list",
         statusCode: 200,
@@ -75,7 +76,7 @@ Cypress.Commands.add("mockDiscoverPage", (itemCount?: number) => {
 
     // Mock Statistics
     cy.task("nock", {
-        hostname: API_BASE_URL_QUERY,
+        hostname: API_BASE_URL_QUERY_SERVER,
         method: "get",
         path: "/items/statistics",
         statusCode: 200,
@@ -91,7 +92,7 @@ Cypress.Commands.add("mockSingleWeight", () => {
     // Mock items single
     cy.task("activateNock")
     cy.task("nock", {
-        hostname: API_BASE_URL_QUERY,
+        hostname: API_BASE_URL_QUERY_SERVER,
         method: "get",
         path: "/items/list",
         statusCode: 200,
@@ -100,7 +101,7 @@ Cypress.Commands.add("mockSingleWeight", () => {
 
     // Mock items related
     cy.task("nock", {
-        hostname: API_BASE_URL_QUERY,
+        hostname: API_BASE_URL_QUERY_SERVER,
         method: "get",
         path: "/items/related",
         statusCode: 200,
@@ -172,12 +173,12 @@ Cypress.Commands.add("mockProfilePage", (options) => {
     } : paginatedContributions
 
     // Mock Contributions
-    cy.intercept("GET", `${API_BASE_URL_QUERY}/items/list*`, {
+    cy.intercept("GET", `${API_BASE_URL_QUERY_CLIENT}/items/list*`, {
         body
     }).as("mockContributions")
 
     // Mock statistics
-    cy.intercept("GET", `${API_BASE_URL_QUERY}/profiles/*/statistics`, {
+    cy.intercept("GET", `${API_BASE_URL_QUERY_CLIENT}/profiles/*/statistics`, {
         body: options?.hasStatistics ?? true ? profileStatistics : {}
     }).as("mockProfileStatistics")
 
