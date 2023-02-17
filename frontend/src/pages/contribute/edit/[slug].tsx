@@ -22,10 +22,10 @@ const EditItem = () => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
     const [item, setItem] = useState<Item | undefined>()
     const [isLoading, setIsLoading] = useState<boolean>(true)
-    const [error, setError] = useState<string | undefined>(undefined)
+    const [error, setError] = useState<string | undefined>()
 
     // Local variables
-    const isLoadingEdit = !item || isLoading || !isReady
+    const isLoadingEdit = isLoading || !isReady
 
     // Global State
     const { getSession } = useContext(AuthContext)
@@ -41,16 +41,21 @@ const EditItem = () => {
                 // Fetch item
                 const itemResponse = await queryServerRequest.get<PaginatedResponse<Item>>(`/items/list?slug=${query.slug}`)
                 const item = itemResponse.data.data[0]
-                setItem(item)
 
                 if (!item)
                     return
 
+                setItem(item)
+
                 // Check if user is authenticated
                 const session = await getSession()
-                if (session?.decodedAccessToken.id === item.userId) {
-                    setIsAuthenticated(true)
-                }
+
+                // Should never happen because of auth route
+                /* istanbul ignore if */
+                if (session === null)
+                    return
+
+                setIsAuthenticated(session.decodedAccessToken.id === item.userId)
             } catch (error) {
                 isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Netzwerk-Zeitüberschreitung")
                 console.error(error)
