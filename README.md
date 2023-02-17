@@ -1,5 +1,7 @@
 # wwweights
 
+[![codecov](https://codecov.io/gh/world-wide-weights/wwweights/branch/main/graph/badge.svg?token=ni0QZuPVH7)](https://codecov.io/gh/world-wide-weights/wwweights)
+
 ## Docker quickstart
 
 The docker compose stack should allow you to get everything up and running in no time.
