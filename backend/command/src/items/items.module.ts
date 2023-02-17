@@ -14,6 +14,7 @@ import { ItemCronJobHandler } from './cron/items.cron';
 import { EventHandlers } from './events';
 import { ItemsController } from './items.controller';
 import { Sagas } from './sagas';
+import { ImagesService } from './services/images.service';
 import { ItemsService } from './services/item.service';
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { ItemsService } from './services/item.service';
     ...Sagas,
     ItemCronJobHandler,
     ItemsService,
+    ImagesService,
   ],
 })
 export class ItemsModule {}

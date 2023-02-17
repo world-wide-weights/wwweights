@@ -15,6 +15,7 @@ export class MockEventStore {
   existingStreams: string[] = [];
   private latestId = 0;
   eventBus: EventBus;
+  public isReady = true;
 
   private readonly eventMap = new Map<
     string,
@@ -33,7 +34,9 @@ export class MockEventStore {
   public addEvent(streamId, eventType: any, event: any) {
     const eventEntry = { id: this.latestId++, eventType, event };
     this.eventBus.publish(new (this.eventMap.get(eventType))(event));
-    this.existingStreams.push(streamId);
+    if (!this.existingStreams.includes(streamId)) {
+      this.existingStreams.push(streamId);
+    }
     return eventEntry.id;
   }
 

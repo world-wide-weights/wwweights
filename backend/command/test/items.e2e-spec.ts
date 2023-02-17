@@ -1,3 +1,4 @@
+import { HttpService } from '@nestjs/axios';
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { CommandBus, EventBus } from '@nestjs/cqrs';
@@ -8,6 +9,7 @@ import * as request from 'supertest';
 import { ALLOWED_EVENT_ENTITIES } from '../src/eventstore/enums/allowedEntities.enum';
 import { EventStore } from '../src/eventstore/eventstore';
 import { EventStoreModule } from '../src/eventstore/eventstore.module';
+import { InternalCommunicationModule } from '../src/internal-communication/internal-communication.module';
 import { DeleteItemCommand } from '../src/items/commands/delete-item.command';
 import { EditItemCommand } from '../src/items/commands/edit-item.command';
 import { ItemCronJobHandler } from '../src/items/cron/items.cron';
@@ -27,6 +29,7 @@ import {
 import { retryCallback } from './helpers/retries';
 import { FakeEnvGuardFactory } from './mocks/env-guard.mock';
 import { MockEventStore } from './mocks/eventstore';
+import { HttpServiceMock } from './mocks/http-service.mock';
 import {
   differentNames as itemsWithDifferentNames,
   insertItem,
@@ -50,6 +53,7 @@ describe('ItemsController (e2e)', () => {
   let server: any; // Has to be any because of supertest not having a type for it either
   const fakeJWTGuard = new FakeAuthGuardFactory();
   const fakeEnvGuard = new FakeEnvGuardFactory();
+  const httpServiceMock = new HttpServiceMock();
   let commandBus: CommandBus;
 
   beforeAll(async () => {
@@ -59,6 +63,7 @@ describe('ItemsController (e2e)', () => {
         initializeMockModule(),
         ItemsModule,
         EventStoreModule,
+        InternalCommunicationModule,
       ],
     })
       .overrideProvider(EventStore)
@@ -69,6 +74,8 @@ describe('ItemsController (e2e)', () => {
       .useValue(fakeJWTGuard.getGuard())
       .overrideGuard(ENVGuard)
       .useValue(fakeEnvGuard.getGuard())
+      .overrideProvider(HttpService)
+      .useValue(httpServiceMock)
       .compile();
 
     app = moduleFixture.createNestApplication();
@@ -102,6 +109,7 @@ describe('ItemsController (e2e)', () => {
     fakeJWTGuard.setUser(verifiedRequestUser);
     fakeEnvGuard.isDev = false;
     mockEventStore.reset();
+    httpServiceMock.reset();
     await itemModel.deleteMany();
     await tagModel.deleteMany();
     await editSuggestionModel.deleteMany();

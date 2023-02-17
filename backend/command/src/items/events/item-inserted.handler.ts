@@ -34,17 +34,10 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       await this.insertItem(item);
 
       // No need for any tag related projection if item has no tags
-      if (!item.tags) {
-        this.logger.debug(
-          `ItemInsertedHandler Insert took: ${
-            performance.now() - insertItemStartTime
-          }ms`,
-        );
-        return;
+      if (item.tags) {
+        await this.incrementOrInsertTags(item);
+        await this.updateNewItemWithCorrectTags(item);
       }
-
-      await this.incrementOrInsertTags(item);
-      await this.updateNewItemWithCorrectTags(item);
 
       this.logger.debug(
         `ItemInsertedHandler Insert took: ${

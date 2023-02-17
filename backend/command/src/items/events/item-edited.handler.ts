@@ -27,10 +27,7 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
 
     const { itemSlug, editValues } = itemEditedEventDto;
 
-    const { image: previousImage } = await this.updateItem(
-      itemSlug,
-      editValues,
-    );
+    const oldItem = await this.updateItem(itemSlug, editValues);
 
     this.logger.debug(
       `${ItemEditedHandler.name} Item update took: ${
@@ -39,30 +36,23 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
     );
 
     // No tags in suggestion => we are done here
-    if (!editValues.tags) {
+    if (editValues.tags) {
+      const updateTagsStartTime = performance.now();
+      await this.updateTags(editValues.tags);
       this.logger.debug(
-        `Total duration of ${ItemEditedHandler.name} was ${
-          performance.now() - updateItemStartTime
+        `Updating tags by themselves took ${
+          performance.now() - updateTagsStartTime
         } ms`,
       );
-      return;
     }
 
-    const updateTagsStartTime = performance.now();
-    await this.updateTags(editValues.tags);
-    this.logger.debug(
-      `Updating tags by themselves took ${
-        performance.now() - updateTagsStartTime
-      } ms`,
-    );
-
-    if (itemEditedEventDto.editValues.image) {
+    if (itemEditedEventDto.editValues.image && oldItem?.image) {
       const imgBackendCallStartTime = performance.now();
       await Promise.all([
         this.imageService.promoteImageInImageBackend(
           itemEditedEventDto.editValues.image,
         ),
-        this.imageService.demoteImageInImageBackend(previousImage),
+        this.imageService.demoteImageInImageBackend(oldItem.image),
       ]);
       this.logger.debug(
         `Finished Image backend api calls in ${
@@ -79,7 +69,7 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
   }
 
   // Db calls: Min: 1 findOneAndUpdate Max: 2 findOneAndUpdate()
-  async updateItem(slug: string, itemData: SuggestionItem) {
+  async updateItem(slug: string, itemData: SuggestionItem): Promise<Item> {
     const { tags: tagsValues, weight, ...itemValues } = itemData;
     const tagNamesToPull = tagsValues?.pull || [];
     const tagsToPush =
@@ -93,7 +83,7 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
         weightSet[`weight.${key}`] = weight[key];
       });
     }
-    let oldItem;
+    let oldItem: Item;
 
     try {
       oldItem = await this.itemModel.findOneAndUpdate(

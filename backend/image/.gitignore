@@ -42,3 +42,4 @@ lerna-debug.log*
 # Exclude Files
 disk/
 cache/
+tmp/
