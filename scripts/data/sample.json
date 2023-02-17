@@ -3,25 +3,25 @@
     "name": "Apple iPhone 13 mini",
     "weight": { "value": 141 },
     "tags": ["Apple", "iOS 15", "Apple A15 Bionic (5 nm)", "2021"],
-    "image": "http://img:3003/serve/test.jpg"
+    "image": "test.jpg"
   },
   {
     "name": "Apple iPad mini (2021)",
     "weight": { "value": 293 },
     "tags": ["Apple", "iPadOS 15", "Apple A15 Bionic (5 nm)", "2021"],
-    "image": "http://img:3003/serve/test.jpg"
+    "image": "test.jpg"
   },
   {
     "name": "Apple iPhone XS",
     "weight": { "value": 177 },
     "tags": ["Apple", "iOS 12", "Apple A12 Bionic (7 nm)", "2018"],
-    "image": "http://img:3003/serve/test.jpg"
+    "image": "test.jpg"
   },
   {
     "name": "Apple iPad Air",
     "weight": { "value": 469 },
     "tags": ["Apple", "iOS 7", "Apple A7 (28 nm)", "2013"],
-    "image": "http://img:3003/serve/test.png"
+    "image": "test.png"
   },
   {
     "name": "Samsung Galaxy A14 5G",
@@ -32,7 +32,7 @@
       "Exynos 1330 - SM-A146BMediatek MT6833 Dimensity 700 (7 nm) - SM-A146P",
       "2023"
     ],
-    "image": "http://img:3003/serve/test.png"
+    "image": "test.png"
   },
   {
     "name": "Samsung Galaxy F04",
@@ -43,7 +43,7 @@
       "Mediatek MT6765 Helio P35 (12nm)",
       "2023"
     ],
-    "image": "http://img:3003/serve/test.png"
+    "image": "test.png"
   },
   {
     "name": "Samsung Galaxy A04e",
@@ -54,7 +54,7 @@
       "Mediatek MT6765 Helio P35 (12nm)",
       "2022"
     ],
-    "image": "http://img:3003/serve/test.jpg"
+    "image": "test.jpg"
   },
   {
     "name": "Samsung Galaxy Z Flip4",
@@ -65,7 +65,7 @@
       "Qualcomm SM8475 Snapdragon 8+ Gen 1 (4 nm)",
       "2022"
     ],
-    "image": "http://img:3003/serve/test.jpg"
+    "image": "test.jpg"
   },
   {
     "name": "Asus ROG Phone 6 Diablo Immortal Edition",
@@ -76,7 +76,7 @@
       "Qualcomm SM8475 Snapdragon 8+ Gen 1 (4 nm)",
       "2022"
     ],
-    "image": "http://img:3003/serve/test.png"
+    "image": "test.png"
   },
   {
     "name": "Asus ROG Phone 6 Batman Edition",
@@ -87,7 +87,7 @@
       "Qualcomm SM8475 Snapdragon 8+ Gen 1 (4 nm) - USAMediatek Dimensity 9000+ (4 nm) - International",
       "2022"
     ],
-    "image": "http://img:3003/serve/test.jpg"
+    "image": "test.jpg"
   },
   {
     "name": "Acer Allegro",
@@ -98,13 +98,13 @@
       "Qualcomm MSM8255 Snapdragon S2",
       "2011"
     ],
-    "image": "http://img:3003/serve/test.jpg"
+    "image": "test.jpg"
   },
   {
     "name": "Nokia 2110",
     "weight": { "value": 236 },
     "tags": ["Nokia", "1995"],
-    "image": "http://img:3003/serve/test.jpg"
+    "image": "test.jpg"
   },
   {
     "name": "Lenovo Golden Warrior Note 8",
@@ -115,7 +115,7 @@
       "Mediatek MT6752 (28 nm)",
       "2014"
     ],
-    "image": "http://img:3003/serve/test.png"
+    "image": "test.png"
   },
   {
     "name": "Oppo Find X Lamborghini",
@@ -126,6 +126,6 @@
       "Qualcomm SDM845 Snapdragon 845 (10 nm)",
       "2018"
     ],
-    "image": "http://img:3003/serve/test.png"
+    "image": "test.png"
   }
 ]

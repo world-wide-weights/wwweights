@@ -8,7 +8,7 @@ export const SkeletonLoadingProfile: React.FC = () => {
             <div className="sm:flex lg:flex-col gap-3 2xl:w-1/4 mb-6 lg:mb-0">
                 {/* Meta infos */}
                 <div className="bg-slate-200 animate-pulse flex flex-col justify-center md:justify-start sm:w-1/2 md:w-auto items-center rounded-lg py-6 px-4 mb-3 sm:mb-0">
-                    <div className="bg-slate-300 animate-pulse h-32 w-32 rounded-full mb-2"></div>
+                    <div className="bg-slate-300 animate-pulse h-28 w-28 rounded-full mb-2"></div>
                     <div className="bg-slate-300 animate-pulse h-6 w-32 mb-2"></div>
                     <div className="bg-slate-300 animate-pulse h-5 w-52 mb-2"></div>
                 </div>
