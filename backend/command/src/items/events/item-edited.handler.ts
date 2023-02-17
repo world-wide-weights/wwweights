@@ -63,7 +63,7 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
     const { tags: tagsValues, weight, ...itemValues } = itemData;
     const tagNamesToPull = tagsValues?.pull || [];
     const tagsToPush =
-      // Use value of 1 as count, as these are updated by cronjob lateron
+      // Use value of 1 as count, as these are updated by cronjob later on
       tagsValues?.push?.map((tag) => ({ name: tag, count: 1 })) || [];
     const weightSet = {};
     if (weight !== undefined) {
