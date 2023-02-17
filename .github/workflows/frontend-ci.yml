@@ -42,8 +42,7 @@ jobs:
     needs: setup
     steps:
       - name: Create babel config file
-        working-directory: frontend
-        run: ls
+        run: cd frontend && ls
 
   e2e-tests:
     runs-on: ubuntu-latest
