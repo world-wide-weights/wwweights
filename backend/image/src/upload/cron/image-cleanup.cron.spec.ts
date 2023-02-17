@@ -50,7 +50,7 @@ describe('ImageCron', () => {
       expect(readdirSync(tmpPath).length).toEqual(1);
     });
 
-    it('Should do both', async () => {
+    it('Should remove filed exceeding ttl and ignore files that do not exceed ttl', async () => {
       // ARRANGE
       copyFileSync(
         join(process.cwd(), 'test', 'helpers', 'test.png'),
