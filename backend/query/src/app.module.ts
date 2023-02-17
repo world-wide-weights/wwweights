@@ -3,8 +3,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { ItemsModule } from './items/items.module';
-import { EditSuggestion } from './models/edit-suggestion.model';
-import { Item } from './models/item.model';
+import { GlobalStatistics } from './models/global-statistics.model';
 import { ProfilesModule } from './profiles/profiles.module';
 import { SharedModule } from './shared/shared.module';
 import { TagsModule } from './tags/tags.module';
@@ -31,7 +30,7 @@ import { TagsModule } from './tags/tags.module';
       },
       inject: [ConfigService],
     }),
-    TypegooseModule.forFeature([EditSuggestion, Item]),
+    TypegooseModule.forFeature([GlobalStatistics]),
     TagsModule,
     ItemsModule,
     SharedModule,
