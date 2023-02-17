@@ -1,5 +1,3 @@
-/** Import font support */
-// import localFont from "@next/font/local"
 /** Imports all material symbols globally which we use as our icon pack */
 import "material-symbols/rounded.css"
 import { NextPage } from "next"
