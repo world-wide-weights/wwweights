@@ -17,7 +17,7 @@ import { Modal } from "../../components/Modal/Modal"
 import { Pagination } from "../../components/Pagination/Pagination"
 import { Seo } from "../../components/Seo/Seo"
 import { Tooltip } from "../../components/Tooltip/Tooltip"
-import { authRequest, queryClientRequest } from "../../services/axios/axios"
+import { authRequest, commandRequest, queryClientRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { getImageUrl } from "../../services/utils/getImageUrl"
 import { UserProfile } from "../../types/auth"
@@ -158,12 +158,26 @@ const Profile: NextPageCustomProps = () => {
             return
         }
 
-        // Submit
-        console.log(values)
+        try {
+            // Get session
+            const session = await getSession()
+            if (session === null)
+                throw Error("Failed to get session.")
 
-        // Delete the contribution and close modal when succesfull
-        if (true)
+            // Delete contribution request
+            await commandRequest.post(`/items/${selectedContribution.slug}/suggest/delete`, {
+                reason: values.reason
+            }, {
+                headers: {
+                    Authorization: `Bearer ${session.accessToken}`
+                }
+            })
+        } catch (error) {
+            // axios.isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Netzwerk-Zeitüberschreitung")
+            console.error(error)
+        } finally {
             closeDeleteModal()
+        }
     }
 
     /**
@@ -183,11 +197,11 @@ const Profile: NextPageCustomProps = () => {
         setSelectedContribution(null)
     }
 
-    if (error)
-        return <Custom500 />
-
     if (isLoadingProfile)
         return <SkeletonLoadingProfile />
+
+    if (error)
+        return <Custom500 />
 
     return <>
         <Seo
@@ -228,7 +242,7 @@ const Profile: NextPageCustomProps = () => {
                                         <IconButton icon="edit" />
                                     </Tooltip>
                                     <Tooltip content="Delete">
-                                        <IconButton icon="delete" onClick={() => openDeleteModal(contribution)} />
+                                        <IconButton datacy={`profile-delete-contribution-${contribution.slug}`} icon="delete" onClick={() => openDeleteModal(contribution)} />
                                     </Tooltip>
                                 </>} />)}
                             </ul>
@@ -251,8 +265,8 @@ const Profile: NextPageCustomProps = () => {
 
                             {/* Buttons */}
                             <div className="flex md:justify-between flex-col md:flex-row">
-                                <Button kind="tertiary" type="button" onClick={closeDeleteModal} className="my-4 md:my-0">Oops, never mind</Button>
-                                <Button kind="primary" type="submit" disabled={!(dirty && isValid)} loading={isSubmitting} icon="delete">Delete forever</Button>
+                                <Button datacy="profile-cancel-button" kind="tertiary" type="button" onClick={closeDeleteModal} className="my-4 md:my-0">Oops, never mind</Button>
+                                <Button datacy="profile-delete-button" kind="primary" type="submit" disabled={!(dirty && isValid)} loading={isSubmitting} icon="delete">Delete forever</Button>
                             </div>
                         </Form>)}
                 </Formik>
