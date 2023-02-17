@@ -1,5 +1,5 @@
 import { Field, FieldArray, FieldProps, useFormikContext } from "formik"
-import React, { Fragment } from "react"
+import React, { Fragment, useRef } from "react"
 import { Chip } from "../../Chip/Chip"
 import { Icon } from "../../Icon/Icon"
 import { Label } from "../Label"
@@ -21,6 +21,7 @@ type ChipTextInputProps = {
  */
 export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name, labelRequired, labelText, helperText }) => {
 	const { values, errors } = useFormikContext<any>()
+	const inputRef = useRef<HTMLInputElement>(null)
 
 	return <FieldArray name={name}>{(arrayHelpers) => {
 		/**
@@ -59,9 +60,19 @@ export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name, labelRequire
 				arrayHelpers.remove(values[name].length - 1)
 		}
 
+		/**
+		 * Focuses the input field when clicked into the "chip"-wrapper div
+		 */
+		const focusInputField = () => {
+			if (!inputRef.current)
+				return
+
+			inputRef.current.focus()
+		}
+
 		return <div datacy="chiptextinput-wrapper" className="mb-2 md:mb-4">
 			{labelText && <Label datacy="chiptextinput-label" name={name} labelText={labelText} labelRequired={labelRequired} />}
-			<div className="flex flex-wrap gap-y-2 border-2 border-gray-100 bg-gray-100 focus-within:outline focus-within:outline-2 focus-within:outline-blue-500 rounded-lg px-2 py-1 mb-2">
+			<div onClick={focusInputField} className="cursor-text flex flex-wrap gap-y-2 border-2 border-gray-100 bg-gray-100 focus-within:outline focus-within:outline-2 focus-within:outline-blue-500 rounded-lg px-2 py-1 mb-2">
 				{/* Chips */}
 				{values[name] && values[name].map((chip: string, index: number) => <Fragment key={index}>
 					<Field name={`${name}.${index}`}>
@@ -73,7 +84,7 @@ export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name, labelRequire
 				</Fragment>)}
 
 				{/* Input */}
-				<input datacy={`chiptextinput-${name}-text-input`} className="focus-visible:outline-none placeholder:text-gray-400 border-2 border-gray-100 bg-gray-100 py-1" onKeyDown={handleKeyDown} onKeyUp={addChip} />
+				<input ref={inputRef} datacy={`chiptextinput-${name}-text-input`} className="focus-visible:outline-none placeholder:text-gray-400 border-2 border-gray-100 bg-gray-100 py-1" onKeyDown={handleKeyDown} onKeyUp={addChip} />
 			</div>
 
 			{/* Helpertext */}
