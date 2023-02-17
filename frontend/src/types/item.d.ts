@@ -24,12 +24,13 @@ export type Weight = {
     isCa?: boolean
 }
 
+// "" is when the field is empty
 export type CreateEditItemForm = {
     name: string
-    weight: number | string
+    weight: number | ""
     unit: "g" | "kg" | "T"
-    additionalValue?: number | string
-    isCa: string[]
+    additionalValue?: number | ""
+    isCa: [string] | []
     valueType: "exact" | "range"
     source?: string
     imageFile?: File | null
@@ -44,17 +45,17 @@ export type CreateItemDto = {
     tags?: string[]
 }
 
-export type EditItemDto = {
-    name?: string
-    weight?: {
-        value?: number,
-        additionalValue?: number | null
-        isCa?: boolean
-    }
-    source?: string | null
-    image?: string | null
-    tags?: {
-        push?: string[]
-        pull?: string[]
-    }
-}
+export type EditItemDto = Partial<{
+    name: string
+    weight: Partial<{
+        value: number,
+        additionalValue: number | null
+        isCa: boolean
+    }>
+    source: string | null
+    image: string | null
+    tags: Partial<{
+        push: string[]
+        pull: string[]
+    }>
+}>
