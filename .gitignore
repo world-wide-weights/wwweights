@@ -1,5 +1,4 @@
 .env
-.babelrc
 
 # Only include pre-provided images
 backend/docker-images/**/*
