@@ -66,6 +66,7 @@ const App = ({ Component, pageProps }: AppPropsCustom) => {
   const layout = Component.layout ?? ((page: React.ReactElement) => <DefaultLayout>{page}</DefaultLayout>)
 
   return <>
+    {/** Handles all global loading of bundles and SSR */}
     <NextNProgress color="#0967D2" height={5} />
 
     {/** Google AdSense */}
