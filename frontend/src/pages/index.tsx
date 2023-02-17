@@ -122,7 +122,7 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 }
 
 export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
-	const itemsResponse = await queryServerRequest.get<PaginatedResponse<Item>>("/items/list?page=1&limit=20&query=iphone 2020")
+	const itemsResponse = await queryServerRequest.get<PaginatedResponse<Item>>("/items/list?page=1&limit=20")
 	const items = itemsResponse.data.data
 
 	return {
