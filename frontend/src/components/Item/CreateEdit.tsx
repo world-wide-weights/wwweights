@@ -108,8 +108,9 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
         if (!isEditMode)
             return
 
+        // Build weights object
         const weight = {
-            value: Number(values.weight), // TODO: Make this optional when api updated
+            ...(values.weight !== item?.weight.value ? { value: Number(values.weight) } : {}),
             ...((values.isCa[0] !== undefined) !== item?.weight.isCa ? { isCa: values.isCa[0] ? true : false } : {}),
             ...(values.additionalValue !== item?.weight.additionalValue && (values.valueType === "range") ? { additionalValue: Number(values.additionalValue) } : {})
         }
@@ -118,17 +119,18 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
         const pull = item.tags.filter(tag => !values.tags?.includes(tag.name)).map(tag => tag.name)
         const push = values.tags?.filter(tag => !item.tags.map(tag => tag.name).includes(tag)) ?? []
 
+        // Build tags object
+        const tags = {
+            ...(pull.length > 0 ? { pull } : {}),
+            ...(push.length > 0 ? { push } : {})
+        }
+
         // Prepare item data update
         const editItem: UpdateItemDto = {
             ...(values.name !== item?.name ? { name: values.name } : {}),
             ...((Object.keys(weight).length > 0) ? { weight } : {}),
             ...(!(values.source === item?.source || values.source === "") ? { source: values.source } : {}),
-            ...(pull.length > 0 || push.length > 0 ? {
-                tags: {
-                    ...(pull.length > 0 ? { pull } : {}),
-                    ...(push.length > 0 ? { push } : {})
-                }
-            } : {})
+            ...((Object.keys(tags).length > 0) ? { tags } : {}),
         }
 
         try {
