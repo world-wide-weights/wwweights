@@ -5,9 +5,11 @@ type LabelProps = {
     labelText: string
     /** When set Required * will be seen  */
     labelRequired?: boolean
+    /** For testing. */
+    datacy?: string
 }
 
 /** 
  * Label for Inputs
  */
-export const Label: React.FC<LabelProps> = ({ name, labelText, labelRequired = false }) => <label className="text-darkgray text-sm font-medium" htmlFor={name}>{labelText}{labelRequired && <span className="text-primary-blue ml-1">*</span>}</label>
+export const Label: React.FC<LabelProps> = ({ name, labelText, labelRequired = false, datacy }) => <label datacy={datacy} className="text-darkgray text-sm font-medium" htmlFor={name}>{labelText}{labelRequired && <span className="text-primary-blue ml-1">*</span>}</label>
