@@ -2,6 +2,7 @@ import { GetStaticPaths, GetStaticProps, InferGetServerSidePropsType } from "nex
 import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../../../components/Auth/Auth"
 import { CreateEdit } from "../../../components/Item/CreateEdit"
+import { Seo } from "../../../components/Seo/Seo"
 import { queryServerRequest } from "../../../services/axios/axios"
 import { Item, PaginatedResponse } from "../../../types/item"
 import Custom404 from "../../404"
@@ -39,6 +40,13 @@ function EditItem({ item }: InferGetServerSidePropsType<typeof getStaticProps>) 
     }
 
     return <>
+        {/* Meta Tags */}
+        <Seo
+            title={`Edit ${item.name}`}
+            description="Improve contributions to the World Wide Weights database and update item."
+        />
+
+        {/* Page Content */}
         <CreateEdit item={item} />
     </>
 }

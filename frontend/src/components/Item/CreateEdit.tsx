@@ -23,7 +23,6 @@ import { ChipTextInput } from "../Form/TextInput/ChipTextInput"
 import { TextInput } from "../Form/TextInput/TextInput"
 import { Headline } from "../Headline/Headline"
 import { Icon } from "../Icon/Icon"
-import { Seo } from "../Seo/Seo"
 import { Tooltip } from "../Tooltip/Tooltip"
 
 const unitTypeDropdownOptions = [
@@ -209,12 +208,6 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
     }
 
     return <>
-        {/* Meta Tags */}
-        <Seo
-            title={`${isEditMode ? `Edit ${item.name}` : "Create new item"}`}
-            description={`${isEditMode ? "Improve contributions to the World Wide Weights database and update item." : "Contribute to the World Wide Weights database and create a new item."}`}
-        />
-
         <main className="mt-5 mb-5 md:mb-20">
             <div className="container">
                 {/* Headline */}
