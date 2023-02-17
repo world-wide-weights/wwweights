@@ -57,7 +57,7 @@ const EditItem = () => {
 
                 setIsAuthenticated(session.decodedAccessToken.id === item.userId)
             } catch (error) {
-                isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Netzwerk-Zeitüberschreitung")
+                isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Our network is feeling a bit heavy today. Please try again in a few minutes.")
                 console.error(error)
             } finally {
                 setIsLoading(false)

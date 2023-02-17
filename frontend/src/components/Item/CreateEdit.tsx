@@ -142,7 +142,7 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
             if (response?.status === 200)
                 await router.push(routes.weights.list())
         } catch (error) {
-            axios.isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Netzwerk-Zeitüberschreitung")
+            axios.isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Our network is feeling a bit heavy today. Please try again in a few minutes.")
             return
         }
     }
