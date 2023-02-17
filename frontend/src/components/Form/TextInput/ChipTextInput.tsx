@@ -61,19 +61,19 @@ export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name, labelRequire
 
 		return <div datacy="chiptextinput-wrapper" className="mb-2 md:mb-4">
 			{labelText && <Label datacy="chiptextinput-label" name={name} labelText={labelText} labelRequired={labelRequired} />}
-			<div className="border-2 border-gray-100 bg-gray-100 focus-within:outline focus-within:outline-2 focus-within:outline-blue-500 rounded-lg p-2 mb-2">
+			<div className="flex flex-wrap gap-y-2 border-2 border-gray-100 bg-gray-100 focus-within:outline focus-within:outline-2 focus-within:outline-blue-500 rounded-lg p-2 mb-2">
 				{/* Chips */}
 				{values[name] && values[name].map((chip: string, index: number) => <Fragment key={index}>
 					<Field name={`${name}.${index}`}>
 						{(props: FieldProps) => <>
 							<input className="hidden" />
-							<Chip datacy={`chiptextinput-chip-${index}`} key={index} iconEnd="close" color={props.form.errors[name]?.[index as keyof typeof props.form.errors.name] ? "red" : undefined} onClick={() => removeChip(index)}>{chip}</Chip>
+							<Chip datacy={`chiptextinput-chip-${index}`} key={index} hasMargin={false} iconEnd="close" color={props.form.errors[name]?.[index as keyof typeof props.form.errors.name] ? "red" : undefined} onClick={() => removeChip(index)}>{chip}</Chip>
 						</>}
 					</Field>
 				</Fragment>)}
 
 				{/* Input */}
-				<input datacy={`chiptextinput-${name}-text-input`} className="focus-visible:outline-none placeholder:text-gray-400 border-2 border-gray-100 bg-gray-100" onKeyDown={handleKeyDown} onKeyUp={addChip} />
+				<input datacy={`chiptextinput-${name}-text-input`} className="focus-visible:outline-none placeholder:text-gray-400 border-2 border-gray-100 bg-gray-100 py-1" onKeyDown={handleKeyDown} onKeyUp={addChip} />
 			</div>
 
 			{/* Helpertext */}

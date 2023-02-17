@@ -19,6 +19,8 @@ type ChipProps = {
   iconStart?: string
   /** Adds icon at the end of chip. */
   iconEnd?: string
+  /** Whether the chip should have margin bottom or not. */
+  hasMargin?: boolean
   /** For testing. */
   datacy?: string
 }
@@ -26,7 +28,7 @@ type ChipProps = {
 /**
  * Chip which can be just display a tag or be a link
  */
-export const Chip: React.FC<ChipProps> = ({ children, to, onClick, iconEnd, iconStart, datacy, disabled, dimOpacityWhenDisabled = true, color = "blue" }) => {
+export const Chip: React.FC<ChipProps> = ({ children, to, onClick, iconEnd, hasMargin = true, iconStart, datacy, disabled, dimOpacityWhenDisabled = true, color = "blue" }) => {
   if (onClick && to)
     return <p>Use &quot;onClick&quot; prop or &quot;to&quot; prop not both!</p>
 
@@ -37,11 +39,11 @@ export const Chip: React.FC<ChipProps> = ({ children, to, onClick, iconEnd, icon
   </>
 
   return <>
-    {!to && <button datacy={datacy} type="button" disabled={disabled} onClick={onClick} className={`inline-flex items-center bg-${color}-500 bg-opacity-20 ${disabled && dimOpacityWhenDisabled ? "text-opacity-60" : ""} text-${color}-600 rounded-full whitespace-nowrap px-5 py-1 mr-2 mb-2`}>
+    {!to && <button datacy={datacy} type="button" disabled={disabled} onClick={onClick} className={`inline-flex items-center bg-${color}-500 bg-opacity-20 ${disabled && dimOpacityWhenDisabled ? "text-opacity-60" : ""} text-${color}-600 rounded-full whitespace-nowrap px-5 py-1 mr-2 ${hasMargin ? "mb-2" : ""}`}>
       {content}
     </button>
     }
-    {to && <Link datacy={datacy} href={to} onClick={disabled ? (event) => event.preventDefault() : () => ""} className={`inline-block bg-${color}-500 ${disabled ? "cursor-default" : ""} ${disabled && dimOpacityWhenDisabled ? "text-opacity-60" : ""} bg-opacity-20 text-${color}-600 rounded-full whitespace-nowrap px-5 py-1 mr-2 mb-2`}>
+    {to && <Link datacy={datacy} href={to} onClick={disabled ? (event) => event.preventDefault() : () => ""} className={`inline-block bg-${color}-500 ${disabled ? "cursor-default" : ""} ${disabled && dimOpacityWhenDisabled ? "text-opacity-60" : ""} bg-opacity-20 text-${color}-600 rounded-full whitespace-nowrap px-5 py-1 mr-2 ${hasMargin ? "mb-2" : ""}`}>
       {content}
     </Link>}
   </>
