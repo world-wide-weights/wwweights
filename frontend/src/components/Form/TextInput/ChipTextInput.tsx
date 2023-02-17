@@ -61,7 +61,7 @@ export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name, labelRequire
 
 		return <div datacy="chiptextinput-wrapper" className="mb-2 md:mb-4">
 			{labelText && <Label datacy="chiptextinput-label" name={name} labelText={labelText} labelRequired={labelRequired} />}
-			<div className="flex flex-wrap gap-y-2 border-2 border-gray-100 bg-gray-100 focus-within:outline focus-within:outline-2 focus-within:outline-blue-500 rounded-lg p-2 mb-2">
+			<div className="flex flex-wrap gap-y-2 border-2 border-gray-100 bg-gray-100 focus-within:outline focus-within:outline-2 focus-within:outline-blue-500 rounded-lg px-2 py-1 mb-2">
 				{/* Chips */}
 				{values[name] && values[name].map((chip: string, index: number) => <Fragment key={index}>
 					<Field name={`${name}.${index}`}>
