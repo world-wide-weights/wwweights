@@ -46,8 +46,7 @@ jobs:
         working-directory: frontend
     steps:
       - name: Create babel config file
-        run: |
-          mv .babelrc.example .babelrc
+        run: mv .babelrc.example .babelrc
 
   e2e-tests:
     runs-on: ubuntu-latest
