@@ -13,6 +13,7 @@ const timeout = (ms = 100) =>
 describe('ImageCron', () => {
   let imageCleanup: ImageCleanup;
   const tmpPath = pathBuilder(undefined, 'tmp');
+  
   beforeAll(async () => {
     imageCleanup = new ImageCleanup(new ConfigService());
     await emptyDir(tmpPath);
