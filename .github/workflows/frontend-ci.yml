@@ -43,7 +43,6 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: frontend
     steps:
       - name: Create babel config file
         run: ~/mv .babelrc.example .babelrc
