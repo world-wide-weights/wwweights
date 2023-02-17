@@ -1,4 +1,5 @@
+import { JWTPayload } from './jwt-payload.interface';
+
 export interface RequestWithUser extends Request {
-  // TODO: Once a user is specifed update this
-  user: any;
+  user: JWTPayload;
 }

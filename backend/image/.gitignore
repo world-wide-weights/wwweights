@@ -36,7 +36,10 @@ lerna-debug.log*
 
 .env
 
+.coverage
+
 
 # Exclude Files
 disk/
 cache/
+tmp/

@@ -4,10 +4,10 @@ import { Headline } from "../../components/Headline/Headline"
 import { Pagination } from "../../components/Pagination/Pagination"
 import { Seo } from "../../components/Seo/Seo"
 import { Tooltip } from "../../components/Tooltip/Tooltip"
-import { queryRequest } from "../../services/axios/axios"
+import { queryServerRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { generatePageString } from "../../services/seo/pageString"
-import { PaginatedResponse } from "../../types/item"
+import { PaginatedResponse } from "../../types/paginated"
 import { Tag } from "../../types/tag"
 
 const DEFAULT_ITEMS_PER_PAGE = 64
@@ -61,7 +61,7 @@ export const getServerSideProps: GetServerSideProps<TagsListProps> = async (cont
     }
 
     // Fetch tags
-    const responseTags = await queryRequest.get<PaginatedResponse<Tag>>(`/tags/list?page=${currentPage}&limit=${limit}`)
+    const responseTags = await queryServerRequest.get<PaginatedResponse<Tag>>(`/tags/list?page=${currentPage}&limit=${limit}`)
     const tags = responseTags.data.data
 
     return {

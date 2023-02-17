@@ -14,6 +14,8 @@ export type ButtonProps = {
     onClick?: (values: any) => void
     /** Link to go when you click button */
     to?: string
+    /** Enable next Shallow routing  */
+    shallow?: boolean
     /** Optional prop to specify icon */
     icon?: string
     /** Specify the location of the icon */
@@ -33,7 +35,7 @@ export type ButtonProps = {
 /**
  *  Button component (with link and button functionality), can look like a link when kind tertiary
  */
-export const Button: React.FC<ButtonProps> = ({ kind = "primary", disabled, dimOpacityWhenDisabled = true, icon, datacy, iconSlot = "start", loading, className, children, to, onClick, isColored = false, type = "button" }) => {
+export const Button: React.FC<ButtonProps> = ({ kind = "primary", disabled, dimOpacityWhenDisabled = true, icon, datacy, iconSlot = "start", loading, className, children, to, onClick, isColored = false, type = "button", shallow = false }) => {
     // When loading should be disabled
     disabled = loading ? true : disabled
 
@@ -61,7 +63,7 @@ export const Button: React.FC<ButtonProps> = ({ kind = "primary", disabled, dimO
 
     return (<>
         {/* Primary or Secondary as link */}
-        {kind !== "tertiary" && to && <Link datacy={datacy} href={disabled ? "" : to} onClick={disabled ? (event) => event.preventDefault() : () => ""} tabIndex={disabled ? -1 : 0} className={`${buttonBaseClasses} ${kind === "primary" ? primaryClasses : secondaryClasses} ${className}`}>
+        {kind !== "tertiary" && to && <Link datacy={datacy} href={disabled ? "" : to} onClick={disabled ? (event) => event.preventDefault() : () => ""} tabIndex={disabled ? -1 : 0} className={`${buttonBaseClasses} ${kind === "primary" ? primaryClasses : secondaryClasses} ${className}`} shallow={shallow}>
             {innerContent}
         </Link>}
 
@@ -71,7 +73,7 @@ export const Button: React.FC<ButtonProps> = ({ kind = "primary", disabled, dimO
         </button>}
 
         {/* Tertiary (link style) as link */}
-        {kind === "tertiary" && to && <Link datacy={datacy} href={disabled ? "" : to} onClick={disabled ? (event) => event.preventDefault() : () => ""} tabIndex={disabled ? -1 : 0} className={`${linkBaseClasses} w-max ${disabledTertiary} ${className}`}>
+        {kind === "tertiary" && to && <Link datacy={datacy} href={disabled ? "" : to} onClick={disabled ? (event) => event.preventDefault() : () => ""} tabIndex={disabled ? -1 : 0} className={`${linkBaseClasses} w-max ${disabledTertiary} ${className}`} shallow={shallow}>
             {innerContent}
         </Link>}
 

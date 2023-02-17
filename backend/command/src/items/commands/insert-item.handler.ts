@@ -4,7 +4,7 @@ import {
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
-import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { ALLOWED_EVENT_ENTITIES } from '../../eventstore/enums/allowedEntities.enum';
 import { EventStore } from '../../eventstore/eventstore';
 import { Item } from '../../models/item.model';
@@ -16,10 +16,7 @@ import { InsertItemCommand } from './insert-item.command';
 @CommandHandler(InsertItemCommand)
 export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
   private readonly logger = new Logger(InsertItemHandler.name);
-  constructor(
-    private readonly publisher: EventPublisher,
-    private readonly eventStore: EventStore,
-  ) {}
+  constructor(private readonly eventStore: EventStore) {}
 
   // No returns, just Exceptions in CQRS
   async execute({ insertItemDto, userId }: InsertItemCommand) {
@@ -34,28 +31,29 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
         createdAt: Date.now(),
       });
 
-      if (
-        await this.eventStore.doesStreamExist(
-          `${ALLOWED_EVENT_ENTITIES.ITEM}-${newItem.slug}`,
-        )
-      ) {
+      const streamName = `${ALLOWED_EVENT_ENTITIES.ITEM}-${newItem.slug}`;
+
+      if (await this.eventStore.doesStreamExist(streamName)) {
         throw new ConflictException('Slug already taken');
       }
 
-      const eventItem = this.publisher.mergeObjectContext(newItem);
       await this.eventStore.addEvent(
-        `${ALLOWED_EVENT_ENTITIES.ITEM}-${eventItem.slug}`,
+        streamName,
         ItemInsertedEvent.name,
-        eventItem,
+        newItem,
       );
-      this.logger.log(`Event created on stream: item-${eventItem.slug}`);
+      this.logger.log(`Event created on stream: item-${newItem.slug}`);
     } catch (error) {
       // If thrown error is already a valid HttpException => Throw that one instead
       if (error instanceof HttpException) {
         throw error;
       }
       this.logger.error(error);
-      throw new InternalServerErrorException('Item could not be inserted');
+      throw new InternalServerErrorException(
+        `Item could not be inserted (target stream name: ${
+          ALLOWED_EVENT_ENTITIES.ITEM
+        }-${getSlug(insertItemDto.name)})`,
+      );
     }
   }
 }

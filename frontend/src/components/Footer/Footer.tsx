@@ -6,10 +6,10 @@ import logo from "../../../public/logo.png"
 import discord from "../../assets/img/logos_icons/discord.svg"
 import github from "../../assets/img/logos_icons/github.svg"
 import twitter from "../../assets/img/logos_icons/twitter.svg"
-import { queryRequest } from "../../services/axios/axios"
+import { queryClientRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
-import { PaginatedResponse } from "../../types/item"
 import { NavLink } from "../../types/nav"
+import { PaginatedResponse } from "../../types/paginated"
 import { Tag } from "../../types/tag"
 import { AuthContext } from "../Auth/Auth"
 import { Button } from "../Button/Button"
@@ -56,7 +56,7 @@ export const Footer: React.FC = () => {
 	useEffect(() => {
 		const fetchTags = async () => {
 			try {
-				const responseTags = await queryRequest.get<PaginatedResponse<Tag>>("/tags/list?page=1&limit=5&sort=most-used")
+				const responseTags = await queryClientRequest.get<PaginatedResponse<Tag>>("/tags/list?page=1&limit=5&sort=most-used")
 				const tags = responseTags.data.data
 				setTags(tags)
 			} catch (error) {
@@ -82,13 +82,13 @@ export const Footer: React.FC = () => {
 					{/* Social Links */}
 					<div className="flex items-center gap-3 mb-4">
 						<a href="https://discord.gg/UmxWf2FEQx" target="_blank" title="Link to our discord server!" rel="noreferrer noopener">
-							<Image src={discord} alt="Image of Discord Logo" width={25} height={25} />
+							<Image src={discord} alt="Image of Discord Logo" width={25} />
 						</a>
 						<a href="https://github.com/world-wide-weights" target="_blank" title="Link to our GitHub Orga!" rel="noreferrer noopener">
-							<Image src={github} alt="Image of Github Logo" width={25} height={25} />
+							<Image src={github} alt="Image of Github Logo" width={25} />
 						</a>
 						<a href="https://twitter.com/wwweights" target="_blank" title="Link to our Twitter!" rel="noreferrer noopener">
-							<Image src={twitter} alt="Image of Twitter logo" className="text-gray-500" width={25} height={25} />
+							<Image src={twitter} alt="Image of Twitter logo" width={25} />
 						</a>
 					</div>
 				</div>

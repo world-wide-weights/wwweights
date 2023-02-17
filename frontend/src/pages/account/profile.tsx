@@ -1,6 +1,5 @@
 import { isAxiosError } from "axios"
 import { Form, Formik } from "formik"
-import Image from "next/image"
 import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
 import { object, SchemaOf, string } from "yup"
@@ -18,11 +17,12 @@ import { Modal } from "../../components/Modal/Modal"
 import { Pagination } from "../../components/Pagination/Pagination"
 import { Seo } from "../../components/Seo/Seo"
 import { Tooltip } from "../../components/Tooltip/Tooltip"
-import { authRequest, queryRequest } from "../../services/axios/axios"
+import { authRequest, queryClientRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { getImageUrl } from "../../services/utils/getImageUrl"
-import { Profile } from "../../types/auth"
-import { Item, PaginatedResponse } from "../../types/item"
+import { UserProfile } from "../../types/auth"
+import { Item } from "../../types/item"
+import { PaginatedResponse } from "../../types/paginated"
 import Custom500 from "../500"
 import { NextPageCustomProps } from "../_app"
 
@@ -65,7 +65,7 @@ const Profile: NextPageCustomProps = () => {
     const { query, isReady } = useRouter()
 
     // Local States
-    const [profile, setProfile] = useState<Profile | undefined>()
+    const [profile, setProfile] = useState<UserProfile | undefined>()
     const [contributions, setContributions] = useState<PaginatedResponse<Item>>({ data: [], total: 0, page: 1, limit: 10 })
     const [selectedContribution, setSelectedContribution] = useState<Item | null>(null)
     const [statistics, setStatistics] = useState<Statistics>({ totalContributions: 0, itemsCreated: 0, itemsUpdated: 0, itemsDeleted: 0 })
@@ -114,9 +114,9 @@ const Profile: NextPageCustomProps = () => {
 
                 // Fetch contributions, statistics and profile
                 const [contributionsResponse, statisticsResponse, profileResponse] = await Promise.all([
-                    queryRequest.get<PaginatedResponse<Item>>(`/items/list?userid=${sessionData.decodedAccessToken.id}&page=${page}&limit=${limit}`),
-                    queryRequest.get<StatisticsResponse>(`/profiles/${sessionData.decodedAccessToken.id}/statistics`),
-                    authRequest.get<Profile>("/profile/me", {
+                    queryClientRequest.get<PaginatedResponse<Item>>(`/items/list?userid=${sessionData.decodedAccessToken.id}&page=${page}&limit=${limit}`),
+                    queryClientRequest.get<StatisticsResponse>(`/profiles/${sessionData.decodedAccessToken.id}/statistics`),
+                    authRequest.get<UserProfile>("/profile/me", {
                         headers: {
                             "Authorization": `Bearer ${sessionData.accessToken}`
                         }
@@ -139,7 +139,7 @@ const Profile: NextPageCustomProps = () => {
                 setContributions(contributionsResponse.data)
                 setStatistics(statistics)
             } catch (error) {
-                isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Netzwerk-Zeitüberschreitung")
+                isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Our servers are feeling a bit heavy today. Please try again in a few minutes.")
                 console.error(error)
             } finally {
                 setIsLoading(false)
@@ -200,8 +200,10 @@ const Profile: NextPageCustomProps = () => {
             <div className="lg:flex gap-4">
                 <div className="sm:flex lg:flex-col gap-3 2xl:w-1/4 mb-6 lg:mb-0">
                     {/* Meta infos */}
-                    <div className="flex flex-col justify-center md:justify-start sm:w-1/2 md:w-auto items-center bg-white rounded-lg py-6 px-4 mb-3 sm:mb-0">
-                        <Image src="https://picsum.photos/120" alt="profile picture" width={120} height={120} className="rounded-full mb-2" />
+                    <div className="flex flex-col justify-center lg:justify-start sm:w-1/2 md:w-auto items-center bg-white rounded-lg py-6 px-4 mb-3 sm:mb-0">
+                        <div className="grid items-center justify-center bg-blue-200 h-28 w-28 rounded-full mb-2">
+                            <span className="text-6xl text-blue-700 font-bold mt-2">{profile.username[0].toUpperCase()}</span>
+                        </div>
                         <Headline datacy="profile-username" level={3} hasMargin={false}>{profile.username}</Headline>
                         <p datacy="profile-registered-since"><>Member since {new Date(profile.createdAt).toLocaleDateString("en-US")}</></p>
                     </div>

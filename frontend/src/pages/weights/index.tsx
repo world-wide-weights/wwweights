@@ -15,12 +15,13 @@ import { Seo } from "../../components/Seo/Seo"
 import { Sort, SortType } from "../../components/Sort/Sort"
 import { Tooltip } from "../../components/Tooltip/Tooltip"
 import { useLocalStorage } from "../../hooks/useLocalStorage"
-import { queryRequest } from "../../services/axios/axios"
+import { queryServerRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { generatePageString } from "../../services/seo/pageString"
 import { renderUnitIntoString, renderWeightAsNumberIntoString } from "../../services/unit/unitRenderer"
 import { getImageUrl } from "../../services/utils/getImageUrl"
-import { Item, PaginatedResponse } from "../../types/item"
+import { Item } from "../../types/item"
+import { PaginatedResponse } from "../../types/paginated"
 
 const DEFAULT_ITEMS_PER_PAGE = 16
 const ITEMS_PER_PAGE_MAXIMUM = 100
@@ -171,8 +172,8 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
     try {
         // Fetch items and statistics
         const [itemsResponse, statisticResponse] = await Promise.all([
-            queryRequest.get<PaginatedResponse<Item>>(`/items/list?page=${currentPage}&limit=${limit}&sort=${sort}&query=${query}`),
-            queryRequest.get<Statistics>(`/items/statistics?query=${query}`),
+            queryServerRequest.get<PaginatedResponse<Item>>(`/items/list?page=${currentPage}&limit=${limit}&sort=${sort}&query=${query}`),
+            queryServerRequest.get<Statistics>(`/items/statistics?query=${query}`),
         ])
 
         // Items, statistics and total items

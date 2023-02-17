@@ -62,7 +62,7 @@ declare global {
       /**
        * Mock requests for single weight page.
        */
-      mockSingleWeight(): Chainable<void>
+      mockSingleWeightPage(): Chainable<void>
       /**
        * Mock items list
        * @param itemCount count of items getting back with body
@@ -88,6 +88,14 @@ declare global {
        * @param hasStatistics if we want to mock statistics having data or not.
        */
       mockProfilePage(options?: { contribtionsCount?: number, hasStatistics?: boolean }): Chainable<void>
+      /**
+       * Mocks single item request.
+       */
+      mockSingleItem(): Chainable<void>
+      /**
+       * Mocks edit item request.
+       */
+      mockEditItem(): Chainable<void>
     }
   }
 }

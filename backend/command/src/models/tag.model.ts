@@ -1,8 +1,7 @@
-import { AggregateRoot } from '@nestjs/cqrs';
 import { prop } from '@typegoose/typegoose';
 import { Expose } from 'class-transformer';
 
-export class Tag extends AggregateRoot {
+export class Tag {
   @Expose()
   @prop({ required: true, unique: true })
   name: string;
@@ -12,7 +11,6 @@ export class Tag extends AggregateRoot {
   count: number;
 
   constructor(partial: Partial<Tag>) {
-    super();
     Object.assign(this, partial);
   }
 }

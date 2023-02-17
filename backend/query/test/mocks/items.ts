@@ -2409,6 +2409,30 @@ export const items = [
   },
 ];
 
+export const itemsWithAdditonalWeight = [
+  {
+    _id: 'aaaaaaaaaaaaaaaaaaaaaaa' + 1,
+    name: 'matching ' + 1,
+    slug: 'matching-' + 1,
+    weight: {
+      value: 100,
+      additionalValue: 300,
+    },
+    tags: [{ name: 'matching', count: 2 }],
+    userId: 1,
+  },
+  {
+    _id: 'aaaaaaaaaaaaaaaaaaaaaaa' + 2,
+    name: 'matching ' + 2,
+    slug: 'matching-' + 2,
+    weight: {
+      value: 100,
+    },
+    tags: [{ name: 'matching', count: 2 }],
+    userId: 1,
+  },
+];
+
 export const getItemsTagCount = () => {
   const tagNames = items.map((item) => item.tags.map((tag) => tag.name)).flat();
 
