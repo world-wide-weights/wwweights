@@ -10,7 +10,7 @@ import { RelatedItems } from "../../components/RelatedItems/RelatedItems"
 import { Seo } from "../../components/Seo/Seo"
 import { Tab } from "../../components/Tabs/Tab"
 import { Tabs } from "../../components/Tabs/Tabs"
-import { queryRequest } from "../../services/axios/axios"
+import { queryServerRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { renderUnitIntoString } from "../../services/unit/unitRenderer"
 import { getImageUrl } from "../../services/utils/getImageUrl"
@@ -94,8 +94,7 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
                     {/* Weights Image */}
                     {imageUrl && <div className="row-start-1 lg:row-end-3 lg:flex lg:justify-end">
                         {/* No better way yet: https://github.com/vercel/next.js/discussions/21379 Let's take a look at this when we got problems with it */}
-                        <Image src={imageUrl} priority className="sm:hidden rounded-xl" alt={item.name} width={120} height={120} />
-                        <Image src={imageUrl} priority className="hidden sm:block rounded-xl" alt={item.name} width={230} height={230} />
+                        <Image src={imageUrl} priority className="rounded-xl" alt={item.name} width={230} height={230} />
                     </div>}
                 </div>
                 <hr className="mb-4 md:mb-8" />
@@ -121,8 +120,8 @@ export const getStaticProps: GetStaticProps<WeightsSingleProps> = async (context
     // TODO (Zoe-Bot): Correct error handling
     // Fetch item and related items
     const [itemResponse, relatedItemsResponse] = await Promise.all([
-        queryRequest.get<PaginatedResponse<Item>>(`/items/list?slug=${slug}`),
-        queryRequest.get<PaginatedResponse<Item>>(`/items/related?slug=${slug}`),
+        queryServerRequest.get<PaginatedResponse<Item>>(`/items/list?slug=${slug}`),
+        queryServerRequest.get<PaginatedResponse<Item>>(`/items/related?slug=${slug}`),
     ])
 
     // Items and RelatedItems
