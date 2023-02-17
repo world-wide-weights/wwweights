@@ -123,7 +123,7 @@ const Profile: NextPageCustomProps = () => {
             <div className="lg:flex gap-4">
                 <div className="sm:flex lg:flex-col gap-3 2xl:w-1/4 mb-6 lg:mb-0">
                     {/* Meta infos */}
-                    <div className="flex flex-col justify-center md:justify-start sm:w-1/2 md:w-auto items-center bg-white rounded-lg py-6 px-4 mb-3 sm:mb-0">
+                    <div className="flex flex-col justify-center lg:justify-start sm:w-1/2 md:w-auto items-center bg-white rounded-lg py-6 px-4 mb-3 sm:mb-0">
                         <div className="grid items-center justify-center bg-blue-200 h-28 w-28 rounded-full mb-2">
                             <span className="text-6xl text-blue-700 font-bold mt-2">{profile.username[0].toUpperCase()}</span>
                         </div>
