@@ -158,7 +158,7 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
                 ...(values.additionalValue && (values.valueType === "range") ? { additionalValue: Number(values.additionalValue) } : {})
             },
             ...(values.source !== "" ? { source: values.source } : {}), // Only add source when defined
-            tags: [] // TODO: Replace with array tags
+            tags: values.tags
         }
 
         try {
