@@ -2,6 +2,7 @@ import { TypegooseModule } from '@m8a/nestjs-typegoose';
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { EventStoreModule } from '../eventstore/eventstore.module';
+import { InternalCommunicationModule } from '../internal-communication/internal-communication.module';
 import { DeleteSuggestion } from '../models/delete-suggestion.model';
 import { EditSuggestion } from '../models/edit-suggestion.model';
 import { Item } from '../models/item.model';
@@ -13,6 +14,7 @@ import { ItemCronJobHandler } from './cron/items.cron';
 import { EventHandlers } from './events';
 import { ItemsController } from './items.controller';
 import { Sagas } from './sagas';
+import { ImagesService } from './services/images.service';
 import { ItemsService } from './services/item.service';
 @Module({
   imports: [
@@ -26,6 +28,7 @@ import { ItemsService } from './services/item.service';
       Profile,
     ]),
     EventStoreModule,
+    InternalCommunicationModule,
   ],
   controllers: [ItemsController],
   providers: [
@@ -34,6 +37,7 @@ import { ItemsService } from './services/item.service';
     ...Sagas,
     ItemCronJobHandler,
     ItemsService,
+    ImagesService,
   ],
 })
 export class ItemsModule {}
