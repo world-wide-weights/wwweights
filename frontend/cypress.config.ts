@@ -1,4 +1,4 @@
-const codeCoverageTask = require("@bahmutov/cypress-code-coverage/plugin")
+const codeCoverageTask = require("@bahmutov/cypress-code-coverage/plugin") // Does not have ts support
 import { defineConfig } from "cypress"
 import { createServer } from "http"
 import next from "next"

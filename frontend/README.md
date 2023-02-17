@@ -59,6 +59,6 @@ docker run -p 3000:3000 --name wwweights-frontend wwweights-frontend
 - [cypress](https://www.cypress.io/) is used as testing framework.
 - [formik](https://formik.org/) is used to handle forms.
 - [yup](https://www.npmjs.com/package/yup) is used to handle form validation.
-
+- [axios](https://axios-http.com/) is used to fetch data
 #### CSS
 - [TailwindCSS](https://tailwindcss.com/) is used as CSS Utility Framework
