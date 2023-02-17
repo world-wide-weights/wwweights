@@ -289,7 +289,7 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
 
                                     {/* Image */}
                                     <Label name="imageFile" labelText={"Image"} />
-                                    <ImageUpload name="imageFile" />
+                                    <ImageUpload name="imageFile" filePath={item?.image} />
 
                                     {/* Source */}
                                     <TextInput name="source" labelText="Source of weight" placeholder="Link to source" />
