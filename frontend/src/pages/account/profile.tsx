@@ -196,11 +196,11 @@ const Profile: NextPageCustomProps = () => {
         setSelectedContribution(null)
     }
 
-    if (error)
-        return <Custom500 />
-
     if (isLoadingProfile)
         return <SkeletonLoadingProfile />
+
+    if (error)
+        return <Custom500 />
 
     return <>
         <Seo
