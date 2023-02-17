@@ -48,17 +48,13 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
 
     if (itemEditedEventDto.editValues.image && oldItem?.image) {
       const imgBackendCallStartTime = performance.now();
-      await Promise.all([
-        this.imageService.promoteImageInImageBackend(
-          itemEditedEventDto.editValues.image,
-        ),
-        this.imageService.demoteImageInImageBackend(oldItem.image),
-      ]);
-      this.logger.debug(
-        `Finished Image backend api calls in ${
-          performance.now() - imgBackendCallStartTime
-        }`,
-      );
+      // Only remove as promotion of new image was done at suggestion creation
+      await this.imageService.demoteImageInImageBackend(oldItem.image),
+        this.logger.debug(
+          `Finished Image backend api call in ${
+            performance.now() - imgBackendCallStartTime
+          }`,
+        );
     }
 
     this.logger.debug(
