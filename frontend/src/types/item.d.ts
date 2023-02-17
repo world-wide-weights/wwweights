@@ -1,3 +1,5 @@
+import { Tag } from "./tag"
+
 export type PaginatedResponse<T> = {
     total: number,
     page: number,
@@ -47,5 +49,8 @@ export type UpdateItemDto = {
     weight?: Omit<Weight, "value"> & { value?: number }
     source?: string
     image?: string
-    tags?: string[]
+    tags?: {
+        push?: string[]
+        pull?: string[]
+    }
 }
