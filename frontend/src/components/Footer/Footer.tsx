@@ -8,8 +8,8 @@ import github from "../../assets/img/logos_icons/github.svg"
 import twitter from "../../assets/img/logos_icons/twitter.svg"
 import { queryClientRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
-import { PaginatedResponse } from "../../types/item"
 import { NavLink } from "../../types/nav"
+import { PaginatedResponse } from "../../types/paginated"
 import { Tag } from "../../types/tag"
 import { AuthContext } from "../Auth/Auth"
 import { Button } from "../Button/Button"
@@ -88,7 +88,7 @@ export const Footer: React.FC = () => {
 							<Image src={github} alt="Image of Github Logo" width={25} />
 						</a>
 						<a href="https://twitter.com/wwweights" target="_blank" title="Link to our Twitter!" rel="noreferrer noopener">
-							<Image src={twitter} alt="Image of Twitter logo" className="text-gray-500" width={25} />
+							<Image src={twitter} alt="Image of Twitter logo" width={25} />
 						</a>
 					</div>
 				</div>

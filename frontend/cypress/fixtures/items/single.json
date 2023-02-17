@@ -1,17 +1,20 @@
 {
     "total": 1,
     "page": 1,
-    "limit": 60,
+    "limit": 1,
     "data": [
         {
-            "name": "ZTE Coral200 Sollar",
-            "slug": "zte-coral200-sollar",
+            "name": "Apple",
+            "slug": "apple",
             "weight": {
-                "value": 85
+                "value": 50,
+                "additionalValue": 100,
+                "isCa": true
             },
             "tags": [],
             "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-coral200-sollar.jpg",
-            "user": "mc",
+            "userId": 1,
+            "source": "https://example.com",
             "createdAt": 1674596011073
         }
     ]

@@ -7,7 +7,7 @@
         },
         "tags": [],
         "image": "https://fdn2.gsmarena.com/vv/bigpic/allview-vivahome.jpg",
-        "user": "mc",
+        "userId": 1,
         "createdAt": 1674594267645
     },
     "lightest": {
@@ -18,7 +18,7 @@
         },
         "tags": [],
         "image": "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-view.jpg",
-        "user": "mc",
+        "userId": 1,
         "createdAt": 1674595331892
     },
     "averageWeight": 156.55436785845927
