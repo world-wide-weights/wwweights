@@ -46,7 +46,11 @@ export type CreateItemDto = {
 
 export type UpdateItemDto = {
     name?: string
-    weight?: Omit<Weight, "value"> & { value?: number }
+    weight?: {
+        value?: number,
+        additionalValue?: number | null
+        isCa?: boolean
+    }
     source?: string
     image?: string
     tags?: {

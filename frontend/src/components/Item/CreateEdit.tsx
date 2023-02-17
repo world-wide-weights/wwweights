@@ -108,11 +108,14 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
         if (!isEditMode)
             return
 
+        // Prepare additionalValue
+        const additionalValue = values.valueType === "exact" ? null : Number(values.additionalValue)
+
         // Build weights object
         const weight = {
             ...(values.weight !== item?.weight.value ? { value: Number(values.weight) } : {}),
             ...((values.isCa[0] !== undefined) !== item?.weight.isCa ? { isCa: values.isCa[0] ? true : false } : {}),
-            ...(values.additionalValue !== item?.weight.additionalValue && (values.valueType === "range") ? { additionalValue: Number(values.additionalValue) } : {})
+            ...((values.additionalValue !== item?.weight.additionalValue) || values.valueType === "exact" ? { additionalValue } : {})
         }
 
         // Calculates which tags to remove and which to add
