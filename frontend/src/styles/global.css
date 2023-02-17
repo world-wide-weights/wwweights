@@ -4,6 +4,7 @@
 
 :root {
     --primary-color: #0967D2;
+    --font-metropolis: "metropolis";
 }
 
 :focus-visible {
@@ -23,5 +24,26 @@
 }
 
 body {
-    @apply tracking-wide	
+    @apply tracking-wide
+}
+
+@font-face {
+    font-family: metropolis;
+    font-style: normal;
+    font-weight: 400;
+    src: url('/fonts/Metropolis-Regular.woff2');
+}
+
+@font-face {
+    font-family: metropolis;
+    font-style: normal;
+    font-weight: 500;
+    src: url('/fonts/Metropolis-Medium.woff2');
+}
+
+@font-face {
+    font-family: metropolis;
+    font-style: normal;
+    font-weight: 700;
+    src: url('/fonts/Metropolis-Bold.woff2');
 }
