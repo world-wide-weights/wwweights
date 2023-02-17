@@ -10,10 +10,11 @@ import { RelatedItems } from "../../components/RelatedItems/RelatedItems"
 import { Seo } from "../../components/Seo/Seo"
 import { Tab } from "../../components/Tabs/Tab"
 import { Tabs } from "../../components/Tabs/Tabs"
-import { queryRequest } from "../../services/axios/axios"
+import { queryServerRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
-import { calculateMedianWeight } from "../../services/utils/weight"
 import { renderUnitIntoString } from "../../services/unit/unitRenderer"
+import { getImageUrl } from "../../services/utils/getImageUrl"
+import { calculateMedianWeight } from "../../services/utils/weight"
 import { Item, PaginatedResponse } from "../../types/item"
 import Custom404 from "../404"
 
@@ -33,7 +34,7 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
         title: "Overview",
         slug: "",
         content: <>
-            <RelatedItems item={item} relatedItems={relatedItems} />
+            {relatedItems.length !== 0 && <RelatedItems item={item} relatedItems={relatedItems} />}
             <CompareContainer weight={compareWeight} itemName={item.name} />
         </>
     }, {
@@ -46,6 +47,9 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
     // Strings + Unit Generator
     const weightString = renderUnitIntoString(item.weight)
     const sourceName = item.source ? new URL(item.source).hostname.replace("www.", "") : null
+
+    // Convert image url 
+    const imageUrl = getImageUrl(item.image)
 
     // Throw error when tab does not exist.
     if (currentTabIndex === -1 && currentTab)
@@ -88,10 +92,9 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
                     </div>
 
                     {/* Weights Image */}
-                    {item.image && <div className="row-start-1 lg:row-end-3 lg:flex lg:justify-end">
+                    {imageUrl && <div className="row-start-1 lg:row-end-3 lg:flex lg:justify-end">
                         {/* No better way yet: https://github.com/vercel/next.js/discussions/21379 Let's take a look at this when we got problems with it */}
-                        <Image src={item.image} priority className="sm:hidden rounded-xl" alt={item.name} width={120} height={120} />
-                        <Image src={item.image} priority className="hidden sm:block rounded-xl" alt={item.name} width={230} height={230} />
+                        <Image src={imageUrl} priority className="rounded-xl" alt={item.name} width={230} height={230} />
                     </div>}
                 </div>
                 <hr className="mb-4 md:mb-8" />
@@ -114,10 +117,11 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
 export const getStaticProps: GetStaticProps<WeightsSingleProps> = async (context) => {
     const slug = context.params ? context.params.slug : "1"
 
+    // TODO (Zoe-Bot): Correct error handling
     // Fetch item and related items
     const [itemResponse, relatedItemsResponse] = await Promise.all([
-        queryRequest.get<PaginatedResponse<Item>>(`/items/list?slug=${slug}`),
-        queryRequest.get<PaginatedResponse<Item>>(`/items/related?slug=${slug}`),
+        queryServerRequest.get<PaginatedResponse<Item>>(`/items/list?slug=${slug}`),
+        queryServerRequest.get<PaginatedResponse<Item>>(`/items/related?slug=${slug}`),
     ])
 
     // Items and RelatedItems

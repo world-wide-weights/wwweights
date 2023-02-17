@@ -33,7 +33,7 @@ const Contact: NextPageCustomProps = () => {
     </>
 }
 
-Contact.getLayout = (page) => {
+Contact.layout = (page) => {
     return <PageLayout title="Contact">
         {page}
     </PageLayout>

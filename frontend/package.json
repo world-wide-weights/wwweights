@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently npm:dev-next npm:mock-server",
-    "dev-next": "next dev",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -20,7 +19,6 @@
     "formik": "^2.2.9",
     "material-symbols": "^0.4.0",
     "next": "^13.0.3",
-    "next-auth": "^4.18.7",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "yup": "^0.32.11"

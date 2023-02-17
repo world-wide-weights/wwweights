@@ -90,12 +90,4 @@ export class InsertItemDto {
     example: 'https://example.com',
   })
   source?: string;
-
-  @IsString()
-  @ApiProperty({
-    type: String,
-    description: 'User ID',
-    example: '5f9e9b9e7c9d440000a1c1c7',
-  })
-  user: string;
 }

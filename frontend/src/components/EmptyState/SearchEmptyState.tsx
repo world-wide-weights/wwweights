@@ -11,12 +11,11 @@ type SearchEmptyStateProps = {
  * Empty State of Discover Page when no search results.
  */
 export const SearchEmptyState: React.FC<SearchEmptyStateProps> = ({ query }) => {
-    return <BaseEmptyState datacy="search-empty-state" headline={`No results for "${query}"`}>
+    return <BaseEmptyState datacy="search-empty-state" icon="weight" headline={`No results for "${query}"`}>
         <p className="text-center">Do you know what &quot;{query}&quot; weighs? Contribute!</p>
         <p className="text-center mb-5">Or try search again.</p>
 
-        {/* TODO (Zoe-Bot): Adjust link when contribute implemented. */}
-        <Button to="/contribute" className="mb-3">Contribute</Button>
+        <Button to={routes.contribute.create} className="mb-3">Contribute</Button>
         <Button to={routes.weights.list({ query: "" })} kind="tertiary">Try again</Button>
     </BaseEmptyState>
 }

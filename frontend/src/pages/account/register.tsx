@@ -1,15 +1,12 @@
-import axios from "axios"
 import { Form, Formik } from "formik"
-import { User } from "next-auth"
-import { signIn, SignInResponse } from "next-auth/react"
 import { useRouter } from "next/router"
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import * as yup from "yup"
 import { Button } from "../../components/Button/Button"
 import { TextInput } from "../../components/Form/TextInput/TextInput"
 import { AccountLayout } from "../../components/Layout/AccountLayout"
 import { Seo } from "../../components/Seo/Seo"
-import { authRequest } from "../../services/axios/axios"
+import { register } from "../../services/auth/register"
 import { routes } from "../../services/routes/routes"
 import { NextPageCustomProps } from "../_app"
 
@@ -24,12 +21,11 @@ type RegisterDto = {
  */
 const Register: NextPageCustomProps = () => {
     const router = useRouter()
-    // Redirect to page where you clicked login
-    const callbackUrl = useMemo(() => typeof router.query.callbackUrl == "string" ? router.query.callbackUrl : router.query.callbackUrl?.[0] ?? null, [router])
 
     // Local State
     const [isPasswordEyeOpen, setIsPasswordEyeOpen] = useState<boolean>(false)
     const [error, setError] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
 
     // Formik Form Initial Values
     const initialFormValues: RegisterDto = {
@@ -50,36 +46,40 @@ const Register: NextPageCustomProps = () => {
      * @param values input from form
      */
     const onFormSubmit = async ({ username, email, password }: RegisterDto) => {
+        setIsLoading(true)
+
         // Register in our backend
-        try {
-            await authRequest.post<User>("/register", {
-                username,
-                email,
-                password
-            })
-        } catch (error) {
-            // If something went wrong when register backend set Error
-            axios.isAxiosError(error) && error.response ? setError(error.response.data) : setError("Netzwerk-Zeitüberschreitung")
+        const registerResponse = await register({
+            username,
+            email,
+            password
+        })
+
+        if (registerResponse === null) {
+            setIsLoading(false)
+            setError("Something went wrong. Try again or come later.")
             return
         }
 
-        // When register backend was ok sign in with next auth
-        try {
-            const response = await signIn("credentials", {
-                password,
-                email,
-                redirect: false
-            }) as SignInResponse
-
-            // When everything was ok in next auth sign in go to url we was before register or home
-            if (response.ok) {
-                router.push(callbackUrl ?? routes.home)
-            } else if (response.error) {
-                setError(response.error)
+        if ("statusCode" in registerResponse) {
+            if (registerResponse.message.includes("Username")) {
+                setError("Username already exists.")
+                // TODO: Add logic to show username is already taken
             }
-        } catch (error) {
-            setError("Something went wrong. Try again or come later.")
+            else if (registerResponse.message.includes("E-Mail")) {
+                setError("E-Mail already exists.")
+                // TODO: Add logic to show email is already taken
+            } else {
+                setError(`${registerResponse.statusCode}: ${registerResponse.message}`)
+            }
+
+            setIsLoading(false)
+            return
         }
+
+        // Register successful -> redirect to callbackUrl
+        const callbackUrl = router.asPath.split("?callbackUrl=")[1] ?? routes.home
+        router.push(callbackUrl)
     }
 
     return <>
@@ -91,11 +91,12 @@ const Register: NextPageCustomProps = () => {
         <Formik initialValues={initialFormValues} validationSchema={validationSchema} onSubmit={onFormSubmit}>
             {({ dirty, isValid }) => (
                 <Form className="mb-5 lg:mb-10">
-                    <TextInput name="email" labelText="E-Mail" placeholder="E-Mail" />
+                    {/** Yes, it's username for email. Read: https://web.dev/sign-in-form-best-practices/#autofill */}
+                    <TextInput autoComplete="username" type="email" name="email" labelText="E-Mail" placeholder="E-Mail" />
                     <TextInput name="username" labelText="Username" placeholder="Username" />
-                    <TextInput type={isPasswordEyeOpen ? "text" : "password"} name="password" labelText="Password" placeholder="Password" icon={isPasswordEyeOpen ? "visibility" : "visibility_off"} iconOnClick={() => setIsPasswordEyeOpen(!isPasswordEyeOpen)} />
+                    <TextInput autoComplete="new-password" type={isPasswordEyeOpen ? "text" : "password"} name="password" labelText="Password" placeholder="Password" icon={isPasswordEyeOpen ? "visibility" : "visibility_off"} iconOnClick={() => setIsPasswordEyeOpen(!isPasswordEyeOpen)} />
 
-                    <Button datacy="register-button" type="submit" disabled={!(dirty && isValid)} className="md:mt-8">Register</Button>
+                    <Button loading={isLoading} datacy="register-button" type="submit" icon="login" disabled={!(dirty && isValid)} className="md:mt-8">Register</Button>
                 </Form>
             )}
         </Formik>
@@ -112,8 +113,13 @@ const Register: NextPageCustomProps = () => {
 }
 
 // Sets custom account layout
-Register.getLayout = (page: React.ReactElement) => {
-    return <AccountLayout page={page} siteTitle="Register" headline="Create your account" description="Start for free." descriptionImage="Register to share your stuff." />
+Register.layout = (page: React.ReactElement) => {
+    return <AccountLayout
+        page={page}
+        headline="Create your account"
+        description="Start for free."
+        sloganHeadline={<><span className="text-blue-300">Weigh</span> something and wanna share it with people?</>}
+        sloganDescription="Register to share your stuff." />
 }
 
 // Sets guest route (user need to be logged out)

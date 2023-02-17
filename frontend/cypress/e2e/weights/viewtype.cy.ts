@@ -5,7 +5,6 @@ describe("View Type Grid/List /weights", () => {
         cy.mockDiscoverPage()
 
         cy.visitLocalPage(routes.weights.list())
-        cy.wait("@mockGetRelatedTags")
     })
 
     it("should change view type to list view when click on list view", () => {

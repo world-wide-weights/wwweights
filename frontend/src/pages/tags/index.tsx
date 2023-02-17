@@ -4,7 +4,7 @@ import { Headline } from "../../components/Headline/Headline"
 import { Pagination } from "../../components/Pagination/Pagination"
 import { Seo } from "../../components/Seo/Seo"
 import { Tooltip } from "../../components/Tooltip/Tooltip"
-import { queryRequest } from "../../services/axios/axios"
+import { queryServerRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { generatePageString } from "../../services/seo/pageString"
 import { PaginatedResponse } from "../../types/item"
@@ -36,9 +36,9 @@ export default function TagsList({ tags, currentPage, totalItems, limit }: Infer
             <Headline level={3}>All tags</Headline>
 
             {/* tags */}
-            <div className="flex flex-wrap pb-3">
-                {tags.map((tag) => <Tooltip key={tag.name} content={`Tags is used ${tag.count} ${tag.count === 1 ? "once" : "times"}.`}>
-                    <Chip to={routes.tags.single(tag.name)}>{tag.name}</Chip>
+            <div datacy="tags-list-container" className="flex flex-wrap pb-3">
+                {tags.map((tag) => <Tooltip key={tag.name} content={`${tag.count === 1 ? "Tag is used once" : `Tag is used ${tag.count} times`}.`}>
+                    <Chip to={routes.tags.single(tag.name)}>{tag.name} ({tag.count})</Chip>
                 </Tooltip>)}
             </div>
 
@@ -61,7 +61,7 @@ export const getServerSideProps: GetServerSideProps<TagsListProps> = async (cont
     }
 
     // Fetch tags
-    const responseTags = await queryRequest.get<PaginatedResponse<Tag>>(`/tags/list?page=${currentPage}&limit=${limit}`)
+    const responseTags = await queryServerRequest.get<PaginatedResponse<Tag>>(`/tags/list?page=${currentPage}&limit=${limit}`)
     const tags = responseTags.data.data
 
     return {

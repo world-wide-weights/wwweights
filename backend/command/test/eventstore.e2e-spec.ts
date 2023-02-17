@@ -1,11 +1,11 @@
 import { INestApplication } from '@nestjs/common';
-import { Test, TestingModule } from '@nestjs/testing';
-import { EventStoreModule } from '../src/eventstore/eventstore.module';
-import { EventStore } from '../src/eventstore/eventstore';
-import { Client } from './mocks/eventstore-connection';
 import { ConfigModule } from '@nestjs/config';
+import { Test, TestingModule } from '@nestjs/testing';
+import { setTimeout } from 'timers/promises';
 import { ALLOWED_EVENT_ENTITIES } from '../src/eventstore/enums/allowedEntities.enum';
-import { timeout } from './helpers/timeout';
+import { EventStore } from '../src/eventstore/eventstore';
+import { EventStoreModule } from '../src/eventstore/eventstore.module';
+import { Client } from './mocks/eventstore-connection';
 
 describe('EventstoreModule', () => {
   // Basically disable the constructor to skip Eventstoredb connection
@@ -40,7 +40,7 @@ describe('EventstoreModule', () => {
       //ACT
       await eventStore['init']();
       // delay as init takes a little bit of time
-      await timeout(100)
+      await setTimeout(100);
       // ASSERT
       expect(eventStore.isReady).toEqual(true);
     });
@@ -84,10 +84,10 @@ describe('EventstoreModule', () => {
       ];
       await replaceApp();
       //ACT
-      await eventStore['init']()
+      await eventStore['init']();
       // ASSERT
       expect(eventStore.isReady).toEqual(true);
-      // Should subscribe to all from the end => all previous are expected already be applied to read db 
+      // Should subscribe to all from the end => all previous are expected already be applied to read db
       expect(client.params[0].fromPosition).toEqual('end');
     });
     it('Should default "SKIP_READ_DB_REBUILD" to false', async () => {
@@ -107,7 +107,7 @@ describe('EventstoreModule', () => {
       ];
       await replaceApp();
       // ACT
-      await eventStore['init']()
+      await eventStore['init']();
       // ASSERT
       expect(eventStore.isReady).toEqual(false);
       // Should subscribe to all from the beginning => needs all events for replay
