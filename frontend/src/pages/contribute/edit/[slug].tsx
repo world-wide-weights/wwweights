@@ -59,10 +59,7 @@ const EditItem = () => {
     }, [getSession, item, isReady, query.slug])
 
     if (isLoadingEdit)
-        return <main className="container">
-            {/* TODO: Implement skeleton */}
-            <div>Loading...</div>
-        </main>
+        return <></>
 
     if (!isAuthenticated || !item) {
         return <Custom404 />
