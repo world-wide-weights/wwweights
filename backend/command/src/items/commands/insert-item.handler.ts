@@ -4,7 +4,7 @@ import {
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
-import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { ALLOWED_EVENT_ENTITIES } from '../../eventstore/enums/allowedEntities.enum';
 import { EventStore } from '../../eventstore/eventstore';
 import { Item } from '../../models/item.model';
@@ -16,10 +16,7 @@ import { InsertItemCommand } from './insert-item.command';
 @CommandHandler(InsertItemCommand)
 export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
   private readonly logger = new Logger(InsertItemHandler.name);
-  constructor(
-    private readonly publisher: EventPublisher,
-    private readonly eventStore: EventStore,
-  ) {}
+  constructor(private readonly eventStore: EventStore) {}
 
   // No returns, just Exceptions in CQRS
   async execute({ insertItemDto, userId }: InsertItemCommand) {

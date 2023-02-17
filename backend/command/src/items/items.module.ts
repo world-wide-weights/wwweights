@@ -2,6 +2,7 @@ import { TypegooseModule } from '@m8a/nestjs-typegoose';
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { EventStoreModule } from '../eventstore/eventstore.module';
+import { InternalCommunicationModule } from '../internal-communication/internal-communication.module';
 import { DeleteSuggestion } from '../models/delete-suggestion.model';
 import { EditSuggestion } from '../models/edit-suggestion.model';
 import { Item } from '../models/item.model';
@@ -26,6 +27,7 @@ import { ItemsService } from './services/item.service';
       Profile,
     ]),
     EventStoreModule,
+    InternalCommunicationModule,
   ],
   controllers: [ItemsController],
   providers: [
