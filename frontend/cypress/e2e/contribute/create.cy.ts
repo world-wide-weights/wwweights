@@ -36,7 +36,7 @@ describe("Create Item", () => {
             cy.dataCy("unit-dropdown-option-kg").click()
 
             // Set is ca to true
-            cy.dataCy("isCa-option-true").click()
+            cy.dataCy("isCa-option-isCa").click()
 
             // Open details
             cy.dataCy("create-open-details-button").click()
