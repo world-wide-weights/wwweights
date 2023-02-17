@@ -85,7 +85,7 @@ Cypress.Commands.add("mockDiscoverPage", (itemCount?: number) => {
     cy.mockGetRelatedTags()
 })
 
-Cypress.Commands.add("mockSingleWeight", () => {
+Cypress.Commands.add("mockSingleWeightPage", () => {
     cy.task("clearNock")
 
     // Mock items single

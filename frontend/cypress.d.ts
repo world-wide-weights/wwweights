@@ -62,7 +62,7 @@ declare global {
       /**
        * Mock requests for single weight page.
        */
-      mockSingleWeight(): Chainable<void>
+      mockSingleWeightPage(): Chainable<void>
       /**
        * Mock items list
        * @param itemCount count of items getting back with body
