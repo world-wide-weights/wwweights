@@ -13,7 +13,8 @@ import { queryServerRequest } from "../services/axios/axios"
 import { routes } from "../services/routes/routes"
 import { getStructuredDataWebsite } from "../services/seo/structuredData/website"
 import { getImageUrl } from "../services/utils/getImageUrl"
-import { Item, PaginatedResponse } from "../types/item"
+import { Item } from "../types/item"
+import { PaginatedResponse } from "../types/paginated"
 
 type HomeProps = {
 	items: Item[]

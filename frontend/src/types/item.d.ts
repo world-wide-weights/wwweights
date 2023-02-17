@@ -1,12 +1,5 @@
 import { Tag } from "./tag"
 
-export type PaginatedResponse<T> = {
-    total: number,
-    page: number,
-    limit: number,
-    data: T[]
-}
-
 export type Item = {
     name: string
     slug: string
