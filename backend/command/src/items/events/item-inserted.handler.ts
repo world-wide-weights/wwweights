@@ -69,7 +69,9 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       this.logger.log(`Item inserted:  ${insertedItem.slug}`);
     } catch (error) {
       this.logger.error(`Insert Item: ${error}`);
-      throw new InternalServerErrorException("Couldn't insert item");
+      throw new InternalServerErrorException(
+        `Couldn't insert item ${item.slug}`,
+      );
     }
   }
 

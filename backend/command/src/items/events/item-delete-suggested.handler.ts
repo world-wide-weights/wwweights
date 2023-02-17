@@ -36,7 +36,9 @@ export class ItemDeleteSuggestedHandler
       this.logger.error(
         `Could not insert deletesuggestion ${deleteSuggestion.uuid} due to an error ${error}`,
       );
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(
+        `DeleteSuggestion (${deleteSuggestion.uuid}) could not be addded for item (${deleteSuggestion.itemSlug})`,
+      );
     }
   }
 }

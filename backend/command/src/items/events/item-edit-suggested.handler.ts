@@ -39,18 +39,20 @@ export class ItemEditSuggestedHandler
   }
 
   // Db calls: 1 save()
-  async insertSuggestion(suggestion: EditSuggestion) {
+  async insertSuggestion(editSuggestion: EditSuggestion) {
     try {
-      const insertedSuggestion = new this.suggestionModel(suggestion);
+      const insertedSuggestion = new this.suggestionModel(editSuggestion);
       await insertedSuggestion.save();
       this.logger.log(
         `Edit suggestion inserted for item ${insertedSuggestion.itemSlug}`,
       );
     } catch (error) {
       this.logger.error(
-        `Insert suggestion for item ${suggestion.itemSlug}: ${error}`,
+        `Insert suggestion for item ${editSuggestion.itemSlug}: ${error}`,
       );
-      throw new InternalServerErrorException("Couldn't insert suggestion");
+      throw new InternalServerErrorException(
+        `EditSuggestion (${editSuggestion.uuid}) could not be addded for item (${editSuggestion.itemSlug})`,
+      );
     }
   }
 }

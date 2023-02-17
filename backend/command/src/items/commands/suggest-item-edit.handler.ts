@@ -1,8 +1,4 @@
-import {
-  InternalServerErrorException,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { Logger, NotFoundException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { randomUUID } from 'crypto';
 import { ALLOWED_EVENT_ENTITIES } from '../../eventstore/enums/allowedEntities.enum';
@@ -40,25 +36,6 @@ export class SuggestItemEditHandler
       ))
     ) {
       throw new NotFoundException('No item with this slug exists');
-    }
-
-    let iterations = 0;
-    while (true) {
-      // This should NEVER occur! However this prevents an infinite loop
-      if (iterations === 9) {
-        throw new InternalServerErrorException('Something went wrong');
-      }
-      // If eventslug-uuid combination does not exist => continue
-      // This ensures uniqueness
-      if (
-        !(await this.eventStore.doesStreamExist(
-          `${ALLOWED_EVENT_ENTITIES.EDIT_SUGGESTION}-${newSuggestion.itemSlug}-${newSuggestion.uuid}`,
-        ))
-      ) {
-        break;
-      }
-      newSuggestion.uuid = randomUUID();
-      iterations++;
     }
 
     const streamName = `${ALLOWED_EVENT_ENTITIES.EDIT_SUGGESTION}-${newSuggestion.itemSlug}-${newSuggestion.uuid}`;

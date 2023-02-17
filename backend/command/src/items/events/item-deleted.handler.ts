@@ -64,7 +64,7 @@ export class ItemDeletedHandler implements IEventHandler<ItemDeletedEvent> {
       this.logger.error(
         `Could not delete item ${slug} due to an error ${error}`,
       );
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(`Could not delete item ${slug}`);
     }
   }
 

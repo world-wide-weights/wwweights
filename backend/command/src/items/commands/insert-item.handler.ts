@@ -34,16 +34,14 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
         createdAt: Date.now(),
       });
 
-      if (
-        await this.eventStore.doesStreamExist(
-          `${ALLOWED_EVENT_ENTITIES.ITEM}-${newItem.slug}`,
-        )
-      ) {
+      const streamName = `${ALLOWED_EVENT_ENTITIES.ITEM}-${newItem.slug}`;
+
+      if (await this.eventStore.doesStreamExist(streamName)) {
         throw new ConflictException('Slug already taken');
       }
 
       await this.eventStore.addEvent(
-        `${ALLOWED_EVENT_ENTITIES.ITEM}-${newItem.slug}`,
+        streamName,
         ItemInsertedEvent.name,
         newItem,
       );
@@ -54,7 +52,11 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
         throw error;
       }
       this.logger.error(error);
-      throw new InternalServerErrorException('Item could not be inserted');
+      throw new InternalServerErrorException(
+        `Item could not be inserted (target stream name: ${
+          ALLOWED_EVENT_ENTITIES.ITEM
+        }-${getSlug(insertItemDto.name)})`,
+      );
     }
   }
 }
