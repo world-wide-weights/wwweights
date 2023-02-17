@@ -111,7 +111,7 @@ describe('ImagesService', () => {
       ).rejects.toThrowError(new ImATeapotException());
     });
 
-    it('Should convert othr exceptions to InternalServerErrorException ', async () => {
+    it('Should convert othr exceptions to InternalServerErrorException', async () => {
       // ARRANGE
       jest
         .spyOn(internalCommunicationService, 'notifyImgAboutItemCreation')
