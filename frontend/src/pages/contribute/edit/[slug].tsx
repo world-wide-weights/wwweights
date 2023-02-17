@@ -58,7 +58,7 @@ const EditItem = () => {
             }
         }
         fetchItem()
-    }, [getSession, item, isReady, query.slug])
+    }, [getSession, isReady, query.slug])
 
     if (isLoadingEdit)
         return <SkeletonLoadingEdit />
