@@ -115,7 +115,7 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
                 throw Error("Failed to get session.")
 
             /** Image Upload */
-            if (values.imageFile && createItem) {
+            if (values.imageFile) {
                 const imageUploadResponse = await uploadImageApi(values.imageFile, session)
 
                 // Append image path to item create
