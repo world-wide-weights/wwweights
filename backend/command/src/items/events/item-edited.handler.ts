@@ -9,6 +9,7 @@ import {
 } from '../../models/edit-suggestion.model';
 import { Item } from '../../models/item.model';
 import { Tag } from '../../models/tag.model';
+import { ImagesService } from '../services/images.service';
 import { ItemEditedEvent } from './item-edited.event';
 
 @EventsHandler(ItemEditedEvent)
@@ -19,13 +20,17 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
     private readonly itemModel: ReturnModelType<typeof Item>,
     @InjectModel(Tag)
     private readonly tagModel: ReturnModelType<typeof Tag>,
+    private readonly imageService: ImagesService,
   ) {}
   async handle({ itemEditedEventDto }: ItemEditedEvent) {
     const updateItemStartTime = performance.now();
 
     const { itemSlug, editValues } = itemEditedEventDto;
 
-    await this.updateItem(itemSlug, editValues);
+    const { image: previousImage } = await this.updateItem(
+      itemSlug,
+      editValues,
+    );
 
     this.logger.debug(
       `${ItemEditedHandler.name} Item update took: ${
@@ -51,6 +56,21 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
       } ms`,
     );
 
+    if (itemEditedEventDto.editValues.image) {
+      const imgBackendCallStartTime = performance.now();
+      await Promise.all([
+        this.imageService.promoteImageInImageBackend(
+          itemEditedEventDto.editValues.image,
+        ),
+        this.imageService.demoteImageInImageBackend(previousImage),
+      ]);
+      this.logger.debug(
+        `Finished Image backend api calls in ${
+          performance.now() - imgBackendCallStartTime
+        }`,
+      );
+    }
+
     this.logger.debug(
       `Total duration of ${ItemEditedHandler.name} was ${
         performance.now() - updateItemStartTime
@@ -73,9 +93,10 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
         weightSet[`weight.${key}`] = weight[key];
       });
     }
+    let oldItem;
 
     try {
-      await this.itemModel.findOneAndUpdate(
+      oldItem = await this.itemModel.findOneAndUpdate(
         { slug },
         {
           ...itemValues,
@@ -99,6 +120,7 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
         `Item ${slug} could not be updated`,
       );
     }
+    return oldItem;
   }
 
   // Db calls: 1 bulkwrite()

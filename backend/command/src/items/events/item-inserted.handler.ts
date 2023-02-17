@@ -1,16 +1,11 @@
 import { InjectModel } from '@m8a/nestjs-typegoose';
-import {
-  HttpException,
-  InternalServerErrorException,
-  Logger,
-} from '@nestjs/common';
+import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
-import { InternalCommunicationService } from '../../internal-communication/internal-communication.service';
 import { Item } from '../../models/item.model';
 import { Profile } from '../../models/profile.model';
 import { Tag } from '../../models/tag.model';
-import { IsUrl } from '../../shared/functions/is-url';
+import { ImagesService } from '../services/images.service';
 import { ItemInsertedEvent } from './item-inserted.event';
 
 @EventsHandler(ItemInsertedEvent)
@@ -23,7 +18,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
     private readonly tagModel: ReturnModelType<typeof Tag>,
     @InjectModel(Profile)
     private readonly profileModel: ReturnModelType<typeof Profile>,
-    private readonly internalCommunicationService: InternalCommunicationService,
+    private readonly imageService: ImagesService,
   ) {}
   async handle({ item }: ItemInsertedEvent) {
     /*
@@ -61,7 +56,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       this.increamentProfileCounts(item);
 
       // Further updates and recovery from inconsistency is handled via cronjobs rather than for every projector run
-      await this.promoteImageInImageBackend(item.image);
+      await this.imageService.promoteImageInImageBackend(item.image);
     } catch (error) {
       this.logger.error(`ItemInsertedHandler TopLevel caught error: ${error}`);
     }
@@ -146,29 +141,6 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       );
     } catch (error) {
       this.logger.error(`Incrementing Profile Counts Failed: ${error}`);
-    }
-  }
-
-  private async promoteImageInImageBackend(imageValue: string) {
-    // Is image from our image backend?
-    if (IsUrl(imageValue)) {
-      return;
-    }
-    // Notify that image is now in use => It should not become a victim of cleanup procedure
-    try {
-      await this.internalCommunicationService.notifyImgAboutItemCreation(
-        imageValue,
-      );
-    } catch (error) {
-      this.logger.error(
-        `Could not notify image backend due to an error ${error}`,
-      );
-      if (error instanceof HttpException) {
-        throw error;
-      }
-      throw new InternalServerErrorException(
-        'Image backend could not be notified',
-      );
     }
   }
 }
