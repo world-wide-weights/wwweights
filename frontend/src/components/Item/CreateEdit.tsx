@@ -140,7 +140,7 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
 
             /** Redirect to discover */
             if (response?.status === 200)
-                await router.push(routes.weights.list())
+                await router.push(routes.account.profile())
         } catch (error) {
             axios.isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Our servers are feeling a bit heavy today. Please try again in a few minutes.")
             return
