@@ -3,7 +3,7 @@ import { prepareCreateItem } from "./create"
 
 describe("Prepare create data", () => {
     describe("Required fields", () => {
-        const data: CreateEditItemForm = {
+        const createItemcreateItemData: CreateEditItemForm = {
             name: "test",
             weight: 200,
             unit: "g",
@@ -14,7 +14,7 @@ describe("Prepare create data", () => {
         }
 
         it("should return correct data when fill required", () => {
-            const createItem = prepareCreateItem(data)
+            const createItem = prepareCreateItem(createItemcreateItemData)
             expect(createItem).deep.equal({
                 name: "test",
                 weight: {
@@ -26,7 +26,7 @@ describe("Prepare create data", () => {
 
     describe("Optional fields", () => {
         it("should omit additionalValue when valueType is exact", () => {
-            const data: CreateEditItemForm = {
+            const createItemData: CreateEditItemForm = {
                 name: "test",
                 weight: 200,
                 unit: "g",
@@ -37,7 +37,7 @@ describe("Prepare create data", () => {
                 tags: []
             }
 
-            const createItem = prepareCreateItem(data)
+            const createItem = prepareCreateItem(createItemData)
             expect(createItem).deep.equal({
                 name: "test",
                 weight: {
@@ -47,7 +47,7 @@ describe("Prepare create data", () => {
         })
 
         it("should add additionalValue when valueType is range", () => {
-            const data: CreateEditItemForm = {
+            const createItemData: CreateEditItemForm = {
                 name: "test",
                 weight: 200,
                 unit: "g",
@@ -58,7 +58,7 @@ describe("Prepare create data", () => {
                 tags: []
             }
 
-            const createItem = prepareCreateItem(data)
+            const createItem = prepareCreateItem(createItemData)
             expect(createItem).deep.equal({
                 name: "test",
                 weight: {
@@ -69,7 +69,7 @@ describe("Prepare create data", () => {
         })
 
         it("should add isCa when isCa is defined", () => {
-            const data: CreateEditItemForm = {
+            const createItemData: CreateEditItemForm = {
                 name: "test",
                 weight: 200,
                 unit: "g",
@@ -80,7 +80,7 @@ describe("Prepare create data", () => {
                 tags: []
             }
 
-            const createItem = prepareCreateItem(data)
+            const createItem = prepareCreateItem(createItemData)
             expect(createItem).deep.equal({
                 name: "test",
                 weight: {
@@ -91,7 +91,7 @@ describe("Prepare create data", () => {
         })
 
         it("should add source when source is defined", () => {
-            const data: CreateEditItemForm = {
+            const createItemData: CreateEditItemForm = {
                 name: "test",
                 weight: 200,
                 unit: "g",
@@ -102,7 +102,7 @@ describe("Prepare create data", () => {
                 tags: []
             }
 
-            const createItem = prepareCreateItem(data)
+            const createItem = prepareCreateItem(createItemData)
             expect(createItem).deep.equal({
                 name: "test",
                 weight: {
@@ -113,7 +113,7 @@ describe("Prepare create data", () => {
         })
 
         it("should add tags when tags is defined", () => {
-            const data: CreateEditItemForm = {
+            const createItemData: CreateEditItemForm = {
                 name: "test",
                 weight: 200,
                 unit: "g",
@@ -124,7 +124,7 @@ describe("Prepare create data", () => {
                 tags: ["tag1", "tag2"]
             }
 
-            const createItem = prepareCreateItem(data)
+            const createItem = prepareCreateItem(createItemData)
             expect(createItem).deep.equal({
                 name: "test",
                 weight: {
