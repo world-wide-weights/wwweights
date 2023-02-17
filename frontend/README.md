@@ -1,40 +1,42 @@
-# wwweights frontend
 
-## Install
 
-    $ git clone git@github.com:world-wide-weights/wwweights.git
-    $ cd frontend
-    $ npm install
+### Start the frontend
+```sh
+git clone git@github.com:world-wide-weights/wwweights.git
+cd frontend
+npm i # Install deps
+npm run dev # Run in watch
+```
 
-## Start & watch
+### Build
 
-    $ npm run dev
+```sh
+npm run build
+npm run start # Starts that build
+```
+### Testing
 
-## Simple build for production
+```sh
+# Open Cypress Client
+npm run test 
 
-    $ npm run build
-    $ npm run start # Starts that build
+# Run e2e tests in cli (without client)
+npm run test:cli
 
-## Testing with Cypress
-### Note
-Cypress Components tests currently not supporting Next v13.0.0.
+# Run component + unit tests in cli (without client)
+npm run test-components:cli
+```
 
-### Open launcher
-Be sure that frontend is running or start it.
+### Code Coverage
 
-    $ npm run dev
-    $ npm run test
+Next v13 Compiler SWC has no stable solution to instrument code. Thereforce use the "old" babel method. [Source](https://github.com/vercel/next.js/discussions/30529)
 
-### Run tests cli
+```sh
+cp .babelrc.example .babelrc # Replace SWC with babelrc config
+```
+Now run the tests normal. 
 
-    $ npm run test:cli
-
-### Run component tests cli
-
-    $ npm run test-components:cli
----
-
-## Build Docker image
+### Build Docker image
 
 Build Docker image from Dockerfile 
 
@@ -48,14 +50,14 @@ Run Docker image
 docker run -p 3000:3000 --name wwweights-frontend wwweights-frontend
 ```
 
-## Tools
+### Tools
 
-### Javascript/Typescript
+#### Javascript/Typescript
 
 - [next](https://nextjs.org/) is used as frontend framework.
 - [cypress](https://www.cypress.io/) is used as testing framework.
 - [formik](https://formik.org/) is used to handle forms.
 - [yup](https://www.npmjs.com/package/yup) is used to handle form validation.
 
-### CSS
+#### CSS
 - [TailwindCSS](https://tailwindcss.com/) is used as CSS Utility Framework
