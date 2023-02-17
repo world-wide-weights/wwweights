@@ -72,11 +72,9 @@ export default defineConfig({
           return null
         },
       })
-      console.log({
-        id: "config",
-        data: { config }
-      })
+
       require("@cypress/code-coverage/task")(on, config)
+
       return config
     },
   },
