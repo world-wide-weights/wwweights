@@ -1,7 +1,7 @@
 import { Form, Formik, useFormikContext } from "formik"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-import { queryRequest } from "../../services/axios/axios"
+import { queryClientRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { PaginatedResponse } from "../../types/item"
 import { Tag } from "../../types/tag"
@@ -75,7 +75,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "
             setIsLoadingRelatedTags(true)
 
             try {
-                const response = await queryRequest.get<PaginatedResponse<Tag>>(`/tags/related?query=${query}`)
+                const response = await queryClientRequest.get<PaginatedResponse<Tag>>(`/tags/related?query=${query}`)
                 const relatedTags = response.data.data
 
                 setRelatedTags(relatedTags)
