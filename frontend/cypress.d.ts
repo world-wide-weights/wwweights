@@ -88,6 +88,10 @@ declare global {
        * @param hasStatistics if we want to mock statistics having data or not.
        */
       mockProfilePage(options?: { contribtionsCount?: number, hasStatistics?: boolean }): Chainable<void>
+      /**
+       * Mocks delete item request.
+       */
+      mockDeleteItem(): Chainable<void>
     }
   }
 }

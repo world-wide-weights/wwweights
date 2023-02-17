@@ -175,5 +175,11 @@ Cypress.Commands.add("mockProfilePage", (options) => {
     }).as("mockProfile")
 })
 
+Cypress.Commands.add("mockDeleteItem", () => {
+    cy.intercept("POST", `${API_BASE_URL_COMMAND}/items/*/suggest/delete`, {
+        statusCode: 200,
+    }).as("mockDeleteItem")
+})
+
 export { }
 

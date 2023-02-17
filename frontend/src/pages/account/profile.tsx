@@ -264,8 +264,8 @@ const Profile: NextPageCustomProps = () => {
 
                             {/* Buttons */}
                             <div className="flex md:justify-between flex-col md:flex-row">
-                                <Button kind="tertiary" type="button" onClick={closeDeleteModal} className="my-4 md:my-0">Oops, never mind</Button>
-                                <Button kind="primary" type="submit" disabled={!(dirty && isValid)} loading={isSubmitting} icon="delete">Delete forever</Button>
+                                <Button datacy="profile-cancel-button" kind="tertiary" type="button" onClick={closeDeleteModal} className="my-4 md:my-0">Oops, never mind</Button>
+                                <Button datacy="profile-delete-button" kind="primary" type="submit" disabled={!(dirty && isValid)} loading={isSubmitting} icon="delete">Delete forever</Button>
                             </div>
                         </Form>)}
                 </Formik>
