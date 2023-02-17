@@ -241,7 +241,7 @@ const Profile: NextPageCustomProps = () => {
                                         <IconButton icon="edit" />
                                     </Tooltip>
                                     <Tooltip content="Delete">
-                                        <IconButton icon="delete" onClick={() => openDeleteModal(contribution)} />
+                                        <IconButton datacy={`profile-delete-contribution-${contribution.slug}`} icon="delete" onClick={() => openDeleteModal(contribution)} />
                                     </Tooltip>
                                 </>} />)}
                             </ul>
