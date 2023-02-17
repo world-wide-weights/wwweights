@@ -90,6 +90,7 @@ export default defineConfig({
       bundler: "webpack",
       webpackConfig: {
         mode: "development",
+        devtool: false,
         module: {
           rules: [
             {
@@ -100,8 +101,7 @@ export default defineConfig({
                 options: {
                   presets: ["next/babel"],
                   plugins: [
-                    "istanbul",
-                    "transform-class-properties"
+                    "istanbul"
                   ]
                 }
               }
