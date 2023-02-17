@@ -2,8 +2,8 @@ import { InjectModel } from '@m8a/nestjs-typegoose';
 import {
   HttpException,
   Injectable,
-  InternalServerErrorException,
   Logger,
+  ServiceUnavailableException,
 } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { EventStore } from '../../eventstore/eventstore';
@@ -51,7 +51,7 @@ export class ImagesService {
       if (error instanceof HttpException) {
         throw error;
       }
-      throw new InternalServerErrorException(
+      throw new ServiceUnavailableException(
         'Image backend could not be notified',
       );
     }
@@ -73,7 +73,7 @@ export class ImagesService {
       return;
     }
     try {
-      await this.internalCommunicationService.notifyImgImageObsoleteness(
+      await this.internalCommunicationService.notifyImgAboutImageObsoleteness(
         imageValue,
       );
     } catch (error) {
@@ -83,7 +83,7 @@ export class ImagesService {
       if (error instanceof HttpException) {
         throw error;
       }
-      throw new InternalServerErrorException(
+      throw new ServiceUnavailableException(
         'Image backend could not be notified',
       );
     }

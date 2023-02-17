@@ -1,3 +1,4 @@
+import { HttpService } from '@nestjs/axios';
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { CommandBus, EventBus } from '@nestjs/cqrs';
@@ -28,6 +29,7 @@ import {
 import { retryCallback } from './helpers/retries';
 import { FakeEnvGuardFactory } from './mocks/env-guard.mock';
 import { MockEventStore } from './mocks/eventstore';
+import { HttpServiceMock } from './mocks/http-service.mock';
 import {
   differentNames as itemsWithDifferentNames,
   insertItem,
@@ -71,6 +73,8 @@ describe('ItemsController (e2e)', () => {
       .useValue(fakeJWTGuard.getGuard())
       .overrideGuard(ENVGuard)
       .useValue(fakeEnvGuard.getGuard())
+      .overrideProvider(HttpService)
+      .useClass(HttpServiceMock)
       .compile();
 
     app = moduleFixture.createNestApplication();

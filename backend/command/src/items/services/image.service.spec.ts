@@ -1,6 +1,6 @@
 import {
   ImATeapotException,
-  InternalServerErrorException,
+  ServiceUnavailableException,
 } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { EventStore } from '../../eventstore/eventstore';
@@ -35,7 +35,7 @@ describe('ImagesService', () => {
       .spyOn(imagesService, 'getItemCountForImage')
       .mockImplementation(async () => 0);
   });
-  
+
   describe('promoteImageInImageBackend', () => {
     it('Should not call backend when eventstore is not ready', async () => {
       // ARRANGE
@@ -116,13 +116,13 @@ describe('ImagesService', () => {
       jest
         .spyOn(internalCommunicationService, 'notifyImgAboutItemCreation')
         .mockImplementation(async () => {
-          throw new InternalServerErrorException();
+          throw new Error('We are all out of coffee');
         });
       // ACT
       await expect(
         async () =>
           await imagesService.promoteImageInImageBackend('validValue'),
-      ).rejects.toThrowError(InternalServerErrorException);
+      ).rejects.toThrowError(ServiceUnavailableException);
     });
   });
 
@@ -131,7 +131,7 @@ describe('ImagesService', () => {
       // ARRANGE
       mockEventstore.isReady = false;
       const apiCall = jest
-        .spyOn(internalCommunicationService, 'notifyImgImageObsoleteness')
+        .spyOn(internalCommunicationService, 'notifyImgAboutImageObsoleteness')
         .mockImplementation(async () => {});
       // ACT
       await imagesService.demoteImageInImageBackend('validValue');
@@ -143,7 +143,7 @@ describe('ImagesService', () => {
       // ARRANGE
       mockEventstore.isReady = false;
       const apiCall = jest
-        .spyOn(internalCommunicationService, 'notifyImgImageObsoleteness')
+        .spyOn(internalCommunicationService, 'notifyImgAboutImageObsoleteness')
         .mockImplementation(async () => {});
       // ACT
       await imagesService.demoteImageInImageBackend(undefined);
@@ -154,7 +154,7 @@ describe('ImagesService', () => {
     it('Should not call backend when passed with an URL', async () => {
       // ARRANGE
       const apiCall = jest
-        .spyOn(internalCommunicationService, 'notifyImgImageObsoleteness')
+        .spyOn(internalCommunicationService, 'notifyImgAboutImageObsoleteness')
         .mockImplementation(async () => {});
       // ACT
       await imagesService.demoteImageInImageBackend('http://google.com');
@@ -165,7 +165,7 @@ describe('ImagesService', () => {
     it('Should not call backend when image is still in use', async () => {
       // ARRANGE
       const apiCall = jest
-        .spyOn(internalCommunicationService, 'notifyImgImageObsoleteness')
+        .spyOn(internalCommunicationService, 'notifyImgAboutImageObsoleteness')
         .mockImplementation(async () => {});
       jest
         .spyOn(imagesService, 'getItemCountForImage')
@@ -179,7 +179,7 @@ describe('ImagesService', () => {
     it('Should call backend', async () => {
       // ARRANGE
       const apiCall = jest
-        .spyOn(internalCommunicationService, 'notifyImgImageObsoleteness')
+        .spyOn(internalCommunicationService, 'notifyImgAboutImageObsoleteness')
         .mockImplementation(async () => {});
       // ACT
       await imagesService.demoteImageInImageBackend('validValue');
@@ -190,7 +190,7 @@ describe('ImagesService', () => {
     it('Should pass http exceptions', async () => {
       // ARRANGE
       jest
-        .spyOn(internalCommunicationService, 'notifyImgImageObsoleteness')
+        .spyOn(internalCommunicationService, 'notifyImgAboutImageObsoleteness')
         .mockImplementation(async () => {
           throw new ImATeapotException();
         });
@@ -203,14 +203,14 @@ describe('ImagesService', () => {
     it('Should convert othr exceptions to InternalServerErrorException', async () => {
       // ARRANGE
       jest
-        .spyOn(internalCommunicationService, 'notifyImgImageObsoleteness')
+        .spyOn(internalCommunicationService, 'notifyImgAboutImageObsoleteness')
         .mockImplementation(async () => {
-          throw new InternalServerErrorException();
+          throw new Error('A very different error');
         });
       // ACT
       await expect(
         async () => await imagesService.demoteImageInImageBackend('validValue'),
-      ).rejects.toThrowError(InternalServerErrorException);
+      ).rejects.toThrowError(ServiceUnavailableException);
     });
   });
 });
