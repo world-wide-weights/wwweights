@@ -37,9 +37,21 @@ jobs:
           path: ~/.npm
           key: node-modules-${{ hashFiles('package-lock.json') }}
 
-  e2e-tests:
+  generate-babel-config:
     runs-on: ubuntu-latest
     needs: setup
+    defaults:
+      run:
+        shell: bash
+        working-directory: frontend
+    steps:
+      - name: Create babel config file
+        run: |
+          mv ./babelrc.example .babelrc
+
+  e2e-tests:
+    runs-on: ubuntu-latest
+    needs: generate-babel-config
     defaults:
       run:
         shell: bash
