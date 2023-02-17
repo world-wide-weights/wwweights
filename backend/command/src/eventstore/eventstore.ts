@@ -19,7 +19,10 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { EventBus } from '@nestjs/cqrs';
 import { readFileSync } from 'fs';
+import { ItemDeleteSuggestedEvent } from '../items/events/item-delete-suggested.event';
+import { ItemDeletedEvent } from '../items/events/item-deleted.event';
 import { ItemEditSuggestedEvent } from '../items/events/item-edit-suggested.event';
+import { ItemEditedEvent } from '../items/events/item-edited.event';
 import { ItemInsertedEvent } from '../items/events/item-inserted.event';
 import { ALLOWED_EVENT_ENTITIES } from './enums/allowedEntities.enum';
 
@@ -30,9 +33,19 @@ import { ALLOWED_EVENT_ENTITIES } from './enums/allowedEntities.enum';
 export class EventStore {
   private readonly logger = new Logger(EventStore.name);
   private client: EventStoreDBClient;
-  private readonly eventMap = new Map<string, (typeof ItemEditSuggestedEvent | typeof ItemInsertedEvent)>([
+  private readonly eventMap = new Map<
+    string,
+    | typeof ItemEditSuggestedEvent
+    | typeof ItemInsertedEvent
+    | typeof ItemDeleteSuggestedEvent
+    | typeof ItemDeletedEvent
+    | typeof ItemEditedEvent
+  >([
     [ItemInsertedEvent.name, ItemInsertedEvent],
-    [ItemEditSuggestedEvent.name, ItemEditSuggestedEvent]
+    [ItemEditSuggestedEvent.name, ItemEditSuggestedEvent],
+    [ItemDeleteSuggestedEvent.name, ItemDeleteSuggestedEvent],
+    [ItemDeletedEvent.name, ItemDeletedEvent],
+    [ItemEditedEvent.name, ItemEditedEvent],
   ]);
   isReady = false;
 
@@ -177,7 +190,7 @@ export class EventStore {
   }
 
   /**
-   * @description Take event along with its typing and publish it to the cqrs event buspublish it to the cqrs event bus
+   * @description Take event along with its typing and publish it to the cqrs event bus
    */
   private publishEventToBus(eventType: any, event: any) {
     if (!event) return;
@@ -185,8 +198,8 @@ export class EventStore {
       this.logger.error(`Invalid eventtype for eventbus ${eventType}`);
       return;
     }
-    this.logger.debug(`Publishing ${eventType} to event bus`);
     this.eventBus.publish(new (this.eventMap.get(eventType))(event));
+    this.logger.debug(`Published ${eventType} to event bus`);
   }
 
   /**
@@ -195,17 +208,20 @@ export class EventStore {
   async doesStreamExist(streamId: string) {
     const result = this.client.readStream(streamId, {
       direction: SDRAWKCAB,
+      fromRevision: END,
       maxCount: 1,
     });
     try {
-      for await (const _ of result) {
-        return true;
+      for await (const event of result) {
+        // Is last event terminating? If yes, the stream is considered non existant
+        return (event?.event?.data as any)?.eventType !== ItemDeletedEvent.name;
       }
-    } catch (e) {
-      if (e instanceof StreamNotFoundError) {
+    } catch (error) {
+      if (error instanceof StreamNotFoundError) {
         return false;
       }
-      throw e;
+      // This may be an Connection lost error etc. Anyway we throw it
+      throw error;
     }
     return true;
   }
