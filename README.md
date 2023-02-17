@@ -4,6 +4,7 @@
 ![Codecov](https://img.shields.io/codecov/c/gh/world-wide-weights/wwweights?flag=command-backend&label=command-backend)
 ![Codecov](https://img.shields.io/codecov/c/gh/world-wide-weights/wwweights?flag=image-backend&label=image-backend)
 ![Codecov](https://img.shields.io/codecov/c/gh/world-wide-weights/wwweights?flag=query-backend&label=query-backend)
+![Codecov](https://img.shields.io/codecov/c/gh/world-wide-weights/wwweights?flag=frontend&label=frontend)
 
 ## Docker quickstart
 
