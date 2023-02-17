@@ -205,7 +205,7 @@ export class UploadService {
     this.logger.debug(`Demoting image ${imageHash} from permanent to tmp`);
     const currentPath = join(this.storePath, imageHash);
     const targetPath = join(this.tmpPath, imageHash);
-    if (!existsSync(currentPath) || !existsSync(targetPath)) {
+    if (!existsSync(currentPath) || existsSync(targetPath)) {
       this.logger.log(`Image demotion failed ${imageHash}`);
       return;
     }
