@@ -26,15 +26,21 @@ export const editItemApi = async (slug: string, updateItem: EditItemDto, session
  * @returns item data for edit item request
  */
 export const prepareEditItem = (values: CreateEditItemForm, oldItem: Item): EditItemDto => {
-    // Prepare single values
-    const additionalValue = values.valueType === "exact" ? null : Number(values.additionalValue)
-    const isCaValue = values.isCa[0] ? true : undefined
+    // Prepare additionalValue
+    const newAdditionalValue = values.valueType === "exact" ? null : Number(values.additionalValue)
+    const oldAdditionalValue = oldItem.weight.additionalValue ? Number(oldItem.weight.additionalValue) : null
+    const additionalValue = newAdditionalValue !== oldAdditionalValue ? { additionalValue: newAdditionalValue } : {}
+
+    // Prepare isCa value
+    const isNewCaValue = values.isCa[0] ? true : false
+    const isOldCaValue = oldItem.weight.isCa ? true : false
+    const caValue = isNewCaValue !== isOldCaValue ? { isCa: isNewCaValue } : {}
 
     // Build weights object
     const weight = {
-        ...(values.weight !== oldItem?.weight.value ? { value: Number(values.weight) } : {}),
-        ...(isCaValue !== oldItem?.weight.isCa ? { isCa: values.isCa[0] ? true : false } : {}),
-        ...((values.additionalValue !== oldItem?.weight.additionalValue) || values.valueType === "exact" ? { additionalValue } : {})
+        ...(values.weight !== oldItem.weight.value ? { value: Number(values.weight) } : {}),
+        ...(caValue),
+        ...(additionalValue)
     }
 
     // Calculates which tags to remove and which to add
@@ -47,13 +53,17 @@ export const prepareEditItem = (values: CreateEditItemForm, oldItem: Item): Edit
         ...(push.length > 0 ? { push } : {})
     }
 
+    // Prepare source
+    const newSourceValue = values.source === "" ? null : values.source
+    const oldSourceValue = oldItem.source ? oldItem.source : null
+    const source = newSourceValue !== oldSourceValue ? { source: newSourceValue } : {}
+
     // Prepare item data update
     const editItem: EditItemDto = {
         ...(values.name !== oldItem?.name ? { name: values.name } : {}),
         ...((Object.keys(weight).length > 0) ? { weight } : {}),
-        ...(!(values.source === oldItem?.source) ? { source: values.source } : {}),
-        ...(values.source === "" ? { source: null } : {}),
-        ...(values.imageFile === null ? { image: null } : {}),
+        ...(source),
+        ...(values.imageFile === null ? { image: null } : {}), // Only remove image here, add logic is in CreateEdit 
         ...((Object.keys(tags).length > 0) ? { tags } : {}),
     }
 

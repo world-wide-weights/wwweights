@@ -158,6 +158,7 @@ describe("Prepare edit item", () => {
                 slug: "old-name",
                 weight: {
                     value: 200,
+                    isCa: false
                 },
                 tags: [],
                 userId: 1,
@@ -209,12 +210,11 @@ describe("Prepare edit item", () => {
             expect(editItem).deep.equal({
                 weight: {
                     additionalValue: 10,
-                },
-                source: null
+                }
             })
         })
 
-        it("should add only source (and other null fields) when update source", () => {
+        it("should add only source when update source", () => {
             const oldItem: Item = {
                 name: "old name",
                 slug: "old-name",
@@ -238,11 +238,63 @@ describe("Prepare edit item", () => {
 
             const editItem = prepareEditItem(updateItem, oldItem)
             expect(editItem).deep.equal({
-                weight: {
-                    additionalValue: null,
-                },
                 source: "new source",
             })
+        })
+
+        it("should update source when source is not equal to the old source", () => {
+            const oldItem: Item = {
+                name: "old name",
+                slug: "old-name",
+                weight: {
+                    value: 200,
+                },
+                tags: [],
+                userId: 1,
+                createdAt: 100000000,
+                source: "https://old.com"
+            }
+
+            const updateItem: CreateEditItemForm = {
+                name: "old name",
+                weight: 200,
+                unit: "g",
+                isCa: [],
+                valueType: "exact",
+                source: "https://new.com",
+                tags: [],
+            }
+
+            const editItem = prepareEditItem(updateItem, oldItem)
+            expect(editItem).deep.equal({
+                source: "https://new.com",
+            })
+        })
+
+        it("should return empty objects when no updates where made", () => {
+            const oldItem: Item = {
+                name: "old name",
+                slug: "old-name",
+                weight: {
+                    value: 200,
+                },
+                tags: [],
+                userId: 1,
+                createdAt: 100000000
+            }
+
+            const updateItem: CreateEditItemForm = {
+                name: "old name",
+                weight: 200,
+                unit: "g",
+                isCa: [],
+                valueType: "exact",
+                source: "",
+                tags: [],
+            }
+
+            const editItem = prepareEditItem(updateItem, oldItem)
+            expect(editItem).deep.equal({})
         })
     })
 
@@ -275,8 +327,7 @@ describe("Prepare edit item", () => {
             expect(editItem).deep.equal({
                 weight: {
                     additionalValue: null,
-                },
-                source: null
+                }
             })
         })
 
@@ -308,39 +359,7 @@ describe("Prepare edit item", () => {
             expect(editItem).deep.equal({
                 weight: {
                     additionalValue: null,
-                },
-                source: null
-            })
-        })
-
-        it("should only add source null (and other null fields) when update source to empty string", () => {
-            const oldItem: Item = {
-                name: "old name",
-                slug: "old-name",
-                weight: {
-                    value: 200,
-                },
-                tags: [],
-                userId: 1,
-                createdAt: 100000000
-            }
-
-            const updateItem: CreateEditItemForm = {
-                name: "old name",
-                weight: 200,
-                unit: "g",
-                isCa: [],
-                valueType: "exact",
-                source: "",
-                tags: [],
-            }
-
-            const editItem = prepareEditItem(updateItem, oldItem)
-            expect(editItem).deep.equal({
-                weight: {
-                    additionalValue: null,
-                },
-                source: null
+                }
             })
         })
 
@@ -370,10 +389,6 @@ describe("Prepare edit item", () => {
 
             const editItem = prepareEditItem(updateItem, oldItem)
             expect(editItem).deep.equal({
-                weight: {
-                    additionalValue: null,
-                },
-                source: null,
                 image: null
             })
         })
@@ -407,10 +422,6 @@ describe("Prepare edit item", () => {
 
             const editItem = prepareEditItem(updateItem, oldItem)
             expect(editItem).deep.equal({
-                weight: {
-                    additionalValue: null,
-                },
-                source: null,
                 tags: {
                     pull: ["tag1"],
                     push: ["tag2"],
@@ -442,10 +453,6 @@ describe("Prepare edit item", () => {
 
             const editItem = prepareEditItem(updateItem, oldItem)
             expect(editItem).deep.equal({
-                weight: {
-                    additionalValue: null,
-                },
-                source: null,
                 tags: {
                     push: ["tag1", "tag2"],
                 },
@@ -482,10 +489,6 @@ describe("Prepare edit item", () => {
 
             const editItem = prepareEditItem(updateItem, oldItem)
             expect(editItem).deep.equal({
-                weight: {
-                    additionalValue: null,
-                },
-                source: null,
                 tags: {
                     pull: ["tag1", "tag2"],
                 },
