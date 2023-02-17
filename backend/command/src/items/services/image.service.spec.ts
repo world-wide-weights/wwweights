@@ -162,7 +162,7 @@ describe('ImagesService', () => {
       expect(apiCall).not.toHaveBeenCalled();
     });
 
-    it('Should not call backend when image is still in use ', async () => {
+    it('Should not call backend when image is still in use', async () => {
       // ARRANGE
       const apiCall = jest
         .spyOn(internalCommunicationService, 'notifyImgImageObsoleteness')
