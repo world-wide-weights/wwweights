@@ -72,7 +72,7 @@ describe('ImagesService', () => {
       expect(apiCall).not.toHaveBeenCalled();
     });
 
-    it('Should not call backend when image is already in use ', async () => {
+    it('Should not call backend when image is already in use', async () => {
       // ARRANGE
       const apiCall = jest
         .spyOn(internalCommunicationService, 'notifyImgAboutItemCreation')
