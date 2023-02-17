@@ -28,12 +28,11 @@ export const prepareCreateItem = (values: CreateEditItemForm): CreateItemDto => 
         name: values.name,
         weight: {
             value: Number(values.weight),
-            isCa: values.isCa[0] ? true : false,
-            // Only add additionalValue when defined and value type is additional
-            ...(values.additionalValue && (values.valueType === "range") ? { additionalValue: Number(values.additionalValue) } : {})
+            ...(values.isCa[0] !== undefined ? { isCa: true } : {}), // Only add isCa when defined
+            ...(values.additionalValue && (values.valueType === "range") ? { additionalValue: Number(values.additionalValue) } : {}) // Only add additionalValue when defined and value type is range
         },
         ...(values.source !== "" ? { source: values.source } : {}), // Only add source when defined
-        tags: values.tags
+        ...(values.tags?.length !== 0 ? { tags: values.tags } : {}), // Only add tags when defined
     }
 
     return createItem
