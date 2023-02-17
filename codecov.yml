@@ -24,6 +24,10 @@ coverage:
         informational: true
         flags: 
           - query-backend
+      frontend:
+        informational: true
+        flags: 
+          - frontend
 
 flags:
   auth-backend:
@@ -38,3 +42,6 @@ flags:
   query-backend:
     paths:
       - backend/query
+  frontend:
+    paths:
+      - frontend     
