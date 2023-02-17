@@ -50,8 +50,8 @@ describe("Routes", () => {
         })
 
         it("should return edit contribute page with slug", () => {
-            expect(routes.contribute.edit("slug")).to.equal("/contribute/create/slug")
-            expect(routes.contribute.edit("apple-iphone-12")).to.equal("/contribute/create/apple-iphone-12")
+            expect(routes.contribute.edit("slug")).to.equal("/contribute/edit/slug")
+            expect(routes.contribute.edit("apple-iphone-12")).to.equal("/contribute/edit/apple-iphone-12")
         })
     })
 
