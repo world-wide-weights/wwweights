@@ -2,6 +2,7 @@ import { TypegooseModule } from '@m8a/nestjs-typegoose';
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { EventStoreModule } from '../eventstore/eventstore.module';
+import { DeleteSuggestion } from '../models/delete-suggestion.model';
 import { EditSuggestion } from '../models/edit-suggestion.model';
 import { Item } from '../models/item.model';
 import { Profile } from '../models/profile.model';
@@ -17,7 +18,13 @@ import { ItemsService } from './services/item.service';
   imports: [
     CqrsModule,
     SharedModule,
-    TypegooseModule.forFeature([Item, Tag, EditSuggestion, Profile]),
+    TypegooseModule.forFeature([
+      Item,
+      Tag,
+      EditSuggestion,
+      DeleteSuggestion,
+      Profile,
+    ]),
     EventStoreModule,
   ],
   controllers: [ItemsController],

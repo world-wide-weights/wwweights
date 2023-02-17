@@ -1,5 +1,5 @@
-import { EditSuggestion } from "src/models/edit-suggestion.model";
+import { EditSuggestion } from '../../models/edit-suggestion.model';
 
 export class ItemEditSuggestedEvent {
-    constructor(public readonly editSuggestion: EditSuggestion){}
+  constructor(public readonly editSuggestion: EditSuggestion) {}
 }

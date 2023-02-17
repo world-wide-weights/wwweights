@@ -1,9 +1,9 @@
-import { SuggestItemEditDTO } from "../interfaces/suggest-item-edit.dto";
+import { SuggestItemEditDTO } from '../interfaces/suggest-item-edit.dto';
 
 export class SuggestItemEditCommand {
   constructor(
-    public readonly suggestItemEditData: SuggestItemEditDTO,
+    public readonly suggestItemEditDto: SuggestItemEditDTO,
     public readonly itemSlug: string,
-    public readonly userId: number
+    public readonly userId: number,
   ) {}
 }
