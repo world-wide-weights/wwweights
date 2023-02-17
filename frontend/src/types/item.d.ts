@@ -31,7 +31,7 @@ export type CreateEditItemForm = {
     valueType: "exact" | "range"
     source?: string
     imageFile?: File
-    tags?: string
+    tags?: string[]
 }
 
 export type CreateItemDto = {

@@ -19,6 +19,7 @@ import { CustomSelectionButton } from "../Form/CustomSelectionButton/CustomSelec
 import { Dropdown } from "../Form/Dropdown/Dropdown"
 import { ImageUpload } from "../Form/ImageUpload/ImageUpload"
 import { Label } from "../Form/Label"
+import { ChipTextInput } from "../Form/TextInput/ChipTextInput"
 import { TextInput } from "../Form/TextInput/TextInput"
 import { Headline } from "../Headline/Headline"
 import { Icon } from "../Icon/Icon"
@@ -66,7 +67,7 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
         isCa: item?.weight.isCa ? [false, true] : [], // This is an array since checkbox component can only handle arrays
         source: item?.source ?? "",
         imageFile: undefined, // The edit initial is at the image upload component
-        tags: ""
+        tags: []
     }
 
     // Formik Form Validation
@@ -82,7 +83,7 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
         isCa: array(),
         source: string(),
         imageFile: mixed().notRequired(),
-        tags: string(),
+        tags: array().of(string().min(2).max(255)).notRequired(),
     })
 
     /**
@@ -272,13 +273,12 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
                                 </div>
 
                                 {isOpenDetails && <div className="mt-4">
-                                    {/* TODO (Zoe-bot): Add tags design */}
-                                    {/* Source */}
-                                    <TextInput name="tags" labelText="Tags" helperText="Tags seperated with commas." placeholder="Tags of item" />
+                                    {/* Tags */}
+                                    <ChipTextInput name="tags" labelText="Tags" helperText="Tags are seperated with commas." />
 
                                     {/* Image */}
                                     <Label name="imageFile" labelText={"Image"} />
-                                    <ImageUpload name="imageFile" filePath={item?.image} />
+                                    <ImageUpload name="imageFile" />
 
                                     {/* Source */}
                                     <TextInput name="source" labelText="Source of weight" placeholder="Link to source" />
