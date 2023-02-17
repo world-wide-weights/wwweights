@@ -3,8 +3,7 @@ import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { EditSuggestion } from '../../models/edit-suggestion.model';
-import { Item } from '../../models/item.model';
-import { Tag } from '../../models/tag.model';
+import { ImagesService } from '../services/images.service';
 import { ItemEditSuggestedEvent } from './item-edit-suggested.event';
 
 @EventsHandler(ItemEditSuggestedEvent)
@@ -15,10 +14,7 @@ export class ItemEditSuggestedHandler
   constructor(
     @InjectModel(EditSuggestion)
     private readonly suggestionModel: ReturnModelType<typeof EditSuggestion>,
-    @InjectModel(Item)
-    private readonly itemModel: ReturnModelType<typeof Item>,
-    @InjectModel(Tag)
-    private readonly tagModel: ReturnModelType<typeof Tag>,
+    private readonly imageService: ImagesService,
   ) {}
   async handle({ editSuggestion }: ItemEditSuggestedEvent) {
     // Performance
@@ -30,6 +26,20 @@ export class ItemEditSuggestedHandler
         performance.now() - insertSuggestionStartTime
       }ms`,
     );
+
+    if (editSuggestion.updatedItemValues.image) {
+      const imgBackendCallStartTime = performance.now();
+      // Promote image to permanent once suggestion is done. The image is now relevant for our business logic
+      await this.imageService.promoteImageInImageBackend(
+        editSuggestion.updatedItemValues.image,
+      );
+
+      this.logger.debug(
+        `Finished Image backend api call in ${
+          performance.now() - imgBackendCallStartTime
+        }`,
+      );
+    }
 
     this.logger.debug(
       `Total duration of ${ItemEditSuggestedHandler.name} was ${

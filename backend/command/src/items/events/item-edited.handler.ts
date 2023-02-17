@@ -9,6 +9,7 @@ import {
 } from '../../models/edit-suggestion.model';
 import { Item } from '../../models/item.model';
 import { Tag } from '../../models/tag.model';
+import { ImagesService } from '../services/images.service';
 import { ItemEditedEvent } from './item-edited.event';
 
 @EventsHandler(ItemEditedEvent)
@@ -19,13 +20,14 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
     private readonly itemModel: ReturnModelType<typeof Item>,
     @InjectModel(Tag)
     private readonly tagModel: ReturnModelType<typeof Tag>,
+    private readonly imageService: ImagesService,
   ) {}
   async handle({ itemEditedEventDto }: ItemEditedEvent) {
     const updateItemStartTime = performance.now();
 
     const { itemSlug, editValues } = itemEditedEventDto;
 
-    await this.updateItem(itemSlug, editValues);
+    const oldItem = await this.updateItem(itemSlug, editValues);
 
     this.logger.debug(
       `${ItemEditedHandler.name} Item update took: ${
@@ -34,22 +36,26 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
     );
 
     // No tags in suggestion => we are done here
-    if (!editValues.tags) {
+    if (editValues.tags) {
+      const updateTagsStartTime = performance.now();
+      await this.updateTags(editValues.tags);
       this.logger.debug(
-        `Total duration of ${ItemEditedHandler.name} was ${
-          performance.now() - updateItemStartTime
+        `Updating tags by themselves took ${
+          performance.now() - updateTagsStartTime
         } ms`,
       );
-      return;
     }
 
-    const updateTagsStartTime = performance.now();
-    await this.updateTags(editValues.tags);
-    this.logger.debug(
-      `Updating tags by themselves took ${
-        performance.now() - updateTagsStartTime
-      } ms`,
-    );
+    if (itemEditedEventDto.editValues.image && oldItem?.image) {
+      const imgBackendCallStartTime = performance.now();
+      // Only remove as promotion of new image was done at suggestion creation
+      await this.imageService.demoteImageInImageBackend(oldItem.image),
+        this.logger.debug(
+          `Finished Image backend api call in ${
+            performance.now() - imgBackendCallStartTime
+          }`,
+        );
+    }
 
     this.logger.debug(
       `Total duration of ${ItemEditedHandler.name} was ${
@@ -59,7 +65,7 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
   }
 
   // Db calls: Min: 1 findOneAndUpdate Max: 2 findOneAndUpdate()
-  async updateItem(slug: string, itemData: SuggestionItem) {
+  async updateItem(slug: string, itemData: SuggestionItem): Promise<Item> {
     const { tags: tagsValues, weight, ...itemValues } = itemData;
     const tagNamesToPull = tagsValues?.pull || [];
     const tagsToPush =
@@ -73,9 +79,10 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
         weightSet[`weight.${key}`] = weight[key];
       });
     }
+    let oldItem: Item;
 
     try {
-      await this.itemModel.findOneAndUpdate(
+      oldItem = await this.itemModel.findOneAndUpdate(
         { slug },
         {
           ...itemValues,
@@ -99,6 +106,7 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
         `Item ${slug} could not be updated`,
       );
     }
+    return oldItem;
   }
 
   // Db calls: 1 bulkwrite()
