@@ -67,7 +67,7 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
         isCa: item?.weight.isCa ? ["isCa"] : [], // This is an array since checkbox component can only handle arrays
         source: item?.source ?? "",
         imageFile: undefined, // The edit initial is at the image upload component
-        tags: []
+        tags: item?.tags.map(tag => tag.name) ?? []
     }
 
     // Formik Form Validation
@@ -114,12 +114,21 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
             ...(values.additionalValue !== item?.weight.additionalValue && (values.valueType === "range") ? { additionalValue: Number(values.additionalValue) } : {})
         }
 
+        // Calculates which tags to remove and which to add
+        const pull = item.tags.filter(tag => !values.tags?.includes(tag.name)).map(tag => tag.name)
+        const push = values.tags?.filter(tag => !item.tags.map(tag => tag.name).includes(tag)) ?? []
+
         // Prepare item data update
         const editItem: UpdateItemDto = {
             ...(values.name !== item?.name ? { name: values.name } : {}),
             ...((Object.keys(weight).length > 0) ? { weight } : {}),
             ...(!(values.source === item?.source || values.source === "") ? { source: values.source } : {}),
-            tags: []
+            ...(pull.length > 0 || push.length > 0 ? {
+                tags: {
+                    ...(pull.length > 0 ? { pull } : {}),
+                    ...(push.length > 0 ? { push } : {})
+                }
+            } : {})
         }
 
         try {
