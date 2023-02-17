@@ -35,6 +35,7 @@ describe('ImagesService', () => {
       .spyOn(imagesService, 'getItemCountForImage')
       .mockImplementation(async () => 0);
   });
+  
   describe('promoteImageInImageBackend', () => {
     it('Should not call backend when eventstore is not ready', async () => {
       // ARRANGE
