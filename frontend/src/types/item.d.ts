@@ -32,7 +32,7 @@ export type CreateEditItemForm = {
     isCa: string[]
     valueType: "exact" | "range"
     source?: string
-    imageFile?: File
+    imageFile?: File | null
     tags?: string[]
 }
 

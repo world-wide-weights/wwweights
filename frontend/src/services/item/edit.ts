@@ -26,13 +26,14 @@ export const editItemApi = async (slug: string, updateItem: EditItemDto, session
  * @returns item data for edit item request
  */
 export const prepareEditItem = (values: CreateEditItemForm, oldItem: Item): EditItemDto => {
-    // Prepare additionalValue
+    // Prepare single values
     const additionalValue = values.valueType === "exact" ? null : Number(values.additionalValue)
+    const isCaValue = values.isCa[0] ? true : undefined
 
     // Build weights object
     const weight = {
         ...(values.weight !== oldItem?.weight.value ? { value: Number(values.weight) } : {}),
-        ...((values.isCa[0] !== undefined) !== oldItem?.weight.isCa ? { isCa: values.isCa[0] ? true : false } : {}),
+        ...(isCaValue !== oldItem?.weight.isCa ? { isCa: values.isCa[0] ? true : false } : {}),
         ...((values.additionalValue !== oldItem?.weight.additionalValue) || values.valueType === "exact" ? { additionalValue } : {})
     }
 
