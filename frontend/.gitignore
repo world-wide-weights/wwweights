@@ -52,3 +52,6 @@ cypress/videos/*
 # nyc test coverage
 .nyc_output
 instrumented
+
+# babel
+.babelrc
