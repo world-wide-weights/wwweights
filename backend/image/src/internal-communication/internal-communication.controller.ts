@@ -8,8 +8,8 @@ import {
 } from '@nestjs/common';
 import { ApiKeyGuard } from '../shared/guards/api-key.guard';
 import { UploadService } from '../upload/upload.service';
+import { DemoteImageDTO } from './dtos/demote-image.dto';
 import { PromoteImageDTO } from './dtos/promote-image.dto';
-import { RemoveImageDTO } from './dtos/remove-image.dto';
 
 @Controller('internal')
 export class InternalCommunicationController {
@@ -18,10 +18,10 @@ export class InternalCommunicationController {
     private uploadService: UploadService,
   ) {}
 
-  @Post('remove-image')
+  @Post('demote-image')
   @UseGuards(ApiKeyGuard)
-  async removeImage(@Body() { imageHash }: RemoveImageDTO) {
-    await this.uploadService.removeImageByHash(imageHash);
+  async removeImage(@Body() { imageHash }: DemoteImageDTO) {
+    await this.uploadService.demoteImage(imageHash);
   }
 
   @Post('promote-image')

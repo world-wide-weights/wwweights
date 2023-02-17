@@ -32,7 +32,7 @@ export class InternalCommunicationService {
    * @description Send information to backend that an image has become obsolete
    */
   async notifyImgImageObsoleteness(imageHash: string) {
-    await this.notifyImg('internal/remove-image', { imageHash });
+    await this.notifyImg('internal/demote-image', { imageHash });
     this.logger.log('Notifed image backend about image obsoleteness');
   }
 

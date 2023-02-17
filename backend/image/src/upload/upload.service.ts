@@ -7,8 +7,8 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createHash } from 'crypto';
-import { existsSync, lstatSync, rmSync } from 'fs';
-import { copyFile, readFile, rm, writeFile } from 'fs/promises';
+import { copyFileSync, existsSync, lstatSync, rmSync } from 'fs';
+import { copyFile, readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
 import * as sharp from 'sharp';
 import { InternalCommunicationService } from '../internal-communication/internal-communication.service';
@@ -93,7 +93,7 @@ export class UploadService {
       throw new InternalServerErrorException();
     } finally {
       // Cleanup cache
-      await rm(cachedFilePath, { force: true });
+      await rmSync(cachedFilePath, { force: true });
     }
 
     try {
@@ -189,9 +189,7 @@ export class UploadService {
       return;
     }
     try {
-      // Use this instead of move to allow for "moving" accross devices (i.e. in a docker volume environment)
-      copyFile(currentPath, targetPath);
-      rm(currentPath);
+      this.moveFile(currentPath, targetPath);
     } catch (error) {
       this.logger.error(
         `Image ${imageHash} could not be promoted due to an error ${console.error()}`,
@@ -200,18 +198,33 @@ export class UploadService {
     }
   }
 
-  async removeImageByHash(imageHash: string) {
-    await this.removeImage(join(this.storePath, imageHash));
+  /**
+   * @description Move image from permanent to temporary storage
+   */
+  async demoteImage(imageHash: string) {
+    this.logger.debug(`Demoting image ${imageHash} from permanent to tmp`);
+    const currentPath = join(this.storePath, imageHash);
+    const targetPath = join(this.tmpPath, imageHash);
+    if (!existsSync(currentPath) || !existsSync(targetPath)) {
+      this.logger.log(`Image demotion failed ${imageHash}`);
+      return;
+    }
+    this.moveFile(currentPath, targetPath);
   }
 
-  private async removeImage(path: string) {
+  /**
+   * @description Move image (allow move accross devices)
+   */
+  private moveFile(source: string, target: string) {
     try {
-      rm(path);
+      // Use this instead of move to allow for "moving" accross devices (i.e. in a docker volume environment)
+      copyFileSync(source, target);
+      rmSync(source);
     } catch (error) {
       this.logger.error(
-        `File at ${path} could not be deleted due to an error ${error}`,
+        `Move from ${source} to ${target} failed due to an error ${error}`,
       );
-      throw new InternalServerErrorException('Image could not be deleted');
+      throw new InternalServerErrorException('Image could not be moved');
     }
   }
 }
