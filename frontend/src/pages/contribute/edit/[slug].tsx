@@ -3,6 +3,7 @@ import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../../../components/Auth/Auth"
 import { CreateEdit } from "../../../components/Item/CreateEdit"
+import { SkeletonLoadingEdit } from "../../../components/Loading/SkeletonLoadingEdit"
 import { Seo } from "../../../components/Seo/Seo"
 import { queryServerRequest } from "../../../services/axios/axios"
 import { Item, PaginatedResponse } from "../../../types/item"
@@ -59,7 +60,7 @@ const EditItem = () => {
     }, [getSession, item, isReady, query.slug])
 
     if (isLoadingEdit)
-        return <></>
+        return <SkeletonLoadingEdit />
 
     if (!isAuthenticated || !item) {
         return <Custom404 />
