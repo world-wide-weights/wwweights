@@ -27,7 +27,7 @@ export type CreateEditItemForm = {
     weight: number | string
     unit: "g" | "kg" | "T"
     additionalValue?: number | string
-    isCa: boolean[]
+    isCa: string[]
     valueType: "exact" | "range"
     source?: string
     imageFile?: File

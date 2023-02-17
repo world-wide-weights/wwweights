@@ -64,7 +64,7 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
         unit: "g",
         valueType: item?.weight.additionalValue ? "range" : "exact",
         additionalValue: item?.weight.additionalValue ?? "",
-        isCa: item?.weight.isCa ? [false, true] : [], // This is an array since checkbox component can only handle arrays
+        isCa: item?.weight.isCa ? ["isCa"] : [], // This is an array since checkbox component can only handle arrays
         source: item?.source ?? "",
         imageFile: undefined, // The edit initial is at the image upload component
         tags: []
@@ -80,7 +80,7 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
             is: "range",
             then: number().required("Additional value is required.").moreThan(ref("weight"), "Additional value must be greater than weight.")
         }),
-        isCa: array(),
+        isCa: array().of(string()).notRequired(),
         source: string(),
         imageFile: mixed().notRequired(),
         tags: array().of(string().min(2).max(255)).notRequired(),
@@ -108,16 +108,18 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
         if (!isEditMode)
             return
 
+        const weight = {
+            value: Number(values.weight), // TODO: Make this optional when api updated
+            ...((values.isCa[0] !== undefined) !== item?.weight.isCa ? { isCa: values.isCa[0] ? true : false } : {}),
+            ...(values.additionalValue !== item?.weight.additionalValue && (values.valueType === "range") ? { additionalValue: Number(values.additionalValue) } : {})
+        }
+
         // Prepare item data update
         const editItem: UpdateItemDto = {
             ...(values.name !== item?.name ? { name: values.name } : {}),
-            weight: {
-                ...(values.weight !== item?.weight.value ? { value: Number(values.weight) } : {}),
-                ...(values.isCa[0] !== item?.weight.isCa ? { isCa: values.isCa[0] } : {}),
-                ...(values.additionalValue !== item?.weight.additionalValue && (values.valueType === "range") ? { additionalValue: Number(values.additionalValue) } : {})
-            },
+            ...((Object.keys(weight).length > 0) ? { weight } : {}),
             ...(!(values.source === item?.source || values.source === "") ? { source: values.source } : {}),
-            tags: [] // TODO: Replace with array tags
+            tags: []
         }
 
         try {
@@ -153,7 +155,7 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
             name: values.name,
             weight: {
                 value: Number(values.weight),
-                isCa: values.isCa[0],
+                isCa: values.isCa[0] ? true : false,
                 // Only add additionalValue when defined and value type is additional
                 ...(values.additionalValue && (values.valueType === "range") ? { additionalValue: Number(values.additionalValue) } : {})
             },
@@ -249,7 +251,7 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
 
                                 {/* Is circa */}
                                 <div className={`${errors.weight ? "mt-2" : ""} flex items-center`}>
-                                    <CheckboxList name="isCa" options={[{ value: true, label: "is circa" }]} />
+                                    <CheckboxList name="isCa" options={[{ value: "isCa", label: "is circa" }]} />
                                     <Tooltip wrapperClassname="cursor-help" position="right" content={<>
                                         <p>When checked it is a circa value and will</p>
                                         <p>be displayed for example as ca. 300 g.</p>
