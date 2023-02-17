@@ -9,8 +9,8 @@ import { commandRequest } from "../axios/axios"
  * @param session the current session
  * @returns response from api
  */
-export const createNewItemApi = async (item: CreateItemDto, session: SessionData): Promise<AxiosResponse> => {
-    const response = await commandRequest.post("/items/insert", item, {
+export const createNewItemApi = async (item: CreateItemDto, session: SessionData): Promise<AxiosResponse<void>> => {
+    const response = await commandRequest.post<void>("/items/insert", item, {
         headers: {
             Authorization: `Bearer ${session.accessToken}`
         }
