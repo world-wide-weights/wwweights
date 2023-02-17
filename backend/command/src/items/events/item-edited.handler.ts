@@ -43,10 +43,8 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
       return;
     }
 
-    const tags = editValues.tags;
-
     const updateTagsStartTime = performance.now();
-    await this.updateTags(tags);
+    await this.updateTags(editValues.tags);
     this.logger.debug(
       `Updating tags by themselves took ${
         performance.now() - updateTagsStartTime

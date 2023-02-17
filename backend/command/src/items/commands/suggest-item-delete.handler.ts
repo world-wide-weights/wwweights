@@ -24,7 +24,7 @@ export class SuggestItemDeleteHandler
     const newSuggestion = new DeleteSuggestion({
       ...suggestItemDeleteDto,
       userId,
-      itemSlug: itemSlug,
+      itemSlug,
       // Approved is default until votes for suggestions are implemented in frontend
       status: SUGGESTION_STATUS.APPROVED,
       uuid: randomUUID(),
