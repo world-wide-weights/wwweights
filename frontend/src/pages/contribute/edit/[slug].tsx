@@ -2,7 +2,7 @@ import { GetStaticPaths, GetStaticProps, InferGetServerSidePropsType } from "nex
 import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../../../components/Auth/Auth"
 import { CreateEdit } from "../../../components/Item/CreateEdit"
-import { queryRequest } from "../../../services/axios/axios"
+import { queryServerRequest } from "../../../services/axios/axios"
 import { Item, PaginatedResponse } from "../../../types/item"
 import Custom404 from "../../404"
 
@@ -48,7 +48,7 @@ export const getStaticProps: GetStaticProps<EditItemProps> = async (context) => 
 
     try {
         // Fetch item
-        const itemResponse = await queryRequest.get<PaginatedResponse<Item>>(`/items/list?slug=${slug}`)
+        const itemResponse = await queryServerRequest.get<PaginatedResponse<Item>>(`/items/list?slug=${slug}`)
 
         // Item
         const item = itemResponse.data.data[0]
