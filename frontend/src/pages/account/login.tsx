@@ -100,7 +100,7 @@ Login.layout = (page: React.ReactElement) => {
         page={page}
         headline="Welcome back"
         description="Sign in to your account below."
-        sloganHeadline={<><span className="text-blue-300">Weigh</span> something and wanna share it with people?</>}
+        sloganHeadline={<><span className="text-blue-300">Weigh</span> something and wanna share it with others?</>}
         sloganDescription="Login to share your stuff." />
 }
 
