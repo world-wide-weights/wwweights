@@ -1,10 +1,8 @@
 import paginatedTagsList from "../../fixtures/tags/list.json"
 
+const tags = paginatedTagsList.data.map((tag: { name: string, count: number }) => tag.name)
 
 describe("Tags", () => {
-
-    const tags = paginatedTagsList.data.map((tag: { name: string, count: number }) => tag.name)
-
     it("should display tags", () => {
         cy.mockGetTagsList()
         cy.visitLocalPage("/tags")
