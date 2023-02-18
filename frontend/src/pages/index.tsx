@@ -92,7 +92,7 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 				<div className="bg-blue-200 py-6">
 					<div className="container flex flex-col md:flex-row gap-5 justify-around">
 						<Stat icon="weight" value="31.000+" description="Weights" />
-						<Stat icon="person" value="300+" description="Users" />
+						<Stat icon="person" value="300+" description="Contributers" />
 						<Stat icon="chat_bubble" value="10.000+" description="Contributions" />
 					</div>
 				</div>
