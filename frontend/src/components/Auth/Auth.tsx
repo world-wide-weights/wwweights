@@ -18,7 +18,7 @@ type AuthContext = {
     /** Check if auth context is loading. */
     isLoading: boolean
     /** Logout user and remove session data from localstorage. */
-    logout: () => void
+    logout: (fromUserAction?: boolean) => void
     /** Get session data from localstorage and logout when refresh token fails. */
     getSession: () => Promise<SessionData | null>
 }
@@ -46,10 +46,17 @@ export const Auth: React.FC<AuthProps> = ({ children, routeType }) => {
     /**
      * Logout user and remove session data from localstorage.
      */
-    const logout = useCallback(() => {
+    const logout = useCallback((fromUserAction: boolean = false) => {
         endSession()
-        setHasSession(false)
-    }, [])
+        if (hasSession) {
+            if (fromUserAction) {
+                toast.success("You have been logged out.")
+            } else {
+                toast.warn("Your session has expired. Please login again.")
+            }
+            setHasSession(false)
+        }
+    }, [hasSession])
 
     /**
      * Get session data from localstorage and logout when session is expired.
@@ -59,7 +66,6 @@ export const Auth: React.FC<AuthProps> = ({ children, routeType }) => {
 
         if (session === null) {
             logout()
-            toast.warn("Your session has expired. Please login again.")
             return null
         }
 
@@ -78,7 +84,8 @@ export const Auth: React.FC<AuthProps> = ({ children, routeType }) => {
 
             // When no session redirect (with no history) to login
             if (!hasSessionData && routeType === "protected") {
-                router.replace(routes.account.login + "?callbackUrl=" + router.asPath)
+                await router.replace(routes.account.login + "?callbackUrl=" + router.asPath)
+                toast.warn("You need to be logged in to access this page.")
             }
 
             // When has session and route type guest redirect (with no history) to home
