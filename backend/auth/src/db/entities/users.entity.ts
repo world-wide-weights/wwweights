@@ -48,7 +48,7 @@ export class UserEntity {
     enum: STATUS,
     example: STATUS.VERIFIED,
   })
-  status: string;
+  status: STATUS;
 
   @Expose()
   @Column('character varying', {
@@ -57,7 +57,7 @@ export class UserEntity {
     default: () => "'unverified'",
   })
   @ApiProperty({ description: 'User role', enum: ROLES, example: ROLES.USER })
-  role: string;
+  role: ROLES;
 
   @Expose({ groups: ['self'] })
   @Column('timestamp with time zone', { name: 'last_login', nullable: true })
