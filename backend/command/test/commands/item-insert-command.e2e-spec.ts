@@ -35,6 +35,7 @@ import {
   differentNames as itemsWithDifferentNames,
   insertItem,
   insertItem2,
+  insertItemWithAllValues,
   testData,
 } from '../mocks/items';
 import { ItemCronJobHandlerMock } from '../mocks/items-cron.mock';
@@ -228,7 +229,23 @@ describe('ItemsController (e2e)', () => {
   it('items/insert => increment profile counts', async () => {
     await request(server)
       .post(commandsPath + itemInsertPath)
-      .send(insertItem)
+      .send(insertItemWithAllValues)
+      .expect(HttpStatus.OK);
+
+    await retryCallback(async () => (await profileModel.count()) === 1);
+
+    const profile = await profileModel.findOne({});
+    expect(profile.count.itemsCreated).toEqual(1);
+    expect(profile.count.additionalValueOnCreation).toEqual(1);
+    expect(profile.count.tagsUsedOnCreation).toEqual(2);
+    expect(profile.count.sourceUsedOnCreation).toEqual(1);
+    expect(profile.count.imageAddedOnCreation).toEqual(1);
+  });
+
+  it('items/insert => increment only profile items count by 0 if rest is not used', async () => {
+    await request(server)
+      .post(commandsPath + itemInsertPath)
+      .send({ name: insertItem.name, weight: insertItem.weight })
       .expect(HttpStatus.OK);
 
     await retryCallback(async () => (await profileModel.count()) === 1);
@@ -236,7 +253,7 @@ describe('ItemsController (e2e)', () => {
     const profile = await profileModel.findOne({});
     expect(profile.count.itemsCreated).toEqual(1);
     expect(profile.count.additionalValueOnCreation).toEqual(0);
-    expect(profile.count.tagsUsedOnCreation).toEqual(2);
+    expect(profile.count.tagsUsedOnCreation).toEqual(0);
     expect(profile.count.sourceUsedOnCreation).toEqual(0);
     expect(profile.count.imageAddedOnCreation).toEqual(0);
   });
