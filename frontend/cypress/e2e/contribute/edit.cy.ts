@@ -6,7 +6,9 @@ describe("Edit Item", () => {
     describe("Loading", () => {
         it("should show loading when loading", () => {
             cy.mockSingleItem()
-            cy.login(`/contribute/edit/${editItem.slug}`)
+            cy.login({
+                route: `/contribute/edit/${editItem.slug}`
+            })
 
             cy.dataCy("skeleton-loading").should("be.visible")
         })
@@ -15,7 +17,9 @@ describe("Edit Item", () => {
     describe("Basic Edit Process", () => {
         beforeEach(() => {
             cy.mockSingleItem()
-            cy.login(`/contribute/edit/${editItem.slug}`)
+            cy.login({
+                route: `/contribute/edit/${editItem.slug}`
+            })
 
             cy.wait("@mockSingleItem")
         })

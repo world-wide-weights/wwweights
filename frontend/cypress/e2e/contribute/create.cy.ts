@@ -1,7 +1,9 @@
 
 describe("Create Item", () => {
     beforeEach(() => {
-        cy.login("/contribute/create")
+        cy.login({
+            route: "/contribute/create"
+        })
     })
 
     describe("Create Process", () => {

@@ -5,7 +5,9 @@ describe("Empty State Profile", () => {
             hasStatistics: false
         })
 
-        cy.login("/account/profile")
+        cy.login({
+            route: "/account/profile"
+        })
 
         cy.wait("@mockContributions")
         cy.wait("@mockProfile")

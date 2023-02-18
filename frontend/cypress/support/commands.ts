@@ -53,10 +53,10 @@ Cypress.Commands.add("mockGetTagsList", () => {
     })
 })
 
-Cypress.Commands.add("mockItemsList", (itemCount?: number) => {
-    const body = itemCount || itemCount === 0 ? {
+Cypress.Commands.add("mockItemsList", (options) => {
+    const body = options?.itemCount || options?.itemCount === 0 ? {
         ...paginatedItems,
-        data: paginatedItems.data.slice(0, itemCount)
+        data: paginatedItems.data.slice(0, options.itemCount)
     } : paginatedItems
 
     cy.task("clearNock")
@@ -70,8 +70,8 @@ Cypress.Commands.add("mockItemsList", (itemCount?: number) => {
     })
 })
 
-Cypress.Commands.add("mockDiscoverPage", (itemCount?: number) => {
-    cy.mockItemsList(itemCount)
+Cypress.Commands.add("mockDiscoverPage", (options) => {
+    cy.mockItemsList(options)
 
     // Mock Statistics
     cy.task("nock", {
@@ -142,7 +142,7 @@ Cypress.Commands.add("mockUploadImage", () => {
     }).as("mockUploadImage")
 })
 
-Cypress.Commands.add("login", (route, visitOptions) => {
+Cypress.Commands.add("login", ({ route, visitOptions }) => {
     cy.mockLogin()
 
     cy.visitLocalPage(route, {

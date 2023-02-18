@@ -22,7 +22,9 @@ describe("Error Profile", () => {
             forceNetworkError: true
         })
 
-        cy.login("/account/profile")
+        cy.login({
+            route: "/account/profile"
+        })
 
         cy.check500()
     })
@@ -43,7 +45,9 @@ describe("Error Profile", () => {
             body: profile
         })
 
-        cy.login("/account/profile")
+        cy.login({
+            route: "/account/profile"
+        })
 
         cy.check500()
     })
@@ -64,7 +68,9 @@ describe("Error Profile", () => {
             forceNetworkError: true
         })
 
-        cy.login("/account/profile")
+        cy.login({
+            route: "/account/profile"
+        })
 
         cy.check500()
     })

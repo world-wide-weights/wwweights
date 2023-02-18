@@ -48,7 +48,7 @@ declare global {
              * - mock item statistics
              * @param itemCount count of items getting back with body
              */
-            mockDiscoverPage(itemCount?: number): Chainable<void>
+            mockDiscoverPage(options?: { itemCount?: number }): Chainable<void>
             /**
              * Mock create item request.
              */
@@ -65,7 +65,7 @@ declare global {
              * Mock items list
              * @param itemCount count of items getting back with body
              */
-            mockItemsList(itemCount?: number): Chainable<void>
+            mockItemsList(options?: { itemCount?: number }): Chainable<void>
             /**
              * Mocks login request.
              */
@@ -79,7 +79,7 @@ declare global {
              * @param route the route we want to go after login
              * @param visitOptions the options we have when visiting page for example failOnStatusCode: false
              */
-            login(route: string, visitOptions?: Partial<Cypress.VisitOptions>): Chainable<void>
+            login(options: { route: string, visitOptions?: Partial<Cypress.VisitOptions> }): Chainable<void>
             /**
              * Mock profile page with contributions, statistics and profile data.
              * @param contribtionsCount count of contributions getting back with body.
