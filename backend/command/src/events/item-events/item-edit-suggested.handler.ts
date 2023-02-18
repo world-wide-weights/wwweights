@@ -15,51 +15,54 @@ export class ItemEditSuggestedHandler
   constructor(
     @InjectModel(EditSuggestion)
     private readonly suggestionModel: ReturnModelType<typeof EditSuggestion>,
-    private readonly sharedService: GlobalStatisticsService,
-    private readonly imageService: ImagesService,
+    private readonly globalStatisticsService: GlobalStatisticsService,
+    private readonly imagesService: ImagesService,
   ) {}
-  async handle({ editSuggestion }: ItemEditSuggestedEvent) {
+  async handle({ editSuggestion }: ItemEditSuggestedEvent): Promise<void> {
     // Performance
     const insertSuggestionStartTime = performance.now();
-    await this.insertSuggestion(editSuggestion);
 
-    this.logger.debug(
-      `${ItemEditSuggestedHandler.name} Insert took: ${
-        performance.now() - insertSuggestionStartTime
-      }ms`,
-    );
-
-    if (editSuggestion.updatedItemValues.image) {
-      const imgBackendCallStartTime = performance.now();
-      // Promote image to permanent once suggestion is done. The image is now relevant for our business logic
-      await this.imageService.promoteImageInImageBackend(
-        editSuggestion.updatedItemValues.image,
-      );
+    try {
+      await this.insertEditSuggestion(editSuggestion);
 
       this.logger.debug(
-        `Finished Image backend api call in ${
-          performance.now() - imgBackendCallStartTime
-        }`,
+        `Insert took: ${performance.now() - insertSuggestionStartTime} ms`,
+      );
+
+      if (editSuggestion.updatedItemValues.image) {
+        const imgBackendCallStartTime = performance.now();
+
+        // Promote image to permanent once suggestion is done. The image is now relevant for our business logic
+        await this.imagesService.promoteImageInImageBackend(
+          editSuggestion.updatedItemValues.image,
+        );
+
+        this.logger.debug(
+          `Finished Image backend api call in ${
+            performance.now() - imgBackendCallStartTime
+          } ms`,
+        );
+      }
+
+      await this.globalStatisticsService.incrementGlobalSuggestionCount();
+    } catch (error) {
+      this.logger.error(
+        `Toplevel error caught. Stopping execution. See above for more details`,
       );
     }
 
-    await this.sharedService.incrementGlobalSuggestionCount();
-
     this.logger.debug(
-      `Total duration of ${ItemEditSuggestedHandler.name} was ${
-        performance.now() - insertSuggestionStartTime
-      } ms`,
+      `Finished in ${performance.now() - insertSuggestionStartTime} ms`,
     );
   }
 
   // Db calls: 1 save()
-  async insertSuggestion(editSuggestion: EditSuggestion) {
+  private async insertEditSuggestion(
+    editSuggestion: EditSuggestion,
+  ): Promise<void> {
     try {
       const insertedSuggestion = new this.suggestionModel(editSuggestion);
       await insertedSuggestion.save();
-      this.logger.log(
-        `Edit suggestion inserted for item ${insertedSuggestion.itemSlug}`,
-      );
     } catch (error) {
       this.logger.error(
         `Insert suggestion for item ${editSuggestion.itemSlug}: ${error}`,

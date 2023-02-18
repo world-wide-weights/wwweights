@@ -16,22 +16,27 @@ export class ItemDeleteSuggestedHandler
     private readonly deleteSuggestionModel: ReturnModelType<
       typeof DeleteSuggestion
     >,
-    private readonly sharedService: GlobalStatisticsService,
+    private readonly globalStatisticsService: GlobalStatisticsService,
   ) {}
-  async handle({ deleteSuggestion }: ItemDeleteSuggestedEvent) {
-    // Performance
-    const insertSuggestionStartTime = performance.now();
-    await this.insertSuggestion(deleteSuggestion);
-    await this.sharedService.incrementGlobalSuggestionCount();
+  async handle({ deleteSuggestion }: ItemDeleteSuggestedEvent): Promise<void> {
 
+    const insertSuggestionStartTime = performance.now();
+    try{
+    // Performance
+    await this.insertDeleteSuggestion(deleteSuggestion);
+    await this.globalStatisticsService.incrementGlobalSuggestionCount();
+    } catch(error){
+      this.logger.error(`Toplevel error caught. Stopping execution. See above for more details`)
+    }
     this.logger.debug(
-      `${ItemDeleteSuggestedHandler.name} finished in ${
-        performance.now() - insertSuggestionStartTime
-      }ms`,
+      `Finished in ${performance.now() - insertSuggestionStartTime} ms`,
     );
   }
 
-  async insertSuggestion(deleteSuggestion: DeleteSuggestion) {
+  /**
+   * @description Insert delete suggestion into Read DB
+   */
+  private async insertDeleteSuggestion(deleteSuggestion: DeleteSuggestion): Promise<void> {
     try {
       const suggestion = new this.deleteSuggestionModel(deleteSuggestion);
       await suggestion.save();

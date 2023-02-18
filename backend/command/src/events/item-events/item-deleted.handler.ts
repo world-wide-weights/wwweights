@@ -16,51 +16,49 @@ export class ItemDeletedHandler implements IEventHandler<ItemDeletedEvent> {
     private readonly itemModel: ReturnModelType<typeof Item>,
     @InjectModel(Tag)
     private readonly tagModel: ReturnModelType<typeof Tag>,
-    private readonly sharedService: GlobalStatisticsService,
-    private readonly imageService: ImagesService,
+    private readonly globalStatisticsService: GlobalStatisticsService,
+    private readonly imagesService: ImagesService,
   ) {}
-  async handle({ itemDeletedEventDto }: ItemDeletedEvent) {
+
+  async handle({ itemDeletedEventDto }: ItemDeletedEvent): Promise<void> {
     const { itemSlug } = itemDeletedEventDto;
 
     const deleteItemStartTime = performance.now();
+    try {
+      // Storing item information within the code is valid here as it cant change anymore
+      const deletedItem: Item = await this.deleteItem(itemSlug);
 
-    // Storing item information here is valid as it cant change anymore
-    const deletedItem: Item = await this.deleteItem(itemSlug);
-
-    this.logger.debug(
-      `${ItemDeletedHandler.name} Item delete took: ${
-        performance.now() - deleteItemStartTime
-      }ms`,
-    );
-
-    await this.sharedService.decrementGlobalItemCount();
-
-    if (deletedItem?.tags) {
-      const updateTagsStartTime = performance.now();
-
-      const tagNames = deletedItem.tags.map((tag) => tag.name);
-
-      await this.updateTags(tagNames);
       this.logger.debug(
-        `${ItemDeletedHandler.name} Tag update took: ${
-          performance.now() - updateTagsStartTime
-        }ms`,
+        `Item delete took: ${performance.now() - deleteItemStartTime} ms`,
+      );
+
+      await this.globalStatisticsService.decrementGlobalItemCount();
+
+      if (deletedItem?.tags) {
+        const updateTagsStartTime = performance.now();
+        const tagNames = deletedItem.tags.map((tag) => tag.name);
+        await this.decrementTags(tagNames);
+        this.logger.debug(
+          `Tag update took: ${performance.now() - updateTagsStartTime} ms`,
+        );
+      }
+
+      await this.imagesService.demoteImageInImageBackend(deletedItem?.image);
+    } catch (error) {
+      this.logger.error(
+        `Toplevel error caught. Stopping execution. See above for more details`,
       );
     }
 
-    await this.imageService.demoteImageInImageBackend(deletedItem?.image);
-
-    this.logger.log(
-      `${ItemDeletedHandler.name} finished in ${
-        performance.now() - deleteItemStartTime
-      }`,
-    );
+    this.logger.log(`Finished in ${performance.now() - deleteItemStartTime}`);
   }
 
-  async deleteItem(slug: string) {
+  /**
+   * @description Delete item in read DB
+   */
+  private async deleteItem(slug: string): Promise<Item> {
     try {
-      const oldItem = await this.itemModel.findOneAndDelete({ slug });
-      return oldItem;
+      return await this.itemModel.findOneAndDelete({ slug });
     } catch (error) {
       this.logger.error(
         `Could not delete item ${slug} due to an error ${error}`,
@@ -69,7 +67,10 @@ export class ItemDeletedHandler implements IEventHandler<ItemDeletedEvent> {
     }
   }
 
-  async updateTags(tagNames: string[]) {
+  /**
+   * @description Decrement Tags by given names
+   */
+  private async decrementTags(tagNames: string[]): Promise<void> {
     try {
       await this.tagModel.updateMany(
         { name: { $in: tagNames } },

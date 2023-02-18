@@ -290,7 +290,57 @@ describe('ItemsController (e2e)', () => {
       expect(updatedItem.weight.isCa).toBeNull();
     });
 
-    it('EditItemCommand => Should update tags in item', async () => {
+    it('EditItemCommand => Should remove tags to item', async () => {
+      // ARRANGE
+      const item = new itemModel(singleItem);
+      await item.save();
+      const command = new EditItemCommand(item.slug, randomUUID(), {
+        tags: { pull: [item.tags[0].name] },
+      });
+      // Create eventstore stream
+      mockEventStore.existingStreams.add(
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      );
+      //ACT
+      await commandBus.execute(command);
+      // ASSERT
+      await retryCallback(
+        async () =>
+          (await itemModel.findOne({ slug: item.slug })).tags?.length <
+          item.tags.length,
+      );
+      const updatedItem = await itemModel.findOne({ slug: item.slug });
+      // Count does not matter in this case
+      expect(updatedItem.tags.map((t) => t.name)).not.toContain(
+        item.tags[0].name,
+      );
+    });
+
+    it('EditItemCommand => Should add tags to item', async () => {
+      // ARRANGE
+      const item = new itemModel(singleItem);
+      await item.save();
+      const command = new EditItemCommand(item.slug, randomUUID(), {
+        tags: { push: ['newTag1'] },
+      });
+      // Create eventstore stream
+      mockEventStore.existingStreams.add(
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      );
+      //ACT
+      await commandBus.execute(command);
+      // ASSERT
+      await retryCallback(
+        async () =>
+          (await itemModel.findOne({ slug: item.slug })).tags?.length >
+          item.tags.length,
+      );
+      const updatedItem = await itemModel.findOne({ slug: item.slug });
+      // Count does not matter in this case
+      expect(updatedItem.tags.map((t) => t.name)).toContain('newTag1');
+    });
+
+    it('EditItemCommand => Should add AND remove tags from item', async () => {
       // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();

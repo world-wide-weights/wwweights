@@ -20,52 +20,56 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
     private readonly itemModel: ReturnModelType<typeof Item>,
     @InjectModel(Tag)
     private readonly tagModel: ReturnModelType<typeof Tag>,
-    private readonly imageService: ImagesService,
+    private readonly imagesService: ImagesService,
   ) {}
-  async handle({ itemEditedEventDto }: ItemEditedEvent) {
-    const updateItemStartTime = performance.now();
 
+  async handle({ itemEditedEventDto }: ItemEditedEvent): Promise<void> {
+    const updateItemStartTime = performance.now();
     const { itemSlug, editValues } = itemEditedEventDto;
 
-    const oldItem = await this.updateItem(itemSlug, editValues);
+    try {
+      const oldItem = await this.updateItem(itemSlug, editValues);
 
-    this.logger.debug(
-      `${ItemEditedHandler.name} Item update took: ${
-        performance.now() - updateItemStartTime
-      }ms`,
-    );
-
-    // No tags in suggestion => we are done here
-    if (editValues.tags) {
-      const updateTagsStartTime = performance.now();
-      await this.updateTags(editValues.tags);
       this.logger.debug(
-        `Updating tags by themselves took ${
-          performance.now() - updateTagsStartTime
-        } ms`,
+        `Item update took: ${performance.now() - updateItemStartTime} ms`,
+      );
+
+      // No tags in suggestion => we are done here
+      if (editValues.tags) {
+        const updateTagsStartTime = performance.now();
+        await this.updateTags(editValues.tags);
+        this.logger.debug(
+          `Updating tags by themselves took ${
+            performance.now() - updateTagsStartTime
+          } ms`,
+        );
+      }
+
+      if (editValues.image && oldItem?.image) {
+        const imgBackendCallStartTime = performance.now();
+        // Only remove as promotion of new image was done at suggestion creation
+        await this.imagesService.demoteImageInImageBackend(oldItem.image),
+          this.logger.debug(
+            `Finished Image backend api call in ${
+              performance.now() - imgBackendCallStartTime
+            } ms`,
+          );
+      }
+    } catch (error) {
+      this.logger.error(
+        `Toplevel error caught. Stopping execution. See above for more details`,
       );
     }
-
-    if (itemEditedEventDto.editValues.image && oldItem?.image) {
-      const imgBackendCallStartTime = performance.now();
-      // Only remove as promotion of new image was done at suggestion creation
-      await this.imageService.demoteImageInImageBackend(oldItem.image),
-        this.logger.debug(
-          `Finished Image backend api call in ${
-            performance.now() - imgBackendCallStartTime
-          }`,
-        );
-    }
-
     this.logger.debug(
-      `Total duration of ${ItemEditedHandler.name} was ${
-        performance.now() - updateItemStartTime
-      } ms`,
+      `Finished in ${performance.now() - updateItemStartTime} ms`,
     );
   }
 
   // Db calls: Min: 1 findOneAndUpdate Max: 2 findOneAndUpdate()
-  async updateItem(slug: string, itemData: SuggestionItem): Promise<Item> {
+  private async updateItem(
+    slug: string,
+    itemData: SuggestionItem,
+  ): Promise<Item> {
     const { tags: tagsValues, weight, ...itemValues } = itemData;
     const tagNamesToPull = tagsValues?.pull || [];
     const tagsToPush =
@@ -79,10 +83,9 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
         weightSet[`weight.${key}`] = weight[key];
       });
     }
-    let oldItem: Item;
 
     try {
-      oldItem = await this.itemModel.findOneAndUpdate(
+      const oldItem = await this.itemModel.findOneAndUpdate(
         { slug },
         {
           ...itemValues,
@@ -98,6 +101,7 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
           },
         );
       }
+      return oldItem;
     } catch (error) {
       this.logger.error(
         `Could not update item ${slug} due to an error ${error}`,
@@ -106,36 +110,44 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
         `Item ${slug} could not be updated`,
       );
     }
-    return oldItem;
   }
 
   // Db calls: 1 bulkwrite()
-  async updateTags(tagUpdate: SuggestionTag) {
+  /**
+   * @description Update Tags
+   */
+  private async updateTags(tagUpdate: SuggestionTag): Promise<void> {
+    // Construct query
     const positiveUpdateQuery: AnyBulkWriteOperation<Tag>[] =
-      tagUpdate.push.map((tagName) => ({
+      tagUpdate.push?.map((tagName) => ({
         updateOne: {
           filter: { name: tagName },
           update: { $inc: { count: 1 } },
           upsert: true,
         },
-      }));
+      })) || [];
+    // Construct query
     const negativeUpdateQuery: AnyBulkWriteOperation<Tag>[] =
-      tagUpdate.pull.map((tagName) => ({
+      tagUpdate.pull?.map((tagName) => ({
         updateOne: {
           filter: { name: tagName },
           update: { $inc: { count: -1 } },
         },
-      }));
+      })) || [];
 
     try {
-      this.tagModel.bulkWrite(positiveUpdateQuery.concat(negativeUpdateQuery));
+      await this.tagModel.bulkWrite(
+        positiveUpdateQuery.concat(negativeUpdateQuery),
+      );
     } catch (error) {
       this.logger.error(
         `Could not update Tags ${tagUpdate.push.concat(
           tagUpdate.pull,
         )} due to an error ${error}`,
       );
-      throw new InternalServerErrorException('Could not update tags');
+      throw new InternalServerErrorException(
+        `Could not update tags ${tagUpdate.pull?.concat()}`,
+      );
     }
   }
 }
