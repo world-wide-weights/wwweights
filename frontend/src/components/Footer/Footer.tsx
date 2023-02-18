@@ -115,8 +115,7 @@ export const Footer: React.FC = () => {
 						{tags.map((tag, index) => <li key={index}>
 							<Button to={routes.tags.single(tag.name)} kind="tertiary">{`${tag.name} (${tag.count})`}</Button>
 						</li>)}
-						<Button to={routes.tags.list()} kind="tertiary">All tags</Button>
-
+						<li><Button to={routes.tags.list()} kind="tertiary">All tags</Button></li>
 					</ul>
 				</div>
 				<div className="mb-4">

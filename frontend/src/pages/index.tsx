@@ -61,7 +61,7 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 				<Navbar />
 
 				{/* Header */}
-				<div className="container flex flex-col items-center justify-center py-10 md:min-h-[30rem]">
+				<div className="container flex flex-col items-center justify-center pt-10 pb-8 md:pt-20 md:pb-16">
 					<h1 className="text-white text-2xl md:text-4xl font-bold mb-1">How much weighs?</h1>
 					<p className="text-gray-200 mb-3 md:mb-6">World&apos;s largest database of weights!</p>
 
