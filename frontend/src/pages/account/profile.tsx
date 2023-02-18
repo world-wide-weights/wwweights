@@ -43,14 +43,20 @@ const MAX_LIMIT = 64
 
 const deleteReasonDropdownOptions = [
     {
-        value: "wrong_information",
-        label: "Wrong information",
+        value: "inappropriate",
+        label: "Inappropriate item",
     }, {
         value: "duplicate",
-        label: "Duplicate",
+        label: "Duplicate item",
     }, {
-        value: "old_or_not_relevant",
-        label: "Old or not relevant",
+        value: "privacy",
+        label: "Privacy concerns",
+    }, {
+        value: "not_relevant",
+        label: "No longer relevant",
+    }, {
+        value: "fun_heavy",
+        label: "The item became too heavy"
     }, {
         value: "other",
         label: "Other",
@@ -173,7 +179,6 @@ const Profile: NextPageCustomProps = () => {
                 }
             })
 
-            // TODO: Successor/Subsequent contributions should be handled after deletion without page change
             let shouldRedirectToPreviousPage = false
 
             // Remove contribution from list
