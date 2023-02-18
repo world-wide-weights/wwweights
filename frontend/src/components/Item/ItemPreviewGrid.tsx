@@ -19,6 +19,8 @@ export type ItemPreviewGridProps = {
     difference?: number
     /** When true the item will be highlighted. */
     selectedItem?: boolean
+    /** Sets custom background color. */
+    bgColor?: string
     /** When true disable link. */
     disableLink?: boolean
 }
@@ -31,10 +33,10 @@ export type ItemPreviewGridProps = {
  * <ItemPreviewGrid name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} imageUrl="https://via.placeholder.com/96.png" />
  * ```
  */
-export const ItemPreviewGrid: React.FC<ItemPreviewGridProps> = ({ slug, datacy, name, weight, imageUrl }) => {
+export const ItemPreviewGrid: React.FC<ItemPreviewGridProps> = ({ slug, datacy, name, weight, imageUrl, bgColor = "bg-white" }) => {
     const weightString = renderUnitIntoString(weight)
 
-    return <Link datacy={datacy} className="flex items-center justify-between rounded-lg bg-white pl-5 pr-2 md:pr-3 py-2 md:py-3" href={routes.weights.single(slug)}>
+    return <Link datacy={datacy} className={`flex items-center justify-between rounded-lg ${bgColor}  pl-5 pr-2 md:pr-3 py-2 md:py-3`} href={routes.weights.single(slug)}>
         <div className="pr-3">
             <div>
                 <h5 datacy="itempreviewgrid-name" className="text-gray-600 text-sm font-medium break-all">{name}</h5>

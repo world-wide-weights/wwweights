@@ -4,7 +4,11 @@ import { range } from "../utils/range"
 
 export const Ellipsis = "..."
 
-export type PaginationBaseOptions = Partial<{ page: number, itemsPerPage: number, defaultItemsPerPage: number }>
+export type PaginationBaseOptions = Partial<{
+    page: number,
+    itemsPerPage: number,
+    defaultItemsPerPage: number
+}>
 
 type PaginationEllipsis = {
     content: typeof Ellipsis

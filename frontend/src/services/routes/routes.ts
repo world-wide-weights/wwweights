@@ -66,7 +66,8 @@ export const routes = {
         }
     },
     contribute: {
-        create: "/contribute/create"
+        create: "/contribute/create",
+        edit: (slug: string) => `/contribute/edit/${slug}`
     },
     misc: {
         index: "/misc",

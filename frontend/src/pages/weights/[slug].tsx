@@ -1,6 +1,9 @@
 import { GetStaticPaths, GetStaticProps, InferGetServerSidePropsType } from "next"
 import Image from "next/image"
 import { useRouter } from "next/router"
+import { useContext, useEffect, useState } from "react"
+import { AuthContext } from "../../components/Auth/Auth"
+import { Button } from "../../components/Button/Button"
 import { Chip } from "../../components/Chip/Chip"
 import { CompareContainer } from "../../components/CompareContainer/CompareContainer"
 import { SearchHeader } from "../../components/Header/SearchHeader"
@@ -29,6 +32,19 @@ type WeightsSingleProps = {
 export default function WeightsSingle({ item, relatedItems }: InferGetServerSidePropsType<typeof getStaticProps>) {
     // Generate Compare Weight
     const compareWeight = calculateMedianWeight(item.weight)
+
+    const { getSession } = useContext(AuthContext)
+    const [isAllowedToEdit, setIsAllowedToEdit] = useState(false)
+
+    useEffect(() => {
+        const addEditButton = async () => {
+            const session = await getSession()
+            if (!session) return
+
+            setIsAllowedToEdit(item.userId === session.decodedAccessToken.id)
+        }
+        addEditButton()
+    }, [getSession, item.userId])
 
     // Handle tabs
     const currentTab = useRouter().query.tab
@@ -97,6 +113,9 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
                         {/* No better way yet: https://github.com/vercel/next.js/discussions/21379 Let's take a look at this when we got problems with it */}
                         <Image src={imageUrl} priority className="rounded-xl" alt={item.name} width={230} height={230} />
                     </div>}
+                </div>
+                <div className="flex justify-end">
+                    {isAllowedToEdit && <Button kind="secondary" to={routes.contribute.edit(item.slug)} className="mb-4">Suggest an edit</Button>}
                 </div>
                 <hr className="mb-4 md:mb-8" />
 
