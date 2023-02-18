@@ -32,6 +32,14 @@ export const insertItem2: Partial<InsertItemDto> = {
   tags: ['tag1'],
 };
 
+export const insertItemWithAllValues: Partial<InsertItemDto> = {
+  name: 'test2',
+  weight: { value: 1123675e30, isCa: false, additionalValue: 1123675e33 },
+  tags: ['tag1', 'tag2'],
+  image: 'https://www.google.com',
+  source: 'https://www.google.com',
+};
+
 export const differentNames = [...Array(20).keys()];
 
 export const testData = [
