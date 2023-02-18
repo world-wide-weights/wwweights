@@ -13,7 +13,7 @@ export class AccountController {
 
   @Post('add-image')
   @UseGuards(JwtGuard, ApiKeyGuard)
-  @ApiOperation({ description: 'INTERNAL ENDPOINT - Used for adding reference between image and user' })
+  @ApiOperation({ summary: 'INTERNAL ENDPOINT - Used for adding reference between image and user' })
   @ApiBody({ type: AddImageDto })
   @ApiInternalServerErrorResponse({ description: 'Most likely database related errors' })
   @ApiUnauthorizedResponse({ description: 'Invalid JWT or invalid api key' })
