@@ -69,7 +69,7 @@ const Register: NextPageCustomProps = () => {
             else if (registerResponse.message.includes("Email")) {
                 setFieldError("email", "E-Mail already in use.")
             } else {
-                toast(`${registerResponse.statusCode}: ${registerResponse.message}`)
+                toast.error(`${registerResponse.statusCode}: ${registerResponse.message}`)
             }
 
             setIsLoading(false)
