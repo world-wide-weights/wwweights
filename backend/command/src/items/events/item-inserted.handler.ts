@@ -48,14 +48,14 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       );
 
       // This is not a SAGA since it is unreasonable to save this in an eventstore
-      this.increamentProfileCounts(item);
+      await this.increamentProfileCounts(item);
+      await this.sharedService.incrementGlobalItemCount();
 
       // Further updates and recovery from inconsistency is handled via cronjobs rather than for every projector run
       await this.imageService.promoteImageInImageBackend(item.image);
     } catch (error) {
       this.logger.error(`ItemInsertedHandler TopLevel caught error: ${error}`);
     }
-    this.sharedService.incrementGlobalItemCount();
   }
 
   // Db calls: 1 save()
@@ -120,7 +120,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
     const incrementer = {
       $inc: {
         'count.itemsCreated': 1,
-        'count.tagsUsedOnCreation': item.tags.length,
+        'count.tagsUsedOnCreation': item.tags?.length || 0,
         'count.sourceUsedOnCreation': item.source ? 1 : 0,
         'count.imageAddedOnCreation': item.image ? 1 : 0,
         'count.additionalValueOnCreation': item.weight.additionalValue ? 1 : 0,
