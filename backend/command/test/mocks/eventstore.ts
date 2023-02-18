@@ -1,10 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { EventBus } from '@nestjs/cqrs';
-import { ItemDeleteSuggestedEvent } from '../../src/items/events/item-delete-suggested.event';
-import { ItemDeletedEvent } from '../../src/items/events/item-deleted.event';
-import { ItemEditSuggestedEvent } from '../../src/items/events/item-edit-suggested.event';
-import { ItemEditedEvent } from '../../src/items/events/item-edited.event';
-import { ItemInsertedEvent } from '../../src/items/events/item-inserted.event';
+import { ItemDeleteSuggestedEvent } from '../../src/events/item-events/item-delete-suggested.event';
+import { ItemDeletedEvent } from '../../src/events/item-events/item-deleted.event';
+import { ItemEditSuggestedEvent } from '../../src/events/item-events/item-edit-suggested.event';
+import { ItemEditedEvent } from '../../src/events/item-events/item-edited.event';
+import { ItemInsertedEvent } from '../../src/events/item-events/item-inserted.event';
+
 
 export const logStringify = (obj: any) => {
   return JSON.stringify(obj, null, 2);

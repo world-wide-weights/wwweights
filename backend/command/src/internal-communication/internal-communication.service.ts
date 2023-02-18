@@ -58,9 +58,8 @@ export class InternalCommunicationService {
             this.logger.error(
               `Request to img backend for image ${data.imageHash} failed! Error: ${error}`,
             );
-            throw new ServiceUnavailableException(
-              'Img Backend could not be notified at the time',
-            );
+            // Don`t throw an exception as it would not go anywhere. Logging is sufficient here
+            return null
           }),
         ),
     );

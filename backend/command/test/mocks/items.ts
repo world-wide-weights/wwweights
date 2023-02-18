@@ -1,5 +1,5 @@
 import { Tag } from 'src/models/tag.model';
-import { InsertItemDto } from '../../src/items/interfaces/insert-item.dto';
+import { InsertItemDto } from '../../src/controllers/interfaces/insert-item.dto';
 import { Item } from '../../src/models/item.model';
 
 export const singleItem: Partial<Item> = {
