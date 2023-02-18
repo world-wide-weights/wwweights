@@ -19,11 +19,11 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { EventBus } from '@nestjs/cqrs';
 import { readFileSync } from 'fs';
-import { ItemDeleteSuggestedEvent } from '../items/events/item-delete-suggested.event';
-import { ItemDeletedEvent } from '../items/events/item-deleted.event';
-import { ItemEditSuggestedEvent } from '../items/events/item-edit-suggested.event';
-import { ItemEditedEvent } from '../items/events/item-edited.event';
-import { ItemInsertedEvent } from '../items/events/item-inserted.event';
+import { ItemDeleteSuggestedEvent } from '../events/item-events/item-delete-suggested.event';
+import { ItemDeletedEvent } from '../events/item-events/item-deleted.event';
+import { ItemEditSuggestedEvent } from '../events/item-events/item-edit-suggested.event';
+import { ItemEditedEvent } from '../events/item-events/item-edited.event';
+import { ItemInsertedEvent } from '../events/item-events/item-inserted.event';
 import { ALLOWED_EVENT_ENTITIES } from './enums/allowedEntities.enum';
 
 /**

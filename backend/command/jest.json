@@ -1,0 +1,21 @@
+{
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "collectCoverage": true,
+  "verbose": true,
+  "testMatch": [
+    "<rootDir>/src/**/*.spec.{ts,js}",
+    "<rootDir>/test/**/item-insert-command.e2e-spec.{ts,js}"
+  ],
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "coverageDirectory": ".coverage",
+  "coverageReporters": ["json", "text"],
+  "coveragePathIgnorePatterns": [
+    "<rootDir>/test/mocks",
+    "<rootDir>/test/helpers",
+    "<rootDir>/node_modules/"
+  ]
+}
