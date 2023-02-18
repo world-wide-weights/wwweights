@@ -3,6 +3,7 @@ import Link from "next/link"
 import { routes } from "../../services/routes/routes"
 import { renderUnitIntoString } from "../../services/unit/unitRenderer"
 import { Weight } from "../../types/item"
+import { Tooltip } from "../Tooltip/Tooltip"
 
 export type ItemPreviewGridProps = {
     /** Name of item. */
@@ -38,9 +39,13 @@ export const ItemPreviewGrid: React.FC<ItemPreviewGridProps> = ({ slug, datacy, 
 
     return <Link datacy={datacy} className={`flex items-center justify-between rounded-lg ${bgColor}  pl-5 pr-2 md:pr-3 py-2 md:py-3`} href={routes.weights.single(slug)}>
         <div className="pr-3">
-            <div>
-                <h5 datacy="itempreviewgrid-name" className="text-gray-600 text-sm font-medium break-all">{name}</h5>
-                <h5 datacy="itempreviewgrid-weight" className="font-bold" title={`${name} has a weight of ${weightString}`}>{weightString}</h5>
+            <div className="flex flex-col">
+                <Tooltip content={name}>
+                    <h5 datacy="itempreviewgrid-name" className="text-gray-600 text-sm font-medium w-52 md:w-44 lg:w-24 xl:w-40 2xl:w-28 truncate break-all">{name}</h5>
+                </Tooltip>
+                <Tooltip content={weightString}>
+                    <h5 datacy="itempreviewgrid-weight" className="font-bold w-52 md:w-44 lg:w-24 xl:w-40 2xl:w-28 truncate" title={`${name} has a weight of ${weightString}`}>{weightString}</h5>
+                </Tooltip>
             </div>
         </div>
         {imageUrl && <Image datacy="itempreviewgrid-image" priority className="object-cover rounded-lg w-20 bg-white" alt={`Image of ${name}`} src={imageUrl} width={96} height={96} />}

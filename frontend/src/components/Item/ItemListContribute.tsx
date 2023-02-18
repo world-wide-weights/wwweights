@@ -35,7 +35,9 @@ export const ItemListContribute: React.FC<ItemListContributeProps> = ({ name, sl
                     <Tooltip position="left" content={name}>
                         <h5 datacy="itemlistcontribute-name" className="font-medium truncate w-40 md:w-64 pr-3">{name}</h5>
                     </Tooltip>
-                    <h5 datacy="itemlistcontribute-weight" className="text-gray-600 font-medium md:w-32 mr-5">{weightString}</h5>
+                    <Tooltip position="left" content={name}>
+                        <h5 datacy="itemlistcontribute-weight" className="text-gray-600 font-medium truncate w-40 md:w-32 mr-5">{weightString}</h5>
+                    </Tooltip>
                 </div>
                 {imageUrl && <Image datacy="itemlistcontribute-image" className="object-cover rounded-lg w-12 h-12" alt={`Image of ${name}`} src={imageUrl} width={96} height={96} />}
             </Link>
