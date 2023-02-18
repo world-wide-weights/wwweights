@@ -1,40 +1,8 @@
-import { SortType } from "../../components/Sort/Sort"
-import { RoutePagination } from "../routes/routes"
+import { PaginationDataServiceParams, PaginationEllipsis, PaginationPage, PaginationService, PaginationServiceParams } from "../../types/pagination"
 import { range } from "../utils/range"
 
 export const Ellipsis = "..."
 
-export type PaginationBaseOptions = Partial<{
-    page: number,
-    itemsPerPage: number,
-    defaultItemsPerPage: number
-}>
-
-type PaginationEllipsis = {
-    content: typeof Ellipsis
-}
-
-type PaginationPage = {
-    content: number,
-    link: string
-}
-
-export type PaginationService = {
-    prev: string | null
-    next: string | null
-    pages: (PaginationPage | PaginationEllipsis)[]
-}
-
-export type PaginationServiceParams = {
-    totalItems: number,
-    itemsPerPage: number,
-    siblingCount: number,
-    currentPage: number,
-    baseRoute: RoutePagination,
-    defaultItemsPerPage: number
-    query: string
-    sort: SortType
-}
 export const paginationService = ({ totalItems, itemsPerPage, siblingCount, currentPage, baseRoute, defaultItemsPerPage, query, sort }: PaginationServiceParams): PaginationService => {
     const totalPageCount = getTotalPageCount(totalItems, itemsPerPage)
 
@@ -57,11 +25,6 @@ export const paginationService = ({ totalItems, itemsPerPage, siblingCount, curr
     }
 }
 
-export type PaginationDataServiceParams = {
-    totalPageCount: number,
-    siblingCount: number,
-    currentPage: number
-}
 export const paginationDataService = ({ totalPageCount, siblingCount, currentPage }: PaginationDataServiceParams): (number | typeof Ellipsis)[] => {
 
     // Pages count is determined as siblingCount + firstPage + lastPage + currentPage + 2*Ellipsis

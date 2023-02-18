@@ -22,7 +22,7 @@ import { routes } from "../../services/routes/routes"
 import { getImageUrl } from "../../services/utils/getImageUrl"
 import { UserProfile } from "../../types/auth"
 import { Item } from "../../types/item"
-import { PaginatedResponse } from "../../types/paginated"
+import { PaginatedResponse } from "../../types/pagination"
 import Custom500 from "../500"
 import { NextPageCustomProps } from "../_app"
 

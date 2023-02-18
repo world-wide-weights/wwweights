@@ -1,5 +1,6 @@
 import { useMemo } from "react"
-import { PaginationService, paginationService, PaginationServiceParams } from "../services/pagination/pagination"
+import { paginationService } from "../services/pagination/pagination"
+import { PaginationService, PaginationServiceParams } from "../types/pagination"
 
 /**
  * Pagination hook, creates the pagination service object

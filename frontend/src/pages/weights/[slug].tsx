@@ -20,7 +20,7 @@ import { renderUnitIntoString } from "../../services/unit/unitRenderer"
 import { getImageUrl } from "../../services/utils/getImageUrl"
 import { calculateMedianWeight } from "../../services/utils/weight"
 import { Item } from "../../types/item"
-import { PaginatedResponse } from "../../types/paginated"
+import { PaginatedResponse } from "../../types/pagination"
 import Custom404 from "../404"
 
 type WeightsSingleProps = {

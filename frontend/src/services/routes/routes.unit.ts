@@ -1,4 +1,4 @@
-import { PaginationBaseOptions } from "../pagination/pagination"
+import { PaginationBaseOptions } from "../../types/pagination"
 import { routes } from "./routes"
 
 describe("Routes", () => {

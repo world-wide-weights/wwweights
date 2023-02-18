@@ -17,9 +17,9 @@ const SHOULD_LOAD_GA = process.env.NODE_ENV !== "development"
  * When using this page type have the option to add custom props.
  * Page.layout --> Adds custom layout for this page.
  * Page.auth = {
- *    routeType: protected --> To see this page you need to be logged in
- *    routeType: guest --> To see this page you need to be a guest (not logged in)
- *    routeType: public --> This page is public and can be seen by everyone
+ *    routeType: protected --> To see this page you need to be logged in.
+ *    routeType: guest --> To see this page you need to be a guest (not logged in).
+ *    routeType: public --> This page is public and can be seen by everyone this is the default.
  * } 
  */
 export type NextPageCustomProps<P = {}, IP = P> = NextPage<P, IP> & {

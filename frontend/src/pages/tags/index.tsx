@@ -7,7 +7,7 @@ import { Tooltip } from "../../components/Tooltip/Tooltip"
 import { queryServerRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { generatePageString } from "../../services/seo/pageString"
-import { PaginatedResponse } from "../../types/paginated"
+import { PaginatedResponse } from "../../types/pagination"
 import { Tag } from "../../types/tag"
 
 const DEFAULT_ITEMS_PER_PAGE = 64

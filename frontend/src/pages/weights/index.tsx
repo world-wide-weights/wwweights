@@ -21,7 +21,7 @@ import { generatePageString } from "../../services/seo/pageString"
 import { renderUnitIntoString, renderWeightAsNumberIntoString } from "../../services/unit/unitRenderer"
 import { getImageUrl } from "../../services/utils/getImageUrl"
 import { Item } from "../../types/item"
-import { PaginatedResponse } from "../../types/paginated"
+import { PaginatedResponse } from "../../types/pagination"
 
 const DEFAULT_ITEMS_PER_PAGE = 16
 const ITEMS_PER_PAGE_MAXIMUM = 100

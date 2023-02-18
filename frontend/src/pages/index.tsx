@@ -14,7 +14,7 @@ import { routes } from "../services/routes/routes"
 import { getStructuredDataWebsite } from "../services/seo/structuredData/website"
 import { getImageUrl } from "../services/utils/getImageUrl"
 import { Item } from "../types/item"
-import { PaginatedResponse } from "../types/paginated"
+import { PaginatedResponse } from "../types/pagination"
 
 type HomeProps = {
     items: Item[]

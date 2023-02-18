@@ -1,5 +1,5 @@
 import { SortType } from "../../components/Sort/Sort"
-import { PaginationBaseOptions } from "../pagination/pagination"
+import { PaginationBaseOptions } from "../../types/pagination"
 
 /**
  * Define Routes for frontend
@@ -77,8 +77,5 @@ export const routes = {
     }
 } as const
 
-// Define types here 
-// TODO: Improve type connection between defintion here and up routes
-// TODO (Zoe-Bot): Change sort types when correct api implemented
 export type RoutePagination = (options?: PaginationBaseOptions & { query?: string, sort?: SortType }) => string
 

@@ -23,7 +23,6 @@ export type CompareTypeProps = {
     iconClassName?: string
 }
 
-// TODO: Refactor this component to use props to give this data and only use this items defintion in SingleWeightCompare
 // TODO: Update naming in component
 export const compareTypes: { [key in CompareTypes]: CompareTypeProps } = {
     ["penny"]: {
