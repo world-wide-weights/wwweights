@@ -21,6 +21,7 @@ class Weight {
   additionalValue?: number;
 }
 
+// TODO: since aggregate is gone we can replace this
 // To simplify here is Tag again but without the Aggregate since the Tag in Items does not have to look the same as the Tag alone and a composition type is too much work
 class Tag {
   @Expose()

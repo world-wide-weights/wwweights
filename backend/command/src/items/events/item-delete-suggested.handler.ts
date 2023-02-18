@@ -3,6 +3,7 @@ import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { DeleteSuggestion } from '../../models/delete-suggestion.model';
+import { SharedService } from '../../shared/shared.service';
 import { ItemDeleteSuggestedEvent } from './item-delete-suggested.event';
 
 @EventsHandler(ItemDeleteSuggestedEvent)
@@ -15,6 +16,7 @@ export class ItemDeleteSuggestedHandler
     private readonly deleteSuggestionModel: ReturnModelType<
       typeof DeleteSuggestion
     >,
+    private readonly sharedService: SharedService,
   ) {}
   async handle({ deleteSuggestion }: ItemDeleteSuggestedEvent) {
     // Performance
@@ -26,6 +28,8 @@ export class ItemDeleteSuggestedHandler
         performance.now() - insertSuggestionStartTime
       }ms`,
     );
+
+    this.sharedService.incrementGlobalSuggestionCount();
   }
 
   async insertSuggestion(deleteSuggestion: DeleteSuggestion) {
