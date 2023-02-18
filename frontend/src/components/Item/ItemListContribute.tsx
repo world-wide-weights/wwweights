@@ -7,7 +7,7 @@ import { Weight } from "../../types/item"
 import { IconButton } from "../Button/IconButton"
 import { Tooltip } from "../Tooltip/Tooltip"
 
-type ItemListContributeProps = {
+export type ItemListContributeProps = {
     /** Name of item. */
     name: string
     /** Slug of item. */

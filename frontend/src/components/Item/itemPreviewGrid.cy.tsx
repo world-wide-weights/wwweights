@@ -1,8 +1,8 @@
 import "material-symbols"
 import "../../styles/global.css"
-import { ItemPreviewGrid } from "./ItemPreviewGrid"
+import { ItemPreviewGrid, ItemPreviewGridProps } from "./ItemPreviewGrid"
 
-const props = {
+const props: ItemPreviewGridProps = {
     name: "Smartphone",
     slug: "smartphone",
     weight: {

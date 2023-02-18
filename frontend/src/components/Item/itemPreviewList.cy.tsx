@@ -1,8 +1,8 @@
 import "material-symbols"
 import "../../styles/global.css"
-import { ItemPreviewList } from "./ItemPreviewList"
+import { ItemPreviewList, ItemPreviewListProps } from "./ItemPreviewList"
 
-const props = {
+const props: ItemPreviewListProps = {
     name: "Smartphone",
     slug: "smartphone",
     weight: {

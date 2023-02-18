@@ -8,7 +8,7 @@ import { Icon } from "../Icon/Icon"
 import { ProgressBar } from "../ProgressBar/ProgressBar"
 import { Tooltip } from "../Tooltip/Tooltip"
 
-type ItemPreviewListProps = {
+export type ItemPreviewListProps = {
     /** Name of item. */
     name: string
     /** Weight. */

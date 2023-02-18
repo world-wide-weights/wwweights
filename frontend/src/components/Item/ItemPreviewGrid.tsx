@@ -4,7 +4,7 @@ import { routes } from "../../services/routes/routes"
 import { renderUnitIntoString } from "../../services/unit/unitRenderer"
 import { Weight } from "../../types/item"
 
-type ItemPreviewGridProps = {
+export type ItemPreviewGridProps = {
     /** Name of item. */
     name: string
     /** Weight. */

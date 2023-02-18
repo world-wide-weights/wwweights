@@ -1,8 +1,8 @@
 import "material-symbols"
 import "../../styles/global.css"
-import { ItemListContribute } from "./ItemListContribute"
+import { ItemListContribute, ItemListContributeProps } from "./ItemListContribute"
 
-const props = {
+const props: ItemListContributeProps = {
     name: "Smartphone",
     slug: "smartphone",
     weight: {
@@ -20,7 +20,7 @@ describe("ItemListContribute", () => {
             </ul>)
         })
 
-        it("should display item preview grid correct", () => {
+        it("should display item preview list correct", () => {
             cy.dataCy("itemlistcontribute-wrapper").should("be.visible")
         })
 
