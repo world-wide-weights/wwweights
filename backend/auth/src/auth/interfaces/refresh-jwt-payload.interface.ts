@@ -3,7 +3,7 @@
  */
 export interface RefreshJWTPayload {
   /**
-   * @description Userid 
+   * @description Userid
    */
   id: number;
   /**
