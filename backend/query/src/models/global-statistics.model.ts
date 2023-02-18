@@ -15,7 +15,7 @@ export class GlobalStatistics {
   @ApiProperty({
     description: 'Total items + total suggestions',
   })
-  @Transform(({ obj }) => obj.totalItems + obj.totalSuggestions)
+  @Transform(({ obj }) => obj.totalItems + (obj.totalSuggestions || 0))
   totalContributions: number;
 
   constructor(Partial: Partial<GlobalStatistics>) {
