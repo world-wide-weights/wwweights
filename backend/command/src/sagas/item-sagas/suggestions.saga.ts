@@ -6,6 +6,7 @@ import { DeleteItemCommand } from '../../commands/item-commands/delete-item.comm
 import { ItemDeleteSuggestedEvent } from '../../events/item-events/item-delete-suggested.event';
 import { ItemEditSuggestedEvent } from '../../events/item-events/item-edit-suggested.event';
 import { EditItemCommand } from '../../commands/item-commands/edit-item.command';
+import { EventstoreAllowedEvents } from '../../events/types/events.type';
 
 @Injectable()
 export class SuggestionsSaga {
@@ -17,7 +18,7 @@ export class SuggestionsSaga {
    */
   @Saga()
   deleteSuggestionSaga = (
-    events$: Observable<any>,
+    events$: Observable<EventstoreAllowedEvents>,
   ): Observable<ICommand | void> => {
     return events$.pipe(
       ofType(ItemDeleteSuggestedEvent),
@@ -48,7 +49,7 @@ export class SuggestionsSaga {
    */
   @Saga()
   editSuggestionSaga = (
-    events$: Observable<any>,
+    events$: Observable<EventstoreAllowedEvents>,
   ): Observable<ICommand | void> => {
     return events$.pipe(
       ofType(ItemEditSuggestedEvent),

@@ -25,6 +25,8 @@ import { ItemEditSuggestedEvent } from '../events/item-events/item-edit-suggeste
 import { ItemEditedEvent } from '../events/item-events/item-edited.event';
 import { ItemInsertedEvent } from '../events/item-events/item-inserted.event';
 import { ALLOWED_EVENT_ENTITIES } from './enums/allowedEntities.enum';
+import { EventstoreAllowedDtos } from './types/allowed-dtos.type';
+import { EventstoreAllowedEvents } from '../events/types/events.type';
 
 /**
  * @description Wrapper for eventstoreDb. Used for save interaction with eventstore
@@ -33,6 +35,7 @@ import { ALLOWED_EVENT_ENTITIES } from './enums/allowedEntities.enum';
 export class EventStore {
   private readonly logger = new Logger(EventStore.name);
   private client: EventStoreDBClient;
+  // Duplicate type definitions as using premade type is not allowed here
   private readonly eventMap = new Map<
     string,
     | typeof ItemEditSuggestedEvent
@@ -138,6 +141,7 @@ export class EventStore {
       }
 
       this.publishEventToBus(
+        // Use any as types from eventstore client package are not in sync to actual db
         (resolvedEvent?.event?.data as any)?.eventType,
         (resolvedEvent?.event?.data as any)?.value,
       );
@@ -178,7 +182,11 @@ export class EventStore {
   /**
    * @description Add event to stream
    */
-  public async addEvent(streamId, eventType: any, event: any): Promise<void> {
+  public async addEvent(
+    streamId,
+    eventType: string,
+    event: EventstoreAllowedEvents,
+  ): Promise<void> {
     // If replay is not ready, don´t accept events to avoid inconsistent data
     if (!this.isReady) {
       throw new ServiceUnavailableException(
@@ -195,7 +203,10 @@ export class EventStore {
   /**
    * @description Take event along with its typing and publish it to the cqrs event bus
    */
-  private publishEventToBus(eventType: any, event: any): Promise<void> {
+  private publishEventToBus(
+    eventType: string,
+    event: EventstoreAllowedDtos,
+  ): Promise<void> {
     if (!event) return;
     if (!this.eventMap.get(eventType)) {
       this.logger.error(`Invalid eventtype for eventbus ${eventType}`);
