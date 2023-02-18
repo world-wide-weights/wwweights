@@ -39,7 +39,7 @@ export const domain = process.env.NEXT_PUBLIC_CLIENT_BASE_URL ?? "https://wwweig
 export const Seo: React.FC<BaseSeoProps> = ({
     title,
     shouldDisplayTitleSuffix = true,
-    description = "World largest database of weights! World Wide Weights is a community project to create a global database of weights.",
+    description = "World&apos;s largest database of weights! World Wide Weights is a community project to create a global database of weights.",
     keywords = [],
     canonicalLink = "",
     ogImage = `${domain}/img/og_default.jpg`,

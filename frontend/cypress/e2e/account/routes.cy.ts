@@ -34,7 +34,7 @@ describe("Routes protected/guest", () => {
             cy.login("/account/login")
 
             // Mock home
-            cy.mockItemsList()
+            cy.mockHome()
 
             // Redirected to /
             cy.url().should("eq", clientBaseUrl + "/")

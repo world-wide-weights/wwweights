@@ -1,7 +1,7 @@
 import { Form, Formik } from "formik"
 import { useRouter } from "next/router"
 import { useState } from "react"
-import { object, SchemaOf, string } from "yup"
+import { object, ObjectSchema, string } from "yup"
 import { Button } from "../../components/Button/Button"
 import { TextInput } from "../../components/Form/TextInput/TextInput"
 import { AccountLayout } from "../../components/Layout/AccountLayout"
@@ -33,7 +33,7 @@ const Login: NextPageCustomProps = () => {
     }
 
     // Formik Form Validation
-    const validationSchema: SchemaOf<LoginDto> = object().shape({
+    const validationSchema: ObjectSchema<LoginDto> = object().shape({
         email: string().email("Please enter a valid E-Mail.").required("E-Mail is required."),
         password: string().required("Password is required.")
     })

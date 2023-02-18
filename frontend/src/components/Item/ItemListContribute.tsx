@@ -4,7 +4,6 @@ import { routes } from "../../services/routes/routes"
 import { renderUnitIntoString } from "../../services/unit/unitRenderer"
 import { getImageUrl } from "../../services/utils/getImageUrl"
 import { Weight } from "../../types/item"
-import { IconButton } from "../Button/IconButton"
 import { Tooltip } from "../Tooltip/Tooltip"
 
 export type ItemListContributeProps = {
@@ -16,9 +15,11 @@ export type ItemListContributeProps = {
     weight: Weight
     /** Image of item. */
     image?: string
+    /** Actions that can be performed on the item. */
+    actions: React.ReactNode
 }
 
-export const ItemListContribute: React.FC<ItemListContributeProps> = ({ name, slug, weight, image }) => {
+export const ItemListContribute: React.FC<ItemListContributeProps> = ({ name, slug, weight, image, actions }) => {
     const weightString = renderUnitIntoString(weight)
 
     const imageUrl = getImageUrl(image)
@@ -38,12 +39,7 @@ export const ItemListContribute: React.FC<ItemListContributeProps> = ({ name, sl
 
             {/* Actions */}
             <div className="flex items-center mx-0 sm:mx-3">
-                <Tooltip content="Edit">
-                    <IconButton icon="edit" />
-                </Tooltip>
-                <Tooltip content="Delete">
-                    <IconButton icon="close" />
-                </Tooltip>
+                {actions}
             </div>
         </div>
     </li>

@@ -8,12 +8,8 @@ const initialValues = {
     box: ""
 }
 
-const submitForm = (values: typeof initialValues) => {
-    console.log(values)
-}
-
 const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    return <Formik initialValues={initialValues} onSubmit={submitForm} >
+    return <Formik initialValues={initialValues} onSubmit={(values: typeof initialValues) => console.log(values)} >
         <Form>
             {children}
         </Form>

@@ -7,15 +7,15 @@ const initialValues = {
     file: ""
 }
 
-const NAME = "file"
-
 const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    return <Formik initialValues={initialValues} onSubmit={(values) => console.log(values)} >
+    return <Formik initialValues={initialValues} onSubmit={(values: typeof initialValues) => console.log(values)} >
         <Form>
             {children}
         </Form>
     </Formik>
 }
+
+const NAME = "file"
 
 describe("Image Upload", () => {
     beforeEach(() => {

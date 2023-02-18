@@ -1,12 +1,14 @@
 /// <reference types="cypress" />
 
 import sessiondata from "../fixtures/auth/sessiondata.json"
+import statisticsAuth from "../fixtures/auth/statistics.json"
 import paginatedItems from "../fixtures/items/list.json"
 import paginatedRelatedItems from "../fixtures/items/related.json"
 import paginatedSingleItem from "../fixtures/items/single.json"
 import itemStatistics from "../fixtures/items/statistics.json"
 import paginatedContributions from "../fixtures/profile/contributions.json"
 import profileStatistics from "../fixtures/profile/statistics.json"
+import statistics from "../fixtures/statistics/statistics.json"
 import paginatedTagsList from "../fixtures/tags/list.json"
 
 const API_BASE_URL_AUTH = Cypress.env("PUBLIC_API_BASE_URL_AUTH")
@@ -153,6 +155,26 @@ Cypress.Commands.add("login", (route, visitOptions) => {
     })
 })
 
+Cypress.Commands.add("mockHome", () => {
+    cy.mockItemsList()
+
+    cy.task("nock", {
+        hostname: API_BASE_URL_AUTH,
+        method: "get",
+        path: "/auth/statistics",
+        statusCode: 200,
+        body: statisticsAuth
+    })
+
+    cy.task("nock", {
+        hostname: API_BASE_URL_QUERY_SERVER,
+        method: "get",
+        path: "/statistics",
+        statusCode: 200,
+        body: statistics
+    })
+})
+
 Cypress.Commands.add("mockProfilePage", (options) => {
     const body = options?.contribtionsCount || options?.contribtionsCount === 0 ? {
         ...paginatedContributions,
@@ -185,6 +207,12 @@ Cypress.Commands.add("mockEditItem", () => {
     cy.intercept("POST", `${API_BASE_URL_COMMAND}/items/*/suggest/edit`, {
         statusCode: 200,
     }).as("mockEditItem")
+})
+
+Cypress.Commands.add("mockDeleteItem", () => {
+    cy.intercept("POST", `${API_BASE_URL_COMMAND}/items/*/suggest/delete`, {
+        statusCode: 200,
+    }).as("mockDeleteItem")
 })
 
 export { }
