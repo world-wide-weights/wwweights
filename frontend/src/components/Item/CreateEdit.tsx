@@ -147,7 +147,6 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
 
             // Handle unkown erros
             if (!axios.isAxiosError(error)) {
-                console.error(error)
                 toast.error("Please try again in a few minutes.")
                 return
             }
@@ -159,11 +158,13 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
                     return
                 }
                 toast.error(`Error ${error.response.status}: ${error.response.data.message}`)
+                return
             }
 
             // Handle errors with no answer from API
-            if (error.message.includes("Network Error")) {
+            if (error.message.includes("Network")) {
                 toast.error("Please check your internet connection and try again.")
+                return
             }
         }
     }
