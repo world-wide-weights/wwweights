@@ -9,7 +9,7 @@ import { Navbar } from "../components/Navbar/Navbar"
 import { Search } from "../components/Search/Search"
 import { Seo } from "../components/Seo/Seo"
 import { Stat } from "../components/Statistics/Stat"
-import { queryServerRequest } from "../services/axios/axios"
+import { authRequest, queryServerRequest } from "../services/axios/axios"
 import { routes } from "../services/routes/routes"
 import { getStructuredDataWebsite } from "../services/seo/structuredData/website"
 import { getImageUrl } from "../services/utils/getImageUrl"
@@ -130,16 +130,17 @@ function Home({ items, statistics }: InferGetServerSidePropsType<typeof getServe
 
 export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
 	try {
-		const [itemsResponse, statisticsUser] = await Promise.all([
+		const [itemsResponse, statisticsUser, statisticsTotal] = await Promise.all([
 			queryServerRequest.get<PaginatedResponse<Item>>("/items/list?page=1&limit=20"),
-			queryServerRequest.get<{ totalUsers: number }>("/auth/statistics")
+			authRequest.get<{ totalUsers: number }>("/auth/statistics"),
+			queryServerRequest.get<{ totalItems: 0, totalContributions: 0 }>("/statistics")
 		])
 
 		const items = itemsResponse.data.data
 		const statistics = {
-			totalUsers: statisticsUser.data.totalUsers,
-			totalItems: 100000,
-			totalContributions: 5000
+			totalUsers: statisticsUser.data.totalUsers ?? 0,
+			totalItems: statisticsTotal.data.totalItems ?? 0,
+			totalContributions: statisticsTotal.data.totalContributions ?? 0
 		}
 
 		return {
