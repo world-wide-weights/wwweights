@@ -72,9 +72,9 @@ const App = ({ Component, pageProps }: AppPropsCustom) => {
     <Auth routeType={Component?.auth?.routeType ?? "public"}> {/** Auth wrapper */}
       <div className="font-sans">
         {layout(<Component {...pageProps} />)} {/** Page content with default or custom layout. */}
-        <ToastContainer />
       </div>
     </Auth>
+    <ToastContainer position="bottom-right" />
   </>
 }
 

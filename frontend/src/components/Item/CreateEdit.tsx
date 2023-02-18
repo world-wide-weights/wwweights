@@ -138,6 +138,8 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
             if (isEditMode && editItem)
                 response = await editItemApi(item?.slug, editItem, session)
 
+            toast.success("Thanks for contributing to World Wide Weights!")
+
             /** Redirect to discover */
             if (response?.status === 200)
                 await router.push(routes.account.profile())

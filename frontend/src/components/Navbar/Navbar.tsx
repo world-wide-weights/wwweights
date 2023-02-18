@@ -40,7 +40,7 @@ export const Navbar: React.FC = () => {
         text: "Register",
     }, {
         shouldDisplay: hasSession,
-        onClick: () => logout(),
+        onClick: () => logout(true),
         text: "Logout"
     }]
 
