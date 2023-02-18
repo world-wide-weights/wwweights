@@ -13,7 +13,7 @@ export type Crumb = {
  * @param router Next router object generate with useRouter()
  * @returns 
  */
-export function generateBreadcrumbs(router: NextRouter): Crumb[] {
+export const generateBreadcrumbs = (router: NextRouter): Crumb[] => {
     // Remove any query parameters, as those aren't included in breadcrumbs
     const asPathWithoutQuery = router.asPath.split("?")[0]
 

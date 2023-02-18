@@ -68,7 +68,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name, filePath }) => {
      * @param event The drag event.
      * @param formikProps helper
      */
-    const handleDrag = function (event: React.DragEvent<HTMLDivElement>) {
+    const handleDrag = (event: React.DragEvent<HTMLDivElement>) => {
         // If image is already set, do nothing.
         if (image)
             return
@@ -88,7 +88,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name, filePath }) => {
      * @param event The drop event.
      * @param formikProps helper
      */
-    const handleDrop = function (event: React.DragEvent<HTMLDivElement>, formikProps: FieldProps<any>) {
+    const handleDrop = (event: React.DragEvent<HTMLDivElement>, formikProps: FieldProps<any>) => {
         event.preventDefault()
         event.stopPropagation()
         setDragActive(false)
