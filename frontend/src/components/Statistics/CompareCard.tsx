@@ -23,7 +23,6 @@ export type CompareTypeProps = {
     iconClassName?: string
 }
 
-// TODO: Update naming in component
 export const compareTypes: { [key in CompareTypes]: CompareTypeProps } = {
     ["penny"]: {
         weight: 2.5,
@@ -99,10 +98,10 @@ export const CompareCard: React.FC<CompareCardProps> = ({ type, itemName, weight
     // Variables
     const compareWith = compareTypes[type].compareWith
     const shouldDisplayToggle = compareWith && calculateWeightFit(weight, compareWith.weight) > 0
-    const weightCompare = buttonState === "right" && compareWith ? compareWith.weight : compareTypes[type].weight
+    const compareWeight = buttonState === "right" && compareWith ? compareWith.weight : compareTypes[type].weight
 
     // Calculations
-    const count = calculateWeightFit(weight, weightCompare)
+    const count = calculateWeightFit(weight, compareWeight)
 
     // Don't show component when number to big
     if (count > 1e10)

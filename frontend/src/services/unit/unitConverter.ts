@@ -34,7 +34,6 @@ const commaShiftsForUnit: { [K in Unit]: number } = {
  */
 export const calculateCommaShift = (value: BigNumber, moveComma: number, left: Boolean): BigNumber => {
     if (moveComma === 0) return value
-    //TODO: if value is smaller then 1e-21 it will return BigNumber = infinity
     if (left) {
         return value.multipliedBy(BigNumber(10).exponentiatedBy(moveComma))
     } else {

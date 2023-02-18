@@ -22,7 +22,6 @@ type CardProps = {
 export const Card: React.FC<CardProps> = ({ icon, descriptionTop, value, descriptionBottom, to, classNameWrapper = "" }) => {
     const CustomTag = to ? Link : "div"
 
-    // TODO: Div should not have href tag
     return <CustomTag href={to ?? "#"} className={`flex items-center bg-white rounded-lg py-4 px-6 ${classNameWrapper}`}>
         <div className="flex items-center justify-center bg-blue-200 rounded-full w-14 h-14 min-w-[56px] mr-6">
             <Icon className="text-blue-700 text-3xl" isFilled>{icon}</Icon>

@@ -71,7 +71,6 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
             canonicalLink={router.asPath}
         />
 
-        {/* TODO (Zoe-Bot): Find a better solution instead of give sort and query */}
         {/* Search with related tags */}
         <SearchHeader query={query} sort={sort} />
 

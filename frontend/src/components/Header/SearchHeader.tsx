@@ -99,8 +99,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "
                                 <Search />
                             </div>
                         </div>
-                        {/* TODO (Zoe-bot): Loading Component */}
-                        {query !== "" && hasRelatedTags && (isLoadingRelatedTags ? <p>Loading...</p> : <div datacy="search-header-tag-wrapper" className="whitespace-nowrap overflow-x-scroll md:whitespace-normal md:overflow-hidden">
+                        {query !== "" && hasRelatedTags && (isLoadingRelatedTags ? <></> : <div datacy="search-header-tag-wrapper" className="whitespace-nowrap overflow-x-scroll md:whitespace-normal md:overflow-hidden">
                             {/* Only show tags not current searched (should not be the value in query field) */}
                             {relatedTags.map((relatedTag, index) => relatedTag.name !== query && <Chip datacy={`search-header-chip-${index}`} key={relatedTag.name} to={routes.weights.list({ sort, query: relatedTag.name })}>{relatedTag.name}</Chip>)}
                             <Chip to={routes.tags.list()}>All tags</Chip>
