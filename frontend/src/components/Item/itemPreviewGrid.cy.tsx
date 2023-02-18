@@ -2,26 +2,32 @@ import "material-symbols"
 import "../../styles/global.css"
 import { ItemPreviewGrid } from "./ItemPreviewGrid"
 
+const props = {
+    name: "Smartphone",
+    slug: "smartphone",
+    weight: {
+        value: 100,
+        isCa: false
+    },
+    image: "https://via.placeholder.com/96.png",
+}
+
 describe("ItemPreviewGrid", () => {
     describe("should display item preview grid correct", () => {
         beforeEach(() => {
-            cy.mount(<ItemPreviewGrid name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} imageUrl="https://via.placeholder.com/96.png" datacy="item-preview-grid" />)
-        })
-
-        it("should display item preview grid correct", () => {
-            cy.dataCy("item-preview-grid").should("be.visible")
+            cy.mount(<ItemPreviewGrid {...props} />)
         })
 
         it("should display item name", () => {
-            cy.dataCy("item-name").should("have.text", "Smartphone")
+            cy.dataCy("itempreviewgrid-name").should("have.text", props.name)
         })
 
         it("should display item weight", () => {
-            cy.dataCy("item-weight").should("have.text", "100 g")
+            cy.dataCy("itempreviewgrid-weight").should("have.text", props.weight.value + " g")
         })
 
         it("should display item image", () => {
-            cy.dataCy("item-image").should("be.visible")
+            cy.dataCy("itempreviewgrid-image").should("be.visible")
         })
     })
 })

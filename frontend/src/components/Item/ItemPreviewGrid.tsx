@@ -1,8 +1,8 @@
 import Image from "next/image"
 import Link from "next/link"
 import { routes } from "../../services/routes/routes"
-import { ItemPreviewProps } from "./ItemPreviewList"
 import { renderUnitIntoString } from "../../services/unit/unitRenderer"
+import { ItemPreviewProps } from "./ItemPreviewList"
 
 /**
  * Excerpt component for Item
@@ -18,10 +18,10 @@ export const ItemPreviewGrid: React.FC<ItemPreviewProps> = ({ slug, datacy, name
     return <Link datacy={datacy} className="flex items-center justify-between rounded-lg bg-white pl-5 pr-2 md:pr-3 py-2 md:py-3" href={routes.weights.single(slug)}>
         <div className="pr-3">
             <div>
-                <h5 datacy="item-name" className="text-gray-600 text-sm font-medium break-all">{name}</h5>
-                <h5 datacy="item-weight" className="font-bold" title={`${name} has a weight of ${weightString}`}>{weightString}</h5>
+                <h5 datacy="itempreviewgrid-name" className="text-gray-600 text-sm font-medium break-all">{name}</h5>
+                <h5 datacy="itempreviewgrid-weight" className="font-bold" title={`${name} has a weight of ${weightString}`}>{weightString}</h5>
             </div>
         </div>
-        {imageUrl && <Image datacy="item-image" priority className="object-cover rounded-lg w-20 bg-white" alt={`Image of ${name}`} src={imageUrl} width={96} height={96} />}
+        {imageUrl && <Image datacy="itempreviewgrid-image" priority className="object-cover rounded-lg w-20 bg-white" alt={`Image of ${name}`} src={imageUrl} width={96} height={96} />}
     </Link>
 }
