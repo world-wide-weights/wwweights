@@ -1,3 +1,6 @@
+/**
+ * @description Sample user for testing
+ */
 export const SAMPLE_USER = {
   username: 'R2D2',
   password: 'StarWarsIsAVeryNiceMovie',

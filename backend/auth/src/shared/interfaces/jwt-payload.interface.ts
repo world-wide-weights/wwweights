@@ -4,7 +4,7 @@ import { ROLES } from '../enums/roles.enum';
 /**
  * @description DTO for JWT Token content
  */
-export class JWTPayload {
+export interface JWTPayload {
   username: string;
   id: number;
   email: string;

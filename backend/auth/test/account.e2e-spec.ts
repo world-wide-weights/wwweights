@@ -22,7 +22,6 @@ import { setupDataSource } from './helpers/typeOrmSetup';
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
   let dataSource: DataSource;
-  let configService: ConfigService;
   let userService: UserService;
   let authService: AuthService;
   let user: UserEntity;
@@ -48,7 +47,6 @@ describe('AuthController (e2e)', () => {
     app = await moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
-    configService = app.get<ConfigService>(ConfigService);
     userService = app.get<UserService>(UserService);
     authService = app.get<AuthService>(AuthService);
 

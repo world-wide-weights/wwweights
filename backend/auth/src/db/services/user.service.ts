@@ -71,15 +71,10 @@ export class UserService {
   }
 
   /**
-   * @description Update user status
-   */
-  async changeUserStatus(id: number, status: STATUS): Promise<void> {
-    await this.userEntity.update(id, { status: status });
-  }
-
-  /**
    * @description Get the system time of postgres instance
    */
+  // ignore this in tests as the SQL query is not supported by pg-mem i.e. it has to be mocked
+  /* istanbul ignore next */
   async getCurrentDbTime(): Promise<{ now: string }> {
     return (await this.userEntity.query('SELECT NOW()::timestamptz'))[0];
   }
