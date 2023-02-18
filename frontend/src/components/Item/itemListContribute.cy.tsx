@@ -10,6 +10,7 @@ const props: ItemListContributeProps = {
         isCa: false
     },
     image: "https://via.placeholder.com/96.png",
+    actions: <></>
 }
 
 describe("ItemListContribute", () => {
