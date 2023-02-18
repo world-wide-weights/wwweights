@@ -3,10 +3,9 @@ import { Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { Item } from '../../models/item.model';
-import { Profile } from '../../models/profile.model';
 import { Tag } from '../../models/tag.model';
-import { GlobalStatisticsService } from '../services/global-statistics.service';
 import { ImagesService } from '../services/images.service';
+import { StatisticsService } from '../services/statistics.service';
 import { ItemInsertedEvent } from './item-inserted.event';
 
 @EventsHandler(ItemInsertedEvent)
@@ -17,9 +16,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
     private readonly itemModel: ReturnModelType<typeof Item>,
     @InjectModel(Tag)
     private readonly tagModel: ReturnModelType<typeof Tag>,
-    @InjectModel(Profile)
-    private readonly profileModel: ReturnModelType<typeof Profile>,
-    private readonly globalStatisticsService: GlobalStatisticsService,
+    private readonly statisticsService: StatisticsService,
     private readonly imagesService: ImagesService,
   ) {}
 
@@ -39,9 +36,9 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
         `Insert took: ${performance.now() - insertItemStartTime} ms`,
       );
 
-      Promise.all([
-        this.increamentProfileCounts(item),
-        this.globalStatisticsService.incrementGlobalItemCount(),
+      await Promise.all([
+        this.incrementProfileCounts(item),
+        this.statisticsService.incrementGlobalItemCount(),
       ]);
 
       // Further updates and recovery from inconsistency is handled via cronjobs rather than for every projector run
@@ -121,7 +118,10 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
     }
   }
 
-  private async increamentProfileCounts(item: Item): Promise<void> {
+  /**
+   * @description Increment the profile counts based on with what the item was created
+   */
+  private async incrementProfileCounts(item: Item): Promise<void> {
     const incrementer = {
       $inc: {
         'count.itemsCreated': 1,
@@ -132,18 +132,9 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       },
     };
 
-    try {
-      await this.profileModel.findOneAndUpdate(
-        { userId: item.userId },
-        incrementer,
-        {
-          upsert: true,
-        },
-      );
-    } catch (error) {
-      this.logger.error(
-        `Incrementing Profile Counts Failed (however we allow it): ${error}`,
-      );
-    }
+    await this.statisticsService.incrementProfileCounts(
+      item.userId,
+      incrementer,
+    );
   }
 }

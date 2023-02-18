@@ -1,10 +1,10 @@
 import { InjectModel } from '@m8a/nestjs-typegoose';
-import { InternalServerErrorException, Logger } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { EditSuggestion } from '../../models/edit-suggestion.model';
-import { GlobalStatisticsService } from '../services/global-statistics.service';
 import { ImagesService } from '../services/images.service';
+import { StatisticsService } from '../services/statistics.service';
 import { ItemEditSuggestedEvent } from './item-edit-suggested.event';
 
 @EventsHandler(ItemEditSuggestedEvent)
@@ -15,7 +15,7 @@ export class ItemEditSuggestedHandler
   constructor(
     @InjectModel(EditSuggestion)
     private readonly suggestionModel: ReturnModelType<typeof EditSuggestion>,
-    private readonly globalStatisticsService: GlobalStatisticsService,
+    private readonly statisticsService: StatisticsService,
     private readonly imagesService: ImagesService,
   ) {}
   async handle({ editSuggestion }: ItemEditSuggestedEvent): Promise<void> {
@@ -44,7 +44,7 @@ export class ItemEditSuggestedHandler
         );
       }
 
-      await this.globalStatisticsService.incrementGlobalSuggestionCount();
+      await this.statisticsService.incrementGlobalSuggestionCount();
     } catch (error) {
       this.logger.error(
         `Toplevel error caught. Stopping execution. See above for more details`,

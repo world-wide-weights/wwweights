@@ -10,6 +10,7 @@ import {
 import { Item } from '../../models/item.model';
 import { Tag } from '../../models/tag.model';
 import { ImagesService } from '../services/images.service';
+import { StatisticsService } from '../services/statistics.service';
 import { ItemEditedEvent } from './item-edited.event';
 
 @EventsHandler(ItemEditedEvent)
@@ -21,6 +22,7 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
     @InjectModel(Tag)
     private readonly tagModel: ReturnModelType<typeof Tag>,
     private readonly imagesService: ImagesService,
+    private readonly statisticsService: StatisticsService,
   ) {}
 
   async handle({ itemEditedEventDto }: ItemEditedEvent): Promise<void> {
@@ -55,6 +57,10 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
             } ms`,
           );
       }
+      await this.incrementProfileCounts(
+        itemEditedEventDto.userId,
+        itemEditedEventDto.editValues,
+      );
     } catch (error) {
       this.logger.error(
         `Toplevel error caught. Stopping execution. See above for more details`,
@@ -145,5 +151,29 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
       );
       throw new Error(`Could not update tags ${tagUpdate.pull?.concat()}`);
     }
+  }
+
+  /**
+   * @description Increment the profile counts based edited values
+   */
+  private async incrementProfileCounts(
+    userId: number,
+    editValues: SuggestionItem,
+  ): Promise<void> {
+    const incrementer = {
+      $inc: {
+        'count.itemsUpdated': 1,
+        'count.tagsUsedOnUpdate':
+          (editValues.tags?.pull.length || 0) +
+          (editValues.tags?.push.length || 0),
+        'count.sourceUsedOnUpdate': editValues.source ? 1 : 0,
+        'count.imageAddedOnUpdate': editValues.image ? 1 : 0,
+        'count.additionalValueOnUpdate': editValues.weight?.additionalValue
+          ? 1
+          : 0,
+      },
+    };
+
+    await this.statisticsService.incrementProfileCounts(userId, incrementer);
   }
 }

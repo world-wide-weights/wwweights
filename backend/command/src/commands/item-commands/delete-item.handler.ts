@@ -1,4 +1,4 @@
-import { Logger, NotFoundException } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { ItemDeletedEvent } from '../../events/item-events/item-deleted.event';
 import { ItemDeletedEventDTO } from '../../eventstore/dtos/deleted-item-event.dto';
@@ -33,7 +33,7 @@ export class DeleteItemHandler implements ICommandHandler<DeleteItemCommand> {
         `${ItemDeletedEvent.name} created on stream: ${streamName}`,
       );
     } catch (error) {
-      this.logger.error(error)
+      this.logger.error(error);
       this.logger.error(
         `Toplevel error caught. Stopping execution and therefore not creating event. See above for more details`,
       );

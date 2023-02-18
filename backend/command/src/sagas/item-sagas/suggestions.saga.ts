@@ -1,18 +1,18 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ICommand, ofType, Saga } from '@nestjs/cqrs';
 import { map, Observable } from 'rxjs';
-import { EventStore } from '../../eventstore/eventstore';
 import { DeleteItemCommand } from '../../commands/item-commands/delete-item.command';
+import { EditItemCommand } from '../../commands/item-commands/edit-item.command';
 import { ItemDeleteSuggestedEvent } from '../../events/item-events/item-delete-suggested.event';
 import { ItemEditSuggestedEvent } from '../../events/item-events/item-edit-suggested.event';
-import { EditItemCommand } from '../../commands/item-commands/edit-item.command';
+import { EventStore } from '../../eventstore/eventstore';
 
 @Injectable()
 export class SuggestionsSaga {
   private readonly logger = new Logger(SuggestionsSaga.name);
   constructor(private readonly eventstore: EventStore) {}
 
-    /**
+  /**
    * @description Saga responsible for spawning itemedeleted events based on suggestions once the requirement is met
    */
   @Saga()
@@ -34,10 +34,9 @@ export class SuggestionsSaga {
         const res = new DeleteItemCommand(
           event.deleteSuggestion.itemSlug,
           event.deleteSuggestion.uuid,
+          event.deleteSuggestion.userId,
         );
-        this.logger.debug(
-          `${SuggestionsSaga.name} published ${DeleteItemCommand.name} to commandBus`,
-        );
+        this.logger.debug(`$Published ${DeleteItemCommand.name} to commandBus`);
         return res;
       }),
     );
@@ -66,10 +65,9 @@ export class SuggestionsSaga {
           event.editSuggestion.itemSlug,
           event.editSuggestion.uuid,
           event.editSuggestion.updatedItemValues,
+          event.editSuggestion.userId,
         );
-        this.logger.debug(
-          `${SuggestionsSaga.name} published ${EditItemCommand.name} to commandBus`,
-        );
+        this.logger.debug(`Published ${EditItemCommand.name} to commandBus`);
         return res;
       }),
     );

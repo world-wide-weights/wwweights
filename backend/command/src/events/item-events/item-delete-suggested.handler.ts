@@ -3,7 +3,7 @@ import { Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { DeleteSuggestion } from '../../models/delete-suggestion.model';
-import { GlobalStatisticsService } from '../services/global-statistics.service';
+import { StatisticsService } from '../services/statistics.service';
 import { ItemDeleteSuggestedEvent } from './item-delete-suggested.event';
 
 @EventsHandler(ItemDeleteSuggestedEvent)
@@ -16,14 +16,14 @@ export class ItemDeleteSuggestedHandler
     private readonly deleteSuggestionModel: ReturnModelType<
       typeof DeleteSuggestion
     >,
-    private readonly globalStatisticsService: GlobalStatisticsService,
+    private readonly statisticsService: StatisticsService,
   ) {}
   async handle({ deleteSuggestion }: ItemDeleteSuggestedEvent): Promise<void> {
     const insertSuggestionStartTime = performance.now();
     try {
       // Performance
       await this.insertDeleteSuggestion(deleteSuggestion);
-      await this.globalStatisticsService.incrementGlobalSuggestionCount();
+      await this.statisticsService.incrementGlobalSuggestionCount();
     } catch (error) {
       this.logger.error(
         `Toplevel error caught. Stopping execution. See above for more details`,

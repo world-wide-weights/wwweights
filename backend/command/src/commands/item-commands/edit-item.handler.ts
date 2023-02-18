@@ -1,4 +1,4 @@
-import { Logger, NotFoundException } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { ItemEditedEvent } from '../../events/item-events/item-edited.event';
 import { ItemEditedEventDTO } from '../../eventstore/dtos/edited-item-event.dto';
@@ -16,11 +16,13 @@ export class EditItemHandler implements ICommandHandler<EditItemCommand> {
     itemSlug,
     editValues,
     suggestionUuid,
+    userId,
   }: EditItemCommand): Promise<void> {
     const newItemEdit: ItemEditedEventDTO = {
       itemSlug,
       editValues,
       suggestionUuid,
+      userId,
     };
     const streamName = `${ALLOWED_EVENT_ENTITIES.ITEM}-${newItemEdit.itemSlug}`;
 
@@ -40,7 +42,7 @@ export class EditItemHandler implements ICommandHandler<EditItemCommand> {
         `${ItemEditedEvent.name} created on stream: ${streamName}`,
       );
     } catch (error) {
-      this.logger.error(error)
+      this.logger.error(error);
       this.logger.error(
         `Toplevel error caught. Stopping execution and therefore not creating event. See above for more details`,
       );

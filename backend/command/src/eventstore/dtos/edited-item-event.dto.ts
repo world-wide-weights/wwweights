@@ -7,4 +7,5 @@ export class ItemEditedEventDTO {
   itemSlug: string;
   suggestionUuid: string;
   editValues: SuggestionItem;
+  userId: number;
 }

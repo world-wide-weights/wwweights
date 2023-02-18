@@ -4,8 +4,8 @@ import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { Item } from '../../models/item.model';
 import { Tag } from '../../models/tag.model';
-import { GlobalStatisticsService } from '../services/global-statistics.service';
 import { ImagesService } from '../services/images.service';
+import { StatisticsService } from '../services/statistics.service';
 import { ItemDeletedEvent } from './item-deleted.event';
 
 @EventsHandler(ItemDeletedEvent)
@@ -16,7 +16,7 @@ export class ItemDeletedHandler implements IEventHandler<ItemDeletedEvent> {
     private readonly itemModel: ReturnModelType<typeof Item>,
     @InjectModel(Tag)
     private readonly tagModel: ReturnModelType<typeof Tag>,
-    private readonly globalStatisticsService: GlobalStatisticsService,
+    private readonly statisticsService: StatisticsService,
     private readonly imagesService: ImagesService,
   ) {}
 
@@ -32,7 +32,10 @@ export class ItemDeletedHandler implements IEventHandler<ItemDeletedEvent> {
         `Item delete took: ${performance.now() - deleteItemStartTime} ms`,
       );
 
-      await this.globalStatisticsService.decrementGlobalItemCount();
+      await Promise.all([
+        this.statisticsService.decrementGlobalItemCount(),
+        this.incrementProfileCounts(itemDeletedEventDto.userId),
+      ]);
 
       if (deletedItem?.tags) {
         const updateTagsStartTime = performance.now();
@@ -84,5 +87,14 @@ export class ItemDeletedHandler implements IEventHandler<ItemDeletedEvent> {
       );
       throw new Error('Could not update tags');
     }
+  }
+
+  /**
+   * @description Increment the profile counts for itemDeletes
+   */
+  private async incrementProfileCounts(userId: number): Promise<void> {
+    const incrementer = { $inc: { 'count.itemsDeleted': 1 } };
+
+    await this.statisticsService.incrementProfileCounts(userId, incrementer);
   }
 }
