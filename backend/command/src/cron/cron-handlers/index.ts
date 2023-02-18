@@ -1,5 +1,3 @@
-import { ItemCronJobHandler } from "./items.cron";
+import { ItemCronJobHandler } from './items.cron';
 
-export const CronJobHandlers = [
-    ItemCronJobHandler
-]
+export const CronJobHandlers = [ItemCronJobHandler];

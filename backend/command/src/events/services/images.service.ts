@@ -1,10 +1,5 @@
 import { InjectModel } from '@m8a/nestjs-typegoose';
-import {
-  HttpException,
-  Injectable,
-  Logger,
-  ServiceUnavailableException,
-} from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { EventStore } from '../../eventstore/eventstore';
 import { InternalCommunicationService } from '../../internal-communication/internal-communication.service';

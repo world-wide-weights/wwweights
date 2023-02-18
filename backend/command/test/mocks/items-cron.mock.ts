@@ -2,11 +2,11 @@ export class ItemCronJobHandlerMock {
   public correctAllItemTagCountsHasBeenCalled = false;
   public deleteUnusedTagsHasBeenCalled = false;
   correctAllItemTagCounts() {
-    this.correctAllItemTagCountsHasBeenCalled = true
+    this.correctAllItemTagCountsHasBeenCalled = true;
   }
 
   deleteUnusedTags() {
-    this.deleteUnusedTagsHasBeenCalled = true
+    this.deleteUnusedTagsHasBeenCalled = true;
   }
 
   reset() {

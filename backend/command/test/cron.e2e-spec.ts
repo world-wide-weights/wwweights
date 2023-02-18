@@ -1,36 +1,36 @@
-import { HttpService } from "@nestjs/axios";
-import { INestApplication, ValidationPipe, HttpStatus } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
-import { CommandBus, EventBus } from "@nestjs/cqrs";
-import { TestingModule, Test } from "@nestjs/testing";
-import { request } from "express";
-import { Model } from "mongoose";
-import { CommandsModule } from "../src/commands/commands.module";
-import { ControllersModule } from "../src/controllers/controllers.module";
-import { ItemCronJobHandler } from "../src/cron/cron-handlers/items.cron";
-import { CronModule } from "../src/cron/cron.module";
-import { EventsModule } from "../src/events/events.module";
-import { ALLOWED_EVENT_ENTITIES } from "../src/eventstore/enums/allowedEntities.enum";
-import { EventStore } from "../src/eventstore/eventstore";
-import { EventStoreModule } from "../src/eventstore/eventstore.module";
-import { InternalCommunicationModule } from "../src/internal-communication/internal-communication.module";
-import { DeleteSuggestion } from "../src/models/delete-suggestion.model";
-import { EditSuggestion } from "../src/models/edit-suggestion.model";
-import { GlobalStatistics } from "../src/models/global-statistics.model";
-import { Item } from "../src/models/item.model";
-import { Profile } from "../src/models/profile.model";
-import { Tag } from "../src/models/tag.model";
-import { ENVGuard } from "../src/shared/guards/env.guard";
-import { JwtAuthGuard } from "../src/shared/guards/jwt.guard";
-import { JwtStrategy } from "../src/shared/strategies/jwt.strategy";
-import { initializeMockModule, teardownMockDataSource } from "./helpers/MongoMemoryHelpers";
-import { retryCallback } from "./helpers/retries";
-import { FakeEnvGuardFactory } from "./mocks/env-guard.mock";
-import { MockEventStore } from "./mocks/eventstore";
-import { HttpServiceMock } from "./mocks/http-service.mock";
-import { singleItem, singleItemTags, insertItem } from "./mocks/items";
-import { FakeAuthGuardFactory } from "./mocks/jwt-guard.mock";
-import { verifiedRequestUser } from "./mocks/users";
+import { HttpService } from '@nestjs/axios';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { EventBus } from '@nestjs/cqrs';
+import { Test, TestingModule } from '@nestjs/testing';
+import { Model } from 'mongoose';
+import { CommandsModule } from '../src/commands/commands.module';
+import { ControllersModule } from '../src/controllers/controllers.module';
+import { ItemCronJobHandler } from '../src/cron/cron-handlers/items.cron';
+import { CronModule } from '../src/cron/cron.module';
+import { EventsModule } from '../src/events/events.module';
+import { EventStore } from '../src/eventstore/eventstore';
+import { EventStoreModule } from '../src/eventstore/eventstore.module';
+import { InternalCommunicationModule } from '../src/internal-communication/internal-communication.module';
+import { DeleteSuggestion } from '../src/models/delete-suggestion.model';
+import { EditSuggestion } from '../src/models/edit-suggestion.model';
+import { GlobalStatistics } from '../src/models/global-statistics.model';
+import { Item } from '../src/models/item.model';
+import { Profile } from '../src/models/profile.model';
+import { Tag } from '../src/models/tag.model';
+import { ENVGuard } from '../src/shared/guards/env.guard';
+import { JwtAuthGuard } from '../src/shared/guards/jwt.guard';
+import { JwtStrategy } from '../src/shared/strategies/jwt.strategy';
+import {
+  initializeMockModule,
+  teardownMockDataSource,
+} from './helpers/MongoMemoryHelpers';
+import { FakeEnvGuardFactory } from './mocks/env-guard.mock';
+import { MockEventStore } from './mocks/eventstore';
+import { HttpServiceMock } from './mocks/http-service.mock';
+import { singleItem, singleItemTags } from './mocks/items';
+import { FakeAuthGuardFactory } from './mocks/jwt-guard.mock';
+import { verifiedRequestUser } from './mocks/users';
 
 describe('ItemsController (e2e)', () => {
   let app: INestApplication;
@@ -46,7 +46,6 @@ describe('ItemsController (e2e)', () => {
   let server: any; // Has to be any because of supertest not having a type for it either
   const fakeJWTGuard = new FakeAuthGuardFactory();
   const fakeEnvGuard = new FakeEnvGuardFactory();
-  let commandBus: CommandBus;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -96,8 +95,6 @@ describe('ItemsController (e2e)', () => {
     itemCronJobHandler = app.get<ItemCronJobHandler>(ItemCronJobHandler);
 
     mockEventStore.eventBus = app.get<EventBus>(EventBus);
-
-    commandBus = app.get<CommandBus>(CommandBus);
   });
 
   beforeEach(async () => {

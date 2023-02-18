@@ -1,4 +1,4 @@
-import { SuggestItemEditDTO } from "../../controllers/interfaces/suggest-item-edit.dto";
+import { SuggestItemEditDTO } from '../../controllers/interfaces/suggest-item-edit.dto';
 
 export class SuggestItemEditCommand {
   constructor(

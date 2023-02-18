@@ -1,4 +1,4 @@
-import { SuggestItemDeleteDTO } from "../../controllers/interfaces/suggest-item-delete.dto";
+import { SuggestItemDeleteDTO } from '../../controllers/interfaces/suggest-item-delete.dto';
 
 export class SuggestItemDeleteCommand {
   constructor(

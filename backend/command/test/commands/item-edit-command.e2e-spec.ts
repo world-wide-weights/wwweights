@@ -1,14 +1,14 @@
 import { HttpService } from '@nestjs/axios';
-import { INestApplication, ValidationPipe, HttpStatus } from '@nestjs/common';
+import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { CommandBus, EventBus } from '@nestjs/cqrs';
-import { TestingModule, Test } from '@nestjs/testing';
+import { Test, TestingModule } from '@nestjs/testing';
 import { randomUUID } from 'crypto';
 import { Model } from 'mongoose';
+import * as request from 'supertest';
 import { CommandsModule } from '../../src/commands/commands.module';
 import { EditItemCommand } from '../../src/commands/item-commands/edit-item.command';
 import { ControllersModule } from '../../src/controllers/controllers.module';
-import { ItemCronJobHandler } from '../../src/cron/cron-handlers/items.cron';
 import { CronModule } from '../../src/cron/cron.module';
 import { EventsModule } from '../../src/events/events.module';
 import { ALLOWED_EVENT_ENTITIES } from '../../src/eventstore/enums/allowedEntities.enum';
@@ -35,7 +35,6 @@ import { HttpServiceMock } from '../mocks/http-service.mock';
 import { singleItem } from '../mocks/items';
 import { FakeAuthGuardFactory } from '../mocks/jwt-guard.mock';
 import { verifiedRequestUser } from '../mocks/users';
-import * as request from 'supertest';
 
 describe('ItemsController (e2e)', () => {
   let app: INestApplication;
@@ -47,7 +46,6 @@ describe('ItemsController (e2e)', () => {
   let globalStatisticsModel: Model<GlobalStatistics>;
 
   const mockEventStore: MockEventStore = new MockEventStore();
-  let itemCronJobHandler: ItemCronJobHandler;
   let server: any; // Has to be any because of supertest not having a type for it either
   const fakeJWTGuard = new FakeAuthGuardFactory();
   const fakeEnvGuard = new FakeEnvGuardFactory();
@@ -98,8 +96,6 @@ describe('ItemsController (e2e)', () => {
     await app.init();
     server = app.getHttpServer();
 
-    itemCronJobHandler = app.get<ItemCronJobHandler>(ItemCronJobHandler);
-
     mockEventStore.eventBus = app.get<EventBus>(EventBus);
 
     commandBus = app.get<CommandBus>(CommandBus);
@@ -125,8 +121,6 @@ describe('ItemsController (e2e)', () => {
   });
 
   const commandsPath = '/commands/v1/';
-  const itemInsertPath = 'items/insert';
-  const itemBulkInsertPath = 'items/bulk-insert';
 
   describe('EditItemCommand', () => {
     it('items/:slug/suggest/edit => Should create a suggestion', async () => {
@@ -349,29 +343,29 @@ describe('ItemsController (e2e)', () => {
     });
 
     it('Should increment totalSuggestions count on item edit suggest', async () => {
-        const item = new itemModel(singleItem);
-        await item.save();
-        mockEventStore.existingStreams.add(
-          `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
-        );
-  
-        const globalStatistic = new globalStatisticsModel({
-          totalItems: 1,
-          totalSuggestions: 0,
-        });
-        await globalStatistic.save();
-  
-        await request(server)
-          .post(commandsPath + `items/${encodeURI(item.slug)}/suggest/edit`)
-          .send({ name: 'smthelse' });
-  
-        await retryCallback(
-          async () => (await editSuggestionModel.count()) !== 0,
-        );
-  
-        expect((await globalStatisticsModel.findOne()).totalSuggestions).toEqual(
-          1,
-        );
+      const item = new itemModel(singleItem);
+      await item.save();
+      mockEventStore.existingStreams.add(
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      );
+
+      const globalStatistic = new globalStatisticsModel({
+        totalItems: 1,
+        totalSuggestions: 0,
       });
+      await globalStatistic.save();
+
+      await request(server)
+        .post(commandsPath + `items/${encodeURI(item.slug)}/suggest/edit`)
+        .send({ name: 'smthelse' });
+
+      await retryCallback(
+        async () => (await editSuggestionModel.count()) !== 0,
+      );
+
+      expect((await globalStatisticsModel.findOne()).totalSuggestions).toEqual(
+        1,
+      );
+    });
   });
 });

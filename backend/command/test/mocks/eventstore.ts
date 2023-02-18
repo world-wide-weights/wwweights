@@ -6,7 +6,6 @@ import { ItemEditSuggestedEvent } from '../../src/events/item-events/item-edit-s
 import { ItemEditedEvent } from '../../src/events/item-events/item-edited.event';
 import { ItemInsertedEvent } from '../../src/events/item-events/item-inserted.event';
 
-
 export const logStringify = (obj: any) => {
   return JSON.stringify(obj, null, 2);
 };

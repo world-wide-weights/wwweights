@@ -34,7 +34,6 @@ import { MockEventStore } from '../mocks/eventstore';
 import { HttpServiceMock } from '../mocks/http-service.mock';
 import {
   bulkInsertData,
-  differentNames as itemsWithDifferentNames,
   insertItem,
   insertItem2,
   insertItemWithAllValues,
@@ -129,7 +128,7 @@ describe('ItemsController (e2e)', () => {
   afterAll(async () => {
     // Await for background db processes
     // Eventual consistency is amazing :)
-    await setTimeout(500)
+    await setTimeout(500);
     await teardownMockDataSource();
     await server.close();
     await app.close();

@@ -1,4 +1,4 @@
-import { InsertItemDto } from "../../controllers/interfaces/insert-item.dto";
+import { InsertItemDto } from '../../controllers/interfaces/insert-item.dto';
 
 export class InsertItemCommand {
   constructor(

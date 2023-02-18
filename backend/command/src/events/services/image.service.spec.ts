@@ -1,7 +1,4 @@
-import {
-  ImATeapotException,
-  ServiceUnavailableException,
-} from '@nestjs/common';
+import { ImATeapotException } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { EventStore } from '../../eventstore/eventstore';
 import { InternalCommunicationService } from '../../internal-communication/internal-communication.service';
@@ -10,7 +7,7 @@ import { ImagesService } from './images.service';
 
 describe('ImagesService', () => {
   let imagesService: ImagesService;
-  let internalCommunicationService = new InternalCommunicationService(
+  const internalCommunicationService = new InternalCommunicationService(
     null,
     null,
   );
@@ -42,7 +39,9 @@ describe('ImagesService', () => {
       mockEventstore.isReady = false;
       const apiCall = jest
         .spyOn(internalCommunicationService, 'notifyImgAboutItemCreation')
-        .mockImplementation(async () => {});
+        .mockImplementation(async () => {
+          return;
+        });
       // ACT
       await imagesService.promoteImageInImageBackend('validValue');
       // ASSERT
@@ -54,7 +53,9 @@ describe('ImagesService', () => {
       mockEventstore.isReady = false;
       const apiCall = jest
         .spyOn(internalCommunicationService, 'notifyImgAboutItemCreation')
-        .mockImplementation(async () => {});
+        .mockImplementation(async () => {
+          return;
+        });
       // ACT
       await imagesService.promoteImageInImageBackend(undefined);
       // ASSERT
@@ -65,7 +66,9 @@ describe('ImagesService', () => {
       // ARRANGE
       const apiCall = jest
         .spyOn(internalCommunicationService, 'notifyImgAboutItemCreation')
-        .mockImplementation(async () => {});
+        .mockImplementation(async () => {
+          return;
+        });
       // ACT
       await imagesService.promoteImageInImageBackend('http://google.com');
       // ASSERT
@@ -76,7 +79,9 @@ describe('ImagesService', () => {
       // ARRANGE
       const apiCall = jest
         .spyOn(internalCommunicationService, 'notifyImgAboutItemCreation')
-        .mockImplementation(async () => {});
+        .mockImplementation(async () => {
+          return;
+        });
       jest
         .spyOn(imagesService, 'getItemCountForImage')
         .mockImplementation(async () => 2);
@@ -90,7 +95,9 @@ describe('ImagesService', () => {
       // ARRANGE
       const apiCall = jest
         .spyOn(internalCommunicationService, 'notifyImgAboutItemCreation')
-        .mockImplementation(async () => {});
+        .mockImplementation(async () => {
+          return;
+        });
       // ACT
       await imagesService.promoteImageInImageBackend('validValue');
       // ASSERT
@@ -117,7 +124,9 @@ describe('ImagesService', () => {
       mockEventstore.isReady = false;
       const apiCall = jest
         .spyOn(internalCommunicationService, 'notifyImgAboutImageObsoleteness')
-        .mockImplementation(async () => {});
+        .mockImplementation(async () => {
+          return;
+        });
       // ACT
       await imagesService.demoteImageInImageBackend('validValue');
       // ASSERT
@@ -129,7 +138,9 @@ describe('ImagesService', () => {
       mockEventstore.isReady = false;
       const apiCall = jest
         .spyOn(internalCommunicationService, 'notifyImgAboutImageObsoleteness')
-        .mockImplementation(async () => {});
+        .mockImplementation(async () => {
+          return;
+        });
       // ACT
       await imagesService.demoteImageInImageBackend(undefined);
       // ASSERT
@@ -140,7 +151,9 @@ describe('ImagesService', () => {
       // ARRANGE
       const apiCall = jest
         .spyOn(internalCommunicationService, 'notifyImgAboutImageObsoleteness')
-        .mockImplementation(async () => {});
+        .mockImplementation(async () => {
+          return;
+        });
       // ACT
       await imagesService.demoteImageInImageBackend('http://google.com');
       // ASSERT
@@ -151,7 +164,9 @@ describe('ImagesService', () => {
       // ARRANGE
       const apiCall = jest
         .spyOn(internalCommunicationService, 'notifyImgAboutImageObsoleteness')
-        .mockImplementation(async () => {});
+        .mockImplementation(async () => {
+          return;
+        });
       jest
         .spyOn(imagesService, 'getItemCountForImage')
         .mockImplementation(async () => 1);
@@ -165,7 +180,9 @@ describe('ImagesService', () => {
       // ARRANGE
       const apiCall = jest
         .spyOn(internalCommunicationService, 'notifyImgAboutImageObsoleteness')
-        .mockImplementation(async () => {});
+        .mockImplementation(async () => {
+          return;
+        });
       // ACT
       await imagesService.demoteImageInImageBackend('validValue');
       // ASSERT

@@ -1,7 +1,6 @@
 import { prop } from '@typegoose/typegoose';
 import { EditSuggestion } from './edit-suggestion.model';
 
-
 export class ProfileCounts {
   @prop()
   itemsCreated: number;

@@ -1,9 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import {
-  Injectable,
-  Logger,
-  ServiceUnavailableException,
-} from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AxiosError } from 'axios';
 import { catchError, firstValueFrom } from 'rxjs';
@@ -59,7 +55,7 @@ export class InternalCommunicationService {
               `Request to img backend for image ${data.imageHash} failed! Error: ${error}`,
             );
             // Don`t throw an exception as it would not go anywhere. Logging is sufficient here
-            return null
+            return null;
           }),
         ),
     );
