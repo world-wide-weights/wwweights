@@ -33,12 +33,26 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
     const streamName = `${ALLOWED_EVENT_ENTITIES.ITEM}-${newItem.slug}`;
 
     if (await this.eventStore.doesStreamExist(streamName)) {
-      throw new ConflictException(`Slug ${newItem.slug} already taken`);
+      this.logger.error(`Slug ${newItem.slug} already taken. No event created.`)
+           // Throw error because this is facing the client
+           throw new ConflictException(`Item with this slug ${newItem.slug} already exists`) 
     }
 
-    await this.eventStore.addEvent(streamName, ItemInsertedEvent.name, newItem);
-    this.logger.log(
-      `${ItemInsertedEvent.name} created on stream: ${streamName}}`,
-    );
+    try {
+      await this.eventStore.addEvent(
+        streamName,
+        ItemInsertedEvent.name,
+        newItem,
+      );
+      this.logger.log(
+        `${ItemInsertedEvent.name} created on stream: ${streamName}}`,
+      );
+    } catch (error) {
+      this.logger.error(error)
+      this.logger.error(
+        `Toplevel error caught. Stopping execution and therefore not creating event. See above for more details`,
+      );
+      throw new InternalServerErrorException()
+    }
   }
 }

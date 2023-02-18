@@ -1,4 +1,4 @@
-import { Logger, NotFoundException } from '@nestjs/common';
+import { InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { randomUUID } from 'crypto';
 import { ItemDeleteSuggestedEvent } from '../../events/item-events/item-delete-suggested.event';
@@ -37,16 +37,27 @@ export class SuggestItemDeleteHandler
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${newSuggestion.itemSlug}`,
       ))
     ) {
+      this.logger.error(
+        `No item with that slug ${itemSlug} exists. No event was created`,
+      );
+      // Throw error because this is facing the client
       throw new NotFoundException(`No item with this slug ${itemSlug} exists`);
     }
-
-    await this.eventStore.addEvent(
-      streamName,
-      ItemDeleteSuggestedEvent.name,
-      newSuggestion,
-    );
-    this.logger.log(
-      `${ItemDeleteSuggestedEvent.name} created on stream: ${streamName}`,
-    );
+    try {
+      await this.eventStore.addEvent(
+        streamName,
+        ItemDeleteSuggestedEvent.name,
+        newSuggestion,
+      );
+      this.logger.log(
+        `${ItemDeleteSuggestedEvent.name} created on stream: ${streamName}`,
+      );
+    } catch (error) {
+      this.logger.error(error)
+      this.logger.error(
+        `Toplevel error caught. Stopping execution and therefore not creating event. See above for more details`,
+      );
+      throw new InternalServerErrorException()
+    }
   }
 }

@@ -25,16 +25,25 @@ export class EditItemHandler implements ICommandHandler<EditItemCommand> {
     const streamName = `${ALLOWED_EVENT_ENTITIES.ITEM}-${newItemEdit.itemSlug}`;
 
     if (!(await this.eventStore.doesStreamExist(streamName))) {
-      throw new NotFoundException(
-        `No item with this slug (${itemSlug}) exists`,
+      this.logger.error(
+        `No item with this slug (${itemSlug}) exists. No event created`,
+      );
+      return;
+    }
+    try {
+      await this.eventStore.addEvent(
+        streamName,
+        ItemEditedEvent.name,
+        newItemEdit,
+      );
+      this.logger.log(
+        `${ItemEditedEvent.name} created on stream: ${streamName}`,
+      );
+    } catch (error) {
+      this.logger.error(error)
+      this.logger.error(
+        `Toplevel error caught. Stopping execution and therefore not creating event. See above for more details`,
       );
     }
-
-    await this.eventStore.addEvent(
-      streamName,
-      ItemEditedEvent.name,
-      newItemEdit,
-    );
-    this.logger.log(`${ItemEditedEvent.name} created on stream: ${streamName}`);
   }
 }

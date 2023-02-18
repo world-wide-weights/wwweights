@@ -14,20 +14,29 @@ export class DeleteItemHandler implements ICommandHandler<DeleteItemCommand> {
   // No returns, just Exceptions in CQRS
   async execute(deleteItemData: DeleteItemCommand): Promise<void> {
     const newItemDelete: ItemDeletedEventDTO = deleteItemData;
-
     const streamName = `${ALLOWED_EVENT_ENTITIES.ITEM}-${newItemDelete.itemSlug}`;
 
     if (!(await this.eventStore.doesStreamExist(streamName))) {
-      throw new NotFoundException('No item with this slug exists');
+      this.logger.error(
+        `No item with that slug ${deleteItemData.itemSlug} exists. No event created`,
+      );
+      return;
     }
 
-    await this.eventStore.addEvent(
-      streamName,
-      ItemDeletedEvent.name,
-      newItemDelete,
-    );
-    this.logger.log(
-      `${ItemDeletedEvent.name} created on stream: ${streamName}`,
-    );
+    try {
+      await this.eventStore.addEvent(
+        streamName,
+        ItemDeletedEvent.name,
+        newItemDelete,
+      );
+      this.logger.log(
+        `${ItemDeletedEvent.name} created on stream: ${streamName}`,
+      );
+    } catch (error) {
+      this.logger.error(error)
+      this.logger.error(
+        `Toplevel error caught. Stopping execution and therefore not creating event. See above for more details`,
+      );
+    }
   }
 }
