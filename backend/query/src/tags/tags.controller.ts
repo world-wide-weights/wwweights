@@ -9,12 +9,12 @@ import {
 } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Tag } from '../models/tag.model';
 import { getStringified } from '../shared/functions/get-stringified';
 import { PaginatedResponse } from '../shared/interfaces/paginated-result';
 import { QueryTagListDto } from './interfaces/query-tag-list.dto';
 import { QueryTagRelatedDto } from './interfaces/query-tag-related.dto';
-import { TagWithRelevance } from './models/tag-with-relevance';
-import { Tag } from './models/tag.model';
+import { TagWithRelevance } from './interfaces/tag-with-relevance';
 import { TagRelatedQuery } from './queries/related-tags.query';
 import { TagListQuery } from './queries/tag-list.query';
 

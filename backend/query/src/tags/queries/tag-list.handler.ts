@@ -2,10 +2,10 @@ import { InjectModel } from '@m8a/nestjs-typegoose';
 import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
+import { Tag } from '../../models/tag.model';
 import { DataWithCount } from '../../shared/interfaces/data-with-count';
 import { PaginatedResponse } from '../../shared/interfaces/paginated-result';
 import { TagSortEnum } from '../interfaces/tag-sort-enum';
-import { Tag } from '../models/tag.model';
 import { TagListQuery } from './tag-list.query';
 
 @QueryHandler(TagListQuery)

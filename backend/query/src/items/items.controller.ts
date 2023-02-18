@@ -14,12 +14,12 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { Item } from '../models/item.model';
 import { PaginatedResponse } from '../shared/interfaces/paginated-result';
 import { ItemStatistics } from './interfaces/item-statistics';
 import { QueryItemListDto } from './interfaces/query-item-list.dto';
 import { QueryItemRelatedDto } from './interfaces/query-item-related.dto';
 import { QueryItemStatisticsDto } from './interfaces/query-item-statistics.dto';
-import { Item } from './models/item.model';
 import { ItemListQuery } from './queries/item-list.query';
 import { ItemStatisticsQuery } from './queries/item-statistics.query';
 import { ItemRelatedQuery } from './queries/related-items.query';
