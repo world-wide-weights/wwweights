@@ -161,7 +161,7 @@ const Profile: NextPageCustomProps = () => {
 
                 // Handle errors with no answer from API
                 if (error.message.includes("Network")) {
-                    toast.error("Please check your internet connection and try again.")
+                    toast.error("We could not connect to the server. Please check your internet connection and try again.")
                     return
                 }
             } finally {
@@ -246,7 +246,7 @@ const Profile: NextPageCustomProps = () => {
 
             // Handle errors with no answer from API
             if (error.message.includes("Network")) {
-                toast.error("Please check your internet connection and try again.")
+                toast.error("We could not connect to the server. Please check your internet connection and try again.")
                 return
             }
         } finally {
