@@ -1,6 +1,8 @@
 # Codecov settings
 comment:
   behavior: once
+  layout: flags
+  show_carryforward_flags: true
 github_checks:
   annotations: false
 coverage:
@@ -28,7 +30,7 @@ coverage:
         informational: true
         flags: 
           - frontend
-max_report_age: off
+          
 flags:
   auth-backend:
     carryforward: true
