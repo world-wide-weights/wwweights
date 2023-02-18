@@ -8,6 +8,7 @@ import paginatedSingleItem from "../fixtures/items/single.json"
 import itemStatistics from "../fixtures/items/statistics.json"
 import paginatedContributions from "../fixtures/profile/contributions.json"
 import profileStatistics from "../fixtures/profile/statistics.json"
+import statistics from "../fixtures/statistics/statistics.json"
 import paginatedTagsList from "../fixtures/tags/list.json"
 
 const API_BASE_URL_AUTH = Cypress.env("PUBLIC_API_BASE_URL_AUTH")
@@ -163,6 +164,14 @@ Cypress.Commands.add("mockHome", () => {
         path: "/auth/statistics",
         statusCode: 200,
         body: statisticsAuth
+    })
+
+    cy.task("nock", {
+        hostname: API_BASE_URL_QUERY_SERVER,
+        method: "get",
+        path: "/statistics",
+        statusCode: 200,
+        body: statistics
     })
 })
 
