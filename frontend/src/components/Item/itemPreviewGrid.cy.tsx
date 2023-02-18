@@ -9,7 +9,7 @@ const props = {
         value: 100,
         isCa: false
     },
-    image: "https://via.placeholder.com/96.png",
+    imageUrl: "https://via.placeholder.com/96.png",
 }
 
 describe("ItemPreviewGrid", () => {
