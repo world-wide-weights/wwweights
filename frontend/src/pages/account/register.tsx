@@ -25,7 +25,6 @@ const Register: NextPageCustomProps = () => {
 
     // Local State
     const [isPasswordEyeOpen, setIsPasswordEyeOpen] = useState<boolean>(false)
-    const [error, setError] = useState("")
     const [isLoading, setIsLoading] = useState(false)
 
     // Formik Form Initial Values
@@ -58,7 +57,7 @@ const Register: NextPageCustomProps = () => {
 
         if (registerResponse === null) {
             setIsLoading(false)
-            setError("Something went wrong. Try again or come later.")
+            toast.error("Something went wrong. Try again or come later.")
             return
         }
 
@@ -99,9 +98,6 @@ const Register: NextPageCustomProps = () => {
                 </Form>
             )}
         </Formik>
-
-        {/* TODO (Zoe-Bot): Add correct error handling */}
-        {error && <p className="py-2">Error: {error}</p>}
 
         {/* Login Text */}
         <div className="flex">
