@@ -35,6 +35,7 @@ import {
   differentNames as itemsWithDifferentNames,
   insertItem,
   insertItem2,
+  insertItemWithAllValues,
   singleItem,
   singleItemTags,
   testData,
@@ -700,20 +701,20 @@ describe('ItemsController (e2e)', () => {
     it('items/insert => increment profile counts', async () => {
       await request(server)
         .post(commandsPath + itemInsertPath)
-        .send(insertItem)
+        .send(insertItemWithAllValues)
         .expect(HttpStatus.OK);
 
       await retryCallback(async () => (await profileModel.count()) === 1);
 
       const profile = await profileModel.findOne({});
       expect(profile.count.itemsCreated).toEqual(1);
-      expect(profile.count.additionalValueOnCreation).toEqual(0);
+      expect(profile.count.additionalValueOnCreation).toEqual(1);
       expect(profile.count.tagsUsedOnCreation).toEqual(2);
-      expect(profile.count.sourceUsedOnCreation).toEqual(0);
-      expect(profile.count.imageAddedOnCreation).toEqual(0);
+      expect(profile.count.sourceUsedOnCreation).toEqual(1);
+      expect(profile.count.imageAddedOnCreation).toEqual(1);
     });
 
-    it('items/insert => increment profile counts and accept no tags', async () => {
+    it('items/insert => increment profile counts by 0 if not used', async () => {
       await request(server)
         .post(commandsPath + itemInsertPath)
         .send({ name: insertItem.name, weight: insertItem.weight })
