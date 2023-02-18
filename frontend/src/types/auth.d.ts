@@ -24,7 +24,7 @@ export type SessionData = {
     refreshToken: string
 }
 
-export type Profile = {
+export type UserProfile = {
     pkUserId: number
     username: string
     email: string

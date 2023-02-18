@@ -65,10 +65,13 @@ services:
       - JWKS_AUTH_URL=${CMD_JWKS_AUTH_URL:-http://auth:3001/auth/.well-known/jwks.json}
       - SKIP_READ_DB_REBUILD=${CMD_SKIP_READ_DB_REBUILD:-true}
       - AUTH_API_KEY=${CMD_AUTH_API_KEY:-cmd}
+      - IMG_BACKEND_BASE_URL=${CMD_IMG_BACKEND_BASE_URL:-http://img:3003}
+      - IMG_API_KEY=${CMD_IMG_API_KEY:-cmd}
     links:
       - auth-backend:auth
       - eventstore:eventstore
       - mongodb:mongo
+      - image-backend:img
 
   image-backend:
     image: ghcr.io/world-wide-weights/image-backend:main
@@ -82,6 +85,7 @@ services:
       - IMAGE_STORE_BASE_PATH=${IMG_IMAGE_STORE_BASE_PATH:-/app/data}
       - IMAGE_STORE_INCOMING_CACHE_PATH=${IMG_IMAGE_STORE_INCOMING_CACHE_PATH:-./cache}
       - AUTH_API_KEY=${IMG_AUTH_API_KEY:-img}
+      - API_KEYS=${IMG_API_KEYS:-cmd}
     volumes:
       - ./backend/docker-images:${IMG_IMAGE_STORE_BASE_PATH:-/app/data}
     links:

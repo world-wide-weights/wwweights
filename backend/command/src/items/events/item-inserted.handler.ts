@@ -5,6 +5,7 @@ import { ReturnModelType } from '@typegoose/typegoose';
 import { Item } from '../../models/item.model';
 import { Profile } from '../../models/profile.model';
 import { Tag } from '../../models/tag.model';
+import { ImagesService } from '../services/images.service';
 import { ItemInsertedEvent } from './item-inserted.event';
 
 @EventsHandler(ItemInsertedEvent)
@@ -17,6 +18,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
     private readonly tagModel: ReturnModelType<typeof Tag>,
     @InjectModel(Profile)
     private readonly profileModel: ReturnModelType<typeof Profile>,
+    private readonly imageService: ImagesService,
   ) {}
   async handle({ item }: ItemInsertedEvent) {
     /*
@@ -32,17 +34,10 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       await this.insertItem(item);
 
       // No need for any tag related projection if item has no tags
-      if (!item.tags) {
-        this.logger.debug(
-          `ItemInsertedHandler Insert took: ${
-            performance.now() - insertItemStartTime
-          }ms`,
-        );
-        return;
+      if (item.tags) {
+        await this.incrementOrInsertTags(item);
+        await this.updateNewItemWithCorrectTags(item);
       }
-
-      await this.incrementOrInsertTags(item);
-      await this.updateNewItemWithCorrectTags(item);
 
       this.logger.debug(
         `ItemInsertedHandler Insert took: ${
@@ -54,6 +49,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       this.increamentProfileCounts(item);
 
       // Further updates and recovery from inconsistency is handled via cronjobs rather than for every projector run
+      await this.imageService.promoteImageInImageBackend(item.image);
     } catch (error) {
       this.logger.error(`ItemInsertedHandler TopLevel caught error: ${error}`);
     }
@@ -69,7 +65,9 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       this.logger.log(`Item inserted:  ${insertedItem.slug}`);
     } catch (error) {
       this.logger.error(`Insert Item: ${error}`);
-      throw new InternalServerErrorException("Couldn't insert item");
+      throw new InternalServerErrorException(
+        `Couldn't insert item ${item.slug}`,
+      );
     }
   }
 

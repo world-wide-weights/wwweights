@@ -13,6 +13,7 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
+import "@bahmutov/cypress-code-coverage/support"
 import { mount } from "cypress/react18"
 import { NextRouter } from "next/router"
 import "./commands"

@@ -3,5 +3,6 @@
  */
 export enum ALLOWED_EVENT_ENTITIES {
   ITEM = 'item',
-  EDIT_SUGGESTION = 'edit-suggestion'
+  EDIT_SUGGESTION = 'edit-suggestion',
+  DELETE_SUGGESTION = 'delete-suggestion',
 }

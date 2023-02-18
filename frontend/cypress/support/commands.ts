@@ -85,7 +85,7 @@ Cypress.Commands.add("mockDiscoverPage", (itemCount?: number) => {
     cy.mockGetRelatedTags()
 })
 
-Cypress.Commands.add("mockSingleWeight", () => {
+Cypress.Commands.add("mockSingleWeightPage", () => {
     cy.task("clearNock")
 
     // Mock items single
@@ -132,13 +132,13 @@ Cypress.Commands.add("mockRegister", () => {
 
 Cypress.Commands.add("mockCreateItem", () => {
     cy.intercept("POST", `${API_BASE_URL_COMMAND}/items/insert`, {
-        statusCode: 204,
+        statusCode: 200,
     }).as("mockCreateItem")
 })
 
 Cypress.Commands.add("mockUploadImage", () => {
     cy.intercept("POST", `${PUBLIC_API_BASE_URL_IMAGE}/upload/image`, {
-        statusCode: 204,
+        statusCode: 201,
     }).as("mockUploadImage")
 })
 
@@ -173,6 +173,18 @@ Cypress.Commands.add("mockProfilePage", (options) => {
     cy.intercept("GET", `${API_BASE_URL_AUTH}/profile/me`, {
         fixture: "profile/me.json"
     }).as("mockProfile")
+})
+
+Cypress.Commands.add("mockSingleItem", () => {
+    cy.intercept("GET", `${API_BASE_URL_QUERY_CLIENT}/items/list*`, {
+        fixture: "items/single.json"
+    }).as("mockSingleItem")
+})
+
+Cypress.Commands.add("mockEditItem", () => {
+    cy.intercept("POST", `${API_BASE_URL_COMMAND}/items/*/suggest/edit`, {
+        statusCode: 200,
+    }).as("mockEditItem")
 })
 
 export { }
