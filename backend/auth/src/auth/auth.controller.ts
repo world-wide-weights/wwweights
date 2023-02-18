@@ -9,7 +9,7 @@ import {
   Req,
   SerializeOptions,
   UseGuards,
-  UseInterceptors,
+  UseInterceptors
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -20,7 +20,7 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiTags,
-  ApiUnauthorizedResponse,
+  ApiUnauthorizedResponse
 } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dtos/login.dto';
