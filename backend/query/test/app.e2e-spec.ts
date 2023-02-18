@@ -75,6 +75,24 @@ describe('QueryController (e2e)', () => {
           globalStatistic.totalItems + globalStatistic.totalSuggestions,
         );
       });
+
+      it('should return a GlobalStatistics object if only item has been created so far', async () => {
+        // The upsert is in create item because there can't be suggestions without items so we have to create it in the query tests
+
+        const globalStatistic = new globalStatisticsModel({
+          totalItems: 1,
+        });
+        await globalStatistic.save();
+
+        const result = await request(server)
+          .get(queriesPath + statisticsPath)
+          .expect(HttpStatus.OK);
+
+        expect(result.body.totalItems).toBe(globalStatistic.totalItems);
+        expect(result.body.totalContributions).toBe(
+          globalStatistic.totalItems + (globalStatistic.totalSuggestions || 0),
+        );
+      });
     });
   });
 });
