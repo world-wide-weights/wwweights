@@ -72,6 +72,7 @@ export default defineConfig({
                 },
             })
 
+            // Handles code coverage
             require("@cypress/code-coverage/task")(on, config)
 
             return config
