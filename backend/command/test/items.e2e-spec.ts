@@ -6,7 +6,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { randomUUID } from 'crypto';
 import { Model } from 'mongoose';
 import * as request from 'supertest';
-import { setTimeout } from 'timers/promises';
 import { ALLOWED_EVENT_ENTITIES } from '../src/eventstore/enums/allowedEntities.enum';
 import { EventStore } from '../src/eventstore/eventstore';
 import { EventStoreModule } from '../src/eventstore/eventstore.module';
@@ -659,9 +658,9 @@ describe('ItemsController (e2e)', () => {
     it('Should increment totalSuggestions count on item edit suggest', async () => {
       const item = new itemModel(singleItem);
       await item.save();
-      mockEventStore.existingStreams = [
+      mockEventStore.existingStreams.add(
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
-      ];
+      );
 
       const globalStatistic = new globalStatisticsModel({
         totalItems: 1,
@@ -682,12 +681,12 @@ describe('ItemsController (e2e)', () => {
       );
     });
 
-    it.only('Should increment totalSuggestions count and decrement itemCount on item delete suggest', async () => {
+    it('Should increment totalSuggestions count and decrement itemCount on item delete suggest', async () => {
       const item = new itemModel(singleItem);
       await item.save();
-      mockEventStore.existingStreams = [
+      mockEventStore.existingStreams.add(
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
-      ];
+      );
 
       const globalStatistic = new globalStatisticsModel({
         totalItems: 2,
@@ -703,8 +702,6 @@ describe('ItemsController (e2e)', () => {
         async () => (await deleteSuggestionModel.count()) !== 0,
       );
 
-      await setTimeout(1000);
-      console.log(await globalStatisticsModel.find());
       await retryCallback(
         async () => (await globalStatisticsModel.findOne())?.totalItems !== 2,
       );
