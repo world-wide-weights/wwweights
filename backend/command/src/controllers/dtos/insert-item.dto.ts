@@ -12,13 +12,16 @@ import {
 } from 'class-validator';
 import { IsBiggerThan } from '../../shared/validators/is-bigger-than';
 
+/**
+ * @description DTO for Weight when inserting an item
+ */
 export class Weight {
   @IsNumber()
   @IsPositive()
   @ApiProperty({
     exclusiveMinimum: true,
     minimum: 0,
-    description: 'Value of weight in gram.',
+    description: 'Value of weight in gramm',
     example: 150,
   })
   value: number;
@@ -27,7 +30,7 @@ export class Weight {
   @IsOptional()
   @ApiPropertyOptional({
     default: false,
-    description: 'Set whether the weight is an approximate weight.',
+    description: 'Set whether the weight is an approximate weight',
     example: true,
   })
   isCa?: boolean;
@@ -42,24 +45,26 @@ export class Weight {
     exclusiveMinimum: true,
     minimum: 0,
     description:
-      'Additional value of weight in gramm. Has to be bigger than value. Use this if you have a range weight.',
+      'Additional value of weight in gramm. Has to be bigger than value. Use this if you have a range weight',
     example: 250,
   })
   additionalValue?: number;
 }
 
+/**
+ * @description DTO for item inserting an item
+ */
 export class InsertItemDto {
-  // TODO: Slug here or on event write
   @IsString()
   @IsNotEmpty()
-  @ApiProperty({ description: 'Name of the item.', example: 'Apple' })
+  @ApiProperty({ description: 'Name of the item', example: 'Apple' })
   name: string;
 
   @ValidateNested()
   @Type(() => Weight)
   @ApiProperty({
     type: Weight,
-    description: 'Weight of the item.',
+    description: 'Weight of the item',
     example: { value: 150, isCa: false, additionalValue: 250 },
   })
   weight: Weight;
@@ -68,8 +73,9 @@ export class InsertItemDto {
   @IsOptional()
   @IsString({ each: true })
   @ApiPropertyOptional({
-    type: [String],
-    description: 'Tags of the item.',
+    type: String,
+    isArray: true,
+    description: 'Tags of the item',
     example: ['fruit', 'red'],
   })
   tags?: string[];
@@ -86,7 +92,7 @@ export class InsertItemDto {
   @IsOptional()
   @ApiPropertyOptional({
     description:
-      'Source of weight for item. Can be an URL or any other format of string.',
+      'Source of weight for item. Can be an URL or any other format of string',
     example: 'https://example.com',
   })
   source?: string;

@@ -27,12 +27,12 @@ import { SuggestItemDeleteCommand } from '../../commands/item-commands/suggest-i
 import { SuggestItemEditCommand } from '../../commands/item-commands/suggest-item-edit.command';
 import { ENVGuard } from '../../shared/guards/env.guard';
 import { JwtAuthGuard } from '../../shared/guards/jwt.guard';
-import { BulkInsertItemDTO } from '../interfaces/bulk-insert-item.dto';
-import { InsertItemDto } from '../interfaces/insert-item.dto';
-import { JwtWithUserDto } from '../interfaces/request-with-user.dto';
-import { SuggestItemDeleteDTO } from '../interfaces/suggest-item-delete.dto';
-import { SuggestItemEditDTO } from '../interfaces/suggest-item-edit.dto';
+import { BulkInsertItemDTO } from '../dtos/bulk-insert-item.dto';
+import { InsertItemDto } from '../dtos/insert-item.dto';
+import { RequestWithJWTPayload } from '../interfaces/request-with-user.interface';
+import { SuggestItemDeleteDTO } from '../dtos/suggest-item-delete.dto';
 import { ItemsService } from '../services/item.service';
+import { SuggestItemEditDTO } from '../dtos/suggest-item-edit.dto';
 
 @Controller('items')
 @ApiTags('items')
@@ -46,7 +46,10 @@ export class ItemsController {
 
   @Post('insert')
   @ApiBody({ type: InsertItemDto })
-  @ApiOperation({ summary: 'Insert an item' })
+  @ApiOperation({
+    summary: 'Insert an item',
+    description: 'Initiate item insert',
+  })
   @ApiOkResponse({
     description: 'Item inserted successfully',
   })
@@ -60,9 +63,9 @@ export class ItemsController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
   async insertItem(
-    @Req() { user }: JwtWithUserDto,
+    @Req() { user }: RequestWithJWTPayload,
     @Body() insertItemDto: InsertItemDto,
-  ) {
+  ): Promise<void> {
     await this.commandBus.execute(
       new InsertItemCommand(insertItemDto, user.id),
     );
@@ -78,7 +81,9 @@ export class ItemsController {
   })
   @ApiOkResponse({ description: 'Items inserted' })
   @ApiInternalServerErrorResponse({ description: 'Something went wrong' })
-  async bulkInsert(@Body() bulkItemInsertDTO: BulkInsertItemDTO[]) {
+  async bulkInsert(
+    @Body() bulkItemInsertDTO: BulkInsertItemDTO[],
+  ): Promise<void> {
     await this.itemsService.handleBulkInsert(bulkItemInsertDTO);
   }
 
@@ -108,8 +113,8 @@ export class ItemsController {
   async suggestEdit(
     @Body() editSuggestionDto: SuggestItemEditDTO,
     @Param('slug') itemSlug: string,
-    @Req() { user }: JwtWithUserDto,
-  ) {
+    @Req() { user }: RequestWithJWTPayload,
+  ): Promise<void> {
     await this.commandBus.execute(
       new SuggestItemEditCommand(editSuggestionDto, itemSlug, user.id),
     );
@@ -141,8 +146,8 @@ export class ItemsController {
   async suggestDelete(
     @Body() deleteSuggestionDto: SuggestItemDeleteDTO,
     @Param('slug') itemSlug: string,
-    @Req() { user }: JwtWithUserDto,
-  ) {
+    @Req() { user }: RequestWithJWTPayload,
+  ): Promise<void> {
     await this.commandBus.execute(
       new SuggestItemDeleteCommand(deleteSuggestionDto, itemSlug, user.id),
     );

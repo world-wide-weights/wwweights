@@ -1,5 +1,8 @@
-import { SuggestItemDeleteDTO } from '../../controllers/interfaces/suggest-item-delete.dto';
+import { SuggestItemDeleteDTO } from "../../controllers/dtos/suggest-item-delete.dto";
 
+/**
+ * @description Command to initiate item delete suggestion flow
+ */
 export class SuggestItemDeleteCommand {
   constructor(
     public readonly suggestItemDeleteDto: SuggestItemDeleteDTO,

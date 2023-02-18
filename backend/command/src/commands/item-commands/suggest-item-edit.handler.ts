@@ -20,10 +20,10 @@ export class SuggestItemEditHandler
     suggestItemEditDto,
     itemSlug,
     userId,
-  }: SuggestItemEditCommand) {
+  }: SuggestItemEditCommand): Promise<void> {
     const newSuggestion = new EditSuggestion({
       userId,
-      itemSlug: itemSlug,
+      itemSlug,
       updatedItemValues: suggestItemEditDto,
       // Approved is default until votes for suggestions are implemented in frontend
       status: SUGGESTION_STATUS.APPROVED,
@@ -35,7 +35,7 @@ export class SuggestItemEditHandler
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${newSuggestion.itemSlug}`,
       ))
     ) {
-      throw new NotFoundException('No item with this slug exists');
+      throw new NotFoundException(`No item with this slug ${itemSlug} exists`);
     }
 
     const streamName = `${ALLOWED_EVENT_ENTITIES.EDIT_SUGGESTION}-${newSuggestion.itemSlug}-${newSuggestion.uuid}`;
@@ -46,7 +46,7 @@ export class SuggestItemEditHandler
       newSuggestion,
     );
     this.logger.log(
-      `${ALLOWED_EVENT_ENTITIES.EDIT_SUGGESTION} created on stream: ${streamName}`,
+      `${ItemEditSuggestedEvent.name} created on stream: ${streamName}`,
     );
   }
 }

@@ -20,7 +20,7 @@ export class SuggestItemDeleteHandler
     suggestItemDeleteDto,
     itemSlug,
     userId,
-  }: SuggestItemDeleteCommand) {
+  }: SuggestItemDeleteCommand): Promise<void> {
     const newSuggestion = new DeleteSuggestion({
       ...suggestItemDeleteDto,
       userId,
@@ -37,7 +37,7 @@ export class SuggestItemDeleteHandler
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${newSuggestion.itemSlug}`,
       ))
     ) {
-      throw new NotFoundException('No item with this slug exists');
+      throw new NotFoundException(`No item with this slug ${itemSlug} exists`);
     }
 
     await this.eventStore.addEvent(

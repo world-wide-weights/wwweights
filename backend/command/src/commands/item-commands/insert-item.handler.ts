@@ -19,41 +19,26 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
   constructor(private readonly eventStore: EventStore) {}
 
   // No returns, just Exceptions in CQRS
-  async execute({ insertItemDto, userId }: InsertItemCommand) {
-    try {
-      const newItem = new Item({
-        ...insertItemDto,
-        userId: userId,
-        slug: getSlug(insertItemDto.name),
-        tags: insertItemDto.tags?.map(
-          (tag) => new Tag({ name: getSlug(tag, ' ') }),
-        ),
-        createdAt: Date.now(),
-      });
+  async execute({ insertItemDto, userId }: InsertItemCommand): Promise<void> {
+    const newItem = new Item({
+      ...insertItemDto,
+      userId: userId,
+      slug: getSlug(insertItemDto.name),
+      tags: insertItemDto.tags?.map(
+        (tag) => new Tag({ name: getSlug(tag, ' ') }),
+      ),
+      createdAt: Date.now(),
+    });
 
-      const streamName = `${ALLOWED_EVENT_ENTITIES.ITEM}-${newItem.slug}`;
+    const streamName = `${ALLOWED_EVENT_ENTITIES.ITEM}-${newItem.slug}`;
 
-      if (await this.eventStore.doesStreamExist(streamName)) {
-        throw new ConflictException('Slug already taken');
-      }
-
-      await this.eventStore.addEvent(
-        streamName,
-        ItemInsertedEvent.name,
-        newItem,
-      );
-      this.logger.log(`Event created on stream: item-${newItem.slug}`);
-    } catch (error) {
-      // If thrown error is already a valid HttpException => Throw that one instead
-      if (error instanceof HttpException) {
-        throw error;
-      }
-      this.logger.error(error);
-      throw new InternalServerErrorException(
-        `Item could not be inserted (target stream name: ${
-          ALLOWED_EVENT_ENTITIES.ITEM
-        }-${getSlug(insertItemDto.name)})`,
-      );
+    if (await this.eventStore.doesStreamExist(streamName)) {
+      throw new ConflictException(`Slug ${newItem.slug} already taken`);
     }
+
+    await this.eventStore.addEvent(streamName, ItemInsertedEvent.name, newItem);
+    this.logger.log(
+      `${ItemInsertedEvent.name} created on stream: ${streamName}}`,
+    );
   }
 }

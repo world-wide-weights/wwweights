@@ -1,3 +1,8 @@
 import { ItemCronJobHandler } from './items.cron';
 
-export const CronJobHandlers = [ItemCronJobHandler];
+/**
+ * @description List of all cronjob handlers
+ */
+export const CronJobHandlers = [
+    ItemCronJobHandler
+]

@@ -12,7 +12,11 @@ export class EditItemHandler implements ICommandHandler<EditItemCommand> {
   constructor(private readonly eventStore: EventStore) {}
 
   // No returns, just Exceptions in CQRS
-  async execute({ itemSlug, editValues, suggestionUuid }: EditItemCommand) {
+  async execute({
+    itemSlug,
+    editValues,
+    suggestionUuid,
+  }: EditItemCommand): Promise<void> {
     const newItemEdit: ItemEditedEventDTO = {
       itemSlug,
       editValues,
@@ -21,7 +25,9 @@ export class EditItemHandler implements ICommandHandler<EditItemCommand> {
     const streamName = `${ALLOWED_EVENT_ENTITIES.ITEM}-${newItemEdit.itemSlug}`;
 
     if (!(await this.eventStore.doesStreamExist(streamName))) {
-      throw new NotFoundException('No item with this slug exists');
+      throw new NotFoundException(
+        `No item with this slug (${itemSlug}) exists`,
+      );
     }
 
     await this.eventStore.addEvent(

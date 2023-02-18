@@ -23,7 +23,7 @@ export class ItemCronJobHandler {
     // Performance
     const updateTagCountStart = performance.now();
     try {
-      // Here an aggregate because for some reason a $lookup and then $set did not update the document in a model.findOneAndUpdate()
+      // Lookup and merge tag values for each item and update item collection accordingly
       await this.itemModel.aggregate([
         {
           $lookup: {
@@ -59,7 +59,7 @@ export class ItemCronJobHandler {
   }
 
   /**
-   * @description Delete all tags that are not assigned to an item
+   * @description Delete all tags that are not assigned to an item i.e. have a count of 0
    */
   @Cron(CronExpression.EVERY_10_MINUTES)
   async deleteUnusedTags() {
@@ -80,11 +80,9 @@ export class ItemCronJobHandler {
     } catch (error) {
       this.logger.error(error);
       this.logger.log(
-        this.logger.log(
-          `Cronjob for deleting Tags in ${
-            performance.now() - deleteTagsStartTime
-          } ms (Job failed)`,
-        ),
+        `Cronjob for deleting Tags in ${
+          performance.now() - deleteTagsStartTime
+        } ms (Job failed)`,
       );
       return;
     }
@@ -92,7 +90,7 @@ export class ItemCronJobHandler {
     this.logger.log(
       `Cronjob for deleting Tags finished in ${
         performance.now() - deleteTagsStartTime
-      } ms`,
+      } ms (Job succeeded)`,
     );
   }
 }
