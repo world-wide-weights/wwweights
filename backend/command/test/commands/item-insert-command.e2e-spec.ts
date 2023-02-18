@@ -1,11 +1,14 @@
-import { HttpModule, HttpService } from '@nestjs/axios';
+import { HttpService } from '@nestjs/axios';
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { EventBus } from '@nestjs/cqrs';
-import { TestingModule, Test } from '@nestjs/testing';
+import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
+import * as request from 'supertest';
 import { CommandsModule } from '../../src/commands/commands.module';
 import { ControllersModule } from '../../src/controllers/controllers.module';
+import { ItemCronJobHandler } from '../../src/cron/cron-handlers/items.cron';
+import { CronModule } from '../../src/cron/cron.module';
 import { EventsModule } from '../../src/events/events.module';
 import { EventStore } from '../../src/eventstore/eventstore';
 import { EventStoreModule } from '../../src/eventstore/eventstore.module';
@@ -16,6 +19,7 @@ import { GlobalStatistics } from '../../src/models/global-statistics.model';
 import { Item } from '../../src/models/item.model';
 import { Profile } from '../../src/models/profile.model';
 import { Tag } from '../../src/models/tag.model';
+import { SagasModule } from '../../src/sagas/sagas.module';
 import { ENVGuard } from '../../src/shared/guards/env.guard';
 import { JwtAuthGuard } from '../../src/shared/guards/jwt.guard';
 import { JwtStrategy } from '../../src/shared/strategies/jwt.strategy';
@@ -28,18 +32,14 @@ import { FakeEnvGuardFactory } from '../mocks/env-guard.mock';
 import { MockEventStore } from '../mocks/eventstore';
 import { HttpServiceMock } from '../mocks/http-service.mock';
 import {
+  differentNames as itemsWithDifferentNames,
   insertItem,
   insertItem2,
-  differentNames as itemsWithDifferentNames,
   testData,
 } from '../mocks/items';
+import { ItemCronJobHandlerMock } from '../mocks/items-cron.mock';
 import { FakeAuthGuardFactory } from '../mocks/jwt-guard.mock';
 import { verifiedRequestUser } from '../mocks/users';
-import * as request from 'supertest';
-import { SagasModule } from '../../src/sagas/sagas.module';
-import { ItemCronJobHandlerMock } from '../mocks/items-cron.mock';
-import { ItemCronJobHandler } from '../../src/cron/cron-handlers/items.cron';
-import { CronModule } from '../../src/cron/cron.module';
 
 describe('ItemsController (e2e)', () => {
   let app: INestApplication;
@@ -67,7 +67,7 @@ describe('ItemsController (e2e)', () => {
         EventStoreModule,
         InternalCommunicationModule,
         SagasModule,
-        CronModule
+        CronModule,
       ],
     })
       .overrideProvider(EventStore)
