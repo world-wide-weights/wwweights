@@ -28,12 +28,15 @@ async function bootstrap() {
         },
         'refresh_token',
       )
-      .addApiKey({
-        description: 'Api key for internal communication',
-        name: 'x-api-key',
-        type: 'apiKey',
-        in: 'header'
-      }, 'api_key')
+      .addApiKey(
+        {
+          description: 'Api key for internal communication',
+          name: 'x-api-key',
+          type: 'apiKey',
+          in: 'header',
+        },
+        'api_key',
+      )
       .build();
     const document = SwaggerModule.createDocument(app, config, {
       ignoreGlobalPrefix: false,

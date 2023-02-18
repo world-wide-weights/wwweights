@@ -9,7 +9,7 @@ import {
   Req,
   SerializeOptions,
   UseGuards,
-  UseInterceptors
+  UseInterceptors,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -21,7 +21,7 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiTags,
-  ApiUnauthorizedResponse
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dtos/login.dto';
@@ -105,7 +105,8 @@ export class AuthController {
     type: AuthStatisticsResponse,
   })
   @ApiInternalServerErrorResponse({
-    description: 'The server failed to execute the give task. This is most likely due to a db issue'
+    description:
+      'The server failed to execute the give task. This is most likely due to a db issue',
   })
   async getAuthStatistics(): Promise<AuthStatisticsResponse> {
     return new AuthStatisticsResponse(

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString, Length, MaxLength } from 'class-validator';
+import { IsEmail, IsString, Length } from 'class-validator';
 
 /**
  * @description DTO used for login endpoint(s)

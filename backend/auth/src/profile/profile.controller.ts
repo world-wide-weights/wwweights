@@ -7,7 +7,7 @@ import {
   Req,
   SerializeOptions,
   UseGuards,
-  UseInterceptors
+  UseInterceptors,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -15,7 +15,7 @@ import {
   ApiOperation,
   ApiParam,
   ApiTags,
-  ApiUnauthorizedResponse
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { UserEntity } from '../db/entities/users.entity';
 import { JwtGuard } from '../shared/guards/jwt.guard';

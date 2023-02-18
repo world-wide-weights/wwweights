@@ -1,5 +1,5 @@
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as request from 'supertest';
@@ -67,7 +67,6 @@ describe('AuthController (e2e)', () => {
   });
 
   describe('/account/add-image (POST)', () => {
-
     describe('Positive Tests', () => {
       it('Should add entry for user without image', async () => {
         // ARRANGE
