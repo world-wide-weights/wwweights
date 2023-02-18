@@ -25,7 +25,7 @@ describe("Delete a contribution", () => {
         cy.dataCy(`profile-delete-contribution-${contributions.data[0].slug}`).click()
 
         cy.dataCy("reason-dropdown-button").click()
-        cy.dataCy("reason-dropdown-option-wrong_information").click()
+        cy.dataCy("reason-dropdown-option-inappropriate").click()
 
         cy.mockDeleteItem()
         cy.dataCy("profile-delete-button").click()
