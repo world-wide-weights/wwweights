@@ -66,7 +66,6 @@ function Home({ items }: InferGetServerSidePropsType<typeof getServerSideProps>)
 					<p className="text-gray-200 mb-3 md:mb-6">World largest database of weights!</p>
 
 					{/* Search */}
-					{/* TODO (Zoe-bot): Move formik stuff to search component */}
 					<Formik initialValues={initialQueryValues} onSubmit={submitForm}>
 						<Form className="flex justify-center w-full">
 							<div className="w-full md:w-[30rem]">
