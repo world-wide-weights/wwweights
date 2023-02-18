@@ -9,6 +9,7 @@ import { CompareContainer } from "../../components/CompareContainer/CompareConta
 import { SearchHeader } from "../../components/Header/SearchHeader"
 import { Headline } from "../../components/Headline/Headline"
 import { Icon } from "../../components/Icon/Icon"
+import { ItemSource } from "../../components/Item/ItemSource"
 import { RelatedItems } from "../../components/RelatedItems/RelatedItems"
 import { Seo } from "../../components/Seo/Seo"
 import { Tab } from "../../components/Tabs/Tab"
@@ -63,7 +64,6 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
 
     // Strings + Unit Generator
     const weightString = renderUnitIntoString(item.weight)
-    const sourceName = item.source ? new URL(item.source).hostname.replace("www.", "") : null
 
     // Convert image url 
     const imageUrl = getImageUrl(item.image)
@@ -101,7 +101,7 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
 
                     {/* Source and Tags */}
                     <div className="flex flex-col self-start col-start-1 col-end-3 lg:row-start-2 mt-5 lg:mt-0">
-                        {item.source && <a target="_blank" rel="noopener noreferrer" href={item.source} className="text-gray-600 hover:text-gray-700 mb-3 md:mb-5">According to {sourceName} a {item.name} weights {weightString}.</a>}
+                        {item.source && <ItemSource name={item.name} source={item.source} weightString={weightString} />}
                         <ul className="flex md:flex-wrap overflow-y-auto">
                             <li><div className="md:hidden absolute bg-gradient-to-r right-0 from-transparent to-gray-100 w-20 h-8 py-1"></div></li>
                             {item.tags.map((tag, index) => <li key={tag.name} className={`${index === item.tags.length - 1 ? "mr-20" : ""}`}><Chip to={routes.tags.single(tag.name)}>{tag.name}</Chip></li>)}
