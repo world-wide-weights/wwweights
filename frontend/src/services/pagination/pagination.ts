@@ -19,7 +19,7 @@ type PaginationPage = {
     link: string
 }
 
-type PaginationService = {
+export type PaginationService = {
     prev: string | null
     next: string | null
     pages: (PaginationPage | PaginationEllipsis)[]

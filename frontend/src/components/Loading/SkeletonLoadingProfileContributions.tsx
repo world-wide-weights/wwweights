@@ -1,10 +1,10 @@
-/**
- * Skeleton Loading for Profile page.
- */
 
 const ITEM_LIST_COUNT = 3
 const PAGINATION_COUNT = 4
 
+/**
+ * Skeleton Loading for Profile page.
+ */
 export const SkeletonLoadingProfileContributions: React.FC = () => {
     return <div className="lg:w-3/4">
         <div className="bg-slate-200 animate-pulse h-7 w-32 mb-2"></div>

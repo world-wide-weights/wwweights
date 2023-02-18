@@ -1,11 +1,17 @@
 import { generateSourceString } from "../../services/utils/generateSourceString"
 
 export type ItemSourceProps = {
+    /** The name of the item. */
     name: string
+    /** The weight string (with ca and range) of the item. */
     weightString: string
+    /** The source of the item. */
     source: string
 }
 
+/**
+ * Renders the source of an item.
+ */
 export const ItemSource: React.FC<ItemSourceProps> = ({ name, source, weightString }) => {
     const { sourceString, isUrl } = generateSourceString({ name, weightString, source })
 

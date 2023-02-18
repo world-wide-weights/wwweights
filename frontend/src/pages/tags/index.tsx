@@ -21,7 +21,9 @@ type TagsListProps = {
     limit: number
 }
 
-/** Base List for tags */
+/** 
+ * Base List for tags 
+ */
 export default function TagsList({ tags, currentPage, totalItems, limit }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
     return (<>

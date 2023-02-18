@@ -23,14 +23,14 @@ const SHOULD_LOAD_GA = process.env.NODE_ENV !== "development"
  * } 
  */
 export type NextPageCustomProps<P = {}, IP = P> = NextPage<P, IP> & {
-  layout?: (page: React.ReactElement) => React.ReactNode
-  auth?: {
-    routeType: "protected" | "guest" | "public"
-  }
+    layout?: (page: React.ReactElement) => React.ReactNode
+    auth?: {
+        routeType: "protected" | "guest" | "public"
+    }
 }
 
 type AppPropsCustom = AppProps & {
-  Component: NextPageCustomProps
+    Component: NextPageCustomProps
 }
 
 /**
@@ -38,41 +38,41 @@ type AppPropsCustom = AppProps & {
  * Wrapps all pages.
  */
 const App = ({ Component, pageProps }: AppPropsCustom) => {
-  // When layout function is defined use custom layout
-  const layout = Component.layout ?? ((page: React.ReactElement) => <DefaultLayout>{page}</DefaultLayout>)
+    // When layout function is defined use custom layout
+    const layout = Component.layout ?? ((page: React.ReactElement) => <DefaultLayout>{page}</DefaultLayout>)
 
-  return <>
-    {/** Handles all global loading of bundles and SSR */}
-    <NextNProgress color="#0967D2" height={5} />
+    return <>
+        {/** Handles all global loading of bundles and SSR */}
+        <NextNProgress color="#0967D2" height={5} />
 
-    {/** Google AdSense */}
-    {SHOULD_DISPLAY_ADS && <Script
-      async
-      strategy="afterInteractive"
-      onError={(e) => { console.error("Script failed to load", e) }}
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7697189508841626"
-    />}
+        {/** Google AdSense */}
+        {SHOULD_DISPLAY_ADS && <Script
+            async
+            strategy="afterInteractive"
+            onError={(e) => { console.error("Script failed to load", e) }}
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7697189508841626"
+        />}
 
-    {/** Google Analytics */}
-    {SHOULD_LOAD_GA && <>
-      <Script async strategy="afterInteractive" src="https://www.googletagmanager.com/gtag/js?id=G-TPQQFLWM0Q" />
-      <Script id="google-analytics" strategy="afterInteractive" >
-        {`
+        {/** Google Analytics */}
+        {SHOULD_LOAD_GA && <>
+            <Script async strategy="afterInteractive" src="https://www.googletagmanager.com/gtag/js?id=G-TPQQFLWM0Q" />
+            <Script id="google-analytics" strategy="afterInteractive" >
+                {`
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
   
         gtag('config', 'G-TPQQFLWM0Q');
         `}
-      </Script>
-    </>}
+            </Script>
+        </>}
 
-    <Auth routeType={Component?.auth?.routeType ?? "public"}> {/** Auth wrapper */}
-      <div className="font-sans">
-        {layout(<Component {...pageProps} />)} {/** Page content with default or custom layout. */}
-      </div>
-    </Auth>
-  </>
+        <Auth routeType={Component?.auth?.routeType ?? "public"}> {/** Auth wrapper */}
+            <div className="font-sans">
+                {layout(<Component {...pageProps} />)} {/** Page content with default or custom layout. */}
+            </div>
+        </Auth>
+    </>
 }
 
 export default App

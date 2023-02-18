@@ -19,6 +19,9 @@ export type ItemListContributeProps = {
     actions: React.ReactNode
 }
 
+/**
+ * Item list for the profile contributions, set focus on headline and adds actions.
+ */
 export const ItemListContribute: React.FC<ItemListContributeProps> = ({ name, slug, weight, image, actions }) => {
     const weightString = renderUnitIntoString(weight)
 

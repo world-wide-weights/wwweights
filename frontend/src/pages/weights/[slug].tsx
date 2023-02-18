@@ -28,7 +28,9 @@ type WeightsSingleProps = {
     relatedItems: Item[]
 }
 
-/** Single Page of a weight */
+/** 
+ * Single Page of a weight 
+ */
 export default function WeightsSingle({ item, relatedItems }: InferGetServerSidePropsType<typeof getStaticProps>) {
     // Generate Compare Weight
     const compareWeight = calculateMedianWeight(item.weight)

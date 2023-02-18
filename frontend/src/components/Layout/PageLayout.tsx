@@ -6,11 +6,14 @@ import { Layout } from "./Layout"
 type PageLayoutProps = {
     /** The main content. */
     children: React.ReactNode
+    /** The title of the page. */
     title: string
 }
 
+/**
+ * The `PageLayout` component is used to create a page layout with a breadcrumb, headline, and main container.
+ */
 export const PageLayout: React.FC<PageLayoutProps> = ({ children, title }) => {
-
     return <Layout>
         {/* Meta Tags */}
         <Seo

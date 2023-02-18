@@ -1,11 +1,10 @@
 import { SkeletonLoadingProfileContributions } from "./SkeletonLoadingProfileContributions"
 
+const STATISTICS_ELEMENT_COUNT = 4
+
 /**
  * Skeleton Loading for Profile page.
  */
-
-const STATISTICS_ELEMENT_COUNT = 4
-
 export const SkeletonLoadingProfile: React.FC = () => {
     return <main datacy="skeleton-loading" className="container mt-5">
         <div className="bg-slate-200 animate-pulse h-6 w-32 mb-2 md:mb-4"></div>

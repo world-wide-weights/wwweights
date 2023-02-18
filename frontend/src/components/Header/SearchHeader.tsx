@@ -22,7 +22,7 @@ type SearchHeaderProps = {
 }
 
 /**
- * Header with search and search suggestions
+ * Header with search and suggestions
  */
 export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "relevance", hasHeadline = true, hasRelatedTags = true }) => {
     const router = useRouter()

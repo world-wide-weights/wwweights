@@ -1,7 +1,6 @@
 import { Ellipsis, getTotalPageCount, paginationDataService, PaginationDataServiceParams, paginationService, PaginationServiceParams } from "./pagination"
 
 describe("Pagination", () => {
-
     describe("pagination data service", () => {
         // BUG: Fix bug with left dots (sollte punkte erst ab 3er seite anzeigen, nicht wenn für die 2 Seite noch platz ist)
         describe("should only display dots when there are at least two pages hidden", () => {

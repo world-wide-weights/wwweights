@@ -9,6 +9,9 @@ type IconProps = {
     datacy?: string
 }
 
+/**
+ * The `Icon` component is used to display a material icon.
+ */
 export const Icon: React.FC<IconProps> = ({ children, isFilled = false, datacy, className }) => <i datacy={datacy} style={isFilled ? {
     fontVariationSettings: "'FILL' 1"
 } : {}} className={`material-symbols-rounded ${className}`}>{children}</i>
