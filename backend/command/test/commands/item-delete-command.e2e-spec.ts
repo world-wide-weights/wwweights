@@ -21,6 +21,7 @@ import { GlobalStatistics } from '../../src/models/global-statistics.model';
 import { Item } from '../../src/models/item.model';
 import { Profile } from '../../src/models/profile.model';
 import { Tag } from '../../src/models/tag.model';
+import { SagasModule } from '../../src/sagas/sagas.module';
 import { ENVGuard } from '../../src/shared/guards/env.guard';
 import { JwtAuthGuard } from '../../src/shared/guards/jwt.guard';
 import { JwtStrategy } from '../../src/shared/strategies/jwt.strategy';
@@ -62,6 +63,7 @@ describe('Item Deletion (e2e)', () => {
         ControllersModule,
         EventStoreModule,
         InternalCommunicationModule,
+        SagasModule,
       ],
     })
       .overrideProvider(EventStore)
@@ -131,7 +133,7 @@ describe('Item Deletion (e2e)', () => {
       mockEventStore.existingStreams.add(
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
       );
-      //ACT
+      // ACT
       const res = await request(server)
         .post(commandsPath + `items/${item.slug}/suggest/delete`)
         .send({ reason: 'test' });
@@ -170,6 +172,25 @@ describe('Item Deletion (e2e)', () => {
       const globalStatistics = await globalStatisticsModel.findOne();
       expect(globalStatistics.totalSuggestions).toEqual(1);
     });
+
+    it('Should increment profile itemsDeleted count', async () => {
+      // ARRANGE
+      const item = new itemModel(singleItem);
+      await item.save();
+      // Create eventstore stream
+      mockEventStore.existingStreams.add(
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      );
+      // ACT
+      await request(server)
+        .post(commandsPath + `items/${item.slug}/suggest/delete`)
+        .send({ reason: 'test' });
+
+      await retryCallback(async () => (await profileModel.count()) !== 0);
+
+      const profile = await profileModel.findOne({});
+      expect(profile.count.itemsDeleted).toEqual(1);
+    });
   });
 
   // WARNING: The following tests are for testing the edit functionality itself. As of now this is triggered via
@@ -180,12 +201,16 @@ describe('Item Deletion (e2e)', () => {
       // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
-      const command = new DeleteItemCommand(item.slug, randomUUID());
+      const command = new DeleteItemCommand(
+        item.slug,
+        randomUUID(),
+        verifiedRequestUser.id,
+      );
       // Create eventstore stream
       mockEventStore.existingStreams.add(
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
       );
-      //ACT
+      // ACT
       await commandBus.execute(command);
       // ASSERT
       await retryCallback(
@@ -209,7 +234,11 @@ describe('Item Deletion (e2e)', () => {
       });
       await globalStatistic.save();
 
-      const command = new DeleteItemCommand(item.slug, randomUUID());
+      const command = new DeleteItemCommand(
+        item.slug,
+        randomUUID(),
+        verifiedRequestUser.id,
+      );
 
       // ACT
       await commandBus.execute(command);

@@ -21,6 +21,7 @@ import { GlobalStatistics } from '../../src/models/global-statistics.model';
 import { Item } from '../../src/models/item.model';
 import { Profile } from '../../src/models/profile.model';
 import { Tag } from '../../src/models/tag.model';
+import { SagasModule } from '../../src/sagas/sagas.module';
 import { ENVGuard } from '../../src/shared/guards/env.guard';
 import { JwtAuthGuard } from '../../src/shared/guards/jwt.guard';
 import { JwtStrategy } from '../../src/shared/strategies/jwt.strategy';
@@ -62,6 +63,7 @@ describe('Item Edit (e2e)', () => {
         ControllersModule,
         EventStoreModule,
         InternalCommunicationModule,
+        SagasModule,
       ],
     })
       .overrideProvider(EventStore)
@@ -180,7 +182,6 @@ describe('Item Edit (e2e)', () => {
 
       const globalStatistic = new globalStatisticsModel({
         totalItems: 1,
-        totalSuggestions: 0,
       });
       await globalStatistic.save();
 
@@ -189,12 +190,38 @@ describe('Item Edit (e2e)', () => {
         .send({ name: 'smthelse' });
 
       await retryCallback(
-        async () => (await editSuggestionModel.count()) !== 0,
+        async () =>
+          (await globalStatisticsModel.findOne()).totalSuggestions !==
+          undefined,
       );
 
       expect((await globalStatisticsModel.findOne()).totalSuggestions).toEqual(
         1,
       );
+    });
+
+    it('Should increment only profile counts', async () => {
+      // ARRANGE
+      const item = new itemModel(singleItem);
+      await item.save();
+      // Create eventstore stream
+      mockEventStore.existingStreams.add(
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      );
+      // ACT
+      await request(server)
+        .post(commandsPath + `items/${item.slug}/suggest/edit`)
+        .send({ image: 'willi_wonka' });
+
+      await retryCallback(async () => (await profileModel.count()) !== 0);
+
+      // ASSERT
+      const profile = await profileModel.findOne({});
+      expect(profile.count.itemsUpdated).toEqual(1);
+      expect(profile.count.additionalValueOnUpdate).toEqual(0);
+      expect(profile.count.tagsUsedOnUpdate).toEqual(0);
+      expect(profile.count.sourceUsedOnUpdate).toEqual(0);
+      expect(profile.count.imageAddedOnUpdate).toEqual(1);
     });
   });
 
@@ -206,9 +233,14 @@ describe('Item Edit (e2e)', () => {
       // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
-      const command = new EditItemCommand(item.slug, randomUUID(), {
-        image: 'test',
-      });
+      const command = new EditItemCommand(
+        item.slug,
+        randomUUID(),
+        {
+          image: 'test',
+        },
+        verifiedRequestUser.id,
+      );
       // Create eventstore stream
       mockEventStore.existingStreams.add(
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
@@ -228,9 +260,14 @@ describe('Item Edit (e2e)', () => {
       // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
-      const command = new EditItemCommand(item.slug, randomUUID(), {
-        source: null,
-      });
+      const command = new EditItemCommand(
+        item.slug,
+        randomUUID(),
+        {
+          source: null,
+        },
+        verifiedRequestUser.id,
+      );
       // Create eventstore stream
       mockEventStore.existingStreams.add(
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
@@ -257,11 +294,16 @@ describe('Item Edit (e2e)', () => {
         },
       });
       await item.save();
-      const command = new EditItemCommand(item.slug, randomUUID(), {
-        weight: {
-          value: 2222222e30,
+      const command = new EditItemCommand(
+        item.slug,
+        randomUUID(),
+        {
+          weight: {
+            value: 2222222e30,
+          },
         },
-      });
+        verifiedRequestUser.id,
+      );
       // Create eventstore stream
       mockEventStore.existingStreams.add(
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
@@ -291,12 +333,17 @@ describe('Item Edit (e2e)', () => {
         weight: { value: 1123675e30, isCa: true },
       });
       await item.save();
-      const command = new EditItemCommand(item.slug, randomUUID(), {
-        weight: {
-          value: 2222222e30,
-          isCa: null,
+      const command = new EditItemCommand(
+        item.slug,
+        randomUUID(),
+        {
+          weight: {
+            value: 2222222e30,
+            isCa: null,
+          },
         },
-      });
+        verifiedRequestUser.id,
+      );
 
       // Create eventstore stream
       mockEventStore.existingStreams.add(
@@ -321,9 +368,14 @@ describe('Item Edit (e2e)', () => {
       // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
-      const command = new EditItemCommand(item.slug, randomUUID(), {
-        tags: { pull: [item.tags[0].name] },
-      });
+      const command = new EditItemCommand(
+        item.slug,
+        randomUUID(),
+        {
+          tags: { pull: [item.tags[0].name] },
+        },
+        verifiedRequestUser.id,
+      );
       // Create eventstore stream
       mockEventStore.existingStreams.add(
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
@@ -347,9 +399,14 @@ describe('Item Edit (e2e)', () => {
       // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
-      const command = new EditItemCommand(item.slug, randomUUID(), {
-        tags: { push: ['newTag1'] },
-      });
+      const command = new EditItemCommand(
+        item.slug,
+        randomUUID(),
+        {
+          tags: { push: ['newTag1'] },
+        },
+        verifiedRequestUser.id,
+      );
       // Create eventstore stream
       mockEventStore.existingStreams.add(
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
@@ -371,9 +428,14 @@ describe('Item Edit (e2e)', () => {
       // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
-      const command = new EditItemCommand(item.slug, randomUUID(), {
-        tags: { push: ['newTag1'], pull: [item.tags[0].name] },
-      });
+      const command = new EditItemCommand(
+        item.slug,
+        randomUUID(),
+        {
+          tags: { push: ['newTag1'], pull: [item.tags[0].name] },
+        },
+        verifiedRequestUser.id,
+      );
       // Create eventstore stream
       mockEventStore.existingStreams.add(
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
@@ -398,9 +460,14 @@ describe('Item Edit (e2e)', () => {
       const item = new itemModel(singleItem);
       await item.save();
       await tagModel.insertMany(item.tags);
-      const command = new EditItemCommand(item.slug, randomUUID(), {
-        tags: { push: ['newTag1'], pull: [item.tags[0].name] },
-      });
+      const command = new EditItemCommand(
+        item.slug,
+        randomUUID(),
+        {
+          tags: { push: ['newTag1'], pull: [item.tags[0].name] },
+        },
+        verifiedRequestUser.id,
+      );
       // Create eventstore stream
       mockEventStore.existingStreams.add(
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,

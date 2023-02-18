@@ -1,5 +1,4 @@
 import { prop } from '@typegoose/typegoose';
-import { EditSuggestion } from './edit-suggestion.model';
 
 /**
  * @description Entity/Model for profile counts in read db

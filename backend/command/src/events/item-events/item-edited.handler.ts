@@ -28,12 +28,18 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
   async handle({ itemEditedEventDto }: ItemEditedEvent): Promise<void> {
     const updateItemStartTime = performance.now();
     const { itemSlug, editValues } = itemEditedEventDto;
+    console.log('itemEditedEventDto', itemEditedEventDto);
 
     try {
       const oldItem = await this.updateItem(itemSlug, editValues);
 
       this.logger.debug(
         `Item update took: ${performance.now() - updateItemStartTime} ms`,
+      );
+
+      await this.incrementProfileCounts(
+        itemEditedEventDto.userId,
+        itemEditedEventDto.editValues,
       );
 
       // No tags in suggestion => we are done here
@@ -57,10 +63,6 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
             } ms`,
           );
       }
-      await this.incrementProfileCounts(
-        itemEditedEventDto.userId,
-        itemEditedEventDto.editValues,
-      );
     } catch (error) {
       this.logger.error(
         `Toplevel error caught. Stopping execution. See above for more details`,
@@ -99,6 +101,7 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
           $set: weightSet,
         },
       );
+
       if (tagsToPush.length > 0) {
         await this.itemModel.findOneAndUpdate(
           { slug },
@@ -160,12 +163,11 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
     userId: number,
     editValues: SuggestionItem,
   ): Promise<void> {
+    console.log('editValues', editValues);
     const incrementer = {
       $inc: {
         'count.itemsUpdated': 1,
-        'count.tagsUsedOnUpdate':
-          (editValues.tags?.pull.length || 0) +
-          (editValues.tags?.push.length || 0),
+        'count.tagsUsedOnUpdate': editValues.tags?.push?.length || 0,
         'count.sourceUsedOnUpdate': editValues.source ? 1 : 0,
         'count.imageAddedOnUpdate': editValues.image ? 1 : 0,
         'count.additionalValueOnUpdate': editValues.weight?.additionalValue
