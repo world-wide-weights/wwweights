@@ -2,7 +2,7 @@ import { isAxiosError } from "axios"
 import { Form, Formik } from "formik"
 import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
-import { object, SchemaOf, string } from "yup"
+import { object, ObjectSchema, string } from "yup"
 import { AuthContext } from "../../components/Auth/Auth"
 import { Button } from "../../components/Button/Button"
 import { IconButton } from "../../components/Button/IconButton"
@@ -91,7 +91,7 @@ const Profile: NextPageCustomProps = () => {
     }
 
     // Formik Form Validation
-    const validationSchemaDelete: SchemaOf<DeleteItemDTO> = object().shape({
+    const validationSchemaDelete: ObjectSchema<DeleteItemDTO> = object().shape({
         reason: string().required("Reason is required."),
     })
 

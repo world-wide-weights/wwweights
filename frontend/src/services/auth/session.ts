@@ -46,7 +46,6 @@ export const getSessionData = async (): Promise<SessionData | null> => {
 
         // Update token if expired
         if (Date.now() > parsedSessionData.decodedAccessToken.exp * 1000) {
-            console.log("Session expired, refreshing token")
             const tokens = await refreshToken(parsedSessionData.refreshToken)
 
             // Refresh token failed
@@ -58,7 +57,6 @@ export const getSessionData = async (): Promise<SessionData | null> => {
             // Update session when refresh token succeeded
             const newSession = createSession(tokens)
             saveSession(newSession)
-            console.log("Session refreshed")
 
             return newSession
         }

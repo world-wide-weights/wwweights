@@ -1,7 +1,7 @@
 import { Form, Formik } from "formik"
 import { useRouter } from "next/router"
 import { useState } from "react"
-import * as yup from "yup"
+import { object, ObjectSchema, string } from "yup"
 import { Button } from "../../components/Button/Button"
 import { TextInput } from "../../components/Form/TextInput/TextInput"
 import { AccountLayout } from "../../components/Layout/AccountLayout"
@@ -35,10 +35,10 @@ const Register: NextPageCustomProps = () => {
     }
 
     // Formik Form Validation
-    const validationSchema: yup.SchemaOf<RegisterDto> = yup.object().shape({
-        email: yup.string().email("Must be a valid E-Mail.").required("E-Mail is required."),
-        username: yup.string().min(3).max(20).required("E-Mail is required."),
-        password: yup.string().min(8).max(128).required("Password is required.")
+    const validationSchema: ObjectSchema<RegisterDto> = object().shape({
+        email: string().email("Must be a valid E-Mail.").required("Please enter an email address."),
+        username: string().min(2, "Please enter a name with at least 2 letters.").max(255, "Please enter a name with maximum 255 letters.").required(" Please enter a username. Without a username, your items will feel lonely and unloved."),
+        password: string().min(8, "Please enter a password with at least 8 letters.").max(128, "Please enter a password with maximum 255 letters.").required("Please enter a secure password.")
     })
 
     /**
