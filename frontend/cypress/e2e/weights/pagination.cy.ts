@@ -1,6 +1,6 @@
 
 const currentPage = 2
-const limit = 5
+const limit = 8
 
 describe("Pagination /weights", () => {
     describe("Base tests", () => {
@@ -63,7 +63,7 @@ describe("Pagination /weights", () => {
 
     describe("Limit", () => {
         beforeEach(() => {
-            cy.mockDiscoverPage({ itemCount: 5 })
+            cy.mockDiscoverPage({ itemCount: 8 })
 
             cy.visitLocalPage(`/weights?limit=${limit}`)
         })
