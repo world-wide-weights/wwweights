@@ -98,6 +98,10 @@ declare global {
              * Mocks delete item request.
              */
             mockDeleteItem(): Chainable<void>
+            /**
+             * Mocks home page.
+             */
+            mockHome(): Chainable<void>
         }
     }
 }
