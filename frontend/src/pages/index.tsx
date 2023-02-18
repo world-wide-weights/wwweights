@@ -118,13 +118,13 @@ function Home({ items, statistics }: InferGetServerSidePropsType<typeof getServe
 								</div>
 							</Form>
 						</Formik>
-					</div >
-				</div >
-			</main >
+					</div>
+				</div>
+			</main>
 
 			{/* Footer */}
-			< Footer />
-		</div >
+			<Footer />
+		</div>
 	)
 }
 
