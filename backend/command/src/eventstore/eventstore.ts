@@ -24,9 +24,12 @@ import { ItemDeletedEvent } from '../events/item-events/item-deleted.event';
 import { ItemEditSuggestedEvent } from '../events/item-events/item-edit-suggested.event';
 import { ItemEditedEvent } from '../events/item-events/item-edited.event';
 import { ItemInsertedEvent } from '../events/item-events/item-inserted.event';
+import { DeleteSuggestion } from '../models/delete-suggestion.model';
+import { EditSuggestion } from '../models/edit-suggestion.model';
+import { Item } from '../models/item.model';
+import { ItemDeletedEventDTO } from './dtos/deleted-item-event.dto';
+import { ItemEditedEventDTO } from './dtos/edited-item-event.dto';
 import { ALLOWED_EVENT_ENTITIES } from './enums/allowedEntities.enum';
-import { EventstoreAllowedDtos } from './types/allowed-dtos.type';
-import { EventstoreAllowedEvents } from '../events/types/events.type';
 
 /**
  * @description Wrapper for eventstoreDb. Used for save interaction with eventstore
@@ -185,7 +188,12 @@ export class EventStore {
   public async addEvent(
     streamId,
     eventType: string,
-    event: EventstoreAllowedEvents,
+    event:
+      | EditSuggestion
+      | Item
+      | DeleteSuggestion
+      | ItemDeletedEventDTO
+      | ItemEditedEventDTO,
   ): Promise<void> {
     // If replay is not ready, don´t accept events to avoid inconsistent data
     if (!this.isReady) {
@@ -205,14 +213,21 @@ export class EventStore {
    */
   private publishEventToBus(
     eventType: string,
-    event: EventstoreAllowedDtos,
+    // Not the prettiest solution but union types do not seem to work
+    event:
+      | typeof ItemEditSuggestedEvent
+      | typeof ItemInsertedEvent
+      | typeof ItemDeleteSuggestedEvent
+      | typeof ItemDeletedEvent
+      | typeof ItemEditedEvent,
   ): Promise<void> {
     if (!event) return;
     if (!this.eventMap.get(eventType)) {
       this.logger.error(`Invalid eventtype for eventbus ${eventType}`);
       return;
     }
-    this.eventBus.publish(new (this.eventMap.get(eventType))(event));
+    // any conversion as map does not allow for union type
+    this.eventBus.publish(new (this.eventMap.get(eventType) as any)(event));
     this.logger.debug(`Published ${eventType} to event bus`);
   }
 

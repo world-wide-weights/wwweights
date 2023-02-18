@@ -6,7 +6,7 @@ import { ItemEditedEvent } from '../item-events/item-edited.event';
 /**
  * @description List of allowed eventTypes
  */
-export type EventstoreAllowedEvents =
+export type UnionEvents =
   | typeof ItemDeleteSuggestedEvent
   | typeof ItemDeletedEvent
   | typeof ItemEditSuggestedEvent
