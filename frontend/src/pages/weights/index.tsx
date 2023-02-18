@@ -20,7 +20,8 @@ import { routes } from "../../services/routes/routes"
 import { generatePageString } from "../../services/seo/pageString"
 import { renderUnitIntoString, renderWeightAsNumberIntoString } from "../../services/unit/unitRenderer"
 import { getImageUrl } from "../../services/utils/getImageUrl"
-import { Item, PaginatedResponse } from "../../types/item"
+import { Item } from "../../types/item"
+import { PaginatedResponse } from "../../types/paginated"
 
 const DEFAULT_ITEMS_PER_PAGE = 16
 const ITEMS_PER_PAGE_MAXIMUM = 100

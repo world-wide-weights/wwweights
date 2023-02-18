@@ -1,3 +1,4 @@
+const codeCoverageTask = require("@bahmutov/cypress-code-coverage/plugin") // Does not have ts support
 import { defineConfig } from "cypress"
 import { createServer } from "http"
 import next from "next"
@@ -72,17 +73,46 @@ export default defineConfig({
         },
       })
 
+      require("@cypress/code-coverage/task")(on, config)
+
       return config
     },
   },
   viewportWidth: 1920,
   viewportHeight: 1080,
   component: {
+    setupNodeEvents(on, config) {
+      return Object.assign({}, config, codeCoverageTask(on, config))
+    },
+    specPattern: "**/*.{cy,unit}.{js,jsx,ts,tsx}",
     devServer: {
       framework: "next",
       bundler: "webpack",
-    },
-    specPattern: "**/*.{cy,unit}.{js,jsx,ts,tsx}"
+      webpackConfig: {
+        mode: "development",
+        devtool: false,
+        module: {
+          rules: [
+            {
+              test: /\.tsx?$/,
+              exclude: [
+                /node_modules/,
+                /cypress/
+              ],
+              use: {
+                loader: "babel-loader",
+                options: {
+                  presets: ["next/babel"],
+                  plugins: [
+                    "istanbul"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+      },
+    }
   },
   env: {
     CLIENT_BASE_URL: "http://localhost:3010",
@@ -93,4 +123,3 @@ export default defineConfig({
     PUBLIC_API_BASE_URL_IMAGE: "http://localhost:3003"
   }
 })
-

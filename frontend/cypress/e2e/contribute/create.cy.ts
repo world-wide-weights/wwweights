@@ -15,7 +15,7 @@ describe("Create Item", () => {
             cy.mockDiscoverPage()
 
             // Submit form
-            cy.dataCy("create-submit-button").click()
+            cy.dataCy("submit-button").click()
 
             cy.wait("@mockCreateItem")
         })
@@ -26,7 +26,7 @@ describe("Create Item", () => {
             cy.dataCy("textinput-weight-input").type("150")
 
             // Select exact
-            cy.dataCy("create-select-button-range").click()
+            cy.dataCy("createedit-select-button-range").click()
 
             // Fill Additional Value
             cy.dataCy("textinput-additionalValue-input").type("300")
@@ -36,10 +36,10 @@ describe("Create Item", () => {
             cy.dataCy("unit-dropdown-option-kg").click()
 
             // Set is ca to true
-            cy.dataCy("isCa-option-true").click()
+            cy.dataCy("isCa-option-isCa").click()
 
             // Open details
-            cy.dataCy("create-open-details-button").click()
+            cy.dataCy("createedit-open-details-button").click()
 
             // Fill details
             cy.dataCy("textinput-source-input").type("https://wikipedia.de")
@@ -55,7 +55,7 @@ describe("Create Item", () => {
             cy.mockCreateItem()
             cy.mockDiscoverPage()
             // Submit form
-            cy.dataCy("create-submit-button").click()
+            cy.dataCy("submit-button").click()
 
             cy.wait("@mockCreateItem")
         })
@@ -69,7 +69,7 @@ describe("Create Item", () => {
 
         it("should display range value fields when range is selected", () => {
             // Select range
-            cy.dataCy("create-select-button-range").click()
+            cy.dataCy("createedit-select-button-range").click()
 
             cy.dataCy("textinput-additionalValue-input").should("be.visible")
         })
@@ -88,7 +88,7 @@ describe("Create Item", () => {
 
         it("should display error when range is selected and additionalValue is empty", () => {
             // Select range
-            cy.dataCy("create-select-button-range").click()
+            cy.dataCy("createedit-select-button-range").click()
 
             cy.dataCy("textinput-additionalValue-input").type("{enter}").blur()
             cy.dataCy("formerror-additionalValue").should("be.visible")
@@ -96,7 +96,7 @@ describe("Create Item", () => {
 
         it("should display error when range is selected and additionalValue is less than weight", () => {
             // Select range
-            cy.dataCy("create-select-button-range").click()
+            cy.dataCy("createedit-select-button-range").click()
 
             cy.dataCy("textinput-weight-input").type("100")
             cy.dataCy("textinput-additionalValue-input").type("50").blur()
@@ -107,7 +107,7 @@ describe("Create Item", () => {
     describe("Details", () => {
         it("should open details when click \"Add more details\"", () => {
             // Open details
-            cy.dataCy("create-open-details-button").click()
+            cy.dataCy("createedit-open-details-button").click()
 
             cy.dataCy("textinput-source-input").should("be.visible")
         })

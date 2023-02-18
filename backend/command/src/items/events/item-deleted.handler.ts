@@ -5,6 +5,7 @@ import { ReturnModelType } from '@typegoose/typegoose';
 import { Item } from '../../models/item.model';
 import { Tag } from '../../models/tag.model';
 import { SharedService } from '../../shared/shared.service';
+import { ImagesService } from '../services/images.service';
 import { ItemDeletedEvent } from './item-deleted.event';
 
 @EventsHandler(ItemDeletedEvent)
@@ -16,6 +17,7 @@ export class ItemDeletedHandler implements IEventHandler<ItemDeletedEvent> {
     @InjectModel(Tag)
     private readonly tagModel: ReturnModelType<typeof Tag>,
     private readonly sharedService: SharedService,
+    private readonly imageService: ImagesService,
   ) {}
   async handle({ itemDeletedEventDto }: ItemDeletedEvent) {
     const { itemSlug } = itemDeletedEventDto;
@@ -31,25 +33,20 @@ export class ItemDeletedHandler implements IEventHandler<ItemDeletedEvent> {
       }ms`,
     );
 
-    if (!deletedItem?.tags) {
-      this.logger.log(
-        `${ItemDeletedHandler.name} took ${
-          performance.now() - deleteItemStartTime
-        } ms. (No tag update)`,
+    if (deletedItem?.tags) {
+      const updateTagsStartTime = performance.now();
+
+      const tagNames = deletedItem.tags.map((tag) => tag.name);
+
+      await this.updateTags(tagNames);
+      this.logger.debug(
+        `${ItemDeletedHandler.name} Tag update took: ${
+          performance.now() - updateTagsStartTime
+        }ms`,
       );
-      return;
     }
 
-    const updateTagsStartTime = performance.now();
-
-    const tagNames = deletedItem.tags.map((tag) => tag.name);
-
-    await this.updateTags(tagNames);
-    this.logger.debug(
-      `${ItemDeletedHandler.name} Tag update took: ${
-        performance.now() - updateTagsStartTime
-      }ms`,
-    );
+    await this.imageService.demoteImageInImageBackend(deletedItem?.image);
 
     this.logger.log(
       `${ItemDeletedHandler.name} finished in ${

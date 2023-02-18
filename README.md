@@ -1,5 +1,11 @@
 # wwweights
 
+![Codecov](https://img.shields.io/codecov/c/gh/world-wide-weights/wwweights?flag=auth-backend&label=auth-backend)
+![Codecov](https://img.shields.io/codecov/c/gh/world-wide-weights/wwweights?flag=command-backend&label=command-backend)
+![Codecov](https://img.shields.io/codecov/c/gh/world-wide-weights/wwweights?flag=image-backend&label=image-backend)
+![Codecov](https://img.shields.io/codecov/c/gh/world-wide-weights/wwweights?flag=query-backend&label=query-backend)
+![Codecov](https://img.shields.io/codecov/c/gh/world-wide-weights/wwweights?flag=frontend&label=frontend)
+
 ## Docker quickstart
 
 The docker compose stack should allow you to get everything up and running in no time.
