@@ -119,7 +119,7 @@ describe('EventstoreModule', () => {
       // ARRANGE
       eventStore.isReady = false;
       // ASSERT
-      expect(eventStore.addEvent('a', 'b', 'c')).rejects.toThrow(
+      expect(eventStore.addEvent('a' as any, 'b' as any, 'c' as any)).rejects.toThrow(
         'Backend is not ready yet. Retry later',
       );
     });
