@@ -28,20 +28,25 @@ coverage:
         informational: true
         flags: 
           - frontend
-
+max_report_age: off
 flags:
   auth-backend:
+    carryforward: true
     paths:
       - backend/auth
   command-backend:
+    carryforward: true
     paths:
       - backend/command
   image-backend:
+    carryforward: true
     paths:
       - backend/image
   query-backend:
+    carryforward: true
     paths:
       - backend/query
   frontend:
+    carryforward: true
     paths:
       - frontend     
