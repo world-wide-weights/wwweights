@@ -2,7 +2,6 @@ export class ItemCronJobHandlerMock {
   public correctAllItemTagCountsHasBeenCalled = false;
   public deleteUnusedTagsHasBeenCalled = false;
   correctAllItemTagCounts() {
-    console.log('executing cron')
     this.correctAllItemTagCountsHasBeenCalled = true
   }
 

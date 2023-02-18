@@ -5,6 +5,7 @@ import { EventBus } from '@nestjs/cqrs';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
 import * as request from 'supertest';
+import { setTimeout } from 'timers/promises';
 import { CommandsModule } from '../../src/commands/commands.module';
 import { ControllersModule } from '../../src/controllers/controllers.module';
 import { ItemCronJobHandler } from '../../src/cron/cron-handlers/items.cron';
@@ -32,11 +33,13 @@ import { FakeEnvGuardFactory } from '../mocks/env-guard.mock';
 import { MockEventStore } from '../mocks/eventstore';
 import { HttpServiceMock } from '../mocks/http-service.mock';
 import {
+  bulkInsertData,
   differentNames as itemsWithDifferentNames,
   insertItem,
   insertItem2,
   insertItemWithAllValues,
   testData,
+  trackerTags,
 } from '../mocks/items';
 import { ItemCronJobHandlerMock } from '../mocks/items-cron.mock';
 import { FakeAuthGuardFactory } from '../mocks/jwt-guard.mock';
@@ -56,6 +59,7 @@ describe('ItemsController (e2e)', () => {
   const fakeJWTGuard = new FakeAuthGuardFactory();
   const fakeEnvGuard = new FakeEnvGuardFactory();
   const cronMock = new ItemCronJobHandlerMock();
+  const httpMock = new HttpServiceMock();
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -80,7 +84,7 @@ describe('ItemsController (e2e)', () => {
       .overrideGuard(ENVGuard)
       .useValue(fakeEnvGuard.getGuard())
       .overrideProvider(HttpService)
-      .useClass(HttpServiceMock)
+      .useValue(httpMock)
       .overrideProvider(ItemCronJobHandler)
       .useValue(cronMock)
       .compile();
@@ -123,6 +127,9 @@ describe('ItemsController (e2e)', () => {
   });
 
   afterAll(async () => {
+    // Await for background db processes
+    // Eventual consistency is amazing :)
+    await setTimeout(500)
     await teardownMockDataSource();
     await server.close();
     await app.close();
@@ -194,12 +201,16 @@ describe('ItemsController (e2e)', () => {
   it('items/insert => insert duplicate Items', async () => {
     await request(server)
       .post(commandsPath + itemInsertPath)
-      .send({ ...insertItem, name: 'This should be in an error message' })
+      .send({ ...insertItem, name: 'amongUs', tags: ['sus'] })
       .expect(HttpStatus.OK);
+
+    await retryCallback(
+      async () => (await tagModel.countDocuments({ name: 'sus' })) === 1,
+    );
 
     await request(server)
       .post(commandsPath + itemInsertPath)
-      .send({ ...insertItem, name: 'This should be in an error message' })
+      .send({ ...insertItem, name: 'amongUs' })
       .expect(HttpStatus.CONFLICT);
 
     const items = await itemModel.find({});
@@ -207,23 +218,21 @@ describe('ItemsController (e2e)', () => {
   });
 
   it('items/insert => insert Items in quick succession', async () => {
-    itemsWithDifferentNames.forEach(async (name) => {
+    bulkInsertData.forEach(async (item) => {
       await request(server)
         .post(commandsPath + itemInsertPath)
-        .send({ ...insertItem2, name })
+        .send({ ...item, tags: [...item.tags, 'coffee'] })
         .expect(HttpStatus.OK);
     });
     await retryCallback(
       async () =>
-        (
-          await tagModel.findOne({ slug: itemsWithDifferentNames[-1] })
-        )?.count === itemsWithDifferentNames.length,
+        (await tagModel.countDocuments({ name: { $in: trackerTags } })) === 5,
     );
     const items = await itemModel.find({});
-    const tag = await tagModel.findOne({ name: 'tag1' });
+    const tag = await tagModel.findOne({ name: 'coffee' });
 
-    expect(items.length).toEqual(itemsWithDifferentNames.length);
-    expect(tag.count).toEqual(itemsWithDifferentNames.length);
+    expect(items.length).toEqual(bulkInsertData.length);
+    expect(tag.count).toEqual(bulkInsertData.length);
   });
 
   it('items/insert => increment profile counts', async () => {
@@ -259,16 +268,18 @@ describe('ItemsController (e2e)', () => {
   });
 
   it('Should increment totalItems count on item insert', async () => {
+    // ACT
     await request(server)
       .post(commandsPath + itemInsertPath)
-      .send(insertItem)
+      .send({ ...insertItem, tags: undefined })
       .expect(HttpStatus.OK);
 
+    // ASSERT
     await retryCallback(
       async () => (await globalStatisticsModel.count()) !== 0,
     );
 
-    expect((await globalStatisticsModel.findOne()).totalItems).toEqual(1);
+    expect((await globalStatisticsModel.findOne())?.totalItems).toEqual(1);
   });
 
   it('items/bulk-insert => Should be hidden if env guard fails', async () => {
@@ -283,14 +294,16 @@ describe('ItemsController (e2e)', () => {
   it('items/bulk-insert => Should insert multiple items', async () => {
     // ARRANGE
     fakeEnvGuard.isDev = true;
-    const data = testData.slice(0, 5);
     // ACT
     const res = await request(server)
       .post(commandsPath + itemBulkInsertPath)
-      .send(data);
+      .send(bulkInsertData);
     // ASSERT
     expect(res.status).toEqual(HttpStatus.OK);
-    await retryCallback(async () => (await itemModel.find({}))?.length === 5);
+    await retryCallback(
+      async () =>
+        (await tagModel.countDocuments({ name: { $in: trackerTags } })) === 5,
+    );
     const items = await itemModel.find({});
     expect(items.length).toEqual(5);
   });
@@ -300,7 +313,7 @@ describe('ItemsController (e2e)', () => {
     await itemModel.deleteMany();
     fakeEnvGuard.isDev = true;
     const userId = 12;
-    const insertItems = testData
+    const insertItems = bulkInsertData
       .slice(0, 5)
       .map((e) => ({ ...e, userId: userId }));
     // ACT
@@ -309,7 +322,10 @@ describe('ItemsController (e2e)', () => {
       .send(insertItems);
     // ASSERT
     expect(res.status).toEqual(HttpStatus.OK);
-    await retryCallback(async () => (await itemModel.find({})).length === 5);
+    await retryCallback(
+      async () =>
+        (await tagModel.countDocuments({ name: { $in: trackerTags } })) === 5,
+    );
     const items = await itemModel.find({});
     for (const item of items) {
       expect(item.userId).toEqual(userId);
@@ -320,14 +336,16 @@ describe('ItemsController (e2e)', () => {
     // ARRANGE
     await itemModel.deleteMany();
     fakeEnvGuard.isDev = true;
-    const data = testData.slice(0, 5);
     // ACT
     const res = await request(server)
       .post(commandsPath + itemBulkInsertPath)
-      .send(data);
+      .send(bulkInsertData);
     // ASSERT
     expect(res.status).toEqual(HttpStatus.OK);
-    await retryCallback(async () => (await itemModel.find({})).length !== 0);
+    await retryCallback(
+      async () =>
+        (await tagModel.countDocuments({ name: { $in: trackerTags } })) === 5,
+    );
     const items = await itemModel.find({});
     for (const item of items) {
       expect(item.userId).toEqual(0);
@@ -338,16 +356,17 @@ describe('ItemsController (e2e)', () => {
     // ARRANGE
     await itemModel.deleteMany();
     fakeEnvGuard.isDev = true;
-    const data = testData.slice(0, 5);
     // ACT
     const res = await request(server)
       .post(commandsPath + itemBulkInsertPath)
-      .send(data);
+      .send(bulkInsertData);
     // ASSERT
     expect(res.status).toEqual(HttpStatus.OK);
     // No tests needed as callback throws an error if condition is never met
     await retryCallback(
-      async () => !cronMock.correctAllItemTagCountsHasBeenCalled,
+      async () =>
+        (await tagModel.countDocuments({ name: { $in: trackerTags } })) === 5,
     );
+    expect(cronMock.correctAllItemTagCountsHasBeenCalled).toBe(true);
   });
 });

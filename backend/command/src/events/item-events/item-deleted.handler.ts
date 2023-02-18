@@ -33,6 +33,8 @@ export class ItemDeletedHandler implements IEventHandler<ItemDeletedEvent> {
       }ms`,
     );
 
+    await this.sharedService.decrementGlobalItemCount();
+
     if (deletedItem?.tags) {
       const updateTagsStartTime = performance.now();
 
@@ -46,8 +48,6 @@ export class ItemDeletedHandler implements IEventHandler<ItemDeletedEvent> {
       );
     }
 
-    // They are not parallel since the imageBackend fail should not also fail th edecrement of the global item count => Promise.all is fast fail
-    await this.sharedService.decrementGlobalItemCount();
     await this.imageService.demoteImageInImageBackend(deletedItem?.image);
 
     this.logger.log(

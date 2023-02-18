@@ -121,3 +121,12 @@ export const testData = [
     ],
   },
 ];
+
+export const bulkInsertData = [...Array(5).keys()].map((ind) => ({
+  ...testData[ind],
+  tags: [...testData[ind].tags, `trackertag${ind}`],
+}));
+
+export const trackerTags = [...Array(5).keys()].map(
+  (ind) => `trackertag${ind}`,
+);

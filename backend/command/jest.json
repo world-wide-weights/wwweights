@@ -6,7 +6,7 @@
   "verbose": true,
   "testMatch": [
     "<rootDir>/src/**/*.spec.{ts,js}",
-    "<rootDir>/test/**/item-insert-command.e2e-spec.{ts,js}"
+    "<rootDir>/test/**/*.e2e-spec.{ts,js}"
   ],
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
