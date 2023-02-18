@@ -1,7 +1,9 @@
 import { CanActivate, Injectable, NotFoundException } from '@nestjs/common';
 import { Observable } from 'rxjs';
 
-// Used to disable endpoints in production
+/**
+ * @description Guard that protects dev endpoints when not in a development environment
+ */
 @Injectable()
 export class ENVGuard implements CanActivate {
   canActivate(): boolean | Promise<boolean> | Observable<boolean> {

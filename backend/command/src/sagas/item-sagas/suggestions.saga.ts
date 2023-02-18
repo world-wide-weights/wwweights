@@ -12,6 +12,9 @@ export class SuggestionsSaga {
   private readonly logger = new Logger(SuggestionsSaga.name);
   constructor(private readonly eventstore: EventStore) {}
 
+    /**
+   * @description Saga responsible for spawning itemedeleted events based on suggestions once the requirement is met
+   */
   @Saga()
   deleteSuggestionSaga = (
     events$: Observable<any>,
@@ -40,6 +43,9 @@ export class SuggestionsSaga {
     );
   };
 
+  /**
+   * @description Saga responsible for spawning itemedited events based on suggestions once the requirement is met
+   */
   @Saga()
   editSuggestionSaga = (
     events$: Observable<any>,
