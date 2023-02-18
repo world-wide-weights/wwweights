@@ -142,13 +142,28 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
             if (response?.status === 200)
                 await router.push(routes.account.profile())
         } catch (error) {
-            if (axios.isAxiosError(error) && error.response) {
+            // Log error to the console
+            console.log(error)
+
+            // Handle unkown erros
+            if (!axios.isAxiosError(error)) {
+                console.error(error)
+                toast.error("Please try again in a few minutes.")
+                return
+            }
+
+            // Handle errors from API (with api answer)
+            if (error.response) {
                 if (error.response.status === 409) {
                     setFieldError("name", "This name is already taken.")
                     return
                 }
+                toast.error(`Error ${error.response.status}: ${error.response.data.message}`)
+            }
 
-                toast.error("Our servers are feeling a bit heavy today. Please try again in a few minutes.")
+            // Handle errors with no answer from API
+            if (error.message.includes("Network Error")) {
+                toast.error("Please check your internet connection and try again.")
             }
         }
     }
