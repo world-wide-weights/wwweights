@@ -41,7 +41,7 @@ export const AuthContext = createContext<AuthContext>({
 export const Auth: React.FC<AuthProps> = ({ children, routeType }) => {
     const [hasSession, setHasSession] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState<boolean>(true)
-    const router = useRouter()
+    const { replace, isReady, asPath } = useRouter()
 
     /**
      * Logout user and remove session data from localstorage.
@@ -84,17 +84,19 @@ export const Auth: React.FC<AuthProps> = ({ children, routeType }) => {
 
             // When no session redirect (with no history) to login
             if (!hasSessionData && routeType === "protected") {
-                await router.replace(routes.account.login + "?callbackUrl=" + router.asPath)
+                if (!isReady)
+                    return
+                await replace(routes.account.login + "?callbackUrl=" + asPath)
                 toast.warn("You need to be logged in to access this page.")
             }
 
             // When has session and route type guest redirect (with no history) to home
             if (hasSessionData && routeType === "guest") {
-                router.replace(routes.home)
+                replace(routes.home)
             }
         }
         checkSession()
-    }, [routeType, router, hasSession, getSession])
+    }, [routeType, isReady, hasSession, asPath, getSession, replace])
 
     return <AuthContext.Provider value={{ hasSession, logout, isLoading, getSession }}>
         {children}

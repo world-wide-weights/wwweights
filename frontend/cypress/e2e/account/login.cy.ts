@@ -19,7 +19,7 @@ describe("Login", () => {
             cy.wait("@mockLogin")
 
             // Mock home
-            cy.mockItemsList()
+            cy.mockHome()
 
             // Check for redirect (add custom time since ci seems to be to slow)
             cy.url({
