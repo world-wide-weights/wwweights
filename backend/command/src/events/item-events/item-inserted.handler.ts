@@ -47,9 +47,10 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
         }ms`,
       );
 
-      // This is not a SAGA since it is unreasonable to save this in an eventstore
-      await this.increamentProfileCounts(item);
-      await this.sharedService.incrementGlobalItemCount();
+      Promise.all([
+        this.increamentProfileCounts(item),
+        this.sharedService.incrementGlobalItemCount(),
+      ]);
 
       // Further updates and recovery from inconsistency is handled via cronjobs rather than for every projector run
       await this.imageService.promoteImageInImageBackend(item.image);
