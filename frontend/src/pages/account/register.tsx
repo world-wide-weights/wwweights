@@ -37,8 +37,8 @@ const Register: NextPageCustomProps = () => {
     // Formik Form Validation
     const validationSchema: ObjectSchema<RegisterDto> = object().shape({
         email: string().email("Must be a valid E-Mail.").required("E-Mail is required."),
-        username: string().min(2, "Please enter a name between 2 and 255 letters long.").max(255, "Please enter a name between 2 and 255 letters long.").required("Username is required."),
-        password: string().min(8, "Please enter a password between 8 and 128 letters long.").max(128, "Please enter a password between 8 and 128 letters long.").required("Password is required.")
+        username: string().min(2, "Please enter a name with at least 2 letters.").max(255, "Please enter a name with maximum 255 letters.").required("Username is required."),
+        password: string().min(8, "Please enter a password with at least 8 letters.").max(128, "Please enter a password with maximum 255 letters.").required("Password is required.")
     })
 
     /**
