@@ -21,8 +21,10 @@ describe("Login", () => {
             // Mock home
             cy.mockHome()
 
-            // Check for redirect
-            cy.url().should("eq", clientBaseUrl + "/")
+            // Check for redirect (add custom time since ci seems to be to slow)
+            cy.url().should("eq", clientBaseUrl + "/", {
+                timeout: 15000
+            })
         })
     })
 

@@ -1,3 +1,4 @@
+import { Item } from "../../types/item"
 import { calculateMedianWeight, calculateWeightFit, generateWeightProgressBarPercentage, generateWeightString, getSortedItemsAndHeaviest } from "./weight"
 
 describe("Generate Weight String", () => {
@@ -128,26 +129,26 @@ describe("Calculate the number of weights that fit in a container and round", ()
 })
 
 describe("Get SortedItems and Get HeaviestWeight", () => {
-    const items = [{
+    const items: Item[] = [{
         name: "test",
         slug: "test",
         weight: { value: 10 },
         tags: [],
-        user: "test",
+        userId: 1,
         createdAt: 123,
     }, {
         name: "test",
         slug: "test",
         weight: { value: 20 },
         tags: [],
-        user: "test",
+        userId: 1,
         createdAt: 123,
     }, {
         name: "test",
         slug: "test",
         weight: { value: 5 },
         tags: [],
-        user: "test",
+        userId: 1,
         createdAt: 123,
     }]
 
@@ -159,21 +160,21 @@ describe("Get SortedItems and Get HeaviestWeight", () => {
                 slug: "test",
                 weight: { value: 5 },
                 tags: [],
-                user: "test",
+                userId: 1,
                 createdAt: 123,
             }, {
                 name: "test",
                 slug: "test",
                 weight: { value: 10 },
                 tags: [],
-                user: "test",
+                userId: 1,
                 createdAt: 123,
             }, {
                 name: "test",
                 slug: "test",
                 weight: { value: 20 },
                 tags: [],
-                user: "test",
+                userId: 1,
                 createdAt: 123,
             }],
             heaviestWeight: { value: 20 }
@@ -188,21 +189,21 @@ describe("Get SortedItems and Get HeaviestWeight", () => {
                 slug: "test",
                 weight: { value: 20 },
                 tags: [],
-                user: "test",
+                userId: 1,
                 createdAt: 123,
             }, {
                 name: "test",
                 slug: "test",
                 weight: { value: 10 },
                 tags: [],
-                user: "test",
+                userId: 1,
                 createdAt: 123,
             }, {
                 name: "test",
                 slug: "test",
                 weight: { value: 5 },
                 tags: [],
-                user: "test",
+                userId: 1,
                 createdAt: 123,
             }],
             heaviestWeight: { value: 20 }

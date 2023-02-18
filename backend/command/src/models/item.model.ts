@@ -1,6 +1,4 @@
-import { AggregateRoot } from '@nestjs/cqrs';
 import { index, prop } from '@typegoose/typegoose';
-import { IsString } from 'class-validator';
 
 export class Weight {
   @prop({ required: true })
@@ -27,7 +25,7 @@ class Tag {
   { name: 'text', 'tags.name': 'text' },
   { weights: { name: 1000, tags: 1 }, name: 'ItemTextIndex' },
 )
-export class Item extends AggregateRoot {
+export class Item {
   @prop({ required: true })
   name: string;
 
@@ -53,7 +51,6 @@ export class Item extends AggregateRoot {
   createdAt?: number;
 
   constructor(partial: Partial<Item>) {
-    super();
     Object.assign(this, partial);
   }
 }

@@ -1,9 +1,7 @@
-/** Import font support */
-import localFont from "@next/font/local"
 /** Imports all material symbols globally which we use as our icon pack */
 import "material-symbols/rounded.css"
 import { NextPage } from "next"
-import type { AppProps } from "next/app"
+import { AppProps } from "next/app"
 import Script from "next/script"
 import NextNProgress from "nextjs-progressbar"
 import React from "react"
@@ -14,28 +12,6 @@ import "../styles/global.css"
 // Hide ads and analytics in development
 const SHOULD_DISPLAY_ADS = process.env.NODE_ENV !== "development"
 const SHOULD_LOAD_GA = process.env.NODE_ENV !== "development"
-
-// Font
-const metropolis = localFont({
-  src: [
-    {
-      path: "../assets/font/metropolis/Metropolis-Regular.woff2",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../assets/font/metropolis/Metropolis-Medium.woff2",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "../assets/font/metropolis/Metropolis-Bold.woff2",
-      weight: "700",
-      style: "normal",
-    },
-  ],
-  variable: "--font-metropolis"
-})
 
 /**
  * When using this page type have the option to add custom props.
@@ -92,7 +68,7 @@ const App = ({ Component, pageProps }: AppPropsCustom) => {
     </>}
 
     <Auth routeType={Component?.auth?.routeType ?? "public"}> {/** Auth wrapper */}
-      <div className={`${metropolis.variable} font-sans`}> {/** Global font */}
+      <div className="font-sans">
         {layout(<Component {...pageProps} />)} {/** Page content with default or custom layout. */}
       </div>
     </Auth>

@@ -19,15 +19,18 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
 import { ENVGuard } from '../shared/guards/env.guard';
 import { JwtAuthGuard } from '../shared/guards/jwt.guard';
 import { InsertItemCommand } from './commands/insert-item.command';
+import { SuggestItemDeleteCommand } from './commands/suggest-item-delete.command';
 import { SuggestItemEditCommand } from './commands/suggest-item-edit.command';
 import { BulkInsertItemDTO } from './interfaces/bulk-insert-item.dto';
 import { InsertItemDto } from './interfaces/insert-item.dto';
 import { JwtWithUserDto } from './interfaces/request-with-user.dto';
+import { SuggestItemDeleteDTO } from './interfaces/suggest-item-delete.dto';
 import { SuggestItemEditDTO } from './interfaces/suggest-item-edit.dto';
 import { ItemsService } from './services/item.service';
 
@@ -83,6 +86,11 @@ export class ItemsController {
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   @ApiBody({ type: SuggestItemEditDTO })
+  @ApiParam({
+    name: 'slug',
+    example: 'apple',
+    description: 'Slug for the item in question',
+  })
   @ApiOperation({
     summary: 'Suggest an item edit ',
     description: 'Used for submitting a suggestion for item value changes',
@@ -104,6 +112,39 @@ export class ItemsController {
   ) {
     await this.commandBus.execute(
       new SuggestItemEditCommand(editSuggestionDto, itemSlug, user.id),
+    );
+  }
+
+  @Post(':slug/suggest/delete')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiBody({ type: SuggestItemDeleteDTO })
+  @ApiParam({
+    name: 'slug',
+    example: 'apple',
+    description: 'Slug for the item in question',
+  })
+  @ApiOperation({
+    summary: 'Suggest an item delete ',
+    description: 'Used for submitting a suggestion for item deletion',
+  })
+  @ApiOkResponse({
+    description: 'Suggestion was successully submitted',
+  })
+  @ApiNotFoundResponse({
+    description: 'No slug with that item',
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid request. Data validation failed.',
+  })
+  @ApiBearerAuth()
+  async suggestDelete(
+    @Body() deleteSuggestionDto: SuggestItemDeleteDTO,
+    @Param('slug') itemSlug: string,
+    @Req() { user }: JwtWithUserDto,
+  ) {
+    await this.commandBus.execute(
+      new SuggestItemDeleteCommand(deleteSuggestionDto, itemSlug, user.id),
     );
   }
 }
