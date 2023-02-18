@@ -7,7 +7,7 @@ import {
   Req,
   SerializeOptions,
   UseGuards,
-  UseInterceptors,
+  UseInterceptors
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -15,7 +15,7 @@ import {
   ApiOperation,
   ApiParam,
   ApiTags,
-  ApiUnauthorizedResponse,
+  ApiUnauthorizedResponse
 } from '@nestjs/swagger';
 import { UserEntity } from '../db/entities/users.entity';
 import { JwtGuard } from '../shared/guards/jwt.guard';
@@ -36,7 +36,7 @@ export class ProfileController {
   @UseGuards(JwtGuard)
   @ApiBearerAuth('access_token')
   @ApiOperation({
-    description: 'Get own profile with confidential information',
+    summary: 'Get own profile with confidential information',
   })
   @ApiOkResponse({ description: 'Profile return', type: UserEntity })
   @ApiUnauthorizedResponse({
@@ -48,7 +48,7 @@ export class ProfileController {
   }
 
   @Get(':userId')
-  @ApiOperation({ description: 'Get profile of user by id' })
+  @ApiOperation({ summary: 'Get profile of user by id' })
   @ApiParam({ name: 'userId', type: Number })
   @ApiOkResponse({
     status: HttpStatus.OK,

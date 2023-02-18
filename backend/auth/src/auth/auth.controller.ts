@@ -9,7 +9,7 @@ import {
   Req,
   SerializeOptions,
   UseGuards,
-  UseInterceptors,
+  UseInterceptors
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -21,7 +21,7 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiTags,
-  ApiUnauthorizedResponse,
+  ApiUnauthorizedResponse
 } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dtos/login.dto';
@@ -41,7 +41,7 @@ export class AuthController {
 
   @Post('register')
   @ApiBody({ type: RegisterDTO })
-  @ApiOperation({ description: 'Register new users' })
+  @ApiOperation({ summary: 'Register new users' })
   @ApiConflictResponse({
     description: 'User properties already in use',
   })
@@ -59,7 +59,7 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiBody({ type: LoginDTO })
-  @ApiOperation({ description: 'Login existing users' })
+  @ApiOperation({ summary: 'Login existing users' })
   @ApiUnauthorizedResponse({
     description: 'User credentials are invalid/User has been banned',
   })
@@ -74,7 +74,7 @@ export class AuthController {
   @Post('/refresh')
   @HttpCode(HttpStatus.OK)
   @UseGuards(RefreshTokenGuard)
-  @ApiOperation({ description: 'Fetch new access token using refresh token' })
+  @ApiOperation({ summary: 'Fetch new access token using refresh token' })
   @ApiBearerAuth('refresh_token')
   @ApiOkResponse({
     description: 'Valid refresh token.',
@@ -91,7 +91,7 @@ export class AuthController {
 
   @Get('.well-known/jwks.json')
   @ApiOperation({
-    description: 'Get all information about access token RSA public key',
+    summary: 'Get all information about access token RSA public key',
   })
   @ApiOkResponse({ type: JWKSResponse })
   getJWKSInfo(): JWKSResponse {
@@ -99,7 +99,7 @@ export class AuthController {
   }
 
   @Get('statistics')
-  @ApiOperation({ description: 'Get auth statistics' })
+  @ApiOperation({ summary: 'Get auth statistics' })
   @ApiOkResponse({
     description: 'Returned statistics',
     type: AuthStatisticsResponse,
