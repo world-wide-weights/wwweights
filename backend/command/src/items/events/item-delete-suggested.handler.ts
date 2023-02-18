@@ -22,14 +22,13 @@ export class ItemDeleteSuggestedHandler
     // Performance
     const insertSuggestionStartTime = performance.now();
     await this.insertSuggestion(deleteSuggestion);
+    await this.sharedService.incrementGlobalSuggestionCount();
 
     this.logger.debug(
       `${ItemDeleteSuggestedHandler.name} finished in ${
         performance.now() - insertSuggestionStartTime
       }ms`,
     );
-
-    this.sharedService.incrementGlobalSuggestionCount();
   }
 
   async insertSuggestion(deleteSuggestion: DeleteSuggestion) {
