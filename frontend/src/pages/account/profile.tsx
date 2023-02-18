@@ -62,7 +62,7 @@ const deleteReasonDropdownOptions = [
  */
 const Profile: NextPageCustomProps = () => {
     // Router
-    const { query, isReady } = useRouter()
+    const { query, isReady, replace } = useRouter()
 
     // Local States
     const [profile, setProfile] = useState<UserProfile | undefined>()
@@ -172,6 +172,38 @@ const Profile: NextPageCustomProps = () => {
                     Authorization: `Bearer ${session.accessToken}`
                 }
             })
+
+            // TODO: Successor/Subsequent contributions should be handled after deletion without page change
+            let shouldRedirectToPreviousPage = false
+
+            // Remove contribution from list
+            setContributions(state => {
+                const newContributions = state.data.filter(item => item.slug !== selectedContribution.slug)
+                shouldRedirectToPreviousPage = newContributions.length === 0 && contributions.page > 1
+                return {
+                    ...state,
+                    total: state.total - 1,
+                    page: shouldRedirectToPreviousPage ? state.page - 1 : state.page,
+                    data: shouldRedirectToPreviousPage ? state.data : newContributions
+                }
+            })
+
+            // Update statistics
+            setStatistics(state => ({
+                ...state,
+                itemsDeleted: state.itemsDeleted + 1,
+                totalContributions: state.totalContributions + 1
+            }))
+
+            // Redirect to previous page if the last contribution on the page was deleted
+            if (shouldRedirectToPreviousPage) {
+                // If the last contribution on the page was deleted, redirect to the previous page
+                await replace(routes.account.profile({
+                    page: contributions.page - 1,
+                    itemsPerPage: contributions.limit,
+                    defaultItemsPerPage: DEFAULT_LIMIT
+                }), undefined, { shallow: true })
+            }
         } catch (error) {
             // axios.isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Netzwerk-Zeitüberschreitung")
             console.error(error)
@@ -246,7 +278,7 @@ const Profile: NextPageCustomProps = () => {
                                     </Tooltip>
                                 </>} />)}
                             </ul>
-                            <Pagination totalItems={contributions.total} currentPage={query.page ? Number(query.page) : 1} baseRoute={routes.account.profile} itemsPerPage={contributions.limit} />
+                            <Pagination defaultItemsPerPage={DEFAULT_LIMIT} totalItems={contributions.total} currentPage={query.page ? Number(query.page) : 1} baseRoute={routes.account.profile} itemsPerPage={contributions.limit} />
                         </>}
                 </div>
             </div>
