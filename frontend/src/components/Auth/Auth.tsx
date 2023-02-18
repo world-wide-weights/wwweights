@@ -1,5 +1,6 @@
 import { useRouter } from "next/router"
 import { createContext, useCallback, useEffect, useState } from "react"
+import { toast } from "react-toastify"
 import { endSession, getSessionData } from "../../services/auth/session"
 import { routes } from "../../services/routes/routes"
 import { SessionData } from "../../types/auth"
@@ -58,6 +59,7 @@ export const Auth: React.FC<AuthProps> = ({ children, routeType }) => {
 
         if (session === null) {
             logout()
+            toast.warn("Your session has expired. Please login again.")
             return null
         }
 
