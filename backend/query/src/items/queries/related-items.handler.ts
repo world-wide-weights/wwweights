@@ -6,12 +6,12 @@ import {
 } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
+import { Item } from '../../models/item.model';
 import { getFilter } from '../../shared/functions/get-filter';
 import { getSort } from '../../shared/functions/get-sort';
 import { DataWithCount } from '../../shared/interfaces/data-with-count';
 import { PaginatedResponse } from '../../shared/interfaces/paginated-result';
 import { ItemSortEnum } from '../interfaces/item-sort-enum';
-import { Item } from '../models/item.model';
 import { ItemRelatedQuery } from './related-items.query';
 
 @QueryHandler(ItemRelatedQuery)
