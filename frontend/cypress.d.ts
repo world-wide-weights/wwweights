@@ -67,6 +67,10 @@ declare global {
        */
       mockItemsList(itemCount?: number): Chainable<void>
       /**
+       * Mocks home page.
+       */
+      mockHome(): Chainable<void>
+      /**
        * Mocks login request.
        */
       mockLogin(): Chainable<void>
