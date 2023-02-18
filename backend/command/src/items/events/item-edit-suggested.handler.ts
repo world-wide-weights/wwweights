@@ -43,13 +43,13 @@ export class ItemEditSuggestedHandler
       );
     }
 
+    await this.sharedService.incrementGlobalSuggestionCount();
+
     this.logger.debug(
       `Total duration of ${ItemEditSuggestedHandler.name} was ${
         performance.now() - insertSuggestionStartTime
       } ms`,
     );
-
-    this.sharedService.incrementGlobalSuggestionCount();
   }
 
   // Db calls: 1 save()
