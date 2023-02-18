@@ -1,9 +1,5 @@
 import { InjectModel } from '@m8a/nestjs-typegoose';
-import {
-  ImATeapotException,
-  InternalServerErrorException,
-  Logger,
-} from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { Item } from '../../models/item.model';
@@ -72,9 +68,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       this.logger.debug(`Item inserted:  ${insertedItem.slug}`);
     } catch (error) {
       this.logger.error(`Insert Item ${item.slug}: ${error}`);
-      throw new InternalServerErrorException(
-        `Couldn't insert item ${item.slug}`,
-      );
+      throw new Error(`Couldn't insert item ${item.slug}`);
     }
   }
 
@@ -123,9 +117,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       ]);
     } catch (error) {
       this.logger.error(error);
-      throw new InternalServerErrorException(
-        `Could not handle update item ${item.slug} tags`,
-      );
+      throw new Error(`Could not handle update item ${item.slug} tags`);
     }
   }
 

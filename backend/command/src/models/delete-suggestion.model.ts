@@ -1,6 +1,9 @@
 import { prop } from '@typegoose/typegoose';
 import { SUGGESTION_STATUS } from '../shared/enums/suggestion-status.enum';
 
+/**
+ * @description Entity/Model for delete suggestion in read db
+ */
 export class DeleteSuggestion {
   @prop({ required: true })
   userId: number;

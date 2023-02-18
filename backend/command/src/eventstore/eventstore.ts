@@ -57,10 +57,12 @@ export class EventStore {
     if (process.env.TEST_MODE === 'true') {
       return;
     }
+
     // Locally we can run with this
     let sslOptions: ChannelCredentialOptions = {
       insecure: true,
     };
+
     // If connecting to secure instance we need this
     if (this.configService.get<string>('DB_EVENTSTORE_USE_TLS') === 'true') {
       sslOptions = {
@@ -140,6 +142,7 @@ export class EventStore {
         (resolvedEvent?.event?.data as any)?.value,
       );
     }
+
     this.logger.verbose(
       'Initialized Stream listener for content streams of eventstore',
     );
@@ -175,7 +178,7 @@ export class EventStore {
   /**
    * @description Add event to stream
    */
-  public async addEvent(streamId, eventType: any, event: any) {
+  public async addEvent(streamId, eventType: any, event: any): Promise<void> {
     // If replay is not ready, don´t accept events to avoid inconsistent data
     if (!this.isReady) {
       throw new ServiceUnavailableException(
@@ -192,7 +195,7 @@ export class EventStore {
   /**
    * @description Take event along with its typing and publish it to the cqrs event bus
    */
-  private publishEventToBus(eventType: any, event: any) {
+  private publishEventToBus(eventType: any, event: any): Promise<void> {
     if (!event) return;
     if (!this.eventMap.get(eventType)) {
       this.logger.error(`Invalid eventtype for eventbus ${eventType}`);
@@ -205,7 +208,7 @@ export class EventStore {
   /**
    * @description Determine whether or not a stream with a given id exists
    */
-  async doesStreamExist(streamId: string) {
+  async doesStreamExist(streamId: string): Promise<boolean> {
     const result = this.client.readStream(streamId, {
       direction: SDRAWKCAB,
       fromRevision: END,

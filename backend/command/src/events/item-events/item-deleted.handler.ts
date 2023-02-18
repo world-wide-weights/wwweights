@@ -1,5 +1,5 @@
 import { InjectModel } from '@m8a/nestjs-typegoose';
-import { InternalServerErrorException, Logger } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { Item } from '../../models/item.model';
@@ -63,7 +63,7 @@ export class ItemDeletedHandler implements IEventHandler<ItemDeletedEvent> {
       this.logger.error(
         `Could not delete item ${slug} due to an error ${error}`,
       );
-      throw new InternalServerErrorException(`Could not delete item ${slug}`);
+      throw new Error(`Could not delete item ${slug}`);
     }
   }
 
@@ -82,7 +82,7 @@ export class ItemDeletedHandler implements IEventHandler<ItemDeletedEvent> {
       this.logger.error(
         `Could not update Tags ${tagNames.join(',')} due to an error ${error}`,
       );
-      throw new InternalServerErrorException('Could not update tags');
+      throw new Error('Could not update tags');
     }
   }
 }

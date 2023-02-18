@@ -1,5 +1,5 @@
 import { InjectModel } from '@m8a/nestjs-typegoose';
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpException, Injectable, Logger } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { EventStore } from '../../eventstore/eventstore';
 import { InternalCommunicationService } from '../../internal-communication/internal-communication.service';
@@ -16,6 +16,9 @@ export class ImagesService {
     private readonly internalCommunicationService: InternalCommunicationService,
   ) {}
 
+  /**
+   * @description Verify an imagevalue and send the promotion request to image backend
+   */
   async promoteImageInImageBackend(imageValue: string) {
     if (!this.eventStore.isReady) {
       this.logger.debug(`Skipping image promotion check in replay`);
@@ -34,18 +37,19 @@ export class ImagesService {
       return;
     }
 
-    // Notify that image is now in use => It should not become a victim of cleanup procedure
-    try {
-      await this.internalCommunicationService.notifyImgAboutItemCreation(
-        imageValue,
-      );
-    } catch (error) {
-      this.logger.error(
-        `Could not notify image backend due to an error ${error}`,
-      );
-    }
+    this.logger.debug(
+      `Notifying image backend that ${imageValue} should be promoted`,
+    );
+
+    await this.internalCommunicationService.notifyImgAboutItemCreation(
+      imageValue,
+    );
   }
 
+  /**
+   * @description Verify an imagevalue and send the demotion request to image backend
+   *
+   */
   async demoteImageInImageBackend(imageValue: string) {
     if (!this.eventStore.isReady) {
       this.logger.debug(`Skipping image demotion check in replay`);
@@ -61,17 +65,13 @@ export class ImagesService {
       this.logger.log(`Image ${imageValue} not obsolete`);
       return;
     }
-    try {
-      await this.internalCommunicationService.notifyImgAboutImageObsoleteness(
-        imageValue,
-      );
-    } catch (error) {
-      this.logger.error(
-        `Could not notify image backend due to an error ${error}`,
-      );
-    }
+
     this.logger.debug(
-      `Image backend notified that ${imageValue} has become obsolete`,
+      `Notifying image backend that ${imageValue} has become obsolete`,
+    );
+
+    await this.internalCommunicationService.notifyImgAboutImageObsoleteness(
+      imageValue,
     );
   }
 

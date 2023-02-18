@@ -1,5 +1,5 @@
 import { InjectModel } from '@m8a/nestjs-typegoose';
-import { InternalServerErrorException, Logger } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { AnyBulkWriteOperation } from 'mongodb';
@@ -106,9 +106,7 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
       this.logger.error(
         `Could not update item ${slug} due to an error ${error}`,
       );
-      throw new InternalServerErrorException(
-        `Item ${slug} could not be updated`,
-      );
+      throw new Error(`Item ${slug} could not be updated`);
     }
   }
 
@@ -145,9 +143,7 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
           tagUpdate.pull,
         )} due to an error ${error}`,
       );
-      throw new InternalServerErrorException(
-        `Could not update tags ${tagUpdate.pull?.concat()}`,
-      );
+      throw new Error(`Could not update tags ${tagUpdate.pull?.concat()}`);
     }
   }
 }

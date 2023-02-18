@@ -103,19 +103,6 @@ describe('ImagesService', () => {
       // ASSERT
       expect(apiCall).toHaveBeenCalled();
     });
-
-    it('Should gracefully handle failure', async () => {
-      // ARRANGE
-      const apiCall = jest
-        .spyOn(internalCommunicationService, 'notifyImgAboutItemCreation')
-        .mockImplementation(async () => {
-          throw new ImATeapotException();
-        });
-      // ACT
-      await imagesService.promoteImageInImageBackend('validValue');
-      // ASSERT
-      expect(apiCall).toHaveBeenCalled();
-    });
   });
 
   describe('demoteImageInImageBackend', () => {
@@ -182,19 +169,6 @@ describe('ImagesService', () => {
         .spyOn(internalCommunicationService, 'notifyImgAboutImageObsoleteness')
         .mockImplementation(async () => {
           return;
-        });
-      // ACT
-      await imagesService.demoteImageInImageBackend('validValue');
-      // ASSERT
-      expect(apiCall).toHaveBeenCalled();
-    });
-
-    it('Should gracefully handle failure', async () => {
-      // ARRANGE
-      const apiCall = jest
-        .spyOn(internalCommunicationService, 'notifyImgAboutImageObsoleteness')
-        .mockImplementation(async () => {
-          throw new ImATeapotException();
         });
       // ACT
       await imagesService.demoteImageInImageBackend('validValue');

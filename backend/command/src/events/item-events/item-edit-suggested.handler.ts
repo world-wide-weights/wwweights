@@ -67,7 +67,7 @@ export class ItemEditSuggestedHandler
       this.logger.error(
         `Insert suggestion for item ${editSuggestion.itemSlug}: ${error}`,
       );
-      throw new InternalServerErrorException(
+      throw new Error(
         `EditSuggestion (${editSuggestion.uuid}) could not be addded for item (${editSuggestion.itemSlug})`,
       );
     }

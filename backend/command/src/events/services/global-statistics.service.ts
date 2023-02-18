@@ -14,7 +14,10 @@ export class GlobalStatisticsService {
     >,
   ) {}
 
-  async incrementGlobalItemCount() {
+  /**
+   * @description Increment the persisted counter for items
+   */
+  async incrementGlobalItemCount(): Promise<void> {
     await this.globalStatisticsModel.updateOne(
       {},
       { $inc: { totalItems: 1 } },
@@ -23,7 +26,10 @@ export class GlobalStatisticsService {
     this.logger.log('Incremented global item count');
   }
 
-  async decrementGlobalItemCount() {
+  /**
+   * @description Decrement the persisted counter for items
+   */
+  async decrementGlobalItemCount(): Promise<void> {
     await this.globalStatisticsModel.updateOne(
       {},
       { $inc: { totalItems: -1 } },
@@ -31,7 +37,10 @@ export class GlobalStatisticsService {
     this.logger.log('Decremented global item count');
   }
 
-  async incrementGlobalSuggestionCount() {
+  /**
+   * @description Increment the persisted counter for suggestions
+   */
+  async incrementGlobalSuggestionCount(): Promise<void> {
     await this.globalStatisticsModel.updateOne(
       {},
       { $inc: { totalSuggestions: 1 } },
