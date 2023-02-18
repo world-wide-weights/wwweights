@@ -169,41 +169,30 @@ export const getServerSideProps: GetServerSideProps<WeightsListProps> = async (c
         }
     }
 
-    try {
-        // Fetch items and statistics
-        const [itemsResponse, statisticResponse] = await Promise.all([
-            queryServerRequest.get<PaginatedResponse<Item>>(`/items/list?page=${currentPage}&limit=${limit}&sort=${sort}&query=${query}`),
-            queryServerRequest.get<Statistics>(`/items/statistics?query=${query}`),
-        ])
+    // Fetch items and statistics
+    const [itemsResponse, statisticResponse] = await Promise.all([
+        queryServerRequest.get<PaginatedResponse<Item>>(`/items/list?page=${currentPage}&limit=${limit}&sort=${sort}&query=${query}`),
+        queryServerRequest.get<Statistics>(`/items/statistics?query=${query}`, {
+            validateStatus(status) {
+                return status === 200 || status === 404
+            },
+        }),
+    ])
 
-        // Items, statistics and total items
-        const items = itemsResponse.data.data
-        const statistics = statisticResponse.data
-        const totalItems = itemsResponse.data.total
+    // Items, statistics and total items
+    const items = itemsResponse.data.data
+    const statistics = statisticResponse.status === 200 ? statisticResponse.data : undefined
+    const totalItems = itemsResponse.data.total
 
-        return {
-            props: {
-                items,
-                currentPage,
-                limit,
-                totalItems,
-                query,
-                sort,
-                statistics
-            }
+    return {
+        props: {
+            items,
+            currentPage,
+            limit,
+            totalItems,
+            query,
+            sort,
+            ...(statistics && { statistics })
         }
-    } catch (error) {
-        return {
-            props: {
-                items: [],
-                currentPage,
-                limit,
-                totalItems: 0,
-                query,
-                sort
-            }
-        }
-
     }
-
 }
