@@ -15,7 +15,7 @@ const Misc: NextPageCustomProps = () => {
 }
 
 Misc.layout = (page) => {
-    return <PageLayout title="Misc">
+    return <PageLayout title="Help center">
         {page}
     </PageLayout>
 }

@@ -4,10 +4,9 @@ import { routes } from "../../services/routes/routes"
 import { renderUnitIntoString } from "../../services/unit/unitRenderer"
 import { getImageUrl } from "../../services/utils/getImageUrl"
 import { Weight } from "../../types/item"
-import { IconButton } from "../Button/IconButton"
 import { Tooltip } from "../Tooltip/Tooltip"
 
-type ItemListContributeProps = {
+export type ItemListContributeProps = {
     /** Name of item. */
     name: string
     /** Slug of item. */
@@ -16,34 +15,31 @@ type ItemListContributeProps = {
     weight: Weight
     /** Image of item. */
     image?: string
+    /** Actions that can be performed on the item. */
+    actions: React.ReactNode
 }
 
-export const ItemListContribute: React.FC<ItemListContributeProps> = ({ name, slug, weight, image }) => {
+export const ItemListContribute: React.FC<ItemListContributeProps> = ({ name, slug, weight, image, actions }) => {
     const weightString = renderUnitIntoString(weight)
 
     const imageUrl = getImageUrl(image)
 
-    return <li datacy="item-list-contribute" className="bg-white rounded-lg py-4 px-2 md:py-2 mb-2">
+    return <li datacy="itemlistcontribute-wrapper" className="bg-white rounded-lg py-4 px-2 md:py-2 mb-2">
         <div className="flex justify-between">
             {/* Item name, weight and image */}
             <Link className="flex justify-between md:justify-start items-center w-full md:h-12 mx-2 md:mx-4" href={routes.weights.single(slug)}>
                 <div className="md:flex">
                     <Tooltip position="left" content={name}>
-                        <h5 className="font-medium truncate w-40 md:w-64 pr-3">{name}</h5>
+                        <h5 datacy="itemlistcontribute-name" className="font-medium truncate w-40 md:w-64 pr-3">{name}</h5>
                     </Tooltip>
-                    <h5 className="text-gray-600 font-medium md:w-32 mr-5">{weightString}</h5>
+                    <h5 datacy="itemlistcontribute-weight" className="text-gray-600 font-medium md:w-32 mr-5">{weightString}</h5>
                 </div>
-                {imageUrl && <Image className="object-cover rounded-lg w-12 h-12" alt={`Image of ${name}`} src={imageUrl} width={96} height={96} />}
+                {imageUrl && <Image datacy="itemlistcontribute-image" className="object-cover rounded-lg w-12 h-12" alt={`Image of ${name}`} src={imageUrl} width={96} height={96} />}
             </Link>
 
             {/* Actions */}
             <div className="flex items-center mx-0 sm:mx-3">
-                <Tooltip content="Edit">
-                    <IconButton icon="edit" />
-                </Tooltip>
-                <Tooltip content="Delete">
-                    <IconButton icon="close" />
-                </Tooltip>
+                {actions}
             </div>
         </div>
     </li>

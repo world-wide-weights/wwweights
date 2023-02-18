@@ -3,7 +3,7 @@ import BigNumber from "bignumber.js"
 import { Form, Formik, FormikProps } from "formik"
 import { useRouter } from "next/router"
 import { useContext, useState } from "react"
-import { array, mixed, number, object, ref, SchemaOf, string } from "yup"
+import { array, mixed, number, object, ObjectSchema, ref, string } from "yup"
 import { createNewItemApi, prepareCreateItem } from "../../services/item/create"
 import { editItemApi, prepareEditItem } from "../../services/item/edit"
 import { uploadImageApi } from "../../services/item/image"
@@ -36,7 +36,7 @@ const unitTypeDropdownOptions = [
         value: "T",
         label: "T",
     },
-]
+] as const
 
 type CreateEditProps = {
     /** Item to edit. If undefined, a new item will be created. */
@@ -70,19 +70,19 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
     }
 
     // Formik Form Validation
-    const validationSchema: SchemaOf<CreateEditItemForm> = object().shape({
-        name: string().required("Name is required."),
-        weight: number().required("Weight is required."),
-        unit: mixed().oneOf(unitTypeDropdownOptions.map(option => option.value)),
-        valueType: mixed().oneOf(["exact", "range"]),
+    const validationSchema: ObjectSchema<CreateEditItemForm> = object().shape({
+        name: string().min(2, "Please enter a name between 2 and 255 letters long.").max(255, "Please enter a name between 2 and 255 letters long.").required("Name is required."),
+        weight: mixed<"" | number>().test("Number positive", "Weight must be positive. Please enter a value greater than zero.", value => value ? value > 0 : false).required("Weight is required."),
+        unit: string().oneOf(unitTypeDropdownOptions.map(unit => unit.value)).required(),
+        valueType: string().oneOf(["exact", "range"]).required(),
         additionalValue: number().when("valueType", {
             is: "range",
-            then: number().required("Additional value is required.").moreThan(ref("weight"), "Additional value must be greater than weight.")
+            then: (schema) => schema.required("Additional value is required.").moreThan(ref("weight"), "Additional value must be greater than weight.")
         }),
-        isCa: array().of(string()).notRequired(),
+        isCa: mixed<["isCa"] | []>().required(),
         source: string(),
-        imageFile: mixed().notRequired(),
-        tags: array().of(string().min(2).max(255)).notRequired(),
+        imageFile: mixed<File>().notRequired(),
+        tags: array().of(string().min(2).max(255).required()).optional(),
     })
 
     /**
@@ -140,7 +140,7 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
 
             /** Redirect to discover */
             if (response?.status === 200)
-                await router.push(routes.weights.list())
+                await router.push(routes.account.profile())
         } catch (error) {
             axios.isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Our servers are feeling a bit heavy today. Please try again in a few minutes.")
             return

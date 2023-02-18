@@ -1,5 +1,3 @@
-// Code stolen from cypress docs
-// https://docs.cypress.io/api/commands/mount#Creating-a-New-cy-mount-Command
 import { mount } from "cypress/react"
 
 declare global {
@@ -100,6 +98,10 @@ declare global {
        * Mocks edit item request.
        */
       mockEditItem(): Chainable<void>
+      /**
+       * Mocks delete item request.
+       */
+      mockDeleteItem(): Chainable<void>
     }
   }
 }

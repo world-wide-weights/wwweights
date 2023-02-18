@@ -1,6 +1,6 @@
 import { Form, Formik } from "formik"
 import "material-symbols"
-import * as yup from "yup"
+import { object, string } from "yup"
 import "../../../styles/global.css"
 import { TextInput } from "./TextInput"
 
@@ -8,16 +8,12 @@ const initialValues = {
     title: ""
 }
 
-const submitForm = (values: typeof initialValues) => {
-    console.log(values)
-}
-
-const schema = yup.object().shape({
-    title: yup.string().required("Title is required"),
+const schema = object().shape({
+    title: string().required("Title is required"),
 })
 
 const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    return <Formik initialValues={initialValues} onSubmit={submitForm} validationSchema={schema} >
+    return <Formik initialValues={initialValues} onSubmit={(values: typeof initialValues) => console.log(values)} validationSchema={schema} >
         <Form>
             <div className="w-80">
                 {children}
