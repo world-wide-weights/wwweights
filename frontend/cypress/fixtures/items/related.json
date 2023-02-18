@@ -172,34 +172,6 @@
             "createdAt": 1676750776267
         },
         {
-            "name": "Apple iPad Air",
-            "slug": "apple-ipad-air",
-            "weight": {
-                "value": 469
-            },
-            "tags": [
-                {
-                    "name": "apple",
-                    "count": 4
-                },
-                {
-                    "name": "ios 7",
-                    "count": 1
-                },
-                {
-                    "name": "apple a7 28 nm",
-                    "count": 1
-                },
-                {
-                    "name": "2013",
-                    "count": 1
-                }
-            ],
-            "image": "test.png",
-            "userId": 1,
-            "createdAt": 1676750776247
-        },
-        {
             "name": "Oppo Find X Lamborghini",
             "slug": "oppo-find-x-lamborghini",
             "weight": {
