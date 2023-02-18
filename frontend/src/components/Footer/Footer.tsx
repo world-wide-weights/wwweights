@@ -14,6 +14,7 @@ import { Tag } from "../../types/tag"
 import { AuthContext } from "../Auth/Auth"
 import { Button } from "../Button/Button"
 import { Headline } from "../Headline/Headline"
+import { Tooltip } from "../Tooltip/Tooltip"
 
 /**
  * Footer
@@ -81,15 +82,21 @@ export const Footer: React.FC = () => {
 
 					{/* Social Links */}
 					<div className="flex items-center gap-3 mb-4">
-						<a href="https://discord.gg/UmxWf2FEQx" target="_blank" title="Link to our discord server!" rel="noreferrer noopener">
-							<Image src={discord} alt="Image of Discord Logo" width={25} />
-						</a>
-						<a href="https://github.com/world-wide-weights" target="_blank" title="Link to our GitHub Orga!" rel="noreferrer noopener">
-							<Image src={github} alt="Image of Github Logo" width={25} />
-						</a>
-						<a href="https://twitter.com/wwweights" target="_blank" title="Link to our Twitter!" rel="noreferrer noopener">
-							<Image src={twitter} alt="Image of Twitter logo" width={25} />
-						</a>
+						<Tooltip content="Link to our discord server!">
+							<a href="https://discord.gg/UmxWf2FEQx" target="_blank" rel="noreferrer noopener">
+								<Image src={discord} alt="Image of Discord Logo" width={25} />
+							</a>
+						</Tooltip>
+						<Tooltip content="Link to our GitHub Orga!">
+							<a href="https://github.com/world-wide-weights" target="_blank" rel="noreferrer noopener">
+								<Image src={github} alt="Image of Github Logo" width={25} />
+							</a>
+						</Tooltip>
+						<Tooltip content="Link to our Twitter!">
+							<a href="https://twitter.com/wwweights" target="_blank" rel="noreferrer noopener">
+								<Image src={twitter} alt="Image of Twitter logo" width={25} />
+							</a>
+						</Tooltip>
 					</div>
 				</div>
 				<div className="mb-4">
@@ -129,5 +136,5 @@ export const Footer: React.FC = () => {
 				<span className="text-gray-600 text-sm md:text-base mr-0 md:mr-3">World Wide Weights Copyright © {new Date().getFullYear()}. All rights reserved.</span>
 			</div>
 		</div>
-	</footer>
+	</footer >
 }
