@@ -172,7 +172,35 @@ describe('ItemsController (e2e)', () => {
       expect(items.length).toEqual(0);
     });
 
-    it('Should increment totalSuggestions count and decrement itemCount on item delete suggest', async () => {
+    it('Should increment totalSuggestions count on item delete suggest', async () => {
+      const item = new itemModel(singleItem);
+      await item.save();
+      mockEventStore.existingStreams.add(
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      );
+
+      const globalStatistic = new globalStatisticsModel({
+        totalItems: 2,
+        totalSuggestions: 0,
+      });
+      await globalStatistic.save();
+
+      // ACT
+      const res = await request(server)
+        .post(commandsPath + `items/${item.slug}/suggest/delete`)
+        .send({ reason: 'test' });
+
+      // ASSERT
+      expect(res.statusCode).toEqual(HttpStatus.OK)
+      await retryCallback(
+        async () => (await globalStatisticsModel.findOne())?.totalSuggestions !== 0,
+      );
+
+      const globalStatistics = await globalStatisticsModel.findOne();
+      expect(globalStatistics.totalSuggestions).toEqual(1);
+    });
+
+    it('Should decrement itemCount on item delete', async () => {
       const item = new itemModel(singleItem);
       await item.save();
       mockEventStore.existingStreams.add(
@@ -192,15 +220,10 @@ describe('ItemsController (e2e)', () => {
 
       // ASSERT
       await retryCallback(
-        async () => (await deleteSuggestionModel.count()) !== 0,
-      );
-
-      await retryCallback(
         async () => (await globalStatisticsModel.findOne())?.totalItems !== 2,
       );
 
       const globalStatistics = await globalStatisticsModel.findOne();
-      expect(globalStatistics.totalSuggestions).toEqual(1);
       expect(globalStatistics.totalItems).toEqual(1);
     });
   });
