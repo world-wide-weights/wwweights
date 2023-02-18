@@ -6,9 +6,9 @@ import { ItemEditSuggestedEvent } from '../../src/events/item-events/item-edit-s
 import { ItemEditedEvent } from '../../src/events/item-events/item-edited.event';
 import { ItemInsertedEvent } from '../../src/events/item-events/item-inserted.event';
 
-export const logStringify = (obj: any) => {
-  return JSON.stringify(obj, null, 2);
-};
+/**
+ * @description Mock eventstore without requiring a direct connection to a eventstoredb instance
+ */
 @Injectable()
 export class MockEventStore {
   private readonly logger = new Logger(MockEventStore.name);

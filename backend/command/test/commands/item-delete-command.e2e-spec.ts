@@ -36,7 +36,7 @@ import { singleItem } from '../mocks/items';
 import { FakeAuthGuardFactory } from '../mocks/jwt-guard.mock';
 import { verifiedRequestUser } from '../mocks/users';
 
-describe('ItemsController (e2e)', () => {
+describe('Item Deletion (e2e)', () => {
   let app: INestApplication;
   let itemModel: Model<Item>;
   let tagModel: Model<Tag>;
@@ -122,8 +122,8 @@ describe('ItemsController (e2e)', () => {
 
   const commandsPath = '/commands/v1/';
 
-  describe('DeleteItemCommand', () => {
-    it('items/:slug/suggest/delete => Should add delete suggestion', async () => {
+  describe('items/:slug/suggest/delete (POST)', () => {
+    it('Should add delete suggestion', async () => {
       // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
@@ -140,30 +140,6 @@ describe('ItemsController (e2e)', () => {
       const suggestions = await deleteSuggestionModel.find({});
       expect(suggestions.length).toEqual(1);
       expect(suggestions[0].reason).toEqual('test');
-    });
-
-    // WARNING: The following tests are for testing the edit functionality itself. As of now this is triggered via
-    // a direct insert of the command. In the final product these are triggered via sagas
-    // However the current saga implementation is temporary and should therefore not(!) be tested/influence the tests
-
-    it('deleteItemCommand => Should delete item', async () => {
-      // ARRANGE
-      const item = new itemModel(singleItem);
-      await item.save();
-      const command = new DeleteItemCommand(item.slug, randomUUID());
-      // Create eventstore stream
-      mockEventStore.existingStreams.add(
-        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
-      );
-      //ACT
-      await commandBus.execute(command);
-      // ASSERT
-      await retryCallback(
-        async () => !(await itemModel.findOne({ slug: item.slug })),
-      );
-      // Does suggestion exist in mongoDb
-      const items = await itemModel.find({});
-      expect(items.length).toEqual(0);
     });
 
     it('Should increment totalSuggestions count on item delete suggest', async () => {
@@ -193,6 +169,31 @@ describe('ItemsController (e2e)', () => {
 
       const globalStatistics = await globalStatisticsModel.findOne();
       expect(globalStatistics.totalSuggestions).toEqual(1);
+    });
+  });
+
+  // WARNING: The following tests are for testing the edit functionality itself. As of now this is triggered via
+  // a direct insert of the command. In the final product these are triggered via sagas
+  // However the current saga implementation is temporary and should therefore not(!) be tested/influence the tests
+  describe('DeleteItemCommand', () => {
+    it('Should delete item', async () => {
+      // ARRANGE
+      const item = new itemModel(singleItem);
+      await item.save();
+      const command = new DeleteItemCommand(item.slug, randomUUID());
+      // Create eventstore stream
+      mockEventStore.existingStreams.add(
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      );
+      //ACT
+      await commandBus.execute(command);
+      // ASSERT
+      await retryCallback(
+        async () => !(await itemModel.findOne({ slug: item.slug })),
+      );
+      // Does suggestion exist in mongoDb
+      const items = await itemModel.find({});
+      expect(items.length).toEqual(0);
     });
 
     it('Should decrement itemCount on item delete', async () => {

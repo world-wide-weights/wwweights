@@ -44,7 +44,7 @@ import { ItemCronJobHandlerMock } from '../mocks/items-cron.mock';
 import { FakeAuthGuardFactory } from '../mocks/jwt-guard.mock';
 import { verifiedRequestUser } from '../mocks/users';
 
-describe('ItemsController (e2e)', () => {
+describe('Item Insertion (e2e)', () => {
   let app: INestApplication;
   let itemModel: Model<Item>;
   let tagModel: Model<Tag>;
@@ -138,234 +138,236 @@ describe('ItemsController (e2e)', () => {
   const itemInsertPath = 'items/insert';
   const itemBulkInsertPath = 'items/bulk-insert';
 
-  it('items/insert => insert one Item should fail with auth false', async () => {
-    fakeJWTGuard.setAuthResponse(false);
-    await request(server)
-      .post(commandsPath + 'items/insert')
-      .send(insertItem)
-      .expect(HttpStatus.FORBIDDEN);
-  });
+  describe(itemInsertPath, () => {
+    it('Insert one Item should fail with auth false', async () => {
+      fakeJWTGuard.setAuthResponse(false);
+      await request(server)
+        .post(commandsPath + 'items/insert')
+        .send(insertItem)
+        .expect(HttpStatus.FORBIDDEN);
+    });
 
-  it('items/insert => insert one Item', async () => {
-    await request(server)
-      .post(commandsPath + itemInsertPath)
-      .send(insertItem)
-      .expect(HttpStatus.OK);
-
-    await retryCallback(async () => (await tagModel.count()) !== 0);
-
-    const item = await itemModel.findOne({});
-
-    // Check if Item got correct tags count
-    expect(item.name).toEqual(insertItem.name);
-    expect(item.slug).toBeDefined();
-    expect(item.userId).toEqual(1);
-
-    const tag1 = await tagModel.findOne({ name: 'tag1' });
-    const tag2 = await tagModel.findOne({ name: 'tag2' });
-    expect(tag1.count).toEqual(1);
-    expect(tag2.count).toEqual(1);
-  });
-
-  it('items/insert => insert two Items', async () => {
-    await request(server)
-      .post(commandsPath + itemInsertPath)
-      .send(insertItem2)
-      .expect(HttpStatus.OK);
-
-    await retryCallback(async () => (await itemModel.count()) === 1);
-
-    await request(server)
-      .post(commandsPath + itemInsertPath)
-      .send(insertItem)
-      .expect(HttpStatus.OK);
-
-    await retryCallback(
-      async () => (await tagModel.findOne({ name: 'tag2' })) !== undefined,
-    );
-
-    const item1 = await itemModel.findOne({ name: insertItem.name });
-    const item2 = await itemModel.findOne({ name: insertItem2.name });
-
-    // Check if Item got correct tags count correct
-    expect(item1.tags.length).toEqual(2);
-    expect(item2.tags.length).toEqual(1);
-
-    const tag1 = await tagModel.findOne({ name: 'tag1' });
-    const tag2 = await tagModel.findOne({ name: 'tag2' });
-    expect(tag1.count).toEqual(2);
-    expect(tag2.count).toEqual(1);
-  });
-
-  it('items/insert => insert duplicate Items', async () => {
-    await request(server)
-      .post(commandsPath + itemInsertPath)
-      .send({ ...insertItem, name: 'amongUs', tags: ['sus'] })
-      .expect(HttpStatus.OK);
-
-    await retryCallback(
-      async () => (await tagModel.countDocuments({ name: 'sus' })) === 1,
-    );
-
-    await request(server)
-      .post(commandsPath + itemInsertPath)
-      .send({ ...insertItem, name: 'amongUs' })
-      .expect(HttpStatus.CONFLICT);
-
-    const items = await itemModel.find({});
-    expect(items.length).toEqual(1);
-  });
-
-  it('items/insert => insert Items in quick succession', async () => {
-    bulkInsertData.forEach(async (item) => {
+    it('Should insert one Item', async () => {
       await request(server)
         .post(commandsPath + itemInsertPath)
-        .send({ ...item, tags: [...item.tags, 'coffee'] })
+        .send(insertItem)
         .expect(HttpStatus.OK);
+
+      await retryCallback(async () => (await tagModel.count()) !== 0);
+
+      const item = await itemModel.findOne({});
+
+      // Check if Item got correct tags count
+      expect(item.name).toEqual(insertItem.name);
+      expect(item.slug).toBeDefined();
+      expect(item.userId).toEqual(1);
+
+      const tag1 = await tagModel.findOne({ name: 'tag1' });
+      const tag2 = await tagModel.findOne({ name: 'tag2' });
+      expect(tag1.count).toEqual(1);
+      expect(tag2.count).toEqual(1);
     });
-    await retryCallback(
-      async () =>
-        (await tagModel.countDocuments({ name: { $in: trackerTags } })) === 5,
-    );
-    const items = await itemModel.find({});
-    const tag = await tagModel.findOne({ name: 'coffee' });
 
-    expect(items.length).toEqual(bulkInsertData.length);
-    expect(tag.count).toEqual(bulkInsertData.length);
+    it('Should insert two Items', async () => {
+      await request(server)
+        .post(commandsPath + itemInsertPath)
+        .send(insertItem2)
+        .expect(HttpStatus.OK);
+
+      await retryCallback(async () => (await itemModel.count()) === 1);
+
+      await request(server)
+        .post(commandsPath + itemInsertPath)
+        .send(insertItem)
+        .expect(HttpStatus.OK);
+
+      await retryCallback(async () => (await tagModel.count()) === 2);
+
+      const item1 = await itemModel.findOne({ name: insertItem.name });
+      const item2 = await itemModel.findOne({ name: insertItem2.name });
+
+      // Check if Item got correct tags count correct
+      expect(item1.tags.length).toEqual(2);
+      expect(item2.tags.length).toEqual(1);
+
+      const tag1 = await tagModel.findOne({ name: 'tag1' });
+      const tag2 = await tagModel.findOne({ name: 'tag2' });
+      expect(tag1.count).toEqual(2);
+      expect(tag2.count).toEqual(1);
+    });
+
+    it('Should insert duplicate Items', async () => {
+      await request(server)
+        .post(commandsPath + itemInsertPath)
+        .send({ ...insertItem, name: 'amongUs', tags: ['sus'] })
+        .expect(HttpStatus.OK);
+
+      await retryCallback(
+        async () => (await tagModel.countDocuments({ name: 'sus' })) === 1,
+      );
+
+      await request(server)
+        .post(commandsPath + itemInsertPath)
+        .send({ ...insertItem, name: 'amongUs' })
+        .expect(HttpStatus.CONFLICT);
+
+      const items = await itemModel.find({});
+      expect(items.length).toEqual(1);
+    });
+
+    it('Should insert Items in quick succession', async () => {
+      bulkInsertData.forEach(async (item) => {
+        await request(server)
+          .post(commandsPath + itemInsertPath)
+          .send({ ...item, tags: [...item.tags, 'coffee'] })
+          .expect(HttpStatus.OK);
+      });
+      await retryCallback(
+        async () =>
+          (await tagModel.countDocuments({ name: { $in: trackerTags } })) === 5,
+      );
+      const items = await itemModel.find({});
+      const tag = await tagModel.findOne({ name: 'coffee' });
+
+      expect(items.length).toEqual(bulkInsertData.length);
+      expect(tag.count).toEqual(bulkInsertData.length);
+    });
+
+    it('Should increment profile counts', async () => {
+      await request(server)
+        .post(commandsPath + itemInsertPath)
+        .send(insertItemWithAllValues)
+        .expect(HttpStatus.OK);
+
+      await retryCallback(async () => (await profileModel.count()) === 1);
+
+      const profile = await profileModel.findOne({});
+      expect(profile.count.itemsCreated).toEqual(1);
+      expect(profile.count.additionalValueOnCreation).toEqual(1);
+      expect(profile.count.tagsUsedOnCreation).toEqual(2);
+      expect(profile.count.sourceUsedOnCreation).toEqual(1);
+      expect(profile.count.imageAddedOnCreation).toEqual(1);
+    });
+
+    it('Should increment only profile items count by 0 if rest is not used', async () => {
+      await request(server)
+        .post(commandsPath + itemInsertPath)
+        .send({ name: insertItem.name, weight: insertItem.weight })
+        .expect(HttpStatus.OK);
+
+      await retryCallback(async () => (await profileModel.count()) === 1);
+
+      const profile = await profileModel.findOne({});
+      expect(profile.count.itemsCreated).toEqual(1);
+      expect(profile.count.additionalValueOnCreation).toEqual(0);
+      expect(profile.count.tagsUsedOnCreation).toEqual(0);
+      expect(profile.count.sourceUsedOnCreation).toEqual(0);
+      expect(profile.count.imageAddedOnCreation).toEqual(0);
+    });
+
+    it('Should increment totalItems count on item insert', async () => {
+      // ACT
+      await request(server)
+        .post(commandsPath + itemInsertPath)
+        .send({ ...insertItem, tags: undefined })
+        .expect(HttpStatus.OK);
+
+      // ASSERT
+      await retryCallback(
+        async () => (await globalStatisticsModel.count()) !== 0,
+      );
+
+      expect((await globalStatisticsModel.findOne())?.totalItems).toEqual(1);
+    });
   });
 
-  it('items/insert => increment profile counts', async () => {
-    await request(server)
-      .post(commandsPath + itemInsertPath)
-      .send(insertItemWithAllValues)
-      .expect(HttpStatus.OK);
+  describe('items/bulk-insert', () => {
+    it('Should be hidden if env guard fails', async () => {
+      // ACT
+      const res = await request(server)
+        .post(commandsPath + itemBulkInsertPath)
+        .send(testData.slice(0, 5));
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.NOT_FOUND);
+    });
 
-    await retryCallback(async () => (await profileModel.count()) === 1);
+    it('Should insert multiple items', async () => {
+      // ARRANGE
+      fakeEnvGuard.isDev = true;
+      // ACT
+      const res = await request(server)
+        .post(commandsPath + itemBulkInsertPath)
+        .send(bulkInsertData);
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.OK);
+      await retryCallback(
+        async () =>
+          (await tagModel.countDocuments({ name: { $in: trackerTags } })) === 5,
+      );
+      const items = await itemModel.find({});
+      expect(items.length).toEqual(5);
+    });
 
-    const profile = await profileModel.findOne({});
-    expect(profile.count.itemsCreated).toEqual(1);
-    expect(profile.count.additionalValueOnCreation).toEqual(1);
-    expect(profile.count.tagsUsedOnCreation).toEqual(2);
-    expect(profile.count.sourceUsedOnCreation).toEqual(1);
-    expect(profile.count.imageAddedOnCreation).toEqual(1);
-  });
+    it('Should allow to set userId', async () => {
+      // ARRANGE
+      await itemModel.deleteMany();
+      fakeEnvGuard.isDev = true;
+      const userId = 12;
+      const insertItems = bulkInsertData
+        .slice(0, 5)
+        .map((e) => ({ ...e, userId: userId }));
+      // ACT
+      const res = await request(server)
+        .post(commandsPath + itemBulkInsertPath)
+        .send(insertItems);
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.OK);
+      await retryCallback(
+        async () =>
+          (await tagModel.countDocuments({ name: { $in: trackerTags } })) === 5,
+      );
+      const items = await itemModel.find({});
+      for (const item of items) {
+        expect(item.userId).toEqual(userId);
+      }
+    });
 
-  it('items/insert => increment only profile items count by 0 if rest is not used', async () => {
-    await request(server)
-      .post(commandsPath + itemInsertPath)
-      .send({ name: insertItem.name, weight: insertItem.weight })
-      .expect(HttpStatus.OK);
+    it('Should default to userId of 0', async () => {
+      // ARRANGE
+      await itemModel.deleteMany();
+      fakeEnvGuard.isDev = true;
+      // ACT
+      const res = await request(server)
+        .post(commandsPath + itemBulkInsertPath)
+        .send(bulkInsertData);
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.OK);
+      await retryCallback(
+        async () =>
+          (await tagModel.countDocuments({ name: { $in: trackerTags } })) === 5,
+      );
+      const items = await itemModel.find({});
+      for (const item of items) {
+        expect(item.userId).toEqual(0);
+      }
+    });
 
-    await retryCallback(async () => (await profileModel.count()) === 1);
-
-    const profile = await profileModel.findOne({});
-    expect(profile.count.itemsCreated).toEqual(1);
-    expect(profile.count.additionalValueOnCreation).toEqual(0);
-    expect(profile.count.tagsUsedOnCreation).toEqual(0);
-    expect(profile.count.sourceUsedOnCreation).toEqual(0);
-    expect(profile.count.imageAddedOnCreation).toEqual(0);
-  });
-
-  it('Should increment totalItems count on item insert', async () => {
-    // ACT
-    await request(server)
-      .post(commandsPath + itemInsertPath)
-      .send({ ...insertItem, tags: undefined })
-      .expect(HttpStatus.OK);
-
-    // ASSERT
-    await retryCallback(
-      async () => (await globalStatisticsModel.count()) !== 0,
-    );
-
-    expect((await globalStatisticsModel.findOne())?.totalItems).toEqual(1);
-  });
-
-  it('items/bulk-insert => Should be hidden if env guard fails', async () => {
-    // ACT
-    const res = await request(server)
-      .post(commandsPath + itemBulkInsertPath)
-      .send(testData.slice(0, 5));
-    // ASSERT
-    expect(res.status).toEqual(HttpStatus.NOT_FOUND);
-  });
-
-  it('items/bulk-insert => Should insert multiple items', async () => {
-    // ARRANGE
-    fakeEnvGuard.isDev = true;
-    // ACT
-    const res = await request(server)
-      .post(commandsPath + itemBulkInsertPath)
-      .send(bulkInsertData);
-    // ASSERT
-    expect(res.status).toEqual(HttpStatus.OK);
-    await retryCallback(
-      async () =>
-        (await tagModel.countDocuments({ name: { $in: trackerTags } })) === 5,
-    );
-    const items = await itemModel.find({});
-    expect(items.length).toEqual(5);
-  });
-
-  it('items/bulk-insert => Should allow to set userId', async () => {
-    // ARRANGE
-    await itemModel.deleteMany();
-    fakeEnvGuard.isDev = true;
-    const userId = 12;
-    const insertItems = bulkInsertData
-      .slice(0, 5)
-      .map((e) => ({ ...e, userId: userId }));
-    // ACT
-    const res = await request(server)
-      .post(commandsPath + itemBulkInsertPath)
-      .send(insertItems);
-    // ASSERT
-    expect(res.status).toEqual(HttpStatus.OK);
-    await retryCallback(
-      async () =>
-        (await tagModel.countDocuments({ name: { $in: trackerTags } })) === 5,
-    );
-    const items = await itemModel.find({});
-    for (const item of items) {
-      expect(item.userId).toEqual(userId);
-    }
-  });
-
-  it('items/bulk-insert => Should default to userId of 0', async () => {
-    // ARRANGE
-    await itemModel.deleteMany();
-    fakeEnvGuard.isDev = true;
-    // ACT
-    const res = await request(server)
-      .post(commandsPath + itemBulkInsertPath)
-      .send(bulkInsertData);
-    // ASSERT
-    expect(res.status).toEqual(HttpStatus.OK);
-    await retryCallback(
-      async () =>
-        (await tagModel.countDocuments({ name: { $in: trackerTags } })) === 5,
-    );
-    const items = await itemModel.find({});
-    for (const item of items) {
-      expect(item.userId).toEqual(0);
-    }
-  });
-
-  it('items/bulk-insert => Should call cronjob', async () => {
-    // ARRANGE
-    await itemModel.deleteMany();
-    fakeEnvGuard.isDev = true;
-    // ACT
-    const res = await request(server)
-      .post(commandsPath + itemBulkInsertPath)
-      .send(bulkInsertData);
-    // ASSERT
-    expect(res.status).toEqual(HttpStatus.OK);
-    // No tests needed as callback throws an error if condition is never met
-    await retryCallback(
-      async () =>
-        (await tagModel.countDocuments({ name: { $in: trackerTags } })) === 5,
-    );
-    expect(cronMock.correctAllItemTagCountsHasBeenCalled).toBe(true);
+    it('Should call cronjob', async () => {
+      // ARRANGE
+      await itemModel.deleteMany();
+      fakeEnvGuard.isDev = true;
+      // ACT
+      const res = await request(server)
+        .post(commandsPath + itemBulkInsertPath)
+        .send(bulkInsertData);
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.OK);
+      // No tests needed as callback throws an error if condition is never met
+      await retryCallback(
+        async () =>
+          (await tagModel.countDocuments({ name: { $in: trackerTags } })) === 5,
+      );
+      expect(cronMock.correctAllItemTagCountsHasBeenCalled).toBe(true);
+    });
   });
 });

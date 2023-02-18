@@ -2,10 +2,10 @@ import { INestApplication } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeout } from 'timers/promises';
-import { ALLOWED_EVENT_ENTITIES } from '../src/eventstore/enums/allowedEntities.enum';
-import { EventStore } from '../src/eventstore/eventstore';
-import { EventStoreModule } from '../src/eventstore/eventstore.module';
-import { Client } from './mocks/eventstore-connection';
+import { ALLOWED_EVENT_ENTITIES } from './enums/allowedEntities.enum';
+import { EventStore } from './eventstore';
+import { EventStoreModule } from './eventstore.module';
+import { Client } from '../../test/mocks/eventstore-connection';
 
 describe('EventstoreModule', () => {
   // Basically disable the constructor to skip Eventstoredb connection

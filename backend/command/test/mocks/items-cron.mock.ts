@@ -1,3 +1,6 @@
+/**
+ * @description Mock item related cronjobs without db access needed
+ */
 export class ItemCronJobHandlerMock {
   public correctAllItemTagCountsHasBeenCalled = false;
   public deleteUnusedTagsHasBeenCalled = false;

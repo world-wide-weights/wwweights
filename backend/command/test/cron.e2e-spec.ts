@@ -32,7 +32,7 @@ import { singleItem, singleItemTags } from './mocks/items';
 import { FakeAuthGuardFactory } from './mocks/jwt-guard.mock';
 import { verifiedRequestUser } from './mocks/users';
 
-describe('ItemsController (e2e)', () => {
+describe('CronJobs (e2e)', () => {
   let app: INestApplication;
   let itemModel: Model<Item>;
   let tagModel: Model<Tag>;
@@ -116,7 +116,7 @@ describe('ItemsController (e2e)', () => {
     await app.close();
   });
 
-  describe('correctAllItemTagCounts (CRON)', () => {
+  describe('correctAllItemTagCounts', () => {
     it('Should update item counts', async () => {
       // ARRANGE
       await itemModel.insertMany([
@@ -156,7 +156,7 @@ describe('ItemsController (e2e)', () => {
     });
   });
 
-  describe('deleteUnusedTags (CRON)', () => {
+  describe('deleteUnusedTags', () => {
     it('Should delete unused Tags from Tags', async () => {
       // ARRANGE
       await tagModel.insertMany([

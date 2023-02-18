@@ -36,7 +36,7 @@ import { singleItem } from '../mocks/items';
 import { FakeAuthGuardFactory } from '../mocks/jwt-guard.mock';
 import { verifiedRequestUser } from '../mocks/users';
 
-describe('ItemsController (e2e)', () => {
+describe('Item Edit (e2e)', () => {
   let app: INestApplication;
   let itemModel: Model<Item>;
   let tagModel: Model<Tag>;
@@ -122,8 +122,8 @@ describe('ItemsController (e2e)', () => {
 
   const commandsPath = '/commands/v1/';
 
-  describe('EditItemCommand', () => {
-    it('items/:slug/suggest/edit => Should create a suggestion', async () => {
+  describe('items/:slug/suggest/edit (POST)', () => {
+    it('Should create a suggestion', async () => {
       // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
@@ -150,7 +150,7 @@ describe('ItemsController (e2e)', () => {
       expect(suggestions[0].updatedItemValues.image).toEqual('test');
     });
 
-    it('items/:slug/suggest/edit => Should add correct user to suggestion', async () => {
+    it('Should add correct user to suggestion', async () => {
       // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
@@ -171,11 +171,38 @@ describe('ItemsController (e2e)', () => {
       expect(suggestion.userId).toEqual(verifiedRequestUser.id);
     });
 
-    // WARNING: The following tests are for testing the edit functionality itself. As of now this is triggered via
-    // a direct insert of the command. In the final product these are triggered via sagas
-    // However the current saga implementation is temporary and should therefore not(!) be tested/influence the tests
+    it('Should increment totalSuggestions count on item edit suggest', async () => {
+      const item = new itemModel(singleItem);
+      await item.save();
+      mockEventStore.existingStreams.add(
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      );
 
-    it('EditItemCommand => Should update item', async () => {
+      const globalStatistic = new globalStatisticsModel({
+        totalItems: 1,
+        totalSuggestions: 0,
+      });
+      await globalStatistic.save();
+
+      await request(server)
+        .post(commandsPath + `items/${encodeURI(item.slug)}/suggest/edit`)
+        .send({ name: 'smthelse' });
+
+      await retryCallback(
+        async () => (await editSuggestionModel.count()) !== 0,
+      );
+
+      expect((await globalStatisticsModel.findOne()).totalSuggestions).toEqual(
+        1,
+      );
+    });
+  });
+
+  // WARNING: The following tests are for testing the edit functionality itself. As of now this is triggered via
+  // a direct insert of the command. In the final product these are triggered via sagas
+  // However the current saga implementation is temporary and should therefore not(!) be tested/influence the tests
+  describe('EditItemCommand', () => {
+    it('Should update item', async () => {
       // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
@@ -197,7 +224,7 @@ describe('ItemsController (e2e)', () => {
       );
     });
 
-    it('EditItemCommand => Should be able to set property to null', async () => {
+    it('Should be able to set property to null', async () => {
       // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
@@ -219,7 +246,7 @@ describe('ItemsController (e2e)', () => {
       );
     });
 
-    it('EditItemCommand => Should be able to update weight (nested Object)', async () => {
+    it('Should be able to update weight (nested Object)', async () => {
       // ARRANGE
       const item = new itemModel({
         ...singleItem,
@@ -257,7 +284,7 @@ describe('ItemsController (e2e)', () => {
       });
     });
 
-    it('EditItemCommand => Should be able to remove fields in weight (nested Object)', async () => {
+    it('Should be able to remove fields in weight (nested Object)', async () => {
       // ARRANGE
       const item = new itemModel({
         ...singleItem,
@@ -290,7 +317,7 @@ describe('ItemsController (e2e)', () => {
       expect(updatedItem.weight.isCa).toBeNull();
     });
 
-    it('EditItemCommand => Should remove tags to item', async () => {
+    it('Should remove tags to item', async () => {
       // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
@@ -316,7 +343,7 @@ describe('ItemsController (e2e)', () => {
       );
     });
 
-    it('EditItemCommand => Should add tags to item', async () => {
+    it('Should add tags to item', async () => {
       // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
@@ -340,7 +367,7 @@ describe('ItemsController (e2e)', () => {
       expect(updatedItem.tags.map((t) => t.name)).toContain('newTag1');
     });
 
-    it('EditItemCommand => Should add AND remove tags from item', async () => {
+    it('Should add AND remove tags from item', async () => {
       // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
@@ -366,7 +393,7 @@ describe('ItemsController (e2e)', () => {
       expect(updatedItem.tags.map((t) => t.name)).toContain('newTag1');
     });
 
-    it('EditItemCommand => Should update tags in Tags', async () => {
+    it('Should update tags in Tags', async () => {
       // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
@@ -390,32 +417,6 @@ describe('ItemsController (e2e)', () => {
       // Has tag been created?
       expect(newTag).toBeDefined();
       expect(oldTag.count).toEqual(item.tags[0].count - 1);
-    });
-
-    it('Should increment totalSuggestions count on item edit suggest', async () => {
-      const item = new itemModel(singleItem);
-      await item.save();
-      mockEventStore.existingStreams.add(
-        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
-      );
-
-      const globalStatistic = new globalStatisticsModel({
-        totalItems: 1,
-        totalSuggestions: 0,
-      });
-      await globalStatistic.save();
-
-      await request(server)
-        .post(commandsPath + `items/${encodeURI(item.slug)}/suggest/edit`)
-        .send({ name: 'smthelse' });
-
-      await retryCallback(
-        async () => (await editSuggestionModel.count()) !== 0,
-      );
-
-      expect((await globalStatisticsModel.findOne()).totalSuggestions).toEqual(
-        1,
-      );
     });
   });
 });
