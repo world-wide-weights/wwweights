@@ -1,658 +1,391 @@
 {
-    "total": 60,
+    "total": 14,
     "page": 1,
     "limit": 16,
     "data": [
         {
-            "name": "ZTE Coral200 Sollar",
-            "slug": "zte-coral200-sollar",
+            "name": "Oppo Find X Lamborghini",
+            "slug": "oppo-find-x-lamborghini",
             "weight": {
-                "value": 85
+                "value": 186
             },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-coral200-sollar.jpg",
+            "tags": [
+                {
+                    "name": "2018",
+                    "count": 2
+                },
+                {
+                    "name": "oppo",
+                    "count": 1
+                },
+                {
+                    "name": "android 81 oreo",
+                    "count": 1
+                },
+                {
+                    "name": "qualcomm sdm845 snapdragon 845 10 nm",
+                    "count": 1
+                }
+            ],
+            "image": "test.png",
             "userId": 1,
-            "createdAt": 1674596011073
+            "createdAt": 1676750776486
         },
         {
-            "name": "ZTE F100",
-            "slug": "zte-f100",
+            "name": "Lenovo Golden Warrior Note 8",
+            "slug": "lenovo-golden-warrior-note-8",
             "weight": {
-                "value": 90
+                "value": 170
             },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-f100.jpg",
+            "tags": [
+                {
+                    "name": "lenovo",
+                    "count": 1
+                },
+                {
+                    "name": "android 442 kitkat",
+                    "count": 1
+                },
+                {
+                    "name": "mediatek mt6752 28 nm",
+                    "count": 1
+                },
+                {
+                    "name": "2014",
+                    "count": 1
+                }
+            ],
+            "image": "test.png",
             "userId": 1,
-            "createdAt": 1674596010843
+            "createdAt": 1676750776472
         },
         {
-            "name": "ZTE F101",
-            "slug": "zte-f101",
+            "name": "Nokia 2110",
+            "slug": "nokia-2110",
             "weight": {
-                "value": 90
+                "value": 236
             },
-            "tags": [],
+            "tags": [
+                {
+                    "name": "nokia",
+                    "count": 1
+                },
+                {
+                    "name": "1995",
+                    "count": 1
+                }
+            ],
+            "image": "test.jpg",
             "userId": 1,
-            "createdAt": 1674596010520
+            "createdAt": 1676750776451
         },
         {
-            "name": "ZTE F103",
-            "slug": "zte-f103",
+            "name": "Acer Allegro",
+            "slug": "acer-allegro",
             "weight": {
-                "value": 90
+                "value": 126
             },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-f103.jpg",
+            "tags": [
+                {
+                    "name": "acer",
+                    "count": 1
+                },
+                {
+                    "name": "microsoft windows phone 75 mango",
+                    "count": 1
+                },
+                {
+                    "name": "qualcomm msm8255 snapdragon s2",
+                    "count": 1
+                },
+                {
+                    "name": "2011",
+                    "count": 1
+                }
+            ],
+            "image": "test.jpg",
             "userId": 1,
-            "createdAt": 1674596010216
+            "createdAt": 1676750776418
         },
         {
-            "name": "ZTE F600",
-            "slug": "zte-f600",
+            "name": "Asus ROG Phone 6 Batman Edition",
+            "slug": "asus-rog-phone-6-batman-edition",
             "weight": {
-                "value": 90
+                "value": 239
             },
-            "tags": [],
+            "tags": [
+                {
+                    "name": "android 12",
+                    "count": 5
+                },
+                {
+                    "name": "2022",
+                    "count": 4
+                },
+                {
+                    "name": "asus",
+                    "count": 2
+                },
+                {
+                    "name": "qualcomm sm8475 snapdragon 8 gen 1 4 nm usamediatek dimensity 9000 4 nm international",
+                    "count": 1
+                }
+            ],
+            "image": "test.jpg",
             "userId": 1,
-            "createdAt": 1674596010128
+            "createdAt": 1676750776397
         },
         {
-            "name": "ZTE F870",
-            "slug": "zte-f870",
+            "name": "Asus ROG Phone 6 Diablo Immortal Edition",
+            "slug": "asus-rog-phone-6-diablo-immortal-edition",
             "weight": {
-                "value": 100
+                "value": 239
             },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-f870.jpg",
+            "tags": [
+                {
+                    "name": "android 12",
+                    "count": 5
+                },
+                {
+                    "name": "2022",
+                    "count": 4
+                },
+                {
+                    "name": "qualcomm sm8475 snapdragon 8 gen 1 4 nm",
+                    "count": 2
+                },
+                {
+                    "name": "asus",
+                    "count": 2
+                }
+            ],
+            "image": "test.png",
             "userId": 1,
-            "createdAt": 1674596009744
+            "createdAt": 1676750776373
         },
         {
-            "name": "ZTE F928",
-            "slug": "zte-f928",
+            "name": "Samsung Galaxy Z Flip4",
+            "slug": "samsung-galaxy-z-flip4",
             "weight": {
-                "value": 100
+                "value": 187
             },
-            "tags": [],
+            "tags": [
+                {
+                    "name": "samsung",
+                    "count": 4
+                },
+                {
+                    "name": "android 12",
+                    "count": 5
+                },
+                {
+                    "name": "2022",
+                    "count": 4
+                },
+                {
+                    "name": "qualcomm sm8475 snapdragon 8 gen 1 4 nm",
+                    "count": 2
+                }
+            ],
+            "image": "test.jpg",
             "userId": 1,
-            "createdAt": 1674596009456
+            "createdAt": 1676750776349
         },
         {
-            "name": "ZTE F952",
-            "slug": "zte-f952",
+            "name": "Samsung Galaxy A04e",
+            "slug": "samsung-galaxy-a04e",
             "weight": {
-                "value": 100
+                "value": 188
             },
-            "tags": [],
+            "tags": [
+                {
+                    "name": "samsung",
+                    "count": 4
+                },
+                {
+                    "name": "android 12",
+                    "count": 5
+                },
+                {
+                    "name": "mediatek mt6765 helio p35 12nm",
+                    "count": 2
+                },
+                {
+                    "name": "2022",
+                    "count": 4
+                }
+            ],
+            "image": "test.jpg",
             "userId": 1,
-            "createdAt": 1674596009195
+            "createdAt": 1676750776332
         },
         {
-            "name": "ZTE F233",
-            "slug": "zte-f233",
+            "name": "Samsung Galaxy F04",
+            "slug": "samsung-galaxy-f04",
             "weight": {
-                "value": 90
+                "value": 188
             },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-f233.jpg",
+            "tags": [
+                {
+                    "name": "samsung",
+                    "count": 4
+                },
+                {
+                    "name": "2023",
+                    "count": 2
+                },
+                {
+                    "name": "android 12",
+                    "count": 5
+                },
+                {
+                    "name": "mediatek mt6765 helio p35 12nm",
+                    "count": 2
+                }
+            ],
+            "image": "test.png",
             "userId": 1,
-            "createdAt": 1674596009004
+            "createdAt": 1676750776305
         },
         {
-            "name": "ZTE A261",
-            "slug": "zte-a261",
+            "name": "Samsung Galaxy A14 5G",
+            "slug": "samsung-galaxy-a14-5g",
             "weight": {
-                "value": 75
+                "value": 202
             },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/ZTE-A261.jpg",
+            "tags": [
+                {
+                    "name": "samsung",
+                    "count": 4
+                },
+                {
+                    "name": "android 13",
+                    "count": 1
+                },
+                {
+                    "name": "exynos 1330 sma146bmediatek mt6833 dimensity 700 7 nm sma146p",
+                    "count": 1
+                },
+                {
+                    "name": "2023",
+                    "count": 2
+                }
+            ],
+            "image": "test.png",
             "userId": 1,
-            "createdAt": 1674596008774
+            "createdAt": 1676750776267
         },
         {
-            "name": "ZTE S302",
-            "slug": "zte-s302",
+            "name": "Apple iPad Air",
+            "slug": "apple-ipad-air",
             "weight": {
-                "value": 79
+                "value": 469
             },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-s302.jpg",
+            "tags": [
+                {
+                    "name": "apple",
+                    "count": 4
+                },
+                {
+                    "name": "ios 7",
+                    "count": 1
+                },
+                {
+                    "name": "apple a7 28 nm",
+                    "count": 1
+                },
+                {
+                    "name": "2013",
+                    "count": 1
+                }
+            ],
+            "image": "test.png",
             "userId": 1,
-            "createdAt": 1674596008655
+            "createdAt": 1676750776247
         },
         {
-            "name": "ZTE Xiang",
-            "slug": "zte-xiang",
+            "name": "Apple iPhone XS",
+            "slug": "apple-iphone-xs",
             "weight": {
-                "value": 120
+                "value": 177
             },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-xiang.jpg",
+            "tags": [
+                {
+                    "name": "apple",
+                    "count": 4
+                },
+                {
+                    "name": "ios 12",
+                    "count": 1
+                },
+                {
+                    "name": "apple a12 bionic 7 nm",
+                    "count": 1
+                },
+                {
+                    "name": "2018",
+                    "count": 2
+                }
+            ],
+            "image": "test.jpg",
             "userId": 1,
-            "createdAt": 1674596008495
+            "createdAt": 1676750776223
         },
         {
-            "name": "ZTE Raise",
-            "slug": "zte-raise",
+            "name": "Apple iPad mini (2021)",
+            "slug": "apple-ipad-mini-2021",
             "weight": {
-                "value": 146
+                "value": 293
             },
-            "tags": [],
+            "tags": [
+                {
+                    "name": "apple",
+                    "count": 4
+                },
+                {
+                    "name": "apple a15 bionic 5 nm",
+                    "count": 2
+                },
+                {
+                    "name": "2021",
+                    "count": 2
+                },
+                {
+                    "name": "ipados 15",
+                    "count": 1
+                }
+            ],
+            "image": "test.jpg",
             "userId": 1,
-            "createdAt": 1674596008111
+            "createdAt": 1676750776183
         },
         {
-            "name": "ZTE E811",
-            "slug": "zte-e811",
-            "weight": {
-                "value": 130
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-e811.jpg",
-            "userId": 1,
-            "createdAt": 1674596007750
-        },
-        {
-            "name": "ZTE X760",
-            "slug": "zte-x760",
-            "weight": {
-                "value": 84
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-x760.jpg",
-            "userId": 1,
-            "createdAt": 1674596007560
-        },
-        {
-            "name": "ZTE X990",
-            "slug": "zte-x990",
-            "weight": {
-                "value": 90
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-x990.jpg",
-            "userId": 1,
-            "createdAt": 1674596007334
-        },
-        {
-            "name": "ZTE F951",
-            "slug": "zte-f951",
-            "weight": {
-                "value": 100
-            },
-            "tags": [],
-            "userId": 1,
-            "createdAt": 1674596007090
-        },
-        {
-            "name": "ZTE Racer",
-            "slug": "zte-racer",
-            "weight": {
-                "value": 100
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-racer.jpg",
-            "userId": 1,
-            "createdAt": 1674596006878
-        },
-        {
-            "name": "ZTE E N72",
-            "slug": "zte-e-n72",
-            "weight": {
-                "value": 130
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/ZTE-E-N72.jpg",
-            "userId": 1,
-            "createdAt": 1674596006676
-        },
-        {
-            "name": "ZTE F107",
-            "slug": "zte-f107",
-            "weight": {
-                "value": 90
-            },
-            "tags": [],
-            "userId": 1,
-            "createdAt": 1674596006514
-        },
-        {
-            "name": "ZTE Salute F350",
-            "slug": "zte-salute-f350",
-            "weight": {
-                "value": 112
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/verizon-wireless-salute.jpg",
-            "userId": 1,
-            "createdAt": 1674596006320
-        },
-        {
-            "name": "ZTE S213",
-            "slug": "zte-s213",
-            "weight": {
-                "value": 95
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-s213.jpg",
-            "userId": 1,
-            "createdAt": 1674596006079
-        },
-        {
-            "name": "ZTE R220",
-            "slug": "zte-r220",
-            "weight": {
-                "value": 80
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-r220.jpg",
-            "userId": 1,
-            "createdAt": 1674596005861
-        },
-        {
-            "name": "ZTE R221",
-            "slug": "zte-r221",
-            "weight": {
-                "value": 80
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-r221.jpg",
-            "userId": 1,
-            "createdAt": 1674596005714
-        },
-        {
-            "name": "ZTE R228",
-            "slug": "zte-r228",
-            "weight": {
-                "value": 67
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/ZTE-G-R228.jpg",
-            "userId": 1,
-            "createdAt": 1674596005493
-        },
-        {
-            "name": "ZTE R228 Dual SIM",
-            "slug": "zte-r228-dual-sim",
-            "weight": {
-                "value": 80
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/ZTE-G-R228.jpg",
-            "userId": 1,
-            "createdAt": 1674596005308
-        },
-        {
-            "name": "ZTE R230",
-            "slug": "zte-r230",
-            "weight": {
-                "value": 80
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-r230.jpg",
-            "userId": 1,
-            "createdAt": 1674596005045
-        },
-        {
-            "name": "ZTE N280",
-            "slug": "zte-n280",
-            "weight": {
-                "value": 130
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-n280.jpg",
-            "userId": 1,
-            "createdAt": 1674596004896
-        },
-        {
-            "name": "ZTE N290",
-            "slug": "zte-n290",
-            "weight": {
-                "value": 106
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-n290.jpg",
-            "userId": 1,
-            "createdAt": 1674596004699
-        },
-        {
-            "name": "ZTE X990D",
-            "slug": "zte-x990d",
-            "weight": {
-                "value": 90
-            },
-            "tags": [],
-            "userId": 1,
-            "createdAt": 1674596004544
-        },
-        {
-            "name": "ZTE Sage",
-            "slug": "zte-sage",
-            "weight": {
-                "value": 80
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-sage-orange-lisbon.jpg",
-            "userId": 1,
-            "createdAt": 1674596004441
-        },
-        {
-            "name": "ZTE Blade",
-            "slug": "zte-blade",
-            "weight": {
-                "value": 110
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-blade-new.jpg",
-            "userId": 1,
-            "createdAt": 1674596004194
-        },
-        {
-            "name": "ZTE Rio",
-            "slug": "zte-rio",
-            "weight": {
-                "value": 90
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-rio.jpg",
-            "userId": 1,
-            "createdAt": 1674596004031
-        },
-        {
-            "name": "ZTE Racer II",
-            "slug": "zte-racer-ii",
-            "weight": {
-                "value": 100
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-racer-ii.jpg",
-            "userId": 1,
-            "createdAt": 1674596003907
-        },
-        {
-            "name": "ZTE Amigo",
-            "slug": "zte-amigo",
-            "weight": {
-                "value": 120
-            },
-            "tags": [],
-            "userId": 1,
-            "createdAt": 1674596003817
-        },
-        {
-            "name": "ZTE V821",
-            "slug": "zte-v821",
-            "weight": {
-                "value": 120
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/ZTE-V821.jpg",
-            "userId": 1,
-            "createdAt": 1674596003669
-        },
-        {
-            "name": "ZTE Skate",
-            "slug": "zte-skate",
-            "weight": {
-                "value": 120
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-skate.jpg",
-            "userId": 1,
-            "createdAt": 1674596003399
-        },
-        {
-            "name": "ZTE N721",
-            "slug": "zte-n721",
-            "weight": {
-                "value": 105
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-n721.jpg",
-            "userId": 1,
-            "createdAt": 1674596003205
-        },
-        {
-            "name": "ZTE V9",
-            "slug": "zte-v9",
-            "weight": {
-                "value": 403
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-v9.jpg",
-            "userId": 1,
-            "createdAt": 1674596002932
-        },
-        {
-            "name": "ZTE Avail",
-            "slug": "zte-avail",
-            "weight": {
-                "value": 127
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-avail.jpg",
-            "userId": 1,
-            "createdAt": 1674596002648
-        },
-        {
-            "name": "ZTE Score",
-            "slug": "zte-score",
-            "weight": {
-                "value": 122
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-score.jpg",
-            "userId": 1,
-            "createdAt": 1674596002365
-        },
-        {
-            "name": "ZTE Warp",
-            "slug": "zte-warp",
-            "weight": {
-                "value": 140
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-warp.jpg",
-            "userId": 1,
-            "createdAt": 1674596002070
-        },
-        {
-            "name": "ZTE Tania",
-            "slug": "zte-tania",
-            "weight": {
-                "value": 158
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-tania.jpg",
-            "userId": 1,
-            "createdAt": 1674596001793
-        },
-        {
-            "name": "ZTE Memo",
-            "slug": "zte-memo",
-            "weight": {
-                "value": 111
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-memo.jpg",
-            "userId": 1,
-            "createdAt": 1674596001544
-        },
-        {
-            "name": "ZTE Chorus",
-            "slug": "zte-chorus",
-            "weight": {
-                "value": 105
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-chorus.jpg",
-            "userId": 1,
-            "createdAt": 1674596001252
-        },
-        {
-            "name": "ZTE FTV Phone",
-            "slug": "zte-ftv-phone",
-            "weight": {
-                "value": 110
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-blade-ftv-phone.jpg",
-            "userId": 1,
-            "createdAt": 1674596001131
-        },
-        {
-            "name": "ZTE Light Tab V9C",
-            "slug": "zte-light-tab-v9c",
-            "weight": {
-                "value": 389
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-light-tab-v9c.jpg",
-            "userId": 1,
-            "createdAt": 1674596000994
-        },
-        {
-            "name": "ZTE Light Tab 2 V9A",
-            "slug": "zte-light-tab-2-v9a",
-            "weight": {
-                "value": 389
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-light-tab-2-v9a-ofic.jpg",
-            "userId": 1,
-            "createdAt": 1674596000783
-        },
-        {
-            "name": "ZTE Optik",
-            "slug": "zte-optik",
-            "weight": {
-                "value": 400
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-optik.jpg",
-            "userId": 1,
-            "createdAt": 1674596000540
-        },
-        {
-            "name": "ZTE Blade II V880+",
-            "slug": "zte-blade-ii-v880",
-            "weight": {
-                "value": 117
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-blade-ii.jpg",
-            "userId": 1,
-            "createdAt": 1674596000347
-        },
-        {
-            "name": "ZTE V875",
-            "slug": "zte-v875",
-            "weight": {
-                "value": 125
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-v875.jpg",
-            "userId": 1,
-            "createdAt": 1674596000075
-        },
-        {
-            "name": "ZTE Style Messanger",
-            "slug": "zte-style-messanger",
-            "weight": {
-                "value": 95
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-style-messenger.jpg",
-            "userId": 1,
-            "createdAt": 1674595999813
-        },
-        {
-            "name": "ZTE Style Q",
-            "slug": "zte-style-q",
-            "weight": {
-                "value": 100
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-style-q.jpg",
-            "userId": 1,
-            "createdAt": 1674595999549
-        },
-        {
-            "name": "ZTE Nova Messenger",
-            "slug": "zte-nova-messenger",
-            "weight": {
-                "value": 95
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-nova-messenger.jpg",
-            "userId": 1,
-            "createdAt": 1674595999286
-        },
-        {
-            "name": "ZTE V880E",
-            "slug": "zte-v880e",
-            "weight": {
-                "value": 130
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-v880e.jpg",
-            "userId": 1,
-            "createdAt": 1674595999129
-        },
-        {
-            "name": "ZTE Kis V788",
-            "slug": "zte-kis-v788",
-            "weight": {
-                "value": 120
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-kis.jpg",
-            "userId": 1,
-            "createdAt": 1674595999019
-        },
-        {
-            "name": "ZTE Orbit",
-            "slug": "zte-orbit",
-            "weight": {
-                "value": 136
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-orbit.jpg",
-            "userId": 1,
-            "createdAt": 1674595998877
-        },
-        {
-            "name": "ZTE Light Tab 3 V9S",
-            "slug": "zte-light-tab-3-v9s",
-            "weight": {
-                "value": 400
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-v9s.jpg",
-            "userId": 1,
-            "createdAt": 1674595998617
-        },
-        {
-            "name": "ZTE Score M",
-            "slug": "zte-score-m",
-            "weight": {
-                "value": 136
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-score-m.jpg",
-            "userId": 1,
-            "createdAt": 1674595998278
-        },
-        {
-            "name": "ZTE U880E",
-            "slug": "zte-u880e",
+            "name": "Apple iPhone 13 mini",
+            "slug": "apple-iphone-13-mini",
             "weight": {
                 "value": 141
             },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-u880.jpg",
+            "tags": [
+                {
+                    "name": "apple",
+                    "count": 4
+                },
+                {
+                    "name": "ios 15",
+                    "count": 1
+                },
+                {
+                    "name": "apple a15 bionic 5 nm",
+                    "count": 2
+                },
+                {
+                    "name": "2021",
+                    "count": 2
+                }
+            ],
+            "image": "test.jpg",
             "userId": 1,
-            "createdAt": 1674595998073
+            "createdAt": 1676750776086
         }
     ]
 }

@@ -37,7 +37,7 @@ describe("Edit Item", () => {
             // Detail fields
             cy.dataCy("imageupload-imageFile-image").should("be.visible")
             cy.dataCy("textinput-source-input").should("have.value", editItem.source)
-            cy.dataCy("chiptextinput-tags-text-input").should("contain.text", editItem.tags)
+            cy.dataCy("chiptextinput-chip-0").should("contain", editItem.tags[0].name)
         })
 
         it("should edit item when fill fields", () => {
