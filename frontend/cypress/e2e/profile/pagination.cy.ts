@@ -75,15 +75,15 @@ describe("Pagination Profile", () => {
         })
 
         it("should show limited count of items when set limit", () => {
-            cy.dataCy("item-list-contribute").should("have.length", limit)
+            cy.dataCy("itemlistcontribute-wrapper").should("have.length", limit)
         })
 
         it("should have limit set when change page", () => {
             cy.dataCy("pagination-button-previous").click()
-            cy.dataCy("item-list-contribute").should("have.length", limit)
+            cy.dataCy("itemlistcontribute-wrapper").should("have.length", limit)
 
             cy.dataCy("pagination-button-next").click()
-            cy.dataCy("item-list-contribute").should("have.length", limit)
+            cy.dataCy("itemlistcontribute-wrapper").should("have.length", limit)
         })
     })
 })
