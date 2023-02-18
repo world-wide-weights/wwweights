@@ -47,14 +47,13 @@ export class ItemDeletedHandler implements IEventHandler<ItemDeletedEvent> {
     }
 
     await this.imageService.demoteImageInImageBackend(deletedItem?.image);
+    await this.sharedService.decrementGlobalItemCount();
 
     this.logger.log(
       `${ItemDeletedHandler.name} finished in ${
         performance.now() - deleteItemStartTime
       }`,
     );
-
-    this.sharedService.decrementGlobalItemCount();
   }
 
   async deleteItem(slug: string) {
