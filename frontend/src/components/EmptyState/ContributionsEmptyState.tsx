@@ -4,6 +4,7 @@ import { BaseEmptyState } from "./BaseEmptyState"
 
 /**
  * Empty State of Discover Page when no search results.
+ * @example <ContributionsEmptyState />
  */
 export const ContributionsEmptyState: React.FC = () => {
     return <BaseEmptyState datacy="contributions-empty-state" icon="volunteer_activism" headline="No contributions">

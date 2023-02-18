@@ -26,12 +26,11 @@ export const textSizes: { [K in Required<HeadlineProps>["level"]]: string } = {
 }
 
 /**
- * Custom Headline Component, to easy handle headlines with different level and adjustive styles
+ * Custom Headline Component, to easy handle headlines with different level and adjustive styles.
+ * @example <Headline level={1} size="text-2xl">Headline</Headline>
  */
 export const Headline: React.FC<HeadlineProps> = ({ level = 1, children, size, hasMargin = true, datacy, className = "" }) => {
     const CustomTag = `h${level}` as keyof JSX.IntrinsicElements
 
-    return (
-        <CustomTag datacy={datacy} className={`${size ?? textSizes[level]} font-bold ${hasMargin ? "mb-2 md:mb-4" : ""} ${className}`}>{children}</CustomTag>
-    )
+    return <CustomTag datacy={datacy} className={`${size ?? textSizes[level]} font-bold ${hasMargin ? "mb-2 md:mb-4" : ""} ${className}`}>{children}</CustomTag>
 }

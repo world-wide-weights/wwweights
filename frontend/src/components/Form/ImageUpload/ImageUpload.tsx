@@ -14,6 +14,7 @@ type ImageUploadProps = {
 
 /**
  * A drag and drop image upload component.
+ * @example <ImageUpload name="image" />
  */
 export const ImageUpload: React.FC<ImageUploadProps> = ({ name, filePath }) => {
     // Local States

@@ -22,7 +22,8 @@ type SearchHeaderProps = {
 }
 
 /**
- * Header with search and suggestions
+ * Header with search and suggestions.
+ * @example <SearchHeader />
  */
 export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "relevance", hasHeadline = true, hasRelatedTags = true }) => {
     const router = useRouter()
@@ -94,16 +95,20 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "
                 {hasHeadline && <Headline level={2} size="text-2xl md:text-3xl" className="text-center">How much weighs?</Headline>}
                 <Formik initialValues={initialQueryValues} onSubmit={submitForm}>
                     <Form>
+                        {/* Search */}
                         <div className="md:flex md:justify-center">
                             <div className="md:w-96">
                                 <Search />
                             </div>
                         </div>
+
+                        {/* Related Tags */}
                         {query !== "" && hasRelatedTags && (isLoadingRelatedTags ? <></> : <div datacy="search-header-tag-wrapper" className="whitespace-nowrap overflow-x-scroll md:whitespace-normal md:overflow-hidden">
                             {/* Only show tags not current searched (should not be the value in query field) */}
                             {relatedTags.map((relatedTag, index) => relatedTag.name !== query && <Chip datacy={`search-header-chip-${index}`} key={relatedTag.name} to={routes.weights.list({ sort, query: relatedTag.name })}>{relatedTag.name}</Chip>)}
                             <Chip to={routes.tags.list()}>All tags</Chip>
                         </div>)}
+
                         <AutoUpdateQueryField />
                     </Form>
                 </Formik>

@@ -11,6 +11,7 @@ export type ItemSourceProps = {
 
 /**
  * Renders the source of an item.
+ * @example <ItemSource name="Axe" weightString="ca. 200-300g" source="https://www.dndbeyond.com/equipment/axe" />
  */
 export const ItemSource: React.FC<ItemSourceProps> = ({ name, source, weightString }) => {
     const { sourceString, isUrl } = generateSourceString({ name, weightString, source })

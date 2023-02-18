@@ -90,6 +90,7 @@ export const compareTypes: { [key in CompareTypes]: CompareTypeProps } = {
 
 /**
  * Displays Stats for Compare weights with different items.
+ * @example <CompareCard type="penny" itemName="Pencil" weight={16} />
  */
 export const CompareCard: React.FC<CompareCardProps> = ({ type, itemName, weight }) => {
     // Local States

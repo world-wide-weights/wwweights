@@ -11,6 +11,7 @@ type IconProps = {
 
 /**
  * The `Icon` component is used to display a material icon.
+ * @example <Icon>add</Icon>
  */
 export const Icon: React.FC<IconProps> = ({ children, isFilled = false, datacy, className }) => <i datacy={datacy} style={isFilled ? {
     fontVariationSettings: "'FILL' 1"

@@ -32,12 +32,8 @@ export type ItemPreviewListProps = {
 }
 
 /**
- * Excerpt component for Item
- * 
- * Example:
- * ```tsx
- * <ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} heaviestWeight={{ value: 100, isCa: false }} imageUrl="https://via.placeholder.com/96.png" />
- * ```
+ * Excerpt component for Item for list view. Needs to have <ul> as parent.
+ * @example <ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} heaviestWeight={{ value: 100, isCa: false }} imageUrl="https://via.placeholder.com/96.png" />
  */
 export const ItemPreviewList: React.FC<ItemPreviewListProps> = ({ slug, name, weight, heaviestWeight, difference, selectedItem, disableLink, imageUrl, datacy, bgColor = "bg-white", }) => {
     const weightString = renderUnitIntoString(weight)

@@ -3,6 +3,11 @@ import { range } from "../utils/range"
 
 export const Ellipsis = "..."
 
+/**
+ * Build pagination service object with next, prev, and pages.
+ * @param paginationparams information about pagination
+ * @returns pagination service object
+ */
 export const paginationService = ({ totalItems, itemsPerPage, siblingCount, currentPage, baseRoute, defaultItemsPerPage, query, sort }: PaginationServiceParams): PaginationService => {
     const totalPageCount = getTotalPageCount(totalItems, itemsPerPage)
 
@@ -25,6 +30,11 @@ export const paginationService = ({ totalItems, itemsPerPage, siblingCount, curr
     }
 }
 
+/**
+ * Get array of pages and ellipsis for pagination.
+ * @param paginationdataparams information about pagination
+ * @returns array of pages and ellipsis
+ */
 export const paginationDataService = ({ totalPageCount, siblingCount, currentPage }: PaginationDataServiceParams): (number | typeof Ellipsis)[] => {
 
     // Pages count is determined as siblingCount + firstPage + lastPage + currentPage + 2*Ellipsis
@@ -69,6 +79,12 @@ export const paginationDataService = ({ totalPageCount, siblingCount, currentPag
     return []
 }
 
+/**
+ * Get total count of pages.
+ * @param totalItems in general
+ * @param itemsPerPage limit
+ * @returns number of pages
+ */
 export const getTotalPageCount = (totalItems: number, itemsPerPage: number): number => {
     if (itemsPerPage <= 0 || totalItems <= 0)
         return 0

@@ -17,6 +17,7 @@ type BaseErrorProps = {
 
 /**
  * Base Error Component, is used as a wrapper for errors like 404, 500,...
+ * @example <BaseError headline="404" />
  */
 export const BaseError: React.FC<BaseErrorProps> = ({ headline, children, backButtonTo = "/", backButtonText = "Back home", ctaContent }) => {
     return <>

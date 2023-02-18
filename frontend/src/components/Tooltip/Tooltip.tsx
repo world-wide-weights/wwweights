@@ -17,6 +17,7 @@ type TooltipProps = {
 
 /**
  * Wrap around Component and show tooltip when hover over it.
+ * @example <Tooltip content="Tooltip">Hover over me</Tooltip>
  */
 export const Tooltip: React.FC<TooltipProps> = ({ children, content, delay, wrapperClassname = "", position = "top", customMargin = "-40px" }) => {
     let timeout: NodeJS.Timeout

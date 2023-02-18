@@ -10,6 +10,7 @@ export type ProgressBarProps = {
 
 /**
  * Progress bar, can show range and ca.
+ * @example <ProgressBar progress={50} progressAdditional={25} isCa={true} />
  */
 export const ProgressBar: React.FC<ProgressBarProps> = ({ progress, progressAdditional = false, isCa = false }) => {
     return <div className="relative bg-gray-200 rounded-lg h-2 w-[100%]">

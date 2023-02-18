@@ -31,7 +31,8 @@ const sortDropdownOptions = [
 ]
 
 /** 
- * Sort Dropdown with sort logic
+ * Sort Dropdown with sort logic.
+ * @example <Sort />
  */
 export const Sort: React.FC<SortProps> = ({ sort, query }) => {
     const router = useRouter()

@@ -27,17 +27,14 @@ export type ItemPreviewGridProps = {
 }
 
 /**
- * Excerpt component for Item
- * s
- * Example:
- * ```tsx
- * <ItemPreviewGrid name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} imageUrl="https://via.placeholder.com/96.png" />
- * ```
+ * Excerpt component for Item as grid view.
+ * @example <ItemPreviewGrid name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} imageUrl="https://via.placeholder.com/96.png" />
  */
 export const ItemPreviewGrid: React.FC<ItemPreviewGridProps> = ({ slug, datacy, name, weight, imageUrl, bgColor = "bg-white" }) => {
     const weightString = renderUnitIntoString(weight)
 
     return <Link datacy={datacy} className={`flex items-center justify-between rounded-lg ${bgColor}  pl-5 pr-2 md:pr-3 py-2 md:py-3`} href={routes.weights.single(slug)}>
+        {/* Item name and string */}
         <div className="pr-3">
             <div className="flex flex-col">
                 <Tooltip content={name}>
@@ -48,6 +45,8 @@ export const ItemPreviewGrid: React.FC<ItemPreviewGridProps> = ({ slug, datacy, 
                 </Tooltip>
             </div>
         </div>
+
+        {/* Image */}
         {imageUrl && <Image datacy="itempreviewgrid-image" priority className="object-cover rounded-lg w-20 bg-white" alt={`Image of ${name}`} src={imageUrl} width={96} height={96} />}
     </Link>
 }

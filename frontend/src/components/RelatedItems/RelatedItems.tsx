@@ -13,12 +13,16 @@ type RelatedItemsProps = {
 
 /**
  * Display list of related items with one item highlighted.
+ * @example <RelatedItems item={item} relatedItems={relatedItems} />
  */
 export const RelatedItems: React.FC<RelatedItemsProps> = ({ relatedItems, item }) => {
     const { items, heaviestWeight } = getSortedItemsAndHeaviest([...relatedItems, item], "desc")
 
     return <>
+        {/* Headline */}
         <Headline level={4}>Related Items</Headline>
+
+        {/* Items */}
         <ul className="mb-5 md:mb-10">
             {items.map(relatedItem => {
                 const currentItem = relatedItem.name === item.name

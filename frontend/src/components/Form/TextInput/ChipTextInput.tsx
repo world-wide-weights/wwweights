@@ -16,8 +16,8 @@ type ChipTextInputProps = {
 }
 
 /**
- * Chip Text Input, can only be used with Formik
- * Text input with chips
+ * Text input with chips, can only be used with Formik.
+ * @example <ChipTextInput name="interests" labelText="Interests" helperText="Select all that apply" />
  */
 export const ChipTextInput: React.FC<ChipTextInputProps> = ({ name, labelRequired, labelText, helperText }) => {
 	const { values, errors } = useFormikContext<any>()

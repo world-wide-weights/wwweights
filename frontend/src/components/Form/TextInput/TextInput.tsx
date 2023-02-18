@@ -26,7 +26,8 @@ type TextInputProps = {
 } & React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
 
 /** 
- * Text Input, can only be used with Formik
+ * Text Input, can only be used with Formik.
+ * @example <TextInput name="email" labelText="Email" helperText="Enter your email" />
  */
 export const TextInput: React.FC<TextInputProps> = ({ name, labelText, labelRequired = false, helperText, type, icon, iconLink, noError = false, iconOnClick, iconButtonIsSubmit, ...restProps }) => {
     return (

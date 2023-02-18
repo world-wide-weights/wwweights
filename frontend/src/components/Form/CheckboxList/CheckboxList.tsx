@@ -14,7 +14,8 @@ type CheckboxProps = {
 }
 
 /**
- * Checkbox, can only be used with Formik
+ * Checkbox, can only be used with Formik.
+ * @example <CheckboxList name="interests" labelText="Interests" helperText="Select all that apply" options={[{ value: "1", label: "Option 1" }, { value: "2", label: "Option 2" }]} />
  */
 export const CheckboxList: React.FC<CheckboxProps> = ({ name, labelText, helperText, options }) => {
     return (

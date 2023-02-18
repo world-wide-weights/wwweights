@@ -22,7 +22,8 @@ type DropdownProps = {
 }
 
 /**
- * Dropdown, can only be used with Formik
+ * Dropdown, can only be used with Formik.
+ * @example <Dropdown name="interests" labelText="Interests" options={[{ value: "1", label: "Option 1" }, { value: "2", label: "Option 2" }]} />
  */
 export const Dropdown: React.FC<DropdownProps> = ({ name, placeholder, labelText, labelRequired, light = false, hasMargin = false, options }) => {
     const [isOpen, setIsOpen] = useState(false)

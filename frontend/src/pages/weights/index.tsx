@@ -45,7 +45,7 @@ type WeightsListProps = {
 }
 
 /** 
- * Discover Page, list all items, search results and single tags
+ * Discover Page, list all items, search results and statistics.
  */
 export default function WeightsList({ items, currentPage, totalItems, limit, query, sort, statistics }: InferGetServerSidePropsType<typeof getServerSideProps>) {
     // Strings

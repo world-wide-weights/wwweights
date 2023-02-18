@@ -19,14 +19,18 @@ type CardProps = {
 
 /**
  * Displays Card with an big icon left, values and descriptions
+ * @example <Card icon="home" value="Home" descriptionTop="Home" descriptionBottom="Home" />
  */
 export const Card: React.FC<CardProps> = ({ icon, descriptionTop, value, descriptionBottom, to, classNameWrapper = "" }) => {
     const CustomTag = to ? Link : "div"
 
     return <CustomTag href={to ?? "#"} className={`flex items-center bg-white rounded-lg py-4 px-6 ${classNameWrapper}`}>
+        {/* Icon */}
         <div className="flex items-center justify-center bg-blue-200 rounded-full w-14 h-14 min-w-[56px] mr-6">
             <Icon className="text-blue-700 text-3xl" isFilled>{icon}</Icon>
         </div>
+
+        {/* Value and descriptions */}
         <div>
             {descriptionTop && <Tooltip position="left" content={descriptionTop}>
                 <div className="font-medium text-gray-600 w-40 truncate break-words">{descriptionTop}</div>

@@ -69,9 +69,8 @@ const EditItem = () => {
     if (isLoadingEdit)
         return <SkeletonLoadingEdit />
 
-    if (!isAuthenticated || !item) {
+    if (!isAuthenticated || !item)
         return <Custom404 />
-    }
 
     if (error)
         return <Custom500 />

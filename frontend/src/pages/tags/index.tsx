@@ -22,12 +22,11 @@ type TagsListProps = {
 }
 
 /** 
- * Base List for tags 
+ * Base List for tags.
  */
 export default function TagsList({ tags, currentPage, totalItems, limit }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
     return (<>
-        {/* Meta Tags */}
         <Seo
             title={`All Tags${generatePageString(currentPage)}`}
             description={"Discover all tags in the world largest database about weights."}
@@ -37,7 +36,7 @@ export default function TagsList({ tags, currentPage, totalItems, limit }: Infer
             {/* Headline */}
             <Headline level={3}>All tags</Headline>
 
-            {/* tags */}
+            {/* Tags */}
             <div datacy="tags-list-container" className="flex flex-wrap pb-3">
                 {tags.map((tag) => <Tooltip key={tag.name} content={`${tag.count === 1 ? "Tag is used once" : `Tag is used ${tag.count} times`}.`}>
                     <Chip to={routes.tags.single(tag.name)}>{tag.name} ({tag.count})</Chip>

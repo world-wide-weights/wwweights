@@ -45,6 +45,7 @@ type CreateEditProps = {
 
 /**
  * Create new items on this page.
+ * @example <CreateEdit />
  */
 export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
     // Local state

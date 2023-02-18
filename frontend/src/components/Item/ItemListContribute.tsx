@@ -21,6 +21,7 @@ export type ItemListContributeProps = {
 
 /**
  * Item list for the profile contributions, set focus on headline and adds actions.
+ * @example <ItemListContribute name="Test" slug="test" weight={1} image="test.png" actions={<div>Actions</div>} />
  */
 export const ItemListContribute: React.FC<ItemListContributeProps> = ({ name, slug, weight, image, actions }) => {
     const weightString = renderUnitIntoString(weight)
