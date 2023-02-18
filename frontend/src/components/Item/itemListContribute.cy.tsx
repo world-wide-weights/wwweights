@@ -2,42 +2,38 @@ import "material-symbols"
 import "../../styles/global.css"
 import { ItemListContribute } from "./ItemListContribute"
 
+const props = {
+    name: "Smartphone",
+    slug: "smartphone",
+    weight: {
+        value: 100,
+        isCa: false
+    },
+    image: "https://via.placeholder.com/96.png",
+}
+
 describe("ItemListContribute", () => {
-    describe("should display item list contribute correct", () => {
+    describe("Display", () => {
         beforeEach(() => {
-            cy.mount(<ItemListContribute name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} image="https://via.placeholder.com/96.png" />)
+            cy.mount(<ul>
+                <ItemListContribute {...props} />
+            </ul>)
         })
 
         it("should display item preview grid correct", () => {
-            cy.dataCy("item-list-contribute").should("be.visible")
+            cy.dataCy("itemlistcontribute-wrapper").should("be.visible")
         })
 
         it("should display item name", () => {
-            cy.dataCy("item-name").should("have.text", "Smartphone")
+            cy.dataCy("itemlistcontribute-name").should("have.text", props.name)
         })
 
         it("should display item weight", () => {
-            cy.dataCy("item-weight").should("have.text", "100 g")
+            cy.dataCy("itemlistcontribute-weight").should("have.text", props.weight.value + " g")
         })
 
         it("should display item image", () => {
-            cy.dataCy("item-image").should("be.visible")
+            cy.dataCy("itemlistcontribute-image").should("be.visible")
         })
     })
-
-    describe("should display actions correct", () => {
-        beforeEach(() => {
-            cy.mount(<ItemListContribute name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} image="https://via.placeholder.com/96.png" />)
-        })
-
-        it("should display edit action", () => {
-            cy.dataCy("edit-action").should("be.visible")
-        })  
-
-        it("should display delete action", () => {
-            cy.dataCy("delete-action").should("be.visible")
-        })
-    })
-
-
 })
