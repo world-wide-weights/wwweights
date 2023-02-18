@@ -78,7 +78,7 @@ export const Footer: React.FC = () => {
 						<h6 className="font-bold text-lg text-blue-500">World Wide Weights</h6>
 					</Link>
 
-					<p className="text-gray-700 text-sm md:text-base mb-2">World largest database of weights! World Wide Weights is a community project to create a global database of weights.</p>
+					<p className="text-gray-700 text-sm md:text-base mb-2">World&apos;s largest database of weights! World Wide Weights is a community project to create a global database of weights.</p>
 
 					{/* Social Links */}
 					<div className="flex items-center gap-3 mb-4">
