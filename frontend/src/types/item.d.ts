@@ -52,3 +52,7 @@ export type EditItemDto = Partial<{
         pull: string[]
     }>
 }>
+
+export type DeleteItemDTO = {
+    reason: string
+}

@@ -1,4 +1,4 @@
-type StatisticsResponse = {
+export type StatisticsResponse = {
     count?: {
         itemsCreated?: number
         itemsUpdated?: number
@@ -12,4 +12,11 @@ type StatisticsResponse = {
         aditionalValueOnUpdate?: number
         itemsDeleted?: number
     }
+}
+
+export type Statistics = {
+    totalContributions: number
+    itemsCreated: number
+    itemsUpdated: number
+    itemsDeleted: number
 }

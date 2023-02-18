@@ -21,21 +21,11 @@ import { authRequest, commandRequest, queryClientRequest } from "../../services/
 import { routes } from "../../services/routes/routes"
 import { getImageUrl } from "../../services/utils/getImageUrl"
 import { UserProfile } from "../../types/auth"
-import { Item } from "../../types/item"
+import { DeleteItemDTO, Item } from "../../types/item"
 import { PaginatedResponse } from "../../types/pagination"
+import { Statistics, StatisticsResponse } from "../../types/profile"
 import Custom500 from "../500"
 import { NextPageCustomProps } from "../_app"
-
-type Statistics = {
-    totalContributions: number
-    itemsCreated: number
-    itemsUpdated: number
-    itemsDeleted: number
-}
-
-type DeleteItemDTO = {
-    reason: string
-}
 
 const DEFAULT_PAGE = 1
 const DEFAULT_LIMIT = 6
