@@ -3,6 +3,7 @@ import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { EditSuggestion } from '../../models/edit-suggestion.model';
+import { SharedService } from '../../shared/shared.service';
 import { ImagesService } from '../services/images.service';
 import { ItemEditSuggestedEvent } from './item-edit-suggested.event';
 
@@ -14,6 +15,7 @@ export class ItemEditSuggestedHandler
   constructor(
     @InjectModel(EditSuggestion)
     private readonly suggestionModel: ReturnModelType<typeof EditSuggestion>,
+    private readonly sharedService: SharedService,
     private readonly imageService: ImagesService,
   ) {}
   async handle({ editSuggestion }: ItemEditSuggestedEvent) {
@@ -46,6 +48,8 @@ export class ItemEditSuggestedHandler
         performance.now() - insertSuggestionStartTime
       } ms`,
     );
+
+    this.sharedService.incrementGlobalSuggestionCount();
   }
 
   // Db calls: 1 save()

@@ -1,6 +1,6 @@
 import { ApiResponseProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { Tag } from './tag.model';
+import { Tag } from '../../models/tag.model';
 
 export class TagWithRelevance extends Tag {
   @Expose()

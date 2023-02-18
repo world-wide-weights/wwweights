@@ -3,12 +3,12 @@ import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { ItemSortEnum } from '../../items/interfaces/item-sort-enum';
-import { Item } from '../../items/models/item.model';
+import { Item } from '../../models/item.model';
 import { getFilter } from '../../shared/functions/get-filter';
 import { getSort } from '../../shared/functions/get-sort';
 import { DataWithCount } from '../../shared/interfaces/data-with-count';
 import { PaginatedResponse } from '../../shared/interfaces/paginated-result';
-import { TagWithRelevance } from '../models/tag-with-relevance';
+import { TagWithRelevance } from '../interfaces/tag-with-relevance';
 import { TagRelatedQuery } from './related-tags.query';
 
 @QueryHandler(TagRelatedQuery)

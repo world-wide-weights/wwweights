@@ -1,31 +1,41 @@
 import "material-symbols"
 import "../../styles/global.css"
-import { ItemPreviewList } from "./ItemPreviewList"
+import { ItemPreviewList, ItemPreviewListProps } from "./ItemPreviewList"
+
+const props: ItemPreviewListProps = {
+    name: "Smartphone",
+    slug: "smartphone",
+    weight: {
+        value: 100,
+        isCa: false
+    },
+    imageUrl: "https://via.placeholder.com/96.png",
+    heaviestWeight: {
+        value: 100,
+        isCa: false
+    }
+}
 
 describe("ItemPreviewList", () => {
     describe("should display item preview list", () => {
         beforeEach(() => {
-            cy.mount(<ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} heaviestWeight={{ value: 100, isCa: false }} imageUrl="https://via.placeholder.com/96.png" datacy="item-preview-list" />)
-        })
-
-        it("should display item preview list correct", () => {
-            cy.dataCy("item-preview-list").should("be.visible")
+            cy.mount(<ItemPreviewList {...props} />)
         })
 
         it("should display item name", () => {
-            cy.dataCy("item-name").should("have.text", "Smartphone")
+            cy.dataCy("itempreviewlist-name").should("have.text", props.name)
         })
 
         it("should display item weight", () => {
-            cy.dataCy("item-weight").should("have.text", "100 g")
+            cy.dataCy("itempreviewlist-weight").should("have.text", props.weight.value + " g")
         })
 
         it("should display item image", () => {
-            cy.dataCy("item-image").should("be.visible")
+            cy.dataCy("itempreviewlist-image").should("be.visible")
         })
 
         it("should not display weight difference", () => {
-            cy.dataCy("div-difference").should("not.exist")
+            cy.dataCy("itempreviewlist-difference").should("not.exist")
         })
 
         it("should display progressbar", () => {
@@ -38,38 +48,52 @@ describe("ItemPreviewList", () => {
     })
 
     describe("should display item preview list correct with weight difference", () => {
-        it("should display weight difference", () => {
-            cy.mount(<ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} heaviestWeight={{ value: 200, isCa: false }} imageUrl="https://via.placeholder.com/96.png" difference={50} />)
+        const propsDifference = {
+            name: "Smartphone",
+            slug: "smartphone",
+            weight: {
+                value: 50,
+                isCa: false
+            },
+            imageUrl: "https://via.placeholder.com/96.png",
+            heaviestWeight: {
+                value: 100,
+                isCa: false
+            }
+        }
 
-            cy.dataCy("div-difference").should("be.visible")
+        it("should display weight difference", () => {
+            cy.mount(<ItemPreviewList {...propsDifference} difference={50} />)
+
+            cy.dataCy("itempreviewlist-difference").should("be.visible")
         })
 
         it("should display weight lower difference correct", () => {
-            cy.mount(<ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} heaviestWeight={{ value: 200, isCa: false }} imageUrl="https://via.placeholder.com/96.png" difference={-50} />)
+            cy.mount(<ItemPreviewList {...propsDifference} difference={-50} />)
 
-            cy.dataCy("div-difference").should("be.visible")
-            cy.dataCy("div-difference").should("have.class", "text-red-500")
+            cy.dataCy("itempreviewlist-difference").should("be.visible")
+            cy.dataCy("itempreviewlist-difference").should("have.class", "text-red-500")
             cy.dataCy("arrow-icon").should("have.text", "arrow_downward")
         })
 
         it("should display weight higher difference correct", () => {
-            cy.mount(<ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} heaviestWeight={{ value: 200, isCa: false }} imageUrl="https://via.placeholder.com/96.png" difference={50} />)
+            cy.mount(<ItemPreviewList {...propsDifference} difference={50} />)
 
-            cy.dataCy("div-difference").should("be.visible")
-            cy.dataCy("div-difference").should("have.class", "text-green-500")
+            cy.dataCy("itempreviewlist-difference").should("be.visible")
+            cy.dataCy("itempreviewlist-difference").should("have.class", "text-green-500")
             cy.dataCy("arrow-icon").should("have.text", "arrow_upward")
         })
 
         it("should display weight difference is 0 correct", () => {
-            cy.mount(<ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} heaviestWeight={{ value: 200, isCa: false }} imageUrl="https://via.placeholder.com/96.png" difference={0} />)
+            cy.mount(<ItemPreviewList {...propsDifference} difference={0} />)
 
-            cy.dataCy("div-difference").should("be.visible")
-            cy.dataCy("div-difference").should("have.class", "text-gray-500")
+            cy.dataCy("itempreviewlist-difference").should("be.visible")
+            cy.dataCy("itempreviewlist-difference").should("have.class", "text-gray-500")
             cy.dataCy("arrow-icon").should("have.text", "remove")
         })
 
         it("should display right percentage of progressbar", () => {
-            cy.mount(<ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} heaviestWeight={{ value: 200, isCa: false }} imageUrl="https://via.placeholder.com/96.png" difference={50} />)
+            cy.mount(<ItemPreviewList {...propsDifference} difference={50} />)
 
             cy.dataCy("progressbar-progress").should("have.attr", "style", "width: 50%;")
         })
@@ -77,24 +101,24 @@ describe("ItemPreviewList", () => {
 
     describe("should display selected item correct", () => {
         beforeEach(() => {
-            cy.mount(<ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} heaviestWeight={{ value: 100, isCa: false }} imageUrl="https://via.placeholder.com/96.png" selectedItem />)
+            cy.mount(<ItemPreviewList {...props} selectedItem />)
         })
 
         it("should display bold font", () => {
-            cy.dataCy("item-name").should("have.class", "font-bold")
+            cy.dataCy("itempreviewlist-name").should("have.class", "font-bold")
         })
 
         it("should display item weight blue", () => {
-            cy.dataCy("item-weight").should("have.class", "text-blue-500")
+            cy.dataCy("itempreviewlist-weight").should("have.class", "text-blue-500")
         })
     })
 
     describe("should disable link", () => {
         it("should disable link", () => {
-            cy.mount(<ItemPreviewList name="Smartphone" slug="smartphone" weight={{ value: 100, isCa: false }} heaviestWeight={{ value: 100, isCa: false }} imageUrl="https://via.placeholder.com/96.png" datacy="item-preview-list" disableLink />)
+            cy.mount(<ItemPreviewList {...props} disableLink datacy="itempreviewlist-wrapper" />)
 
-            cy.dataCy("item-preview-list").invoke("attr", "href").should("eq", "#")
-            cy.dataCy("item-preview-list").should("have.class", "cursor-default")
+            cy.dataCy("itempreviewlist-wrapper").should("have.attr", "href", "#")
+            cy.dataCy("itempreviewlist-wrapper").should("have.class", "cursor-default")
         })
     })
 
