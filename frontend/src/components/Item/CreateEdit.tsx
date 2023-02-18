@@ -71,8 +71,8 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
 
     // Formik Form Validation
     const validationSchema: ObjectSchema<CreateEditItemForm> = object().shape({
-        name: string().required("Name is required."),
-        weight: mixed<"" | number>().required("Weight is required."),
+        name: string().min(2, "Please enter a name between 2 and 255 letters long.").max(255, "Please enter a name between 2 and 255 letters long.").required("Name is required."),
+        weight: mixed<"" | number>().test("Number positive", "Weight must be positive. Please enter a value greater than zero.", value => value ? value > 0 : false).required("Weight is required."),
         unit: string().oneOf(unitTypeDropdownOptions.map(unit => unit.value)).required(),
         valueType: string().oneOf(["exact", "range"]).required(),
         additionalValue: number().when("valueType", {
