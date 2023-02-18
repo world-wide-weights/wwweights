@@ -4,8 +4,11 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UserService } from '../../db/services/user.service';
 import { STATUS } from '../../shared/enums/status.enum';
-import { RefreshJWTPayload } from '../dtos/refresh-jwt-payload.dto';
+import { RefreshJWTPayload } from '../interfaces/refresh-jwt-payload.interface';
 
+/**
+ * @description Strategy for validating long living refresh tokens
+ */
 @Injectable()
 export class RefreshTokenStrategy extends PassportStrategy(
   Strategy,

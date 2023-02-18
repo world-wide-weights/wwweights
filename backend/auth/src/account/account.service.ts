@@ -8,8 +8,11 @@ export class AccountService {
     private readonly imageUserLookupService: ImageUserLookupService,
   ) {}
 
-  async addImageToUser(id: number, imageHash: string) {
-    this.logger.debug('Adding entry for user <-> image');
+  /**
+   * @description Link an image to a user within the database
+   */
+  async addImageToUser(id: number, imageHash: string): Promise<void> {
+    this.logger.log('Adding entry for user <-> image');
     await this.imageUserLookupService.addHashToUser(id, imageHash);
   }
 }

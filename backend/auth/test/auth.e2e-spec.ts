@@ -7,16 +7,16 @@ import * as jwkToPem from 'jwk-to-pem';
 import * as request from 'supertest';
 import { DataSource } from 'typeorm';
 import { AppModule } from '../src/app.module';
-import { RefreshJWTPayload } from '../src/auth/dtos/refresh-jwt-payload.dto';
+import { RefreshJWTPayload } from '../src/auth/interfaces/refresh-jwt-payload.interface';
 import { RsaJWK } from '../src/auth/responses/jwks.response';
 import { UserService } from '../src/db/services/user.service';
-import { JWTPayload } from '../src/shared/dtos/jwt-payload.dto';
+import { JWTPayload } from '../src/shared/interfaces/jwt-payload.interface';
 import { STATUS } from '../src/shared/enums/status.enum';
 import {
   createUser,
-  deleteByAttribute,
+  deleteUserByAttribute,
   getUserByAttribute,
-  updateByAttribute,
+  updateUserByAttribute,
 } from './helpers/db.helper';
 import { comparePassword } from './helpers/general.helper';
 import { SAMPLE_USER } from './helpers/sample-data.helper';
@@ -142,7 +142,10 @@ describe('AuthController (e2e)', () => {
 
       it('should fail for duplicate email', async () => {
         // ARRANGE
-        await createUser(dataSource, { email: SAMPLE_USER.email, ...SAMPLE_USER });
+        await createUser(dataSource, {
+          email: SAMPLE_USER.email,
+          ...SAMPLE_USER,
+        });
         // ACT
         const res = await request(app.getHttpServer())
           .post('/auth/register')
@@ -154,7 +157,10 @@ describe('AuthController (e2e)', () => {
 
       it('should fail for duplicate username', async () => {
         // ARRANGE
-        await createUser(dataSource, { username: SAMPLE_USER.username, ...SAMPLE_USER });
+        await createUser(dataSource, {
+          username: SAMPLE_USER.username,
+          ...SAMPLE_USER,
+        });
         // ACT
         const res = await request(app.getHttpServer())
           .post('/auth/register')
@@ -256,6 +262,18 @@ describe('AuthController (e2e)', () => {
         // ASSERT
         expect(res.statusCode).toEqual(HttpStatus.UNAUTHORIZED);
       });
+
+      it('Should fail for non existing user', async () => {
+        // ACT
+        const res = await request(app.getHttpServer())
+          .post('/auth/login')
+          .send({
+            password: SAMPLE_USER.password,
+            email: SAMPLE_USER.email,
+          });
+        // ASSERT
+        expect(res.statusCode).toEqual(HttpStatus.UNAUTHORIZED);
+      });
     });
   });
 
@@ -293,7 +311,7 @@ describe('AuthController (e2e)', () => {
 
       it('should fail to auth for non existant user', async () => {
         // ARRANGE
-        await deleteByAttribute(dataSource, { email: SAMPLE_USER.email });
+        await deleteUserByAttribute(dataSource, { email: SAMPLE_USER.email });
         // ACT
         const res = await request(app.getHttpServer())
           .post('/auth/refresh')
@@ -304,7 +322,7 @@ describe('AuthController (e2e)', () => {
 
       it('should fail to auth for banned user', async () => {
         // ARRANGE
-        await updateByAttribute(
+        await updateUserByAttribute(
           dataSource,
           { email: SAMPLE_USER.email },
           { status: STATUS.BANNED },

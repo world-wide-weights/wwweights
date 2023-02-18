@@ -7,7 +7,7 @@ import { DataSource } from 'typeorm';
 import { AppModule } from '../src/app.module';
 import { AuthService } from '../src/auth/auth.service';
 import { UserService } from '../src/db/services/user.service';
-import { createUser, deleteByAttribute } from './helpers/db.helper';
+import { createUser, deleteUserByAttribute } from './helpers/db.helper';
 import { SAMPLE_USER } from './helpers/sample-data.helper';
 import { setupDataSource } from './helpers/typeOrmSetup';
 
@@ -53,7 +53,7 @@ describe('ProfilesController (e2e)', () => {
       jwtToken = (await authService.getAuthPayload(user)).access_token;
     });
     afterEach(async () => {
-      await deleteByAttribute(dataSource, { pkUserId: user.pkUserId });
+      await deleteUserByAttribute(dataSource, { pkUserId: user.pkUserId });
     });
     describe('Positive Tests', () => {
       it('Should return current logged in users profile', async () => {
@@ -110,7 +110,7 @@ describe('ProfilesController (e2e)', () => {
       jwtToken = (await authService.getAuthPayload(loggedInUser)).access_token;
     });
     afterEach(async () => {
-      await deleteByAttribute(dataSource, { pkUserId: user.pkUserId });
+      await deleteUserByAttribute(dataSource, { pkUserId: user.pkUserId });
     });
 
     describe('Positive Tests', () => {
