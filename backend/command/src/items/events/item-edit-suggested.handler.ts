@@ -5,6 +5,7 @@ import { ReturnModelType } from '@typegoose/typegoose';
 import { EditSuggestion } from '../../models/edit-suggestion.model';
 import { Item } from '../../models/item.model';
 import { Tag } from '../../models/tag.model';
+import { SharedService } from '../../shared/shared.service';
 import { ItemEditSuggestedEvent } from './item-edit-suggested.event';
 
 @EventsHandler(ItemEditSuggestedEvent)
@@ -19,6 +20,7 @@ export class ItemEditSuggestedHandler
     private readonly itemModel: ReturnModelType<typeof Item>,
     @InjectModel(Tag)
     private readonly tagModel: ReturnModelType<typeof Tag>,
+    private readonly sharedService: SharedService,
   ) {}
   async handle({ editSuggestion }: ItemEditSuggestedEvent) {
     // Performance
@@ -36,6 +38,8 @@ export class ItemEditSuggestedHandler
         performance.now() - insertSuggestionStartTime
       } ms`,
     );
+
+    this.sharedService.incrementGlobalSuggestionCount();
   }
 
   // Db calls: 1 save()

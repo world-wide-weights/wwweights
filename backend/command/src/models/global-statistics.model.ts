@@ -5,7 +5,7 @@ export class GlobalStatistics {
   totalItems: number;
 
   @prop()
-  totalContributions: number;
+  totalSuggestions: number;
 
   constructor(Partial: Partial<GlobalStatistics>) {
     Object.assign(this, Partial);

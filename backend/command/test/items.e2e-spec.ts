@@ -5,6 +5,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { randomUUID } from 'crypto';
 import { Model } from 'mongoose';
 import * as request from 'supertest';
+import { setTimeout } from 'timers/promises';
 import { ALLOWED_EVENT_ENTITIES } from '../src/eventstore/enums/allowedEntities.enum';
 import { EventStore } from '../src/eventstore/eventstore';
 import { EventStoreModule } from '../src/eventstore/eventstore.module';
@@ -14,6 +15,7 @@ import { ItemCronJobHandler } from '../src/items/cron/items.cron';
 import { ItemsModule } from '../src/items/items.module';
 import { DeleteSuggestion } from '../src/models/delete-suggestion.model';
 import { EditSuggestion } from '../src/models/edit-suggestion.model';
+import { GlobalStatistics } from '../src/models/global-statistics.model';
 import { Item } from '../src/models/item.model';
 import { Profile } from '../src/models/profile.model';
 import { Tag } from '../src/models/tag.model';
@@ -45,6 +47,8 @@ describe('ItemsController (e2e)', () => {
   let editSuggestionModel: Model<EditSuggestion>;
   let profileModel: Model<Profile>;
   let deleteSuggestionModel: Model<DeleteSuggestion>;
+  let globalStatisticsModel: Model<GlobalStatistics>;
+
   const mockEventStore: MockEventStore = new MockEventStore();
   let itemCronJobHandler: ItemCronJobHandler;
   let server: any; // Has to be any because of supertest not having a type for it either
@@ -85,6 +89,7 @@ describe('ItemsController (e2e)', () => {
     editSuggestionModel = moduleFixture.get('EditSuggestionModel');
     profileModel = moduleFixture.get('ProfileModel');
     deleteSuggestionModel = moduleFixture.get('DeleteSuggestionModel');
+    globalStatisticsModel = moduleFixture.get('GlobalStatisticsModel');
 
     app.setGlobalPrefix('commands/v1');
     await app.init();
@@ -106,6 +111,8 @@ describe('ItemsController (e2e)', () => {
     await tagModel.deleteMany();
     await editSuggestionModel.deleteMany();
     await profileModel.deleteMany();
+    await deleteSuggestionModel.deleteMany();
+    await globalStatisticsModel.deleteMany();
   });
 
   afterAll(async () => {
@@ -115,6 +122,8 @@ describe('ItemsController (e2e)', () => {
   });
 
   const commandsPath = '/commands/v1/';
+  const itemInsertPath = 'items/insert';
+  const itemBulkInsertPath = 'items/bulk-insert';
 
   describe('Commands (POSTS) /commands/v1', () => {
     it('items/insert => insert one Item should fail with auth false', async () => {
@@ -127,7 +136,7 @@ describe('ItemsController (e2e)', () => {
 
     it('items/insert => insert one Item', async () => {
       await request(server)
-        .post(commandsPath + 'items/insert')
+        .post(commandsPath + itemInsertPath)
         .send(insertItem)
         .expect(HttpStatus.OK);
 
@@ -150,14 +159,14 @@ describe('ItemsController (e2e)', () => {
 
     it('items/insert => insert two Items', async () => {
       await request(server)
-        .post(commandsPath + 'items/insert')
+        .post(commandsPath + itemInsertPath)
         .send(insertItem2)
         .expect(HttpStatus.OK);
 
       await retryCallback(async () => (await itemModel.count()) === 1);
 
       await request(server)
-        .post(commandsPath + 'items/insert')
+        .post(commandsPath + itemInsertPath)
         .send(insertItem)
         .expect(HttpStatus.OK);
 
@@ -182,12 +191,12 @@ describe('ItemsController (e2e)', () => {
 
     it('items/insert => insert duplicate Items', async () => {
       await request(server)
-        .post(commandsPath + 'items/insert')
+        .post(commandsPath + itemInsertPath)
         .send({ ...insertItem, name: 'This should be in an error message' })
         .expect(HttpStatus.OK);
 
       await request(server)
-        .post(commandsPath + 'items/insert')
+        .post(commandsPath + itemInsertPath)
         .send({ ...insertItem, name: 'This should be in an error message' })
         .expect(HttpStatus.CONFLICT);
 
@@ -198,7 +207,7 @@ describe('ItemsController (e2e)', () => {
     it('items/insert => insert Items in quick succession', async () => {
       itemsWithDifferentNames.forEach(async (name) => {
         await request(server)
-          .post(commandsPath + 'items/insert')
+          .post(commandsPath + itemInsertPath)
           .send({ ...insertItem2, name })
           .expect(HttpStatus.OK);
       });
@@ -217,7 +226,7 @@ describe('ItemsController (e2e)', () => {
 
     it('items/insert => increment profile counts', async () => {
       await request(server)
-        .post(commandsPath + 'items/insert')
+        .post(commandsPath + itemInsertPath)
         .send(insertItem)
         .expect(HttpStatus.OK);
 
@@ -498,7 +507,7 @@ describe('ItemsController (e2e)', () => {
     it('items/bulk-insert => Should be hidden if env guard fails', async () => {
       // ACT
       const res = await request(server)
-        .post(commandsPath + 'items/bulk-insert')
+        .post(commandsPath + itemBulkInsertPath)
         .send(testData.slice(0, 5));
       // ASSERT
       expect(res.status).toEqual(HttpStatus.NOT_FOUND);
@@ -510,7 +519,7 @@ describe('ItemsController (e2e)', () => {
       const data = testData.slice(0, 5);
       // ACT
       const res = await request(server)
-        .post(commandsPath + 'items/bulk-insert')
+        .post(commandsPath + itemBulkInsertPath)
         .send(data);
       // ASSERT
       expect(res.status).toEqual(HttpStatus.OK);
@@ -529,7 +538,7 @@ describe('ItemsController (e2e)', () => {
         .map((e) => ({ ...e, userId: userId }));
       // ACT
       const res = await request(server)
-        .post(commandsPath + 'items/bulk-insert')
+        .post(commandsPath + itemBulkInsertPath)
         .send(insertItems);
       // ASSERT
       expect(res.status).toEqual(HttpStatus.OK);
@@ -547,7 +556,7 @@ describe('ItemsController (e2e)', () => {
       const data = testData.slice(0, 5);
       // ACT
       const res = await request(server)
-        .post(commandsPath + 'items/bulk-insert')
+        .post(commandsPath + itemBulkInsertPath)
         .send(data);
       // ASSERT
       expect(res.status).toEqual(HttpStatus.OK);
@@ -624,6 +633,79 @@ describe('ItemsController (e2e)', () => {
       // ASSERT
       const tags = await tagModel.find({});
       expect(tags.length).toEqual(singleItemTags.length);
+    });
+  });
+
+  describe('globalStatistics (CRON)', () => {
+    it('Should increment totalItems count on item insert', async () => {
+      await request(server)
+        .post(commandsPath + itemInsertPath)
+        .send(insertItem)
+        .expect(HttpStatus.OK);
+
+      await retryCallback(
+        async () => (await globalStatisticsModel.count()) !== 0,
+      );
+
+      expect((await globalStatisticsModel.findOne()).totalItems).toEqual(1);
+    });
+
+    it('Should increment totalSuggestions count on item edit suggest', async () => {
+      const item = new itemModel(singleItem);
+      await item.save();
+      mockEventStore.existingStreams = [
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      ];
+
+      const globalStatistic = new globalStatisticsModel({
+        totalItems: 1,
+        totalSuggestions: 0,
+      });
+      await globalStatistic.save();
+
+      await request(server)
+        .post(commandsPath + `items/${encodeURI(item.slug)}/suggest/edit`)
+        .send({ name: 'smthelse' });
+
+      await retryCallback(
+        async () => (await editSuggestionModel.count()) !== 0,
+      );
+
+      expect((await globalStatisticsModel.findOne()).totalSuggestions).toEqual(
+        1,
+      );
+    });
+
+    it.only('Should increment totalSuggestions count and decrement itemCount on item delete suggest', async () => {
+      const item = new itemModel(singleItem);
+      await item.save();
+      mockEventStore.existingStreams = [
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      ];
+
+      const globalStatistic = new globalStatisticsModel({
+        totalItems: 2,
+        totalSuggestions: 0,
+      });
+      await globalStatistic.save();
+
+      await request(server)
+        .post(commandsPath + `items/${item.slug}/suggest/delete`)
+        .send({ reason: 'test' });
+
+      await retryCallback(
+        async () => (await deleteSuggestionModel.count()) !== 0,
+      );
+
+      await setTimeout(1000);
+      console.log(await globalStatisticsModel.find());
+      await retryCallback(
+        async () => (await globalStatisticsModel.findOne())?.totalItems !== 2,
+      );
+
+      const globalStatistics = await globalStatisticsModel.findOne();
+      expect(globalStatistics.totalSuggestions).toEqual(1);
+      expect(globalStatistics.totalItems).toEqual(1);
     });
   });
 });

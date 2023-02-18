@@ -4,6 +4,7 @@ import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { Item } from '../../models/item.model';
 import { Tag } from '../../models/tag.model';
+import { SharedService } from '../../shared/shared.service';
 import { ItemDeletedEvent } from './item-deleted.event';
 
 @EventsHandler(ItemDeletedEvent)
@@ -14,6 +15,7 @@ export class ItemDeletedHandler implements IEventHandler<ItemDeletedEvent> {
     private readonly itemModel: ReturnModelType<typeof Item>,
     @InjectModel(Tag)
     private readonly tagModel: ReturnModelType<typeof Tag>,
+    private readonly sharedService: SharedService,
   ) {}
   async handle({ itemDeletedEventDto }: ItemDeletedEvent) {
     const { itemSlug } = itemDeletedEventDto;
@@ -54,6 +56,8 @@ export class ItemDeletedHandler implements IEventHandler<ItemDeletedEvent> {
         performance.now() - deleteItemStartTime
       }`,
     );
+
+    this.sharedService.decrementGlobalItemCount();
   }
 
   async deleteItem(slug: string) {

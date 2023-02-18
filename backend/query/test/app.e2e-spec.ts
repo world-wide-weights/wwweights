@@ -4,19 +4,15 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
 import * as request from 'supertest';
 import { AppController } from '../src/app.controller';
-import { EditSuggestion } from '../src/models/edit-suggestion.model';
-import { Item } from '../src/models/item.model';
+import { GlobalStatistics } from '../src/models/global-statistics.model';
 import {
   initializeMockModule,
   teardownMockDataSource,
 } from './helpers/MongoMemoryHelpers';
-import { items } from './mocks/items';
-import { suggestions } from './mocks/suggestions';
 
 describe('QueryController (e2e)', () => {
   let app: INestApplication;
-  let itemModel: Model<Item>;
-  let editSuggestionModel: Model<EditSuggestion>;
+  let globalStatisticsModel: Model<GlobalStatistics>;
   let server: any; // Has to be any because of supertest not having a type for it either
 
   beforeAll(async () => {
@@ -24,7 +20,7 @@ describe('QueryController (e2e)', () => {
       // Importing everything here because it was the most straightforward way found to prevent the openHandlesIssue
       imports: [
         initializeMockModule(),
-        TypegooseModule.forFeature([EditSuggestion, Item]),
+        TypegooseModule.forFeature([GlobalStatistics]),
       ],
       controllers: [AppController],
     }).compile();
@@ -38,8 +34,7 @@ describe('QueryController (e2e)', () => {
       }),
     );
 
-    itemModel = moduleFixture.get('ItemModel');
-    editSuggestionModel = moduleFixture.get('EditSuggestionModel');
+    globalStatisticsModel = moduleFixture.get('GlobalStatisticsModel');
 
     app.setGlobalPrefix('queries/v1');
     await app.init();
@@ -47,10 +42,7 @@ describe('QueryController (e2e)', () => {
   });
 
   beforeEach(async () => {
-    await itemModel.deleteMany();
-    await editSuggestionModel.deleteMany();
-    await itemModel.insertMany(items);
-    await editSuggestionModel.insertMany(suggestions);
+    await globalStatisticsModel.deleteMany();
   });
 
   afterAll(async () => {
@@ -63,16 +55,24 @@ describe('QueryController (e2e)', () => {
     const queriesPath = '/queries/v1/';
 
     describe('statistics', () => {
-      const subPath = 'statistics';
+      const statisticsPath = 'statistics';
 
       it('should return a GlobalStatistics object', async () => {
+        // The upsert is in create item because there can't be suggestions without items so we have to create it in the query tests
+
+        const globalStatistic = new globalStatisticsModel({
+          totalItems: 1,
+          totalSuggestions: 1,
+        });
+        await globalStatistic.save();
+
         const result = await request(server)
-          .get(queriesPath + subPath)
+          .get(queriesPath + statisticsPath)
           .expect(HttpStatus.OK);
 
-        expect(result.body.totalItems).toBe(items.length);
+        expect(result.body.totalItems).toBe(globalStatistic.totalItems);
         expect(result.body.totalContributions).toBe(
-          items.length + suggestions.length,
+          globalStatistic.totalItems + globalStatistic.totalSuggestions,
         );
       });
     });

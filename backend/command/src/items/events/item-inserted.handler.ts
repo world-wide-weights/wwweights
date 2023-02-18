@@ -5,6 +5,7 @@ import { ReturnModelType } from '@typegoose/typegoose';
 import { Item } from '../../models/item.model';
 import { Profile } from '../../models/profile.model';
 import { Tag } from '../../models/tag.model';
+import { SharedService } from '../../shared/shared.service';
 import { ItemInsertedEvent } from './item-inserted.event';
 
 @EventsHandler(ItemInsertedEvent)
@@ -17,6 +18,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
     private readonly tagModel: ReturnModelType<typeof Tag>,
     @InjectModel(Profile)
     private readonly profileModel: ReturnModelType<typeof Profile>,
+    private readonly sharedService: SharedService,
   ) {}
   async handle({ item }: ItemInsertedEvent) {
     /*
@@ -57,6 +59,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
     } catch (error) {
       this.logger.error(`ItemInsertedHandler TopLevel caught error: ${error}`);
     }
+    this.sharedService.incrementGlobalItemCount();
   }
 
   // Db calls: 1 save()
