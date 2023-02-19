@@ -21,7 +21,7 @@ export class ProfileStatisticsHandler
   ) {}
 
   async execute({
-    dto,
+    userId,
   }: ProfileStatisticsQuery): Promise<
     { count: ProfileCounts } | Record<string, never>
   > {
@@ -29,9 +29,9 @@ export class ProfileStatisticsHandler
 
     try {
       const profileCounts = await this.profileModel
-        .findOne({ userId: dto.userId }, { _id: 0, count: 1 })
+        .findOne({ userId: userId }, { _id: 0, count: 1 })
         .lean();
-      this.logger.log(`ProfileCounts retrieved for: ${dto.userId}`);
+      this.logger.log(`ProfileCounts retrieved for: ${userId}`);
 
       this.logger.debug(
         `Finished in ${performance.now() - profileStatisticsQueryStartTime} ms`,
