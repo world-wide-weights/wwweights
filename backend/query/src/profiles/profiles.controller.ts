@@ -14,8 +14,8 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { ProfileStatistics } from './interfaces/profile-statistics-response';
-import { QueryProfileStatisticsDto } from './interfaces/query-profile-statistics.dto';
+import { QueryProfileStatisticsDto } from './dtos/query-profile-statistics.dto';
+import { ProfileStatistics } from './interfaces/profile-statistics-response.interface';
 import { ProfileStatisticsQuery } from './queries/profile-statistics.query';
 
 @Controller('profiles')
