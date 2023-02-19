@@ -80,8 +80,8 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
             title={`${item.name} Weight`}
             description={`The weight of ${item.name} is ${weightString}. ${item.tags.length ? `Discover more weights with topics like ${item.tags.map(tag => tag.name).join(", ")}` : "Discover more weights in the world largest database about weights!"}.`}
             ogImage={item.image}
-            ogImageHeight={"512px"}
-            ogImageWidth={"512px"}
+            ogImageHeight="512px"
+            ogImageWidth="512px"
             ogImageDescription={`${item.name}`}
             twitterImage={item.image}
         />

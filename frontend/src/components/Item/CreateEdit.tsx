@@ -239,7 +239,7 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
                                     <ChipTextInput name="tags" labelText="Tags" helperText="Tags are seperated with commas." />
 
                                     {/* Image */}
-                                    <Label name="imageFile" labelText={"Image"} />
+                                    <Label name="imageFile" labelText="Image" />
                                     <ImageUpload name="imageFile" filePath={item?.image} />
 
                                     {/* Source */}

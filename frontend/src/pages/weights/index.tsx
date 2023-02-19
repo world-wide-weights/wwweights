@@ -67,7 +67,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                 query === "" ?
                     `Discover ${totalItems ? totalItems : ""} weights${generatePageString(currentPage)}` :
                     `${query} Weights${generatePageString(currentPage)}`}
-            description={"Get all the information you need about the weights of various objects, from smartphones to cars. Our advanced search and filter options make it easy to find the weight you're looking for."}
+            description="Get all the information you need about the weights of various objects, from smartphones to cars. Our advanced search and filter options make it easy to find the weight you're looking for."
             canonicalLink={router.asPath}
         />
 
@@ -114,7 +114,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                                 </div>}
 
                                 {/* Weights List View */}
-                                {viewType === "list" && <ul className={"grid md:gap-2 mb-5 md:mb-8"}>
+                                {viewType === "list" && <ul className="grid md:gap-2 mb-5 md:mb-8">
                                     {items.map((item) => <ItemPreviewList datacy="weights-list-item" key={item.slug} name={item.name} slug={item.slug} weight={item.weight} heaviestWeight={statistics.heaviest.weight} imageUrl={getImageUrl(item.image)} />)}
                                 </ul>}
                             </>}

@@ -18,7 +18,7 @@ describe("Chip", () => {
 
         it("should display correct color", () => {
             const color = "amber"
-            cy.mount(<Chip to="/" color={"amber"}>Test</Chip>)
+            cy.mount(<Chip to="/" color="amber">Test</Chip>)
 
             cy.get("a").should("have.class", `bg-${color}-500`)
             cy.get("a").should("have.class", `text-${color}-600`)
@@ -53,7 +53,7 @@ describe("Chip", () => {
 
         it("should display correct color", () => {
             const color = "amber"
-            cy.mount(<Chip onClick={() => ""} color={"amber"}>Test</Chip>)
+            cy.mount(<Chip onClick={() => ""} color="amber">Test</Chip>)
 
             cy.get("button").should("have.class", `bg-${color}-500`)
             cy.get("button").should("have.class", `text-${color}-600`)

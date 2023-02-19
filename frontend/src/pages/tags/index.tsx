@@ -30,7 +30,7 @@ export default function TagsList({ tags, currentPage, totalItems, limit }: Infer
     return (<>
         <Seo
             title={`All Tags${generatePageString(currentPage)}`}
-            description={"Discover all tags in the world largest database about weights."}
+            description="Discover all tags in the world largest database about weights."
         />
 
         <main className="container mt-5">
