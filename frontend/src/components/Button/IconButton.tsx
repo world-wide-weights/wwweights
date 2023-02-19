@@ -24,7 +24,8 @@ type IconButtonProps = {
 }
 
 /**
- * Button with an Icon
+ * Button only as Icon. Can be used as a link or with an onClick function.
+ * @example <IconButton icon="home" to="/home" />
  */
 export const IconButton: React.FC<IconButtonProps> = ({ icon, to, onClick, datacy, iconClassName = "", disabled = false, className = "", color = "gray", dimOpacityWhenDisabled = true }) => {
     const innerIcon = <Icon className={`${disabled && dimOpacityWhenDisabled ? "text-opacity-50 " : ""}text-${color}-600 ${iconClassName}`}>{icon}</Icon>

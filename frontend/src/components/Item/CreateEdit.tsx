@@ -1,14 +1,15 @@
-import axios from "axios"
 import BigNumber from "bignumber.js"
-import { Form, Formik, FormikProps } from "formik"
+import { Form, Formik, FormikHelpers, FormikProps } from "formik"
 import { useRouter } from "next/router"
 import { useContext, useState } from "react"
-import { array, mixed, number, object, ref, SchemaOf, string } from "yup"
+import { toast } from "react-toastify"
+import { array, mixed, number, object, ObjectSchema, ref, string } from "yup"
 import { createNewItemApi, prepareCreateItem } from "../../services/item/create"
 import { editItemApi, prepareEditItem } from "../../services/item/edit"
 import { uploadImageApi } from "../../services/item/image"
 import { routes } from "../../services/routes/routes"
 import { convertAnyWeightIntoGram } from "../../services/unit/unitConverter"
+import { errorHandling } from "../../services/utils/errorHandling"
 import { CreateEditItemForm, CreateItemDto, EditItemDto, Item } from "../../types/item"
 import { AuthContext } from "../Auth/Auth"
 import { Button } from "../Button/Button"
@@ -36,7 +37,7 @@ const unitTypeDropdownOptions = [
         value: "T",
         label: "T",
     },
-]
+] as const
 
 type CreateEditProps = {
     /** Item to edit. If undefined, a new item will be created. */
@@ -45,11 +46,11 @@ type CreateEditProps = {
 
 /**
  * Create new items on this page.
+ * @example <CreateEdit />
  */
 export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
     // Local state
     const [isOpenDetails, setIsOpenDetails] = useState<boolean>(false)
-    const [error, setError] = useState<string>()
 
     const router = useRouter()
     const { getSession } = useContext(AuthContext)
@@ -70,26 +71,26 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
     }
 
     // Formik Form Validation
-    const validationSchema: SchemaOf<CreateEditItemForm> = object().shape({
-        name: string().required("Name is required."),
-        weight: number().required("Weight is required."),
-        unit: mixed().oneOf(unitTypeDropdownOptions.map(option => option.value)),
-        valueType: mixed().oneOf(["exact", "range"]),
+    const validationSchema: ObjectSchema<CreateEditItemForm> = object().shape({
+        name: string().min(2, "Please enter a name between 2 and 255 letters long.").max(255, "Please enter a name between 2 and 255 letters long.").required("Name is required."),
+        weight: mixed<"" | number>().test("Number positive", "Weight must be positive. Please enter a value greater than zero.", value => value ? value > 0 : false).required("Weight is required."),
+        unit: string().oneOf(unitTypeDropdownOptions.map(unit => unit.value)).required(),
+        valueType: string().oneOf(["exact", "range"]).required(),
         additionalValue: number().when("valueType", {
             is: "range",
-            then: number().required("Additional value is required.").moreThan(ref("weight"), "Additional value must be greater than weight.")
+            then: (schema) => schema.required("Additional value is required.").moreThan(ref("weight"), "Additional value must be greater than weight.")
         }),
-        isCa: array().of(string()).notRequired(),
+        isCa: mixed<["isCa"] | []>().required(),
         source: string(),
-        imageFile: mixed().notRequired(),
-        tags: array().of(string().min(2).max(255)).notRequired(),
+        imageFile: mixed<File>().notRequired(),
+        tags: array().of(string().min(2).max(255).required()).optional(),
     })
 
     /**
      * Handle submit create item.
      * @param values input from form
      */
-    const onFormSubmit = async (values: CreateEditItemForm) => {
+    const onFormSubmit = async (values: CreateEditItemForm, { setFieldError }: FormikHelpers<CreateEditItemForm>) => {
         // Convert weight in g
         values.weight = convertAnyWeightIntoGram(new BigNumber(values.weight), values.unit).toNumber()
 
@@ -138,12 +139,18 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
             if (isEditMode && editItem)
                 response = await editItemApi(item?.slug, editItem, session)
 
+            toast.success("Thanks for contributing to World Wide Weights!")
+
             /** Redirect to discover */
             if (response?.status === 200)
                 await router.push(routes.account.profile())
         } catch (error) {
-            axios.isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Our servers are feeling a bit heavy today. Please try again in a few minutes.")
-            return
+            errorHandling(error, (error) => {
+                if (error.response?.status === 409) {
+                    setFieldError("name", "This name is already taken.")
+                    return true
+                }
+            })
         }
     }
 
@@ -151,7 +158,9 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
         <main className="mt-5 mb-5 md:mb-20">
             <div className="container">
                 {/* Headline */}
-                <Headline>{isEditMode ? `Edit ${item.name}` : "Create new item"}</Headline>
+                <Headline>{isEditMode ? <div className="w-[20rem] lg:w-[60rem] truncate">
+                    {`Edit ${item.name}`}
+                </div> : "Create new item"}</Headline>
             </div>
 
             {/* Content */}
@@ -257,11 +266,6 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
                     </Form>
                 )}
             </Formik>
-
-            {/* TODO (Zoe-Bot): Add correct error handling */}
-            <div className="container">
-                {error && <p className="text-red-500">{error}</p>}
-            </div>
         </main >
     </>
 }

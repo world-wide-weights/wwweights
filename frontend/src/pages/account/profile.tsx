@@ -1,8 +1,8 @@
-import { isAxiosError } from "axios"
 import { Form, Formik } from "formik"
 import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
-import { object, SchemaOf, string } from "yup"
+import { toast } from "react-toastify"
+import { object, ObjectSchema, string } from "yup"
 import { AuthContext } from "../../components/Auth/Auth"
 import { Button } from "../../components/Button/Button"
 import { IconButton } from "../../components/Button/IconButton"
@@ -19,23 +19,13 @@ import { Seo } from "../../components/Seo/Seo"
 import { Tooltip } from "../../components/Tooltip/Tooltip"
 import { authRequest, commandRequest, queryClientRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
+import { errorHandling } from "../../services/utils/errorHandling"
 import { getImageUrl } from "../../services/utils/getImageUrl"
 import { UserProfile } from "../../types/auth"
-import { Item } from "../../types/item"
-import { PaginatedResponse } from "../../types/paginated"
-import Custom500 from "../500"
+import { DeleteItemDTO, Item } from "../../types/item"
+import { PaginatedResponse } from "../../types/pagination"
+import { Statistics, StatisticsResponse } from "../../types/profile"
 import { NextPageCustomProps } from "../_app"
-
-type Statistics = {
-    totalContributions: number
-    itemsCreated: number
-    itemsUpdated: number
-    itemsDeleted: number
-}
-
-type DeleteItemDTO = {
-    reason: string
-}
 
 const DEFAULT_PAGE = 1
 const DEFAULT_LIMIT = 6
@@ -77,7 +67,6 @@ const Profile: NextPageCustomProps = () => {
     const [statistics, setStatistics] = useState<Statistics>({ totalContributions: 0, itemsCreated: 0, itemsUpdated: 0, itemsDeleted: 0 })
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false)
-    const [error, setError] = useState<string | undefined>(undefined)
 
     // Local variables
     const isLoadingProfile = !profile || isLoading || !isReady
@@ -91,7 +80,7 @@ const Profile: NextPageCustomProps = () => {
     }
 
     // Formik Form Validation
-    const validationSchemaDelete: SchemaOf<DeleteItemDTO> = object().shape({
+    const validationSchemaDelete: ObjectSchema<DeleteItemDTO> = object().shape({
         reason: string().required("Reason is required."),
     })
 
@@ -145,8 +134,7 @@ const Profile: NextPageCustomProps = () => {
                 setContributions(contributionsResponse.data)
                 setStatistics(statistics)
             } catch (error) {
-                isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Our servers are feeling a bit heavy today. Please try again in a few minutes.")
-                console.error(error)
+                errorHandling(error)
             } finally {
                 setIsLoading(false)
             }
@@ -179,6 +167,8 @@ const Profile: NextPageCustomProps = () => {
                 }
             })
 
+            toast.success(`${selectedContribution.name} was deleted.`)
+
             let shouldRedirectToPreviousPage = false
 
             // Remove contribution from list
@@ -210,8 +200,7 @@ const Profile: NextPageCustomProps = () => {
                 }), undefined, { shallow: true })
             }
         } catch (error) {
-            // axios.isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Netzwerk-Zeitüberschreitung")
-            console.error(error)
+            errorHandling(error)
         } finally {
             closeDeleteModal()
         }
@@ -234,9 +223,6 @@ const Profile: NextPageCustomProps = () => {
         setSelectedContribution(null)
     }
 
-    if (error)
-        return <Custom500 />
-
     if (isLoadingProfile)
         return <SkeletonLoadingProfile />
 
@@ -255,7 +241,7 @@ const Profile: NextPageCustomProps = () => {
                         <div className="grid items-center justify-center bg-blue-200 h-28 w-28 rounded-full mb-2">
                             <span className="text-6xl text-blue-700 font-bold mt-2">{profile.username[0].toUpperCase()}</span>
                         </div>
-                        <Headline datacy="profile-username" level={3} hasMargin={false}>{profile.username}</Headline>
+                        <Headline datacy="profile-username" className="w-64 text-center break-words" level={3} hasMargin={false}>{profile.username}</Headline>
                         <p datacy="profile-registered-since"><>Member since {new Date(profile.createdAt).toLocaleDateString("en-US")}</></p>
                     </div>
 

@@ -20,21 +20,33 @@ describe("Routes protected/guest", () => {
             cy.mockProfilePage()
 
             // Login and visit profile
-            cy.login("/account/profile")
+            cy.login({
+                route: "/account/profile"
+            })
 
             // Should be at profile
             cy.url().should("include", "/account/profile")
             cy.contains("Profile").should("be.visible")
+        })
+
+        it("should show toast when you try to access protected page when logged out", () => {
+            // Login and visit profile
+            cy.visitLocalPage("/account/profile")
+
+            // Check for toast
+            cy.contains("You need to be logged in to access this page.").should("be.visible")
         })
     })
 
     describe("Guest Route", () => {
         it("should redirect to / when logged in and visit login (guest route)", () => {
             // Login and visit login page
-            cy.login("/account/login")
+            cy.login({
+                route: "/account/login"
+            })
 
             // Mock home
-            cy.mockItemsList()
+            cy.mockHome()
 
             // Redirected to /
             cy.url().should("eq", clientBaseUrl + "/")
@@ -67,7 +79,9 @@ describe("Routes protected/guest", () => {
             cy.mockItemsList()
 
             // Login and visit home page
-            cy.login("/")
+            cy.login({
+                route: "/"
+            })
 
             // Should be at home
             cy.url().should("eq", clientBaseUrl + "/")

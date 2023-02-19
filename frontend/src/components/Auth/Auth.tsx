@@ -1,5 +1,6 @@
 import { useRouter } from "next/router"
 import { createContext, useCallback, useEffect, useState } from "react"
+import { toast } from "react-toastify"
 import { endSession, getSessionData } from "../../services/auth/session"
 import { routes } from "../../services/routes/routes"
 import { SessionData } from "../../types/auth"
@@ -17,7 +18,7 @@ type AuthContext = {
     /** Check if auth context is loading. */
     isLoading: boolean
     /** Logout user and remove session data from localstorage. */
-    logout: () => void
+    logout: (fromUserAction?: boolean) => void
     /** Get session data from localstorage and logout when refresh token fails. */
     getSession: () => Promise<SessionData | null>
 }
@@ -40,15 +41,22 @@ export const AuthContext = createContext<AuthContext>({
 export const Auth: React.FC<AuthProps> = ({ children, routeType }) => {
     const [hasSession, setHasSession] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState<boolean>(true)
-    const router = useRouter()
+    const { replace, isReady, asPath } = useRouter()
 
     /**
      * Logout user and remove session data from localstorage.
      */
-    const logout = useCallback(() => {
+    const logout = useCallback((fromUserAction: boolean = false) => {
         endSession()
-        setHasSession(false)
-    }, [])
+        if (hasSession) {
+            if (fromUserAction) {
+                toast.success("You have been logged out.")
+            } else {
+                toast.warn("Your session has expired. Please login again.")
+            }
+            setHasSession(false)
+        }
+    }, [hasSession])
 
     /**
      * Get session data from localstorage and logout when session is expired.
@@ -76,16 +84,19 @@ export const Auth: React.FC<AuthProps> = ({ children, routeType }) => {
 
             // When no session redirect (with no history) to login
             if (!hasSessionData && routeType === "protected") {
-                router.replace(routes.account.login + "?callbackUrl=" + router.asPath)
+                if (!isReady)
+                    return
+                await replace(routes.account.login + "?callbackUrl=" + asPath)
+                toast.warn("You need to be logged in to access this page.")
             }
 
             // When has session and route type guest redirect (with no history) to home
             if (hasSessionData && routeType === "guest") {
-                router.replace(routes.home)
+                replace(routes.home)
             }
         }
         checkSession()
-    }, [routeType, router, hasSession, getSession])
+    }, [routeType, isReady, hasSession, asPath, getSession, replace])
 
     return <AuthContext.Provider value={{ hasSession, logout, isLoading, getSession }}>
         {children}

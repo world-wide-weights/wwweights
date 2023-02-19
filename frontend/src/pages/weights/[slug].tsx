@@ -18,9 +18,9 @@ import { queryServerRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { renderUnitIntoString } from "../../services/unit/unitRenderer"
 import { getImageUrl } from "../../services/utils/getImageUrl"
-import { calculateMedianWeight } from "../../services/utils/weight"
+import { calculateMedianWeight, generateWeightString } from "../../services/utils/weight"
 import { Item } from "../../types/item"
-import { PaginatedResponse } from "../../types/paginated"
+import { PaginatedResponse } from "../../types/pagination"
 import Custom404 from "../404"
 
 type WeightsSingleProps = {
@@ -28,7 +28,9 @@ type WeightsSingleProps = {
     relatedItems: Item[]
 }
 
-/** Single Page of a weight */
+/** 
+ * Single Page of a weight 
+ */
 export default function WeightsSingle({ item, relatedItems }: InferGetServerSidePropsType<typeof getStaticProps>) {
     // Generate Compare Weight
     const compareWeight = calculateMedianWeight(item.weight)
@@ -91,12 +93,12 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
             <div className="bg-white rounded-lg px-3 md:px-6 py-4 md:py-8">
                 <div className="grid grid-cols-[120px_1fr] md:grid-cols-[250px_1fr] items-center lg:grid-cols-2 mb-5 md:mb-10">
                     {/* Headline and Weight */}
-                    <div className="lg:col-start-1 lg:col-end-3 pl-5 lg:pl-0 md:mt-5">
-                        <a target="_blank" rel="noopener noreferrer" className="flex items-center text-gray-700 text-lg sm:text-2xl md:mb-2" href={`https://www.google.com/search?q=${item.name}`}>
+                    <div className="flex flex-col lg:col-start-1 lg:col-end-3 pl-5 lg:pl-0 md:mt-5">
+                        <a target="_blank" rel="noopener noreferrer" title={item.name} className="flex items-center text-gray-700 w-40 sm:w-80 lg:w-[35rem] 2xl:w-[50rem] truncate text-lg sm:text-2xl md:mb-2" href={`https://www.google.com/search?q=${item.name}`}>
                             {item.name}
                             <Icon className="ml-2">open_in_new</Icon>
                         </a>
-                        <Headline size="text-2xl sm:text-4xl lg:text-5xl">{weightString}</Headline>
+                        <Headline title={generateWeightString(item.weight)} size="text-2xl sm:text-4xl lg:text-5xl w-40 sm:w-80 lg:w-[35rem] 2xl:w-[50rem] truncate">{weightString}</Headline>
                     </div>
 
                     {/* Source and Tags */}
@@ -110,8 +112,7 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
 
                     {/* Weights Image */}
                     {imageUrl && <div className="row-start-1 lg:row-end-3 lg:flex lg:justify-end">
-                        {/* No better way yet: https://github.com/vercel/next.js/discussions/21379 Let's take a look at this when we got problems with it */}
-                        <Image src={imageUrl} priority className="rounded-xl" alt={item.name} width={230} height={230} />
+                        <Image src={imageUrl} priority className="rounded-xl w-auto h-auto" alt={item.name} width={230} height={230} />
                     </div>}
                 </div>
                 <div className="flex justify-end">
@@ -137,7 +138,6 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
 export const getStaticProps: GetStaticProps<WeightsSingleProps> = async (context) => {
     const slug = context.params ? context.params.slug : "1"
 
-    // TODO (Zoe-Bot): Correct error handling
     // Fetch item and related items
     const [itemResponse, relatedItemsResponse] = await Promise.all([
         queryServerRequest.get<PaginatedResponse<Item>>(`/items/list?slug=${slug}`),

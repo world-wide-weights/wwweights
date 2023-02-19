@@ -10,6 +10,7 @@ export type RouterBreadcrumbType = {
 
 /**
  * Auto generated breadcrumb from current path
+ * @example <RouterBreadcrumb customLastCrumb="Test" />
  */
 export const RouterBreadcrumb: React.FC<RouterBreadcrumbType> = ({ customLastCrumb }) => {
     const router = useRouter()

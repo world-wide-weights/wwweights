@@ -2,7 +2,6 @@ import React, { useRef } from "react"
 import "../styles/global.css"
 import { useLocalStorage } from "./useLocalStorage"
 
-
 const EXAMPLE_KEY = "example_key"
 const INITIAL_VALUE = "example1"
 const CHANGED_VALUE = "example1"
@@ -35,8 +34,6 @@ describe("Local Storage Custom Hook", () => {
         cy.get("button").click()
         cy.get("p").contains(CHANGED_VALUE)
     })
-
-    // TODO (Zoe-Bot): Test localstorage
 })
 
 export { }

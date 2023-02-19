@@ -7,15 +7,15 @@ const initialValues = {
     file: ""
 }
 
-const NAME = "file"
-
 const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    return <Formik initialValues={initialValues} onSubmit={(values) => console.log(values)} >
+    return <Formik initialValues={initialValues} onSubmit={(values: typeof initialValues) => console.log(values)} >
         <Form>
             {children}
         </Form>
     </Formik>
 }
+
+const NAME = "file"
 
 describe("Image Upload", () => {
     beforeEach(() => {
@@ -70,8 +70,8 @@ describe("Image Upload", () => {
                 lastModified: Date.now(),
             }, { force: true })
 
-            // TODO (Zoe-Bot): Implement error test when correct error handling is implemented
-            cy.dataCy(`imageupload-${NAME}-image`).should("not.exist")
+            cy.dataCy(`formerror-${NAME}`).should("be.visible")
+            cy.dataCy(`formerror-${NAME}`).should("contain.text", "File type is not supported.")
         })
     })
 })

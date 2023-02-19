@@ -23,7 +23,7 @@ export type CreateEditItemForm = {
     weight: number | ""
     unit: "g" | "kg" | "T"
     additionalValue?: number | ""
-    isCa: [string] | []
+    isCa: ["isCa"] | []
     valueType: "exact" | "range"
     source?: string
     imageFile?: File | null
@@ -52,3 +52,7 @@ export type EditItemDto = Partial<{
         pull: string[]
     }>
 }>
+
+export type DeleteItemDTO = {
+    reason: string
+}

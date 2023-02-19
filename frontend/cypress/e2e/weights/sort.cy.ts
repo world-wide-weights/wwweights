@@ -1,4 +1,3 @@
-import { routes } from "../../../src/services/routes/routes"
 import paginatedItems from "../../fixtures/items/list.json"
 
 const SORT_TYPE = "heaviest"
@@ -7,7 +6,7 @@ describe("Sort /weights", () => {
     beforeEach(() => {
         cy.mockDiscoverPage()
 
-        cy.visitLocalPage(routes.weights.list())
+        cy.visitLocalPage("/weights")
     })
 
     it("should initial sort by relevance", () => {

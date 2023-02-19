@@ -2,6 +2,8 @@ import { ItemSourceProps } from "../../components/Item/ItemSource"
 
 /**
  * Generate a source string for the item source component
+ * @param itemsourceprops meta infos about the item
+ * @returns source string and if it is a url
  */
 export const generateSourceString = ({ name, source, weightString }: ItemSourceProps): {
     sourceString: string

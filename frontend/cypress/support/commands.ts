@@ -1,12 +1,14 @@
 /// <reference types="cypress" />
 
 import sessiondata from "../fixtures/auth/sessiondata.json"
+import statisticsAuth from "../fixtures/auth/statistics.json"
 import paginatedItems from "../fixtures/items/list.json"
 import paginatedRelatedItems from "../fixtures/items/related.json"
 import paginatedSingleItem from "../fixtures/items/single.json"
 import itemStatistics from "../fixtures/items/statistics.json"
 import paginatedContributions from "../fixtures/profile/contributions.json"
 import profileStatistics from "../fixtures/profile/statistics.json"
+import statistics from "../fixtures/statistics/statistics.json"
 import paginatedTagsList from "../fixtures/tags/list.json"
 
 const API_BASE_URL_AUTH = Cypress.env("PUBLIC_API_BASE_URL_AUTH")
@@ -32,6 +34,10 @@ Cypress.Commands.add("check500", () => {
     cy.contains("500 - Error on Server Side").should("be.visible")
 })
 
+Cypress.Commands.add("checkNetworkError", () => {
+    cy.contains("We could not connect to the server. Please check your internet connection and try again.").should("be.visible")
+})
+
 Cypress.Commands.add("checkCurrentActivePage", (activePageNumber) => {
     cy.dataCy(`pagination-button-page-${activePageNumber}`).should("have.class", "bg-blue-500")
     cy.dataCy(`pagination-button-page-${activePageNumber}`).should("have.class", "text-white")
@@ -43,20 +49,27 @@ Cypress.Commands.add("mockGetRelatedTags", () => {
     }).as("mockGetRelatedTags")
 })
 
-Cypress.Commands.add("mockGetTagsList", () => {
+Cypress.Commands.add("mockGetTagsList", (options) => {
+    const body = options?.itemCount || options?.itemCount === 0 ? {
+        ...paginatedTagsList,
+        data: paginatedTagsList.data.slice(0, options.itemCount)
+    } : paginatedTagsList
+
+    cy.task("clearNock")
+    cy.task("activateNock")
     cy.task("nock", {
         hostname: API_BASE_URL_QUERY_SERVER,
         method: "get",
         path: "/tags/list",
         statusCode: 200,
-        body: paginatedTagsList,
+        body
     })
 })
 
-Cypress.Commands.add("mockItemsList", (itemCount?: number) => {
-    const body = itemCount || itemCount === 0 ? {
+Cypress.Commands.add("mockItemsList", (options) => {
+    const body = options?.itemCount || options?.itemCount === 0 ? {
         ...paginatedItems,
-        data: paginatedItems.data.slice(0, itemCount)
+        data: paginatedItems.data.slice(0, options.itemCount)
     } : paginatedItems
 
     cy.task("clearNock")
@@ -70,8 +83,8 @@ Cypress.Commands.add("mockItemsList", (itemCount?: number) => {
     })
 })
 
-Cypress.Commands.add("mockDiscoverPage", (itemCount?: number) => {
-    cy.mockItemsList(itemCount)
+Cypress.Commands.add("mockDiscoverPage", (options) => {
+    cy.mockItemsList(options)
 
     // Mock Statistics
     cy.task("nock", {
@@ -142,7 +155,7 @@ Cypress.Commands.add("mockUploadImage", () => {
     }).as("mockUploadImage")
 })
 
-Cypress.Commands.add("login", (route, visitOptions) => {
+Cypress.Commands.add("login", ({ route, visitOptions }) => {
     cy.mockLogin()
 
     cy.visitLocalPage(route, {
@@ -150,6 +163,26 @@ Cypress.Commands.add("login", (route, visitOptions) => {
         onBeforeLoad: (window) => {
             window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(sessiondata))
         }
+    })
+})
+
+Cypress.Commands.add("mockHome", () => {
+    cy.mockItemsList()
+
+    cy.task("nock", {
+        hostname: API_BASE_URL_AUTH,
+        method: "get",
+        path: "/auth/statistics",
+        statusCode: 200,
+        body: statisticsAuth
+    })
+
+    cy.task("nock", {
+        hostname: API_BASE_URL_QUERY_SERVER,
+        method: "get",
+        path: "/statistics",
+        statusCode: 200,
+        body: statistics
     })
 })
 

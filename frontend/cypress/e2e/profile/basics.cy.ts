@@ -7,7 +7,9 @@ describe("Profile Basics", () => {
         beforeEach(() => {
             cy.mockProfilePage()
 
-            cy.login("/account/profile")
+            cy.login({
+                route: "/account/profile"
+            })
 
             cy.wait("@mockContributions")
             cy.wait("@mockProfile")
@@ -42,7 +44,9 @@ describe("Profile Basics", () => {
         beforeEach(() => {
             cy.mockProfilePage()
 
-            cy.login("/account/profile")
+            cy.login({
+                route: "/account/profile"
+            })
         })
 
         it("should display loading", () => {

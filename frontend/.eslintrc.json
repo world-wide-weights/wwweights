@@ -1,15 +1,15 @@
 {
-  "extends": [
-    "next/core-web-vitals"
-  ],
-  "rules": {
-    "semi": [
-      "warn",
-      "never"
+    "extends": [
+        "next/core-web-vitals"
     ],
-    "quotes": [
-      "warn",
-      "double"
-    ]
-  }
+    "rules": {
+        "semi": [
+            "warn",
+            "never"
+        ],
+        "quotes": [
+            "warn",
+            "double"
+        ]
+    }
 }

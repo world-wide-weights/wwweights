@@ -1,5 +1,6 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import { Chip } from "../../components/Chip/Chip"
+import { TagsEmptyState } from "../../components/EmptyState/TagsEmptyState"
 import { Headline } from "../../components/Headline/Headline"
 import { Pagination } from "../../components/Pagination/Pagination"
 import { Seo } from "../../components/Seo/Seo"
@@ -7,7 +8,7 @@ import { Tooltip } from "../../components/Tooltip/Tooltip"
 import { queryServerRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { generatePageString } from "../../services/seo/pageString"
-import { PaginatedResponse } from "../../types/paginated"
+import { PaginatedResponse } from "../../types/pagination"
 import { Tag } from "../../types/tag"
 
 const DEFAULT_ITEMS_PER_PAGE = 64
@@ -21,11 +22,12 @@ type TagsListProps = {
     limit: number
 }
 
-/** Base List for tags */
+/** 
+ * Base List for tags.
+ */
 export default function TagsList({ tags, currentPage, totalItems, limit }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
     return (<>
-        {/* Meta Tags */}
         <Seo
             title={`All Tags${generatePageString(currentPage)}`}
             description={"Discover all tags in the world largest database about weights."}
@@ -35,12 +37,12 @@ export default function TagsList({ tags, currentPage, totalItems, limit }: Infer
             {/* Headline */}
             <Headline level={3}>All tags</Headline>
 
-            {/* tags */}
-            <div datacy="tags-list-container" className="flex flex-wrap pb-3">
+            {/* Tags */}
+            {tags.length === 0 ? <TagsEmptyState /> : <div datacy="tags-list-container" className="flex flex-wrap pb-3">
                 {tags.map((tag) => <Tooltip key={tag.name} content={`${tag.count === 1 ? "Tag is used once" : `Tag is used ${tag.count} times`}.`}>
                     <Chip to={routes.tags.single(tag.name)}>{tag.name} ({tag.count})</Chip>
                 </Tooltip>)}
-            </div>
+            </div>}
 
             {/* Pagination */}
             <Pagination totalItems={totalItems} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} baseRoute={routes.tags.list} />

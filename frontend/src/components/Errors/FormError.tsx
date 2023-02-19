@@ -7,7 +7,8 @@ export type FormErrorProps = {
 }
 
 /**
- * Errormessage for inputs, can only be used with formik
+ * Errormessage for inputs, can only be used with formik.
+ * @example <FormError field="email" />
  */
 export const FormError: React.FunctionComponent<FormErrorProps> = ({ field }) => {
     return (

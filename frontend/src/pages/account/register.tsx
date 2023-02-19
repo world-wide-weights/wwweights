@@ -1,7 +1,8 @@
-import { Form, Formik } from "formik"
+import { Form, Formik, FormikHelpers } from "formik"
 import { useRouter } from "next/router"
 import { useState } from "react"
-import * as yup from "yup"
+import { toast } from "react-toastify"
+import { object, ObjectSchema, string } from "yup"
 import { Button } from "../../components/Button/Button"
 import { TextInput } from "../../components/Form/TextInput/TextInput"
 import { AccountLayout } from "../../components/Layout/AccountLayout"
@@ -24,7 +25,6 @@ const Register: NextPageCustomProps = () => {
 
     // Local State
     const [isPasswordEyeOpen, setIsPasswordEyeOpen] = useState<boolean>(false)
-    const [error, setError] = useState("")
     const [isLoading, setIsLoading] = useState(false)
 
     // Formik Form Initial Values
@@ -35,17 +35,17 @@ const Register: NextPageCustomProps = () => {
     }
 
     // Formik Form Validation
-    const validationSchema: yup.SchemaOf<RegisterDto> = yup.object().shape({
-        email: yup.string().email("Must be a valid E-Mail.").required("E-Mail is required."),
-        username: yup.string().min(3).max(20).required("E-Mail is required."),
-        password: yup.string().min(8).max(128).required("Password is required.")
+    const validationSchema: ObjectSchema<RegisterDto> = object().shape({
+        email: string().email("Must be a valid E-Mail.").required("Please enter an email address."),
+        username: string().max(64, "Please enter a name with maximum 64 letters.").required("Please enter a username. Without a username, your items will feel lonely and unloved."),
+        password: string().min(8, "Please enter a password with at least 8 letters.").max(256, "Please enter a password with maximum 256 letters.").required("Please enter a secure password.")
     })
 
     /**
      * Handle submit register form.
      * @param values input from form
      */
-    const onFormSubmit = async ({ username, email, password }: RegisterDto) => {
+    const onFormSubmit = async ({ username, email, password }: RegisterDto, { setFieldError }: FormikHelpers<RegisterDto>) => {
         setIsLoading(true)
 
         // Register in our backend
@@ -57,20 +57,18 @@ const Register: NextPageCustomProps = () => {
 
         if (registerResponse === null) {
             setIsLoading(false)
-            setError("Something went wrong. Try again or come later.")
+            toast.error("Something went wrong. Try again or come later.")
             return
         }
 
         if ("statusCode" in registerResponse) {
             if (registerResponse.message.includes("Username")) {
-                setError("Username already exists.")
-                // TODO: Add logic to show username is already taken
+                setFieldError("username", "Username already exists.")
             }
-            else if (registerResponse.message.includes("E-Mail")) {
-                setError("E-Mail already exists.")
-                // TODO: Add logic to show email is already taken
+            else if (registerResponse.message.includes("Email")) {
+                setFieldError("email", "E-Mail already in use.")
             } else {
-                setError(`${registerResponse.statusCode}: ${registerResponse.message}`)
+                toast.error(`${registerResponse.statusCode}: ${registerResponse.message}`)
             }
 
             setIsLoading(false)
@@ -101,9 +99,6 @@ const Register: NextPageCustomProps = () => {
             )}
         </Formik>
 
-        {/* TODO (Zoe-Bot): Add correct error handling */}
-        {error && <p className="py-2">Error: {error}</p>}
-
         {/* Login Text */}
         <div className="flex">
             <p className="mr-2">Already have an account?</p>
@@ -118,7 +113,7 @@ Register.layout = (page: React.ReactElement) => {
         page={page}
         headline="Create your account"
         description="Start for free."
-        sloganHeadline={<><span className="text-blue-300">Weigh</span> something and wanna share it with people?</>}
+        sloganHeadline={<>Become a <span className="text-blue-300">contributor</span> today</>}
         sloganDescription="Register to share your stuff." />
 }
 

@@ -1,7 +1,8 @@
 import { Form, Formik } from "formik"
 import { useRouter } from "next/router"
 import { useState } from "react"
-import { object, SchemaOf, string } from "yup"
+import { toast } from "react-toastify"
+import { object, ObjectSchema, string } from "yup"
 import { Button } from "../../components/Button/Button"
 import { TextInput } from "../../components/Form/TextInput/TextInput"
 import { AccountLayout } from "../../components/Layout/AccountLayout"
@@ -23,7 +24,6 @@ const Login: NextPageCustomProps = () => {
 
     // Local State
     const [isPasswordEyeOpen, setIsPasswordEyeOpen] = useState<boolean>(false)
-    const [error, setError] = useState("")
     const [isLoading, setIsLoading] = useState(false)
 
     // Formik Form Initial Values
@@ -33,7 +33,7 @@ const Login: NextPageCustomProps = () => {
     }
 
     // Formik Form Validation
-    const validationSchema: SchemaOf<LoginDto> = object().shape({
+    const validationSchema: ObjectSchema<LoginDto> = object().shape({
         email: string().email("Please enter a valid E-Mail.").required("E-Mail is required."),
         password: string().required("Password is required.")
     })
@@ -51,13 +51,17 @@ const Login: NextPageCustomProps = () => {
 
         if (response === null) {
             setIsLoading(false)
-            setError("Something went wrong. Try again or come later.")
+            toast.error("Something went wrong. Try again or come later.")
             return
         }
 
         if ("statusCode" in response) {
             setIsLoading(false)
-            setError(`${response.statusCode}: ${response.message}`)
+            if (response.statusCode === 401) {
+                toast.error("Wrong E-Mail or Password.")
+                return
+            }
+            toast.error(`${response.statusCode}: ${response.message}`)
             return
         }
 
@@ -83,9 +87,6 @@ const Login: NextPageCustomProps = () => {
             )}
         </Formik>
 
-        {/* TODO (Zoe-Bot): Add correct error handling */}
-        {error && <p className="py-2">Error: {error}</p>}
-
         {/* Register Text */}
         <div className="flex">
             <p className="mr-2">Don&apos;t have an account?</p>
@@ -100,7 +101,7 @@ Login.layout = (page: React.ReactElement) => {
         page={page}
         headline="Welcome back"
         description="Sign in to your account below."
-        sloganHeadline={<><span className="text-blue-300">Weigh</span> something and wanna share it with people?</>}
+        sloganHeadline={<><span className="text-blue-300">Weigh</span> something and wanna share it with others?</>}
         sloganDescription="Login to share your stuff." />
 }
 

@@ -2,12 +2,12 @@ import "material-symbols"
 import "../../styles/global.css"
 import { Modal } from "./Modal"
 
-describe("Modal", () => {
-    const data = {
-        modalHeading: "Modal Heading",
-        content: "Hello World!",
-    }
+const data = {
+    modalHeading: "Modal Heading",
+    content: "Hello World!",
+}
 
+describe("Modal", () => {
     describe("Open", () => {
         beforeEach(() => {
             cy.mount(<Modal isOpen={true} modalHeading={data.modalHeading} onDissmis={cy.spy().as("onDissmis")}>

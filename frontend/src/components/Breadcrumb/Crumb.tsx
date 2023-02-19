@@ -9,6 +9,7 @@ type CrumbProps = {
 
 /**
  *  Each individual "crumb" in the breadcrumbs list.
+ * @example <Crumb text="Home" to="/home" />
  */
 export const Crumb: React.FC<CrumbProps> = ({ text, to }) => {
     // The last crumb is rendered as normal text since we are already on the page

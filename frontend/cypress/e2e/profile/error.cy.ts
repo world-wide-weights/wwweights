@@ -22,9 +22,11 @@ describe("Error Profile", () => {
             forceNetworkError: true
         })
 
-        cy.login("/account/profile")
+        cy.login({
+            route: "/account/profile"
+        })
 
-        cy.check500()
+        cy.checkNetworkError()
     })
 
     it("should display error 500 when statistics failed", () => {
@@ -43,9 +45,11 @@ describe("Error Profile", () => {
             body: profile
         })
 
-        cy.login("/account/profile")
+        cy.login({
+            route: "/account/profile"
+        })
 
-        cy.check500()
+        cy.checkNetworkError()
     })
 
     it("should display error 500 when profile failed", () => {
@@ -64,9 +68,11 @@ describe("Error Profile", () => {
             forceNetworkError: true
         })
 
-        cy.login("/account/profile")
+        cy.login({
+            route: "/account/profile"
+        })
 
-        cy.check500()
+        cy.checkNetworkError()
     })
 })
 

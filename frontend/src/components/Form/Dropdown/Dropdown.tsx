@@ -14,7 +14,7 @@ type DropdownProps = {
     /** When set Required * will be seen  */
     labelRequired?: boolean
     /** A list of options to choose from. */
-    options: ComponentOptions[]
+    options: readonly ComponentOptions[]
     /** Set to true when dropdown needs to fit to other inputs (have lighter color) */
     light?: boolean
     /** When true add margin to dropdown like other inputs */
@@ -22,7 +22,8 @@ type DropdownProps = {
 }
 
 /**
- * Dropdown, can only be used with Formik
+ * Dropdown, can only be used with Formik.
+ * @example <Dropdown name="interests" labelText="Interests" options={[{ value: "1", label: "Option 1" }, { value: "2", label: "Option 2" }]} />
  */
 export const Dropdown: React.FC<DropdownProps> = ({ name, placeholder, labelText, labelRequired, light = false, hasMargin = false, options }) => {
     const [isOpen, setIsOpen] = useState(false)

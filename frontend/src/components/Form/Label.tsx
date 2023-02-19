@@ -11,5 +11,8 @@ type LabelProps = {
 
 /** 
  * Label for Inputs
+ * @example <Label name="name" labelText="Name" labelRequired={true} />
  */
-export const Label: React.FC<LabelProps> = ({ name, labelText, labelRequired = false, datacy }) => <label datacy={datacy} className="text-darkgray text-sm font-medium" htmlFor={name}>{labelText}{labelRequired && <span className="text-primary-blue ml-1">*</span>}</label>
+export const Label: React.FC<LabelProps> = ({ name, labelText, labelRequired = false, datacy }) => <>
+    <label datacy={datacy} className="text-darkgray text-sm font-medium" htmlFor={name}>{labelText}{labelRequired && <span className="text-primary-blue ml-1">*</span>}</label>
+</>

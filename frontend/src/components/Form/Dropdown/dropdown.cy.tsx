@@ -8,12 +8,8 @@ const initialValues = {
     filter: ""
 }
 
-const submitForm = (values: typeof initialValues) => {
-    console.log(values)
-}
-
 const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    return <Formik initialValues={initialValues} onSubmit={submitForm}>
+    return <Formik initialValues={initialValues} onSubmit={(values: typeof initialValues) => console.log(values)}>
         <Form>
             <div className="w-80">
                 {children}
@@ -55,7 +51,7 @@ describe("Dropdown", () => {
     })
 
     it("should set options in dropdown", () => {
-        // open dropdown
+        // Open dropdown
         cy.dataCy(`${data.name}-dropdown-button`).click()
 
         data.options.forEach((option) => {
@@ -63,46 +59,46 @@ describe("Dropdown", () => {
         })
     })
 
-    it("should open dropdown when click it", () => {
-        // open dropdown
+    it("should Open dropdown when click it", () => {
+        // Open dropdown
         cy.dataCy(`${data.name}-dropdown-button`).click()
 
         cy.dataCy(`${data.name}-dropdown-menu`).should("be.visible")
     })
 
-    it("should close dropdown when click it after its open", () => {
-        // open dropdown
+    it("should Close dropdown when click it after its Open", () => {
+        // Open dropdown
         cy.dataCy(`${data.name}-dropdown-button`).click({ force: true })
 
-        // close dropdown
+        // Close dropdown
         cy.dataCy(`${data.name}-dropdown-button`).click({ force: true })
         cy.dataCy(`${data.name}-dropdown-menu`).should("not.exist")
     })
 
-    it("should close dropdown when click outside dropdown", () => {
-        // open dropdown
+    it("should Close dropdown when click outside dropdown", () => {
+        // Open dropdown
         cy.dataCy(`${data.name}-dropdown-button`).click()
 
-        // close dropdown
+        // Close dropdown
         cy.get("body").click()
         cy.dataCy(`${data.name}-dropdown-menu`).should("not.exist")
     })
 
     it("should set correct item when click on it", () => {
-        // open dropdown
+        // Open dropdown
         cy.dataCy(`${data.name}-dropdown-button`).click()
 
-        // select first item
+        // Select first item
         cy.dataCy(`${data.name}-dropdown-option-${data.options[0].value}`).click()
 
         cy.dataCy(`${data.name}-dropdown-button`).should("contain", data.options[0].label)
     })
 
     it("should close dropdown after select element", () => {
-        // open dropdown
+        // Open dropdown
         cy.dataCy(`${data.name}-dropdown-button`).click()
 
-        // select first item
+        // Select first item
         cy.dataCy(`${data.name}-dropdown-option-${data.options[0].value}`).click()
 
         cy.dataCy(`${data.name}-dropdown-menu`).should("not.exist")
@@ -113,7 +109,7 @@ describe("Dropdown", () => {
     })
 
     it("should have icon rotate-180 when dropdown is open", () => {
-        // open dropdown
+        // Open dropdown
         cy.dataCy(`${data.name}-dropdown-button`).click()
 
         cy.dataCy(`${data.name}-dropdown-button`, " i").should("have.class", "-rotate-180")

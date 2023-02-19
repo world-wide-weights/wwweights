@@ -9,11 +9,12 @@ import twitter from "../../assets/img/logos_icons/twitter.svg"
 import { queryClientRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { NavLink } from "../../types/nav"
-import { PaginatedResponse } from "../../types/paginated"
+import { PaginatedResponse } from "../../types/pagination"
 import { Tag } from "../../types/tag"
 import { AuthContext } from "../Auth/Auth"
 import { Button } from "../Button/Button"
 import { Headline } from "../Headline/Headline"
+import { Tooltip } from "../Tooltip/Tooltip"
 
 /**
  * Footer
@@ -60,7 +61,8 @@ export const Footer: React.FC = () => {
 				const tags = responseTags.data.data
 				setTags(tags)
 			} catch (error) {
-				console.error(error)
+				// Display no error message here to the user since it's not mandatory
+				console.log(error)
 				return
 			}
 		}
@@ -77,19 +79,25 @@ export const Footer: React.FC = () => {
 						<h6 className="font-bold text-lg text-blue-500">World Wide Weights</h6>
 					</Link>
 
-					<p className="text-gray-700 text-sm md:text-base mb-2">World largest database of weights! World Wide Weights is a community project to create a global database of weights.</p>
+					<p className="text-gray-700 text-sm md:text-base mb-2">World&apos;s largest database of weights! World Wide Weights is a community project to create a global database of weights.</p>
 
 					{/* Social Links */}
 					<div className="flex items-center gap-3 mb-4">
-						<a href="https://discord.gg/UmxWf2FEQx" target="_blank" title="Link to our discord server!" rel="noreferrer noopener">
-							<Image src={discord} alt="Image of Discord Logo" width={25} />
-						</a>
-						<a href="https://github.com/world-wide-weights" target="_blank" title="Link to our GitHub Orga!" rel="noreferrer noopener">
-							<Image src={github} alt="Image of Github Logo" width={25} />
-						</a>
-						<a href="https://twitter.com/wwweights" target="_blank" title="Link to our Twitter!" rel="noreferrer noopener">
-							<Image src={twitter} alt="Image of Twitter logo" width={25} />
-						</a>
+						<Tooltip content="Link to our discord server!">
+							<a href="https://discord.gg/UmxWf2FEQx" target="_blank" rel="noreferrer noopener">
+								<Image src={discord} alt="Image of Discord Logo" width={25} />
+							</a>
+						</Tooltip>
+						<Tooltip content="Link to our GitHub Orga!">
+							<a href="https://github.com/world-wide-weights" target="_blank" rel="noreferrer noopener">
+								<Image src={github} alt="Image of Github Logo" width={25} />
+							</a>
+						</Tooltip>
+						<Tooltip content="Link to our Twitter!">
+							<a href="https://twitter.com/wwweights" target="_blank" rel="noreferrer noopener">
+								<Image src={twitter} alt="Image of Twitter logo" width={25} />
+							</a>
+						</Tooltip>
 					</div>
 				</div>
 				<div className="mb-4">
@@ -128,5 +136,5 @@ export const Footer: React.FC = () => {
 				<span className="text-gray-600 text-sm md:text-base mr-0 md:mr-3">World Wide Weights Copyright © {new Date().getFullYear()}. All rights reserved.</span>
 			</div>
 		</div>
-	</footer>
+	</footer >
 }
