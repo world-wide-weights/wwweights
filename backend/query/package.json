@@ -17,8 +17,8 @@
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:cov": "jest --config ./jest-e2e.json --runInBand --coverage",
-    "test:ci": "jest --config ./jest-e2e.json --runInBand"
+    "test:cov": "jest --config ./jest.json --runInBand --coverage",
+    "test:ci": "jest --config ./jest.json --runInBand"
   },
   "dependencies": {
     "@eventstore/db-client": "^5.0.0",
