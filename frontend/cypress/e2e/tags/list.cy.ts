@@ -46,6 +46,7 @@ describe("Tags", () => {
 
     describe("EmptyState", () => {
         it("should display empty state when there are no tags", () => {
+            cy.mockTagsListClient()
             cy.mockTagsList({ itemCount: 0 })
             cy.visitLocalPage("/tags?page=1")
 

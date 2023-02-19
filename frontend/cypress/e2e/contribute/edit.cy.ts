@@ -69,7 +69,7 @@ describe("Edit Item", () => {
             // Mock update, upload and weights page
             cy.mockUploadImage()
             cy.mockEditItem()
-            cy.mockDiscoverPage()
+            cy.mockProfilePage()
 
             // Submit form
             cy.dataCy("submit-button").click()

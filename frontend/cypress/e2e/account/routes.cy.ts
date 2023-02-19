@@ -30,6 +30,8 @@ describe("Routes protected/guest", () => {
         })
 
         it("should show toast when you try to access protected page when logged out", () => {
+            cy.mockTagsListClient()
+
             // Login and visit profile
             cy.visitLocalPage("/account/profile")
 
@@ -76,7 +78,7 @@ describe("Routes protected/guest", () => {
     describe("Public Route", () => {
         it("should show page when logged in", () => {
             // Mock home
-            cy.mockItemsList()
+            cy.mockHome()
 
             // Login and visit home page
             cy.login({
@@ -90,7 +92,7 @@ describe("Routes protected/guest", () => {
 
         it("should show page when guest", () => {
             // Mock home
-            cy.mockItemsList()
+            cy.mockHome()
 
             // Visit home page
             cy.visitLocalPage("/")

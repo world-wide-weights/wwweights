@@ -9,7 +9,7 @@ describe("Error Profile", () => {
     it("should display error 500 when contribution failed", () => {
         // Mock Contributions
         cy.intercept("GET", `${API_BASE_URL_QUERY_CLIENT}/items/list*`, {
-            body: contributions
+            forceNetworkError: true
         })
 
         // Mock statistics
@@ -19,7 +19,7 @@ describe("Error Profile", () => {
 
         // Mock profile
         cy.intercept("GET", `${API_BASE_URL_AUTH}/profile/me`, {
-            forceNetworkError: true
+            body: profile
         })
 
         cy.login({

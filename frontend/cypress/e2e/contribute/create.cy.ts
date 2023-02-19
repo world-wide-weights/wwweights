@@ -128,7 +128,7 @@ describe("Create Item", () => {
                 statusCode: 409, // Conflict
             }).as("mockCreateItemConflict")
             cy.mockUploadImage()
-            cy.mockDiscoverPage()
+            cy.mockProfilePage()
 
             // Submit form
             cy.dataCy("submit-button").click()
@@ -149,7 +149,7 @@ describe("Create Item", () => {
                 forceNetworkError: true,
             }).as("mockCreateItemNetwork")
             cy.mockUploadImage()
-            cy.mockDiscoverPage()
+            cy.mockProfilePage()
 
             // Submit form
             cy.dataCy("submit-button").click()
