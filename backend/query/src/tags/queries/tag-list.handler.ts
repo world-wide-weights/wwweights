@@ -5,7 +5,7 @@ import { ReturnModelType } from '@typegoose/typegoose';
 import { Tag } from '../../models/tag.model';
 import { DataWithCount } from '../../shared/interfaces/data-with-count.interface';
 import { PaginatedResponse } from '../../shared/interfaces/paginated-result.interface';
-import { TagSortEnum } from '../interfaces/tag-sort-enum';
+import { TagSortEnum } from '../enums/tag-sort-enum';
 import { TagListQuery } from './tag-list.query';
 
 @QueryHandler(TagListQuery)
