@@ -9,7 +9,7 @@ export const retryCallback = async (
 ): Promise<void> => {
   const startTime = performance.now();
   while (performance.now() - startTime < maxDuration) {
-    await setTimeout(99);
+    await setTimeout(maxDuration / 20);
     const currentResult = await callback();
     if (currentResult) return;
   }
