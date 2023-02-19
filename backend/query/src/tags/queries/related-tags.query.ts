@@ -1,4 +1,4 @@
-import { QueryTagRelatedDto } from '../interfaces/query-tag-related.dto';
+import { QueryTagRelatedDto } from '../dtos/query-tag-related.dto';
 
 export class TagRelatedQuery {
   constructor(public readonly dto: QueryTagRelatedDto) {}
