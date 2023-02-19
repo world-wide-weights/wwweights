@@ -53,9 +53,6 @@ module.exports = {
                     '800': '#323F48',
                     '900': '#1F2933',
                 }
-            }, backgroundImage: {
-                'background-half-page': `url('../../public/background_half_page.svg')`,
-                'background-header-index': `url('../../public/background_header_index.svg')`,
             }
         },
         fontFamily: {

@@ -2,6 +2,7 @@ import { Form, Formik } from "formik"
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Head from "next/head"
 import { useRouter } from "next/router"
+import backgroundHeader from "../assets/images/backgrounds/background_header_index.svg"
 import { Button } from "../components/Button/Button"
 import { Footer } from "../components/Footer/Footer"
 import { ItemPreviewGrid } from "../components/Item/ItemPreviewGrid"
@@ -64,7 +65,7 @@ function Home({ items, statistics }: InferGetServerSidePropsType<typeof getServe
                 />
             </Head>
 
-            <header className="bg-background-header-index bg-no-repeat bg-cover bg-center md:border-t-4 md:border-blue-500">
+            <header style={{ backgroundImage: `url(${backgroundHeader.src})` }} className="bg-background-header-index bg-no-repeat bg-cover bg-center md:border-t-4 md:border-blue-500">
                 {/* Navbar */}
                 <Navbar />
 
