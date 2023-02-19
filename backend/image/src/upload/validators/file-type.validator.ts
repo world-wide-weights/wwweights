@@ -1,5 +1,8 @@
 import { FileValidator, Injectable } from '@nestjs/common';
 
+/**
+ * @description Validator that determines whether a given file is of one of the allowed formats
+ */
 @Injectable()
 export class FileTypeValidator extends FileValidator<{
   supportedFileTypes: string[];

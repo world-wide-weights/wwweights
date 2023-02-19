@@ -4,5 +4,5 @@
 export enum STATUS {
   UNVERIFIED = 'unverified',
   VERIFIED = 'verified',
-  BANNED = 'BANNED',
+  BANNED = 'banned',
 }

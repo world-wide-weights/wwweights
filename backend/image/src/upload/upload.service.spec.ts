@@ -1,3 +1,4 @@
+import { InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createHash } from 'crypto';
 import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync } from 'fs';
@@ -16,12 +17,7 @@ describe('UploadService', () => {
     describe('Positive Tests', () => {
       it('Should hash file correctly', async () => {
         // ARRANGE
-        const imagePath = join(
-          process.cwd(),
-          'test',
-          'helpers',
-          'test.png',
-        );
+        const imagePath = join(process.cwd(), 'test', 'helpers', 'test.png');
         // ACT
         const res = await uploadService.hashFile(imagePath);
         // ASSERT
@@ -33,31 +29,17 @@ describe('UploadService', () => {
 
       it('Should produce same result for same file', async () => {
         // ARRANGE
-        const imagePath = join(
-          process.cwd(),
-          'test',
-          'helpers',
-          'test.png',
-        );
+        const imagePath = join(process.cwd(), 'test', 'helpers', 'test.png');
         // ACT
         const res = await uploadService.hashFile(imagePath);
         // ASSERT
         expect(res).toEqual(await uploadService.hashFile(imagePath));
       });
+
       it('Should produce different results for different files', async () => {
         // ARRANGE
-        const imagePath = join(
-          process.cwd(),
-          'test',
-          'helpers',
-          'test.png',
-        );
-        const imagePath2 = join(
-          process.cwd(),
-          'test',
-          'helpers',
-          'test.jpg',
-        );
+        const imagePath = join(process.cwd(), 'test', 'helpers', 'test.png');
+        const imagePath2 = join(process.cwd(), 'test', 'helpers', 'test.jpg');
         // ACT
         const res = await uploadService.hashFile(imagePath);
         // ASSERT
@@ -78,6 +60,7 @@ describe('UploadService', () => {
           'Filepath does not lead to file',
         );
       });
+
       it('Should fail for when pointed at a directory', async () => {
         // ARRANGE
         const imagePath = join(process.cwd(), 'test', 'helpers');
@@ -95,9 +78,11 @@ describe('UploadService', () => {
         mkdirSync(join(process.cwd(), 'cropTest'));
       }
     });
+
     afterEach(() => {
       rmSync(join(process.cwd(), 'cropTest'), { recursive: true });
     });
+
     describe('Positive Tests', () => {
       it('Should not crop small images (png)', async () => {
         // ARRANGE
@@ -114,6 +99,7 @@ describe('UploadService', () => {
         sharp.cache(false);
         expect(await sharp(testFilePath).metadata()).toEqual(initialMetadata);
       });
+
       it('Should not crop small images (jpg)', async () => {
         // ARRANGE
         const testFilePath = join(process.cwd(), 'cropTest', 'test.jpg');
@@ -129,6 +115,7 @@ describe('UploadService', () => {
         sharp.cache(false);
         expect(await sharp(testFilePath).metadata()).toEqual(initialMetadata);
       });
+
       it('Should crop images > provided dimensions', async () => {
         // ARRANGE
         const testFilePath = join(
@@ -159,17 +146,76 @@ describe('UploadService', () => {
             512,
             512,
           ),
-        ).rejects.toThrowError('Image could not be found within cache');
+        ).rejects.toThrowError('Image cropping failed');
       });
+
       it('Should fail for path pointing to directory', async () => {
         // ACT & ASSERT
         await expect(
-          uploadService['cropImage'](
-            join(process.cwd(), 'cropTest'),
-            512,
-            512,
-          ),
-        ).rejects.toThrowError('Cannot crop directory');
+          uploadService['cropImage'](join(process.cwd(), 'cropTest'), 512, 512),
+        ).rejects.toThrowError('Image cropping failed');
+      });
+    });
+  });
+  describe('moveFile', () => {
+    const sourcePath = join(process.cwd(), 'mvSource', 'test.jpg');
+    const targetPath = join(process.cwd(), 'mvTarget', 'test.jpg');
+    beforeEach(() => {
+      if (!existsSync(join(process.cwd(), 'mvSource'))) {
+        mkdirSync(join(process.cwd(), 'mvSource'));
+      }
+      if (!existsSync(join(process.cwd(), 'mvTarget'))) {
+        mkdirSync(join(process.cwd(), 'mvTarget'));
+      }
+      copyFileSync(
+        join(process.cwd(), 'test', 'helpers', 'test.jpg'),
+        sourcePath,
+      );
+    });
+
+    afterEach(() => {
+      rmSync(join(process.cwd(), 'mvSource'), { recursive: true });
+      rmSync(join(process.cwd(), 'mvTarget'), { recursive: true });
+    });
+    describe('Positive Tests', () => {
+      it('Should copy file into new location', () => {
+        // ACT
+        uploadService['moveFile'](sourcePath, targetPath);
+        // ASSERT
+        expect(existsSync(targetPath)).toBe(true);
+      });
+
+      it('Should remove file from old location', () => {
+        // ACT
+        uploadService['moveFile'](sourcePath, targetPath);
+        // ASSERT
+        expect(existsSync(sourcePath)).toBe(false);
+      });
+    });
+    describe('Negative Tests', () => {
+      it('Should throw error if source file does not exist', () => {
+        // ARRANGE
+        const cb = () => {
+          uploadService['moveFile'](sourcePath + 'a', targetPath);
+        };
+        // ACT & ASSERT
+        expect(cb).toThrow(InternalServerErrorException);
+      });
+
+      it('Should throw error if target file already exist', () => {
+        // ARRANGE
+        copyFileSync(sourcePath, targetPath);
+        const cb = () => uploadService['moveFile'](sourcePath, targetPath);
+        // ACT & ASSERT
+        expect(cb).toThrow(InternalServerErrorException);
+      });
+
+      it('Should throw error if target folder does not exist', () => {
+        // ARRANGE
+        const invalidTarget = join(process.cwd(), 'thisdoesnotexist', 'test.jpg')
+        const cb = () => uploadService['moveFile'](sourcePath, invalidTarget);
+        // ACT & ASSERT
+        expect(cb).toThrow(InternalServerErrorException);
       });
     });
   });
