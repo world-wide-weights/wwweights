@@ -4,23 +4,24 @@ import { IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
 import { QueryTagsAndPage } from '../../shared/interfaces/queryTagsAndPage';
 import { ItemSortEnum } from '../enums/item-sort-enum';
 
+/**
+ * @description Query DTO to retrieve a list of items
+ */
 export class QueryItemListDto extends QueryTagsAndPage {
   @IsOptional()
   @IsEnum(ItemSortEnum)
   @ApiPropertyOptional({
     enum: ItemSortEnum,
     default: ItemSortEnum.RELEVANCE,
-    description: 'Sort by relevance | heaviest | lieghtest',
-    example: ItemSortEnum.RELEVANCE,
+    description: `Sort by ${Object.values(ItemSortEnum).join(' | ')}`,
   })
-  sort = ItemSortEnum.RELEVANCE; // Maybe: also newest | oldest
+  sort = ItemSortEnum.RELEVANCE;
 
   @IsString()
   @IsOptional()
   @ApiPropertyOptional({
-    type: String,
     description: 'The item slug to search for',
-    example: 'item-name',
+    example: 'apple',
   })
   slug: string;
 
@@ -37,7 +38,6 @@ export class QueryItemListDto extends QueryTagsAndPage {
   @IsInt()
   @IsOptional()
   @ApiPropertyOptional({
-    type: Number,
     description: 'Searching for items by a specific user',
     example: 1,
   })
