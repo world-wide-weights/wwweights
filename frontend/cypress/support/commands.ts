@@ -68,12 +68,10 @@ Cypress.Commands.add("mockDiscoverPage", (options) => {
 })
 
 Cypress.Commands.add("mockSingleWeightPage", () => {
-	cy.mockTagsListClient()
-
 	// Clear nock and activate it
-	cy.task("clearNock")
-	cy.task("activateNock")
+	cy.task("resetNock")
 
+	cy.mockTagsListClient()
 	cy.mockImageServe()
 
 	// Mock items single
@@ -122,6 +120,8 @@ Cypress.Commands.add("mockHome", () => {
 })
 
 Cypress.Commands.add("mockProfilePage", (options) => {
+	cy.task("resetNock")
+
 	const body =
 		options?.contribtionsCount || options?.contribtionsCount === 0
 			? {
@@ -130,8 +130,6 @@ Cypress.Commands.add("mockProfilePage", (options) => {
 			}
 			: paginatedContributions
 
-	cy.task("clearNock")
-	cy.task("activateNock")
 	cy.mockImageServe()
 	cy.mockTagsListClient()
 
@@ -155,6 +153,8 @@ Cypress.Commands.add("mockProfilePage", (options) => {
 /**** Mock Fetch Server *****/
 
 Cypress.Commands.add("mockTagsList", (options) => {
+	cy.task("resetNock")
+
 	const body =
 		options?.itemCount || options?.itemCount === 0
 			? {
@@ -163,8 +163,6 @@ Cypress.Commands.add("mockTagsList", (options) => {
 			}
 			: paginatedTagsList
 
-	cy.task("clearNock")
-	cy.task("activateNock")
 	cy.task("nock", {
 		hostname: API_BASE_URL_QUERY_SERVER,
 		method: "get",
@@ -175,6 +173,8 @@ Cypress.Commands.add("mockTagsList", (options) => {
 })
 
 Cypress.Commands.add("mockItemsList", (options) => {
+	cy.task("resetNock")
+
 	const body =
 		options?.itemCount || options?.itemCount === 0
 			? {
@@ -183,8 +183,6 @@ Cypress.Commands.add("mockItemsList", (options) => {
 			}
 			: paginatedItems
 
-	cy.task("clearNock")
-	cy.task("activateNock")
 	cy.task("nock", {
 		hostname: API_BASE_URL_QUERY_SERVER,
 		method: "get",
