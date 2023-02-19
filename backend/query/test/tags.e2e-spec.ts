@@ -95,6 +95,21 @@ describe('Tags (e2e)', () => {
         // ASSERT
         expect(result.body.data[0].name).toEqual(tags[2].name);
       });
+
+      it('should return total 0 if no tags exist', async () => {
+        // ARRANGE
+        await tagModel.deleteMany();
+
+        // ACT
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({ limit: 5, sort: 'most-used' })
+          .expect(HttpStatus.OK);
+
+        // ASSERT
+        expect(result.body.data).toHaveLength(0);
+        expect(result.body.total).toEqual(0);
+      });
     });
 
     describe('tags/related', () => {
