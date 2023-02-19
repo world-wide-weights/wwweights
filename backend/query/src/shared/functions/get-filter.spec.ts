@@ -42,7 +42,7 @@ describe('getFilter', () => {
       $and: [{ image: { $exists: false } }],
     });
   });
-  it('should return user with userid given', () => {
+  it('should return user with userId given', () => {
     expect(getFilter(null, null, null, undefined, 1)).toEqual({
       $and: [{ userId: 1 }],
     });

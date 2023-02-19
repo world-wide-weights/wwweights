@@ -2,9 +2,12 @@ import { ApiProperty } from '@nestjs/swagger';
 import { prop } from '@typegoose/typegoose';
 import { Expose, Transform } from 'class-transformer';
 
+/**
+ * @description Global statistics
+ */
 export class GlobalStatistics {
   @Expose()
-  @ApiProperty({ description: 'Total active items' })
+  @ApiProperty({ description: 'Total active items', example: 69 })
   @prop()
   totalItems: number;
 
@@ -14,6 +17,7 @@ export class GlobalStatistics {
   @Expose()
   @ApiProperty({
     description: 'Total items + total suggestions',
+    example: 420,
   })
   @Transform(({ obj }) => obj.totalItems + (obj.totalSuggestions || 0))
   totalContributions: number;

@@ -2,14 +2,14 @@ import { InjectModel } from '@m8a/nestjs-typegoose';
 import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
-import { ItemSortEnum } from '../../items/interfaces/item-sort-enum';
+import { ItemSortEnum } from '../../items/enums/item-sort-enum';
 import { Item } from '../../models/item.model';
 import { getFilter } from '../../shared/functions/get-filter';
 import { getSort } from '../../shared/functions/get-sort';
-import { DataWithCount } from '../../shared/interfaces/data-with-count';
-import { PaginatedResponse } from '../../shared/interfaces/paginated-result';
-import { TagWithRelevance } from '../interfaces/tag-with-relevance';
-import { TagRelatedQuery } from './related-tags.query';
+import { DataWithCount } from '../../shared/interfaces/data-with-count.interface';
+import { PaginatedResponse } from '../../shared/interfaces/paginated-result.interface';
+import { TagWithRelevance } from '../interfaces/tag-with-relevance.interface';
+import { TagRelatedQuery } from './tag-related.query';
 
 @QueryHandler(TagRelatedQuery)
 export class TagRelatedHandler implements IQueryHandler<TagRelatedQuery> {
@@ -23,10 +23,10 @@ export class TagRelatedHandler implements IQueryHandler<TagRelatedQuery> {
   async execute({
     dto,
   }: TagRelatedQuery): Promise<PaginatedResponse<TagWithRelevance>> {
+    const filter = getFilter(dto.query, dto.tags);
+    const sort = getSort(ItemSortEnum.RELEVANCE, !!dto.query || !!dto.tags);
+    const tagRelatedQueryStartTime = performance.now();
     try {
-      const filter = getFilter(dto.query, dto.tags);
-      const sort = getSort(ItemSortEnum.RELEVANCE, !!dto.query || !!dto.tags);
-
       // After searching for the normal filter parameters, this aggregation counts the number of items
       // Then it unwinds all tags and counts their occurences
       // After that it filters out all tags that do not build a subset, this automattically strips those from the search aswell
@@ -35,10 +35,6 @@ export class TagRelatedHandler implements IQueryHandler<TagRelatedQuery> {
         DataWithCount<TagWithRelevance>
       >([
         { $match: filter },
-        // TODO: Find a fix for @ts-ignore
-        // Unfortunately, we need to ignore the following line, because the fields are not known at compile time
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-ignore
         { $sort: sort },
         { $limit: 1000 },
         {
@@ -96,6 +92,9 @@ export class TagRelatedHandler implements IQueryHandler<TagRelatedQuery> {
       this.logger.log(
         `Related Tags found: ${relatedTagsWithCount[0].total[0]?.count || 0}`,
       );
+      this.logger.debug(
+        `Finished in ${performance.now() - tagRelatedQueryStartTime} ms`,
+      );
 
       return {
         total: relatedTagsWithCount[0].total[0]?.count || 0,
@@ -104,6 +103,9 @@ export class TagRelatedHandler implements IQueryHandler<TagRelatedQuery> {
         data: relatedTagsWithCount[0].data,
       };
     } catch (error) /* istanbul ignore next */ {
+      this.logger.debug(
+        `Failed after ${performance.now() - tagRelatedQueryStartTime} ms`,
+      );
       this.logger.error(error);
       throw new InternalServerErrorException(
         'Related Tags could not be retrieved',

@@ -8,7 +8,7 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { Item } from '../../models/item.model';
 import { getFilter } from '../../shared/functions/get-filter';
-import { ItemStatistics } from '../interfaces/item-statistics';
+import { ItemStatistics } from '../interfaces/item-statistics.interface';
 import { ItemStatisticsQuery } from './item-statistics.query';
 
 @QueryHandler(ItemStatisticsQuery)
@@ -23,9 +23,15 @@ export class ItemStatisticsHandler
   ) {}
 
   async execute({ dto }: ItemStatisticsQuery): Promise<ItemStatistics> {
+    const itemStatisticsQueryStartTime = performance.now();
+    // We also run textSearch on tags
+    const filter = getFilter(dto.query, dto.tags);
+
     try {
-      // We currently also run textSearch on tags
-      const filter = getFilter(dto.query, dto.tags);
+      // We match for the filter, sort the result
+      // Then we group the results to get the min, max and average weight considering the additionalValue
+      // Then we set the heaviest based on the largest value or additionalValue
+      // There is no $sort expression that would allow us to sort by the maximum of the 2 fields (value & additionalValue)
       const statistics = await this.itemModel.aggregate<ItemStatistics>([
         { $match: filter },
         { $sort: { 'weight.value': -1 } },
@@ -71,11 +77,17 @@ export class ItemStatisticsHandler
 
       if (!statistics[0]?.averageWeight) {
         this.logger.log('No items found');
-        // Just to jump into the catch
         throw new NotFoundException('No items found');
       }
+      this.logger.debug(
+        `Finished in ${performance.now() - itemStatisticsQueryStartTime} ms`,
+      );
+
       return statistics[0];
     } catch (error) {
+      this.logger.debug(
+        `Failed after ${performance.now() - itemStatisticsQueryStartTime} ms`,
+      );
       this.logger.error(error);
       if (error instanceof NotFoundException) throw error;
       /* istanbul ignore next */
@@ -85,4 +97,3 @@ export class ItemStatisticsHandler
     }
   }
 }
-
