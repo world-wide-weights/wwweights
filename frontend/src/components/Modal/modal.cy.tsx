@@ -38,7 +38,11 @@ describe("Modal", () => {
 
 	describe("Close", () => {
 		it("should not be visible when open false", () => {
-			cy.mount(<Modal isOpen={false} modalHeading={data.modalHeading} onDissmis={() => ""}></Modal>)
+			cy.mount(
+				<Modal isOpen={false} modalHeading={data.modalHeading} onDissmis={() => ""}>
+					<p datacy="modal-content-p">{data.content}</p>
+				</Modal>
+			)
 
 			cy.dataCy("modal-content").should("not.exist")
 		})
