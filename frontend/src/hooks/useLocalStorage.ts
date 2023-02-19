@@ -8,34 +8,34 @@ import { Dispatch, MutableRefObject, SetStateAction, useEffect, useState } from 
  * @returns [ value: the state we sync, loading: loading state from the synced value, setValue: update the state ]
  */
 export const useLocalStorage = <T>(key: string, initialValue: T, initialRenderRef: MutableRefObject<boolean>): readonly [T, Dispatch<SetStateAction<T>>, boolean] => {
-    const [value, setValue] = useState<T>(initialValue)
-    const [loading, setLoading] = useState<boolean>(true)
+	const [value, setValue] = useState<T>(initialValue)
+	const [loading, setLoading] = useState<boolean>(true)
 
-    /**
-     * Sets the inital state from localstorage or set initialValue when not set jet.
-     */
-    useEffect(() => {
-        const stored = localStorage.getItem(key) as T ?? initialValue
-        setValue(stored)
-    }, [key, initialValue])
+	/**
+	 * Sets the inital state from localstorage or set initialValue when not set jet.
+	 */
+	useEffect(() => {
+		const stored = (localStorage.getItem(key) as T) ?? initialValue
+		setValue(stored)
+	}, [key, initialValue])
 
-    /**
-     * Updates the state in localstorage.
-     */
-    useEffect(() => {
-        /**
-         * When we are on first render initialRenderRef is true on second render false.
-         * On first render we should not update localstorage because we would reset the value.
-         */
-        if (initialRenderRef.current) {
-            initialRenderRef.current = false
-            setLoading(false)
-            return
-        }
+	/**
+	 * Updates the state in localstorage.
+	 */
+	useEffect(() => {
+		/**
+		 * When we are on first render initialRenderRef is true on second render false.
+		 * On first render we should not update localstorage because we would reset the value.
+		 */
+		if (initialRenderRef.current) {
+			initialRenderRef.current = false
+			setLoading(false)
+			return
+		}
 
-        // Sets item in localstorage
-        localStorage.setItem(key, value as string)
-    }, [initialRenderRef, key, value])
+		// Sets item in localstorage
+		localStorage.setItem(key, value as string)
+	}, [initialRenderRef, key, value])
 
-    return [value, setValue, loading] as const
+	return [value, setValue, loading] as const
 }

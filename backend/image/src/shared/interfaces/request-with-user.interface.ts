@@ -1,5 +1,8 @@
 import { JWTPayload } from './jwt-payload.interface';
 
-export interface RequestWithUser extends Request {
+/**
+ * @description Request along with the decoded contents of the JWT
+ */
+export interface RequestWithJWTPayload extends Request {
   user: JWTPayload;
 }

@@ -10,14 +10,13 @@ import {
   teardownMockDataSource,
 } from './helpers/MongoMemoryHelpers';
 
-describe('QueryController (e2e)', () => {
+describe('App (e2e)', () => {
   let app: INestApplication;
   let globalStatisticsModel: Model<GlobalStatistics>;
   let server: any; // Has to be any because of supertest not having a type for it either
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      // Importing everything here because it was the most straightforward way found to prevent the openHandlesIssue
       imports: [
         initializeMockModule(),
         TypegooseModule.forFeature([GlobalStatistics]),
@@ -51,25 +50,26 @@ describe('QueryController (e2e)', () => {
     await app.close();
   });
 
-  describe('App /', () => {
+  describe('/queries/v1', () => {
     const queriesPath = '/queries/v1/';
 
-    describe('statistics', () => {
+    describe('/statistics', () => {
       const statisticsPath = 'statistics';
 
       it('should return a GlobalStatistics object', async () => {
+        // ARRANGE
         // The upsert is in create item because there can't be suggestions without items so we have to create it in the query tests
-
         const globalStatistic = new globalStatisticsModel({
           totalItems: 1,
           totalSuggestions: 1,
         });
         await globalStatistic.save();
-
+        // ACT
         const result = await request(server)
           .get(queriesPath + statisticsPath)
           .expect(HttpStatus.OK);
 
+        // ASSERT
         expect(result.body.totalItems).toBe(globalStatistic.totalItems);
         expect(result.body.totalContributions).toBe(
           globalStatistic.totalItems + globalStatistic.totalSuggestions,

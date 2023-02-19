@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createHash } from 'crypto';
-import { copyFileSync, existsSync, lstatSync, rmSync } from 'fs';
+import { constants, copyFileSync, existsSync, lstatSync, rmSync } from 'fs';
 import { copyFile, readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
 import * as sharp from 'sharp';
@@ -47,6 +47,7 @@ export class UploadService {
     );
     validateOrCreateDirectory(this.tmpPath);
   }
+
   /**
    * @description Handle uploaded image including duplicate check, hashing and saving it
    */
@@ -56,40 +57,31 @@ export class UploadService {
   ): Promise<ImageUploadResponse> {
     const cachedFilePath = join(this.cachePath, image.filename);
 
+    const fileType = `${image.mimetype.split('/')[1]}`;
+
     // Crop the image before hashing => otherwise hashing would be useless
     await this.cropImage(cachedFilePath, 512, 512);
 
-    // TODO: Remove all geographic data etc. from image file
+    const hash = `${await this.hashFile(cachedFilePath)}.${fileType}`;
+    const fileTargetPath = join(this.tmpPath, hash);
 
-    const hash = await this.hashFile(cachedFilePath);
-    const fileTargetPath = join(
-      this.tmpPath,
-      `${hash}.${image.mimetype.split('/')[1]}`,
-    );
+    // Does file exist in permanent or temporary storage?
+    if (existsSync(fileTargetPath) || existsSync(join(this.storePath, hash))) {
+      this.logger.log(`Image ${hash} already exists`);
+      // Image is duplicate => return error along with the hash => no duplicate files
+      throw new ConflictException({
+        message:
+          'This file already seems to be uploaded (indicated by m5hash of file)',
+        path: hash,
+      } as ImageUploadConflictError);
+    }
 
     try {
-      // Does file exist in permanent or temporary storage?
-      if (
-        existsSync(fileTargetPath) ||
-        existsSync(
-          join(this.storePath, `${hash}.${image.mimetype.split('/')[1]}`),
-        )
-      ) {
-        // Image is duplicate => return error along with the hash => no duplicate files
-        throw new ConflictException({
-          message:
-            'This file already seems to be uploaded (indicated by m5hash of file)',
-          path: `${hash}.${image.mimetype.split('/')[1]}`,
-        } as ImageUploadConflictError);
-      }
       // Copy rather than move to allow for "moving" accross devices (i.e. docker volumes)
       this.logger.debug('Promoting image from cache to tmp');
       await copyFile(cachedFilePath, fileTargetPath);
-    } catch (error) {
+    } /* istanbul ignore next */ catch (error) {
       this.logger.error(error);
-      if (error instanceof HttpException) {
-        throw error;
-      }
       throw new InternalServerErrorException();
     } finally {
       // Cleanup cache
@@ -99,10 +91,10 @@ export class UploadService {
     try {
       await this.internalCommunicationService.notifyAuthAboutNewImage(
         userJWT,
-        `${hash}.${image.mimetype.split('/')[1]}`,
+        hash,
       );
     } catch (error) {
-      this.logger.warn(
+      this.logger.error(
         `An upload failed because the communication to the  auth backend failed. This could indicate a crashed auth service. ${error}`,
       );
       // A file without an owner is not allowed => cleanup
@@ -114,7 +106,7 @@ export class UploadService {
     }
 
     this.logger.log('Sucesfully uploaded Image with hash: ', hash);
-    return { path: `${hash}.${image.mimetype.split('/')[1]}` };
+    return { path: hash };
   }
 
   /**
@@ -136,22 +128,31 @@ export class UploadService {
     sourcePath: string,
     wDimension: number,
     hDimension: number,
-  ) {
+  ): Promise<void> {
     this.logger.debug(`Cropping image ${sourcePath}`);
+
     if (!existsSync(sourcePath)) {
-      throw new InternalServerErrorException(
-        'Image could not be found within cache',
+      this.logger.error(
+        `Image could not be cropped as it could not be found in cache (${sourcePath})`,
       );
+      throw new InternalServerErrorException('Image cropping failed');
     }
+
     if (lstatSync(sourcePath).isDirectory()) {
-      throw new InternalServerErrorException('Cannot crop directory');
+      this.logger.error(
+        `Image cropping path points to a directory (${sourcePath})`,
+      );
+      throw new InternalServerErrorException('Image cropping failed');
     }
+
     const image = sharp(sourcePath);
     const metadata = await image.metadata();
+
     // Image is smaller or equal to the size limit
     if (metadata.width <= wDimension && metadata.height <= hDimension) {
       return;
     }
+
     // Calculate offset so the image is cropped symetrically
     const wOffset = Math.floor((metadata.width - wDimension) / 2);
     const hOffset = Math.floor((metadata.height - hDimension) / 2);
@@ -160,12 +161,12 @@ export class UploadService {
         .extract({
           width: Math.max(0, Math.min(wDimension, metadata.width)),
           height: Math.max(0, Math.min(hDimension, metadata.height)),
-          left: wOffset,
-          top: hOffset,
+          left: Math.max(0, wOffset),
+          top: Math.max(0, hOffset),
         })
         .toBuffer();
       await writeFile(sourcePath, buffer);
-    } catch (error) {
+    } /* istanbul ignore next */ catch (error) {
       this.logger.error(error);
       throw new InternalServerErrorException('Image cropping failed');
     }
@@ -174,7 +175,7 @@ export class UploadService {
   /**
    * @description Move image from temporary to permanent storage
    */
-  async promoteImage(imageHash: string) {
+  async promoteImage(imageHash: string): Promise<void> {
     this.logger.debug(`Promoting image ${imageHash} from tmp to permanent`);
     const currentPath = join(this.tmpPath, imageHash);
     const targetPath = join(this.storePath, imageHash);
@@ -188,20 +189,13 @@ export class UploadService {
       this.logger.log('Image already exists in promoted form');
       return;
     }
-    try {
-      this.moveFile(currentPath, targetPath);
-    } catch (error) {
-      this.logger.error(
-        `Image ${imageHash} could not be promoted due to an error ${console.error()}`,
-      );
-      throw new InternalServerErrorException('Image could not be promoted');
-    }
+    this.moveFile(currentPath, targetPath);
   }
 
   /**
    * @description Move image from permanent to temporary storage
    */
-  async demoteImage(imageHash: string) {
+  async demoteImage(imageHash: string): Promise<void> {
     this.logger.debug(`Demoting image ${imageHash} from permanent to tmp`);
     const currentPath = join(this.storePath, imageHash);
     const targetPath = join(this.tmpPath, imageHash);
@@ -215,10 +209,10 @@ export class UploadService {
   /**
    * @description Move image (allow move accross devices)
    */
-  private moveFile(source: string, target: string) {
+  private moveFile(source: string, target: string): void {
     try {
       // Use this instead of move to allow for "moving" accross devices (i.e. in a docker volume environment)
-      copyFileSync(source, target);
+      copyFileSync(source, target, constants.COPYFILE_EXCL);
       rmSync(source);
     } catch (error) {
       this.logger.error(

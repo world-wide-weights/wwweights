@@ -5,7 +5,6 @@ import { AppController } from './app.controller';
 import { ItemsModule } from './items/items.module';
 import { GlobalStatistics } from './models/global-statistics.model';
 import { ProfilesModule } from './profiles/profiles.module';
-import { SharedModule } from './shared/shared.module';
 import { TagsModule } from './tags/tags.module';
 
 @Module({
@@ -33,7 +32,6 @@ import { TagsModule } from './tags/tags.module';
     TypegooseModule.forFeature([GlobalStatistics]),
     TagsModule,
     ItemsModule,
-    SharedModule,
     ProfilesModule,
   ],
   controllers: [AppController],

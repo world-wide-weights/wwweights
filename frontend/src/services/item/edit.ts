@@ -11,12 +11,12 @@ import { commandRequest } from "../axios/axios"
  * @returns response from api
  */
 export const editItemApi = async (slug: string, updateItem: EditItemDto, session: SessionData): Promise<AxiosResponse> => {
-    const response = await commandRequest.post(`items/${slug}/suggest/edit`, updateItem, {
-        headers: {
-            Authorization: `Bearer ${session.accessToken}`
-        }
-    })
-    return response
+	const response = await commandRequest.post(`items/${slug}/suggest/edit`, updateItem, {
+		headers: {
+			Authorization: `Bearer ${session.accessToken}`,
+		},
+	})
+	return response
 }
 
 /**
@@ -26,46 +26,46 @@ export const editItemApi = async (slug: string, updateItem: EditItemDto, session
  * @returns item data for edit item request
  */
 export const prepareEditItem = (values: CreateEditItemForm, oldItem: Item): EditItemDto => {
-    // Prepare additionalValue
-    const newAdditionalValue = values.valueType === "exact" ? null : Number(values.additionalValue)
-    const oldAdditionalValue = oldItem.weight.additionalValue ? Number(oldItem.weight.additionalValue) : null
-    const additionalValue = newAdditionalValue !== oldAdditionalValue ? { additionalValue: newAdditionalValue } : {}
+	// Prepare additionalValue
+	const newAdditionalValue = values.valueType === "exact" ? null : Number(values.additionalValue)
+	const oldAdditionalValue = oldItem.weight.additionalValue ? Number(oldItem.weight.additionalValue) : null
+	const additionalValue = newAdditionalValue !== oldAdditionalValue ? { additionalValue: newAdditionalValue } : {}
 
-    // Prepare isCa value
-    const isNewCaValue = values.isCa[0] ? true : false
-    const isOldCaValue = oldItem.weight.isCa ? true : false
-    const caValue = isNewCaValue !== isOldCaValue ? { isCa: isNewCaValue } : {}
+	// Prepare isCa value
+	const isNewCaValue = values.isCa[0] ? true : false
+	const isOldCaValue = oldItem.weight.isCa ? true : false
+	const caValue = isNewCaValue !== isOldCaValue ? { isCa: isNewCaValue } : {}
 
-    // Build weights object
-    const weight = {
-        ...(values.weight !== oldItem.weight.value ? { value: Number(values.weight) } : {}),
-        ...(caValue),
-        ...(additionalValue)
-    }
+	// Build weights object
+	const weight = {
+		...(values.weight !== oldItem.weight.value ? { value: Number(values.weight) } : {}),
+		...caValue,
+		...additionalValue,
+	}
 
-    // Calculates which tags to remove and which to add
-    const pull = oldItem.tags.filter(tag => !values.tags?.includes(tag.name)).map(tag => tag.name)
-    const push = values.tags?.filter(tag => !oldItem.tags.map(tag => tag.name).includes(tag)) ?? []
+	// Calculates which tags to remove and which to add
+	const pull = oldItem.tags.filter((tag) => !values.tags?.includes(tag.name)).map((tag) => tag.name)
+	const push = values.tags?.filter((tag) => !oldItem.tags.map((tag) => tag.name).includes(tag)) ?? []
 
-    // Build tags object
-    const tags = {
-        ...(pull.length > 0 ? { pull } : {}),
-        ...(push.length > 0 ? { push } : {})
-    }
+	// Build tags object
+	const tags = {
+		...(pull.length > 0 ? { pull } : {}),
+		...(push.length > 0 ? { push } : {}),
+	}
 
-    // Prepare source
-    const newSourceValue = values.source === "" ? null : values.source
-    const oldSourceValue = oldItem.source ? oldItem.source : null
-    const source = newSourceValue !== oldSourceValue ? { source: newSourceValue } : {}
+	// Prepare source
+	const newSourceValue = values.source === "" ? null : values.source
+	const oldSourceValue = oldItem.source ? oldItem.source : null
+	const source = newSourceValue !== oldSourceValue ? { source: newSourceValue } : {}
 
-    // Prepare item data update
-    const editItem: EditItemDto = {
-        ...(values.name !== oldItem?.name ? { name: values.name } : {}),
-        ...((Object.keys(weight).length > 0) ? { weight } : {}),
-        ...(source),
-        ...(values.imageFile === null ? { image: null } : {}), // Only remove image here, add logic is in CreateEdit 
-        ...((Object.keys(tags).length > 0) ? { tags } : {}),
-    }
+	// Prepare item data update
+	const editItem: EditItemDto = {
+		...(values.name !== oldItem?.name ? { name: values.name } : {}),
+		...(Object.keys(weight).length > 0 ? { weight } : {}),
+		...source,
+		...(values.imageFile === null ? { image: null } : {}), // Only remove image here, add logic is in CreateEdit
+		...(Object.keys(tags).length > 0 ? { tags } : {}),
+	}
 
-    return editItem
+	return editItem
 }

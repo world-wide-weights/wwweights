@@ -1,7 +1,7 @@
 import {
   Injectable,
   InternalServerErrorException,
-  Logger
+  Logger,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
@@ -14,12 +14,15 @@ export class ImageUserLookupService {
   constructor(
     @InjectRepository(ImageUserLookupEntity)
     private readonly imageUserLookupEntity: Repository<ImageUserLookupEntity>,
-  ) { }
+  ) {}
 
-  async addHashToUser(userId: number, imageHash: string) {
+  /**
+   * @description Persist connection between user and hash in db
+   */
+  async addHashToUser(fkUserId: number, imageHash: string): Promise<void> {
     const newEntry: ImageUserLookupEntity = {
-      fkUserId: userId,
-      imageHash: imageHash,
+      fkUserId,
+      imageHash,
     };
     try {
       await this.imageUserLookupEntity.insert(newEntry);
@@ -28,12 +31,12 @@ export class ImageUserLookupService {
         // Duplicate error is allowed => User may have uploaded same image twice
         if (error.code === '23505') {
           this.logger.log(
-            `User (${userId} has uploaded image (${imageHash}) for a second time. No values have been inserted)`,
+            `User (${fkUserId} has uploaded image (${imageHash}) for a second time. No values have been inserted)`,
           );
           return;
         }
       }
-      this.logger.error(error)
+      this.logger.error(error);
       throw new InternalServerErrorException('Could not persist information.');
     }
   }

@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { rmSync, statSync } from 'fs';
+import { rmSync, Stats, statSync } from 'fs';
 import { readdir } from 'fs/promises';
 import { join } from 'path';
 import {
@@ -24,15 +24,18 @@ export class ImageCleanup {
     validateOrCreateDirectory(this.tmpPath);
   }
 
+  /**
+   * @description Remove all files within the temporary stage that have exceeded the TTL
+   */
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   // Adding a parameter allows for calling this manually and easier testing
-  async cleanTmpStage(ttl_in_ms = undefined) {
+  async cleanTmpStage(ttl_in_ms = undefined): Promise<void> {
     const cronStartTime = performance.now();
     const files = await readdir(this.tmpPath);
 
     const expiredFiles = files.filter(
       (a) =>
-        Date.now() - this.getFileMetadata(a).birthtime.getTime() >
+        Date.now() - this.getFileMetadata(a)?.birthtime.getTime() >
         (ttl_in_ms || this.TMP_FILES_TTL),
     );
 
@@ -48,7 +51,15 @@ export class ImageCleanup {
     );
   }
 
-  private getFileMetadata(path) {
+  /**
+   * @description Get the metadata for a given file
+   */
+  private getFileMetadata(path): Stats {
+    try{
     return statSync(join(this.tmpPath, path));
+    } catch(error){
+      this.logger.log(error)
+      return null 
+    }
   }
 }

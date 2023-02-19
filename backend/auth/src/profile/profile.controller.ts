@@ -7,7 +7,7 @@ import {
   Req,
   SerializeOptions,
   UseGuards,
-  UseInterceptors
+  UseInterceptors,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -15,18 +15,19 @@ import {
   ApiOperation,
   ApiParam,
   ApiTags,
-  ApiUnauthorizedResponse
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { UserEntity } from '../db/entities/users.entity';
 import { JwtGuard } from '../shared/guards/jwt.guard';
-import { RequestWithUser } from '../shared/interfaces/request-with-user.dto';
+import { RequestWithJWTPayload } from '../shared/interfaces/request-with-user.interface';
 import { ProfileService } from './profile.service';
 
 @Controller('profile')
+@ApiTags('profile')
 @UseInterceptors(ClassSerializerInterceptor)
 @SerializeOptions({ strategy: 'excludeAll' })
 export class ProfileController {
-  constructor(private readonly profileService: ProfileService) { }
+  constructor(private readonly profileService: ProfileService) {}
 
   @Get('me')
   @SerializeOptions({
@@ -35,19 +36,19 @@ export class ProfileController {
   @UseGuards(JwtGuard)
   @ApiBearerAuth('access_token')
   @ApiOperation({
-    description: 'Get own profile with confidential information',
+    summary: 'Get own profile with confidential information',
   })
   @ApiOkResponse({ description: 'Profile return', type: UserEntity })
   @ApiUnauthorizedResponse({
     status: HttpStatus.UNAUTHORIZED,
     description: 'Invalid access token',
   })
-  async getMe(@Req() jwtPayload: RequestWithUser): Promise<UserEntity> {
-    return await this.profileService.findUserByIdOrFail(jwtPayload.user.id);
+  async getMe(@Req() { user }: RequestWithJWTPayload): Promise<UserEntity> {
+    return await this.profileService.findUserByIdOrFail(user.id);
   }
 
   @Get(':userId')
-  @ApiOperation({ description: 'Get profile of user by id' })
+  @ApiOperation({ summary: 'Get profile of user by id' })
   @ApiParam({ name: 'userId', type: Number })
   @ApiOkResponse({
     status: HttpStatus.OK,

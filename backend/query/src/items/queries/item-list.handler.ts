@@ -5,8 +5,8 @@ import { ReturnModelType } from '@typegoose/typegoose';
 import { Item } from '../../models/item.model';
 import { getFilter } from '../../shared/functions/get-filter';
 import { getSort } from '../../shared/functions/get-sort';
-import { DataWithCount } from '../../shared/interfaces/data-with-count';
-import { PaginatedResponse } from '../../shared/interfaces/paginated-result';
+import { DataWithCount } from '../../shared/interfaces/data-with-count.interface';
+import { PaginatedResponse } from '../../shared/interfaces/paginated-result.interface';
 import { ItemListQuery } from './item-list.query';
 
 @QueryHandler(ItemListQuery)
@@ -19,25 +19,24 @@ export class ItemListHandler implements IQueryHandler<ItemListQuery> {
   ) {}
 
   async execute({ dto }: ItemListQuery): Promise<PaginatedResponse<Item>> {
-    try {
-      // We currently also run textSearch on tags
-      const sort = getSort(dto.sort, (dto.query || dto.tags) && !dto.slug);
-      const filter = getFilter(
-        dto.query,
-        dto.tags,
-        dto.slug,
-        dto.hasimage,
-        dto.userid,
-      );
+    // We also run textSearch on tags
+    const sort = getSort(dto.sort, (dto.query || dto.tags) && !dto.slug);
+    const filter = getFilter(
+      dto.query,
+      dto.tags,
+      dto.slug,
+      dto.hasimage,
+      dto.userId,
+    );
 
+    const itemListQueryStartTime = performance.now();
+
+    try {
+      // We match for the filter, sort the result and use facet to get the total count and the paginated data
       const itemListWithCount = await this.itemModel.aggregate<
         DataWithCount<Item>
       >([
         { $match: filter },
-        // TODO: Find a fix for @ts-ignore
-        // Unfortunately, we need to ignore the following line, because the fields are not known at compile time
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-ignore
         { $sort: sort },
         {
           $facet: {
@@ -53,6 +52,9 @@ export class ItemListHandler implements IQueryHandler<ItemListQuery> {
       this.logger.log(
         `Items found: ${itemListWithCount[0].total[0]?.count || 0}`,
       );
+      this.logger.debug(
+        `Finished in ${performance.now() - itemListQueryStartTime} ms`,
+      );
 
       return {
         total: itemListWithCount[0].total[0]?.count || 0,
@@ -61,6 +63,9 @@ export class ItemListHandler implements IQueryHandler<ItemListQuery> {
         data: itemListWithCount[0].data,
       };
     } catch (error) /* istanbul ignore next */ {
+      this.logger.debug(
+        `Failed after ${performance.now() - itemListQueryStartTime} ms`,
+      );
       this.logger.error(error);
       throw new InternalServerErrorException(
         'Item list could not be retrieved',

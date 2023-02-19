@@ -1,21 +1,22 @@
-import { AggregateRoot } from '@nestjs/cqrs';
 import { ApiResponseProperty } from '@nestjs/swagger';
 import { prop } from '@typegoose/typegoose';
 import { Expose } from 'class-transformer';
 
-export class Tag extends AggregateRoot {
+/**
+ * @description The Tag model with an index on the name
+ */
+export class Tag {
   @Expose()
   @prop({ required: true, unique: true })
-  @ApiResponseProperty({ type: String, example: 'tag1' })
+  @ApiResponseProperty({ example: 'fruit' })
   name: string;
 
   @Expose()
   @prop({ required: true, default: 1 })
-  @ApiResponseProperty({ type: Number, example: 3 })
+  @ApiResponseProperty({ example: 3 })
   count: number;
 
   constructor(partial: Partial<Tag>) {
-    super();
     Object.assign(this, partial);
   }
 }

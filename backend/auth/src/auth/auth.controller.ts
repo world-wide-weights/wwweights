@@ -9,7 +9,7 @@ import {
   Req,
   SerializeOptions,
   UseGuards,
-  UseInterceptors
+  UseInterceptors,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -17,40 +17,38 @@ import {
   ApiBody,
   ApiConflictResponse,
   ApiCreatedResponse,
+  ApiInternalServerErrorResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
-  ApiUnauthorizedResponse
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dtos/login.dto';
 import { RegisterDTO } from './dtos/register.dto';
 import { RefreshTokenGuard } from './guards/refresh-token.guard';
-import { RequestWithRefreshPayload } from './interfaces/request-with-refresh-payload.interface';
+import { RequestWithDbUser } from './interfaces/request-with-refresh-payload.interface';
 import { AuthStatisticsResponse } from './responses/auth-statistics.response';
 import { JWKSResponse } from './responses/jwks.response';
 import { TokenResponse } from './responses/token.response';
 
 @Controller('auth')
+@ApiTags('auth')
 @UseInterceptors(ClassSerializerInterceptor)
-@ApiTags()
 @SerializeOptions({ strategy: 'excludeAll' })
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
   @ApiBody({ type: RegisterDTO })
-  @ApiOperation({ description: 'Register new users' })
+  @ApiOperation({ summary: 'Register new users' })
   @ApiConflictResponse({
-    status: HttpStatus.CONFLICT,
     description: 'User properties already in use',
   })
   @ApiBadRequestResponse({
-    status: HttpStatus.BAD_REQUEST,
     description: 'Malformed dto passed',
   })
   @ApiCreatedResponse({
-    status: HttpStatus.CREATED,
     description: 'User has been created',
     type: TokenResponse,
   })
@@ -61,13 +59,11 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiBody({ type: LoginDTO })
-  @ApiOperation({ description: 'Login existing users' })
+  @ApiOperation({ summary: 'Login existing users' })
   @ApiUnauthorizedResponse({
-    status: HttpStatus.UNAUTHORIZED,
     description: 'User credentials are invalid/User has been banned',
   })
   @ApiOkResponse({
-    status: HttpStatus.OK,
     description: 'Authorized',
     type: TokenResponse,
   })
@@ -78,39 +74,39 @@ export class AuthController {
   @Post('/refresh')
   @HttpCode(HttpStatus.OK)
   @UseGuards(RefreshTokenGuard)
-  @ApiOperation({ description: 'Fetch new access token using refresh token' })
+  @ApiOperation({ summary: 'Fetch new access token using refresh token' })
   @ApiBearerAuth('refresh_token')
   @ApiOkResponse({
-    status: HttpStatus.OK,
     description: 'Valid refresh token.',
     type: TokenResponse,
   })
   @ApiUnauthorizedResponse({
-    status: HttpStatus.OK,
     description: 'Invalid refresh token',
   })
   async getAuthViaRefreshToken(
-    @Req() tokenData: RequestWithRefreshPayload,
+    @Req() { user }: RequestWithDbUser,
   ): Promise<TokenResponse> {
-    return new TokenResponse(
-      await this.authService.getAuthPayload(tokenData.user),
-    );
+    return new TokenResponse(await this.authService.getAuthPayload(user));
   }
 
   @Get('.well-known/jwks.json')
   @ApiOperation({
-    description: 'Get all information about access token RSA public key',
+    summary: 'Get all information about access token RSA public key',
   })
   @ApiOkResponse({ type: JWKSResponse })
-  getJWKSInfo() {
+  getJWKSInfo(): JWKSResponse {
     return new JWKSResponse({ keys: [this.authService.getJWKSPayload()] });
   }
 
   @Get('statistics')
-  @ApiOperation({ description: 'Get auth statistics' })
+  @ApiOperation({ summary: 'Get auth statistics' })
   @ApiOkResponse({
     description: 'Returned statistics',
     type: AuthStatisticsResponse,
+  })
+  @ApiInternalServerErrorResponse({
+    description:
+      'The server failed to execute the give task. This is most likely due to a db issue',
   })
   async getAuthStatistics(): Promise<AuthStatisticsResponse> {
     return new AuthStatisticsResponse(
