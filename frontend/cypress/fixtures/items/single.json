@@ -4,35 +4,24 @@
     "limit": 1,
     "data": [
         {
-            "name": "Apple iPad Air",
-            "slug": "apple-ipad-air",
+            "name": "Apple",
+            "slug": "apple",
             "weight": {
-                "value": 469,
-                "additionalValue": 500,
+                "value": 50,
+                "additionalValue": 100,
                 "isCa": true
             },
-            "tags": [
-                {
-                    "name": "apple",
-                    "count": 4
-                },
-                {
-                    "name": "ios 7",
-                    "count": 1
-                },
-                {
-                    "name": "apple a7 28 nm",
-                    "count": 1
-                },
-                {
-                    "name": "2013",
-                    "count": 1
-                }
-            ],
-            "image": "test.png",
+            "tags": [{
+                "name": "fruit",
+                "count": 2
+            }, {
+                "name": "red",
+                "count": 1
+            }],
+            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-coral200-sollar.jpg",
             "userId": 1,
-            "source": "https://www.apple.com/ipad-air/",
-            "createdAt": 1676750776247
+            "source": "https://example.com",
+            "createdAt": 1674596011073
         }
     ]
 }

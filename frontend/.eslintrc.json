@@ -1,15 +1,6 @@
 {
     "extends": [
-        "next/core-web-vitals"
-    ],
-    "rules": {
-        "semi": [
-            "warn",
-            "never"
-        ],
-        "quotes": [
-            "warn",
-            "double"
-        ]
-    }
+        "next/core-web-vitals",
+        "prettier"
+    ]
 }

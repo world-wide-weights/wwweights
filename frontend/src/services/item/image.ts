@@ -10,21 +10,21 @@ import { imageRequest } from "../axios/axios"
  * @returns response from api
  */
 export const uploadImageApi = async (imageFile: File, session: SessionData): Promise<AxiosResponse<ImageUploadResponse>> => {
-    // Create form and append image
-    const formData = new FormData()
-    formData.append("image", imageFile)
+	// Create form and append image
+	const formData = new FormData()
+	formData.append("image", imageFile)
 
-    // Upload image
-    const imageResponse = await imageRequest.post<ImageUploadResponse>("/upload/image", formData, {
-        headers: {
-            Authorization: `Bearer ${session.accessToken}`,
-            "Content-Type": "multipart/form-data"
-        },
-        validateStatus(status) {
-            // Accept 409 Conflict as valid status
-            return (status >= 200 && status < 300) || status === 409
-        },
-    })
+	// Upload image
+	const imageResponse = await imageRequest.post<ImageUploadResponse>("/upload/image", formData, {
+		headers: {
+			Authorization: `Bearer ${session.accessToken}`,
+			"Content-Type": "multipart/form-data",
+		},
+		validateStatus(status) {
+			// Accept 409 Conflict as valid status
+			return (status >= 200 && status < 300) || status === 409
+		},
+	})
 
-    return imageResponse
+	return imageResponse
 }

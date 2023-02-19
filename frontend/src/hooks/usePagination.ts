@@ -4,9 +4,9 @@ import { PaginationService, PaginationServiceParams } from "../types/pagination"
 
 /**
  * Pagination hook, creates the pagination service object
- * @param usePaginationProps params for pagination 
+ * @param usePaginationProps params for pagination
  * @returns pagination service object
  */
 export const usePagination = (usePaginationProps: PaginationServiceParams): PaginationService => {
-    return useMemo(() => paginationService(usePaginationProps), [usePaginationProps])
+	return useMemo(() => paginationService(usePaginationProps), [usePaginationProps])
 }

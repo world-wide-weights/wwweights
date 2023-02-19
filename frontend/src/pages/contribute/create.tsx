@@ -6,21 +6,20 @@ import { NextPageCustomProps } from "../_app"
  * Create Item Page.
  */
 const CreateItem: NextPageCustomProps = () => {
-    return <>
-        {/* Meta Tags */}
-        <Seo
-            title="Create new item"
-            description="Contribute to the World Wide Weights database and create a new item."
-        />
+	return (
+		<>
+			{/* Meta Tags */}
+			<Seo title="Create new item" description="Contribute to the World Wide Weights database and create a new item." />
 
-        {/* Page Content */}
-        <CreateEdit />
-    </>
+			{/* Page Content */}
+			<CreateEdit />
+		</>
+	)
 }
 
 // Sets route need to be logged in
 CreateItem.auth = {
-    routeType: "protected"
+	routeType: "protected",
 }
 
 export default CreateItem

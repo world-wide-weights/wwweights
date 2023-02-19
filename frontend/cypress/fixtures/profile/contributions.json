@@ -1,391 +1,140 @@
 {
-    "total": 14,
+    "total": 7,
     "page": 1,
-    "limit": 4,
+    "limit": 2,
     "data": [
         {
-            "name": "Oppo Find X Lamborghini",
-            "slug": "oppo-find-x-lamborghini",
+            "name": "Test",
+            "slug": "test",
             "weight": {
-                "value": 186
+                "value": 150,
+                "isCa": false,
+                "additionalValue": 250
             },
             "tags": [
                 {
-                    "name": "2018",
+                    "name": "fruit",
                     "count": 2
                 },
                 {
-                    "name": "oppo",
-                    "count": 1
-                },
-                {
-                    "name": "android 81 oreo",
-                    "count": 1
-                },
-                {
-                    "name": "qualcomm sdm845 snapdragon 845 10 nm",
-                    "count": 1
+                    "name": "red",
+                    "count": 2
                 }
             ],
-            "image": "test.png",
+            "image": "https://example.com/image.png",
+            "source": "https://example.com",
             "userId": 1,
-            "createdAt": 1676750776486
+            "createdAt": 1676302822896
         },
         {
-            "name": "Lenovo Golden Warrior Note 8",
-            "slug": "lenovo-golden-warrior-note-8",
+            "name": "Test2",
+            "slug": "test2",
             "weight": {
-                "value": 170
+                "value": 150,
+                "isCa": false,
+                "additionalValue": 250
             },
             "tags": [
                 {
-                    "name": "lenovo",
-                    "count": 1
+                    "name": "fruit",
+                    "count": 2
                 },
                 {
-                    "name": "android 442 kitkat",
-                    "count": 1
-                },
-                {
-                    "name": "mediatek mt6752 28 nm",
-                    "count": 1
-                },
-                {
-                    "name": "2014",
-                    "count": 1
+                    "name": "red",
+                    "count": 2
                 }
             ],
-            "image": "test.png",
+            "source": "https://example.com",
             "userId": 1,
-            "createdAt": 1676750776472
+            "createdAt": 1676302816532
         },
         {
-            "name": "Nokia 2110",
-            "slug": "nokia-2110",
+            "name": "Test3",
+            "slug": "test3",
             "weight": {
-                "value": 236
+                "value": 150,
+                "isCa": false,
+                "additionalValue": 250
             },
             "tags": [
                 {
-                    "name": "nokia",
-                    "count": 1
+                    "name": "fruit",
+                    "count": 2
                 },
                 {
-                    "name": "1995",
-                    "count": 1
+                    "name": "red",
+                    "count": 2
                 }
             ],
-            "image": "test.jpg",
+            "source": "https://example.com",
             "userId": 1,
-            "createdAt": 1676750776451
+            "createdAt": 1676302816532
         },
         {
-            "name": "Acer Allegro",
-            "slug": "acer-allegro",
+            "name": "Test4",
+            "slug": "test4",
             "weight": {
-                "value": 126
+                "value": 150,
+                "isCa": false,
+                "additionalValue": 250
             },
             "tags": [
                 {
-                    "name": "acer",
-                    "count": 1
+                    "name": "fruit",
+                    "count": 2
                 },
                 {
-                    "name": "microsoft windows phone 75 mango",
-                    "count": 1
-                },
-                {
-                    "name": "qualcomm msm8255 snapdragon s2",
-                    "count": 1
-                },
-                {
-                    "name": "2011",
-                    "count": 1
+                    "name": "red",
+                    "count": 2
                 }
             ],
-            "image": "test.jpg",
+            "source": "https://example.com",
             "userId": 1,
-            "createdAt": 1676750776418
+            "createdAt": 1676302816532
         },
         {
-            "name": "Asus ROG Phone 6 Batman Edition",
-            "slug": "asus-rog-phone-6-batman-edition",
+            "name": "Test5",
+            "slug": "test5",
             "weight": {
-                "value": 239
+                "value": 150,
+                "isCa": false,
+                "additionalValue": 250
             },
             "tags": [
                 {
-                    "name": "android 12",
-                    "count": 5
-                },
-                {
-                    "name": "2022",
-                    "count": 4
-                },
-                {
-                    "name": "asus",
+                    "name": "fruit",
                     "count": 2
                 },
                 {
-                    "name": "qualcomm sm8475 snapdragon 8 gen 1 4 nm usamediatek dimensity 9000 4 nm international",
-                    "count": 1
+                    "name": "red",
+                    "count": 2
                 }
             ],
-            "image": "test.jpg",
+            "source": "https://example.com",
             "userId": 1,
-            "createdAt": 1676750776397
+            "createdAt": 1676302816532
         },
         {
-            "name": "Asus ROG Phone 6 Diablo Immortal Edition",
-            "slug": "asus-rog-phone-6-diablo-immortal-edition",
+            "name": "Test6",
+            "slug": "test6",
             "weight": {
-                "value": 239
+                "value": 150,
+                "isCa": false,
+                "additionalValue": 250
             },
             "tags": [
                 {
-                    "name": "android 12",
-                    "count": 5
-                },
-                {
-                    "name": "2022",
-                    "count": 4
-                },
-                {
-                    "name": "qualcomm sm8475 snapdragon 8 gen 1 4 nm",
+                    "name": "fruit",
                     "count": 2
                 },
                 {
-                    "name": "asus",
+                    "name": "red",
                     "count": 2
                 }
             ],
-            "image": "test.png",
+            "source": "https://example.com",
             "userId": 1,
-            "createdAt": 1676750776373
-        },
-        {
-            "name": "Samsung Galaxy Z Flip4",
-            "slug": "samsung-galaxy-z-flip4",
-            "weight": {
-                "value": 187
-            },
-            "tags": [
-                {
-                    "name": "samsung",
-                    "count": 4
-                },
-                {
-                    "name": "android 12",
-                    "count": 5
-                },
-                {
-                    "name": "2022",
-                    "count": 4
-                },
-                {
-                    "name": "qualcomm sm8475 snapdragon 8 gen 1 4 nm",
-                    "count": 2
-                }
-            ],
-            "image": "test.jpg",
-            "userId": 1,
-            "createdAt": 1676750776349
-        },
-        {
-            "name": "Samsung Galaxy A04e",
-            "slug": "samsung-galaxy-a04e",
-            "weight": {
-                "value": 188
-            },
-            "tags": [
-                {
-                    "name": "samsung",
-                    "count": 4
-                },
-                {
-                    "name": "android 12",
-                    "count": 5
-                },
-                {
-                    "name": "mediatek mt6765 helio p35 12nm",
-                    "count": 2
-                },
-                {
-                    "name": "2022",
-                    "count": 4
-                }
-            ],
-            "image": "test.jpg",
-            "userId": 1,
-            "createdAt": 1676750776332
-        },
-        {
-            "name": "Samsung Galaxy F04",
-            "slug": "samsung-galaxy-f04",
-            "weight": {
-                "value": 188
-            },
-            "tags": [
-                {
-                    "name": "samsung",
-                    "count": 4
-                },
-                {
-                    "name": "2023",
-                    "count": 2
-                },
-                {
-                    "name": "android 12",
-                    "count": 5
-                },
-                {
-                    "name": "mediatek mt6765 helio p35 12nm",
-                    "count": 2
-                }
-            ],
-            "image": "test.png",
-            "userId": 1,
-            "createdAt": 1676750776305
-        },
-        {
-            "name": "Samsung Galaxy A14 5G",
-            "slug": "samsung-galaxy-a14-5g",
-            "weight": {
-                "value": 202
-            },
-            "tags": [
-                {
-                    "name": "samsung",
-                    "count": 4
-                },
-                {
-                    "name": "android 13",
-                    "count": 1
-                },
-                {
-                    "name": "exynos 1330 sma146bmediatek mt6833 dimensity 700 7 nm sma146p",
-                    "count": 1
-                },
-                {
-                    "name": "2023",
-                    "count": 2
-                }
-            ],
-            "image": "test.png",
-            "userId": 1,
-            "createdAt": 1676750776267
-        },
-        {
-            "name": "Apple iPad Air",
-            "slug": "apple-ipad-air",
-            "weight": {
-                "value": 469
-            },
-            "tags": [
-                {
-                    "name": "apple",
-                    "count": 4
-                },
-                {
-                    "name": "ios 7",
-                    "count": 1
-                },
-                {
-                    "name": "apple a7 28 nm",
-                    "count": 1
-                },
-                {
-                    "name": "2013",
-                    "count": 1
-                }
-            ],
-            "image": "test.png",
-            "userId": 1,
-            "createdAt": 1676750776247
-        },
-        {
-            "name": "Apple iPhone XS",
-            "slug": "apple-iphone-xs",
-            "weight": {
-                "value": 177
-            },
-            "tags": [
-                {
-                    "name": "apple",
-                    "count": 4
-                },
-                {
-                    "name": "ios 12",
-                    "count": 1
-                },
-                {
-                    "name": "apple a12 bionic 7 nm",
-                    "count": 1
-                },
-                {
-                    "name": "2018",
-                    "count": 2
-                }
-            ],
-            "image": "test.jpg",
-            "userId": 1,
-            "createdAt": 1676750776223
-        },
-        {
-            "name": "Apple iPad mini (2021)",
-            "slug": "apple-ipad-mini-2021",
-            "weight": {
-                "value": 293
-            },
-            "tags": [
-                {
-                    "name": "apple",
-                    "count": 4
-                },
-                {
-                    "name": "apple a15 bionic 5 nm",
-                    "count": 2
-                },
-                {
-                    "name": "2021",
-                    "count": 2
-                },
-                {
-                    "name": "ipados 15",
-                    "count": 1
-                }
-            ],
-            "image": "test.jpg",
-            "userId": 1,
-            "createdAt": 1676750776183
-        },
-        {
-            "name": "Apple iPhone 13 mini",
-            "slug": "apple-iphone-13-mini",
-            "weight": {
-                "value": 141
-            },
-            "tags": [
-                {
-                    "name": "apple",
-                    "count": 4
-                },
-                {
-                    "name": "ios 15",
-                    "count": 1
-                },
-                {
-                    "name": "apple a15 bionic 5 nm",
-                    "count": 2
-                },
-                {
-                    "name": "2021",
-                    "count": 2
-                }
-            ],
-            "image": "test.jpg",
-            "userId": 1,
-            "createdAt": 1676750776086
+            "createdAt": 1676302816532
         }
     ]
 }

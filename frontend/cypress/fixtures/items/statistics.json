@@ -1,59 +1,25 @@
 {
     "heaviest": {
-        "name": "Apple iPad Air",
-        "slug": "apple-ipad-air",
+        "name": "Allview Viva Home",
+        "slug": "allview-viva-home",
         "weight": {
-            "value": 469
+            "value": 2018
         },
-        "tags": [
-            {
-                "name": "apple",
-                "count": 4
-            },
-            {
-                "name": "ios 7",
-                "count": 1
-            },
-            {
-                "name": "apple a7 28 nm",
-                "count": 1
-            },
-            {
-                "name": "2013",
-                "count": 1
-            }
-        ],
-        "image": "test.png",
+        "tags": [],
+        "image": "https://fdn2.gsmarena.com/vv/bigpic/allview-vivahome.jpg",
         "userId": 1,
-        "createdAt": 1676750776247
+        "createdAt": 1674594267645
     },
     "lightest": {
-        "name": "Acer Allegro",
-        "slug": "acer-allegro",
+        "name": "Samsung Galaxy View",
+        "slug": "samsung-galaxy-view",
         "weight": {
-            "value": 126
+            "value": 2
         },
-        "tags": [
-            {
-                "name": "acer",
-                "count": 1
-            },
-            {
-                "name": "microsoft windows phone 75 mango",
-                "count": 1
-            },
-            {
-                "name": "qualcomm msm8255 snapdragon s2",
-                "count": 1
-            },
-            {
-                "name": "2011",
-                "count": 1
-            }
-        ],
-        "image": "test.jpg",
+        "tags": [],
+        "image": "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-view.jpg",
         "userId": 1,
-        "createdAt": 1676750776418
+        "createdAt": 1674595331892
     },
-    "averageWeight": 217.21428571428572
+    "averageWeight": 156.55436785845927
 }

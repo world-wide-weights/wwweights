@@ -1,5 +1,4 @@
 export type ImageUploadResponse = {
-    message?: string;
-    path: string;
+	message?: string
+	path: string
 }
-
