@@ -140,7 +140,10 @@ describe('Item Insertion (e2e)', () => {
 
   describe(itemInsertPath, () => {
     it('Insert one Item should fail with auth false', async () => {
+      // ARRANGE
       fakeJWTGuard.setAuthResponse(false);
+
+      // ACT & ASSERT
       await request(server)
         .post(commandsPath + 'items/insert')
         .send(insertItem)
@@ -148,11 +151,13 @@ describe('Item Insertion (e2e)', () => {
     });
 
     it('Should insert one Item', async () => {
-      await request(server)
+      // ACT
+      const res = await request(server)
         .post(commandsPath + itemInsertPath)
-        .send(insertItem)
-        .expect(HttpStatus.OK);
+        .send(insertItem);
 
+      // ASSERT
+      expect(res.statusCode).toEqual(HttpStatus.OK);
       await retryCallback(async () => (await tagModel.count()) !== 0);
 
       const item = await itemModel.findOne({});
@@ -169,17 +174,20 @@ describe('Item Insertion (e2e)', () => {
     });
 
     it('Should insert two Items', async () => {
-      await request(server)
+      // ACT
+      const res = await request(server)
         .post(commandsPath + itemInsertPath)
-        .send(insertItem2)
-        .expect(HttpStatus.OK);
+        .send(insertItem2);
 
       await retryCallback(async () => (await itemModel.count()) === 1);
 
-      await request(server)
+      const res2 = await request(server)
         .post(commandsPath + itemInsertPath)
-        .send(insertItem)
-        .expect(HttpStatus.OK);
+        .send(insertItem);
+
+      // ASSERT
+      expect(res.statusCode).toEqual(HttpStatus.OK);
+      expect(res2.statusCode).toEqual(HttpStatus.OK);
 
       await retryCallback(async () => (await tagModel.count()) === 2);
 
@@ -197,31 +205,37 @@ describe('Item Insertion (e2e)', () => {
     });
 
     it('Should insert duplicate Items', async () => {
-      await request(server)
+      // ACT
+      const res = await request(server)
         .post(commandsPath + itemInsertPath)
-        .send({ ...insertItem, name: 'amongUs', tags: ['sus'] })
-        .expect(HttpStatus.OK);
+        .send({ ...insertItem, name: 'amongUs', tags: ['sus'] });
 
       await retryCallback(
         async () => (await tagModel.countDocuments({ name: 'sus' })) === 1,
       );
 
-      await request(server)
+      const res2 = await request(server)
         .post(commandsPath + itemInsertPath)
-        .send({ ...insertItem, name: 'amongUs' })
-        .expect(HttpStatus.CONFLICT);
+        .send({ ...insertItem, name: 'amongUs' });
+
+      // ASSERT
+      expect(res.statusCode).toEqual(HttpStatus.OK);
+      expect(res2.statusCode).toEqual(HttpStatus.CONFLICT);
 
       const items = await itemModel.find({});
       expect(items.length).toEqual(1);
     });
 
     it('Should insert Items in quick succession', async () => {
+      // ACT & kinda ASSERT
       bulkInsertData.forEach(async (item) => {
         await request(server)
           .post(commandsPath + itemInsertPath)
           .send({ ...item, tags: [...item.tags, 'coffee'] })
           .expect(HttpStatus.OK);
       });
+
+      // ASSERT
       await retryCallback(
         async () =>
           (await tagModel.countDocuments({ name: { $in: trackerTags } })) === 5,
@@ -234,11 +248,13 @@ describe('Item Insertion (e2e)', () => {
     });
 
     it('Should increment profile counts', async () => {
-      await request(server)
+      // ACT
+      const res = await request(server)
         .post(commandsPath + itemInsertPath)
-        .send(insertItemWithAllValues)
-        .expect(HttpStatus.OK);
+        .send(insertItemWithAllValues);
 
+      // ASSERT
+      expect(res.statusCode).toEqual(HttpStatus.OK);
       await retryCallback(async () => (await profileModel.count()) === 1);
 
       const profile = await profileModel.findOne({});
@@ -250,11 +266,13 @@ describe('Item Insertion (e2e)', () => {
     });
 
     it('Should increment only profile items count by 0 if rest is not used', async () => {
-      await request(server)
+      // ACT
+      const res = await request(server)
         .post(commandsPath + itemInsertPath)
-        .send({ name: insertItem.name, weight: insertItem.weight })
-        .expect(HttpStatus.OK);
+        .send({ name: insertItem.name, weight: insertItem.weight });
 
+      // ASSERT
+      expect(res.statusCode).toEqual(HttpStatus.OK);
       await retryCallback(async () => (await profileModel.count()) === 1);
 
       const profile = await profileModel.findOne({});
@@ -267,12 +285,12 @@ describe('Item Insertion (e2e)', () => {
 
     it('Should increment totalItems count on item insert', async () => {
       // ACT
-      await request(server)
+      const res = await request(server)
         .post(commandsPath + itemInsertPath)
-        .send({ ...insertItem, tags: undefined })
-        .expect(HttpStatus.OK);
+        .send({ ...insertItem, tags: undefined });
 
       // ASSERT
+      expect(res.statusCode).toEqual(HttpStatus.OK);
       await retryCallback(
         async () => (await globalStatisticsModel.count()) !== 0,
       );

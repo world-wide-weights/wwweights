@@ -2,10 +2,10 @@ import { INestApplication } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeout } from 'timers/promises';
+import { Client } from '../../test/mocks/eventstore-connection';
 import { ALLOWED_EVENT_ENTITIES } from './enums/allowedEntities.enum';
 import { EventStore } from './eventstore';
 import { EventStoreModule } from './eventstore.module';
-import { Client } from '../../test/mocks/eventstore-connection';
 
 describe('EventstoreModule', () => {
   // Basically disable the constructor to skip Eventstoredb connection
@@ -118,10 +118,10 @@ describe('EventstoreModule', () => {
     it('Should reject events when not ready', async () => {
       // ARRANGE
       eventStore.isReady = false;
-      // ASSERT
-      expect(eventStore.addEvent('a' as any, 'b' as any, 'c' as any)).rejects.toThrow(
-        'Backend is not ready yet. Retry later',
-      );
+      // ACT & ASSERT
+      expect(
+        eventStore.addEvent('a' as any, 'b' as any, 'c' as any),
+      ).rejects.toThrow('Backend is not ready yet. Retry later');
     });
   });
 });

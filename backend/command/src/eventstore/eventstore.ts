@@ -24,12 +24,8 @@ import { ItemDeletedEvent } from '../events/item-events/item-deleted.event';
 import { ItemEditSuggestedEvent } from '../events/item-events/item-edit-suggested.event';
 import { ItemEditedEvent } from '../events/item-events/item-edited.event';
 import { ItemInsertedEvent } from '../events/item-events/item-inserted.event';
-import { DeleteSuggestion } from '../models/delete-suggestion.model';
-import { EditSuggestion } from '../models/edit-suggestion.model';
-import { Item } from '../models/item.model';
-import { ItemDeletedEventDTO } from './dtos/deleted-item-event.dto';
-import { ItemEditedEventDTO } from './dtos/edited-item-event.dto';
 import { ALLOWED_EVENT_ENTITIES } from './enums/allowedEntities.enum';
+import { AllowedEventInputs } from './types/allowed-event-inputs.type';
 
 /**
  * @description Wrapper for eventstoreDb. Used for save interaction with eventstore
@@ -188,12 +184,7 @@ export class EventStore {
   public async addEvent(
     streamId,
     eventType: string,
-    event:
-      | EditSuggestion
-      | Item
-      | DeleteSuggestion
-      | ItemDeletedEventDTO
-      | ItemEditedEventDTO,
+    event: AllowedEventInputs,
   ): Promise<void> {
     // If replay is not ready, don´t accept events to avoid inconsistent data
     if (!this.isReady) {

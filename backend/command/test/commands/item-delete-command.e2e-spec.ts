@@ -145,6 +145,7 @@ describe('Item Deletion (e2e)', () => {
     });
 
     it('Should increment totalSuggestions count on item delete suggest', async () => {
+      // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
       mockEventStore.existingStreams.add(
@@ -222,6 +223,7 @@ describe('Item Deletion (e2e)', () => {
     });
 
     it('Should decrement itemCount on item delete', async () => {
+      // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
       mockEventStore.existingStreams.add(

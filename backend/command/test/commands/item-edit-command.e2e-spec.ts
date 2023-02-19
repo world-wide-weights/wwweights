@@ -174,6 +174,7 @@ describe('Item Edit (e2e)', () => {
     });
 
     it('Should increment totalSuggestions count on item edit suggest', async () => {
+      // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
       mockEventStore.existingStreams.add(
@@ -185,10 +186,12 @@ describe('Item Edit (e2e)', () => {
       });
       await globalStatistic.save();
 
+      // ACT
       await request(server)
         .post(commandsPath + `items/${encodeURI(item.slug)}/suggest/edit`)
         .send({ name: 'smthelse' });
 
+      // ASSERT
       await retryCallback(
         async () =>
           (await globalStatisticsModel.findOne()).totalSuggestions !==
