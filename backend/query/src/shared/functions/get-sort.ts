@@ -5,6 +5,9 @@ const textSearchParams = {
   name: 1,
 };
 
+/**
+ * @description The getSort function is used to create a sort object for the mongo aggregate sort stage
+ */
 export const getSort = (sort: ItemSortEnum, textSearch: boolean) => {
   if (sort === ItemSortEnum.RELEVANCE && !textSearch) return { createdAt: -1 };
   if (sort === ItemSortEnum.RELEVANCE && textSearch) {

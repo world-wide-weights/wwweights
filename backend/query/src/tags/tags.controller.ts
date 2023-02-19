@@ -10,7 +10,6 @@ import {
 import { QueryBus } from '@nestjs/cqrs';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Tag } from '../models/tag.model';
-import { getStringified } from '../shared/functions/get-stringified';
 import { PaginatedResponse } from '../shared/interfaces/paginated-result';
 import { QueryTagListDto } from './interfaces/query-tag-list.dto';
 import { QueryTagRelatedDto } from './interfaces/query-tag-related.dto';
@@ -48,10 +47,7 @@ export class TagsController {
   })
   async getTagsRelated(@Query() dto: QueryTagRelatedDto) {
     this.logger.log(
-      `Get related tag list for ${getStringified({
-        query: dto.query,
-        tags: dto.tags,
-      })}`,
+      `Get related tag list for ${{ query: dto.query, tags: dto.tags }}`,
     );
     const result = await this.queryBus.execute(new TagRelatedQuery(dto));
     return new PaginatedResponse<TagWithRelevance>(result, TagWithRelevance);
