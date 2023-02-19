@@ -35,6 +35,7 @@ async function bootstrap() {
     // Has to be done here as serving via static is done without a controller
     document.paths['/serve/{filePath}'] = {
       get: {
+        tags: ['serve'],
         description:
           'Endpoint serving all uploaded files. As of now these are limited to images and all non-image requests will be blocked',
         responses: {

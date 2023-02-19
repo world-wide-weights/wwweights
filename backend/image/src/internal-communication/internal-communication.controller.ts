@@ -33,6 +33,7 @@ export class InternalCommunicationController {
 
   @Post('demote-image')
   @ApiOperation({
+    summary: 'Demote image',
     description:
       'INTERNAL ENDPOINT - Demote an image to be removed by cleanup processes',
   })
@@ -49,6 +50,7 @@ export class InternalCommunicationController {
 
   @Post('promote-image')
   @ApiOperation({
+    summary: 'Promote image',
     description:
       'INTERNAL ENDPOINT - Promote an image to be prevent removal during cleanup processes',
   })
