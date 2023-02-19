@@ -28,6 +28,10 @@ declare global {
        */
       check500(): Chainable<void>
       /**
+       * Checks if we a network error toast is visible.
+       */
+      checkNetworkError(): Chainable<void>
+      /**
        * In Pagination checks if the activePageNumber is active.
        * @param activePageNumber the page we want to check active status
        */

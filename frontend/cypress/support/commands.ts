@@ -34,6 +34,10 @@ Cypress.Commands.add("check500", () => {
     cy.contains("500 - Error on Server Side").should("be.visible")
 })
 
+Cypress.Commands.add("checkNetworkError", () => {
+    cy.contains("We could not connect to the server. Please check your internet connection and try again.").should("be.visible")
+})
+
 Cypress.Commands.add("checkCurrentActivePage", (activePageNumber) => {
     cy.dataCy(`pagination-button-page-${activePageNumber}`).should("have.class", "bg-blue-500")
     cy.dataCy(`pagination-button-page-${activePageNumber}`).should("have.class", "text-white")
