@@ -10,8 +10,9 @@ import { AppModule } from '../src/app.module';
 import { RefreshJWTPayload } from '../src/auth/interfaces/refresh-jwt-payload.interface';
 import { RsaJWK } from '../src/auth/responses/jwks.response';
 import { UserService } from '../src/db/services/user.service';
-import { JWTPayload } from '../src/shared/interfaces/jwt-payload.interface';
 import { STATUS } from '../src/shared/enums/status.enum';
+import { JWTPayload } from '../src/shared/interfaces/jwt-payload.interface';
+import { MockConfigService } from './helpers/configService.helper';
 import {
   createUser,
   deleteUserByAttribute,
@@ -31,11 +32,14 @@ describe('AuthController (e2e)', () => {
 
   beforeEach(async () => {
     dataSource = await setupDataSource();
+
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
       .overrideProvider(DataSource)
       .useValue(dataSource)
+      .overrideProvider(ConfigService)
+      .useClass(MockConfigService)
       .compile();
 
     app = await moduleFixture.createNestApplication();
@@ -214,6 +218,7 @@ describe('AuthController (e2e)', () => {
         });
         expect(userInDb.lastLogin).toEqual(timeValue);
       });
+
       it('Should return token that can be validated with public key', async () => {
         // ARRANGE
         await createUser(dataSource, SAMPLE_USER);
@@ -237,6 +242,7 @@ describe('AuthController (e2e)', () => {
         );
       });
     });
+
     describe('Negative Tests', () => {
       it('Should fail for incorrect data ', () => {
         // ACT & ASSERT
@@ -391,6 +397,7 @@ describe('AuthController (e2e)', () => {
       });
     });
   });
+
   describe('/auth/statistics (GET)', () => {
     describe('Positive Tests', () => {
       it('Should return the correct user amount', async () => {
