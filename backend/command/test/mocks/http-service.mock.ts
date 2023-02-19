@@ -2,6 +2,9 @@ import { HttpStatus } from '@nestjs/common';
 import { AxiosError } from 'axios';
 import { of, throwError } from 'rxjs';
 
+/**
+ * @description Mock httpservice (currently post only)
+ */
 export class HttpServiceMock {
   params = [];
   shouldFail = false;

@@ -3,17 +3,19 @@ import { IsBiggerThan } from './is-bigger-than';
 describe('IsBiggerThan', () => {
   describe('Postive tests', () => {
     it('should return no ValidationErrors when marked number is bigger than other', async () => {
+      // ARRANGE
       class Test {
         @IsBiggerThan('min')
         max: number;
         min: number;
       }
-
+      // ACT
       const test = new Test();
       test.max = 10; // Max is bigger than min => All good!
       test.min = 5;
 
       const validationErrorsArray = await validate(test);
+      // ASSERT
       expect(test.max).toBeGreaterThan(test.min); // Sanity check
       expect(validationErrorsArray).toEqual([]);
       expect(validationErrorsArray).toHaveLength(0);
@@ -42,6 +44,7 @@ describe('IsBiggerThan', () => {
     });
 
     it('should contain error message when max is not bigger than min', async () => {
+      // ARRANGE
       const errorMessage = 'Max should be bigger than min';
       class Test {
         @IsBiggerThan('min', {
@@ -51,11 +54,14 @@ describe('IsBiggerThan', () => {
         min: number;
       }
 
+      // ACT
       const test = new Test();
       test.max = 5;
       test.min = 10;
 
       const validationErrorsArray = await validate(test);
+
+      // ASSERT
       const validationError = validationErrorsArray[0];
 
       expect(test.max).toBeLessThan(test.min); // Sanity check
@@ -68,6 +74,7 @@ describe('IsBiggerThan', () => {
   });
   describe('Negative tests', () => {
     it('should return ValidationError when number is equal to the other number', async () => {
+      // ARRANGE
       class Test {
         @IsBiggerThan('min')
         max: number;
@@ -78,7 +85,10 @@ describe('IsBiggerThan', () => {
       test.max = 5;
       test.min = 5;
 
+      // ACT
       const validationErrorsArray = await validate(test);
+
+      // ASSERT
       const validationError = validationErrorsArray[0];
 
       expect(test.max).toBe(test.min); // Sanity check
@@ -87,6 +97,7 @@ describe('IsBiggerThan', () => {
     });
 
     it('should return ValidationError when number is smaller than the other number', async () => {
+      // ARRANGE
       class Test {
         @IsBiggerThan('min')
         max: number;
@@ -97,7 +108,10 @@ describe('IsBiggerThan', () => {
       test.max = 5;
       test.min = 10;
 
+      // ACT
       const validationErrorsArray = await validate(test);
+
+      // ARRANGE
       const validationError = validationErrorsArray[0];
 
       expect(test.max).toBeLessThan(test.min); // Sanity check
@@ -106,6 +120,7 @@ describe('IsBiggerThan', () => {
     });
 
     it('should return ValidationError when number is not a number', async () => {
+      // ARRANGE
       class Test {
         @IsBiggerThan('min')
         max: number;
@@ -116,7 +131,10 @@ describe('IsBiggerThan', () => {
       test.max = 10;
       test.min = 'Welcome';
 
+      // ACT
       const validationErrorsArray = await validate(test);
+
+      // ASSERT
       const validationError = validationErrorsArray[0];
 
       expect(validationErrorsArray).toHaveLength(1);

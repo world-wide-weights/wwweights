@@ -1,9 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import {
-  Injectable,
-  Logger,
-  ServiceUnavailableException,
-} from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AxiosError } from 'axios';
 import { catchError, firstValueFrom } from 'rxjs';
@@ -23,7 +19,7 @@ export class InternalCommunicationService {
   /**
    * @description Send information to backend that an image is used by item
    */
-  async notifyImgAboutItemCreation(imageHash: string) {
+  async notifyImgAboutItemCreation(imageHash: string): Promise<void> {
     await this.notifyImg('/internal/promote-image', { imageHash });
     this.logger.log('Notifed image backend about image usage');
   }
@@ -31,7 +27,7 @@ export class InternalCommunicationService {
   /**
    * @description Send information to backend that an image has become obsolete
    */
-  async notifyImgAboutImageObsoleteness(imageHash: string) {
+  async notifyImgAboutImageObsoleteness(imageHash: string): Promise<void> {
     await this.notifyImg('/internal/demote-image', { imageHash });
     this.logger.log('Notifed image backend about image obsoleteness');
   }
@@ -39,7 +35,10 @@ export class InternalCommunicationService {
   /**
    * @description Send post request to the backend
    */
-  private async notifyImg(endpoint: string, data: { imageHash: string }) {
+  private async notifyImg(
+    endpoint: string,
+    data: { imageHash: string },
+  ): Promise<void> {
     await firstValueFrom(
       this.httpService
         .post(
@@ -58,9 +57,7 @@ export class InternalCommunicationService {
             this.logger.error(
               `Request to img backend for image ${data.imageHash} failed! Error: ${error}`,
             );
-            throw new ServiceUnavailableException(
-              'Img Backend could not be notified at the time',
-            );
+            throw new Error(`Image backend could not be notified`);
           }),
         ),
     );

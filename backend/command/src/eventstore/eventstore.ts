@@ -19,12 +19,13 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { EventBus } from '@nestjs/cqrs';
 import { readFileSync } from 'fs';
-import { ItemDeleteSuggestedEvent } from '../items/events/item-delete-suggested.event';
-import { ItemDeletedEvent } from '../items/events/item-deleted.event';
-import { ItemEditSuggestedEvent } from '../items/events/item-edit-suggested.event';
-import { ItemEditedEvent } from '../items/events/item-edited.event';
-import { ItemInsertedEvent } from '../items/events/item-inserted.event';
+import { ItemDeleteSuggestedEvent } from '../events/item-events/item-delete-suggested.event';
+import { ItemDeletedEvent } from '../events/item-events/item-deleted.event';
+import { ItemEditSuggestedEvent } from '../events/item-events/item-edit-suggested.event';
+import { ItemEditedEvent } from '../events/item-events/item-edited.event';
+import { ItemInsertedEvent } from '../events/item-events/item-inserted.event';
 import { ALLOWED_EVENT_ENTITIES } from './enums/allowedEntities.enum';
+import { AllowedEventInputs } from './types/allowed-event-inputs.type';
 
 /**
  * @description Wrapper for eventstoreDb. Used for save interaction with eventstore
@@ -33,6 +34,7 @@ import { ALLOWED_EVENT_ENTITIES } from './enums/allowedEntities.enum';
 export class EventStore {
   private readonly logger = new Logger(EventStore.name);
   private client: EventStoreDBClient;
+  // Duplicate type definitions as using premade type is not allowed here
   private readonly eventMap = new Map<
     string,
     | typeof ItemEditSuggestedEvent
@@ -57,10 +59,12 @@ export class EventStore {
     if (process.env.TEST_MODE === 'true') {
       return;
     }
+
     // Locally we can run with this
     let sslOptions: ChannelCredentialOptions = {
       insecure: true,
     };
+
     // If connecting to secure instance we need this
     if (this.configService.get<string>('DB_EVENTSTORE_USE_TLS') === 'true') {
       sslOptions = {
@@ -136,10 +140,12 @@ export class EventStore {
       }
 
       this.publishEventToBus(
+        // Use any as types from eventstore client package are not in sync to actual db
         (resolvedEvent?.event?.data as any)?.eventType,
         (resolvedEvent?.event?.data as any)?.value,
       );
     }
+
     this.logger.verbose(
       'Initialized Stream listener for content streams of eventstore',
     );
@@ -175,7 +181,11 @@ export class EventStore {
   /**
    * @description Add event to stream
    */
-  public async addEvent(streamId, eventType: any, event: any) {
+  public async addEvent(
+    streamId,
+    eventType: string,
+    event: AllowedEventInputs,
+  ): Promise<void> {
     // If replay is not ready, don´t accept events to avoid inconsistent data
     if (!this.isReady) {
       throw new ServiceUnavailableException(
@@ -192,20 +202,30 @@ export class EventStore {
   /**
    * @description Take event along with its typing and publish it to the cqrs event bus
    */
-  private publishEventToBus(eventType: any, event: any) {
+  private publishEventToBus(
+    eventType: string,
+    // Not the prettiest solution but union types do not seem to work
+    event:
+      | typeof ItemEditSuggestedEvent
+      | typeof ItemInsertedEvent
+      | typeof ItemDeleteSuggestedEvent
+      | typeof ItemDeletedEvent
+      | typeof ItemEditedEvent,
+  ): Promise<void> {
     if (!event) return;
     if (!this.eventMap.get(eventType)) {
       this.logger.error(`Invalid eventtype for eventbus ${eventType}`);
       return;
     }
-    this.eventBus.publish(new (this.eventMap.get(eventType))(event));
+    // any conversion as map does not allow for union type
+    this.eventBus.publish(new (this.eventMap.get(eventType) as any)(event));
     this.logger.debug(`Published ${eventType} to event bus`);
   }
 
   /**
    * @description Determine whether or not a stream with a given id exists
    */
-  async doesStreamExist(streamId: string) {
+  async doesStreamExist(streamId: string): Promise<boolean> {
     const result = this.client.readStream(streamId, {
       direction: SDRAWKCAB,
       fromRevision: END,

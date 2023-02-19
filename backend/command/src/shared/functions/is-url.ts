@@ -1,3 +1,6 @@
+/**
+ * @description Check if string is url
+ */
 export const IsUrl = (potentialUrl: string) => {
   try {
     new URL(potentialUrl);

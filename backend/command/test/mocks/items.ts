@@ -1,5 +1,5 @@
 import { Tag } from 'src/models/tag.model';
-import { InsertItemDto } from '../../src/items/interfaces/insert-item.dto';
+import { InsertItemDto } from '../../src/controllers/dtos/insert-item.dto';
 import { Item } from '../../src/models/item.model';
 
 export const singleItem: Partial<Item> = {
@@ -121,3 +121,12 @@ export const testData = [
     ],
   },
 ];
+
+export const bulkInsertData = [...Array(5).keys()].map((ind) => ({
+  ...testData[ind],
+  tags: [...testData[ind].tags, `trackertag${ind}`],
+}));
+
+export const trackerTags = [...Array(5).keys()].map(
+  (ind) => `trackertag${ind}`,
+);

@@ -82,13 +82,11 @@ describe('InternalCommunicationController (e2e)', () => {
         join(process.cwd(), 'test', 'helpers', 'test.png'),
         join(diskPath, imageHash),
       );
-      console.log('ready');
       // ACT
       const res = await request(app.getHttpServer())
         .post('/internal/promote-image')
         .set('x-api-key', 'abc')
         .send({ imageHash });
-      console.log('res');
 
       // ASSERT
       // Should return 200 as it is an expected edge case and the sending eventhandler is not meant to handle it

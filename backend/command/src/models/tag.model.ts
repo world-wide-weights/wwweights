@@ -1,6 +1,9 @@
 import { prop } from '@typegoose/typegoose';
 import { Expose } from 'class-transformer';
 
+/**
+ * @description Entity/Model for tag in read db
+ */
 export class Tag {
   @Expose()
   @prop({ required: true, unique: true })
