@@ -11,7 +11,7 @@ import { Profile } from '../src/models/profile.model';
 import { ProfilesModule } from '../src/profiles/profiles.module';
 import { profiles } from './mocks/profiles';
 
-describe('QueryController (e2e)', () => {
+describe('Profiles (e2e)', () => {
   let app: INestApplication;
   let profileModel: Model<Profile>;
   let server: any; // Has to be any because of supertest not having a type for it either
@@ -49,7 +49,7 @@ describe('QueryController (e2e)', () => {
     await app.close();
   });
 
-  describe('Queries /queries/v1', () => {
+  describe('/queries/v1', () => {
     const queriesPath = '/queries/v1/';
 
     describe('profiles/:userId/statistics', () => {
@@ -72,7 +72,7 @@ describe('QueryController (e2e)', () => {
         });
       });
 
-      it('should throw a not found if document does not exist )', async () => {
+      it('should throw a not found if document does not exist', async () => {
         // ARRANGE
         await profileModel.deleteMany();
         // ACT
