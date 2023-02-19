@@ -32,7 +32,7 @@ export class DeleteItemHandler implements ICommandHandler<DeleteItemCommand> {
       this.logger.log(
         `${ItemDeletedEvent.name} created on stream: ${streamName}`,
       );
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       this.logger.error(error);
       this.logger.error(
         `Toplevel error caught. Stopping execution and therefore not creating event. See above for more details`,

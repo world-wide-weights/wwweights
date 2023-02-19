@@ -4,9 +4,9 @@ import {
   Logger,
 } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import { BulkInsertItemDTO } from '../dtos/bulk-insert-item.dto';
 import { InsertItemCommand } from '../../commands/item-commands/insert-item.command';
 import { ItemCronJobHandler } from '../../cron/cron-handlers/items.cron';
+import { BulkInsertItemDTO } from '../dtos/bulk-insert-item.dto';
 
 @Injectable()
 export class ItemsService {
@@ -32,7 +32,7 @@ export class ItemsService {
         );
         count++;
       }
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       this.logger.error(
         `Failed bulk insert at ${count}/${bulkInsertItemDTOs.length} items due to an error: ${error}`,
       );

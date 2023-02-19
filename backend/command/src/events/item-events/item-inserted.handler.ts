@@ -43,7 +43,8 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
 
       // Further updates and recovery from inconsistency is handled via cronjobs rather than for every projector run
       await this.imagesService.promoteImageInImageBackend(item.image);
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
+      this.logger.log(error);
       this.logger.error(
         `Toplevel error caught. Stopping execution. See above for more details`,
       );
@@ -63,7 +64,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       const insertedItem = new this.itemModel(item);
       await insertedItem.save();
       this.logger.debug(`Item inserted:  ${insertedItem.slug}`);
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       this.logger.error(`Insert Item ${item.slug}: ${error}`);
       throw new Error(`Couldn't insert item ${item.slug}`);
     }
@@ -82,7 +83,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
       }));
       await this.tagModel.bulkWrite(tagsArray);
       this.logger.log(`Tags incremented or created: ${tagsArray}`);
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       this.logger.log(
         `Acceptable Create Tags (${item.tags.join(
           ',',
@@ -112,7 +113,7 @@ export class ItemInsertedHandler implements IEventHandler<ItemInsertedEvent> {
         },
         { $merge: { into: 'items' } },
       ]);
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       this.logger.error(error);
       throw new Error(`Could not handle update item ${item.slug} tags`);
     }

@@ -42,7 +42,7 @@ export class ItemCronJobHandler {
         },
         { $merge: { into: 'items' } },
       ]);
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       this.logger.error(error);
       this.logger.log(
         `Cronjob for updating Tag count in Items finished in${
@@ -77,7 +77,7 @@ export class ItemCronJobHandler {
         );
         return;
       }
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       this.logger.error(error);
       this.logger.log(
         `Cronjob for deleting Tags in ${

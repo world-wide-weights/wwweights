@@ -50,12 +50,14 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
       this.logger.log(
         `${ItemInsertedEvent.name} created on stream: ${streamName}}`,
       );
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       this.logger.error(error);
       this.logger.error(
         `Toplevel error caught. Stopping execution and therefore not creating event. See above for more details`,
       );
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(
+        "Couldn't create insertItem event",
+      );
     }
   }
 }

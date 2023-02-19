@@ -24,7 +24,8 @@ export class ItemDeleteSuggestedHandler
       // Performance
       await this.insertDeleteSuggestion(deleteSuggestion);
       await this.statisticsService.incrementGlobalSuggestionCount();
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
+      this.logger.error(error);
       this.logger.error(
         `Toplevel error caught. Stopping execution. See above for more details`,
       );
@@ -43,7 +44,7 @@ export class ItemDeleteSuggestedHandler
     try {
       const suggestion = new this.deleteSuggestionModel(deleteSuggestion);
       await suggestion.save();
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       this.logger.error(
         `Could not insert deletesuggestion ${deleteSuggestion.uuid} due to an error ${error}`,
       );

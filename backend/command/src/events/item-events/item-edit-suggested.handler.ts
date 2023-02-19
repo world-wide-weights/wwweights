@@ -45,7 +45,8 @@ export class ItemEditSuggestedHandler
       }
 
       await this.statisticsService.incrementGlobalSuggestionCount();
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
+      this.logger.error(error);
       this.logger.error(
         `Toplevel error caught. Stopping execution. See above for more details`,
       );
@@ -63,7 +64,7 @@ export class ItemEditSuggestedHandler
     try {
       const insertedSuggestion = new this.suggestionModel(editSuggestion);
       await insertedSuggestion.save();
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       this.logger.error(
         `Insert suggestion for item ${editSuggestion.itemSlug}: ${error}`,
       );

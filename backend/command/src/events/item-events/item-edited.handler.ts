@@ -62,7 +62,8 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
             } ms`,
           );
       }
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
+      this.logger.error(error);
       this.logger.error(
         `Toplevel error caught. Stopping execution. See above for more details`,
       );
@@ -110,7 +111,7 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
         );
       }
       return oldItem;
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       this.logger.error(
         `Could not update item ${slug} due to an error ${error}`,
       );
@@ -145,7 +146,7 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
       await this.tagModel.bulkWrite(
         positiveUpdateQuery.concat(negativeUpdateQuery),
       );
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       this.logger.error(
         `Could not update Tags ${tagUpdate.push.concat(
           tagUpdate.pull,

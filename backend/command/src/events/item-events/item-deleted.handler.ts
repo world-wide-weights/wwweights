@@ -47,7 +47,8 @@ export class ItemDeletedHandler implements IEventHandler<ItemDeletedEvent> {
       }
 
       await this.imagesService.demoteImageInImageBackend(deletedItem?.image);
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
+      this.logger.error(error);
       this.logger.error(
         `Toplevel error caught. Stopping execution. See above for more details`,
       );
@@ -62,7 +63,7 @@ export class ItemDeletedHandler implements IEventHandler<ItemDeletedEvent> {
   private async deleteItem(slug: string): Promise<Item> {
     try {
       return await this.itemModel.findOneAndDelete({ slug });
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       this.logger.error(
         `Could not delete item ${slug} due to an error ${error}`,
       );
@@ -81,7 +82,7 @@ export class ItemDeletedHandler implements IEventHandler<ItemDeletedEvent> {
           $inc: { count: -1 },
         },
       );
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       this.logger.error(
         `Could not update Tags ${tagNames.join(',')} due to an error ${error}`,
       );
