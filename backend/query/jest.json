@@ -18,6 +18,7 @@
   "coverageDirectory": ".coverage",
   "coverageReporters": [
     "json",
-    "text"
+    "text",
+    "html"
   ]
 }
