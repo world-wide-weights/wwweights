@@ -1,5 +1,9 @@
 {
-  "moduleFileExtensions": ["js", "json", "ts"],
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
   "rootDir": ".",
   "testEnvironment": "node",
   "collectCoverage": true,
@@ -12,14 +16,14 @@
     "^.+\\.(t|j)s$": "ts-jest"
   },
   "coverageDirectory": ".coverage",
-<<<<<<< HEAD:backend/auth/jest.json
-  "coverageReporters": ["json", "text", "html"],
+  "coverageReporters": [
+    "json",
+    "text",
+    "html"
+  ],
   "coveragePathIgnorePatterns": [
     "<rootDir>/test/mocks",
     "<rootDir>/test/helpers",
     "<rootDir>/node_modules/"
   ]
-=======
-  "coverageReporters": ["json", "text", "html"]
->>>>>>> 8aef78a080faeed7ef21c61e23146d40e5d5d010:backend/image/jest.json
 }
