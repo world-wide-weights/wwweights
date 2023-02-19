@@ -4,7 +4,6 @@ import { routes } from "../../services/routes/routes"
 import { renderUnitIntoString } from "../../services/unit/unitRenderer"
 import { getImageUrl } from "../../services/utils/getImageUrl"
 import { Weight } from "../../types/item"
-import { Tooltip } from "../Tooltip/Tooltip"
 
 export type ItemListContributeProps = {
     /** Name of item. */
@@ -33,12 +32,8 @@ export const ItemListContribute: React.FC<ItemListContributeProps> = ({ name, sl
             {/* Item name, weight and image */}
             <Link className="flex justify-between md:justify-start items-center w-full md:h-12 mx-2 md:mx-4" href={routes.weights.single(slug)}>
                 <div className="md:flex">
-                    <Tooltip position="left" content={name}>
-                        <h5 datacy="itemlistcontribute-name" className="font-medium truncate w-40 md:w-64 pr-3">{name}</h5>
-                    </Tooltip>
-                    <Tooltip position="left" content={name}>
-                        <h5 datacy="itemlistcontribute-weight" className="text-gray-600 font-medium truncate w-40 md:w-32 mr-5">{weightString}</h5>
-                    </Tooltip>
+                    <h5 datacy="itemlistcontribute-name" title={name} className="font-medium truncate w-40 md:w-64 lg:w-52 xl:w-64 pr-3">{name}</h5>
+                    <h5 datacy="itemlistcontribute-weight" title={weightString} className="text-gray-600 font-medium truncate w-40 md:w-32 mr-5">{weightString}</h5>
                 </div>
                 {imageUrl && <Image datacy="itemlistcontribute-image" className="object-cover rounded-lg w-12 h-12" alt={`Image of ${name}`} src={imageUrl} width={96} height={96} />}
             </Link>

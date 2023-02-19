@@ -1,6 +1,5 @@
 import Link from "next/link"
 import { Icon } from "../Icon/Icon"
-import { Tooltip } from "../Tooltip/Tooltip"
 
 type CardProps = {
     /** Icon displays in front of value and descriptions */
@@ -32,12 +31,8 @@ export const Card: React.FC<CardProps> = ({ icon, descriptionTop, value, descrip
 
         {/* Value and descriptions */}
         <div>
-            {descriptionTop && <Tooltip position="left" content={descriptionTop}>
-                <div className="font-medium text-gray-600 w-40 truncate break-words">{descriptionTop}</div>
-            </Tooltip>}
-            <Tooltip position="left" content={value}>
-                <h5 className="font-bold text-xl w-32 truncate leading-4">{value}</h5>
-            </Tooltip>
+            {descriptionTop && <div title={descriptionTop} className="font-medium text-gray-600 w-40 truncate break-words">{descriptionTop}</div>}
+            <h5 title={value} className="font-bold text-xl w-32 truncate leading-6">{value}</h5>
             {descriptionBottom && <p className="text-gray-700">{descriptionBottom}</p>}
         </div>
     </CustomTag>

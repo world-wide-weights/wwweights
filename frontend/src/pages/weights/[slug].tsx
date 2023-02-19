@@ -112,7 +112,7 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
 
                     {/* Weights Image */}
                     {imageUrl && <div className="row-start-1 lg:row-end-3 lg:flex lg:justify-end">
-                        <Image src={imageUrl} priority className="rounded-xl" alt={item.name} width={230} height={230} />
+                        <Image src={imageUrl} priority className="rounded-xl h-auto" alt={item.name} width={230} height={230} />
                     </div>}
                 </div>
                 <div className="flex justify-end">
