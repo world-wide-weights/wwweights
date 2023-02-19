@@ -58,7 +58,7 @@ export default defineConfig({
 				 * @param object with mock meta information and body
 				 */
 				async nock({ hostname, method, path, statusCode, body }: NockType) {
-					console.log(`Backend Mock: ${method.toUpperCase()} ${hostname}${path} respond with`, statusCode, `${body ? JSON.stringify(body).substring(0, 50) : "No body."}...`)
+					console.log(`Backend Mock: ${method.toUpperCase()} ${hostname}${path} respond with`, statusCode, `${body ? JSON.stringify(body).substring(0, 50) : "No body"}...`)
 
 					nock(hostname).persist()[method](path).query(true).reply(statusCode, body)
 

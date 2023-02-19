@@ -26,4 +26,5 @@ describe("Single Weight Tabs", () => {
 	})
 })
 
-export {}
+export { }
+
