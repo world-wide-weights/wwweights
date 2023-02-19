@@ -12,7 +12,7 @@ import { getSort } from '../../shared/functions/get-sort';
 import { DataWithCount } from '../../shared/interfaces/data-with-count';
 import { PaginatedResponse } from '../../shared/interfaces/paginated-result';
 import { ItemSortEnum } from '../enums/item-sort-enum';
-import { ItemRelatedQuery } from './related-items.query';
+import { ItemRelatedQuery } from './item-related.query';
 
 @QueryHandler(ItemRelatedQuery)
 export class ItemRelatedHandler implements IQueryHandler<ItemRelatedQuery> {

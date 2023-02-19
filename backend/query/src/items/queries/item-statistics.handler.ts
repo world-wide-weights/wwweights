@@ -77,7 +77,6 @@ export class ItemStatisticsHandler
 
       if (!statistics[0]?.averageWeight) {
         this.logger.log('No items found');
-        // Just to jump into the catch
         throw new NotFoundException('No items found');
       }
       this.logger.debug(
