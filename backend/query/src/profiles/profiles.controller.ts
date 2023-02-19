@@ -34,9 +34,13 @@ export class ProfilesController {
     description: 'Counts of profile activity',
   })
   @ApiNotFoundResponse({ description: 'Profile not found' })
-  async getProfileStatistics(@Param() dto: QueryProfileStatisticsDto) {
-    this.logger.log(`Get profileCounts for ${dto.userId}`);
-    const result = await this.queryBus.execute(new ProfileStatisticsQuery(dto));
+  async getProfileStatistics(
+    @Param() { userId }: QueryProfileStatisticsDto,
+  ): Promise<ProfileStatistics> {
+    this.logger.log(`Get profileCounts for ${userId}`);
+    const result = await this.queryBus.execute(
+      new ProfileStatisticsQuery(userId),
+    );
     return new ProfileStatistics(result);
   }
 }
