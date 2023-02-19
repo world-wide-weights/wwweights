@@ -1,4 +1,6 @@
 
+const API_BASE_URL_COMMAND = Cypress.env("PUBLIC_API_BASE_URL_COMMAND")
+
 describe("Create Item", () => {
     beforeEach(() => {
         cy.login("/contribute/create")
@@ -110,6 +112,49 @@ describe("Create Item", () => {
             cy.dataCy("createedit-open-details-button").click()
 
             cy.dataCy("textinput-source-input").should("be.visible")
+        })
+    })
+
+    describe("Error Handling", () => {
+        it("should display error when name duplicate", () => {
+            // Fill required
+            cy.dataCy("textinput-name-input").type("apple")
+            cy.dataCy("textinput-weight-input").type("150")
+
+            // Mock create conflict
+            cy.intercept("POST", `${API_BASE_URL_COMMAND}/items/insert`, {
+                statusCode: 409, // Conflict
+            }).as("mockCreateItemConflict")
+            cy.mockUploadImage()
+            cy.mockDiscoverPage()
+
+            // Submit form
+            cy.dataCy("submit-button").click()
+
+            cy.wait("@mockCreateItemConflict")
+
+            cy.dataCy("formerror-name").should("be.visible")
+            cy.dataCy("formerror-name").should("contain", "This name is already taken.")
+        })
+
+        it("should display error when network error occured", () => {
+            // Fill required
+            cy.dataCy("textinput-name-input").type("apple")
+            cy.dataCy("textinput-weight-input").type("150")
+
+            // Mock create conflict
+            cy.intercept("POST", `${API_BASE_URL_COMMAND}/items/insert`, {
+                forceNetworkError: true,
+            }).as("mockCreateItemNetwork")
+            cy.mockUploadImage()
+            cy.mockDiscoverPage()
+
+            // Submit form
+            cy.dataCy("submit-button").click()
+
+            cy.wait("@mockCreateItemNetwork")
+
+            cy.checkNetworkError()
         })
     })
 })

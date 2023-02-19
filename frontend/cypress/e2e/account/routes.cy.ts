@@ -26,6 +26,14 @@ describe("Routes protected/guest", () => {
             cy.url().should("include", "/account/profile")
             cy.contains("Profile").should("be.visible")
         })
+
+        it("should show toast when you try to access protected page when logged out", () => {
+            // Login and visit profile
+            cy.visitLocalPage("/account/profile")
+
+            // Check for toast
+            cy.contains("You need to be logged in to access this page.").should("be.visible")
+        })
     })
 
     describe("Guest Route", () => {

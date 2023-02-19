@@ -38,6 +38,19 @@ describe("Login", () => {
             cy.dataCy("textinput-password-input").invoke("attr", "type").should("eq", "text")
         })
     })
+
+    describe("Logout", () => {
+        it("should show logout toast when you logout successfully", () => {
+            // Mock login
+            cy.login("/")
+
+            // Logout
+            cy.contains("Logout").click()
+
+            // Check for toast
+            cy.contains("You have been logged out.").should("be.visible")
+        })
+    })
 })
 
 export { }
