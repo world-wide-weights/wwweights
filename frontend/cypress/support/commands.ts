@@ -18,6 +18,8 @@ const API_BASE_URL_COMMAND = Cypress.env("PUBLIC_API_BASE_URL_COMMAND")
 const PUBLIC_API_BASE_URL_IMAGE = Cypress.env("PUBLIC_API_BASE_URL_IMAGE")
 const LOCAL_STORAGE_KEY = "session"
 
+/**** Command helper *****/
+
 Cypress.Commands.add("dataCy", (dataCy, customSelector = "") => {
 	cy.get(`[datacy=${dataCy}]${customSelector}`)
 })
@@ -43,11 +45,114 @@ Cypress.Commands.add("checkCurrentActivePage", (activePageNumber) => {
 	cy.dataCy(`pagination-button-page-${activePageNumber}`).should("have.class", "text-white")
 })
 
-Cypress.Commands.add("mockRelatedTags", () => {
-	cy.intercept("GET", `${API_BASE_URL_QUERY_CLIENT}/tags/related*`, {
-		fixture: "tags/related.json",
-	}).as("mockRelatedTags")
+
+/**** Mock Pages *****/
+
+Cypress.Commands.add("mockDiscoverPage", (options) => {
+	cy.mockTagsListClient()
+
+	// Clear nock and activate it in items list
+	cy.mockItemsList(options)
+	cy.mockImageServe()
+
+	// Mock Statistics
+	cy.task("nock", {
+		hostname: API_BASE_URL_QUERY_SERVER,
+		method: "get",
+		path: "/items/statistics",
+		statusCode: 200,
+		body: itemStatistics,
+	})
+
+	cy.mockRelatedTags()
 })
+
+Cypress.Commands.add("mockSingleWeightPage", () => {
+	cy.mockTagsListClient()
+
+	// Clear nock and activate it
+	cy.task("clearNock")
+	cy.task("activateNock")
+
+	cy.mockImageServe()
+
+	// Mock items single
+	cy.task("nock", {
+		hostname: API_BASE_URL_QUERY_SERVER,
+		method: "get",
+		path: "/items/list",
+		statusCode: 200,
+		body: paginatedSingleItem,
+	})
+
+	// Mock items related
+	cy.task("nock", {
+		hostname: API_BASE_URL_QUERY_SERVER,
+		method: "get",
+		path: "/items/related",
+		statusCode: 200,
+		body: paginatedRelatedItems,
+	})
+
+	cy.mockRelatedTags()
+})
+
+Cypress.Commands.add("mockHome", () => {
+	// Clear nock and activate it in items list
+	cy.mockItemsList()
+
+	cy.mockImageServe()
+	cy.mockTagsListClient()
+
+	cy.task("nock", {
+		hostname: API_BASE_URL_AUTH,
+		method: "get",
+		path: "/auth/statistics",
+		statusCode: 200,
+		body: statisticsAuth,
+	})
+
+	cy.task("nock", {
+		hostname: API_BASE_URL_QUERY_SERVER,
+		method: "get",
+		path: "/statistics",
+		statusCode: 200,
+		body: statistics,
+	})
+})
+
+Cypress.Commands.add("mockProfilePage", (options) => {
+	const body =
+		options?.contribtionsCount || options?.contribtionsCount === 0
+			? {
+				...paginatedContributions,
+				data: paginatedContributions.data.slice(0, options?.contribtionsCount),
+			}
+			: paginatedContributions
+
+	cy.task("clearNock")
+	cy.task("activateNock")
+	cy.mockImageServe()
+	cy.mockTagsListClient()
+
+	// Mock Contributions
+	cy.intercept("GET", `${API_BASE_URL_QUERY_CLIENT}/items/list*`, {
+		body,
+	}).as("mockContributions")
+
+	// Mock statistics
+	cy.intercept("GET", `${API_BASE_URL_QUERY_CLIENT}/profiles/*/statistics`, {
+		body: options?.hasStatistics ?? true ? profileStatistics : {},
+	}).as("mockProfileStatistics")
+
+	// Mock profile
+	cy.intercept("GET", `${API_BASE_URL_AUTH}/profile/me`, {
+		fixture: "profile/me.json",
+	}).as("mockProfile")
+})
+
+
+/**** Mock Fetch Server *****/
 
 Cypress.Commands.add("mockTagsList", (options) => {
 	const body =
@@ -67,12 +172,6 @@ Cypress.Commands.add("mockTagsList", (options) => {
 		statusCode: 200,
 		body,
 	})
-})
-
-Cypress.Commands.add("mockTagsListClient", () => {
-	cy.intercept("GET", `${API_BASE_URL_QUERY_CLIENT}/tags/list*`, {
-		fixture: "tags/related.json",
-	}).as("mockTagsListClient")
 })
 
 Cypress.Commands.add("mockItemsList", (options) => {
@@ -95,48 +194,26 @@ Cypress.Commands.add("mockItemsList", (options) => {
 	})
 })
 
-Cypress.Commands.add("mockDiscoverPage", (options) => {
-	cy.mockImageServe()
-	cy.mockTagsListClient()
-	cy.mockItemsList(options)
+Cypress.Commands.add("mockImageServe", () => {
+	cy.intercept("GET", `${PUBLIC_API_BASE_URL_IMAGE}/serve/*`, {
+		statusCode: 201,
+	}).as("mockImageServe")
 
-	// Mock Statistics
 	cy.task("nock", {
-		hostname: API_BASE_URL_QUERY_SERVER,
+		hostname: PUBLIC_API_BASE_URL_IMAGE,
 		method: "get",
-		path: "/items/statistics",
+		path: "/*",
 		statusCode: 200,
-		body: itemStatistics,
 	})
-
-	cy.mockRelatedTags()
 })
 
-Cypress.Commands.add("mockSingleWeightPage", () => {
-	cy.mockImageServe()
-	cy.mockTagsListClient()
-	cy.task("clearNock")
 
-	// Mock items single
-	cy.task("activateNock")
-	cy.task("nock", {
-		hostname: API_BASE_URL_QUERY_SERVER,
-		method: "get",
-		path: "/items/list",
-		statusCode: 200,
-		body: paginatedSingleItem,
-	})
+/**** Mock Fetch Client *****/
 
-	// Mock items related
-	cy.task("nock", {
-		hostname: API_BASE_URL_QUERY_SERVER,
-		method: "get",
-		path: "/items/related",
-		statusCode: 200,
-		body: paginatedRelatedItems,
-	})
-
-	cy.mockRelatedTags()
+Cypress.Commands.add("mockTagsListClient", () => {
+	cy.intercept("GET", `${API_BASE_URL_QUERY_CLIENT}/tags/list*`, {
+		fixture: "tags/related.json",
+	}).as("mockTagsListClient")
 })
 
 Cypress.Commands.add("mockLogin", () => {
@@ -165,6 +242,12 @@ Cypress.Commands.add("mockRegister", () => {
 	}).as("mockRefresh")
 })
 
+Cypress.Commands.add("mockRelatedTags", () => {
+	cy.intercept("GET", `${API_BASE_URL_QUERY_CLIENT}/tags/related*`, {
+		fixture: "tags/related.json",
+	}).as("mockRelatedTags")
+})
+
 Cypress.Commands.add("mockCreateItem", () => {
 	cy.intercept("POST", `${API_BASE_URL_COMMAND}/items/insert`, {
 		statusCode: 200,
@@ -188,56 +271,6 @@ Cypress.Commands.add("login", ({ route, visitOptions }) => {
 	})
 })
 
-Cypress.Commands.add("mockHome", () => {
-	cy.mockImageServe()
-	cy.mockTagsListClient()
-	cy.mockItemsList()
-
-	cy.task("nock", {
-		hostname: API_BASE_URL_AUTH,
-		method: "get",
-		path: "/auth/statistics",
-		statusCode: 200,
-		body: statisticsAuth,
-	})
-
-	cy.task("nock", {
-		hostname: API_BASE_URL_QUERY_SERVER,
-		method: "get",
-		path: "/statistics",
-		statusCode: 200,
-		body: statistics,
-	})
-})
-
-Cypress.Commands.add("mockProfilePage", (options) => {
-	const body =
-		options?.contribtionsCount || options?.contribtionsCount === 0
-			? {
-				...paginatedContributions,
-				data: paginatedContributions.data.slice(0, options?.contribtionsCount),
-			}
-			: paginatedContributions
-
-	cy.mockImageServe()
-	cy.mockTagsListClient()
-
-	// Mock Contributions
-	cy.intercept("GET", `${API_BASE_URL_QUERY_CLIENT}/items/list*`, {
-		body,
-	}).as("mockContributions")
-
-	// Mock statistics
-	cy.intercept("GET", `${API_BASE_URL_QUERY_CLIENT}/profiles/*/statistics`, {
-		body: options?.hasStatistics ?? true ? profileStatistics : {},
-	}).as("mockProfileStatistics")
-
-	// Mock profile
-	cy.intercept("GET", `${API_BASE_URL_AUTH}/profile/me`, {
-		fixture: "profile/me.json",
-	}).as("mockProfile")
-})
-
 Cypress.Commands.add("mockSingleItem", () => {
 	cy.intercept("GET", `${API_BASE_URL_QUERY_CLIENT}/items/list*`, {
 		fixture: "items/single.json",
@@ -254,12 +287,6 @@ Cypress.Commands.add("mockDeleteItem", () => {
 	cy.intercept("POST", `${API_BASE_URL_COMMAND}/items/*/suggest/delete`, {
 		statusCode: 200,
 	}).as("mockDeleteItem")
-})
-
-Cypress.Commands.add("mockImageServe", () => {
-	cy.intercept("GET", `${PUBLIC_API_BASE_URL_IMAGE}/serve/*`, {
-		statusCode: 201,
-	}).as("mockImageServe")
 })
 
 export { }

@@ -41,7 +41,7 @@ describe("Search /weights", () => {
 				cy.dataCy("search").type(relatedTags.data[1].name)
 				cy.dataCy("text-input-icon-query").click()
 
-				cy.wait("@mockGetRelatedTags")
+				cy.wait("@mockRelatedTags")
 			})
 
 			it("should display tags when search", () => {
@@ -69,4 +69,5 @@ describe("Search /weights", () => {
 	})
 })
 
-export {}
+export { }
+

@@ -1,6 +1,7 @@
 describe("Navbar", () => {
 	it("should not flicker when changing pages", () => {
 		cy.mockDiscoverPage()
+
 		cy.visitLocalPage("/weights")
 
 		cy.contains("Discover").should("be.visible")
@@ -11,4 +12,5 @@ describe("Navbar", () => {
 	})
 })
 
-export {}
+export { }
+
