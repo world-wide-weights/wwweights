@@ -18,21 +18,19 @@ export class TagListHandler implements IQueryHandler<TagListQuery> {
   ) {}
 
   async execute({ dto }: TagListQuery): Promise<PaginatedResponse<Tag>> {
-    try {
-      const sort: { name: number } | { count: -1 } =
-        dto.sort === TagSortEnum.DESC
-          ? { name: -1 }
-          : dto.sort === TagSortEnum.MOST_USED
-          ? { count: -1 }
-          : { name: 1 };
+    const sort: Record<string, -1 | 1> =
+      dto.sort === TagSortEnum.DESC
+        ? { name: -1 }
+        : dto.sort === TagSortEnum.MOST_USED
+        ? { count: -1 }
+        : { name: 1 };
 
+    const tagListQueryStartTime = performance.now();
+
+    try {
       const tagListWithCount = await this.tagModel.aggregate<
         DataWithCount<Tag>
       >([
-        // TODO: Find a fix for @ts-ignore
-        // Unfortunately, we need to ignore the following line, because the fields are not known at compile time
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-ignore
         { $sort: sort },
         {
           $facet: {
@@ -48,6 +46,9 @@ export class TagListHandler implements IQueryHandler<TagListQuery> {
       this.logger.log(
         `Tags found: ${tagListWithCount[0].total[0]?.count || 0}`,
       );
+      this.logger.debug(
+        `Finished in ${performance.now() - tagListQueryStartTime} ms`,
+      );
 
       return {
         total: tagListWithCount[0].total[0]?.count || 0,
@@ -56,6 +57,9 @@ export class TagListHandler implements IQueryHandler<TagListQuery> {
         data: tagListWithCount[0].data,
       };
     } catch (error) /* istanbul ignore next */ {
+      this.logger.debug(
+        `Failed after ${performance.now() - tagListQueryStartTime} ms`,
+      );
       this.logger.error(error);
       throw new InternalServerErrorException('Tag list could not be retrieved');
     }
