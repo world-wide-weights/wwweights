@@ -10,7 +10,5 @@ export class GlobalStatistics {
   @prop()
   totalSuggestions: number;
 
-  constructor(Partial: Partial<GlobalStatistics>) {
-    Object.assign(this, Partial);
-  }
+  // No constructor because it is never used
 }

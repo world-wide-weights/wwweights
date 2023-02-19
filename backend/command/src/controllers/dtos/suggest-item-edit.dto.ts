@@ -1,5 +1,4 @@
 import { ApiPropertyOptional, OmitType, PartialType } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
 import { IsArray, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { InsertItemDto, Weight } from './insert-item.dto';
 
@@ -9,7 +8,7 @@ import { InsertItemDto, Weight } from './insert-item.dto';
 class SuggestItemEditWeightDTO extends PartialType(Weight) {}
 
 /**
- * @description DTO for tags when suggesting item edit 
+ * @description DTO for tags when suggesting item edit
  */
 class SuggestItemEditTagsDTO {
   @IsArray()
@@ -19,7 +18,7 @@ class SuggestItemEditTagsDTO {
     description: 'Tags that should be added to the item tags',
     example: ['healthy'],
     type: String,
-    isArray: true
+    isArray: true,
   })
   push: string[];
 
@@ -45,7 +44,6 @@ export class SuggestItemEditDTO extends PartialType(
     description: 'Tags that are pulled from and pushed to the item tags',
     type: SuggestItemEditTagsDTO,
   })
-  @Type(() => SuggestItemEditTagsDTO)
   tags?: SuggestItemEditTagsDTO;
 
   @IsOptional()
@@ -54,6 +52,5 @@ export class SuggestItemEditDTO extends PartialType(
     description: 'Weight values for item',
     type: SuggestItemEditWeightDTO,
   })
-  @Type(() => SuggestItemEditWeightDTO)
   weight?: SuggestItemEditWeightDTO;
 }
