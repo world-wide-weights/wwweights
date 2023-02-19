@@ -28,7 +28,6 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
   async handle({ itemEditedEventDto }: ItemEditedEvent): Promise<void> {
     const updateItemStartTime = performance.now();
     const { itemSlug, editValues } = itemEditedEventDto;
-    console.log('itemEditedEventDto', itemEditedEventDto);
 
     try {
       const oldItem = await this.updateItem(itemSlug, editValues);
@@ -163,7 +162,6 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
     userId: number,
     editValues: SuggestionItem,
   ): Promise<void> {
-    console.log('editValues', editValues);
     const incrementer = {
       $inc: {
         'count.itemsUpdated': 1,
