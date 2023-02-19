@@ -1,4 +1,8 @@
-import { InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import {
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { randomUUID } from 'crypto';
 import { ItemDeleteSuggestedEvent } from '../../events/item-events/item-delete-suggested.event';
@@ -53,11 +57,11 @@ export class SuggestItemDeleteHandler
         `${ItemDeleteSuggestedEvent.name} created on stream: ${streamName}`,
       );
     } catch (error) {
-      this.logger.error(error)
+      this.logger.error(error);
       this.logger.error(
         `Toplevel error caught. Stopping execution and therefore not creating event. See above for more details`,
       );
-      throw new InternalServerErrorException()
+      throw new InternalServerErrorException();
     }
   }
 }

@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { JWTPayload } from '../../controllers/interfaces/jwt-payload.interface';
 
 /**
- * @description Guard for verifying access tokens against the auth service 
+ * @description Guard for verifying access tokens against the auth service
  */
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {

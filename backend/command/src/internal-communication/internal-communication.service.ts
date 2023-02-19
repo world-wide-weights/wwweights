@@ -35,7 +35,10 @@ export class InternalCommunicationService {
   /**
    * @description Send post request to the backend
    */
-  private async notifyImg(endpoint: string, data: { imageHash: string }): Promise<void> {
+  private async notifyImg(
+    endpoint: string,
+    data: { imageHash: string },
+  ): Promise<void> {
     await firstValueFrom(
       this.httpService
         .post(
@@ -54,7 +57,7 @@ export class InternalCommunicationService {
             this.logger.error(
               `Request to img backend for image ${data.imageHash} failed! Error: ${error}`,
             );
-            throw new Error(`Image backend could not be notified`)
+            throw new Error(`Image backend could not be notified`);
           }),
         ),
     );

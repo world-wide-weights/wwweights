@@ -1,6 +1,5 @@
 import {
   ConflictException,
-  HttpException,
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
@@ -33,9 +32,13 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
     const streamName = `${ALLOWED_EVENT_ENTITIES.ITEM}-${newItem.slug}`;
 
     if (await this.eventStore.doesStreamExist(streamName)) {
-      this.logger.error(`Slug ${newItem.slug} already taken. No event created.`)
-           // Throw error because this is facing the client
-           throw new ConflictException(`Item with this slug ${newItem.slug} already exists`) 
+      this.logger.error(
+        `Slug ${newItem.slug} already taken. No event created.`,
+      );
+      // Throw error because this is facing the client
+      throw new ConflictException(
+        `Item with this slug ${newItem.slug} already exists`,
+      );
     }
 
     try {
@@ -48,11 +51,11 @@ export class InsertItemHandler implements ICommandHandler<InsertItemCommand> {
         `${ItemInsertedEvent.name} created on stream: ${streamName}}`,
       );
     } catch (error) {
-      this.logger.error(error)
+      this.logger.error(error);
       this.logger.error(
         `Toplevel error caught. Stopping execution and therefore not creating event. See above for more details`,
       );
-      throw new InternalServerErrorException()
+      throw new InternalServerErrorException();
     }
   }
 }

@@ -1,7 +1,7 @@
-import { InsertItemDto } from "../../controllers/dtos/insert-item.dto";
+import { InsertItemDto } from '../../controllers/dtos/insert-item.dto';
 
 /**
- * @description Command for initiating item insertion 
+ * @description Command for initiating item insertion
  */
 export class InsertItemCommand {
   constructor(

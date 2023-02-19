@@ -1,4 +1,4 @@
-import { SuggestItemEditDTO } from "../../controllers/dtos/suggest-item-edit.dto";
+import { SuggestItemEditDTO } from '../../controllers/dtos/suggest-item-edit.dto';
 
 /**
  * @description Command initiating item edit suggestion flow

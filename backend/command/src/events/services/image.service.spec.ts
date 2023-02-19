@@ -1,4 +1,3 @@
-import { ImATeapotException } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { EventStore } from '../../eventstore/eventstore';
 import { InternalCommunicationService } from '../../internal-communication/internal-communication.service';

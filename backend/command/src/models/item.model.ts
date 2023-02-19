@@ -37,7 +37,7 @@ export class Item {
   tags?: Tag[];
 
   @prop()
-  image?: string; 
+  image?: string;
 
   @prop()
   source?: string;
