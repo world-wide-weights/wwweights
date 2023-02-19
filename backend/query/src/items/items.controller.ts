@@ -16,8 +16,8 @@ import {
 } from '@nestjs/swagger';
 import { Item } from '../models/item.model';
 import { PaginatedResponse } from '../shared/interfaces/paginated-result';
-import { ItemStatistics } from './interfaces/item-statistics';
-import { QueryItemListDto } from './interfaces/query-item-list.dto';
+import { QueryItemListDto } from './dtos/query-item-list.dto';
+import { ItemStatistics } from './interfaces/item-statistics.interface';
 import { QueryItemRelatedDto } from './interfaces/query-item-related.dto';
 import { QueryItemStatisticsDto } from './interfaces/query-item-statistics.dto';
 import { ItemListQuery } from './queries/item-list.query';

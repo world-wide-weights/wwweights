@@ -2,7 +2,7 @@ import { InjectModel } from '@m8a/nestjs-typegoose';
 import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
-import { ItemSortEnum } from '../../items/interfaces/item-sort-enum';
+import { ItemSortEnum } from '../../items/enums/item-sort-enum';
 import { Item } from '../../models/item.model';
 import { getFilter } from '../../shared/functions/get-filter';
 import { getSort } from '../../shared/functions/get-sort';

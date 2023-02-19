@@ -8,7 +8,7 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { Item } from '../../models/item.model';
 import { getFilter } from '../../shared/functions/get-filter';
-import { ItemStatistics } from '../interfaces/item-statistics';
+import { ItemStatistics } from '../interfaces/item-statistics.interface';
 import { ItemStatisticsQuery } from './item-statistics.query';
 
 @QueryHandler(ItemStatisticsQuery)
@@ -85,4 +85,3 @@ export class ItemStatisticsHandler
     }
   }
 }
-

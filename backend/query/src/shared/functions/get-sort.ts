@@ -1,4 +1,4 @@
-import { ItemSortEnum } from '../../items/interfaces/item-sort-enum';
+import { ItemSortEnum } from '../../items/enums/item-sort-enum';
 
 const textSearchParams = {
   score: { $meta: 'textScore' },
