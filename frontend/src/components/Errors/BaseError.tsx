@@ -24,7 +24,6 @@ export const BaseError: React.FC<BaseErrorProps> = ({ headline, children, backBu
 		<>
 			<Seo title={headline} description="An error occured! Please try again later." />
 			<main className="container flex items-center min-h-[calc(100vh-88.5px-102.5px)]">
-				{" "}
 				{/* 100vh page - 88.5px Navbar - 102.5px Footer*/}
 				<div className="md:w-2/3">
 					<Headline>{headline}</Headline>
