@@ -1,6 +1,6 @@
-# Command Service 
+# Image Service 
 
-Backend for Command handling. Connects and interacts with EventstoreDB and MongoDB.
+Backend for image handling. Connects and interacts the local filesystem.
 
 Service exposed on Port [3003](http://localhost:3003) by default. Swagger on [`/swagger`](http://localhost:3003/swagger)
 
