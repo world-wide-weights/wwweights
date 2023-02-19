@@ -42,6 +42,6 @@ export const ItemPreviewGrid: React.FC<ItemPreviewGridProps> = ({ slug, datacy, 
         </div>
 
         {/* Image */}
-        {imageUrl && <Image datacy="itempreviewgrid-image" priority className="object-cover rounded-lg w-20 bg-white" alt={`Image of ${name}`} src={imageUrl} width={96} height={96} />}
+        {imageUrl && <Image datacy="itempreviewgrid-image" className="object-cover rounded-lg w-20 bg-white" alt={`Image of ${name}`} src={imageUrl} width={96} height={96} />}
     </Link>
 }
