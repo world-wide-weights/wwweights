@@ -38,7 +38,7 @@ describe("Generate Weight Process Bar Percentage", () => {
         expect(generateWeightProgressBarPercentage({ value: 100, additionalValue: 200, isCa: false }, { value: 200, additionalValue: 300, isCa: false })).to.deep.equal({ percentage: 33.33, percentageAdditional: 66.67 })
     })
 
-    // Bug: https://github.com/world-wide-weights/wwweights/issues/329
+    // Bugfix: https://github.com/world-wide-weights/wwweights/issues/329
     it("should use additionaValue in heaviestWeight", () => {
         expect(generateWeightProgressBarPercentage({ value: 200, isCa: false }, { value: 200, additionalValue: 400, isCa: false })).to.deep.equal({ percentage: 50 })
         expect(generateWeightProgressBarPercentage({ value: 200, additionalValue: 300, isCa: false }, { value: 200, additionalValue: 400, isCa: false })).to.deep.equal({ percentage: 50, percentageAdditional: 3 / 4 * 100 })
