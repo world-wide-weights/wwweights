@@ -2,7 +2,6 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
-  Logger,
   Param,
   SerializeOptions,
   UseInterceptors,
@@ -23,8 +22,6 @@ import { ProfileStatisticsQuery } from './queries/profile-statistics.query';
 @UseInterceptors(ClassSerializerInterceptor)
 @SerializeOptions({ strategy: 'excludeAll' })
 export class ProfilesController {
-  private readonly logger = new Logger(ProfilesController.name);
-
   constructor(private queryBus: QueryBus) {}
 
   @Get(':userId/statistics')
@@ -37,7 +34,6 @@ export class ProfilesController {
   async getProfileStatistics(
     @Param() { userId }: QueryProfileStatisticsDto,
   ): Promise<ProfileStatistics> {
-    this.logger.log(`Get profileCounts for ${userId}`);
     const result = await this.queryBus.execute(
       new ProfileStatisticsQuery(userId),
     );

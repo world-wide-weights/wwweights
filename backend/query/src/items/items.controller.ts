@@ -2,7 +2,6 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
-  Logger,
   Query,
   SerializeOptions,
   UseInterceptors,
@@ -30,8 +29,6 @@ import { ItemStatisticsQuery } from './queries/item-statistics.query';
 @UseInterceptors(ClassSerializerInterceptor)
 @SerializeOptions({ strategy: 'excludeAll' })
 export class ItemsController {
-  private readonly logger = new Logger(ItemsController.name);
-
   constructor(private readonly queryBus: QueryBus) {}
 
   @Get('list')
@@ -40,7 +37,6 @@ export class ItemsController {
   async getItemList(
     @Query() dto: QueryItemListDto,
   ): Promise<PaginatedResponse<Item>> {
-    this.logger.log(`Get item list`);
     const result = await this.queryBus.execute(new ItemListQuery(dto));
     return new PaginatedResponse<Item>(result, Item);
   }
@@ -52,7 +48,6 @@ export class ItemsController {
   async getItemRelated(
     @Query() dto: QueryItemRelatedDto,
   ): Promise<PaginatedResponse<Item>> {
-    this.logger.log(`Get related item list`);
     const result = await this.queryBus.execute(new ItemRelatedQuery(dto));
     return new PaginatedResponse<Item>(result, Item);
   }
@@ -64,7 +59,6 @@ export class ItemsController {
   async getItemStatistics(
     @Query() dto: QueryItemStatisticsDto,
   ): Promise<ItemStatistics> {
-    this.logger.log(`Get item statistics`);
     const result = await this.queryBus.execute(new ItemStatisticsQuery(dto));
     return new ItemStatistics(result);
   }
