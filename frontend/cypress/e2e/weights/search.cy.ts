@@ -9,15 +9,15 @@ describe("Search /weights", () => {
             cy.visitLocalPage("/weights")
         })
 
-        it('should search items when click search items', () => {
-            cy.dataCy('search').type(paginatedItems.data[0].name)
-            cy.dataCy('text-input-icon-query').click()
+        it("should search items when click search items", () => {
+            cy.dataCy("search").type(paginatedItems.data[0].name)
+            cy.dataCy("text-input-icon-query").click()
 
             cy.contains(paginatedItems.data[0].name).should("be.visible")
         })
 
-        it('should search items when hit enter', () => {
-            cy.dataCy('search').type(`${paginatedItems.data[0].name}{enter}`)
+        it("should search items when hit enter", () => {
+            cy.dataCy("search").type(`${paginatedItems.data[0].name}{enter}`)
             cy.contains(paginatedItems.data[0].name).should("be.visible")
         })
 
