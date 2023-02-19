@@ -15,14 +15,15 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Item } from '../models/item.model';
+import { ApiOkResponsePaginated } from '../shared/decorators/paginated-ok-response.decorator';
 import { PaginatedResponse } from '../shared/interfaces/paginated-result';
 import { QueryItemListDto } from './dtos/query-item-list.dto';
 import { QueryItemRelatedDto } from './dtos/query-item-related.dto';
 import { QueryItemStatisticsDto } from './dtos/query-item-statistics.dto';
 import { ItemStatistics } from './interfaces/item-statistics.interface';
 import { ItemListQuery } from './queries/item-list.query';
+import { ItemRelatedQuery } from './queries/item-related.query';
 import { ItemStatisticsQuery } from './queries/item-statistics.query';
-import { ItemRelatedQuery } from './queries/related-items.query';
 
 @Controller('items')
 @ApiTags('items')
@@ -31,15 +32,14 @@ import { ItemRelatedQuery } from './queries/related-items.query';
 export class ItemsController {
   private readonly logger = new Logger(ItemsController.name);
 
-  constructor(private queryBus: QueryBus) {}
+  constructor(private readonly queryBus: QueryBus) {}
 
   @Get('list')
   @ApiOperation({ summary: 'Get a list of items' })
-  @ApiOkResponse({
-    description: 'Paginated result of items',
-    type: PaginatedResponse<Item>,
-  })
-  async getItemList(@Query() dto: QueryItemListDto) {
+  @ApiOkResponsePaginated(Item)
+  async getItemList(
+    @Query() dto: QueryItemListDto,
+  ): Promise<PaginatedResponse<Item>> {
     this.logger.log(`Get item list`);
     const result = await this.queryBus.execute(new ItemListQuery(dto));
     return new PaginatedResponse<Item>(result, Item);
@@ -47,23 +47,22 @@ export class ItemsController {
 
   @Get('related')
   @ApiOperation({ summary: 'Get related items' })
-  @ApiOkResponse({
-    description: 'Paginated result of related items',
-    type: PaginatedResponse<Item>,
-  })
+  @ApiOkResponsePaginated(Item)
   @ApiNotFoundResponse({ description: 'The item could not be found' })
-  async getItem(@Query() dto: QueryItemRelatedDto) {
-    this.logger.log(`Get item list`);
+  async getItemRelated(
+    @Query() dto: QueryItemRelatedDto,
+  ): Promise<PaginatedResponse<Item>> {
+    this.logger.log(`Get related item list`);
     const result = await this.queryBus.execute(new ItemRelatedQuery(dto));
     return new PaginatedResponse<Item>(result, Item);
   }
 
   @Get('statistics')
-  @ApiOperation({ summary: 'Get statistics' })
+  @ApiOperation({ summary: 'Get statistics for an item search' })
   @ApiNotFoundResponse({ description: 'No items found' })
   @ApiOkResponse({ description: 'Item statistics', type: ItemStatistics })
   async getItemStatistics(@Query() dto: QueryItemStatisticsDto) {
-    this.logger.log(`Get item list`);
+    this.logger.log(`Get item statistics`);
     const result = await this.queryBus.execute(new ItemStatisticsQuery(dto));
     return new ItemStatistics(result);
   }

@@ -1,4 +1,3 @@
-import { AggregateRoot } from '@nestjs/cqrs';
 import { ApiResponseProperty } from '@nestjs/swagger';
 import { index, prop } from '@typegoose/typegoose';
 import { Expose, Type } from 'class-transformer';
@@ -39,7 +38,7 @@ class Tag {
   { name: 'text', 'tags.name': 'text' },
   { weights: { name: 1000, tags: 1 }, name: 'ItemTextIndex' },
 )
-export class Item extends AggregateRoot {
+export class Item {
   @Expose()
   @prop({ required: true })
   @ApiResponseProperty({ type: String, example: 'Item Name' })
@@ -89,7 +88,6 @@ export class Item extends AggregateRoot {
   createdAt?: number;
 
   constructor(partial: Partial<Item>) {
-    super();
     Object.assign(this, partial);
   }
 }
