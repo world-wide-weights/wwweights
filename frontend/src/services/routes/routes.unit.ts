@@ -42,8 +42,6 @@ describe("Routes", () => {
         })
     })
 
-    // TODO: Add missing route tests
-
     describe("contribute Routes", () => {
         it("should return contribute page", () => {
             expect(routes.contribute.create).to.equal("/contribute/create")
