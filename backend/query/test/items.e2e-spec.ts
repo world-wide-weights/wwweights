@@ -252,7 +252,7 @@ describe('Items (e2e)', () => {
         // ACT
         const result = await request(server)
           .get(queriesPath + subPath)
-          .query({ hasimage: '0', limit: 21 })
+          .query({ hasimage: '0', limit: 21, page: 1 })
           .expect(HttpStatus.OK);
 
         // ASSERT
