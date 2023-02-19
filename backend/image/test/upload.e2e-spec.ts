@@ -71,6 +71,7 @@ describe('UploadController (e2e)', () => {
         expect(res.statusCode).toEqual(HttpStatus.CREATED);
         expect(readdirSync(tmpPath).length).toEqual(1);
       });
+
       it('Should accept png', async () => {
         // ACT
         const res = await request(app.getHttpServer())
@@ -81,6 +82,7 @@ describe('UploadController (e2e)', () => {
         expect(res.statusCode).toEqual(HttpStatus.CREATED);
         expect(readdirSync(tmpPath).length).toEqual(1);
       });
+
       it('Should accept oversized images', async () => {
         // ACT
         const res = await request(app.getHttpServer())
@@ -94,6 +96,7 @@ describe('UploadController (e2e)', () => {
         expect(res.statusCode).toEqual(HttpStatus.CREATED);
         expect(readdirSync(tmpPath).length).toEqual(1);
       });
+
       it('Should notify the auth backend about upload', async () => {
         // ACT
         const res = await request(app.getHttpServer())
@@ -108,6 +111,7 @@ describe('UploadController (e2e)', () => {
         expect(readdirSync(tmpPath).length).toEqual(1);
         expect(httpMock.params.length).not.toEqual(0);
       });
+
       it('Should clean temporary image storage when uploading image', async () => {
         // ACT
         const res = await request(app.getHttpServer())
@@ -120,6 +124,7 @@ describe('UploadController (e2e)', () => {
         expect(res.statusCode).toEqual(HttpStatus.CREATED);
         expect(readdirSync(cachePath).length).toEqual(0);
       });
+
       it('Should return correct hash', async () => {
         // ACT
         const res = await request(app.getHttpServer())
@@ -133,6 +138,7 @@ describe('UploadController (e2e)', () => {
       });
       // File size limitation not tested for obvious reasons
     });
+
     describe('Negative Tests', () => {
       it('Should fail for invalid file types', async () => {
         // ACT
@@ -145,6 +151,7 @@ describe('UploadController (e2e)', () => {
           true,
         );
       });
+
       it('Should fail for unauthorized user', async () => {
         // ASSERT
         fakeGuard.setAuthResponse(false);
@@ -156,6 +163,7 @@ describe('UploadController (e2e)', () => {
         // ASSERT
         expect(res.statusCode).toEqual(HttpStatus.FORBIDDEN);
       });
+
       it('Should detect duplicates', async () => {
         // ASSERT
         // Copy file to disk folder
@@ -176,6 +184,7 @@ describe('UploadController (e2e)', () => {
         expect(res.body.path).toEqual(`${fileHash}.png`);
         expect(readdirSync(tmpPath).length).toEqual(1);
       });
+
       it('Should fail if auth backend could not be notified', async () => {
         // ASSERT
         httpMock.shouldFail = true;

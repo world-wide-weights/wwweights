@@ -1,27 +1,25 @@
-# Image backend
-Backend for handling image upload and serving for wwweights
+# Command Service 
 
-Available on port 3003
+Backend for Command handling. Connects and interacts with EventstoreDB and MongoDB.
 
-## Quick start 
+Service exposed on Port [3003](http://localhost:3003) by default. Swagger on [`/swagger`](http://localhost:3003/swagger)
 
-Setup
+## Quickstart
+
 ```sh
-npm i
 cp sample.env .env
-```
-
-Run dev
-```sh
+npm i
 npm run start:dev
 ```
 
-Run unit tests
+## Tests
+
+Run unit tests:
 ```sh
 npm run test
 ```
 
-Run end to end tests:
+Run all tests:
 ```sh
-npm run test:e2e
+npm run test:cov
 ```

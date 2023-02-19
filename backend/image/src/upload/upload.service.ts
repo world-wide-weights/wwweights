@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createHash } from 'crypto';
-import { copyFileSync, existsSync, lstatSync, rmSync } from 'fs';
+import { constants, copyFileSync, existsSync, lstatSync, rmSync } from 'fs';
 import { copyFile, readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
 import * as sharp from 'sharp';
@@ -80,7 +80,7 @@ export class UploadService {
       // Copy rather than move to allow for "moving" accross devices (i.e. docker volumes)
       this.logger.debug('Promoting image from cache to tmp');
       await copyFile(cachedFilePath, fileTargetPath);
-    } catch (error) {
+    } /* istanbul ignore next */ catch (error) {
       this.logger.error(error);
       throw new InternalServerErrorException();
     } finally {
@@ -166,7 +166,7 @@ export class UploadService {
         })
         .toBuffer();
       await writeFile(sourcePath, buffer);
-    } catch (error) {
+    } /* istanbul ignore next */ catch (error) {
       this.logger.error(error);
       throw new InternalServerErrorException('Image cropping failed');
     }
@@ -212,7 +212,7 @@ export class UploadService {
   private moveFile(source: string, target: string): void {
     try {
       // Use this instead of move to allow for "moving" accross devices (i.e. in a docker volume environment)
-      copyFileSync(source, target);
+      copyFileSync(source, target, constants.COPYFILE_EXCL);
       rmSync(source);
     } catch (error) {
       this.logger.error(
