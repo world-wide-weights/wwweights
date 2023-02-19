@@ -1,4 +1,3 @@
-import axios from "axios"
 import BigNumber from "bignumber.js"
 import { Form, Formik, FormikHelpers, FormikProps } from "formik"
 import { useRouter } from "next/router"
@@ -10,6 +9,7 @@ import { editItemApi, prepareEditItem } from "../../services/item/edit"
 import { uploadImageApi } from "../../services/item/image"
 import { routes } from "../../services/routes/routes"
 import { convertAnyWeightIntoGram } from "../../services/unit/unitConverter"
+import { errorHandling } from "../../services/utils/errorHandling"
 import { CreateEditItemForm, CreateItemDto, EditItemDto, Item } from "../../types/item"
 import { AuthContext } from "../Auth/Auth"
 import { Button } from "../Button/Button"
@@ -144,30 +144,12 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
             if (response?.status === 200)
                 await router.push(routes.account.profile())
         } catch (error) {
-            // Log error to the console
-            console.log(error)
-
-            // Handle unkown erros
-            if (!axios.isAxiosError(error)) {
-                toast.error("Please try again in a few minutes.")
-                return
-            }
-
-            // Handle errors from API (with api answer)
-            if (error.response) {
-                if (error.response.status === 409) {
+            errorHandling(error, (error) => {
+                if (error.response?.status === 409) {
                     setFieldError("name", "This name is already taken.")
-                    return
+                    return true
                 }
-                toast.error(`Error ${error.response.status}: ${error.response.data.message}`)
-                return
-            }
-
-            // Handle errors with no answer from API
-            if (error.message.includes("Network")) {
-                toast.error("We could not connect to the server. Please check your internet connection and try again.")
-                return
-            }
+            })
         }
     }
 

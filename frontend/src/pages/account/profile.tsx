@@ -1,4 +1,3 @@
-import { isAxiosError } from "axios"
 import { Form, Formik } from "formik"
 import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
@@ -20,6 +19,7 @@ import { Seo } from "../../components/Seo/Seo"
 import { Tooltip } from "../../components/Tooltip/Tooltip"
 import { authRequest, commandRequest, queryClientRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
+import { errorHandling } from "../../services/utils/errorHandling"
 import { getImageUrl } from "../../services/utils/getImageUrl"
 import { UserProfile } from "../../types/auth"
 import { Item } from "../../types/item"
@@ -144,26 +144,7 @@ const Profile: NextPageCustomProps = () => {
                 setContributions(contributionsResponse.data)
                 setStatistics(statistics)
             } catch (error) {
-                // Log error 
-                console.log(error)
-
-                // Handle unkown erros
-                if (!isAxiosError(error)) {
-                    toast.error("Please try again in a few minutes.")
-                    return
-                }
-
-                // Handle errors from API (with api answer)
-                if (error.response) {
-                    toast.error(error.response.data.message)
-                    return
-                }
-
-                // Handle errors with no answer from API
-                if (error.message.includes("Network")) {
-                    toast.error("We could not connect to the server. Please check your internet connection and try again.")
-                    return
-                }
+                errorHandling(error)
             } finally {
                 setIsLoading(false)
             }
@@ -229,26 +210,7 @@ const Profile: NextPageCustomProps = () => {
                 }), undefined, { shallow: true })
             }
         } catch (error) {
-            // Log error 
-            console.log(error)
-
-            // Handle unkown erros
-            if (!isAxiosError(error)) {
-                toast.error("Please try again in a few minutes.")
-                return
-            }
-
-            // Handle errors from API (with api answer)
-            if (error.response) {
-                toast.error(error.response.data.message)
-                return
-            }
-
-            // Handle errors with no answer from API
-            if (error.message.includes("Network")) {
-                toast.error("We could not connect to the server. Please check your internet connection and try again.")
-                return
-            }
+            errorHandling(error)
         } finally {
             closeDeleteModal()
         }
