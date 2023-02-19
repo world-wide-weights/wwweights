@@ -22,7 +22,7 @@ const Contact: NextPageCustomProps = () => {
         <Image className="mb-4" alt="Image of E-Mail Adresse" src={email} />
         <p className="mb-4">You are more than welcome to share feedback and request with us.</p>
 
-        {/* Logos */}
+        {/* Social Media */}
         <div className="flex">
             <Tooltip content="Link to our discord server!">
                 <a href="https://discord.gg/UmxWf2FEQx" target="_blank" rel="noreferrer noopener">
