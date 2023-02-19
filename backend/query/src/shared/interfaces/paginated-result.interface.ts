@@ -1,21 +1,25 @@
 import { ApiResponseProperty } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
 
+/**
+ * @description Paginated response for generic data
+ */
 export class PaginatedResponse<T> {
   @Expose()
-  @ApiResponseProperty({ type: Number, example: 69 })
+  @ApiResponseProperty({ example: 69 })
   total: number;
 
   @Expose()
-  @ApiResponseProperty({ type: Number, example: 2 })
+  @ApiResponseProperty({ example: 2 })
   page: number;
 
   @Expose()
-  @ApiResponseProperty({ type: Number, example: 16 })
+  @ApiResponseProperty({ example: 16 })
   limit: number;
 
   @Expose()
-  @ApiResponseProperty({ type: [Object] }) // Unfortunately, this does not work with generics
+  // Unfortunately, this does not work with generics, but the response examples are correct via the @ApiOkResponsePaginated decorator
+  @ApiResponseProperty({ type: [Object] })
   @Transform(({ obj }) =>
     obj.data.map((data) => new obj.classConstructor(data)),
   )

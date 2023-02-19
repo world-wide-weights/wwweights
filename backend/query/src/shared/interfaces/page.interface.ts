@@ -1,20 +1,23 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsNumber, IsOptional, Max, Min } from 'class-validator';
+import { IsInt, IsOptional, Max, Min } from 'class-validator';
 
+/**
+ * @description Page for paginated results
+ */
 export class Page {
-  @IsNumber()
+  @IsInt()
   @IsOptional()
   @Min(1)
   @Type(() => Number)
-  @ApiPropertyOptional({ type: Number, default: 1, minimum: 1 })
+  @ApiPropertyOptional({ default: 1, minimum: 1 })
   page = 1;
 
-  @IsNumber()
+  @IsInt()
   @IsOptional()
   @Min(1)
   @Max(64)
   @Type(() => Number)
-  @ApiPropertyOptional({ type: Number, default: 16, minimum: 1, maximum: 64 })
+  @ApiPropertyOptional({ default: 16, minimum: 1, maximum: 64 })
   limit = 16;
 }

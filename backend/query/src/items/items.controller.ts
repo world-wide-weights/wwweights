@@ -16,7 +16,7 @@ import {
 } from '@nestjs/swagger';
 import { Item } from '../models/item.model';
 import { ApiOkResponsePaginated } from '../shared/decorators/paginated-ok-response.decorator';
-import { PaginatedResponse } from '../shared/interfaces/paginated-result';
+import { PaginatedResponse } from '../shared/interfaces/paginated-result.interface';
 import { QueryItemListDto } from './dtos/query-item-list.dto';
 import { QueryItemRelatedDto } from './dtos/query-item-related.dto';
 import { QueryItemStatisticsDto } from './dtos/query-item-statistics.dto';

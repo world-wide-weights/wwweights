@@ -10,7 +10,7 @@ import {
 import { QueryBus } from '@nestjs/cqrs';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Tag } from '../models/tag.model';
-import { PaginatedResponse } from '../shared/interfaces/paginated-result';
+import { PaginatedResponse } from '../shared/interfaces/paginated-result.interface';
 import { QueryTagListDto } from './interfaces/query-tag-list.dto';
 import { QueryTagRelatedDto } from './interfaces/query-tag-related.dto';
 import { TagWithRelevance } from './interfaces/tag-with-relevance';
