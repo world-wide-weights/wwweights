@@ -61,7 +61,9 @@ export class ItemsController {
   @ApiOperation({ summary: 'Get statistics for an item search' })
   @ApiNotFoundResponse({ description: 'No items found' })
   @ApiOkResponse({ description: 'Item statistics', type: ItemStatistics })
-  async getItemStatistics(@Query() dto: QueryItemStatisticsDto) {
+  async getItemStatistics(
+    @Query() dto: QueryItemStatisticsDto,
+  ): Promise<ItemStatistics> {
     this.logger.log(`Get item statistics`);
     const result = await this.queryBus.execute(new ItemStatisticsQuery(dto));
     return new ItemStatistics(result);
