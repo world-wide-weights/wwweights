@@ -316,6 +316,21 @@ describe('Items (e2e)', () => {
           .query({ slug: relatedItems[0].slug })
           .expect(HttpStatus.NOT_FOUND);
       });
+
+      it('should return total with 0 if no related item found', async () => {
+        // ARRANGE
+        await itemModel.deleteMany();
+        await itemModel.insertMany(relatedItems[0]);
+
+        // ACT
+        const res = await request(server)
+          .get(queriesPath + subPath)
+          .query({ slug: relatedItems[0].slug })
+          .expect(HttpStatus.OK);
+
+        // ASSERT
+        expect(res.body.total).toEqual(0);
+      });
     });
 
     describe('items/statistics', () => {
