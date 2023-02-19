@@ -1,6 +1,12 @@
 import { AxiosError, isAxiosError } from "axios"
 import { toast } from "react-toastify"
 
+/**
+ * Handle errors and displays error messages to the user
+ * @param error the error from the catch
+ * @param customErrorCheck custom API error checks with custom behavior
+ * @returns {void} 
+ */
 export const errorHandling = (error: unknown, customErrorCheck = (error: AxiosError): void | true => { }) => {
     // Log error 
     console.log(error)
