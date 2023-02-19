@@ -14,13 +14,15 @@ type CardProps = {
     to?: string
     /** Custom classname */
     classNameWrapper?: string
+    /** When true no word wrapping or ellipsis text overflow. */
+    noTruncate?: boolean
 }
 
 /**
  * Displays Card with an big icon left, values and descriptions
  * @example <Card icon="home" value="Home" descriptionTop="Home" descriptionBottom="Home" />
  */
-export const Card: React.FC<CardProps> = ({ icon, descriptionTop, value, descriptionBottom, to, classNameWrapper = "" }) => {
+export const Card: React.FC<CardProps> = ({ icon, descriptionTop, value, descriptionBottom, to, classNameWrapper = "", noTruncate = false }) => {
     const CustomTag = to ? Link : "div"
 
     return <CustomTag href={to ?? "#"} className={`flex items-center bg-white rounded-lg py-4 px-6 ${classNameWrapper}`}>
@@ -31,8 +33,8 @@ export const Card: React.FC<CardProps> = ({ icon, descriptionTop, value, descrip
 
         {/* Value and descriptions */}
         <div>
-            {descriptionTop && <div title={descriptionTop} className="font-medium text-gray-600 w-40 truncate break-words">{descriptionTop}</div>}
-            <h5 title={value} className="font-bold text-xl w-32 truncate leading-6">{value}</h5>
+            {descriptionTop && <div title={descriptionTop} className={`font-medium text-gray-600 ${noTruncate ? "" : " w-40 truncate break-words"}`}>{descriptionTop}</div>}
+            <h5 title={value} className={`font-bold text-xl  ${noTruncate ? "" : "w-32 truncate"} leading-6`}>{value}</h5>
             {descriptionBottom && <p className="text-gray-700">{descriptionBottom}</p>}
         </div>
     </CustomTag>
