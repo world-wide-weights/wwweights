@@ -1,4 +1,8 @@
-import { InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import {
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { randomUUID } from 'crypto';
 import { ItemEditSuggestedEvent } from '../../events/item-events/item-edit-suggested.event';
@@ -29,15 +33,16 @@ export class SuggestItemEditHandler
       status: SUGGESTION_STATUS.APPROVED,
       uuid: randomUUID(),
     });
-
     if (
       !(await this.eventStore.doesStreamExist(
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${newSuggestion.itemSlug}`,
       ))
     ) {
-      this.logger.error(`No item with this slug ${itemSlug} exists. No Event created`)
+      this.logger.error(
+        `No item with this slug ${itemSlug} exists. No Event created`,
+      );
       // Throw error because this is facing the client
-      throw new NotFoundException(`No item with this slug ${itemSlug} exists`)
+      throw new NotFoundException(`No item with this slug ${itemSlug} exists`);
     }
 
     const streamName = `${ALLOWED_EVENT_ENTITIES.EDIT_SUGGESTION}-${newSuggestion.itemSlug}-${newSuggestion.uuid}`;
@@ -52,11 +57,11 @@ export class SuggestItemEditHandler
         `${ItemEditSuggestedEvent.name} created on stream: ${streamName}`,
       );
     } catch (error) {
-      this.logger.error(error)
+      this.logger.error(error);
       this.logger.error(
         `Toplevel error caught. Stopping execution and therefore not creating event. See above for more details`,
       );
-      throw new InternalServerErrorException()
+      throw new InternalServerErrorException();
     }
   }
 }
