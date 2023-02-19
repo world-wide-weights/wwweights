@@ -14,8 +14,8 @@ import { PaginatedResponse } from '../shared/interfaces/paginated-result.interfa
 import { QueryTagListDto } from './dtos/query-tag-list.dto';
 import { QueryTagRelatedDto } from './dtos/query-tag-related.dto';
 import { TagWithRelevance } from './interfaces/tag-with-relevance.interface';
-import { TagRelatedQuery } from './queries/related-tags.query';
 import { TagListQuery } from './queries/tag-list.query';
+import { TagRelatedQuery } from './queries/tag-related.query';
 
 @Controller('tags')
 @ApiTags('tags')
