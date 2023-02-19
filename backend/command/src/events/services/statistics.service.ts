@@ -58,10 +58,9 @@ export class StatisticsService {
     userId: number,
     incrementer: { $inc: Record<string, number> },
   ): Promise<void> {
-    await this.profileModel.findOneAndUpdate({ userId }, incrementer, {
+    await this.profileModel.updateOne({ userId }, incrementer, {
       upsert: true,
     });
-
     this.logger.log(`Incremented Profile Counts for ${userId}`);
   }
 }

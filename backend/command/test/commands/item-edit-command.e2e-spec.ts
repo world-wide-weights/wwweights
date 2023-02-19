@@ -11,6 +11,7 @@ import { EditItemCommand } from '../../src/commands/item-commands/edit-item.comm
 import { ControllersModule } from '../../src/controllers/controllers.module';
 import { CronModule } from '../../src/cron/cron.module';
 import { EventsModule } from '../../src/events/events.module';
+import { ImagesService } from '../../src/events/services/images.service';
 import { ALLOWED_EVENT_ENTITIES } from '../../src/eventstore/enums/allowedEntities.enum';
 import { EventStore } from '../../src/eventstore/eventstore';
 import { EventStoreModule } from '../../src/eventstore/eventstore.module';
@@ -47,6 +48,7 @@ describe('Item Edit (e2e)', () => {
   let globalStatisticsModel: Model<GlobalStatistics>;
 
   const mockEventStore: MockEventStore = new MockEventStore();
+  let imagesService: ImagesService;
   let server: any; // Has to be any because of supertest not having a type for it either
   const fakeJWTGuard = new FakeAuthGuardFactory();
   const fakeEnvGuard = new FakeEnvGuardFactory();
@@ -99,6 +101,7 @@ describe('Item Edit (e2e)', () => {
     server = app.getHttpServer();
 
     mockEventStore.eventBus = app.get<EventBus>(EventBus);
+    imagesService = app.get<ImagesService>(ImagesService);
 
     commandBus = app.get<CommandBus>(CommandBus);
   });
@@ -487,6 +490,38 @@ describe('Item Edit (e2e)', () => {
       // Has tag been created?
       expect(newTag).toBeDefined();
       expect(oldTag.count).toEqual(item.tags[0].count - 1);
+    });
+
+    it('Should call demote Image if replaced', async () => {
+      // ARRANGE
+      const item = new itemModel({ ...singleItem, image: 'initial' });
+      await item.save();
+      const command = new EditItemCommand(
+        item.slug,
+        randomUUID(),
+        {
+          image: 'changed',
+        },
+        verifiedRequestUser.id,
+      );
+      // Create eventstore stream
+      mockEventStore.existingStreams.add(
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      );
+
+      const demoteImageFunction = jest
+        .spyOn(imagesService, 'demoteImageInImageBackend')
+        .mockImplementation(async () => null);
+
+      //ACT
+      commandBus.execute(command);
+
+      await retryCallback(
+        async () => demoteImageFunction.mock.calls.length !== 0,
+      );
+
+      // ASSERT
+      expect(demoteImageFunction).toHaveBeenCalled();
     });
   });
 });

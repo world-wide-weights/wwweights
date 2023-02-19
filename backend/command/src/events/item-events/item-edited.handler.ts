@@ -35,7 +35,6 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
       this.logger.debug(
         `Item update took: ${performance.now() - updateItemStartTime} ms`,
       );
-
       await this.incrementProfileCounts(
         itemEditedEventDto.userId,
         itemEditedEventDto.editValues,
@@ -51,7 +50,6 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
           } ms`,
         );
       }
-
       if (editValues.image && oldItem?.image) {
         const imgBackendCallStartTime = performance.now();
         // Only remove as promotion of new image was done at suggestion creation
@@ -174,7 +172,7 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
           : 0,
       },
     };
-
+    const time = performance.now();
     await this.statisticsService.incrementProfileCounts(userId, incrementer);
   }
 }

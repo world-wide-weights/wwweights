@@ -1,3 +1,5 @@
+import { setTimeout } from 'timers/promises';
+
 /**
  * @description Retry passed callback until completion or timeout is exceeded. If its the ladder an error is thrown to stop the test
  */
@@ -7,6 +9,7 @@ export const retryCallback = async (
 ): Promise<void> => {
   const startTime = performance.now();
   while (performance.now() - startTime < maxDuration) {
+    await setTimeout(99);
     const currentResult = await callback();
     if (currentResult) return;
   }
