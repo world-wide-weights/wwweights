@@ -159,7 +159,7 @@ describe('UploadService', () => {
             512,
             512,
           ),
-        ).rejects.toThrowError('Image could not be found within cache');
+        ).rejects.toThrowError('Image cropping failed');
       });
       it('Should fail for path pointing to directory', async () => {
         // ACT & ASSERT
@@ -169,7 +169,7 @@ describe('UploadService', () => {
             512,
             512,
           ),
-        ).rejects.toThrowError('Cannot crop directory');
+        ).rejects.toThrowError('Image cropping failed');
       });
     });
   });

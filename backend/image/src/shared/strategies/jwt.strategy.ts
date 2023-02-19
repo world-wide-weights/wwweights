@@ -3,6 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { passportJwtSecret } from 'jwks-rsa';
 import { ConfigService } from '@nestjs/config';
+import { JWTPayload } from '../interfaces/jwt-payload.interface';
 
 /**
  * @description Strategy verifying the jwt tokens of incoming requests against auth service
@@ -22,7 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  validate(payload: any): any {
+  validate(payload: JWTPayload): JWTPayload {
     return payload;
   }
 }
