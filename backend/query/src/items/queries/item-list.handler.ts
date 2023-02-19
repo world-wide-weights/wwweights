@@ -26,7 +26,7 @@ export class ItemListHandler implements IQueryHandler<ItemListQuery> {
       dto.tags,
       dto.slug,
       dto.hasimage,
-      dto.userid,
+      dto.userId,
     );
 
     const itemListQueryStartTime = performance.now();

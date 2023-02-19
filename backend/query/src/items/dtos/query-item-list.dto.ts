@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { Transform, Type } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
 import { IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
 import { QueryTagsAndPage } from '../../shared/interfaces/queryTagsAndPage';
 import { ItemSortEnum } from '../enums/item-sort-enum';
@@ -41,5 +41,6 @@ export class QueryItemListDto extends QueryTagsAndPage {
     description: 'Searching for items by a specific user',
     example: 1,
   })
-  userid?: number;
+  @Expose({ name: 'userid' })
+  userId?: number;
 }
