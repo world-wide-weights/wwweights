@@ -39,7 +39,6 @@ describe('Profiles (e2e)', () => {
 
   beforeEach(async () => {
     await profileModel.deleteMany();
-
     await profileModel.insertMany(profiles);
   });
 
@@ -72,13 +71,15 @@ describe('Profiles (e2e)', () => {
         });
       });
 
-      it('should throw a not found if document does not exist', async () => {
+      it('should not throw a not found if document does not exist', async () => {
         // ARRANGE
         await profileModel.deleteMany();
+
         // ACT
         const result = await request(server).get(
           queriesPath + subPath(profiles[0].userId),
         );
+
         // ASSERT
         expect(result.statusCode).toEqual(HttpStatus.OK);
         expect(result.body).toEqual({});

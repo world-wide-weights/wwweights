@@ -7,12 +7,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
-import {
-  ApiNotFoundResponse,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { QueryProfileStatisticsDto } from './dtos/query-profile-statistics.dto';
 import { ProfileStatistics } from './interfaces/profile-statistics-response.interface';
 import { ProfileStatisticsQuery } from './queries/profile-statistics.query';
@@ -30,7 +25,6 @@ export class ProfilesController {
     type: ProfileStatistics,
     description: 'Counts of profile activity',
   })
-  @ApiNotFoundResponse({ description: 'Profile not found' })
   async getProfileStatistics(
     @Param() { userId }: QueryProfileStatisticsDto,
   ): Promise<ProfileStatistics> {
