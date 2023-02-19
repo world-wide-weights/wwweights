@@ -1,3 +1,4 @@
+import { SortType } from "../components/Sort/Sort"
 import { RoutePagination } from "../services/routes/routes"
 
 export type PaginatedResponse<T> = {
