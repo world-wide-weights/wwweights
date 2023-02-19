@@ -5,7 +5,7 @@ const tags = paginatedTagsList.data.map((tag: { name: string, count: number }) =
 describe("Tags", () => {
     describe("List", () => {
         beforeEach(() => {
-            cy.mockGetTagsList()
+            cy.mockTagsList()
             cy.visitLocalPage("/tags")
         })
 
@@ -37,7 +37,7 @@ describe("Tags", () => {
 
     describe("Pagination", () => {
         it("should display pagination when there are more tags than limit per page is", () => {
-            cy.mockGetTagsList()
+            cy.mockTagsList()
             cy.visitLocalPage("/tags?limit=5")
 
             cy.dataCy("pagination").should("be.visible")
@@ -46,7 +46,7 @@ describe("Tags", () => {
 
     describe("EmptyState", () => {
         it("should display empty state when there are no tags", () => {
-            cy.mockGetTagsList({ itemCount: 0 })
+            cy.mockTagsList({ itemCount: 0 })
             cy.visitLocalPage("/tags?page=1")
 
             cy.dataCy("tags-empty-state").should("be.visible")

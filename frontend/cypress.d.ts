@@ -43,7 +43,7 @@ declare global {
             /**
              * Interceptor for tags list request.
              */
-            mockGetTagsList(options?: { itemCount?: number }): Chainable<void>
+            mockTagsList(options?: { itemCount?: number }): Chainable<void>
             /**
              * Mocks all requests server side and client side
              * - clear and activate nock
@@ -110,6 +110,10 @@ declare global {
              * Mocks home page.
              */
             mockHome(): Chainable<void>
+            /**
+             * Mock tags list request (client site).
+             */
+            mockTagsListClient(): Chainable<void>
         }
     }
 }

@@ -49,7 +49,7 @@ Cypress.Commands.add("mockGetRelatedTags", () => {
     }).as("mockGetRelatedTags")
 })
 
-Cypress.Commands.add("mockGetTagsList", (options) => {
+Cypress.Commands.add("mockTagsList", (options) => {
     const body = options?.itemCount || options?.itemCount === 0 ? {
         ...paginatedTagsList,
         data: paginatedTagsList.data.slice(0, options.itemCount)
@@ -64,6 +64,12 @@ Cypress.Commands.add("mockGetTagsList", (options) => {
         statusCode: 200,
         body
     })
+})
+
+Cypress.Commands.add("mockTagsListClient", () => {
+    cy.intercept("GET", `${API_BASE_URL_QUERY_CLIENT}/tags/list*`, {
+        fixture: "tags/related.json"
+    }).as("mockTagsListClient")
 })
 
 Cypress.Commands.add("mockItemsList", (options) => {
@@ -84,6 +90,7 @@ Cypress.Commands.add("mockItemsList", (options) => {
 })
 
 Cypress.Commands.add("mockDiscoverPage", (options) => {
+    cy.mockTagsListClient()
     cy.mockItemsList(options)
 
     // Mock Statistics
@@ -99,6 +106,7 @@ Cypress.Commands.add("mockDiscoverPage", (options) => {
 })
 
 Cypress.Commands.add("mockSingleWeightPage", () => {
+    cy.mockTagsListClient()
     cy.task("clearNock")
 
     // Mock items single
@@ -124,6 +132,8 @@ Cypress.Commands.add("mockSingleWeightPage", () => {
 })
 
 Cypress.Commands.add("mockLogin", () => {
+    cy.mockTagsListClient()
+
     cy.intercept("POST", `${API_BASE_URL_AUTH}/auth/login`, {
         fixture: "auth/tokens.json"
     }).as("mockLogin")
@@ -134,6 +144,8 @@ Cypress.Commands.add("mockLogin", () => {
 })
 
 Cypress.Commands.add("mockRegister", () => {
+    cy.mockTagsListClient()
+
     cy.intercept("POST", `${API_BASE_URL_AUTH}/auth/register`, {
         fixture: "auth/tokens.json"
     }).as("mockRegister")
@@ -167,6 +179,7 @@ Cypress.Commands.add("login", ({ route, visitOptions }) => {
 })
 
 Cypress.Commands.add("mockHome", () => {
+    cy.mockTagsListClient()
     cy.mockItemsList()
 
     cy.task("nock", {
@@ -191,6 +204,8 @@ Cypress.Commands.add("mockProfilePage", (options) => {
         ...paginatedContributions,
         data: paginatedContributions.data.slice(0, options?.contribtionsCount)
     } : paginatedContributions
+
+    cy.mockTagsListClient()
 
     // Mock Contributions
     cy.intercept("GET", `${API_BASE_URL_QUERY_CLIENT}/items/list*`, {
