@@ -1,6 +1,12 @@
 import { useMemo } from "react"
-import { paginationService, PaginationServiceParams } from "../services/pagination/pagination"
+import { paginationService } from "../services/pagination/pagination"
+import { PaginationService, PaginationServiceParams } from "../types/pagination"
 
-export const usePagination = (usePaginationProps: PaginationServiceParams) => {
-    return useMemo(() => paginationService(usePaginationProps), [usePaginationProps]) // MC: Is this still working expected?
+/**
+ * Pagination hook, creates the pagination service object
+ * @param usePaginationProps params for pagination
+ * @returns pagination service object
+ */
+export const usePagination = (usePaginationProps: PaginationServiceParams): PaginationService => {
+	return useMemo(() => paginationService(usePaginationProps), [usePaginationProps])
 }

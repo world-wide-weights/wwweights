@@ -19,7 +19,7 @@ export class GlobalStatistics {
     description: 'Total items + total suggestions',
     example: 420,
   })
-  @Transform(({ obj }) => obj.totalItems + obj.totalSuggestions)
+  @Transform(({ obj }) => obj.totalItems + (obj.totalSuggestions || 0))
   totalContributions: number;
 
   constructor(Partial: Partial<GlobalStatistics>) {

@@ -1,4 +1,3 @@
-import { isAxiosError } from "axios"
 import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../../../components/Auth/Auth"
@@ -6,8 +5,9 @@ import { CreateEdit } from "../../../components/Item/CreateEdit"
 import { SkeletonLoadingEdit } from "../../../components/Loading/SkeletonLoadingEdit"
 import { Seo } from "../../../components/Seo/Seo"
 import { queryServerRequest } from "../../../services/axios/axios"
+import { errorHandling } from "../../../services/utils/errorHandling"
 import { Item } from "../../../types/item"
-import { PaginatedResponse } from "../../../types/paginated"
+import { PaginatedResponse } from "../../../types/pagination"
 import Custom404 from "../../404"
 import Custom500 from "../../500"
 
@@ -15,82 +15,73 @@ import Custom500 from "../../500"
  * Edit Item Page.
  */
 const EditItem = () => {
-    // Router
-    const { query, isReady } = useRouter()
+	// Router
+	const { query, isReady } = useRouter()
 
-    // Local State
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
-    const [item, setItem] = useState<Item | undefined>()
-    const [isLoading, setIsLoading] = useState<boolean>(true)
-    const [error, setError] = useState<string | undefined>()
+	// Local State
+	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
+	const [item, setItem] = useState<Item | undefined>()
+	const [isLoading, setIsLoading] = useState<boolean>(true)
+	const [error, setError] = useState<string | undefined>()
 
-    // Local variables
-    const isLoadingEdit = isLoading || !isReady
+	// Local variables
+	const isLoadingEdit = isLoading || !isReady
 
-    // Global State
-    const { getSession } = useContext(AuthContext)
+	// Global State
+	const { getSession } = useContext(AuthContext)
 
-    // Check if item is owned by user
-    useEffect(() => {
-        // Wait till the router has finished loading
-        if (!isReady)
-            return
+	// Check if item is owned by user
+	useEffect(() => {
+		// Wait till the router has finished loading
+		if (!isReady) return
 
-        const fetchItem = async () => {
-            try {
-                // Fetch item
-                const itemResponse = await queryServerRequest.get<PaginatedResponse<Item>>(`/items/list?slug=${query.slug}`)
-                const item = itemResponse.data.data[0]
+		const fetchItem = async () => {
+			try {
+				// Fetch item
+				const itemResponse = await queryServerRequest.get<PaginatedResponse<Item>>(`/items/list?slug=${query.slug}`)
+				const item = itemResponse.data.data[0]
 
-                if (!item)
-                    return
+				if (!item) return
 
-                setItem(item)
+				setItem(item)
 
-                // Check if user is authenticated
-                const session = await getSession()
+				// Check if user is authenticated
+				const session = await getSession()
 
-                // Should never happen because of auth route
-                /* istanbul ignore if */
-                if (session === null)
-                    return
+				// Should never happen because of auth route
+				/* istanbul ignore if */
+				if (session === null) return
 
-                setIsAuthenticated(session.decodedAccessToken.id === item.userId)
-            } catch (error) {
-                isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Our servers are feeling a bit heavy today. Please try again in a few minutes.")
-                console.error(error)
-            } finally {
-                setIsLoading(false)
-            }
-        }
-        fetchItem()
-    }, [getSession, isReady, query.slug])
+				setIsAuthenticated(session.decodedAccessToken.id === item.userId)
+			} catch (error) {
+				errorHandling(error)
+			} finally {
+				setIsLoading(false)
+			}
+		}
+		fetchItem()
+	}, [getSession, isReady, query.slug])
 
-    if (isLoadingEdit)
-        return <SkeletonLoadingEdit />
+	if (isLoadingEdit) return <SkeletonLoadingEdit />
 
-    if (!isAuthenticated || !item) {
-        return <Custom404 />
-    }
+	if (!isAuthenticated || !item) return <Custom404 />
 
-    if (error)
-        return <Custom500 />
+	if (error) return <Custom500 />
 
-    return <>
-        {/* Meta Tags */}
-        <Seo
-            title={`Edit ${item.name}`}
-            description="Improve contributions to the World Wide Weights database and update item."
-        />
+	return (
+		<>
+			{/* Meta Tags */}
+			<Seo title={`Edit ${item.name}`} description="Improve contributions to the World Wide Weights database and update item." />
 
-        {/* Page Content */}
-        <CreateEdit item={item} />
-    </>
+			{/* Page Content */}
+			<CreateEdit item={item} />
+		</>
+	)
 }
 
 // Sets route need to be logged in
 EditItem.auth = {
-    routeType: "protected"
+	routeType: "protected",
 }
 
 export default EditItem

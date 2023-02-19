@@ -18,14 +18,12 @@ describe("IconButton", () => {
 			cy.get("button i").should("be.visible")
 		})
 
-
 		it("should have hover effect", () => {
 			cy.mount(<IconButton icon="menu" onClick={() => ""} />)
 			cy.get("button").trigger("mouseover")
 
 			cy.get("button").should("have.class", "hover:bg-gray-200")
 		})
-
 
 		it("should be disabled", () => {
 			cy.mount(<IconButton icon="menu" disabled onClick={() => ""} />)
@@ -44,7 +42,6 @@ describe("IconButton", () => {
 
 			cy.get("i").should("not.have.class", DIMMED_CSS_CLASS)
 		})
-
 	})
 
 	describe("Button as link", () => {
@@ -85,8 +82,6 @@ describe("IconButton", () => {
 			cy.get("i").should("not.have.class", DIMMED_CSS_CLASS)
 		})
 	})
-
 })
 
-export { }
-
+export {}

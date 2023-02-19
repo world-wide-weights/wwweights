@@ -10,19 +10,19 @@ const LOCAL_STORAGE_KEY = "session"
  * @returns session object
  */
 export const createSession = (tokens: Tokens): SessionData => {
-    const { access_token, refresh_token } = tokens
+	const { access_token, refresh_token } = tokens
 
-    // Decode access token
-    const decodedAccessToken = parseJwt(access_token)
+	// Decode access token
+	const decodedAccessToken = parseJwt(access_token)
 
-    // Create session object
-    const sessionData: SessionData = {
-        accessToken: access_token,
-        refreshToken: refresh_token,
-        decodedAccessToken,
-    }
+	// Create session object
+	const sessionData: SessionData = {
+		accessToken: access_token,
+		refreshToken: refresh_token,
+		decodedAccessToken,
+	}
 
-    return sessionData
+	return sessionData
 }
 
 /**
@@ -30,52 +30,50 @@ export const createSession = (tokens: Tokens): SessionData => {
  * @param sessionData session data to save in local storage
  */
 export const saveSession = (sessionData: SessionData): void => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(sessionData))
+	localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(sessionData))
 }
 
-/** 
+/**
  * Get session data from local storage and update the access token if it has expired.
  * @returns session data or null if no session data is found
  */
 export const getSessionData = async (): Promise<SessionData | null> => {
-    // Get session from local storage
-    const sessionData = localStorage.getItem(LOCAL_STORAGE_KEY)
+	// Get session from local storage
+	const sessionData = localStorage.getItem(LOCAL_STORAGE_KEY)
 
-    if (sessionData) {
-        const parsedSessionData: SessionData = JSON.parse(sessionData)
+	if (sessionData) {
+		const parsedSessionData: SessionData = JSON.parse(sessionData)
 
-        // Update token if expired
-        if (Date.now() > parsedSessionData.decodedAccessToken.exp * 1000) {
-            console.log("Session expired, refreshing token")
-            const tokens = await refreshToken(parsedSessionData.refreshToken)
+		// Update token if expired
+		if (Date.now() > parsedSessionData.decodedAccessToken.exp * 1000) {
+			const tokens = await refreshToken(parsedSessionData.refreshToken)
 
-            // Refresh token failed
-            if (tokens === null) {
-                console.error("Session expired and refresh token failed")
-                return null
-            }
+			// Refresh token failed
+			if (tokens === null) {
+				console.error("Session expired and refresh token failed")
+				return null
+			}
 
-            // Update session when refresh token succeeded
-            const newSession = createSession(tokens)
-            saveSession(newSession)
-            console.log("Session refreshed")
+			// Update session when refresh token succeeded
+			const newSession = createSession(tokens)
+			saveSession(newSession)
 
-            return newSession
-        }
+			return newSession
+		}
 
-        // Token is still valid
-        return parsedSessionData
-    }
+		// Token is still valid
+		return parsedSessionData
+	}
 
-    // No session data found
-    return null
+	// No session data found
+	return null
 }
 
 /**
  * Remove session data from local storage.
  */
 export const endSession = (): void => {
-    localStorage.removeItem(LOCAL_STORAGE_KEY)
+	localStorage.removeItem(LOCAL_STORAGE_KEY)
 }
 
 /**
@@ -84,16 +82,20 @@ export const endSession = (): void => {
  * @returns new access and refresh tokens
  */
 export const refreshToken = async (refreshToken: string): Promise<Tokens | null> => {
-    try {
-        const response = await authRequest.post<Tokens>("/auth/refresh", {}, {
-            headers: {
-                Authorization: "Bearer " + refreshToken
-            }
-        })
+	try {
+		const response = await authRequest.post<Tokens>(
+			"/auth/refresh",
+			{},
+			{
+				headers: {
+					Authorization: "Bearer " + refreshToken,
+				},
+			}
+		)
 
-        const tokens = response.data
-        return tokens
-    } catch (error) {
-        return null
-    }
+		const tokens = response.data
+		return tokens
+	} catch (error) {
+		return null
+	}
 }

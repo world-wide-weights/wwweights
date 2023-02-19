@@ -3,6 +3,6 @@
  * @param token the JWT token
  * @returns the payload
  */
-export function parseJwt(token: string) {
-    return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString())
+export const parseJwt = (token: string) => {
+	return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString())
 }
