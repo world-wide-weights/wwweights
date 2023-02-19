@@ -1,6 +1,6 @@
 import { applyDecorators, Type } from '@nestjs/common';
 import { ApiExtraModels, ApiOkResponse, getSchemaPath } from '@nestjs/swagger';
-import { PaginatedResponse } from '../interfaces/paginated-result';
+import { PaginatedResponse } from '../interfaces/paginated-result.interface';
 
 /**
  * @description Black Magic for paginated responses with generic types

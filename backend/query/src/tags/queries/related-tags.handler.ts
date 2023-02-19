@@ -6,8 +6,8 @@ import { ItemSortEnum } from '../../items/enums/item-sort-enum';
 import { Item } from '../../models/item.model';
 import { getFilter } from '../../shared/functions/get-filter';
 import { getSort } from '../../shared/functions/get-sort';
-import { DataWithCount } from '../../shared/interfaces/data-with-count';
-import { PaginatedResponse } from '../../shared/interfaces/paginated-result';
+import { DataWithCount } from '../../shared/interfaces/data-with-count.interface';
+import { PaginatedResponse } from '../../shared/interfaces/paginated-result.interface';
 import { TagWithRelevance } from '../interfaces/tag-with-relevance';
 import { TagRelatedQuery } from './related-tags.query';
 

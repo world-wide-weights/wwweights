@@ -5,8 +5,8 @@ import { ReturnModelType } from '@typegoose/typegoose';
 import { Item } from '../../models/item.model';
 import { getFilter } from '../../shared/functions/get-filter';
 import { getSort } from '../../shared/functions/get-sort';
-import { DataWithCount } from '../../shared/interfaces/data-with-count';
-import { PaginatedResponse } from '../../shared/interfaces/paginated-result';
+import { DataWithCount } from '../../shared/interfaces/data-with-count.interface';
+import { PaginatedResponse } from '../../shared/interfaces/paginated-result.interface';
 import { ItemListQuery } from './item-list.query';
 
 @QueryHandler(ItemListQuery)

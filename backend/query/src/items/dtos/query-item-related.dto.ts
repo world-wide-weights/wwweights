@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
-import { Page } from '../../shared/interfaces/page';
+import { Page } from '../../shared/interfaces/page.interface';
 
 /**
  * @description Query DTO to retrieve a list of items related to a given item
