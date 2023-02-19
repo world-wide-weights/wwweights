@@ -14,12 +14,11 @@ import { RelatedItems } from "../../components/RelatedItems/RelatedItems"
 import { Seo } from "../../components/Seo/Seo"
 import { Tab } from "../../components/Tabs/Tab"
 import { Tabs } from "../../components/Tabs/Tabs"
-import { Tooltip } from "../../components/Tooltip/Tooltip"
 import { queryServerRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { renderUnitIntoString } from "../../services/unit/unitRenderer"
 import { getImageUrl } from "../../services/utils/getImageUrl"
-import { calculateMedianWeight } from "../../services/utils/weight"
+import { calculateMedianWeight, generateWeightString } from "../../services/utils/weight"
 import { Item } from "../../types/item"
 import { PaginatedResponse } from "../../types/pagination"
 import Custom404 from "../404"
@@ -95,15 +94,11 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
                 <div className="grid grid-cols-[120px_1fr] md:grid-cols-[250px_1fr] items-center lg:grid-cols-2 mb-5 md:mb-10">
                     {/* Headline and Weight */}
                     <div className="flex flex-col lg:col-start-1 lg:col-end-3 pl-5 lg:pl-0 md:mt-5">
-                        <Tooltip content={item.name}>
-                            <a target="_blank" rel="noopener noreferrer" className="flex items-center text-gray-700 text-lg sm:text-2xl md:mb-2" href={`https://www.google.com/search?q=${item.name}`}>
-                                <div className="w-40 sm:w-80 lg:w-[35rem] 2xl:w-[50rem] truncate">{item.name}</div>
-                                <Icon className="ml-2">open_in_new</Icon>
-                            </a>
-                        </Tooltip>
-                        <Tooltip content={weightString}>
-                            <Headline size="text-2xl sm:text-4xl lg:text-5xl w-40 sm:w-80 lg:w-[35rem] 2xl:w-[50rem] truncate">{weightString}</Headline>
-                        </Tooltip>
+                        <a target="_blank" rel="noopener noreferrer" title={item.name} className="flex items-center text-gray-700 w-40 sm:w-80 lg:w-[35rem] 2xl:w-[50rem] truncate text-lg sm:text-2xl md:mb-2" href={`https://www.google.com/search?q=${item.name}`}>
+                            {item.name}
+                            <Icon className="ml-2">open_in_new</Icon>
+                        </a>
+                        <Headline title={generateWeightString(item.weight)} size="text-2xl sm:text-4xl lg:text-5xl w-40 sm:w-80 lg:w-[35rem] 2xl:w-[50rem] truncate">{weightString}</Headline>
                     </div>
 
                     {/* Source and Tags */}
