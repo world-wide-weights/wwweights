@@ -1,11 +1,20 @@
 import { faker } from '@faker-js/faker';
 import { hash } from 'bcrypt';
-import { DataSource, Repository } from 'typeorm';
+import {
+  DataSource,
+  DeleteResult,
+  InsertResult,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
 import { ImageUserLookupEntity } from '../../src/db/entities/image-user-lookup.entity';
 import { UserEntity } from '../../src/db/entities/users.entity';
 import { ROLES } from '../../src/shared/enums/roles.enum';
 import { STATUS } from '../../src/shared/enums/status.enum';
 
+/**
+ * @description Create user in provided datasource. Use defaults that can be overwritten
+ */
 export async function createUser(
   dataSource: DataSource,
   valueOverride?: Partial<UserEntity>,
@@ -23,54 +32,73 @@ export async function createUser(
     .generatedMaps[0] as UserEntity;
 }
 
-export async function deleteByAttribute(
+/**
+ * @description Delete user by attribute
+ */
+export async function deleteUserByAttribute(
   dataSource: DataSource,
   identifier: Partial<UserEntity>,
-) {
+): Promise<DeleteResult> {
   return await getRepository<UserEntity>(dataSource, UserEntity).delete(
     identifier,
   );
 }
 
-export async function updateByAttribute(
+/**
+ * @description Update user by attribute
+ */
+export async function updateUserByAttribute(
   dataSource: DataSource,
   identifier: Partial<UserEntity>,
   updateValue: Partial<UserEntity>,
-) {
+): Promise<UpdateResult> {
   return await getRepository<UserEntity>(dataSource, UserEntity).update(
     identifier,
     updateValue,
   );
 }
+
+/**
+ * @description Fetch user by attribute
+ */
 export async function getUserByAttribute(
   dataSource: DataSource,
   identifier: Partial<UserEntity>,
-) {
+): Promise<UserEntity> {
   return await getRepository<UserEntity>(dataSource, UserEntity).findOneBy(
     identifier,
   );
 }
 
+/**
+ * @description Get user <-> image lookup by userId
+ */
 export async function getLookupsByUserId(
   dataSource: DataSource,
   fkUserId: number,
-) {
+): Promise<ImageUserLookupEntity[]> {
   return await getRepository<ImageUserLookupEntity>(
     dataSource,
     ImageUserLookupEntity,
   ).findBy({ fkUserId });
 }
 
+/**
+ * @description Insert user <-> image lookup
+ */
 export async function createLookup(
   dataSource: DataSource,
   lookup: ImageUserLookupEntity,
-) {
+): Promise<InsertResult> {
   return await getRepository<ImageUserLookupEntity>(
     dataSource,
     ImageUserLookupEntity,
   ).insert(lookup);
 }
 
+/**
+ * @description Get Repository for Entity
+ */
 function getRepository<T>(dataSource, entity): Repository<T> {
   return dataSource.getRepository(entity) as Repository<T>;
 }

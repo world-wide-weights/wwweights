@@ -1,7 +1,6 @@
 import { ConflictException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
-import { STATUS } from '../../shared/enums/status.enum';
 import { UserEntity } from '../entities/users.entity';
 
 @Injectable()
@@ -47,7 +46,10 @@ export class UserService {
       // This is a non ideal way of inserting the date, especially since postgres already has a default value
       // However pg-mem has imperfections in the SQL parser that force us to set the createdAt date on the server rather than in the db directly
       // This problem is related to https://github.com/oguimbal/pg-mem/issues/239
-      const insertedUser = await this.userEntity.save({...user, createdAt: await (await this.getCurrentDbTime()).now});
+      const insertedUser = await this.userEntity.save({
+        ...user,
+        createdAt: await (await this.getCurrentDbTime()).now,
+      });
       return insertedUser;
     } catch (error) {
       this.logger.error(error);
@@ -71,19 +73,14 @@ export class UserService {
   }
 
   /**
-   * @description Update user status
-   */
-  async changeUserStatus(id: number, status: STATUS): Promise<void> {
-    await this.userEntity.update(id, { status: status });
-  }
-
-  /**
    * @description Get the system time of postgres instance
    */
+  // ignore this in tests as the SQL query is not supported by pg-mem i.e. it has to be mocked
+  /* istanbul ignore next */
   async getCurrentDbTime(): Promise<{ now: string }> {
     return (await this.userEntity.query('SELECT NOW()::timestamptz'))[0];
   }
-  
+
   /**
    * @description Get the total amount of registered users in DB
    */

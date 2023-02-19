@@ -12,5 +12,10 @@
     "^.+\\.(t|j)s$": "ts-jest"
   },
   "coverageDirectory": ".coverage",
-  "coverageReporters": ["json", "text"]
+  "coverageReporters": ["json", "text", "html"],
+  "coveragePathIgnorePatterns": [
+    "<rootDir>/test/mocks",
+    "<rootDir>/test/helpers",
+    "<rootDir>/node_modules/"
+  ]
 }

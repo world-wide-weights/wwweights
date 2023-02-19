@@ -5,23 +5,23 @@ import { Expose, Type } from 'class-transformer';
  * @description Base properties of JWK as generated via public key
  */
 export class RsaJWKBase {
-  /**
-   *@description Identifies cryptographic algorithm family
-   **/
   @Expose()
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Identifies cryptographic algorithm family',
+    example: 'RSA',
+  })
   kty: string;
-  /**
-   *@description RSA exponent
-   **/
+
   @Expose()
-  @ApiProperty()
+  @ApiProperty({ description: 'RSA exponent', example: 'AQAB' })
   e: string;
-  /**
-   *@description RSA modulo
-   **/
+
   @Expose()
-  @ApiProperty()
+  @ApiProperty({
+    description: 'RSA module',
+    example:
+      'u8sRC2J7ZLiyA0hgRRJ0mlWbSYCqphQO__e2funNhgMBsRNz3YFGHot9AHYOo4PcSMRQ1VDcMIeSrDnNwC3D-xmcXsBh9qJPMEkrDM6wzuKBQKIUZV7EinevQdErwUjM9V5eU-sZSAvX0wWrRg6UxUg_RUAXqMYBs5GtPsA_uOM',
+  })
   n: string;
 
   constructor(data: Partial<RsaJWKBase>) {
@@ -33,26 +33,23 @@ export class RsaJWKBase {
  *@description JWK with metadata necessary for proper usage within a JWKS
  **/
 export class RsaJWK extends RsaJWKBase {
-  /**
-   *@description identify purpose of public key => "sig" for signature or "enc" for encryption
-   **/
   @Expose()
-  @ApiProperty({ description: 'Identify purpose of the key' })
+  @ApiProperty({
+    description: 'Identify purpose of the key',
+    examples: ['sig', 'enc'],
+  })
   use: string;
-  /**
-   *@description KeyId used to identify key when exposing multiple
-   **/
+
   @Expose()
   @ApiPropertyOptional({
     description:
       'Id of the key. Used for finding relevant information when looking up JWKS from client side',
+    example: 'auth-base-key',
   })
   kid?: string;
-  /**
-   *@description Algorithm
-   **/
+
   @Expose()
-  @ApiProperty({ description: 'Algorithm of the key' })
+  @ApiProperty({ description: 'Algorithm of the key', example: 'RS256' })
   alg: string;
 
   constructor(data: Partial<RsaJWK>) {
