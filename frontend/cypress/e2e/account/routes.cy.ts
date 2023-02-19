@@ -93,5 +93,4 @@ describe("Routes protected/guest", () => {
 	})
 })
 
-export { }
-
+export {}

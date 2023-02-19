@@ -47,8 +47,7 @@ export default defineConfig({
 					nock.cleanAll()
 
 					// After nock restore is called we need to activate nock again because it removes http interceptor: https://github.com/nock/nock#restoring
-					if (!nock.isActive())
-						nock.activate()
+					if (!nock.isActive()) nock.activate()
 
 					// Need to return null or a value in task otherwise it will fail test: https://docs.cypress.io/api/commands/task#Usage
 					return null
@@ -58,7 +57,11 @@ export default defineConfig({
 				 * @param object with mock meta information and body
 				 */
 				async nock({ hostname, method, path, statusCode, body }: NockType) {
-					console.log(`Backend Mock: ${method.toUpperCase()} ${hostname}${path} respond with`, statusCode, `${body ? JSON.stringify(body).substring(0, 50) : "No body"}...`)
+					console.log(
+						`Backend Mock: ${method.toUpperCase()} ${hostname}${path} respond with`,
+						statusCode,
+						`${body ? JSON.stringify(body).substring(0, 50) : "No body"}...`
+					)
 
 					nock(hostname).persist()[method](path).query(true).reply(statusCode, body)
 

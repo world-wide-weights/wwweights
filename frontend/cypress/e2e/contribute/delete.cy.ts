@@ -38,5 +38,4 @@ describe("Delete a contribution", () => {
 	})
 })
 
-export { }
-
+export {}

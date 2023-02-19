@@ -17,5 +17,4 @@ describe("Empty State /weights", () => {
 	})
 })
 
-export { }
-
+export {}

@@ -69,5 +69,4 @@ describe("Search /weights", () => {
 	})
 })
 
-export { }
-
+export {}
