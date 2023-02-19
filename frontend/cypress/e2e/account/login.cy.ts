@@ -13,15 +13,13 @@ describe("Login Page", () => {
 
         describe("Login Flow - Email and Password", () => {
             it("should login successfull login user and redirect to home page", () => {
-                // Mock login
+                // Mocks
                 cy.mockLogin()
+                cy.mockHome()
 
                 // Login
                 cy.dataCy("login-button").click()
                 cy.wait("@mockLogin")
-
-                // Mock home
-                cy.mockHome()
 
                 // Check for redirect (add custom time since ci seems to be to slow)
                 cy.url({

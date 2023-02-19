@@ -15,14 +15,12 @@ describe("Register", () => {
 
             // Mocks
             cy.mockRegister()
+            cy.mockHome()
 
             // Register button
             cy.dataCy("register-button").click()
 
             cy.wait("@mockRegister")
-
-            // Mock home
-            cy.mockHome()
 
             // Check redirect
             cy.url().should("include", "/")

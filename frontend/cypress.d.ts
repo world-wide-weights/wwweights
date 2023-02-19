@@ -114,6 +114,10 @@ declare global {
              * Mock tags list request (client site).
              */
             mockTagsListClient(): Chainable<void>
+            /**
+             * Mocks request for getting image from server.
+             */
+            mockImageServe(): Chainable<void>
         }
     }
 }

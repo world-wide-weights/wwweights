@@ -6,7 +6,7 @@ describe("Navbar", () => {
 
         cy.contains("Discover").should("be.visible")
 
-        cy.mockItemsList()
+        cy.mockHome()
         cy.dataCy("navbar-home-link").click()
         cy.contains("Discover", { timeout: 0 }).should("be.visible")
     })

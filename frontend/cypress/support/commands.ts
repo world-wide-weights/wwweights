@@ -90,6 +90,7 @@ Cypress.Commands.add("mockItemsList", (options) => {
 })
 
 Cypress.Commands.add("mockDiscoverPage", (options) => {
+    cy.mockImageServe()
     cy.mockTagsListClient()
     cy.mockItemsList(options)
 
@@ -106,6 +107,7 @@ Cypress.Commands.add("mockDiscoverPage", (options) => {
 })
 
 Cypress.Commands.add("mockSingleWeightPage", () => {
+    cy.mockImageServe()
     cy.mockTagsListClient()
     cy.task("clearNock")
 
@@ -132,6 +134,7 @@ Cypress.Commands.add("mockSingleWeightPage", () => {
 })
 
 Cypress.Commands.add("mockLogin", () => {
+    cy.mockImageServe()
     cy.mockTagsListClient()
 
     cy.intercept("POST", `${API_BASE_URL_AUTH}/auth/login`, {
@@ -144,6 +147,7 @@ Cypress.Commands.add("mockLogin", () => {
 })
 
 Cypress.Commands.add("mockRegister", () => {
+    cy.mockImageServe()
     cy.mockTagsListClient()
 
     cy.intercept("POST", `${API_BASE_URL_AUTH}/auth/register`, {
@@ -179,6 +183,7 @@ Cypress.Commands.add("login", ({ route, visitOptions }) => {
 })
 
 Cypress.Commands.add("mockHome", () => {
+    cy.mockImageServe()
     cy.mockTagsListClient()
     cy.mockItemsList()
 
@@ -205,6 +210,7 @@ Cypress.Commands.add("mockProfilePage", (options) => {
         data: paginatedContributions.data.slice(0, options?.contribtionsCount)
     } : paginatedContributions
 
+    cy.mockImageServe()
     cy.mockTagsListClient()
 
     // Mock Contributions
@@ -239,6 +245,12 @@ Cypress.Commands.add("mockDeleteItem", () => {
     cy.intercept("POST", `${API_BASE_URL_COMMAND}/items/*/suggest/delete`, {
         statusCode: 200,
     }).as("mockDeleteItem")
+})
+
+Cypress.Commands.add("mockImageServe", () => {
+    cy.intercept("GET", `${PUBLIC_API_BASE_URL_IMAGE}/serve/*`, {
+        statusCode: 201,
+    }).as("mockImageServe")
 })
 
 export { }
