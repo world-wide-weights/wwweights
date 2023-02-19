@@ -136,7 +136,7 @@ describe('Item Edit (e2e)', () => {
       //ACT
       const res = await request(server)
         .post(commandsPath + `items/${encodeURI(item.slug)}/suggest/edit`)
-        .send({ image: 'test' });
+        .send({ image: 'test', bullshit: 'test' });
 
       await retryCallback(
         async () => (await editSuggestionModel.count()) === 1,
