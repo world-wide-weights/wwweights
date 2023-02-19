@@ -49,13 +49,20 @@ Cypress.Commands.add("mockGetRelatedTags", () => {
     }).as("mockGetRelatedTags")
 })
 
-Cypress.Commands.add("mockGetTagsList", () => {
+Cypress.Commands.add("mockGetTagsList", (options) => {
+    const body = options?.itemCount || options?.itemCount === 0 ? {
+        ...paginatedTagsList,
+        data: paginatedTagsList.data.slice(0, options.itemCount)
+    } : paginatedTagsList
+
+    cy.task("clearNock")
+    cy.task("activateNock")
     cy.task("nock", {
         hostname: API_BASE_URL_QUERY_SERVER,
         method: "get",
         path: "/tags/list",
         statusCode: 200,
-        body: paginatedTagsList,
+        body
     })
 })
 

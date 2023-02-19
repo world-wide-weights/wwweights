@@ -1,7 +1,6 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
-import { Button } from "../../components/Button/Button"
 import { Chip } from "../../components/Chip/Chip"
-import { BaseEmptyState } from "../../components/EmptyState/BaseEmptyState"
+import { TagsEmptyState } from "../../components/EmptyState/TagsEmptyState"
 import { Headline } from "../../components/Headline/Headline"
 import { Pagination } from "../../components/Pagination/Pagination"
 import { Seo } from "../../components/Seo/Seo"
@@ -37,16 +36,12 @@ export default function TagsList({ tags, currentPage, totalItems, limit }: Infer
             {/* Headline */}
             <Headline level={3}>All tags</Headline>
 
-            {/* tags */}
-            {tags.length > 0 ? <div datacy="tags-list-container" className="flex flex-wrap pb-3">
+            {/* Tags */}
+            {tags.length === 0 ? <TagsEmptyState /> : <div datacy="tags-list-container" className="flex flex-wrap pb-3">
                 {tags.map((tag) => <Tooltip key={tag.name} content={`${tag.count === 1 ? "Tag is used once" : `Tag is used ${tag.count} times`}.`}>
                     <Chip to={routes.tags.single(tag.name)}>{tag.name} ({tag.count})</Chip>
                 </Tooltip>)}
-            </div> : <BaseEmptyState datacy="contributions-empty-state" icon="volunteer_activism" headline="Add tags to World Wide Weights!">
-                <p className="text-center mb-2">Start creating items with tags to view an overview here.</p>
-
-                <Button to={routes.contribute.create}>Contribute</Button>
-            </BaseEmptyState >}
+            </div>}
 
             {/* Pagination */}
             <Pagination totalItems={totalItems} currentPage={currentPage} itemsPerPage={limit} defaultItemsPerPage={DEFAULT_ITEMS_PER_PAGE} baseRoute={routes.tags.list} />
