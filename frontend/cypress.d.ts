@@ -28,6 +28,10 @@ declare global {
              */
             check500(): Chainable<void>
             /**
+             * Checks if we a network error toast is visible.
+             */
+            checkNetworkError(): Chainable<void>
+            /**
              * In Pagination checks if the activePageNumber is active.
              * @param activePageNumber the page we want to check active status
              */
@@ -39,7 +43,7 @@ declare global {
             /**
              * Interceptor for tags list request.
              */
-            mockGetTagsList(): Chainable<void>
+            mockGetTagsList(options?: { itemCount?: number }): Chainable<void>
             /**
              * Mocks all requests server side and client side
              * - clear and activate nock
@@ -66,6 +70,10 @@ declare global {
              * @param itemCount count of items getting back with body
              */
             mockItemsList(options?: { itemCount?: number }): Chainable<void>
+            /**
+             * Mocks home page.
+             */
+            mockHome(): Chainable<void>
             /**
              * Mocks login request.
              */

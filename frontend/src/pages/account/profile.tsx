@@ -1,7 +1,7 @@
-import { isAxiosError } from "axios"
 import { Form, Formik } from "formik"
 import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
+import { toast } from "react-toastify"
 import { object, ObjectSchema, string } from "yup"
 import { AuthContext } from "../../components/Auth/Auth"
 import { Button } from "../../components/Button/Button"
@@ -19,12 +19,12 @@ import { Seo } from "../../components/Seo/Seo"
 import { Tooltip } from "../../components/Tooltip/Tooltip"
 import { authRequest, commandRequest, queryClientRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
+import { errorHandling } from "../../services/utils/errorHandling"
 import { getImageUrl } from "../../services/utils/getImageUrl"
 import { UserProfile } from "../../types/auth"
 import { DeleteItemDTO, Item } from "../../types/item"
 import { PaginatedResponse } from "../../types/pagination"
 import { Statistics, StatisticsResponse } from "../../types/profile"
-import Custom500 from "../500"
 import { NextPageCustomProps } from "../_app"
 
 const DEFAULT_PAGE = 1
@@ -67,7 +67,6 @@ const Profile: NextPageCustomProps = () => {
     const [statistics, setStatistics] = useState<Statistics>({ totalContributions: 0, itemsCreated: 0, itemsUpdated: 0, itemsDeleted: 0 })
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false)
-    const [error, setError] = useState<string | undefined>(undefined)
 
     // Local variables
     const isLoadingProfile = !profile || isLoading || !isReady
@@ -135,8 +134,7 @@ const Profile: NextPageCustomProps = () => {
                 setContributions(contributionsResponse.data)
                 setStatistics(statistics)
             } catch (error) {
-                isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Our servers are feeling a bit heavy today. Please try again in a few minutes.")
-                console.error(error)
+                errorHandling(error)
             } finally {
                 setIsLoading(false)
             }
@@ -169,6 +167,8 @@ const Profile: NextPageCustomProps = () => {
                 }
             })
 
+            toast.success(`${selectedContribution.name} was deleted.`)
+
             let shouldRedirectToPreviousPage = false
 
             // Remove contribution from list
@@ -200,8 +200,7 @@ const Profile: NextPageCustomProps = () => {
                 }), undefined, { shallow: true })
             }
         } catch (error) {
-            // axios.isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Netzwerk-Zeitüberschreitung")
-            console.error(error)
+            errorHandling(error)
         } finally {
             closeDeleteModal()
         }
@@ -223,9 +222,6 @@ const Profile: NextPageCustomProps = () => {
         setDeleteModalOpen(false)
         setSelectedContribution(null)
     }
-
-    if (error)
-        return <Custom500 />
 
     if (isLoadingProfile)
         return <SkeletonLoadingProfile />

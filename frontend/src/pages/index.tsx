@@ -150,7 +150,7 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
             }
         }
     } catch (error) {
-        // axios.isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Netzwerk-Zeitüberschreitung")
+        // Do not fail application when stats are not available
         console.error(error)
         return {
             props: {

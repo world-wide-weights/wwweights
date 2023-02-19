@@ -1,6 +1,7 @@
-import { Form, Formik } from "formik"
+import { Form, Formik, FormikHelpers } from "formik"
 import { useRouter } from "next/router"
 import { useState } from "react"
+import { toast } from "react-toastify"
 import { object, ObjectSchema, string } from "yup"
 import { Button } from "../../components/Button/Button"
 import { TextInput } from "../../components/Form/TextInput/TextInput"
@@ -24,7 +25,6 @@ const Register: NextPageCustomProps = () => {
 
     // Local State
     const [isPasswordEyeOpen, setIsPasswordEyeOpen] = useState<boolean>(false)
-    const [error, setError] = useState("")
     const [isLoading, setIsLoading] = useState(false)
 
     // Formik Form Initial Values
@@ -45,7 +45,7 @@ const Register: NextPageCustomProps = () => {
      * Handle submit register form.
      * @param values input from form
      */
-    const onFormSubmit = async ({ username, email, password }: RegisterDto) => {
+    const onFormSubmit = async ({ username, email, password }: RegisterDto, { setFieldError }: FormikHelpers<RegisterDto>) => {
         setIsLoading(true)
 
         // Register in our backend
@@ -57,20 +57,18 @@ const Register: NextPageCustomProps = () => {
 
         if (registerResponse === null) {
             setIsLoading(false)
-            setError("Something went wrong. Try again or come later.")
+            toast.error("Something went wrong. Try again or come later.")
             return
         }
 
         if ("statusCode" in registerResponse) {
             if (registerResponse.message.includes("Username")) {
-                setError("Username already exists.")
-                // TODO: Add logic to show username is already taken
+                setFieldError("username", "Username already exists.")
             }
-            else if (registerResponse.message.includes("E-Mail")) {
-                setError("E-Mail already exists.")
-                // TODO: Add logic to show email is already taken
+            else if (registerResponse.message.includes("Email")) {
+                setFieldError("email", "E-Mail already in use.")
             } else {
-                setError(`${registerResponse.statusCode}: ${registerResponse.message}`)
+                toast.error(`${registerResponse.statusCode}: ${registerResponse.message}`)
             }
 
             setIsLoading(false)
@@ -100,9 +98,6 @@ const Register: NextPageCustomProps = () => {
                 </Form>
             )}
         </Formik>
-
-        {/* TODO (Zoe-Bot): Add correct error handling */}
-        {error && <p className="py-2">Error: {error}</p>}
 
         {/* Login Text */}
         <div className="flex">

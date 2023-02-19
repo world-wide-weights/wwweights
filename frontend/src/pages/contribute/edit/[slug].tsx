@@ -1,4 +1,3 @@
-import { isAxiosError } from "axios"
 import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../../../components/Auth/Auth"
@@ -6,6 +5,7 @@ import { CreateEdit } from "../../../components/Item/CreateEdit"
 import { SkeletonLoadingEdit } from "../../../components/Loading/SkeletonLoadingEdit"
 import { Seo } from "../../../components/Seo/Seo"
 import { queryServerRequest } from "../../../services/axios/axios"
+import { errorHandling } from "../../../services/utils/errorHandling"
 import { Item } from "../../../types/item"
 import { PaginatedResponse } from "../../../types/pagination"
 import Custom404 from "../../404"
@@ -57,8 +57,7 @@ const EditItem = () => {
 
                 setIsAuthenticated(session.decodedAccessToken.id === item.userId)
             } catch (error) {
-                isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Our servers are feeling a bit heavy today. Please try again in a few minutes.")
-                console.error(error)
+                errorHandling(error)
             } finally {
                 setIsLoading(false)
             }

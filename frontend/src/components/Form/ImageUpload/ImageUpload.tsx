@@ -3,6 +3,7 @@ import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
 import { getImageUrl } from "../../../services/utils/getImageUrl"
 import { IconButton } from "../../Button/IconButton"
+import { FormError } from "../../Errors/FormError"
 import { Icon } from "../../Icon/Icon"
 
 type ImageUploadProps = {
@@ -39,6 +40,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name, filePath }) => {
      * @param formikProps helper
      */
     const handleImage = (files: FileList, formikProps: FieldProps<any>) => {
+        formikProps.form.setFieldTouched(name, true, false)
         const file = files[0]
         if (!file) {
             return
@@ -46,13 +48,13 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name, filePath }) => {
 
         // File size bigger than 1MB
         if (file.size > 1e+6) {
-            console.error("File size is too big.")
+            formikProps.form.setFieldError(name, "File size is too big.")
             return
         }
 
         // File type not image (png, jpeg, jpg)
         if (file.type !== "image/png" && file.type !== "image/jpeg" && file.type !== "image/jpg") {
-            console.error("File type is not supported.")
+            formikProps.form.setFieldError(name, "File type is not supported.")
             return
         }
 
@@ -123,7 +125,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name, filePath }) => {
     }
 
     return <Field name={name}>{(props: FieldProps<any>) => <>
-        <div className={`mb-2 md:mb-4 relative transition duration-200 w-full h-56 ${dragActive ? "border-2 border-blue-500 border-dashed" : `${image ? "" : "border-2 border-gray-300 border-dashed"}`}`} onDragEnter={handleDrag}>
+        <div className={`mb-2 md:mb-4 relative transition duration-200 w-full h-56 border-2 border-dashed ${dragActive ? "border-blue-500" : `${image ? "" : (props.meta.error && props.meta.touched) ? "border-red-500" : "border-gray-300"}`}`} onDragEnter={handleDrag}>
             {/* Upload Drag and Dropbox */}
             {!image && <>
                 {/* File upload */}
@@ -150,6 +152,9 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name, filePath }) => {
                 <Image datacy={`imageupload-${name}-image`} className="w-full sm:w-auto object-cover h-56" src={image as string} width={200} height={200} alt="uploaded" />
             </div>}
         </div>
+        {props.meta.error && props.meta.touched && <div className="mb-3">
+            <FormError field={name} />
+        </div>}
     </>}
     </Field>
 }
