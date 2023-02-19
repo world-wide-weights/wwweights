@@ -43,19 +43,19 @@ Cypress.Commands.add("checkCurrentActivePage", (activePageNumber) => {
 	cy.dataCy(`pagination-button-page-${activePageNumber}`).should("have.class", "text-white")
 })
 
-Cypress.Commands.add("mockGetRelatedTags", () => {
+Cypress.Commands.add("mockRelatedTags", () => {
 	cy.intercept("GET", `${API_BASE_URL_QUERY_CLIENT}/tags/related*`, {
 		fixture: "tags/related.json",
-	}).as("mockGetRelatedTags")
+	}).as("mockRelatedTags")
 })
 
 Cypress.Commands.add("mockTagsList", (options) => {
 	const body =
 		options?.itemCount || options?.itemCount === 0
 			? {
-					...paginatedTagsList,
-					data: paginatedTagsList.data.slice(0, options.itemCount),
-			  }
+				...paginatedTagsList,
+				data: paginatedTagsList.data.slice(0, options.itemCount),
+			}
 			: paginatedTagsList
 
 	cy.task("clearNock")
@@ -79,9 +79,9 @@ Cypress.Commands.add("mockItemsList", (options) => {
 	const body =
 		options?.itemCount || options?.itemCount === 0
 			? {
-					...paginatedItems,
-					data: paginatedItems.data.slice(0, options.itemCount),
-			  }
+				...paginatedItems,
+				data: paginatedItems.data.slice(0, options.itemCount),
+			}
 			: paginatedItems
 
 	cy.task("clearNock")
@@ -109,7 +109,7 @@ Cypress.Commands.add("mockDiscoverPage", (options) => {
 		body: itemStatistics,
 	})
 
-	cy.mockGetRelatedTags()
+	cy.mockRelatedTags()
 })
 
 Cypress.Commands.add("mockSingleWeightPage", () => {
@@ -136,7 +136,7 @@ Cypress.Commands.add("mockSingleWeightPage", () => {
 		body: paginatedRelatedItems,
 	})
 
-	cy.mockGetRelatedTags()
+	cy.mockRelatedTags()
 })
 
 Cypress.Commands.add("mockLogin", () => {
@@ -214,9 +214,9 @@ Cypress.Commands.add("mockProfilePage", (options) => {
 	const body =
 		options?.contribtionsCount || options?.contribtionsCount === 0
 			? {
-					...paginatedContributions,
-					data: paginatedContributions.data.slice(0, options?.contribtionsCount),
-			  }
+				...paginatedContributions,
+				data: paginatedContributions.data.slice(0, options?.contribtionsCount),
+			}
 			: paginatedContributions
 
 	cy.mockImageServe()
@@ -262,4 +262,5 @@ Cypress.Commands.add("mockImageServe", () => {
 	}).as("mockImageServe")
 })
 
-export {}
+export { }
+

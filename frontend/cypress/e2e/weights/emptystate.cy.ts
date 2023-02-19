@@ -5,7 +5,7 @@ describe("Empty State /weights", () => {
 		cy.mockDiscoverPage({ itemCount: 0 })
 
 		cy.visitLocalPage(`/weights?query=${SEARCH_QUERY}`)
-		cy.wait("@mockGetRelatedTags")
+		cy.wait("@mockRelatedTags")
 	})
 
 	it("should display empty state when no items come from api", () => {
@@ -17,4 +17,5 @@ describe("Empty State /weights", () => {
 	})
 })
 
-export {}
+export { }
+

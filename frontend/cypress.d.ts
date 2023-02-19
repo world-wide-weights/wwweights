@@ -39,7 +39,7 @@ declare global {
 			/**
 			 * Interceptor for related tag request.
 			 */
-			mockGetRelatedTags(): Chainable<void>
+			mockRelatedTags(): Chainable<void>
 			/**
 			 * Interceptor for tags list request.
 			 */
