@@ -21,7 +21,7 @@ import { generatePageString } from "../../services/seo/pageString"
 import { renderUnitIntoString, renderWeightAsNumberIntoString } from "../../services/unit/unitRenderer"
 import { getImageUrl } from "../../services/utils/getImageUrl"
 import { Item } from "../../types/item"
-import { PaginatedResponse } from "../../types/paginated"
+import { PaginatedResponse } from "../../types/pagination"
 
 const DEFAULT_ITEMS_PER_PAGE = 16
 const ITEMS_PER_PAGE_MAXIMUM = 100
@@ -45,7 +45,7 @@ type WeightsListProps = {
 }
 
 /** 
- * Discover Page, list all items, search results and single tags
+ * Discover Page, list all items, search results and statistics.
  */
 export default function WeightsList({ items, currentPage, totalItems, limit, query, sort, statistics }: InferGetServerSidePropsType<typeof getServerSideProps>) {
     // Strings
@@ -71,7 +71,6 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
             canonicalLink={router.asPath}
         />
 
-        {/* TODO (Zoe-Bot): Find a better solution instead of give sort and query */}
         {/* Search with related tags */}
         <SearchHeader query={query} sort={sort} />
 
@@ -83,7 +82,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                 : <>
                     <div className={`lg:flex ${statisticsExpanded ? "lg:flex-col-reverse" : ""}`}>
                         {/*** Weights List ***/}
-                        <div className={`${statisticsExpanded ? "" : "lg:w-2/3 2xl:w-[70%] lg:mr-10"} mb-10 lg:mb-0`}>
+                        <div className={`${statisticsExpanded ? "" : "lg:w-[70%] lg:mr-10"} mb-10 lg:mb-0`}>
                             {/* Header Weights List */}
                             <div className="md:flex justify-between items-end mb-4">
                                 <div className="flex items-end mb-2 lg:mb-0">
@@ -108,7 +107,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                                 </div>
                             </div>
 
-                            {loadingViewType ? <p>Loading...</p> : <>
+                            {loadingViewType ? <></> : <>
                                 {/* Weights Box View */}
                                 {viewType === "grid" && <div className={`grid ${statisticsExpanded ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" : "grid-cols-1 md:grid-cols-2 2xl:grid-cols-3"} gap-2 md:gap-5 mb-5 md:mb-8`}>
                                     {items.map((item) => <ItemPreviewGrid datacy="weights-grid-item" key={item.slug} name={item.name} slug={item.slug} weight={item.weight} imageUrl={getImageUrl(item.image)} />)}
@@ -125,7 +124,7 @@ export default function WeightsList({ items, currentPage, totalItems, limit, que
                         </div>
 
                         {/*** Statistics ***/}
-                        <div className={`${statisticsExpanded ? "" : "lg:items-start lg:w-1/2 xl:w-1/3 2xl:w-[30%]"}`}>
+                        <div className={`${statisticsExpanded ? "" : "lg:items-start xl:w-1/3 lg:w-[30%]"}`}>
                             {/* Header Statistics */}
                             <div className={`flex ${statisticsExpanded ? "justify-between" : "lg:justify-end "} lg:items-end lg:h-[46px] mb-2 lg:mb-4`}>
                                 {/* Headline */}

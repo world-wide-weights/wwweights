@@ -1,3 +1,4 @@
+
 export type TabProps = {
     /** Title is the text displayed on the tab button. */
     title: string
@@ -11,7 +12,7 @@ export type TabProps = {
  * The `Tab` component is used to create a single tab within a set of tabs. 
  * It should be wrapped inside of the `Tabs` component for proper functionality. 
  * @example
- * ```jsx
+ * ```tsx
  * <Tabs>
  *  <Tab tab="Test 1" link={routes.test({ tab: test1 })}>
  *     <p>Test 1 Content</p> 

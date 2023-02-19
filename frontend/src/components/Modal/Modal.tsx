@@ -17,6 +17,9 @@ type ModalProps = {
 
 /**
  * Modal, lays over other content.
+ * @example <Modal modalHeading="Modal Heading" isOpen={true} onDissmis={() => {}}>
+ * <p>Modal Content</p>
+ * </Modal>
  */
 export const Modal: React.FC<ModalProps> = ({ modalHeading, isOpen, onDissmis, children, dataCy }) => {
     /** Prevent scrolling when Modal is open. */

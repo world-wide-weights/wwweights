@@ -22,20 +22,10 @@ import { routes } from "../../services/routes/routes"
 import { errorHandling } from "../../services/utils/errorHandling"
 import { getImageUrl } from "../../services/utils/getImageUrl"
 import { UserProfile } from "../../types/auth"
-import { Item } from "../../types/item"
-import { PaginatedResponse } from "../../types/paginated"
+import { DeleteItemDTO, Item } from "../../types/item"
+import { PaginatedResponse } from "../../types/pagination"
+import { Statistics, StatisticsResponse } from "../../types/profile"
 import { NextPageCustomProps } from "../_app"
-
-type Statistics = {
-    totalContributions: number
-    itemsCreated: number
-    itemsUpdated: number
-    itemsDeleted: number
-}
-
-type DeleteItemDTO = {
-    reason: string
-}
 
 const DEFAULT_PAGE = 1
 const DEFAULT_LIMIT = 6
@@ -251,7 +241,7 @@ const Profile: NextPageCustomProps = () => {
                         <div className="grid items-center justify-center bg-blue-200 h-28 w-28 rounded-full mb-2">
                             <span className="text-6xl text-blue-700 font-bold mt-2">{profile.username[0].toUpperCase()}</span>
                         </div>
-                        <Headline datacy="profile-username" level={3} hasMargin={false}>{profile.username}</Headline>
+                        <Headline datacy="profile-username" className="w-64 text-center break-words" level={3} hasMargin={false}>{profile.username}</Headline>
                         <p datacy="profile-registered-since"><>Member since {new Date(profile.createdAt).toLocaleDateString("en-US")}</></p>
                     </div>
 

@@ -1,7 +1,6 @@
-import { routes } from "../../../src/services/routes/routes"
 
 const currentPage = 2
-const limit = 5
+const limit = 8
 
 describe("Pagination /weights", () => {
     describe("Base tests", () => {
@@ -10,20 +9,20 @@ describe("Pagination /weights", () => {
         })
 
         it("should display pagination", () => {
-            cy.visitLocalPage(routes.weights.list())
+            cy.visitLocalPage("/weights")
             cy.dataCy("pagination").should("be.visible")
         })
 
         it("should show page 1 when query is page=1 or nothing", () => {
-            cy.visitLocalPage(routes.weights.list())
+            cy.visitLocalPage("/weights")
             cy.checkCurrentActivePage(1)
 
-            cy.visitLocalPage(routes.weights.list({ page: 1 }))
+            cy.visitLocalPage("/weights?page=1")
             cy.checkCurrentActivePage(1)
         })
 
         it("should show page 2 when query is page=2", () => {
-            cy.visitLocalPage(routes.weights.list({ page: 2 }))
+            cy.visitLocalPage("/weights?page=2")
             cy.checkCurrentActivePage(2)
         })
 
@@ -47,7 +46,7 @@ describe("Pagination /weights", () => {
 
         describe("Buttons", () => {
             beforeEach(() => {
-                cy.visitLocalPage(routes.weights.list({ page: currentPage }))
+                cy.visitLocalPage(`/weights?page=${currentPage}`)
             })
 
             it("should show next page when click next button", () => {
@@ -64,9 +63,9 @@ describe("Pagination /weights", () => {
 
     describe("Limit", () => {
         beforeEach(() => {
-            cy.mockDiscoverPage(5)
+            cy.mockDiscoverPage({ itemCount: 8 })
 
-            cy.visitLocalPage(routes.weights.list({ itemsPerPage: limit }))
+            cy.visitLocalPage(`/weights?limit=${limit}`)
         })
 
         it("should show limited count of items when set limit", () => {

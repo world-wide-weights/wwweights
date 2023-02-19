@@ -37,8 +37,8 @@ const Register: NextPageCustomProps = () => {
     // Formik Form Validation
     const validationSchema: ObjectSchema<RegisterDto> = object().shape({
         email: string().email("Must be a valid E-Mail.").required("Please enter an email address."),
-        username: string().min(2, "Please enter a name with at least 2 letters.").max(255, "Please enter a name with maximum 255 letters.").required(" Please enter a username. Without a username, your items will feel lonely and unloved."),
-        password: string().min(8, "Please enter a password with at least 8 letters.").max(128, "Please enter a password with maximum 255 letters.").required("Please enter a secure password.")
+        username: string().max(64, "Please enter a name with maximum 64 letters.").required("Please enter a username. Without a username, your items will feel lonely and unloved."),
+        password: string().min(8, "Please enter a password with at least 8 letters.").max(256, "Please enter a password with maximum 256 letters.").required("Please enter a secure password.")
     })
 
     /**
@@ -113,7 +113,7 @@ Register.layout = (page: React.ReactElement) => {
         page={page}
         headline="Create your account"
         description="Start for free."
-        sloganHeadline={<><span className="text-blue-300">Weigh</span> something and wanna share it with people?</>}
+        sloganHeadline={<>Become a <span className="text-blue-300">contributor</span> today</>}
         sloganDescription="Register to share your stuff." />
 }
 

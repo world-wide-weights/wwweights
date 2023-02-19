@@ -67,7 +67,9 @@ describe("Login Page", () => {
     describe("Logout", () => {
         it("should show logout toast when you logout successfully", () => {
             // Mock login
-            cy.login("/")
+            cy.login({
+                route: "/"
+            })
 
             // Logout
             cy.contains("Logout").click()

@@ -15,6 +15,7 @@ type CustomSelectionButtonProps = {
 
 /**
  * A custom selection button that can be used in a form for a selection between states.
+ * @example <CustomSelectionButton active={true} onClick={() => {}} headline="Headline" description="Description" />
  */
 export const CustomSelectionButton: React.FC<CustomSelectionButtonProps> = ({ active, onClick, headline, datacy, description }) => {
     return <button datacy={datacy} type="button" onClick={onClick} disabled={active} className={`flex items-center flex-col border-2 transition duration-200 ease-in-out ${active ? "border-blue-500 " : "border-gray-100"} bg-gray-100 rounded-lg pt-1 pb-3 px-4`}>

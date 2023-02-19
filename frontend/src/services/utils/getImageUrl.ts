@@ -1,6 +1,11 @@
 import { string } from "yup"
 
-export const getImageUrl = (image: string | undefined) => {
+/**
+ * Generate image url with image string.
+ * @param image the image string
+ * @returns the image url
+ */
+export const getImageUrl = (image: string | undefined): string | undefined => {
     if (!image) return undefined
     try {
         // Validate if image is URL and throw error if not

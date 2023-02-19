@@ -8,7 +8,7 @@ import { Tooltip } from "../../components/Tooltip/Tooltip"
 import { queryServerRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { generatePageString } from "../../services/seo/pageString"
-import { PaginatedResponse } from "../../types/paginated"
+import { PaginatedResponse } from "../../types/pagination"
 import { Tag } from "../../types/tag"
 
 const DEFAULT_ITEMS_PER_PAGE = 64
@@ -22,11 +22,12 @@ type TagsListProps = {
     limit: number
 }
 
-/** Base List for tags */
+/** 
+ * Base List for tags.
+ */
 export default function TagsList({ tags, currentPage, totalItems, limit }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
     return (<>
-        {/* Meta Tags */}
         <Seo
             title={`All Tags${generatePageString(currentPage)}`}
             description={"Discover all tags in the world largest database about weights."}

@@ -20,7 +20,9 @@ describe("Routes protected/guest", () => {
             cy.mockProfilePage()
 
             // Login and visit profile
-            cy.login("/account/profile")
+            cy.login({
+                route: "/account/profile"
+            })
 
             // Should be at profile
             cy.url().should("include", "/account/profile")
@@ -39,7 +41,9 @@ describe("Routes protected/guest", () => {
     describe("Guest Route", () => {
         it("should redirect to / when logged in and visit login (guest route)", () => {
             // Login and visit login page
-            cy.login("/account/login")
+            cy.login({
+                route: "/account/login"
+            })
 
             // Mock home
             cy.mockHome()
@@ -75,7 +79,9 @@ describe("Routes protected/guest", () => {
             cy.mockItemsList()
 
             // Login and visit home page
-            cy.login("/")
+            cy.login({
+                route: "/"
+            })
 
             // Should be at home
             cy.url().should("eq", clientBaseUrl + "/")

@@ -6,7 +6,9 @@ describe("Edit Item", () => {
     describe("Loading", () => {
         it("should show loading when loading", () => {
             cy.mockSingleItem()
-            cy.login(`/contribute/edit/${editItem.slug}`)
+            cy.login({
+                route: `/contribute/edit/${editItem.slug}`
+            })
 
             cy.dataCy("skeleton-loading").should("be.visible")
         })
@@ -15,7 +17,9 @@ describe("Edit Item", () => {
     describe("Basic Edit Process", () => {
         beforeEach(() => {
             cy.mockSingleItem()
-            cy.login(`/contribute/edit/${editItem.slug}`)
+            cy.login({
+                route: `/contribute/edit/${editItem.slug}`
+            })
 
             cy.wait("@mockSingleItem")
         })
@@ -33,7 +37,7 @@ describe("Edit Item", () => {
             // Detail fields
             cy.dataCy("imageupload-imageFile-image").should("be.visible")
             cy.dataCy("textinput-source-input").should("have.value", editItem.source)
-            cy.dataCy("chiptextinput-tags-text-input").should("contain.text", editItem.tags)
+            cy.dataCy("chiptextinput-chip-0").should("contain", editItem.tags[0].name)
         })
 
         it("should edit item when fill fields", () => {

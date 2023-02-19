@@ -34,6 +34,7 @@ export type ButtonProps = {
 
 /**
  *  Button component (with link and button functionality), can look like a link when kind tertiary
+ * @example <Button kind="primary" to="/home">Home</Button>
  */
 export const Button: React.FC<ButtonProps> = ({ kind = "primary", disabled, dimOpacityWhenDisabled = true, icon, datacy, iconSlot = "start", loading, className, children, to, onClick, isColored = false, type = "button", shallow = false }) => {
     // When loading should be disabled

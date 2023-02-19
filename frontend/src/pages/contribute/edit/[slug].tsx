@@ -7,7 +7,7 @@ import { Seo } from "../../../components/Seo/Seo"
 import { queryServerRequest } from "../../../services/axios/axios"
 import { errorHandling } from "../../../services/utils/errorHandling"
 import { Item } from "../../../types/item"
-import { PaginatedResponse } from "../../../types/paginated"
+import { PaginatedResponse } from "../../../types/pagination"
 import Custom404 from "../../404"
 import Custom500 from "../../500"
 
@@ -68,9 +68,8 @@ const EditItem = () => {
     if (isLoadingEdit)
         return <SkeletonLoadingEdit />
 
-    if (!isAuthenticated || !item) {
+    if (!isAuthenticated || !item)
         return <Custom404 />
-    }
 
     if (error)
         return <Custom500 />

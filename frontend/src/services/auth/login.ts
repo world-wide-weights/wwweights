@@ -6,7 +6,7 @@ import { createSession, saveSession } from "./session"
 /**
  * Login a user and return the tokens.
  * @param credentials credentials from user 
- * @returns 
+ * @returns session, error or null if request failed.
  */
 export const login = async ({ email, password }: { email: string, password: string }): Promise<SessionData | ApiAuthException | null> => {
     try {

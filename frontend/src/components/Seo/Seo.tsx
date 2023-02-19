@@ -34,7 +34,6 @@ export const domain = process.env.NEXT_PUBLIC_CLIENT_BASE_URL ?? "https://wwweig
 /**
  * Sets metadata into the `<head>` for search engines and social media.
  * @param {BaseSeoProps} Properties for the Seo component
- * @returns Seo component
  */
 export const Seo: React.FC<BaseSeoProps> = ({
     title,

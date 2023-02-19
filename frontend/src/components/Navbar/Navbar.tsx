@@ -9,9 +9,8 @@ import { AuthContext } from "../Auth/Auth"
 import { Button } from "../Button/Button"
 import { IconButton } from "../Button/IconButton"
 
-
 /** 
- * Navbar component, should only be used once at the top 
+ * Navbar component, should only be used once at the top.
  */
 export const Navbar: React.FC = () => {
     const router = useRouter()

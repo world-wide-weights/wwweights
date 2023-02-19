@@ -3,7 +3,9 @@ const API_BASE_URL_COMMAND = Cypress.env("PUBLIC_API_BASE_URL_COMMAND")
 
 describe("Create Item", () => {
     beforeEach(() => {
-        cy.login("/contribute/create")
+        cy.login({
+            route: "/contribute/create"
+        })
     })
 
     describe("Create Process", () => {

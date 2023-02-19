@@ -46,6 +46,7 @@ type CreateEditProps = {
 
 /**
  * Create new items on this page.
+ * @example <CreateEdit />
  */
 export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
     // Local state
@@ -157,7 +158,9 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
         <main className="mt-5 mb-5 md:mb-20">
             <div className="container">
                 {/* Headline */}
-                <Headline>{isEditMode ? `Edit ${item.name}` : "Create new item"}</Headline>
+                <Headline>{isEditMode ? <div className="w-[20rem] lg:w-[60rem] truncate">
+                    {`Edit ${item.name}`}
+                </div> : "Create new item"}</Headline>
             </div>
 
             {/* Content */}
