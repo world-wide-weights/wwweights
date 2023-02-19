@@ -253,5 +253,25 @@ describe('Item Deletion (e2e)', () => {
       const globalStatistics = await globalStatisticsModel.findOne();
       expect(globalStatistics.totalItems).toEqual(1);
     });
+
+    it('Should gracefully handle item that does not exist in readDB', async () => {
+      // ARRANGE
+      const item = new itemModel(singleItem);
+      // No saving here, imagine the item is deleted faster than it is writen into the readdb
+      const command = new DeleteItemCommand(
+        item.slug,
+        randomUUID(),
+        verifiedRequestUser.id,
+      );
+      // Create eventstore stream
+      mockEventStore.existingStreams.add(
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      );
+      // ACT
+      await commandBus.execute(command);
+      // Does suggestion exist in mongoDb
+      const items = await itemModel.find({});
+      expect(items.length).toEqual(0);
+    });
   });
 });
