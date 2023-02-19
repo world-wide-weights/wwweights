@@ -1,4 +1,4 @@
 export type Tag = {
-    name: string
-    count: number
+	name: string
+	count: number
 }

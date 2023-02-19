@@ -1,8 +1,11 @@
 export type NavLink = {
-    shouldDisplay: boolean
-    text: string
-} & ({
-    to: string
-} | {
-    onClick: () => void
-})
+	shouldDisplay: boolean
+	text: string
+} & (
+	| {
+			to: string
+	  }
+	| {
+			onClick: () => void
+	  }
+)

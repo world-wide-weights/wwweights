@@ -18,7 +18,7 @@ Cypress.Commands.add("mount", mount)
 
 /**
  * Mock Next Router.
- * @example 
+ * @example
  * ```jsx
  * const router = createRouter()
  * <RouterContext.Provider value={router}>
@@ -29,28 +29,28 @@ Cypress.Commands.add("mount", mount)
  * @returns next router mock instance.
  */
 export const createRouter = (params?: Partial<NextRouter>): NextRouter => ({
-    route: "/",
-    pathname: "/",
-    query: {},
-    asPath: "",
-    basePath: "/",
-    back: cy.spy().as("back"),
-    beforePopState: cy.spy().as("beforePopState"),
-    forward: cy.spy().as("forward"),
-    prefetch: cy.stub().as("prefetch").resolves(),
-    push: cy.spy().as("push"),
-    reload: cy.spy().as("reload"),
-    replace: cy.spy().as("replace"),
-    events: {
-        emit: cy.spy().as("emit"),
-        off: cy.spy().as("off"),
-        on: cy.spy().as("on"),
-    },
-    isFallback: false,
-    isLocaleDomain: true,
-    isReady: true,
-    defaultLocale: "en",
-    domainLocales: [],
-    isPreview: false,
-    ...params,
+	route: "/",
+	pathname: "/",
+	query: {},
+	asPath: "",
+	basePath: "/",
+	back: cy.spy().as("back"),
+	beforePopState: cy.spy().as("beforePopState"),
+	forward: cy.spy().as("forward"),
+	prefetch: cy.stub().as("prefetch").resolves(),
+	push: cy.spy().as("push"),
+	reload: cy.spy().as("reload"),
+	replace: cy.spy().as("replace"),
+	events: {
+		emit: cy.spy().as("emit"),
+		off: cy.spy().as("off"),
+		on: cy.spy().as("on"),
+	},
+	isFallback: false,
+	isLocaleDomain: true,
+	isReady: true,
+	defaultLocale: "en",
+	domainLocales: [],
+	isPreview: false,
+	...params,
 })

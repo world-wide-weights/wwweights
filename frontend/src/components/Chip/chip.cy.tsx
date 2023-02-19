@@ -2,81 +2,109 @@ import "../../styles/global.css"
 import { Chip } from "./Chip"
 
 describe("Chip", () => {
-    describe("Chip as Link", () => {
-        it("chip as link should be visible", () => {
-            cy.mount(<Chip to="/">Test</Chip>)
+	describe("Chip as Link", () => {
+		it("chip as link should be visible", () => {
+			cy.mount(<Chip to="/">Test</Chip>)
 
-            cy.get("a").should("be.visible")
-        })
+			cy.get("a").should("be.visible")
+		})
 
-        it("should display default color", () => {
-            cy.mount(<Chip to="/">Test</Chip>)
+		it("should display default color", () => {
+			cy.mount(<Chip to="/">Test</Chip>)
 
-            cy.get("a").should("have.class", "bg-blue-500")
-            cy.get("a").should("have.class", "text-blue-600")
-        })
+			cy.get("a").should("have.class", "bg-blue-500")
+			cy.get("a").should("have.class", "text-blue-600")
+		})
 
-        it("should display correct color", () => {
-            const color = "amber"
-            cy.mount(<Chip to="/" color="amber">Test</Chip>)
+		it("should display correct color", () => {
+			const color = "amber"
+			cy.mount(
+				<Chip to="/" color="amber">
+					Test
+				</Chip>
+			)
 
-            cy.get("a").should("have.class", `bg-${color}-500`)
-            cy.get("a").should("have.class", `text-${color}-600`)
-        })
+			cy.get("a").should("have.class", `bg-${color}-500`)
+			cy.get("a").should("have.class", `text-${color}-600`)
+		})
 
-        it("should have opacity if disabled", () => {
-            cy.mount(<Chip to="/" disabled>Test</Chip>)
+		it("should have opacity if disabled", () => {
+			cy.mount(
+				<Chip to="/" disabled>
+					Test
+				</Chip>
+			)
 
-            cy.get("a").should("have.class", "text-opacity-60")
-        })
+			cy.get("a").should("have.class", "text-opacity-60")
+		})
 
-        it("should not have opacity if disabled & dimOpacityWhenDisabled is false", () => {
-            cy.mount(<Chip to="/" disabled dimOpacityWhenDisabled={false}>Test</Chip>)
+		it("should not have opacity if disabled & dimOpacityWhenDisabled is false", () => {
+			cy.mount(
+				<Chip to="/" disabled dimOpacityWhenDisabled={false}>
+					Test
+				</Chip>
+			)
 
-            cy.get("a").should("not.have.class", "text-opacity-60")
-        })
-    })
+			cy.get("a").should("not.have.class", "text-opacity-60")
+		})
+	})
 
-    describe("Chip as Button", () => {
-        it("chip as button should be visible", () => {
-            cy.mount(<Chip onClick={() => ""}>Test</Chip>)
+	describe("Chip as Button", () => {
+		it("chip as button should be visible", () => {
+			cy.mount(<Chip onClick={() => ""}>Test</Chip>)
 
-            cy.get("button").should("be.visible")
-        })
+			cy.get("button").should("be.visible")
+		})
 
-        it("should display default color", () => {
-            cy.mount(<Chip onClick={() => ""}>Test</Chip>)
+		it("should display default color", () => {
+			cy.mount(<Chip onClick={() => ""}>Test</Chip>)
 
-            cy.get("button").should("have.class", "bg-blue-500")
-            cy.get("button").should("have.class", "text-blue-600")
-        })
+			cy.get("button").should("have.class", "bg-blue-500")
+			cy.get("button").should("have.class", "text-blue-600")
+		})
 
-        it("should display correct color", () => {
-            const color = "amber"
-            cy.mount(<Chip onClick={() => ""} color="amber">Test</Chip>)
+		it("should display correct color", () => {
+			const color = "amber"
+			cy.mount(
+				<Chip onClick={() => ""} color="amber">
+					Test
+				</Chip>
+			)
 
-            cy.get("button").should("have.class", `bg-${color}-500`)
-            cy.get("button").should("have.class", `text-${color}-600`)
-        })
+			cy.get("button").should("have.class", `bg-${color}-500`)
+			cy.get("button").should("have.class", `text-${color}-600`)
+		})
 
-        it("should have opacity if disabled", () => {
-            cy.mount(<Chip onClick={() => ""} disabled>Test</Chip>)
+		it("should have opacity if disabled", () => {
+			cy.mount(
+				<Chip onClick={() => ""} disabled>
+					Test
+				</Chip>
+			)
 
-            cy.get("button").should("have.class", "text-opacity-60")
-        })
+			cy.get("button").should("have.class", "text-opacity-60")
+		})
 
-        it("should not have opacity if disabled & dimOpacityWhenDisabled is false", () => {
-            cy.mount(<Chip onClick={() => ""} disabled dimOpacityWhenDisabled={false}>Test</Chip>)
+		it("should not have opacity if disabled & dimOpacityWhenDisabled is false", () => {
+			cy.mount(
+				<Chip onClick={() => ""} disabled dimOpacityWhenDisabled={false}>
+					Test
+				</Chip>
+			)
 
-            cy.get("button").should("not.have.class", "text-opacity-60")
-        })
-    })
+			cy.get("button").should("not.have.class", "text-opacity-60")
+		})
+	})
 
-    describe("Error Handling", () => {
-        it("should show error if it has onclick and link ", () => {
-            cy.mount(<Chip to="/weights" onClick={() => ""}>Test</Chip>)
+	describe("Error Handling", () => {
+		it("should show error if it has onclick and link ", () => {
+			cy.mount(
+				<Chip to="/weights" onClick={() => ""}>
+					Test
+				</Chip>
+			)
 
-            cy.get("p").should("be.visible")
-        })
-    })
+			cy.get("p").should("be.visible")
+		})
+	})
 })

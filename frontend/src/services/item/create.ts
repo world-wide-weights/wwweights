@@ -10,12 +10,12 @@ import { commandRequest } from "../axios/axios"
  * @returns response from api
  */
 export const createNewItemApi = async (item: CreateItemDto, session: SessionData): Promise<AxiosResponse<void>> => {
-    const response = await commandRequest.post<void>("/items/insert", item, {
-        headers: {
-            Authorization: `Bearer ${session.accessToken}`
-        }
-    })
-    return response
+	const response = await commandRequest.post<void>("/items/insert", item, {
+		headers: {
+			Authorization: `Bearer ${session.accessToken}`,
+		},
+	})
+	return response
 }
 
 /**
@@ -24,16 +24,16 @@ export const createNewItemApi = async (item: CreateItemDto, session: SessionData
  * @returns item data for create item request
  */
 export const prepareCreateItem = (values: CreateEditItemForm): CreateItemDto => {
-    const createItem: CreateItemDto = {
-        name: values.name,
-        weight: {
-            value: Number(values.weight),
-            ...(values.isCa[0] !== undefined ? { isCa: true } : {}), // Only add isCa when defined
-            ...(values.additionalValue && (values.valueType === "range") ? { additionalValue: Number(values.additionalValue) } : {}) // Only add additionalValue when defined and value type is range
-        },
-        ...(values.source !== "" ? { source: values.source } : {}), // Only add source when defined
-        ...(values.tags?.length !== 0 ? { tags: values.tags } : {}), // Only add tags when defined
-    }
+	const createItem: CreateItemDto = {
+		name: values.name,
+		weight: {
+			value: Number(values.weight),
+			...(values.isCa[0] !== undefined ? { isCa: true } : {}), // Only add isCa when defined
+			...(values.additionalValue && values.valueType === "range" ? { additionalValue: Number(values.additionalValue) } : {}), // Only add additionalValue when defined and value type is range
+		},
+		...(values.source !== "" ? { source: values.source } : {}), // Only add source when defined
+		...(values.tags?.length !== 0 ? { tags: values.tags } : {}), // Only add tags when defined
+	}
 
-    return createItem
+	return createItem
 }
