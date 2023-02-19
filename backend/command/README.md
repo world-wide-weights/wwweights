@@ -1,4 +1,4 @@
-# Command Backend
+# Command Service
 
 Backend for Command handling. Connects and interacts with EventstoreDB and MongoDB.
 
