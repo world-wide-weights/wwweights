@@ -113,7 +113,7 @@ Register.layout = (page: React.ReactElement) => {
         page={page}
         headline="Create your account"
         description="Start for free."
-        sloganHeadline={<><span className="text-blue-300">Weigh</span> something and wanna share it with others?</>}
+        sloganHeadline={<>Become a <span className="text-blue-300">contributor</span> today</>}
         sloganDescription="Register to share your stuff." />
 }
 
