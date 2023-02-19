@@ -80,6 +80,7 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ query = "", sort = "
 
                 setRelatedTags(relatedTags)
             } catch (error) {
+                // Display no error message here to the user since it's not mandatory
                 console.error(error)
             } finally {
                 setIsLoadingRelatedTags(false)

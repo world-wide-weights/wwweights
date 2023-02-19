@@ -1,14 +1,15 @@
-import axios from "axios"
 import BigNumber from "bignumber.js"
-import { Form, Formik, FormikProps } from "formik"
+import { Form, Formik, FormikHelpers, FormikProps } from "formik"
 import { useRouter } from "next/router"
 import { useContext, useState } from "react"
+import { toast } from "react-toastify"
 import { array, mixed, number, object, ObjectSchema, ref, string } from "yup"
 import { createNewItemApi, prepareCreateItem } from "../../services/item/create"
 import { editItemApi, prepareEditItem } from "../../services/item/edit"
 import { uploadImageApi } from "../../services/item/image"
 import { routes } from "../../services/routes/routes"
 import { convertAnyWeightIntoGram } from "../../services/unit/unitConverter"
+import { errorHandling } from "../../services/utils/errorHandling"
 import { CreateEditItemForm, CreateItemDto, EditItemDto, Item } from "../../types/item"
 import { AuthContext } from "../Auth/Auth"
 import { Button } from "../Button/Button"
@@ -49,7 +50,6 @@ type CreateEditProps = {
 export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
     // Local state
     const [isOpenDetails, setIsOpenDetails] = useState<boolean>(false)
-    const [error, setError] = useState<string>()
 
     const router = useRouter()
     const { getSession } = useContext(AuthContext)
@@ -89,7 +89,7 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
      * Handle submit create item.
      * @param values input from form
      */
-    const onFormSubmit = async (values: CreateEditItemForm) => {
+    const onFormSubmit = async (values: CreateEditItemForm, { setFieldError }: FormikHelpers<CreateEditItemForm>) => {
         // Convert weight in g
         values.weight = convertAnyWeightIntoGram(new BigNumber(values.weight), values.unit).toNumber()
 
@@ -138,12 +138,18 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
             if (isEditMode && editItem)
                 response = await editItemApi(item?.slug, editItem, session)
 
+            toast.success("Thanks for contributing to World Wide Weights!")
+
             /** Redirect to discover */
             if (response?.status === 200)
                 await router.push(routes.account.profile())
         } catch (error) {
-            axios.isAxiosError(error) && error.response ? setError(error.response.data.message) : setError("Our servers are feeling a bit heavy today. Please try again in a few minutes.")
-            return
+            errorHandling(error, (error) => {
+                if (error.response?.status === 409) {
+                    setFieldError("name", "This name is already taken.")
+                    return true
+                }
+            })
         }
     }
 
@@ -257,11 +263,6 @@ export const CreateEdit: React.FC<CreateEditProps> = ({ item }) => {
                     </Form>
                 )}
             </Formik>
-
-            {/* TODO (Zoe-Bot): Add correct error handling */}
-            <div className="container">
-                {error && <p className="text-red-500">{error}</p>}
-            </div>
         </main >
     </>
 }

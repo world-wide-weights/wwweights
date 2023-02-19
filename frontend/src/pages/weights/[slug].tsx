@@ -137,7 +137,6 @@ export default function WeightsSingle({ item, relatedItems }: InferGetServerSide
 export const getStaticProps: GetStaticProps<WeightsSingleProps> = async (context) => {
     const slug = context.params ? context.params.slug : "1"
 
-    // TODO (Zoe-Bot): Correct error handling
     // Fetch item and related items
     const [itemResponse, relatedItemsResponse] = await Promise.all([
         queryServerRequest.get<PaginatedResponse<Item>>(`/items/list?slug=${slug}`),

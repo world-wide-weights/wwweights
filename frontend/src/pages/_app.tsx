@@ -5,6 +5,8 @@ import { AppProps } from "next/app"
 import Script from "next/script"
 import NextNProgress from "nextjs-progressbar"
 import React from "react"
+import { ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 import { Auth } from "../components/Auth/Auth"
 import { Layout as DefaultLayout } from "../components/Layout/Layout"
 import "../styles/global.css"
@@ -72,6 +74,7 @@ const App = ({ Component, pageProps }: AppPropsCustom) => {
         {layout(<Component {...pageProps} />)} {/** Page content with default or custom layout. */}
       </div>
     </Auth>
+    <ToastContainer position="bottom-right" bodyClassName="font-sans text-black font-medium" />
   </>
 }
 

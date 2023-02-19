@@ -61,7 +61,8 @@ export const Footer: React.FC = () => {
 				const tags = responseTags.data.data
 				setTags(tags)
 			} catch (error) {
-				console.error(error)
+				// Display no error message here to the user since it's not mandatory
+				console.log(error)
 				return
 			}
 		}
