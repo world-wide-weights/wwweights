@@ -74,7 +74,7 @@ const App = ({ Component, pageProps }: AppPropsCustom) => {
         {layout(<Component {...pageProps} />)} {/** Page content with default or custom layout. */}
       </div>
     </Auth>
-    <ToastContainer position="bottom-right" />
+    <ToastContainer position="bottom-right" bodyClassName="font-sans text-black font-medium" />
   </>
 }
 
