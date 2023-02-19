@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsInt, IsNotEmpty } from 'class-validator';
 
 /**
- * @description
+ * @description The QueryProfileStatisticsDto contains the userId for which statistics are requested for
  */
 export class QueryProfileStatisticsDto {
   @IsInt()
