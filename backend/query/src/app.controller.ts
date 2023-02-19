@@ -3,7 +3,6 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
-  Logger,
   SerializeOptions,
   UseInterceptors,
 } from '@nestjs/common';
@@ -16,8 +15,6 @@ import { GlobalStatistics } from './models/global-statistics.model';
 @UseInterceptors(ClassSerializerInterceptor)
 @SerializeOptions({ strategy: 'excludeAll' })
 export class AppController {
-  private readonly logger = new Logger(AppController.name);
-
   constructor(
     @InjectModel(GlobalStatistics)
     private readonly globalStatisticsModel: ReturnModelType<
@@ -31,8 +28,7 @@ export class AppController {
     type: GlobalStatistics,
     description: `Global statistics`,
   })
-  async getGlobalStatistics() {
-    this.logger.log(`Get global statistics`);
+  async getGlobalStatistics(): Promise<GlobalStatistics> {
     const globalStatisctics = await this.globalStatisticsModel.findOne().lean();
     return new GlobalStatistics(globalStatisctics);
   }
