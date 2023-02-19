@@ -95,10 +95,7 @@ export default defineConfig({
                     rules: [
                         {
                             test: /\.tsx?$/,
-                            exclude: [
-                                /node_modules/,
-                                /cypress/
-                            ],
+                            exclude: [/node_modules/],
                             use: {
                                 loader: "babel-loader",
                                 options: {
