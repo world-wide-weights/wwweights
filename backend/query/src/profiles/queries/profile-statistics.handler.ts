@@ -1,9 +1,5 @@
 import { InjectModel } from '@m8a/nestjs-typegoose';
-import {
-  InternalServerErrorException,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { Profile, ProfileCounts } from '../../models/profile.model';
@@ -37,14 +33,13 @@ export class ProfileStatisticsHandler
         `Finished in ${performance.now() - profileStatisticsQueryStartTime} ms`,
       );
       return profileCounts || {};
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       this.logger.debug(
         `Failed after ${
           performance.now() - profileStatisticsQueryStartTime
         } ms`,
       );
       this.logger.error(error);
-      if (error instanceof NotFoundException) throw error;
       /* istanbul ignore next */
       throw new InternalServerErrorException(
         'Profile statistics could not be retrieved',
