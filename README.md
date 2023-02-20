@@ -11,13 +11,8 @@
 The docker compose stack should allow you to get everything up and running in no time.
 
 ```sh
-docker compose up
-```
-
-All necessary values use a fallback by default. To overwrite these simply copy the sample.env
-
-```sh
 cp sample.env .env
+docker compose up
 ```
 
 **Note:** When using an arm based system uncheck the first env variable in sample.env to use arm friendly eventstore image
