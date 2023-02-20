@@ -127,8 +127,9 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name, filePath }) => {
 			{(props: FieldProps<any>) => (
 				<>
 					<div
-						className={`mb-2 md:mb-4 relative transition duration-200 w-full h-56 border-2 border-dashed ${dragActive ? "border-blue-500" : `${image ? "" : props.meta.error && props.meta.touched ? "border-red-500" : "border-gray-300"}`
-							}`}
+						className={`mb-2 md:mb-4 relative transition duration-200 w-full h-56 border-2 border-dashed ${
+							dragActive ? "border-blue-500" : `${image ? "" : props.meta.error && props.meta.touched ? "border-red-500" : "border-gray-300"}`
+						}`}
 						onDragEnter={handleDrag}
 					>
 						{/* Upload Drag and Dropbox */}

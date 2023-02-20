@@ -78,5 +78,4 @@ describe("Login Page", () => {
 	})
 })
 
-export { }
-
+export {}
