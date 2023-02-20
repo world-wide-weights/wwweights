@@ -6,3 +6,5 @@ Container here are:
 - Command Service - Responsible for handling user input (as commands), persisting in Eventstore and projecting to ReadDB
 - Query Service - Responsible for handling queries and fetching data from the ReadDB
 - Image Service - Responsible for receiving and serving images as well as cropping them
+
+**Note:** `docker-images` contains all permanently saved images of the lokal in-docker image service.
