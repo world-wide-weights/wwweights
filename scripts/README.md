@@ -16,7 +16,7 @@ All parameters are optional:
 
 1. localhost port => default 3002
 2. filepath to json => default data/sample.json
-3. chunksize for insert (may be useful for gigantic inserts) => default all at once
+3. chunksize for insert (may be useful for gigantic inserts) => default to 100
 
 ### Local steps
 
