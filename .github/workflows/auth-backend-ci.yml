@@ -2,9 +2,6 @@ name: auth-backend-pipeline
 
 on:
   push:
-    paths:
-      - "backend/auth/**"
-      - ".github/workflows/auth-backend-ci.yml"
     branches:
       - "stable"
       - "main"

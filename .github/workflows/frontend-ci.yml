@@ -2,9 +2,6 @@ name: frontend-pipeline
 
 on:
   push:
-    paths:
-      - "frontend/**"
-      - ".github/workflows/frontend-ci.yml"
     branches:
       - "stable"
       - "main"
