@@ -1,4 +1,4 @@
---- Insert users for submission
+--- INSERT users for submission
 INSERT INTO users(
 		pk_user_id,
 		username,
@@ -29,3 +29,5 @@ VALUES (
 		'2023-02-20 11:37:38.282+00',
 		'2023-02-20 11:37:38.265+00'
 	);
+-- SET sequence
+SELECT pg_catalog.setval('users_pk_user_id_seq', 2, true);
