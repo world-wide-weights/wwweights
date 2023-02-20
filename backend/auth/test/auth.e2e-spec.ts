@@ -12,16 +12,16 @@ import { RsaJWK } from '../src/auth/responses/jwks.response';
 import { UserService } from '../src/db/services/user.service';
 import { STATUS } from '../src/shared/enums/status.enum';
 import { JWTPayload } from '../src/shared/interfaces/jwt-payload.interface';
-import { MockConfigService } from './helpers/configService.helper';
+import { MockConfigService } from './helpers/config-service.helper';
 import {
   createUser,
   deleteUserByAttribute,
   getUserByAttribute,
-  updateUserByAttribute,
+  updateUserByAttribute
 } from './helpers/db.helper';
 import { comparePassword } from './helpers/general.helper';
 import { SAMPLE_USER } from './helpers/sample-data.helper';
-import { setupDataSource } from './helpers/typeOrmSetup';
+import { setupDataSource } from './helpers/typeorm-setup';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
