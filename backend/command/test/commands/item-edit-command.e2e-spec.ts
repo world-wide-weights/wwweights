@@ -229,6 +229,17 @@ describe('Item Edit (e2e)', () => {
       expect(profile.count.sourceUsedOnUpdate).toEqual(0);
       expect(profile.count.imageAddedOnUpdate).toEqual(1);
     });
+
+    it('Should return not found if stream does not exist', async () => {
+      // ARRANGE
+      const item = new itemModel(singleItem);
+
+      // ACT & ASSERT
+      await request(server)
+        .post(commandsPath + `items/${item.slug}/suggest/edit`)
+        .send({ image: 'willi_wonka' })
+        .expect(HttpStatus.NOT_FOUND);
+    });
   });
 
   // WARNING: The following tests are for testing the edit functionality itself. As of now this is triggered via
