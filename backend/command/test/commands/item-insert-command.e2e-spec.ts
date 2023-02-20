@@ -322,6 +322,28 @@ describe('Item Insertion (e2e)', () => {
       expect(items.length).toEqual(5);
     });
 
+    it('Should have dto validated without array', async () => {
+      // ARRANGE
+      fakeEnvGuard.isDev = true;
+      // ACT
+      const res = await request(server)
+        .post(commandsPath + itemBulkInsertPath)
+        .send({ you: 'are', really: 'awesome' });
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.BAD_REQUEST);
+    });
+
+    it('Should have dto validated with array and one wrong', async () => {
+      // ARRANGE
+      fakeEnvGuard.isDev = true;
+      // ACT
+      const res = await request(server)
+        .post(commandsPath + itemBulkInsertPath)
+        .send([...bulkInsertData, { you: 'are', really: 'awesome' }]);
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.BAD_REQUEST);
+    });
+
     it('Should allow to set userId', async () => {
       // ARRANGE
       await itemModel.deleteMany();
