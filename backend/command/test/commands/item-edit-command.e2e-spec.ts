@@ -6,6 +6,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { randomUUID } from 'crypto';
 import { Model } from 'mongoose';
 import * as request from 'supertest';
+import { setTimeout } from 'timers/promises';
 import { CommandsModule } from '../../src/commands/commands.module';
 import { EditItemCommand } from '../../src/commands/item-commands/edit-item.command';
 import { ControllersModule } from '../../src/controllers/controllers.module';
@@ -533,6 +534,28 @@ describe('Item Edit (e2e)', () => {
 
       // ASSERT
       expect(demoteImageFunction).toHaveBeenCalled();
+    });
+
+    it('Should gracefully handle item that does not have a stream', async () => {
+      // ARRANGE
+      const item = new itemModel(singleItem);
+      const command = new EditItemCommand(
+        item.slug,
+        randomUUID(),
+        {
+          image: 'changed',
+        },
+        verifiedRequestUser.id,
+      );
+
+      // ACT
+      await commandBus.execute(command);
+
+      // Wait for nothing to have happened
+      await setTimeout(100);
+      // ASSERT
+      expect(mockEventStore.existingStreams.size).toEqual(0);
+      //expect(mockFunction).toHaveBeenCalled();
     });
   });
 });
