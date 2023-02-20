@@ -16,7 +16,8 @@ const API_BASE_URL_AUTH_SERVER = Cypress.env("PUBLIC_API_BASE_URL_AUTH_SERVER")
 const API_BASE_URL_QUERY_CLIENT = Cypress.env("PUBLIC_API_BASE_URL_QUERY_CLIENT")
 const API_BASE_URL_QUERY_SERVER = Cypress.env("PUBLIC_API_BASE_URL_QUERY_SERVER")
 const API_BASE_URL_COMMAND = Cypress.env("PUBLIC_API_BASE_URL_COMMAND")
-const PUBLIC_API_BASE_URL_IMAGE = Cypress.env("PUBLIC_API_BASE_URL_IMAGE")
+const PUBLIC_API_BASE_URL_IMAGE_SERVER = Cypress.env("PUBLIC_API_BASE_URL_IMAGE_SERVER")
+const PUBLIC_API_BASE_URL_IMAGE_CLIENT = Cypress.env("PUBLIC_API_BASE_URL_IMAGE_CLIENT")
 const LOCAL_STORAGE_KEY = "session"
 
 /**** Command helper *****/
@@ -192,12 +193,12 @@ Cypress.Commands.add("mockItemsList", (options) => {
 })
 
 Cypress.Commands.add("mockImageServe", () => {
-	cy.intercept("GET", `${PUBLIC_API_BASE_URL_IMAGE}/serve/*`, {
+	cy.intercept("GET", `${PUBLIC_API_BASE_URL_IMAGE_CLIENT}/serve/*`, {
 		statusCode: 201,
 	}).as("mockImageServe")
 
 	cy.task("nock", {
-		hostname: PUBLIC_API_BASE_URL_IMAGE,
+		hostname: PUBLIC_API_BASE_URL_IMAGE_SERVER,
 		method: "get",
 		path: "/*",
 		statusCode: 200,
@@ -251,7 +252,7 @@ Cypress.Commands.add("mockCreateItem", () => {
 })
 
 Cypress.Commands.add("mockUploadImage", () => {
-	cy.intercept("POST", `${PUBLIC_API_BASE_URL_IMAGE}/upload/image`, {
+	cy.intercept("POST", `${PUBLIC_API_BASE_URL_IMAGE_CLIENT}/upload/image`, {
 		statusCode: 201,
 	}).as("mockUploadImage")
 })

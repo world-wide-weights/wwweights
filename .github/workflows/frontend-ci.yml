@@ -48,7 +48,8 @@ jobs:
       NEXT_PUBLIC_API_BASE_URL_COMMAND: http://localhost:3002/commands/v1
       NEXT_PUBLIC_API_BASE_URL_AUTH_SERVER: http://localhost:3001
       NEXT_PUBLIC_API_BASE_URL_AUTH_CLIENT: http://localhost:3001
-      NEXT_PUBLIC_API_BASE_URL_IMAGE: http://localhost:3003
+      NEXT_PUBLIC_API_BASE_URL_IMAGE_SERVER: http://localhost:3003
+      NEXT_PUBLIC_API_BASE_URL_IMAGE_CLIENT: http://localhost:3003
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -104,7 +105,8 @@ jobs:
       NEXT_PUBLIC_API_BASE_URL_COMMAND: http://localhost:3002/commands/v1
       NEXT_PUBLIC_API_BASE_URL_AUTH_SERVER: http://localhost:3001
       NEXT_PUBLIC_API_BASE_URL_AUTH_CLIENT: http://localhost:3001
-      NEXT_PUBLIC_API_BASE_URL_IMAGE: http://localhost:3003
+      NEXT_PUBLIC_API_BASE_URL_IMAGE_SERVER: http://localhost:3003
+      NEXT_PUBLIC_API_BASE_URL_IMAGE_CLIENT: http://localhost:3003
     steps:
       - name: Checkout
         uses: actions/checkout@v3

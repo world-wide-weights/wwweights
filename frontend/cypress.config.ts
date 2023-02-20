@@ -113,6 +113,7 @@ export default defineConfig({
 		PUBLIC_API_BASE_URL_COMMAND: "http://localhost:3002/commands/v1",
 		PUBLIC_API_BASE_URL_AUTH_CLIENT: "http://localhost:3001",
 		PUBLIC_API_BASE_URL_AUTH_SERVER: "http://localhost:3001",
-		PUBLIC_API_BASE_URL_IMAGE: "http://localhost:3003",
+		PUBLIC_API_BASE_URL_IMAGE_SERVER: "http://localhost:3003",
+		PUBLIC_API_BASE_URL_IMAGE_CLIENT: "http://localhost:3003",
 	},
 })
