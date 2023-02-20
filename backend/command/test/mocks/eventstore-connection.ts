@@ -1,5 +1,4 @@
 import { StreamNotFoundError } from '@eventstore/db-client';
-import { W } from 'mongodb';
 
 /**
  * @description Mock eventstore client using js generators
@@ -15,9 +14,9 @@ export class Client {
   readAll(): Generator {
     let g = generator(this.forcedResult.pop());
     if (this.simulateNonExistingStream) {
-      g = errorGenerator()
+      g = errorGenerator();
     }
-   
+
     // This needs a cancel function
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     (g as any).cancel = () => {};
@@ -30,7 +29,7 @@ export class Client {
   subscribeToAll(...args: any[]): Generator {
     this.params = args;
     if (this.simulateNonExistingStream) {
-      return errorGenerator()
+      return errorGenerator();
     }
     return generator(this.forcedResult.pop());
   }
@@ -41,9 +40,9 @@ export class Client {
   readStream(): Generator {
     let g = generator(this.forcedResult.pop());
     if (this.simulateNonExistingStream) {
-      g = errorGenerator()
+      g = errorGenerator();
     }
-   
+
     // This needs a cancel function
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     (g as any).cancel = () => {};
@@ -53,9 +52,9 @@ export class Client {
   /**
    * @description Take and save params
    */
-  async appendToStream(...args: any[]): Promise<void>{
-    this.params = args
-    return
+  async appendToStream(...args: any[]): Promise<void> {
+    this.params = args;
+    return;
   }
 
   /**
@@ -79,8 +78,8 @@ export function* generator(val: any[]): Generator {
 }
 
 /**
- * @description Black Magic to simulate eventstore failure output 
+ * @description Black Magic to simulate eventstore failure output
  */
 export function* errorGenerator(): Generator {
-  throw new StreamNotFoundError()
+  throw new StreamNotFoundError();
 }

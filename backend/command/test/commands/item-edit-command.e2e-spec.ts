@@ -261,12 +261,14 @@ describe('Item Edit (e2e)', () => {
         async () => (await editSuggestionModel.count()) !== 0,
       );
 
-      // ASSERT (Any to test if property not defined)
-      const suggestion: any = await editSuggestionModel.findOne({
+      // ASSERT
+      const suggestion = await editSuggestionModel.findOne({
         itemSlug: item.slug,
       });
       expect(suggestion.updatedItemValues.tags.push).toEqual(['test']);
-      expect(suggestion.updatedItemValues.tags.wrongProperty).toBeUndefined();
+      expect(
+        suggestion.updatedItemValues.tags['wrongProperty'],
+      ).toBeUndefined();
     });
 
     it('Should validate suggestionWeight', async () => {
@@ -288,12 +290,14 @@ describe('Item Edit (e2e)', () => {
         async () => (await editSuggestionModel.count()) !== 0,
       );
 
-      // ASSERT (Any to test if property not defined)
-      const suggestion: any = await editSuggestionModel.findOne({
+      // ASSERT
+      const suggestion = await editSuggestionModel.findOne({
         itemSlug: item.slug,
       });
       expect(suggestion.updatedItemValues.weight.value).toEqual(123);
-      expect(suggestion.updatedItemValues.weight.wrongProperty).toBeUndefined();
+      expect(
+        suggestion.updatedItemValues.weight['wrongProperty'],
+      ).toBeUndefined();
     });
   });
 

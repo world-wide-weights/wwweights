@@ -4,7 +4,7 @@
 export class MockConfigService {
   public values = {
     SKIP_READ_DB_REBUILD: 'false',
-    TEST_MODE: 'true'
+    TEST_MODE: 'true',
   };
 
   /**
@@ -13,7 +13,7 @@ export class MockConfigService {
   reset() {
     this.values = {
       SKIP_READ_DB_REBUILD: 'false',
-      TEST_MODE: 'true'
+      TEST_MODE: 'true',
     };
   }
 
