@@ -103,8 +103,8 @@ services:
       - NODE_ENV=${DOCKER_NODE_ENV:-development}
       - DB_MONGO_HOST=${QRY_DB_MONGO_HOST:-mongo}
       - DB_MONGO_PORT=${QRY_DB_MONGO_PORT:-27017}
-      - DB_MONGO_USER=${QRY_DB_MONGO_USER:-mongo}
-      - DB_MONGO_PW=${QRY_DB_MONGO_PW:-mongo}
+      - DB_MONGO_USER=${QRY_DB_MONGO_USER:-admin}
+      - DB_MONGO_PW=${QRY_DB_MONGO_PW:-admin}
       - DB_MONGO_NAME=${QRY_DB_MONGO_NAME:-wwweights}
       - JWKS_AUTH_URL=${QRY_JWKS_AUTH_URL:-http://auth:3001/auth/.well-known/jwks.json}
       - AUTH_API_KEY=${QRY_AUTH_API_KEY:-qry}
