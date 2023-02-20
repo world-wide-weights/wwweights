@@ -2,9 +2,6 @@ name: query-backend-pipeline
 
 on:
   push:
-    paths:
-      - "backend/query/**"
-      - ".github/workflows/query-backend-ci.yml"
     branches:
       - "stable"
       - "main"
