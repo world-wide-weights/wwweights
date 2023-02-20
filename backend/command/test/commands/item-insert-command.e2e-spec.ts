@@ -5,7 +5,6 @@ import { EventBus } from '@nestjs/cqrs';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
 import * as request from 'supertest';
-import { setTimeout } from 'timers/promises';
 import { CommandsModule } from '../../src/commands/commands.module';
 import { ControllersModule } from '../../src/controllers/controllers.module';
 import { ItemCronJobHandler } from '../../src/cron/cron-handlers/items.cron';
@@ -126,9 +125,6 @@ describe('Item Insertion (e2e)', () => {
   });
 
   afterAll(async () => {
-    // Await for background db processes
-    // Eventual consistency is amazing :)
-    await setTimeout(500);
     await teardownMockDataSource();
     await server.close();
     await app.close();

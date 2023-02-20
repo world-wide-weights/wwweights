@@ -122,7 +122,7 @@ describe('Item Edit (e2e)', () => {
 
   afterAll(async () => {
     await teardownMockDataSource();
-    server.close();
+    await server.close();
     await app.close();
   });
 
@@ -240,6 +240,60 @@ describe('Item Edit (e2e)', () => {
         .post(commandsPath + `items/${item.slug}/suggest/edit`)
         .send({ image: 'willi_wonka' })
         .expect(HttpStatus.NOT_FOUND);
+    });
+
+    it('Should validate suggestionTags', async () => {
+      // ARRANGE
+      const item = new itemModel(singleItem);
+      await item.save();
+      // Create eventstore stream
+      mockEventStore.existingStreams.add(
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      );
+
+      //ACT
+      await request(server)
+        .post(commandsPath + `items/${item.slug}/suggest/edit`)
+        .send({ tags: { push: ['test'], wrongProperty: 'stuff' } })
+        .expect(HttpStatus.OK);
+
+      await retryCallback(
+        async () => (await editSuggestionModel.count()) !== 0,
+      );
+
+      // ASSERT (Any to test if property not defined)
+      const suggestion: any = await editSuggestionModel.findOne({
+        itemSlug: item.slug,
+      });
+      expect(suggestion.updatedItemValues.tags.push).toEqual(['test']);
+      expect(suggestion.updatedItemValues.tags.wrongProperty).toBeUndefined();
+    });
+
+    it('Should validate suggestionWeight', async () => {
+      // ARRANGE
+      const item = new itemModel(singleItem);
+      await item.save();
+      // Create eventstore stream
+      mockEventStore.existingStreams.add(
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      );
+
+      //ACT
+      await request(server)
+        .post(commandsPath + `items/${item.slug}/suggest/edit`)
+        .send({ weight: { value: 123, wrongProperty: 'stuff' } })
+        .expect(HttpStatus.OK);
+
+      await retryCallback(
+        async () => (await editSuggestionModel.count()) !== 0,
+      );
+
+      // ASSERT (Any to test if property not defined)
+      const suggestion: any = await editSuggestionModel.findOne({
+        itemSlug: item.slug,
+      });
+      expect(suggestion.updatedItemValues.weight.value).toEqual(123);
+      expect(suggestion.updatedItemValues.weight.wrongProperty).toBeUndefined();
     });
   });
 
