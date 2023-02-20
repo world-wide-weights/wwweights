@@ -76,5 +76,4 @@ describe("Error Profile", () => {
 	})
 })
 
-export { }
-
+export {}

@@ -126,9 +126,9 @@ Cypress.Commands.add("mockProfilePage", (options) => {
 	const body =
 		options?.contribtionsCount || options?.contribtionsCount === 0
 			? {
-				...paginatedContributions,
-				data: paginatedContributions.data.slice(0, options?.contribtionsCount),
-			}
+					...paginatedContributions,
+					data: paginatedContributions.data.slice(0, options?.contribtionsCount),
+			  }
 			: paginatedContributions
 
 	cy.mockImageServe()
@@ -158,9 +158,9 @@ Cypress.Commands.add("mockTagsList", (options) => {
 	const body =
 		options?.itemCount || options?.itemCount === 0
 			? {
-				...paginatedTagsList,
-				data: paginatedTagsList.data.slice(0, options.itemCount),
-			}
+					...paginatedTagsList,
+					data: paginatedTagsList.data.slice(0, options.itemCount),
+			  }
 			: paginatedTagsList
 
 	cy.task("nock", {
@@ -178,9 +178,9 @@ Cypress.Commands.add("mockItemsList", (options) => {
 	const body =
 		options?.itemCount || options?.itemCount === 0
 			? {
-				...paginatedItems,
-				data: paginatedItems.data.slice(0, options.itemCount),
-			}
+					...paginatedItems,
+					data: paginatedItems.data.slice(0, options.itemCount),
+			  }
 			: paginatedItems
 
 	cy.task("nock", {
@@ -286,5 +286,4 @@ Cypress.Commands.add("mockDeleteItem", () => {
 	}).as("mockDeleteItem")
 })
 
-export { }
-
+export {}
