@@ -1,6 +1,8 @@
-export enum SUGGESTION_STATUS{
-     PENDING = 'pending',
-    APPROVED = 'approved',
-    // Currently unreachable
-    DENIED = 'denied'
+/**
+ * @description Possible status values for suggestions (edit and delete)
+ */
+export enum SUGGESTION_STATUS {
+  PENDING = 'pending',
+  APPROVED = 'approved',
+  DENIED = 'denied',
 }

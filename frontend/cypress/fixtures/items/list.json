@@ -10,8 +10,8 @@
                 "value": 85
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-coral200-sollar.jpg",
-            "user": "mc",
+            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-tania.jpg",
+            "userId": 1,
             "createdAt": 1674596011073
         },
         {
@@ -21,8 +21,7 @@
                 "value": 90
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-f100.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596010843
         },
         {
@@ -32,7 +31,7 @@
                 "value": 90
             },
             "tags": [],
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596010520
         },
         {
@@ -42,8 +41,7 @@
                 "value": 90
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-f103.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596010216
         },
         {
@@ -53,7 +51,7 @@
                 "value": 90
             },
             "tags": [],
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596010128
         },
         {
@@ -63,8 +61,7 @@
                 "value": 100
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-f870.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596009744
         },
         {
@@ -74,7 +71,7 @@
                 "value": 100
             },
             "tags": [],
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596009456
         },
         {
@@ -84,7 +81,7 @@
                 "value": 100
             },
             "tags": [],
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596009195
         },
         {
@@ -94,8 +91,7 @@
                 "value": 90
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-f233.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596009004
         },
         {
@@ -105,8 +101,7 @@
                 "value": 75
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/ZTE-A261.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596008774
         },
         {
@@ -116,8 +111,7 @@
                 "value": 79
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-s302.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596008655
         },
         {
@@ -127,8 +121,7 @@
                 "value": 120
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-xiang.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596008495
         },
         {
@@ -138,7 +131,7 @@
                 "value": 146
             },
             "tags": [],
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596008111
         },
         {
@@ -148,8 +141,7 @@
                 "value": 130
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-e811.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596007750
         },
         {
@@ -159,8 +151,7 @@
                 "value": 84
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-x760.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596007560
         },
         {
@@ -170,8 +161,7 @@
                 "value": 90
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-x990.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596007334
         },
         {
@@ -181,7 +171,7 @@
                 "value": 100
             },
             "tags": [],
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596007090
         },
         {
@@ -191,8 +181,7 @@
                 "value": 100
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-racer.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596006878
         },
         {
@@ -202,161 +191,8 @@
                 "value": 130
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/ZTE-E-N72.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596006676
-        },
-        {
-            "name": "ZTE F107",
-            "slug": "zte-f107",
-            "weight": {
-                "value": 90
-            },
-            "tags": [],
-            "user": "mc",
-            "createdAt": 1674596006514
-        },
-        {
-            "name": "ZTE Salute F350",
-            "slug": "zte-salute-f350",
-            "weight": {
-                "value": 112
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/verizon-wireless-salute.jpg",
-            "user": "mc",
-            "createdAt": 1674596006320
-        },
-        {
-            "name": "ZTE S213",
-            "slug": "zte-s213",
-            "weight": {
-                "value": 95
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-s213.jpg",
-            "user": "mc",
-            "createdAt": 1674596006079
-        },
-        {
-            "name": "ZTE R220",
-            "slug": "zte-r220",
-            "weight": {
-                "value": 80
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-r220.jpg",
-            "user": "mc",
-            "createdAt": 1674596005861
-        },
-        {
-            "name": "ZTE R221",
-            "slug": "zte-r221",
-            "weight": {
-                "value": 80
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-r221.jpg",
-            "user": "mc",
-            "createdAt": 1674596005714
-        },
-        {
-            "name": "ZTE R228",
-            "slug": "zte-r228",
-            "weight": {
-                "value": 67
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/ZTE-G-R228.jpg",
-            "user": "mc",
-            "createdAt": 1674596005493
-        },
-        {
-            "name": "ZTE R228 Dual SIM",
-            "slug": "zte-r228-dual-sim",
-            "weight": {
-                "value": 80
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/ZTE-G-R228.jpg",
-            "user": "mc",
-            "createdAt": 1674596005308
-        },
-        {
-            "name": "ZTE R230",
-            "slug": "zte-r230",
-            "weight": {
-                "value": 80
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-r230.jpg",
-            "user": "mc",
-            "createdAt": 1674596005045
-        },
-        {
-            "name": "ZTE N280",
-            "slug": "zte-n280",
-            "weight": {
-                "value": 130
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-n280.jpg",
-            "user": "mc",
-            "createdAt": 1674596004896
-        },
-        {
-            "name": "ZTE N290",
-            "slug": "zte-n290",
-            "weight": {
-                "value": 106
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-n290.jpg",
-            "user": "mc",
-            "createdAt": 1674596004699
-        },
-        {
-            "name": "ZTE X990D",
-            "slug": "zte-x990d",
-            "weight": {
-                "value": 90
-            },
-            "tags": [],
-            "user": "mc",
-            "createdAt": 1674596004544
-        },
-        {
-            "name": "ZTE Sage",
-            "slug": "zte-sage",
-            "weight": {
-                "value": 80
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-sage-orange-lisbon.jpg",
-            "user": "mc",
-            "createdAt": 1674596004441
-        },
-        {
-            "name": "ZTE Blade",
-            "slug": "zte-blade",
-            "weight": {
-                "value": 110
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-blade-new.jpg",
-            "user": "mc",
-            "createdAt": 1674596004194
-        },
-        {
-            "name": "ZTE Rio",
-            "slug": "zte-rio",
-            "weight": {
-                "value": 90
-            },
-            "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-rio.jpg",
-            "user": "mc",
-            "createdAt": 1674596004031
         },
         {
             "name": "ZTE Racer II",
@@ -365,8 +201,7 @@
                 "value": 100
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-racer-ii.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596003907
         },
         {
@@ -376,7 +211,7 @@
                 "value": 120
             },
             "tags": [],
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596003817
         },
         {
@@ -386,8 +221,7 @@
                 "value": 120
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/ZTE-V821.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596003669
         },
         {
@@ -397,8 +231,7 @@
                 "value": 120
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-skate.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596003399
         },
         {
@@ -408,8 +241,7 @@
                 "value": 105
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-n721.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596003205
         },
         {
@@ -419,8 +251,7 @@
                 "value": 403
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-v9.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596002932
         },
         {
@@ -430,8 +261,7 @@
                 "value": 127
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-avail.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596002648
         },
         {
@@ -441,8 +271,7 @@
                 "value": 122
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-score.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596002365
         },
         {
@@ -452,8 +281,7 @@
                 "value": 140
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-warp.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596002070
         },
         {
@@ -463,8 +291,7 @@
                 "value": 158
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-tania.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596001793
         },
         {
@@ -474,8 +301,7 @@
                 "value": 111
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-memo.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596001544
         },
         {
@@ -485,8 +311,7 @@
                 "value": 105
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-chorus.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596001252
         },
         {
@@ -496,8 +321,7 @@
                 "value": 110
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-blade-ftv-phone.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596001131
         },
         {
@@ -507,8 +331,7 @@
                 "value": 389
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-light-tab-v9c.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596000994
         },
         {
@@ -518,8 +341,7 @@
                 "value": 389
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-light-tab-2-v9a-ofic.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596000783
         },
         {
@@ -529,8 +351,7 @@
                 "value": 400
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-optik.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596000540
         },
         {
@@ -540,8 +361,7 @@
                 "value": 117
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-blade-ii.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596000347
         },
         {
@@ -551,8 +371,7 @@
                 "value": 125
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-v875.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674596000075
         },
         {
@@ -562,8 +381,7 @@
                 "value": 95
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-style-messenger.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674595999813
         },
         {
@@ -573,8 +391,7 @@
                 "value": 100
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-style-q.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674595999549
         },
         {
@@ -584,8 +401,7 @@
                 "value": 95
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-nova-messenger.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674595999286
         },
         {
@@ -595,8 +411,7 @@
                 "value": 130
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-v880e.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674595999129
         },
         {
@@ -606,8 +421,7 @@
                 "value": 120
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-kis.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674595999019
         },
         {
@@ -617,8 +431,7 @@
                 "value": 136
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-orbit.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674595998877
         },
         {
@@ -628,8 +441,7 @@
                 "value": 400
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-v9s.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674595998617
         },
         {
@@ -639,8 +451,7 @@
                 "value": 136
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-score-m.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674595998278
         },
         {
@@ -650,8 +461,7 @@
                 "value": 141
             },
             "tags": [],
-            "image": "https://fdn2.gsmarena.com/vv/bigpic/zte-u880.jpg",
-            "user": "mc",
+            "userId": 1,
             "createdAt": 1674595998073
         }
     ]

@@ -1,4 +1,3 @@
-
 /**
  * Generates a string of keywords separated by commas.
  * @param {string[]} keywords An array of keywords.
@@ -6,5 +5,5 @@
  */
 
 export const generateKeywordString = (keywords: string[]): string => {
-    return keywords.join(", ")
+	return keywords.join(", ")
 }

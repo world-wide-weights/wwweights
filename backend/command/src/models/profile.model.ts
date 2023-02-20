@@ -1,7 +1,8 @@
 import { prop } from '@typegoose/typegoose';
-import { EditSuggestion } from './edit-suggestion.model';
 
-
+/**
+ * @description Entity/Model for profile counts in read db
+ */
 export class ProfileCounts {
   @prop()
   itemsCreated: number;
@@ -36,15 +37,14 @@ export class ProfileCounts {
   @prop()
   itemsDeleted: number;
 }
+
+/**
+ * @description Entity/Model for profile in read db
+ */
 export class Profile {
   @prop({ required: true, unique: true })
   userId: number;
 
   @prop({ type: () => ProfileCounts, _id: false })
   count: ProfileCounts;
-
-  @prop({ array: true, type: () => [EditSuggestion] })
-  suggestions: EditSuggestion[];
-  // Since we currently don't look for items and suggestions created, we omit this.
-  // But we can always fetch them by adding an index in items on the userId and then looking for matches over the item/suggestion collection.
 }

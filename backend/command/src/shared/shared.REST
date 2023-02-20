@@ -1,8 +1,0 @@
-@host=http://localhost:3000/shared
-@auth_token=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImF1dGgtYmFzZS1rZXkifQ.eyJ1c2VybmFtZSI6InRlMnQiLCJpZCI6NSwiZW1haWwiOiJzYWFlYW1zLmhvZWdlcjM3QGV0aGVyZWFsLmVtYWlsIiwic3RhdHVzIjoidXNlciIsInJvbGUiOiJ1bnZlcmlmaWVkIiwiaWF0IjoxNjczMTk2ODM2LCJleHAiOjE2NzMxOTc3MzZ9.VWS_uUgspDjS36Iy5Iy6BsScATlB_9EefYDlXbySSG62ja_xOLuv9JF40ol5CSAqzWWmJymx1rZgqZJM1wYe5Q2crqeUoDL7y_c7N_SF_rqzcyQ1-eIG54uih79eB74G4VRVdTv5w646ALwjdFNFkMgFwbfrWPDrlfv7UWnS1HY
-
-
-
-###
-GET {{host}}/info
-Authorization: Bearer {{auth_token}}

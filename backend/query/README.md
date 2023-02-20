@@ -1,30 +1,22 @@
-# WWWeights Query Service
+# Command Backend
 
-Available on port 3004
+Backend for Query handling. Connects and interacts with MongoDB.
 
-## Quick start
+Service exposed on Port [3004](http://localhost:3004) by default. Swagger on [`/swagger`](http://localhost:3004/swagger)
 
-First:
-
+## Quickstart
 ```sh
-npm i
 cp sample.env .env
-```
-
-Run for dev:
-
-```sh
+npm i
 npm run start:dev
 ```
+## Tests
 
 Run unit tests:
-
 ```sh
 npm run test
 ```
-
-Run e2e tests:
-
+Run all tests:
 ```sh
-npm run test:e2e
+npm run test:cov
 ```

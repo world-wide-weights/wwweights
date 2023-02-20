@@ -1,16 +1,15 @@
-
 describe("Navbar", () => {
-    it("should not flicker when changing pages", () => {
-        cy.mockDiscoverPage()
-        cy.visitLocalPage("/weights")
+	it("should not flicker when changing pages", () => {
+		cy.mockDiscoverPage()
 
-        cy.contains("Discover").should("be.visible")
+		cy.visitLocalPage("/weights")
 
-        cy.mockItemsList()
-        cy.dataCy("navbar-home-link").click()
-        cy.contains("Discover", { timeout: 0 }).should("be.visible")
-    })
+		cy.contains("Discover").should("be.visible")
+
+		cy.mockHome()
+		cy.dataCy("navbar-home-link").click()
+		cy.contains("Discover", { timeout: 0 }).should("be.visible")
+	})
 })
 
-export { }
-
+export {}

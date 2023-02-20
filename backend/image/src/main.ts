@@ -18,6 +18,15 @@ async function bootstrap() {
         },
         'jwt',
       )
+      .addApiKey(
+        {
+          description: 'Api key for internal communication',
+          name: 'x-api-key',
+          type: 'apiKey',
+          in: 'header',
+        },
+        'api_key',
+      )
       .build();
     const document = SwaggerModule.createDocument(app, config, {
       ignoreGlobalPrefix: false,
@@ -26,6 +35,7 @@ async function bootstrap() {
     // Has to be done here as serving via static is done without a controller
     document.paths['/serve/{filePath}'] = {
       get: {
+        tags: ['serve'],
         description:
           'Endpoint serving all uploaded files. As of now these are limited to images and all non-image requests will be blocked',
         responses: {

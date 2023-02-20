@@ -1,19 +1,19 @@
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { Model } from 'mongoose';
 import * as request from 'supertest';
-import { Tag } from '../src/tags/models/tag.model';
+import { Tag } from '../src/models/tag.model';
 import {
   initializeMockModule,
   teardownMockDataSource,
 } from './helpers/MongoMemoryHelpers';
 
 import { Test, TestingModule } from '@nestjs/testing';
-import { Item } from '../src/items/models/item.model';
+import { Item } from '../src/models/item.model';
 import { TagsModule } from '../src/tags/tags.module';
 import { getItemsTagCount, items } from './mocks/items';
 import { tags } from './mocks/tags';
 
-describe('QueryController (e2e)', () => {
+describe('Tags (e2e)', () => {
   let app: INestApplication;
   let tagModel: Model<Tag>;
   let itemModel: Model<Item>;
@@ -50,7 +50,6 @@ describe('QueryController (e2e)', () => {
   });
 
   afterAll(async () => {
-    await tagModel.deleteMany();
     await teardownMockDataSource();
     server.close();
     await app.close();
@@ -62,45 +61,68 @@ describe('QueryController (e2e)', () => {
     describe('tags/list', () => {
       const subPath = 'tags/list';
 
-      it('should return the alphabetical first 5)', async () => {
+      it('should return the alphabetical first 5', async () => {
+        // ACT
         const result = await request(server)
           .get(queriesPath + subPath)
           .query({ limit: 5 })
           .expect(HttpStatus.OK);
 
+        // ASSERT
         expect(result.body.data[0].name).toEqual(tags[0].name);
         expect(result.body.data[4].name).toEqual(tags[4].name);
       });
 
-      it('should return the alphabetical last 5)', async () => {
+      it('should return the alphabetical last 5', async () => {
+        // ACT
         const result = await request(server)
           .get(queriesPath + subPath)
           .query({ limit: 5, sort: 'desc' })
           .expect(HttpStatus.OK);
 
+        // ASSERT
         expect(result.body.data[4].name).toEqual(tags[0].name);
         expect(result.body.data[0].name).toEqual(tags[4].name);
       });
 
-      it('should return the 5 most used)', async () => {
+      it('should return the 5 most used', async () => {
+        // ACT
         const result = await request(server)
           .get(queriesPath + subPath)
           .query({ limit: 5, sort: 'most-used' })
           .expect(HttpStatus.OK);
 
+        // ASSERT
         expect(result.body.data[0].name).toEqual(tags[2].name);
+      });
+
+      it('should return total 0 if no tags exist', async () => {
+        // ARRANGE
+        await tagModel.deleteMany();
+
+        // ACT
+        const result = await request(server)
+          .get(queriesPath + subPath)
+          .query({ limit: 5, sort: 'most-used' })
+          .expect(HttpStatus.OK);
+
+        // ASSERT
+        expect(result.body.data).toHaveLength(0);
+        expect(result.body.total).toEqual(0);
       });
     });
 
     describe('tags/related', () => {
       const subPath = 'tags/related';
 
-      it("should find list of tags when querying 'android'", async () => {
+      it('should find list of tags when querying "android"', async () => {
+        // ACT
         const result = await request(server)
           .get(queriesPath + subPath)
           .query({ query: 'android' })
           .expect(HttpStatus.OK);
 
+        // ASSERT
         expect(result.body.data).toHaveLength(16);
         for (const tag of result.body.data) {
           expect(tag).toHaveProperty('relevance');
@@ -111,19 +133,24 @@ describe('QueryController (e2e)', () => {
       });
 
       it('should find most relevance tag "smartphone" when querying "android"', async () => {
+        // ACT
         const result = await request(server)
           .get(queriesPath + subPath)
           .query({ query: 'android' })
           .expect(HttpStatus.OK);
+
+        // ASSERT
         expect(result.body.data[0].name).toEqual('smartphone');
       });
 
       it('should return base results if query is empty', async () => {
+        // ACT
         const result = await request(server)
           .get(queriesPath + subPath)
           .query({})
           .expect(HttpStatus.OK);
 
+        // ASSERT
         expect(result.body.data).toHaveLength(16);
         expect(result.body.total).toBe(getItemsTagCount());
         expect(result.body.limit).toBe(16);
@@ -134,33 +161,41 @@ describe('QueryController (e2e)', () => {
       });
 
       it('should not contain data if db is empty', async () => {
+        // ARRANGE
         await itemModel.deleteMany();
+
+        // ACT
         const result = await request(server)
           .get(queriesPath + subPath)
           .query({})
           .expect(HttpStatus.OK);
 
+        // ASSERT
         expect(result.body.total).toBe(0);
         expect(result.body.data).toHaveLength(0);
       });
 
       it('should not return android tag if querytag contains android', async () => {
+        // ACT
         const result = await request(server)
           .get(queriesPath + subPath)
           .query({ query: 'android', tags: ['android'] })
           .expect(HttpStatus.OK);
 
+        // ASSERT
         for (const tag of result.body.data) {
           expect(tag.name).not.toBe('android');
         }
       });
 
       it('should return decending relevance', async () => {
+        // ACT
         const result = await request(server)
           .get(queriesPath + subPath)
           .query({ query: 'android', tags: ['android'] })
           .expect(HttpStatus.OK);
 
+        // ASSERT
         expect(result.body.data[0].relevance).toBeGreaterThan(
           result.body.data.at(-1).relevance,
         );

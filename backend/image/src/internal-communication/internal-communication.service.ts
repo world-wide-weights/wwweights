@@ -8,9 +8,6 @@ import { ConfigService } from '@nestjs/config';
 import { AxiosError } from 'axios';
 import { catchError, firstValueFrom } from 'rxjs';
 
-/**
- * @description Service that is responsible for all communication to other services within the wwweights infrastructure
- */
 @Injectable()
 export class InternalCommunicationService {
   private readonly logger = new Logger(InternalCommunicationService.name);
@@ -23,7 +20,10 @@ export class InternalCommunicationService {
   /**
    * @description Send information to backend that an image has been uploaded by an user
    */
-  async notifyAuthAboutNewImage(userJwt: string, imageHash: string) {
+  async notifyAuthAboutNewImage(
+    userJwt: string,
+    imageHash: string,
+  ): Promise<void> {
     await this.notifyAuth(
       '/account/add-image',
       { imageHash },
@@ -39,7 +39,7 @@ export class InternalCommunicationService {
     endpoint: string,
     data: never | { imageHash: string },
     headers: Record<string, string>,
-  ) {
+  ): Promise<void> {
     await firstValueFrom(
       this.httpService
         .post(

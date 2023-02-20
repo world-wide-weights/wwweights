@@ -1,9 +1,13 @@
-import { TypegooseModule, TypegooseModuleOptions } from '@m8a/nestjs-typegoose';
+import { TypegooseModule } from '@m8a/nestjs-typegoose';
+import { DynamicModule } from '@nestjs/common';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 
 let mongod: MongoMemoryServer;
 
-export const initializeMockModule = (options?: TypegooseModuleOptions) =>
+/**
+ * @description Get typegoose module using the in memory mongo server
+ */
+export const initializeMockModule = (): DynamicModule =>
   TypegooseModule.forRootAsync({
     useFactory: async () => {
       mongod = await MongoMemoryServer.create();
@@ -14,6 +18,9 @@ export const initializeMockModule = (options?: TypegooseModuleOptions) =>
     },
   });
 
-export async function teardownMockDataSource() {
+/**
+ * @description Close in memory mongodb instance
+ */
+export async function teardownMockDataSource(): Promise<void> {
   await mongod.stop();
 }

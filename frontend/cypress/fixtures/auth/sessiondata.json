@@ -1,5 +1,5 @@
 {
-    "accessToken": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImF1dGgtYmFzZS1rZXkifQ.eyJ1c2VybmFtZSI6InN0cmluZyIsImlkIjoxLCJlbWFpbCI6InRlc3RAdGVzdC50ZXN0Iiwic3RhdHVzIjoidW52ZXJpZmllZCIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjc2Mjc4NDk5LCJleHAiOjE2NzYyNzg1NTl9.Q24AF1rkUPiai4R1GNlApqN2iW1I2A1WvjSTJe5iKaXNZjtXRKzwOWKYmx3Txo3lKIX3GSSHtDTnnsLIfbcToortB0LQ6kK2tF1L-OstWl8tAyPqf6lYfz6nsv9GaWeOhH_lhh6vQMXaxILIAXTvRvwa6BBVXhcTs3mOnEjVOg4",
+    "accessToken": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImF1dGgtYmFzZS1rZXkifQ.eyJ1c2VybmFtZSI6IlRlc3QiLCJpZCI6MSwiZW1haWwiOiJ0ZXN0QGdtYWlsLmNvbSIsInN0YXR1cyI6InVudmVyaWZpZWQiLCJyb2xlIjoidXNlciIsImlhdCI6MTY3NjY2MTU3NSwiZXhwIjoxNjc2NjYxNjM1fQ.TpnrhfPvORZkOmHVCLbZniGQu2pypSBns8ScCQkbmB6AtZhRuCOYnCcOjm5dAwkJX4ZHXv9P07n46UggyZzxntIFFUmFmUu66WkAl7YVFz9PyrN5fWOtAsv92wttfYD_JSPV6vrMtUFAW5jjPIieIzb2JXCbJf2YhPhGOmN6LpA",
     "decodedAccessToken": {
         "username": "string",
         "id": 1,
@@ -9,5 +9,5 @@
         "iat": 1676278499,
         "exp": 1676278559
     },
-    "refreshToken": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ0ZXN0QHRlc3QudGVzdCIsImlhdCI6MTY3NjI3ODQ5OSwiZXhwIjoxNjc2MjgwMjk5fQ.INK1dpGY-n3xhlgQau-mqFOr5rtHjc9dtZOxhKWUBVyV4Mza59XpiKkUF1RxH88yMgogbBqGFIvFFl_usi3-qFnEwiOskdZGfHjWe-ETcJBtz3LBmrwnldht_y3AsTMo4PPdamt-kOTSAKIN2ap9u79rJr-mA4F4Ov6ikg8006g"
+    "refreshToken": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTY3NjY2MTU3NSwiZXhwIjoxNjc2NjYzMzc1fQ.aTnZvFAjaCeXtGSKm1eYvX1VBkdeLBYwz98M4hapbgmaSk1CQQyL-VODwg7tOXnhvOH1W0VFfTK651bApqK7h7yyyPO3LXWw0izmFHKLlCwVQk93sWMCjrmAwv7rbgab4B9RrHRBcPrUI9giwvdQRuLqFpxlT9ND1q6OPvDTzxo"
 }

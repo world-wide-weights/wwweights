@@ -5,6 +5,7 @@
     "data": [
         {
             "name": "Test",
+            "slug": "test",
             "weight": {
                 "value": 150,
                 "isCa": false,
@@ -27,6 +28,7 @@
         },
         {
             "name": "Test2",
+            "slug": "test2",
             "weight": {
                 "value": 150,
                 "isCa": false,
@@ -42,13 +44,13 @@
                     "count": 2
                 }
             ],
-            "image": "https://example.com/image.png",
             "source": "https://example.com",
             "userId": 1,
             "createdAt": 1676302816532
         },
         {
             "name": "Test3",
+            "slug": "test3",
             "weight": {
                 "value": 150,
                 "isCa": false,
@@ -64,13 +66,13 @@
                     "count": 2
                 }
             ],
-            "image": "https://example.com/image.png",
             "source": "https://example.com",
             "userId": 1,
             "createdAt": 1676302816532
         },
         {
             "name": "Test4",
+            "slug": "test4",
             "weight": {
                 "value": 150,
                 "isCa": false,
@@ -86,13 +88,35 @@
                     "count": 2
                 }
             ],
-            "image": "https://example.com/image.png",
+            "source": "https://example.com",
+            "userId": 1,
+            "createdAt": 1676302816532
+        },
+        {
+            "name": "Test5",
+            "slug": "test5",
+            "weight": {
+                "value": 150,
+                "isCa": false,
+                "additionalValue": 250
+            },
+            "tags": [
+                {
+                    "name": "fruit",
+                    "count": 2
+                },
+                {
+                    "name": "red",
+                    "count": 2
+                }
+            ],
             "source": "https://example.com",
             "userId": 1,
             "createdAt": 1676302816532
         },
         {
             "name": "Test6",
+            "slug": "test6",
             "weight": {
                 "value": 150,
                 "isCa": false,
@@ -108,29 +132,6 @@
                     "count": 2
                 }
             ],
-            "image": "https://example.com/image.png",
-            "source": "https://example.com",
-            "userId": 1,
-            "createdAt": 1676302816532
-        },
-        {
-            "name": "Test7",
-            "weight": {
-                "value": 150,
-                "isCa": false,
-                "additionalValue": 250
-            },
-            "tags": [
-                {
-                    "name": "fruit",
-                    "count": 2
-                },
-                {
-                    "name": "red",
-                    "count": 2
-                }
-            ],
-            "image": "https://example.com/image.png",
             "source": "https://example.com",
             "userId": 1,
             "createdAt": 1676302816532

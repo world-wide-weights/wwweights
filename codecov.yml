@@ -1,6 +1,8 @@
 # Codecov settings
 comment:
   behavior: once
+  layout: flags
+  show_carryforward_flags: true
 github_checks:
   annotations: false
 coverage:
@@ -24,17 +26,29 @@ coverage:
         informational: true
         flags: 
           - query-backend
-
+      frontend:
+        informational: true
+        flags: 
+          - frontend
+          
 flags:
   auth-backend:
+    carryforward: true
     paths:
       - backend/auth
   command-backend:
+    carryforward: true
     paths:
       - backend/command
   image-backend:
+    carryforward: true
     paths:
       - backend/image
   query-backend:
+    carryforward: true
     paths:
       - backend/query
+  frontend:
+    carryforward: true
+    paths:
+      - frontend     

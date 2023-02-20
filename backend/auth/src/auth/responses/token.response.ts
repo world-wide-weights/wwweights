@@ -1,6 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 
+/**
+ * @description Response for returning access_- and refresh_token
+ */
 export class TokenResponse {
   @Expose()
   @ApiProperty({

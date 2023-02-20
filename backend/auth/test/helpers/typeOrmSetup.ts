@@ -3,7 +3,10 @@ import { DataSource } from 'typeorm';
 import { ImageUserLookupEntity } from '../../src/db/entities/image-user-lookup.entity';
 import { UserEntity } from '../../src/db/entities/users.entity';
 
-export const setupDataSource = async () => {
+/**
+ * @description Get mock datasource for testing
+ */
+export const setupDataSource = async (): Promise<DataSource> => {
   const db = newDb({
     autoCreateForeignKeyIndices: true,
   });

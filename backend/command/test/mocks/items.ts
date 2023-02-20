@@ -1,5 +1,5 @@
 import { Tag } from 'src/models/tag.model';
-import { InsertItemDto } from '../../src/items/interfaces/insert-item.dto';
+import { InsertItemDto } from '../../src/controllers/dtos/insert-item.dto';
 import { Item } from '../../src/models/item.model';
 
 export const singleItem: Partial<Item> = {
@@ -30,6 +30,14 @@ export const insertItem2: Partial<InsertItemDto> = {
   name: 'test2',
   weight: { value: 1123675e30 },
   tags: ['tag1'],
+};
+
+export const insertItemWithAllValues: Partial<InsertItemDto> = {
+  name: 'test2',
+  weight: { value: 1123675e30, isCa: false, additionalValue: 1123675e33 },
+  tags: ['tag1', 'tag2'],
+  image: 'https://www.google.com',
+  source: 'https://www.google.com',
 };
 
 export const differentNames = [...Array(20).keys()];
@@ -113,3 +121,12 @@ export const testData = [
     ],
   },
 ];
+
+export const bulkInsertData = [...Array(5).keys()].map((ind) => ({
+  ...testData[ind],
+  tags: [...testData[ind].tags, `trackertag${ind}`],
+}));
+
+export const trackerTags = [...Array(5).keys()].map(
+  (ind) => `trackertag${ind}`,
+);

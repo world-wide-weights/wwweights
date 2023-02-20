@@ -1,5 +1,8 @@
 import { ExecutionContext } from '@nestjs/common';
 
+/**
+ * @description Produce a fake jwt guard that can be commanded at will
+ */
 export class FakeAuthGuardFactory {
   private user;
   private authorizeRequests = true;

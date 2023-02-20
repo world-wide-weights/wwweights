@@ -1,3 +1,6 @@
+/**
+ * @description The getFilter function is used to create a filter object for the mongo match stage
+ */
 export const getFilter = (
   query?: string,
   tags?: string[],
@@ -7,7 +10,7 @@ export const getFilter = (
 ) => {
   const tagsSearch = { 'tags.name': { $all: tags } };
   const textSearch = { $text: { $search: query } };
-  const tagsAsQuery = { $text: { $search: tags?.join(' ') } }; // Since we also want a relevance score for tags only
+  const tagsAsQuery = { $text: { $search: tags?.join(' ') } }; // Since we also want a relevance score for tags only searches
 
   // Edgecases outside of the multiFilter
   if (!query && !tags && !slug && hasImage === undefined && !userId) return {};

@@ -1,3 +1,6 @@
+/**
+ * @description Mock eventstore client using js generators
+ */
 export class Client {
   forcedResult: any[] = [];
   params = [];

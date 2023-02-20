@@ -11,6 +11,7 @@ import { DbModule } from '../src/db/db.module';
 import { UserEntity } from '../src/db/entities/users.entity';
 import { UserService } from '../src/db/services/user.service';
 import { SharedModule } from '../src/shared/shared.module';
+import { MockConfigService } from './helpers/configService.helper';
 import {
   createLookup,
   createUser,
@@ -22,7 +23,6 @@ import { setupDataSource } from './helpers/typeOrmSetup';
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
   let dataSource: DataSource;
-  let configService: ConfigService;
   let userService: UserService;
   let authService: AuthService;
   let user: UserEntity;
@@ -30,7 +30,7 @@ describe('AuthController (e2e)', () => {
 
   beforeEach(async () => {
     dataSource = await setupDataSource();
-    process.env.API_KEYS = 'abc,def';
+
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot(),
@@ -43,12 +43,13 @@ describe('AuthController (e2e)', () => {
     })
       .overrideProvider(DataSource)
       .useValue(dataSource)
+      .overrideProvider(ConfigService)
+      .useClass(MockConfigService)
       .compile();
 
     app = await moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
-    configService = app.get<ConfigService>(ConfigService);
     userService = app.get<UserService>(UserService);
     authService = app.get<AuthService>(AuthService);
 
@@ -69,7 +70,6 @@ describe('AuthController (e2e)', () => {
   });
 
   describe('/account/add-image (POST)', () => {
-
     describe('Positive Tests', () => {
       it('Should add entry for user without image', async () => {
         // ARRANGE
@@ -88,6 +88,7 @@ describe('AuthController (e2e)', () => {
         expect(entries.length).toEqual(1);
         expect(entries[0].imageHash).toEqual(hash);
       });
+
       it('Should add entry for user with preexisting image', async () => {
         // ARRANGE
         const hash = 'abcdefg.png';
@@ -108,6 +109,7 @@ describe('AuthController (e2e)', () => {
         const entries = await getLookupsByUserId(dataSource, user.pkUserId);
         expect(entries.length).toEqual(2);
       });
+
       it('Should not add duplicate (user, image) combination', async () => {
         // ARRANGE
         const hash = 'abcdefg.png';
@@ -139,6 +141,7 @@ describe('AuthController (e2e)', () => {
         // ASSERT
         expect(res.statusCode).toEqual(HttpStatus.UNAUTHORIZED);
       });
+
       it('Should fail with "Forbidden" for valid JWT but invalid API key', async () => {
         // ACT
         const res = await request(app.getHttpServer())
@@ -148,6 +151,7 @@ describe('AuthController (e2e)', () => {
         // ASSERT
         expect(res.statusCode).toEqual(HttpStatus.FORBIDDEN);
       });
+
       it('Should fail for valid JWT but invalid API key', async () => {
         // ACT
         const res = await request(app.getHttpServer())

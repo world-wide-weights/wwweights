@@ -46,13 +46,17 @@ jobs:
         working-directory: frontend
     env:
       NEXT_PUBLIC_CLIENT_BASE_URL: http://localhost:3002
-      NEXT_PUBLIC_API_BASE_URL_QUERY: http://localhost:3004/queries/v1
+      NEXT_PUBLIC_API_BASE_URL_QUERY_SERVER: http://localhost:3004/queries/v1
+      NEXT_PUBLIC_API_BASE_URL_QUERY_CLIENT: http://localhost:3004/queries/v1
       NEXT_PUBLIC_API_BASE_URL_COMMAND: http://localhost:3002/commands/v1
       NEXT_PUBLIC_API_BASE_URL_AUTH: http://localhost:3001
       NEXT_PUBLIC_API_BASE_URL_IMAGE: http://localhost:3003
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Create babel config file
+        run: mv .babelrc.example .babelrc
 
       - name: Load cache
         id: cache
@@ -69,6 +73,13 @@ jobs:
         timeout-minutes: 15
         with:
           working-directory: ./frontend
+      
+      - name: codecov upload
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./frontend/.nyc_output/out.json
+          flags: frontend
           
       - uses: actions/upload-artifact@v3
         if: always()
@@ -79,6 +90,7 @@ jobs:
             frontend/cypress/reports/*
             frontend/cypress/screenshots/*
             frontend/cypress/videos/*
+            frontend/coverage
 
   component-tests:
     runs-on: ubuntu-latest
@@ -89,13 +101,17 @@ jobs:
         working-directory: frontend
     env:
       NEXT_PUBLIC_CLIENT_BASE_URL: http://localhost:3002
-      NEXT_PUBLIC_API_BASE_URL_QUERY: http://localhost:3004/queries/v1
+      NEXT_PUBLIC_API_BASE_URL_QUERY_SERVER: http://localhost:3004/queries/v1
+      NEXT_PUBLIC_API_BASE_URL_QUERY_CLIENT: http://localhost:3004/queries/v1
       NEXT_PUBLIC_API_BASE_URL_COMMAND: http://localhost:3002/commands/v1
       NEXT_PUBLIC_API_BASE_URL_AUTH: http://localhost:3001
       NEXT_PUBLIC_API_BASE_URL_IMAGE: http://localhost:3003
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Create babel config file
+        run: mv .babelrc.example .babelrc
 
       - name: Load cache
         id: cache
@@ -115,6 +131,13 @@ jobs:
           build: npm run build
           start: npm start
           command: npm run test-components:cli
+
+      - name: codecov upload
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./frontend/.nyc_output/out.json
+          flags: frontend
           
       - uses: actions/upload-artifact@v3
         if: always()
@@ -125,6 +148,7 @@ jobs:
             frontend/cypress/reports/*
             frontend/cypress/screenshots/*
             frontend/cypress/videos/*
+            frontend/coverage
 
   docker-build-and-push:
     runs-on: ubuntu-latest

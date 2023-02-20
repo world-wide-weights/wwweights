@@ -30,11 +30,7 @@ This script can also be used to insert data into production.
 
 **Note from @coffemakingtoaster :** Please dont do this on your own...Either let devops do that or do it with someone from devops
 
-1. Set server into dev-maintenance
-
-```sh
-ssh <username>@<server> sh /home/wwweights/dev-maintenance.sh
-```
+1. Set server into maintenance mode (development env and disable nginx)
 
 2. Create ssh tunnel. When prod server is in maintenance the reverse proxy does not allow for http connetions from anywhere but localhost.
 
@@ -43,8 +39,5 @@ ssh -L 3002:3002 <username>@<server>
 ```
 
 3. Execute script as mentioned above
-4. Set prod back to normal
 
-```sh
-ssh <username>@<server> sh /home/wwweights/production.sh
-```
+4. Set prod back to normal

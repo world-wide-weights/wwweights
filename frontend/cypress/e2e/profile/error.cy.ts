@@ -3,72 +3,77 @@ import profile from "../../fixtures/profile/me.json"
 import statistics from "../../fixtures/profile/statistics.json"
 
 const API_BASE_URL_AUTH = Cypress.env("PUBLIC_API_BASE_URL_AUTH")
-const API_BASE_URL_QUERY = Cypress.env("PUBLIC_API_BASE_URL_QUERY")
+const API_BASE_URL_QUERY_CLIENT = Cypress.env("PUBLIC_API_BASE_URL_QUERY_CLIENT")
 
 describe("Error Profile", () => {
-    it("should display error 500 when contribution failed", () => {
-        // Mock Contributions
-        cy.intercept("GET", `${API_BASE_URL_QUERY}/items/list*`, {
-            body: contributions
-        })
+	it("should display error 500 when contribution failed", () => {
+		// Mock Contributions
+		cy.intercept("GET", `${API_BASE_URL_QUERY_CLIENT}/items/list*`, {
+			forceNetworkError: true,
+		})
 
-        // Mock statistics
-        cy.intercept("GET", `${API_BASE_URL_QUERY}/profiles/*/statistics`, {
-            body: {}
-        })
+		// Mock statistics
+		cy.intercept("GET", `${API_BASE_URL_QUERY_CLIENT}/profiles/*/statistics`, {
+			body: {},
+		})
 
-        // Mock profile
-        cy.intercept("GET", `${API_BASE_URL_AUTH}/profile/me`, {
-            forceNetworkError: true
-        })
+		// Mock profile
+		cy.intercept("GET", `${API_BASE_URL_AUTH}/profile/me`, {
+			body: profile,
+		})
 
-        cy.login("/account/profile")
+		cy.login({
+			route: "/account/profile",
+		})
 
-        cy.check500()
-    })
+		cy.checkNetworkError()
+	})
 
-    it("should display error 500 when statistics failed", () => {
-        // Mock Contributions
-        cy.intercept("GET", `${API_BASE_URL_QUERY}/items/list*`, {
-            body: contributions
-        })
+	it("should display error 500 when statistics failed", () => {
+		// Mock Contributions
+		cy.intercept("GET", `${API_BASE_URL_QUERY_CLIENT}/items/list**`, {
+			body: contributions,
+		})
 
-        // Mock statistics
-        cy.intercept("GET", `${API_BASE_URL_QUERY}/profiles/*/statistics`, {
-            forceNetworkError: true
-        })
+		// Mock statistics
+		cy.intercept("GET", `${API_BASE_URL_QUERY_CLIENT}/profiles/*/statistics`, {
+			forceNetworkError: true,
+		})
 
-        // Mock profile
-        cy.intercept("GET", `${API_BASE_URL_AUTH}/profile/me`, {
-            body: profile
-        })
+		// Mock profile
+		cy.intercept("GET", `${API_BASE_URL_AUTH}/profile/me`, {
+			body: profile,
+		})
 
-        cy.login("/account/profile")
+		cy.login({
+			route: "/account/profile",
+		})
 
-        cy.check500()
-    })
+		cy.checkNetworkError()
+	})
 
-    it("should display error 500 when profile failed", () => {
-        // Mock Contributions
-        cy.intercept("GET", `${API_BASE_URL_QUERY}/items/list*`, {
-            body: contributions
-        })
+	it("should display error 500 when profile failed", () => {
+		// Mock Contributions
+		cy.intercept("GET", `${API_BASE_URL_QUERY_CLIENT}/items/list*`, {
+			body: contributions,
+		})
 
-        // Mock statistics
-        cy.intercept("GET", `${API_BASE_URL_QUERY}/profiles/*/statistics`, {
-            body: statistics
-        })
+		// Mock statistics
+		cy.intercept("GET", `${API_BASE_URL_QUERY_CLIENT}/profiles/*/statistics`, {
+			body: statistics,
+		})
 
-        // Mock profile
-        cy.intercept("GET", `${API_BASE_URL_AUTH}/profile/me`, {
-            forceNetworkError: true
-        })
+		// Mock profile
+		cy.intercept("GET", `${API_BASE_URL_AUTH}/profile/me`, {
+			forceNetworkError: true,
+		})
 
-        cy.login("/account/profile")
+		cy.login({
+			route: "/account/profile",
+		})
 
-        cy.check500()
-    })
+		cy.checkNetworkError()
+	})
 })
 
-export { }
-
+export {}

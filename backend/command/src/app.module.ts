@@ -2,8 +2,13 @@ import { TypegooseModule } from '@m8a/nestjs-typegoose';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
+import { CommandsModule } from './commands/commands.module';
+import { ControllersModule } from './controllers/controllers.module';
+import { CronModule } from './cron/cron.module';
+import { EventsModule } from './events/events.module';
 import { EventStoreModule } from './eventstore/eventstore.module';
-import { ItemsModule } from './items/items.module';
+import { InternalCommunicationModule } from './internal-communication/internal-communication.module';
+import { SagasModule } from './sagas/sagas.module';
 import { SharedModule } from './shared/shared.module';
 
 @Module({
@@ -29,9 +34,14 @@ import { SharedModule } from './shared/shared.module';
       inject: [ConfigService],
     }),
     EventStoreModule,
-    ItemsModule,
+    CommandsModule,
+    ControllersModule,
+    SagasModule,
+    EventsModule,
     SharedModule,
-    ScheduleModule.forRoot()
+    CronModule,
+    ScheduleModule.forRoot(),
+    InternalCommunicationModule,
   ],
 })
 export class AppModule {}
