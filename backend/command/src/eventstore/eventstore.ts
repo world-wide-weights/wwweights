@@ -55,7 +55,7 @@ export class EventStore {
     private readonly eventBus: EventBus,
     private readonly configService: ConfigService,
   ) {
-    // Add to allow for testing
+    // Add to allow for testing and return here, the rest of the constructor is not needed and would fail due to grpc
     if (process.env.TEST_MODE === 'true') {
       return;
     }
@@ -66,6 +66,7 @@ export class EventStore {
     };
 
     // If connecting to secure instance we need this
+    /* istanbul ignore if */
     if (this.configService.get<string>('DB_EVENTSTORE_USE_TLS') === 'true') {
       sslOptions = {
         insecure: false,
@@ -75,6 +76,7 @@ export class EventStore {
       };
     }
 
+    /* istanbul ignore next */
     this.client = new EventStoreDBClient(
       {
         endpoint: this.configService.get<string>('DB_EVENTSTORE_HOST'),
@@ -85,7 +87,7 @@ export class EventStore {
         password: this.configService.get<string>('DB_EVENTSTORE_PW'),
       },
     );
-
+    /* istanbul ignore next */
     this.init();
   }
 

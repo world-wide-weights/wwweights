@@ -1,7 +1,8 @@
 import { INestApplication } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeout } from 'timers/promises';
+import { MockConfigService } from '../../test/helpers/config-service.helper';
 import { Client } from '../../test/mocks/eventstore-connection';
 import { ALLOWED_EVENT_ENTITIES } from './enums/allowedEntities.enum';
 import { EventStore } from './eventstore';
@@ -9,26 +10,32 @@ import { EventStoreModule } from './eventstore.module';
 
 describe('EventstoreModule', () => {
   // Basically disable the constructor to skip Eventstoredb connection
-  process.env.TEST_MODE = 'true';
   let app: INestApplication;
   let eventStore: EventStore;
   const client = new Client();
+  const mockConfigService = new MockConfigService();
 
   async function replaceApp() {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [ConfigModule.forRoot({ isGlobal: true }), EventStoreModule],
-    }).compile();
+    })
+      .overrideProvider(ConfigService)
+      .useValue(mockConfigService)
+      .compile();
+
     app = moduleFixture.createNestApplication();
     eventStore = app.get<EventStore>(EventStore);
     await app.init();
+
     eventStore.isReady = false;
     eventStore['client'] = client as any;
   }
 
   beforeEach(async () => {
-    process.env.SKIP_READ_DB_REBUILD = 'false';
+    mockConfigService.reset();
     await replaceApp();
   });
+
   afterEach(async () => {
     await app.close();
   });
@@ -70,7 +77,7 @@ describe('EventstoreModule', () => {
     it('Should be ready instantly "SKIP_READ_DB_REBUILD" is is true', async () => {
       // ARRANGE
       await app.close();
-      process.env.SKIP_READ_DB_REBUILD = 'true';
+      mockConfigService.values.SKIP_READ_DB_REBUILD = 'true';
       const eventList = {
         event: {
           streamId: `${ALLOWED_EVENT_ENTITIES.ITEM}-`,
@@ -90,10 +97,11 @@ describe('EventstoreModule', () => {
       // Should subscribe to all from the end => all previous are expected already be applied to read db
       expect(client.params[0].fromPosition).toEqual('end');
     });
+
     it('Should default "SKIP_READ_DB_REBUILD" to false', async () => {
       // ARRANGE
       await app.close();
-      process.env.SKIP_READ_DB_REBUILD = undefined;
+      mockConfigService.values.SKIP_READ_DB_REBUILD = undefined;
       const eventList = {
         event: {
           streamId: `${ALLOWED_EVENT_ENTITIES.ITEM}-`,
@@ -114,6 +122,7 @@ describe('EventstoreModule', () => {
       expect(client.params[0].fromPosition).toEqual('start');
     });
   });
+
   describe('Protection during setup', () => {
     it('Should reject events when not ready', async () => {
       // ARRANGE
@@ -123,5 +132,11 @@ describe('EventstoreModule', () => {
         eventStore.addEvent('a' as any, 'b' as any, 'c' as any),
       ).rejects.toThrow('Backend is not ready yet. Retry later');
     });
+
+    // it('Should ???????', async () => {
+    //   const newEventStore = new EventStore(null, null);
+    //   console.log(newEventStore['client']);
+    //   expect(newEventStore['client']).toBeUndefined();
+    // });
   });
 });
