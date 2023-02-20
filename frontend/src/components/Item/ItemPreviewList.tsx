@@ -80,12 +80,11 @@ export const ItemPreviewList: React.FC<ItemPreviewListProps> = ({
 				</div>
 				<div className={`flex items-center ${hasDifference && selectedItem ? "justify-end" : ""} md:w-[60%]`}>
 					{/* Difference */}
-					{hasDifference && !selectedItem && (
+					{hasDifference && (
 						<div
 							datacy="itempreviewlist-difference"
-							className={`flex items-center justify-center ${
-								difference === 0 ? "text-gray-500" : difference > 0 ? "text-green-500" : "text-red-500"
-							} md:px-3 lg:px-0 w-2/6 md:w-1/4`}
+							className={`flex items-center justify-center ${!selectedItem ? "" : "opacity-0"} ${difference === 0 ? "text-gray-500" : difference > 0 ? "text-green-500" : "text-red-500"
+								} md:px-3 lg:px-0 w-2/6 md:w-1/4`}
 						>
 							<span className="font-medium mr-1">{renderWeightAsNumberIntoString(Math.abs(difference))}</span>
 							<Icon datacy="arrow-icon" className="text-xl">
@@ -98,9 +97,8 @@ export const ItemPreviewList: React.FC<ItemPreviewListProps> = ({
 					<h5
 						datacy="itempreviewlist-weight"
 						title={`${name} has a weight of ${weightString}`}
-						className={`${selectedItem ? "text-blue-500" : "text-gray-800"} text-right font-bold w-52 lg:w-48 pl-5 truncate ${
-							hasDifference ? (selectedItem ? "w-2/3 md:w-1/4" : "w-3/6 md:w-1/4") : "w-1/3"
-						} mr-4`}
+						className={`${selectedItem ? "text-blue-500" : "text-gray-800"} text-right font-bold w-52 lg:w-48 pl-5 truncate ${hasDifference ? (selectedItem ? "w-2/3 md:w-1/4" : "w-3/6 md:w-1/4") : "w-1/3"
+							} mr-4`}
 					>
 						{weightString}
 					</h5>
