@@ -8,7 +8,7 @@ import { GlobalStatistics } from '../src/models/global-statistics.model';
 import {
   initializeMockModule,
   teardownMockDataSource,
-} from './helpers/MongoMemoryHelpers';
+} from './helpers/mongo-memory-helper';
 
 describe('App (e2e)', () => {
   let app: INestApplication;

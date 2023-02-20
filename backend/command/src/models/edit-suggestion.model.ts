@@ -1,8 +1,6 @@
-import { PartialType } from '@nestjs/swagger';
 import { prop } from '@typegoose/typegoose';
 import { IsArray, IsOptional, IsString } from 'class-validator';
 import { SUGGESTION_STATUS } from '../shared/enums/suggestion-status.enum';
-import { Weight } from './item.model';
 
 /**
  * @description Entity/Model for tags in edit suggestion in read db
@@ -21,10 +19,22 @@ export class SuggestionTag {
   pull?: string[];
 }
 
+// OmitType/PickType/PartialType does not work here, therefore this is partially duplicate code
+// However we avoid accidentally adding fields if item ever changes its structure
+// Solving this is tracked in Issue #424
 /**
  * @description Entity/Model for weight in edit suggestion in read db
  */
-class SuggestionWeight extends PartialType(Weight) {}
+class SuggestionWeight {
+  @prop()
+  value?: number;
+
+  @prop()
+  isCa?: boolean;
+
+  @prop()
+  additionalValue?: number;
+}
 
 // OmitType/PickType/PartialType does not work here, therefore this is partially duplicate code
 // However we avoid accidentally adding fields if item ever changes its structure

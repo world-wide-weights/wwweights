@@ -55,8 +55,8 @@ export class EventStore {
     private readonly eventBus: EventBus,
     private readonly configService: ConfigService,
   ) {
-    // Add to allow for testing
-    if (process.env.TEST_MODE === 'true') {
+    // Add to allow for testing and return here, the rest of the constructor is not needed and would fail due to grpc
+    if (this.configService.get<string>('TEST_MODE') === 'true') {
       return;
     }
 
@@ -66,6 +66,7 @@ export class EventStore {
     };
 
     // If connecting to secure instance we need this
+    /* istanbul ignore if */
     if (this.configService.get<string>('DB_EVENTSTORE_USE_TLS') === 'true') {
       sslOptions = {
         insecure: false,
@@ -75,6 +76,7 @@ export class EventStore {
       };
     }
 
+    /* istanbul ignore next */
     this.client = new EventStoreDBClient(
       {
         endpoint: this.configService.get<string>('DB_EVENTSTORE_HOST'),
@@ -85,7 +87,7 @@ export class EventStore {
         password: this.configService.get<string>('DB_EVENTSTORE_PW'),
       },
     );
-
+    /* istanbul ignore next */
     this.init();
   }
 
@@ -211,7 +213,7 @@ export class EventStore {
       | typeof ItemDeleteSuggestedEvent
       | typeof ItemDeletedEvent
       | typeof ItemEditedEvent,
-  ): Promise<void> {
+  ): void {
     if (!event) return;
     if (!this.eventMap.get(eventType)) {
       this.logger.error(`Invalid eventtype for eventbus ${eventType}`);
@@ -240,7 +242,9 @@ export class EventStore {
       if (error instanceof StreamNotFoundError) {
         return false;
       }
+      /* istanbul ignore next */
       // This may be an Connection lost error etc. Anyway we throw it
+      // We dont test it for to obvious reasons
       throw error;
     }
     return true;

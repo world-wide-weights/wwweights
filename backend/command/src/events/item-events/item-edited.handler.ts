@@ -172,7 +172,6 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
           : 0,
       },
     };
-    const time = performance.now();
     await this.statisticsService.incrementProfileCounts(userId, incrementer);
   }
 }
