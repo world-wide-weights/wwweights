@@ -30,7 +30,7 @@ import { JwtStrategy } from '../../src/shared/strategies/jwt.strategy';
 import {
   initializeMockModule,
   teardownMockDataSource,
-} from '../helpers/MongoMemoryHelpers';
+} from '../helpers/mongo-memory-helper';
 import { retryCallback } from '../helpers/retries';
 import { FakeEnvGuardFactory } from '../mocks/env-guard.mock';
 import { MockEventStore } from '../mocks/eventstore';

@@ -9,7 +9,7 @@ import { Item } from '../src/models/item.model';
 import {
   initializeMockModule,
   teardownMockDataSource,
-} from './helpers/MongoMemoryHelpers';
+} from './helpers/mongo-memory-helper';
 import {
   items,
   itemsWithAdditonalWeight,
