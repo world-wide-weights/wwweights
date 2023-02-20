@@ -6,6 +6,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { randomUUID } from 'crypto';
 import { Model } from 'mongoose';
 import * as request from 'supertest';
+import { setTimeout } from 'timers/promises';
 import { CommandsModule } from '../../src/commands/commands.module';
 import { DeleteItemCommand } from '../../src/commands/item-commands/delete-item.command';
 import { ControllersModule } from '../../src/controllers/controllers.module';
@@ -229,7 +230,7 @@ describe('Item Deletion (e2e)', () => {
         async () => !(await itemModel.findOne({ slug: item.slug })),
       );
       // Does suggestion exist in mongoDb
-      const items = await itemModel.find({});
+      const items = await itemModel.find();
       expect(items.length).toEqual(0);
     });
 
@@ -280,9 +281,30 @@ describe('Item Deletion (e2e)', () => {
       );
       // ACT
       await commandBus.execute(command);
-      // Does suggestion exist in mongoDb
-      const items = await itemModel.find({});
+      // Wait for nothing to have happened
+      await setTimeout(100);
+
+      // ASSERT
+      const items = await itemModel.find();
       expect(items.length).toEqual(0);
+    });
+
+    it('Should gracefully handle item that does not have a stream', async () => {
+      // ARRANGE
+      const item = new itemModel(singleItem);
+      const command = new DeleteItemCommand(
+        item.slug,
+        randomUUID(),
+        verifiedRequestUser.id,
+      );
+
+      // ACT
+      await commandBus.execute(command);
+      // Wait for nothing to have happened
+      await setTimeout(100);
+
+      // ASSERT
+      expect(mockEventStore.existingStreams.size).toEqual(0);
     });
   });
 });
