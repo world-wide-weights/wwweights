@@ -18,12 +18,21 @@ export const commandRequest = axios.create({
 	baseURL: process.env.NEXT_PUBLIC_API_BASE_URL_COMMAND,
 })
 
-// Auth API
-export const authRequest = axios.create({
-	baseURL: process.env.NEXT_PUBLIC_API_BASE_URL_AUTH,
+// Auth API from Client
+export const authClientRequest = axios.create({
+	baseURL: process.env.NEXT_PUBLIC_API_BASE_URL_AUTH_CLIENT,
 })
 
-// Image API
-export const imageRequest = axios.create({
-	baseURL: process.env.NEXT_PUBLIC_API_BASE_URL_IMAGE,
+// Auth API from Server
+export const authServerRequest = axios.create({
+	baseURL: process.env.NEXT_PUBLIC_API_BASE_URL_AUTH_SERVER,
+})
+
+// Image API from Server
+export const imageServerRequest = axios.create({
+	baseURL: process.env.NEXT_PUBLIC_API_BASE_URL_IMAGE_SERVER,
+})
+
+export const imageClientRequest = axios.create({
+	baseURL: process.env.NEXT_PUBLIC_API_BASE_URL_IMAGE_CLIENT,
 })

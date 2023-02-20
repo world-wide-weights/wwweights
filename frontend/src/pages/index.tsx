@@ -10,7 +10,7 @@ import { Navbar } from "../components/Navbar/Navbar"
 import { Search } from "../components/Search/Search"
 import { Seo } from "../components/Seo/Seo"
 import { Stat } from "../components/Statistics/Stat"
-import { authRequest, queryServerRequest } from "../services/axios/axios"
+import { authServerRequest, queryServerRequest } from "../services/axios/axios"
 import { routes } from "../services/routes/routes"
 import { getStructuredDataWebsite } from "../services/seo/structuredData/website"
 import { getImageUrl } from "../services/utils/getImageUrl"
@@ -148,7 +148,7 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
 	try {
 		const [itemsResponse, statisticsUser, statisticsTotal] = await Promise.all([
 			queryServerRequest.get<PaginatedResponse<Item>>("/items/list?page=1&limit=20"),
-			authRequest.get<{ totalUsers: number }>("/auth/statistics"),
+			authServerRequest.get<{ totalUsers: number }>("/auth/statistics"),
 			queryServerRequest.get<{ totalItems: 0; totalContributions: 0 }>("/statistics"),
 		])
 

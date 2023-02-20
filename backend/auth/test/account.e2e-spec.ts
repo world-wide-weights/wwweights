@@ -11,14 +11,14 @@ import { DbModule } from '../src/db/db.module';
 import { UserEntity } from '../src/db/entities/users.entity';
 import { UserService } from '../src/db/services/user.service';
 import { SharedModule } from '../src/shared/shared.module';
-import { MockConfigService } from './helpers/configService.helper';
+import { MockConfigService } from './helpers/config-service.helper';
 import {
   createLookup,
   createUser,
   getLookupsByUserId,
 } from './helpers/db.helper';
 import { SAMPLE_USER } from './helpers/sample-data.helper';
-import { setupDataSource } from './helpers/typeOrmSetup';
+import { setupDataSource } from './helpers/typeorm-setup';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;

@@ -1,5 +1,5 @@
 import { SessionData, Tokens } from "../../types/auth"
-import { authRequest } from "../axios/axios"
+import { authClientRequest } from "../axios/axios"
 import { parseJwt } from "../utils/jwt"
 
 const LOCAL_STORAGE_KEY = "session"
@@ -83,7 +83,7 @@ export const endSession = (): void => {
  */
 export const refreshToken = async (refreshToken: string): Promise<Tokens | null> => {
 	try {
-		const response = await authRequest.post<Tokens>(
+		const response = await authClientRequest.post<Tokens>(
 			"/auth/refresh",
 			{},
 			{

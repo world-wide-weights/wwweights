@@ -6,6 +6,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { randomUUID } from 'crypto';
 import { Model } from 'mongoose';
 import * as request from 'supertest';
+import { setTimeout } from 'timers/promises';
 import { CommandsModule } from '../../src/commands/commands.module';
 import { EditItemCommand } from '../../src/commands/item-commands/edit-item.command';
 import { ControllersModule } from '../../src/controllers/controllers.module';
@@ -29,7 +30,7 @@ import { JwtStrategy } from '../../src/shared/strategies/jwt.strategy';
 import {
   initializeMockModule,
   teardownMockDataSource,
-} from '../helpers/MongoMemoryHelpers';
+} from '../helpers/mongo-memory-helper';
 import { retryCallback } from '../helpers/retries';
 import { FakeEnvGuardFactory } from '../mocks/env-guard.mock';
 import { MockEventStore } from '../mocks/eventstore';
@@ -121,7 +122,7 @@ describe('Item Edit (e2e)', () => {
 
   afterAll(async () => {
     await teardownMockDataSource();
-    server.close();
+    await server.close();
     await app.close();
   });
 
@@ -229,6 +230,75 @@ describe('Item Edit (e2e)', () => {
       expect(profile.count.sourceUsedOnUpdate).toEqual(0);
       expect(profile.count.imageAddedOnUpdate).toEqual(1);
     });
+
+    it('Should return not found if stream does not exist', async () => {
+      // ARRANGE
+      const item = new itemModel(singleItem);
+
+      // ACT & ASSERT
+      await request(server)
+        .post(commandsPath + `items/${item.slug}/suggest/edit`)
+        .send({ image: 'willi_wonka' })
+        .expect(HttpStatus.NOT_FOUND);
+    });
+
+    it('Should validate suggestionTags', async () => {
+      // ARRANGE
+      const item = new itemModel(singleItem);
+      await item.save();
+      // Create eventstore stream
+      mockEventStore.existingStreams.add(
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      );
+
+      //ACT
+      await request(server)
+        .post(commandsPath + `items/${item.slug}/suggest/edit`)
+        .send({ tags: { push: ['test'], wrongProperty: 'stuff' } })
+        .expect(HttpStatus.OK);
+
+      await retryCallback(
+        async () => (await editSuggestionModel.count()) !== 0,
+      );
+
+      // ASSERT
+      const suggestion = await editSuggestionModel.findOne({
+        itemSlug: item.slug,
+      });
+      expect(suggestion.updatedItemValues.tags.push).toEqual(['test']);
+      expect(
+        suggestion.updatedItemValues.tags['wrongProperty'],
+      ).toBeUndefined();
+    });
+
+    it('Should validate suggestionWeight', async () => {
+      // ARRANGE
+      const item = new itemModel(singleItem);
+      await item.save();
+      // Create eventstore stream
+      mockEventStore.existingStreams.add(
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      );
+
+      //ACT
+      await request(server)
+        .post(commandsPath + `items/${item.slug}/suggest/edit`)
+        .send({ weight: { value: 123, wrongProperty: 'stuff' } })
+        .expect(HttpStatus.OK);
+
+      await retryCallback(
+        async () => (await editSuggestionModel.count()) !== 0,
+      );
+
+      // ASSERT
+      const suggestion = await editSuggestionModel.findOne({
+        itemSlug: item.slug,
+      });
+      expect(suggestion.updatedItemValues.weight.value).toEqual(123);
+      expect(
+        suggestion.updatedItemValues.weight['wrongProperty'],
+      ).toBeUndefined();
+    });
   });
 
   // WARNING: The following tests are for testing the edit functionality itself. As of now this is triggered via
@@ -237,7 +307,7 @@ describe('Item Edit (e2e)', () => {
   describe('EditItemCommand', () => {
     it('Should update item', async () => {
       // ARRANGE
-      const item = new itemModel(singleItem);
+      const item = new itemModel({ ...singleItem, image: 'initial' });
       await item.save();
       const command = new EditItemCommand(
         item.slug,
@@ -522,6 +592,28 @@ describe('Item Edit (e2e)', () => {
 
       // ASSERT
       expect(demoteImageFunction).toHaveBeenCalled();
+    });
+
+    it('Should gracefully handle item that does not have a stream', async () => {
+      // ARRANGE
+      const item = new itemModel(singleItem);
+      const command = new EditItemCommand(
+        item.slug,
+        randomUUID(),
+        {
+          image: 'changed',
+        },
+        verifiedRequestUser.id,
+      );
+
+      // ACT
+      await commandBus.execute(command);
+
+      // Wait for nothing to have happened
+      await setTimeout(100);
+      // ASSERT
+      expect(mockEventStore.existingStreams.size).toEqual(0);
+      //expect(mockFunction).toHaveBeenCalled();
     });
   });
 });

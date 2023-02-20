@@ -5,7 +5,7 @@ import { Tag } from '../src/models/tag.model';
 import {
   initializeMockModule,
   teardownMockDataSource,
-} from './helpers/MongoMemoryHelpers';
+} from './helpers/mongo-memory-helper';
 
 import { Test, TestingModule } from '@nestjs/testing';
 import { Item } from '../src/models/item.model';

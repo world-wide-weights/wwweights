@@ -5,6 +5,7 @@ import {
   HttpStatus,
   Logger,
   Param,
+  ParseArrayPipe,
   Post,
   Req,
   UseGuards,
@@ -29,10 +30,10 @@ import { ENVGuard } from '../../shared/guards/env.guard';
 import { JwtAuthGuard } from '../../shared/guards/jwt.guard';
 import { BulkInsertItemDTO } from '../dtos/bulk-insert-item.dto';
 import { InsertItemDto } from '../dtos/insert-item.dto';
-import { RequestWithJWTPayload } from '../interfaces/request-with-user.interface';
 import { SuggestItemDeleteDTO } from '../dtos/suggest-item-delete.dto';
-import { ItemsService } from '../services/item.service';
 import { SuggestItemEditDTO } from '../dtos/suggest-item-edit.dto';
+import { RequestWithJWTPayload } from '../interfaces/request-with-user.interface';
+import { ItemsService } from '../services/item.service';
 
 @Controller('items')
 @ApiTags('items')
@@ -82,9 +83,10 @@ export class ItemsController {
   @ApiOkResponse({ description: 'Items inserted' })
   @ApiInternalServerErrorResponse({ description: 'Something went wrong' })
   async bulkInsert(
-    @Body() bulkItemInsertDTO: BulkInsertItemDTO[],
+    @Body(new ParseArrayPipe({ items: BulkInsertItemDTO }))
+    bulkItemInsertDTOs: BulkInsertItemDTO[],
   ): Promise<void> {
-    await this.itemsService.handleBulkInsert(bulkItemInsertDTO);
+    await this.itemsService.handleBulkInsert(bulkItemInsertDTOs);
   }
 
   @Post(':slug/suggest/edit')

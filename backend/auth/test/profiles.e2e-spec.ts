@@ -11,10 +11,10 @@ import { AuthService } from '../src/auth/auth.service';
 import { UserService } from '../src/db/services/user.service';
 import { ProfileModule } from '../src/profile/profile.module';
 import { SharedModule } from '../src/shared/shared.module';
-import { MockConfigService } from './helpers/configService.helper';
+import { MockConfigService } from './helpers/config-service.helper';
 import { createUser, deleteUserByAttribute } from './helpers/db.helper';
 import { SAMPLE_USER } from './helpers/sample-data.helper';
-import { setupDataSource } from './helpers/typeOrmSetup';
+import { setupDataSource } from './helpers/typeorm-setup';
 
 describe('ProfilesController (e2e)', () => {
   let app: INestApplication;

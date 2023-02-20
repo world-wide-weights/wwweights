@@ -2,9 +2,6 @@ name: command-backend-pipeline
 
 on:
   push:
-    paths:
-      - "backend/command/**"
-      - ".github/workflows/command-backend-ci.yml"
     branches:
       - "stable"
       - "main"
