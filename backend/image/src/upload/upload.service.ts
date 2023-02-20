@@ -153,16 +153,10 @@ export class UploadService {
       return;
     }
 
-    // Calculate offset so the image is cropped symetrically
-    const wOffset = Math.floor((metadata.width - wDimension) / 2);
-    const hOffset = Math.floor((metadata.height - hDimension) / 2);
     try {
       const buffer = await image
-        .extract({
-          width: Math.max(0, Math.min(wDimension, metadata.width)),
-          height: Math.max(0, Math.min(hDimension, metadata.height)),
-          left: Math.max(0, wOffset),
-          top: Math.max(0, hOffset),
+        .resize(wDimension, hDimension, {
+          fit: 'cover',
         })
         .toBuffer();
       await writeFile(sourcePath, buffer);
