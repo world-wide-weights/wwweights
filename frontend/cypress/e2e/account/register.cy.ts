@@ -86,5 +86,4 @@ describe("Register", () => {
 	})
 })
 
-export { }
-
+export {}

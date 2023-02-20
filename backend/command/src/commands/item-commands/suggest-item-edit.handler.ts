@@ -1,4 +1,6 @@
+import { BadRequest } from '@eventstore/db-client/generated/shared_pb';
 import {
+  BadRequestException,
   InternalServerErrorException,
   Logger,
   NotFoundException,
@@ -25,6 +27,17 @@ export class SuggestItemEditHandler
     itemSlug,
     userId,
   }: SuggestItemEditCommand): Promise<void> {
+
+    // Basic validation that is not possible in DTO due to partial nature of object
+    if (
+      suggestItemEditDto.weight?.value >=
+      suggestItemEditDto.weight?.additionalValue
+    ) {
+      throw new BadRequestException(
+        'Additional Value has to be greater than value',
+      );
+    }
+
     const newSuggestion = new EditSuggestion({
       userId,
       itemSlug,

@@ -1,12 +1,33 @@
 import { ApiPropertyOptional, OmitType, PartialType } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsArray, IsOptional, IsString, ValidateNested } from 'class-validator';
+import {
+  IsArray,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { InsertItemDto, Weight } from './insert-item.dto';
 
 /**
  * @description DTO for weight when suggesting item edit (inherits from Insert weight DTO)
  */
-class SuggestItemEditWeightDTO extends PartialType(Weight) {}
+class SuggestItemEditWeightDTO extends PartialType(
+  OmitType(Weight, ['additionalValue']),
+) {
+  @IsNumber()
+  @IsPositive()
+  @IsOptional()
+  @ApiPropertyOptional({
+    exclusiveMinimum: true,
+    minimum: 0,
+    description:
+      'Additional value of weight in gramm. Has to be bigger than value. Use this if you have a range weight',
+    example: 250,
+  })
+  additionalValue?: number;
+}
 
 /**
  * @description DTO for tags when suggesting item edit

@@ -271,7 +271,7 @@ describe('Item Edit (e2e)', () => {
       ).toBeUndefined();
     });
 
-    it('Should validate suggestionWeight', async () => {
+    it('Should validate that additionalWeight is greater than the weight', async () => {
       // ARRANGE
       const item = new itemModel(singleItem);
       await item.save();
@@ -280,24 +280,11 @@ describe('Item Edit (e2e)', () => {
         `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
       );
 
-      //ACT
+      //ACT & ASSERT
       await request(server)
         .post(commandsPath + `items/${item.slug}/suggest/edit`)
-        .send({ weight: { value: 123, wrongProperty: 'stuff' } })
-        .expect(HttpStatus.OK);
-
-      await retryCallback(
-        async () => (await editSuggestionModel.count()) !== 0,
-      );
-
-      // ASSERT
-      const suggestion = await editSuggestionModel.findOne({
-        itemSlug: item.slug,
-      });
-      expect(suggestion.updatedItemValues.weight.value).toEqual(123);
-      expect(
-        suggestion.updatedItemValues.weight['wrongProperty'],
-      ).toBeUndefined();
+        .send({ weight: { value: 100, additionalValue: 99 } })
+        .expect(HttpStatus.BAD_REQUEST);
     });
   });
 
@@ -560,6 +547,38 @@ describe('Item Edit (e2e)', () => {
       // Has tag been created?
       expect(newTag).toBeDefined();
       expect(oldTag.count).toEqual(item.tags[0].count - 1);
+    });
+
+    it('Should not update Item if additionalValue is (now) greater or equal to value ', async () => {
+      // ARRANGE
+      const item = new itemModel(singleItem);
+      await item.save();
+      await tagModel.insertMany(item.tags);
+      const command = new EditItemCommand(
+        item.slug,
+        randomUUID(),
+        {
+          weight: { additionalValue: singleItem.weight.value - 1 },
+        },
+        verifiedRequestUser.id,
+      );
+      // Create eventstore stream
+      mockEventStore.existingStreams.add(
+        `${ALLOWED_EVENT_ENTITIES.ITEM}-${item.slug}`,
+      );
+      //ACT
+      await commandBus.execute(command);
+      // ASSERT
+      // Timout here as this tests is meant to verify that nothing happens
+      // Having a check for nothing to happen seems like a paradox
+      setTimeout(500);
+
+      const hopefullyNotUpdatedItem = await itemModel.findOne({
+        slug: item.slug,
+      });
+      expect(hopefullyNotUpdatedItem.weight.additionalValue).not.toEqual(
+        singleItem.weight.value - 1,
+      );
     });
 
     it('Should call demote Image if replaced', async () => {

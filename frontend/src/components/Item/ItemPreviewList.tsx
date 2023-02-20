@@ -80,10 +80,10 @@ export const ItemPreviewList: React.FC<ItemPreviewListProps> = ({
 				</div>
 				<div className={`flex items-center ${hasDifference && selectedItem ? "justify-end" : ""} md:w-[60%]`}>
 					{/* Difference */}
-					{hasDifference && !selectedItem && (
+					{hasDifference && (
 						<div
 							datacy="itempreviewlist-difference"
-							className={`flex items-center justify-center ${
+							className={`flex items-center justify-center ${!selectedItem ? "" : "opacity-0"} ${
 								difference === 0 ? "text-gray-500" : difference > 0 ? "text-green-500" : "text-red-500"
 							} md:px-3 lg:px-0 w-2/6 md:w-1/4`}
 						>

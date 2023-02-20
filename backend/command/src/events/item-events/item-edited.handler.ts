@@ -30,6 +30,8 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
     const { itemSlug, editValues } = itemEditedEventDto;
 
     try {
+      await this.validateItemEditOrFail(itemSlug, editValues);
+
       const oldItem = await this.updateItem(itemSlug, editValues);
 
       this.logger.debug(
@@ -173,5 +175,45 @@ export class ItemEditedHandler implements IEventHandler<ItemEditedEvent> {
       },
     };
     await this.statisticsService.incrementProfileCounts(userId, incrementer);
+  }
+
+  /**
+   * @description Check whether or not the edit values are (still) valid
+   */
+  private async validateItemEditOrFail(
+    slug: string,
+    editValues: SuggestionItem,
+  ): Promise<void> {
+    let currItem: Item;
+    try {
+      currItem = await this.itemModel.findOne({ slug });
+    } catch (error) /* istanbul ignore next */ {
+      this.logger.error(
+        `Searching item ${slug} failed due to an error ${error}`,
+      );
+      throw new Error(`Could not search for item ${slug}`);
+    }
+    // Not testable because...how would one validate the result? Something that does not exist has not changed?
+    /* istanbul ignore if */
+    if (!currItem) {
+      this.logger.error(
+        `Item ${slug} could not be found even though it was supposed to be edited`,
+      );
+      throw new Error(`Could not find item ${slug}`);
+    }
+
+    if (!editValues.weight) {
+      return;
+    }
+
+    if (
+      (editValues.weight?.value || currItem.weight.value) >=
+      (editValues.weight?.additionalValue || currItem.weight?.additionalValue)
+    ) {
+      this.logger.error(
+        `Tried to set an invalid range order (additionalValue < value) for item ${slug}`,
+      );
+      throw new Error(`Prevented invalid insert for item ${slug}`);
+    }
   }
 }
