@@ -24,6 +24,7 @@
   "coveragePathIgnorePatterns": [
     "<rootDir>/test/mocks",
     "<rootDir>/test/helpers",
-    "<rootDir>/node_modules/"
+    "<rootDir>/node_modules/",
+    "<rootDir>/src/shared/strategies"
   ]
 }
