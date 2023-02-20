@@ -17,7 +17,7 @@ import { Modal } from "../../components/Modal/Modal"
 import { Pagination } from "../../components/Pagination/Pagination"
 import { Seo } from "../../components/Seo/Seo"
 import { Tooltip } from "../../components/Tooltip/Tooltip"
-import { authRequest, commandRequest, queryClientRequest } from "../../services/axios/axios"
+import { authClientRequest, commandRequest, queryClientRequest } from "../../services/axios/axios"
 import { routes } from "../../services/routes/routes"
 import { errorHandling } from "../../services/utils/errorHandling"
 import { getImageUrl } from "../../services/utils/getImageUrl"
@@ -130,7 +130,7 @@ const Profile: NextPageCustomProps = () => {
 				const [contributionsResponse, statisticsResponse, profileResponse] = await Promise.all([
 					queryClientRequest.get<PaginatedResponse<Item>>(`/items/list?userid=${sessionData.decodedAccessToken.id}&page=${page}&limit=${limit}`),
 					queryClientRequest.get<StatisticsResponse>(`/profiles/${sessionData.decodedAccessToken.id}/statistics`),
-					authRequest.get<UserProfile>("/profile/me", {
+					authClientRequest.get<UserProfile>("/profile/me", {
 						headers: {
 							Authorization: `Bearer ${sessionData.accessToken}`,
 						},

@@ -53,12 +53,14 @@ export class InternalCommunicationService {
           },
         )
         .pipe(
-          catchError((error: AxiosError) => {
-            this.logger.error(
-              `Request to img backend for image ${data.imageHash} failed! Error: ${error}`,
-            );
-            throw new Error(`Image backend could not be notified`);
-          }),
+          catchError(
+            /* istanbul ignore next */ (error: AxiosError) => {
+              this.logger.error(
+                `Request to img backend for image ${data.imageHash} failed! Error: ${error}`,
+              );
+              throw new Error(`Image backend could not be notified`);
+            },
+          ),
         ),
     );
   }

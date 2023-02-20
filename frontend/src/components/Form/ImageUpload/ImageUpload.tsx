@@ -45,8 +45,8 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name, filePath }) => {
 			return
 		}
 
-		// File size bigger than 1MB
-		if (file.size > 1e6) {
+		// File size bigger than 2MB
+		if (file.size > 2e6) {
 			formikProps.form.setFieldError(name, "File size is too big.")
 			return
 		}
@@ -127,9 +127,8 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name, filePath }) => {
 			{(props: FieldProps<any>) => (
 				<>
 					<div
-						className={`mb-2 md:mb-4 relative transition duration-200 w-full h-56 border-2 border-dashed ${
-							dragActive ? "border-blue-500" : `${image ? "" : props.meta.error && props.meta.touched ? "border-red-500" : "border-gray-300"}`
-						}`}
+						className={`mb-2 md:mb-4 relative transition duration-200 w-full h-56 border-2 border-dashed ${dragActive ? "border-blue-500" : `${image ? "" : props.meta.error && props.meta.touched ? "border-red-500" : "border-gray-300"}`
+							}`}
 						onDragEnter={handleDrag}
 					>
 						{/* Upload Drag and Dropbox */}
@@ -155,7 +154,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ name, filePath }) => {
 										<button type="button" onClick={() => inputRef.current?.click()} className="inline font-medium text-blue-500 hover:text-blue-700">
 											Browse
 										</button>
-										<p className="text-gray-500 text-sm">PNG, JPG or JPEG (max file size: 1MB)</p>
+										<p className="text-gray-500 text-sm">PNG, JPG or JPEG (max file size: 2MB)</p>
 									</div>
 								</label>
 

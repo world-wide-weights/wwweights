@@ -4,7 +4,7 @@ import * as request from 'supertest';
 import {
   initializeMockModule,
   teardownMockDataSource,
-} from './helpers/MongoMemoryHelpers';
+} from './helpers/mongo-memory-helper';
 
 import { Test, TestingModule } from '@nestjs/testing';
 import { Profile } from '../src/models/profile.model';

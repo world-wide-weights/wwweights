@@ -1,4 +1,4 @@
-const API_BASE_URL_AUTH = Cypress.env("PUBLIC_API_BASE_URL_AUTH")
+const API_BASE_URL_AUTH = Cypress.env("PUBLIC_API_BASE_URL_AUTH_CLIENT")
 
 describe("Register", () => {
 	beforeEach(() => {
@@ -86,4 +86,5 @@ describe("Register", () => {
 	})
 })
 
-export {}
+export { }
+

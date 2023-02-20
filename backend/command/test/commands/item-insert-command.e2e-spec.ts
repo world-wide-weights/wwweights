@@ -5,7 +5,6 @@ import { EventBus } from '@nestjs/cqrs';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
 import * as request from 'supertest';
-import { setTimeout } from 'timers/promises';
 import { CommandsModule } from '../../src/commands/commands.module';
 import { ControllersModule } from '../../src/controllers/controllers.module';
 import { ItemCronJobHandler } from '../../src/cron/cron-handlers/items.cron';
@@ -27,7 +26,7 @@ import { JwtStrategy } from '../../src/shared/strategies/jwt.strategy';
 import {
   initializeMockModule,
   teardownMockDataSource,
-} from '../helpers/MongoMemoryHelpers';
+} from '../helpers/mongo-memory-helper';
 import { retryCallback } from '../helpers/retries';
 import { FakeEnvGuardFactory } from '../mocks/env-guard.mock';
 import { MockEventStore } from '../mocks/eventstore';
@@ -126,9 +125,6 @@ describe('Item Insertion (e2e)', () => {
   });
 
   afterAll(async () => {
-    // Await for background db processes
-    // Eventual consistency is amazing :)
-    await setTimeout(500);
     await teardownMockDataSource();
     await server.close();
     await app.close();
@@ -324,6 +320,28 @@ describe('Item Insertion (e2e)', () => {
       );
       const items = await itemModel.find({});
       expect(items.length).toEqual(5);
+    });
+
+    it('Should have dto validated without array', async () => {
+      // ARRANGE
+      fakeEnvGuard.isDev = true;
+      // ACT
+      const res = await request(server)
+        .post(commandsPath + itemBulkInsertPath)
+        .send({ you: 'are', really: 'awesome' });
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.BAD_REQUEST);
+    });
+
+    it('Should have dto validated with array and one wrong', async () => {
+      // ARRANGE
+      fakeEnvGuard.isDev = true;
+      // ACT
+      const res = await request(server)
+        .post(commandsPath + itemBulkInsertPath)
+        .send([...bulkInsertData, { you: 'are', really: 'awesome' }]);
+      // ASSERT
+      expect(res.status).toEqual(HttpStatus.BAD_REQUEST);
     });
 
     it('Should allow to set userId', async () => {
