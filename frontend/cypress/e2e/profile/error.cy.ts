@@ -2,7 +2,7 @@ import contributions from "../../fixtures/profile/contributions.json"
 import profile from "../../fixtures/profile/me.json"
 import statistics from "../../fixtures/profile/statistics.json"
 
-const API_BASE_URL_AUTH = Cypress.env("PUBLIC_API_BASE_URL_AUTH")
+const API_BASE_URL_AUTH = Cypress.env("PUBLIC_API_BASE_URL_AUTH_CLIENT")
 const API_BASE_URL_QUERY_CLIENT = Cypress.env("PUBLIC_API_BASE_URL_QUERY_CLIENT")
 
 describe("Error Profile", () => {
@@ -76,4 +76,5 @@ describe("Error Profile", () => {
 	})
 })
 
-export {}
+export { }
+

@@ -11,7 +11,8 @@ import profileStatistics from "../fixtures/profile/statistics.json"
 import statistics from "../fixtures/statistics/statistics.json"
 import paginatedTagsList from "../fixtures/tags/list.json"
 
-const API_BASE_URL_AUTH = Cypress.env("PUBLIC_API_BASE_URL_AUTH")
+const API_BASE_URL_AUTH_CLIENT = Cypress.env("PUBLIC_API_BASE_URL_AUTH_CLIENT")
+const API_BASE_URL_AUTH_SERVER = Cypress.env("PUBLIC_API_BASE_URL_AUTH_SERVER")
 const API_BASE_URL_QUERY_CLIENT = Cypress.env("PUBLIC_API_BASE_URL_QUERY_CLIENT")
 const API_BASE_URL_QUERY_SERVER = Cypress.env("PUBLIC_API_BASE_URL_QUERY_SERVER")
 const API_BASE_URL_COMMAND = Cypress.env("PUBLIC_API_BASE_URL_COMMAND")
@@ -102,7 +103,7 @@ Cypress.Commands.add("mockHome", () => {
 	cy.mockTagsListClient()
 
 	cy.task("nock", {
-		hostname: API_BASE_URL_AUTH,
+		hostname: API_BASE_URL_AUTH_SERVER,
 		method: "get",
 		path: "/auth/statistics",
 		statusCode: 200,
@@ -124,9 +125,9 @@ Cypress.Commands.add("mockProfilePage", (options) => {
 	const body =
 		options?.contribtionsCount || options?.contribtionsCount === 0
 			? {
-					...paginatedContributions,
-					data: paginatedContributions.data.slice(0, options?.contribtionsCount),
-			  }
+				...paginatedContributions,
+				data: paginatedContributions.data.slice(0, options?.contribtionsCount),
+			}
 			: paginatedContributions
 
 	cy.mockImageServe()
@@ -143,7 +144,7 @@ Cypress.Commands.add("mockProfilePage", (options) => {
 	}).as("mockProfileStatistics")
 
 	// Mock profile
-	cy.intercept("GET", `${API_BASE_URL_AUTH}/profile/me`, {
+	cy.intercept("GET", `${API_BASE_URL_AUTH_CLIENT}/profile/me`, {
 		fixture: "profile/me.json",
 	}).as("mockProfile")
 })
@@ -156,9 +157,9 @@ Cypress.Commands.add("mockTagsList", (options) => {
 	const body =
 		options?.itemCount || options?.itemCount === 0
 			? {
-					...paginatedTagsList,
-					data: paginatedTagsList.data.slice(0, options.itemCount),
-			  }
+				...paginatedTagsList,
+				data: paginatedTagsList.data.slice(0, options.itemCount),
+			}
 			: paginatedTagsList
 
 	cy.task("nock", {
@@ -176,9 +177,9 @@ Cypress.Commands.add("mockItemsList", (options) => {
 	const body =
 		options?.itemCount || options?.itemCount === 0
 			? {
-					...paginatedItems,
-					data: paginatedItems.data.slice(0, options.itemCount),
-			  }
+				...paginatedItems,
+				data: paginatedItems.data.slice(0, options.itemCount),
+			}
 			: paginatedItems
 
 	cy.task("nock", {
@@ -215,11 +216,11 @@ Cypress.Commands.add("mockLogin", () => {
 	cy.mockImageServe()
 	cy.mockTagsListClient()
 
-	cy.intercept("POST", `${API_BASE_URL_AUTH}/auth/login`, {
+	cy.intercept("POST", `${API_BASE_URL_AUTH_CLIENT}/auth/login`, {
 		fixture: "auth/tokens.json",
 	}).as("mockLogin")
 
-	cy.intercept("POST", `${API_BASE_URL_AUTH}/auth/refresh`, {
+	cy.intercept("POST", `${API_BASE_URL_AUTH_CLIENT}/auth/refresh`, {
 		fixture: "auth/tokens.json",
 	}).as("mockRefresh")
 })
@@ -228,11 +229,11 @@ Cypress.Commands.add("mockRegister", () => {
 	cy.mockImageServe()
 	cy.mockTagsListClient()
 
-	cy.intercept("POST", `${API_BASE_URL_AUTH}/auth/register`, {
+	cy.intercept("POST", `${API_BASE_URL_AUTH_CLIENT}/auth/register`, {
 		fixture: "auth/tokens.json",
 	}).as("mockRegister")
 
-	cy.intercept("POST", `${API_BASE_URL_AUTH}/auth/refresh`, {
+	cy.intercept("POST", `${API_BASE_URL_AUTH_CLIENT}/auth/refresh`, {
 		fixture: "auth/tokens.json",
 	}).as("mockRefresh")
 })
@@ -284,4 +285,5 @@ Cypress.Commands.add("mockDeleteItem", () => {
 	}).as("mockDeleteItem")
 })
 
-export {}
+export { }
+
