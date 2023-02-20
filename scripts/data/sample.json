@@ -3447,7 +3447,7 @@
   },
   {
     "name": "CQRS",
-    "weight": { "value": 9000 },
+    "weight": { "value": 900000 },
     "tags": ["Confusing", "Software", "Losing my sanity"],
     "image": "b940fc33e9146ce97cee23b3790321eeb29c77043eb59221a5c7da60f3b74443.jpeg",
     "userId": 1
@@ -3461,7 +3461,7 @@
   },
   {
     "name": "Your Mom",
-    "weight": { "value": 36000 },
+    "weight": { "value": 3600000 },
     "tags": ["Gigantic", "Enormous", "Gravitational Force"],
     "image": "ca21e2d697682fae2ea8908dd1f64149957729cc4a106a7f558fe67cf7577e80.jpeg",
     "userId": 1
