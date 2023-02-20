@@ -28,7 +28,11 @@ export const authServerRequest = axios.create({
 	baseURL: process.env.NEXT_PUBLIC_API_BASE_URL_AUTH_SERVER,
 })
 
-// Image API
-export const imageRequest = axios.create({
-	baseURL: process.env.NEXT_PUBLIC_API_BASE_URL_IMAGE,
+// Image API from Server
+export const imageServerRequest = axios.create({
+	baseURL: process.env.NEXT_PUBLIC_API_BASE_URL_IMAGE_SERVER,
+})
+
+export const imageClientRequest = axios.create({
+	baseURL: process.env.NEXT_PUBLIC_API_BASE_URL_IMAGE_CLIENT,
 })
