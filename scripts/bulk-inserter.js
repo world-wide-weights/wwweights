@@ -2,7 +2,7 @@
 // Args:
 // 1. localhost port (defaults to 3002. To see why this script only works against localhost see README)
 // 2. filepath (defaults to sample data)
-// 3. chunksize (defaults all at once)
+// 3. chunksize (defaults to 100)
 
 const { readFileSync, existsSync } = require("fs");
 
@@ -62,7 +62,7 @@ async function main(opts) {
 const opts = {
   port: +process.argv.at(2) || 3002,
   filePath: process.argv.at(3) || "./data/sample.json",
-  chunkSize: +process.argv.at(4) || -1,
+  chunkSize: +process.argv.at(4) || 100,
 };
 
 main(opts);
