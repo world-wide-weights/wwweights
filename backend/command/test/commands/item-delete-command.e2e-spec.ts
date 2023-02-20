@@ -192,6 +192,17 @@ describe('Item Deletion (e2e)', () => {
       const profile = await profileModel.findOne({});
       expect(profile.count.itemsDeleted).toEqual(1);
     });
+
+    it('Should return not found if stream does not exist', async () => {
+      // ARRANGE
+      const item = new itemModel(singleItem);
+
+      // ACT & ASSERT
+      await request(server)
+        .post(commandsPath + `items/${item.slug}/suggest/delete`)
+        .send({ reason: 'willi_wonka' })
+        .expect(HttpStatus.NOT_FOUND);
+    });
   });
 
   // WARNING: The following tests are for testing the edit functionality itself. As of now this is triggered via
