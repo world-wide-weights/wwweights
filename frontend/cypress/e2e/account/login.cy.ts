@@ -1,5 +1,5 @@
 const CLIENT_BASE_URL = Cypress.env("CLIENT_BASE_URL")
-const API_BASE_URL_AUTH = Cypress.env("PUBLIC_API_BASE_URL_AUTH")
+const API_BASE_URL_AUTH = Cypress.env("PUBLIC_API_BASE_URL_AUTH_CLIENT")
 
 describe("Login Page", () => {
 	describe("Login", () => {
@@ -78,4 +78,5 @@ describe("Login Page", () => {
 	})
 })
 
-export {}
+export { }
+
