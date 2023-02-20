@@ -1,4 +1,4 @@
-# wwweights
+![WWWeights](https://user-images.githubusercontent.com/47084064/220177551-d6f90fd9-a4a1-4a8c-b83b-ffc39a9bbda2.png)
 
 ![Codecov](https://img.shields.io/codecov/c/gh/world-wide-weights/wwweights?flag=auth-backend&label=auth-backend)
 ![Codecov](https://img.shields.io/codecov/c/gh/world-wide-weights/wwweights?flag=command-backend&label=command-backend)
