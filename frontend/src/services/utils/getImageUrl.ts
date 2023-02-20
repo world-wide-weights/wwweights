@@ -12,6 +12,6 @@ export const getImageUrl = (image: string | undefined): string | undefined => {
 		string().url().validateSync(image)
 		return image
 	} catch (error) {
-		return `${process.env.NEXT_PUBLIC_API_BASE_URL_IMAGE_CLIENT}/serve/${image}`
+		return `${process.env.NEXT_PUBLIC_API_BASE_URL_IMAGE_SERVER}/serve/${image}`
 	}
 }

@@ -10,7 +10,7 @@ describe("getImageUrl", () => {
 	it("should return image url with image service when image is not URL", () => {
 		const image = "image.png"
 		const result = getImageUrl(image)
-		expect(result).to.equal(`${Cypress.env("PUBLIC_API_BASE_URL_IMAGE_CLIENT")}/serve/${image}`)
+		expect(result).to.equal(`${Cypress.env("PUBLIC_API_BASE_URL_IMAGE_SERVER")}/serve/${image}`)
 	})
 
 	// This issue is in yup and is currently in PR (14.02.2023) https://github.com/jquense/yup/pull/1859
