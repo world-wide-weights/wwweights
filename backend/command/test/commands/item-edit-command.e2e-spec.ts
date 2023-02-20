@@ -303,7 +303,7 @@ describe('Item Edit (e2e)', () => {
   describe('EditItemCommand', () => {
     it('Should update item', async () => {
       // ARRANGE
-      const item = new itemModel(singleItem);
+      const item = new itemModel({ ...singleItem, image: 'initial' });
       await item.save();
       const command = new EditItemCommand(
         item.slug,
