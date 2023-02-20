@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios"
 import { SessionData } from "../../types/auth"
 import { ImageUploadResponse } from "../../types/image"
-import { imageRequest } from "../axios/axios"
+import { imageClientRequest } from "../axios/axios"
 
 /**
  * Upload an image to the api
@@ -15,7 +15,7 @@ export const uploadImageApi = async (imageFile: File, session: SessionData): Pro
 	formData.append("image", imageFile)
 
 	// Upload image
-	const imageResponse = await imageRequest.post<ImageUploadResponse>("/upload/image", formData, {
+	const imageResponse = await imageClientRequest.post<ImageUploadResponse>("/upload/image", formData, {
 		headers: {
 			Authorization: `Bearer ${session.accessToken}`,
 			"Content-Type": "multipart/form-data",

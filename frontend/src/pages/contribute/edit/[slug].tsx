@@ -4,7 +4,7 @@ import { AuthContext } from "../../../components/Auth/Auth"
 import { CreateEdit } from "../../../components/Item/CreateEdit"
 import { SkeletonLoadingEdit } from "../../../components/Loading/SkeletonLoadingEdit"
 import { Seo } from "../../../components/Seo/Seo"
-import { queryServerRequest } from "../../../services/axios/axios"
+import { queryClientRequest } from "../../../services/axios/axios"
 import { errorHandling } from "../../../services/utils/errorHandling"
 import { Item } from "../../../types/item"
 import { PaginatedResponse } from "../../../types/pagination"
@@ -38,7 +38,7 @@ const EditItem = () => {
 		const fetchItem = async () => {
 			try {
 				// Fetch item
-				const itemResponse = await queryServerRequest.get<PaginatedResponse<Item>>(`/items/list?slug=${query.slug}`)
+				const itemResponse = await queryClientRequest.get<PaginatedResponse<Item>>(`/items/list?slug=${query.slug}`)
 				const item = itemResponse.data.data[0]
 
 				if (!item) return
